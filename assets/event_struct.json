@@ -1,0 +1,29 @@
+{
+  "cachedAt" : "",
+  "_id" : "",
+  "days" : [
+      {
+      "name": "",
+      "date": "",
+      "events" : 
+      
+    [
+        {
+          "year" : "",
+          "month": "",
+          "dayOfMonth": "",
+          "dayOfWeek": "",
+          "title": "",
+          "course" : {
+              "name": "",
+              "color": ""
+            },
+        "timeStart": "",
+        "timeEnd": "",
+        "location": "",
+        "teacher": ""
+            }
+      ]
+    }
+  ]
+}

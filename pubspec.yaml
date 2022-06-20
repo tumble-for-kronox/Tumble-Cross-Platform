@@ -1,0 +1,93 @@
+name: tumble
+description: A new Flutter project.
+
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.17.1 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  http: ^0.13.1
+  freezed: any
+  cupertino_icons: ^1.0.5
+  build_runner: ^2.1.11
+  get_it: ^7.2.0
+  sqlite3_flutter_libs: ^0.4.2 
+  flutter_bloc: ^8.0.1
+  permission_handler: ^9.2.0
+  intl: ^0.17.0
+  collection: ^1.14.13
+  animated_text_kit: ^4.2.1
+  flutter_spinkit: any
+  path_provider: ^2.0.9
+  provider: any
+  drift: ^1.7.0
+  dart_extensions: ^2.2.0
+  cron: ^0.5.0
+  firebase_messaging: ^11.4.2
+  freezed_annotation: ^2.0.3
+  json_annotation: ^4.5.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  drift_dev: ^1.5.2
+  flutter_lints: ^2.0.0
+  json_serializable: ^6.2.0
+
+flutter:
+
+  assets:
+    - assets/images/cardBanner.png
+    - assets/images/tumbleAppLogo.png
+    - assets/images/detailsSplitter.png
+    - assets/school_logos/hkr_logo.png
+    - assets/school_logos/ltu_logo.png
+    - assets/school_logos/mau_logo.png
+    - assets/school_logos/oru_logo.png
+    - assets/school_logos/hb_logo.png
+    - assets/school_logos/hig_logo.png
+    - assets/school_logos/hv_logo.png
+    - assets/school_logos/mdh_logo.png
+    - assets/school_logos/sh_logo.png
+
+  fonts:
+    - family: Roboto
+      fonts:
+        - asset: assets/fonts/roboto_black_italic.ttf
+          weight: 900
+          style: italic
+        - asset: assets/fonts/roboto_black.ttf
+          weight: 900
+        - asset: assets/fonts/roboto_bold_italic.ttf
+          weight: 700
+          style: italic
+        - asset: assets/fonts/roboto_bold.ttf
+          weight: 700
+        - asset: assets/fonts/roboto_light_italic.ttf
+          weight: 300
+          style: italic
+        - asset: assets/fonts/roboto_light.ttf
+          weight: 300
+        - asset: assets/fonts/roboto_medium_italic.ttf
+          weight: 500
+          style: italic
+        - asset: assets/fonts/roboto_medium.ttf
+          weight: 500
+        - asset: assets/fonts/roboto_regular.ttf
+          weight: 400
+        - asset: assets/fonts/roboto_thin_italic.ttf
+          weight: 100
+          style: italic
+        - asset: assets/fonts/roboto_thin.ttf
+          weight: 100
+        - asset: assets/fonts/roboto.ttf
+          weight: 400
+          style: italic
+
+  uses-material-design: true
