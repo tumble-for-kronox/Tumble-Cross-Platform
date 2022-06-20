@@ -60,7 +60,7 @@ class ImplementationRepository implements IImplementationService {
     }
   }
 
-  void setupSchoolReset(String school) async {
+  void schoolReset(String school) async {
     if ((await _databaseService.getPreferences() != null)) {
       _databaseService.updatePreferences(school);
     } else {

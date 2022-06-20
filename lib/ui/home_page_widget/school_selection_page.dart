@@ -30,7 +30,7 @@ class _SchoolSelectionPageState extends State<SchoolSelectionPage> {
             child: Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(top: 20, right: 20, left: 20),
+                  padding: const EdgeInsets.only(top: 50, right: 20, left: 20),
                   child: Text(
                     "Choose your school",
                     style: TextStyle(

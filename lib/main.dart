@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tumble/startup/get_it_instances.dart';
 import 'package:tumble/ui/home_page_widget/bottom_nav_widget/cubit/bottom_nav_cubit.dart';
@@ -30,7 +29,8 @@ void main() async {
       ),
     ),
     BlocProvider<BottomNavCubit>(
-        create: (c) => BottomNavCubit(), child: const CustomBottomBar()),
+        create: (c) => BottomNavCubit(),
+        child: const CustomBottomBar()),
 
     /// Currently shared state between all
     /// descendants of HomePage. Maybe not?

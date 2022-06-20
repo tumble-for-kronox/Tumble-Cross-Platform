@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'package:drift/drift.dart';
@@ -52,21 +53,13 @@ class MyDatabase extends _$MyDatabase implements IDatabaseService {
   }
 
   @override
-  Future<int?> deleteAllSchedules() {
-    // TODO: implement deleteAllSchedules
-    throw UnimplementedError();
+  Future<int?> deleteAllSchedules() async {
+    return await delete(schedule).go();
   }
 
   @override
-  Future<List<String>?> getAllDatabaseScheduleIds() {
-    // TODO: implement getAllDatabaseScheduleIds
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<List<ScheduleData>?> getAllDatabaseScheduleNames() {
-    // TODO: implement getAllDatabaseScheduleNames
-    throw UnimplementedError();
+  Future<List<String>?> getAllDatabaseScheduleIds() async {
+    return (await (select(schedule)).get()).map((value) => value.id).toList();
   }
 
   @override
@@ -76,9 +69,11 @@ class MyDatabase extends _$MyDatabase implements IDatabaseService {
   }
 
   @override
-  Future<List<String>?> getGeneratedUuids(String scheduleId) {
-    // TODO: implement getGeneratedUuids
-    throw UnimplementedError();
+  Future<List<String>?> getGeneratedUuids(String scheduleId) async {
+    ScheduleData? data = await (select(schedule)
+      ..where((scheduleTbl) => scheduleTbl.id.equals(scheduleId)))
+        .getSingleOrNull();
+    return data?.generatedUuids == null ? null : jsonDecode(data!.generatedUuids);
   }
 
   @override
@@ -100,7 +95,6 @@ class MyDatabase extends _$MyDatabase implements IDatabaseService {
 
   @override
   Future<int> addPreferences(PreferenceData preferenceData) async {
-    log("AddPreferences");
     return await into(preferences).insert(preferenceData);
   }
 
@@ -111,7 +105,6 @@ class MyDatabase extends _$MyDatabase implements IDatabaseService {
 
   @override
   Future<int> updatePreferencesSchool(String target) async {
-    log("UpdatePreferences");
     return await (update(preferences)
           ..where((t) => t.defaultSchool.isNotNull()))
         .write(

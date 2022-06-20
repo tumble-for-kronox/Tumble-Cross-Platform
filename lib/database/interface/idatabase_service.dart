@@ -20,8 +20,6 @@ abstract class IDatabaseService {
 
   Future<List<String>?> getAllDatabaseScheduleIds();
 
-  Future<List<ScheduleData>?> getAllDatabaseScheduleNames();
-
   Future<List<String>?> getGeneratedUuids(String scheduleId);
 
   Future<void> updateSchedules(ScheduleCompanion newSchedule);

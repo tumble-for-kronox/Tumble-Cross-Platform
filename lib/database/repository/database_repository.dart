@@ -22,9 +22,6 @@ class DatabaseRepository {
   Future<List<String>?> getAllDatabaseScheduleIds() =>
       db.getAllDatabaseScheduleIds();
 
-  Future<List<ScheduleData>?> getAllDatabaseScheduleNames() =>
-      db.getAllDatabaseScheduleNames();
-
   Future<List<String>?> getGeneratedUuids(String scheduleId) =>
       db.getGeneratedUuids(scheduleId);
 

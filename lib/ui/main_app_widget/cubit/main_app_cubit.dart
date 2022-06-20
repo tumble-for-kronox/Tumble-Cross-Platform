@@ -44,6 +44,6 @@ class MainAppCubit extends Cubit<MainAppState> {
   /// app for the first time
   void setup(String school) async {
     log("Setup");
-    _implementationService.setupSchoolReset(school);
+    _implementationService.schoolReset(school);
   }
 }
