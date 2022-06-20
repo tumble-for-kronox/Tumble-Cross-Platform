@@ -42,6 +42,10 @@ class HomePageCubit extends Cubit<HomePageState> {
       switch (_schedule.status) {
         case Status.COMPLETED:
           final ScheduleModel scheduleModel = _schedule.data as ScheduleModel;
+
+          /// Now we have an instance of the list used in
+          /// [TumbleListView] and an instance of the list
+          /// used in [TumbleWeekView]
           _schedulesListView = scheduleModel.days;
           _schedulesWeekView = scheduleModel.weekSplit();
           switch (_defaultViewType) {
@@ -68,8 +72,6 @@ class HomePageCubit extends Cubit<HomePageState> {
     _currentPageIndex = index;
     if (state is! HomePageError) {
       emit(_pages[index]);
-    } else {
-      emit(const HomePageError());
     }
   }
 }
