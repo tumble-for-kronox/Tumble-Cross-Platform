@@ -1,12 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tumble/models/api_models/schedule_model.dart';
-import 'day_item.dart';
+import 'tumble_list_view_day_container.dart';
 
 class TumbleListView extends StatefulWidget {
   final String? scheduleId;
-  final List<Day>? listView;
-  const TumbleListView({Key? key, this.scheduleId, this.listView})
+  final List<Day>? listOfDays;
+  const TumbleListView({Key? key, this.scheduleId, this.listOfDays})
       : super(key: key);
 
   @override
@@ -18,13 +18,11 @@ class _TumbleListViewState extends State<TumbleListView> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Column(
-          children: widget.listView!
-              .map((day) => DayItem(
+          children: widget.listOfDays!
+              .map((day) => TumbleListViewDayContainer(
                     day: day,
-                    onTap: () {},
                   ))
               .toList()),
     );
   }
 }
-

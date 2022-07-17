@@ -2,11 +2,11 @@ import 'package:tumble/models/api_models/schedule_model.dart';
 
 class Week {
   final int weekNumber;
-  final List<Event> events;
+  final List<Day> days;
 
-  Week({required this.weekNumber, required this.events});
+  Week({required this.weekNumber, required this.days});
 
-  factory Week.fromEventList(int weekNumber, List<Event> events) {
-    return Week(weekNumber: weekNumber, events: events);
+  factory Week.fromEventList(int weekNumber, List<Day> days) {
+    return Week(weekNumber: weekNumber, days: days);
   }
 }

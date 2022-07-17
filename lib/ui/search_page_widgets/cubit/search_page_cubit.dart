@@ -11,13 +11,9 @@ import 'package:tumble/startup/get_it_instances.dart';
 part 'search_page_state.dart';
 
 class SearchPageCubit extends Cubit<SearchPageState> {
-  SearchPageCubit() : super(const SearchPageInitial());
+  SearchPageCubit() : super(const SearchPageInitial(focused: false));
 
   final _implementationService = locator<ImplementationRepository>();
-
-  final TextEditingController _textEditingController = TextEditingController();
-
-  TextEditingController get textEditingController => _textEditingController;
 
   Future<void> search(String searchQuery) async {
     emit(const SearchPageLoading());
@@ -31,6 +27,7 @@ class SearchPageCubit extends Cubit<SearchPageState> {
         break;
       default:
         emit(const SearchPageNoSchedules());
+        break;
     }
   }
 }

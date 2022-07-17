@@ -32,9 +32,9 @@ abstract class Day with _$Day {
     required String name,
     required String date,
     required String year,
-    required String month,
-    required String dayOfMonth,
-    required String dayOfWeek,
+    required int month,
+    required int dayOfMonth,
+    required int dayOfWeek,
     required int weekNumber,
     required List<Event> events,
   }) = _Day;
@@ -49,11 +49,35 @@ abstract class Event with _$Event {
     required Course course,
     required DateTime timeStart,
     required DateTime timeEnd,
-    required String location,
-    required String teacher,
+    required List<Location> locations,
+    required List<Teacher> teachers,
   }) = _Event;
 
   factory Event.fromJson(Map<String, dynamic> json) => _$EventFromJson(json);
+}
+
+@freezed
+abstract class Location with _$Location {
+  const factory Location(
+      {required String id,
+      required String name,
+      required String building,
+      required String floor,
+      required int maxSeats}) = _Location;
+
+  factory Location.fromJson(Map<String, dynamic> json) =>
+      _$LocationFromJson(json);
+}
+
+@freezed
+abstract class Teacher with _$Teacher {
+  const factory Teacher(
+      {required String id,
+      required String firstName,
+      required String lastName}) = _Teacher;
+
+  factory Teacher.fromJson(Map<String, dynamic> json) =>
+      _$TeacherFromJson(json);
 }
 
 @freezed

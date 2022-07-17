@@ -6,6 +6,7 @@ import 'package:tumble/theme/colors.dart';
 import 'package:tumble/ui/home_page_widget/home_page.dart';
 import 'package:tumble/ui/search_page_widgets/search/program_card.dart';
 import 'package:tumble/ui/search_page_widgets/search/schedule_search_bar.dart';
+import 'package:tumble/ui/search_page_widgets/search_bar_widget/searchbar_and_logo_container.dart';
 
 import '../cubit/search_page_cubit.dart';
 
@@ -40,22 +41,21 @@ class _ScheduleSearchPageState extends State<ScheduleSearchPage> {
                                 color: CustomColors.orangePrimary);
                           }
                           if (state is SearchPageFoundSchedules) {
-                            return SingleChildScrollView(
-                              child: Column(
-                                  children: state.programList
-                                      .map((program) => ProgramCard(
-                                          programName: program.scheduleName,
-                                          programId: program.scheduleId,
-                                          onTap: () {
-                                            Navigator.push(
-                                                context,
-                                                CupertinoPageRoute(
-                                                    builder: (context) => HomePage(
-                                                        currentScheduleId:
-                                                            program
-                                                                .scheduleId)));
-                                          }))
-                                      .toList()),
+                            return ListView(
+                              padding: const EdgeInsets.only(top: 70),
+                              children: state.programList
+                                  .map((program) => ProgramCard(
+                                      programName: program.scheduleName,
+                                      programId: program.scheduleId,
+                                      onTap: () {
+                                        Navigator.push(
+                                            context,
+                                            CupertinoPageRoute(
+                                                builder: (context) => HomePage(
+                                                    currentScheduleId:
+                                                        program.scheduleId)));
+                                      }))
+                                  .toList(),
                             );
                           }
                           if (state is SearchPageNoSchedules) {
@@ -72,14 +72,14 @@ class _ScheduleSearchPageState extends State<ScheduleSearchPage> {
                               ),
                             );
                           }
-                          return const ScheduleSearchBar();
+                          return Container();
                         },
                       )),
                 )
               ],
             ),
           ),
-          Container()
+          const SearchBarAndLogoContainer(),
         ],
       ),
     );

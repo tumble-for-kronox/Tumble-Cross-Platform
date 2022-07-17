@@ -55,6 +55,7 @@ flutter:
     - assets/school_logos/hv_logo.png
     - assets/school_logos/mdh_logo.png
     - assets/school_logos/sh_logo.png
+    - pretend_struct.json
 
   fonts:
     - family: Roboto

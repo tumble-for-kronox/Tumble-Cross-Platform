@@ -11,14 +11,14 @@ class HomePageInitial extends HomePageState {
 
 class HomePageWeekView extends HomePageState {
   final String? scheduleId;
-  final List<Week>? weekView;
-  const HomePageWeekView({this.scheduleId, this.weekView});
+  final List<Week>? listOfWeeks;
+  const HomePageWeekView({this.scheduleId, this.listOfWeeks});
 }
 
 class HomePageListView extends HomePageState {
   final String? scheduleId;
-  final List<Day>? listView;
-  const HomePageListView({this.scheduleId, this.listView});
+  final List<Day>? listOfDays;
+  const HomePageListView({this.scheduleId, this.listOfDays});
 }
 
 class HomePageLoading extends HomePageState {

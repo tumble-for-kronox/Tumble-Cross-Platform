@@ -23,10 +23,12 @@ extension ResponseParsing on Response {
 }
 
 extension ScheduleParsing on ScheduleModel {
-  List<Week> weekSplit() {
-    return groupBy(days,
-            (Day day) => Week(weekNumber: day.weekNumber, events: day.events))
-        .keys
+  List<Week> splitToWeek() {
+    return groupBy(days, (Day day) => day.weekNumber)
+        .entries
+        .map((weekNumberToDayList) => Week(
+            weekNumber: weekNumberToDayList.key,
+            days: weekNumberToDayList.value))
         .toList();
   }
 }

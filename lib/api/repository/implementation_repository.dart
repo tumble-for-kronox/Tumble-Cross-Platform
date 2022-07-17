@@ -1,11 +1,13 @@
 // ignore_for_file: no_leading_underscores_for_local_identifiers
+import 'dart:convert';
 
+import 'package:flutter/services.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:tumble/api/apiservices/api_response.dart';
 import 'package:tumble/database/database_response.dart';
 import 'package:tumble/api/interface/iimplementation_service.dart';
 import 'package:tumble/api/repository/backend_repository.dart';
 import 'package:tumble/database/database.dart';
-import 'package:tumble/database/database_response.dart';
 import 'package:tumble/database/repository/database_repository.dart';
 import 'package:tumble/models/api_models/schedule_model.dart';
 import 'package:tumble/startup/get_it_instances.dart';
@@ -31,15 +33,18 @@ class ImplementationRepository implements IImplementationService {
   }
 
   @override
-  Future<dynamic> getSchedule(String scheduleId) async {
-    final ScheduleData? _possibleSchedule =
+  Future<ApiResponse> getSchedule(String scheduleId) async {
+    String thing = await rootBundle.loadString('pretend_struct.json');
+    return ApiResponse.completed(scheduleModelFromJson(thing));
+
+    /* final ScheduleData? _possibleSchedule =
         await _databaseService.getScheduleEntry(scheduleId);
     if (_possibleSchedule != null) {
       final ScheduleModel _schedule =
           scheduleModelFromJson(_possibleSchedule.jsonString);
       return _schedule;
     }
-    return getSchedulesRequest(scheduleId);
+    return getSchedulesRequest(scheduleId); */
   }
 
   @override

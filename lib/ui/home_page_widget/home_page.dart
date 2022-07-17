@@ -1,16 +1,14 @@
-import 'dart:developer';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:tumble/theme/colors.dart';
+import 'package:tumble/ui/home_page_widget/bottom_nav_widget/cubit/bottom_nav_cubit.dart';
 import 'package:tumble/ui/home_page_widget/cubit/home_page_cubit.dart';
 import 'package:tumble/ui/home_page_widget/bottom_nav_widget/custom_bottom_bar.dart';
-import 'package:tumble/ui/home_page_widget/data/labels.dart';
 import 'package:tumble/ui/home_page_widget/schedule_view_widgets/no_schedule.dart';
-import 'package:tumble/ui/home_page_widget/schedule_view_widgets/tumble_list_view.dart';
-import 'package:tumble/ui/home_page_widget/schedule_view_widgets/tumble_week_view.dart';
+import 'package:tumble/ui/home_page_widget/schedule_view_widgets/tumble_list_view/tumble_list_view.dart';
+import 'package:tumble/ui/home_page_widget/schedule_view_widgets/tumble_week_view/tumble_week_view.dart';
+import 'package:tumble/ui/home_page_widget/tumble_app_bar.dart';
 
 class HomePage extends StatefulWidget {
   final String? currentScheduleId;
@@ -21,13 +19,14 @@ class HomePage extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _HomePageState createState() => _HomePageState();
+  State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        appBar: const TumbleAppBar(),
         body: FutureBuilder(
             future:
                 context.read<HomePageCubit>().init(widget.currentScheduleId!),
@@ -36,11 +35,13 @@ class _HomePageState extends State<HomePage> {
                 builder: (context, state) {
                   if (state is HomePageListView) {
                     return TumbleListView(
-                        scheduleId: state.scheduleId, listView: state.listView);
+                        scheduleId: state.scheduleId,
+                        listOfDays: state.listOfDays);
                   }
                   if (state is HomePageWeekView) {
                     return TumbleWeekView(
-                        scheduleId: state.scheduleId, weekView: state.weekView);
+                        scheduleId: state.scheduleId,
+                        listOfWeeks: state.listOfWeeks);
                   }
                   if (state is HomePageError) {
                     return const NoScheduleAvailable();
@@ -50,8 +51,9 @@ class _HomePageState extends State<HomePage> {
                 },
               );
             }),
-        bottomNavigationBar: CustomBottomBar(
-          onTap: (index) => context.read<HomePageCubit>().setPage(index),
-        ));
+        bottomNavigationBar: CustomBottomBar(onTap: (index) {
+          context.read<HomePageCubit>().setPage(index);
+          context.read<BottomNavCubit>().updateIndex(index);
+        }));
   }
 }

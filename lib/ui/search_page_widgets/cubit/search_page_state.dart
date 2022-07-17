@@ -6,18 +6,22 @@ abstract class SearchPageState {
 }
 
 class SearchPageInitial extends SearchPageState {
-  const SearchPageInitial();
+  final bool focused;
+  const SearchPageInitial({required this.focused});
 }
 
 class SearchPageLoading extends SearchPageState {
+  final bool focused = true;
   const SearchPageLoading();
 }
 
 class SearchPageFoundSchedules extends SearchPageState {
+  final bool focused = true;
   final List<RequestedSchedule> programList;
   const SearchPageFoundSchedules({required this.programList});
 }
 
 class SearchPageNoSchedules extends SearchPageState {
+  final bool focused = true;
   const SearchPageNoSchedules();
 }

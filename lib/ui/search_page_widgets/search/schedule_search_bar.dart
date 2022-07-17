@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tumble/ui/search_page_widgets/cubit/search_page_cubit.dart';
+import 'package:tumble/ui/search_page_widgets/search_bar_widget/cubit/schedule_search_bar_and_logo_container_cubit.dart';
 
 class ScheduleSearchBar extends StatefulWidget {
   const ScheduleSearchBar({Key? key}) : super(key: key);
@@ -28,9 +29,13 @@ class _ScheduleSearchBarState extends State<ScheduleSearchBar> {
             ],
           ),
           child: TextField(
-              controller: context.read<SearchPageCubit>().textEditingController,
+              focusNode: context
+                  .read<ScheduleSearchBarAndLogoContainerCubit>()
+                  .focusNode,
+              controller: context
+                  .read<ScheduleSearchBarAndLogoContainerCubit>()
+                  .textEditingController,
               textInputAction: TextInputAction.search,
-              onSubmitted: null,
               textAlignVertical: TextAlignVertical.center,
               decoration: InputDecoration(
                 border: InputBorder.none,
@@ -45,12 +50,12 @@ class _ScheduleSearchBarState extends State<ScheduleSearchBar> {
                         color: Colors.transparent,
                         child: IconButton(
                           color: Theme.of(context).colorScheme.onSurface,
-                          onPressed: () {
-                            log("Here");
-                            context.read<SearchPageCubit>().search(context
-                                .read<SearchPageCubit>()
+                          onPressed: () async {
+                            String text = context
+                                .read<ScheduleSearchBarAndLogoContainerCubit>()
                                 .textEditingController
-                                .text);
+                                .text;
+                            await context.read<SearchPageCubit>().search(text);
                           },
                           icon: const Icon(Icons.close),
                           iconSize: 20,
@@ -74,9 +79,11 @@ class _ScheduleSearchBarState extends State<ScheduleSearchBar> {
             shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(5))),
             onPressed: () async {
-              log("Here");
-              await context.read<SearchPageCubit>().search(
-                  context.read<SearchPageCubit>().textEditingController.text);
+              String text = context
+                  .read<ScheduleSearchBarAndLogoContainerCubit>()
+                  .textEditingController
+                  .text;
+              await context.read<SearchPageCubit>().search(text);
             },
             disabledColor: Colors.orange.shade200,
             visualDensity: VisualDensity.compact,

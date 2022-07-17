@@ -199,9 +199,9 @@ mixin _$Day {
   String get name => throw _privateConstructorUsedError;
   String get date => throw _privateConstructorUsedError;
   String get year => throw _privateConstructorUsedError;
-  String get month => throw _privateConstructorUsedError;
-  String get dayOfMonth => throw _privateConstructorUsedError;
-  String get dayOfWeek => throw _privateConstructorUsedError;
+  int get month => throw _privateConstructorUsedError;
+  int get dayOfMonth => throw _privateConstructorUsedError;
+  int get dayOfWeek => throw _privateConstructorUsedError;
   int get weekNumber => throw _privateConstructorUsedError;
   List<Event> get events => throw _privateConstructorUsedError;
 
@@ -218,9 +218,9 @@ abstract class $DayCopyWith<$Res> {
       {String name,
       String date,
       String year,
-      String month,
-      String dayOfMonth,
-      String dayOfWeek,
+      int month,
+      int dayOfMonth,
+      int dayOfWeek,
       int weekNumber,
       List<Event> events});
 }
@@ -260,15 +260,15 @@ class _$DayCopyWithImpl<$Res> implements $DayCopyWith<$Res> {
       month: month == freezed
           ? _value.month
           : month // ignore: cast_nullable_to_non_nullable
-              as String,
+              as int,
       dayOfMonth: dayOfMonth == freezed
           ? _value.dayOfMonth
           : dayOfMonth // ignore: cast_nullable_to_non_nullable
-              as String,
+              as int,
       dayOfWeek: dayOfWeek == freezed
           ? _value.dayOfWeek
           : dayOfWeek // ignore: cast_nullable_to_non_nullable
-              as String,
+              as int,
       weekNumber: weekNumber == freezed
           ? _value.weekNumber
           : weekNumber // ignore: cast_nullable_to_non_nullable
@@ -290,9 +290,9 @@ abstract class _$$_DayCopyWith<$Res> implements $DayCopyWith<$Res> {
       {String name,
       String date,
       String year,
-      String month,
-      String dayOfMonth,
-      String dayOfWeek,
+      int month,
+      int dayOfMonth,
+      int dayOfWeek,
       int weekNumber,
       List<Event> events});
 }
@@ -333,15 +333,15 @@ class __$$_DayCopyWithImpl<$Res> extends _$DayCopyWithImpl<$Res>
       month: month == freezed
           ? _value.month
           : month // ignore: cast_nullable_to_non_nullable
-              as String,
+              as int,
       dayOfMonth: dayOfMonth == freezed
           ? _value.dayOfMonth
           : dayOfMonth // ignore: cast_nullable_to_non_nullable
-              as String,
+              as int,
       dayOfWeek: dayOfWeek == freezed
           ? _value.dayOfWeek
           : dayOfWeek // ignore: cast_nullable_to_non_nullable
-              as String,
+              as int,
       weekNumber: weekNumber == freezed
           ? _value.weekNumber
           : weekNumber // ignore: cast_nullable_to_non_nullable
@@ -377,11 +377,11 @@ class _$_Day implements _Day {
   @override
   final String year;
   @override
-  final String month;
+  final int month;
   @override
-  final String dayOfMonth;
+  final int dayOfMonth;
   @override
-  final String dayOfWeek;
+  final int dayOfWeek;
   @override
   final int weekNumber;
   final List<Event> _events;
@@ -442,9 +442,9 @@ abstract class _Day implements Day {
       {required final String name,
       required final String date,
       required final String year,
-      required final String month,
-      required final String dayOfMonth,
-      required final String dayOfWeek,
+      required final int month,
+      required final int dayOfMonth,
+      required final int dayOfWeek,
       required final int weekNumber,
       required final List<Event> events}) = _$_Day;
 
@@ -457,11 +457,11 @@ abstract class _Day implements Day {
   @override
   String get year => throw _privateConstructorUsedError;
   @override
-  String get month => throw _privateConstructorUsedError;
+  int get month => throw _privateConstructorUsedError;
   @override
-  String get dayOfMonth => throw _privateConstructorUsedError;
+  int get dayOfMonth => throw _privateConstructorUsedError;
   @override
-  String get dayOfWeek => throw _privateConstructorUsedError;
+  int get dayOfWeek => throw _privateConstructorUsedError;
   @override
   int get weekNumber => throw _privateConstructorUsedError;
   @override
@@ -481,8 +481,8 @@ mixin _$Event {
   Course get course => throw _privateConstructorUsedError;
   DateTime get timeStart => throw _privateConstructorUsedError;
   DateTime get timeEnd => throw _privateConstructorUsedError;
-  String get location => throw _privateConstructorUsedError;
-  String get teacher => throw _privateConstructorUsedError;
+  List<Location> get locations => throw _privateConstructorUsedError;
+  List<Teacher> get teachers => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -498,8 +498,8 @@ abstract class $EventCopyWith<$Res> {
       Course course,
       DateTime timeStart,
       DateTime timeEnd,
-      String location,
-      String teacher});
+      List<Location> locations,
+      List<Teacher> teachers});
 
   $CourseCopyWith<$Res> get course;
 }
@@ -518,8 +518,8 @@ class _$EventCopyWithImpl<$Res> implements $EventCopyWith<$Res> {
     Object? course = freezed,
     Object? timeStart = freezed,
     Object? timeEnd = freezed,
-    Object? location = freezed,
-    Object? teacher = freezed,
+    Object? locations = freezed,
+    Object? teachers = freezed,
   }) {
     return _then(_value.copyWith(
       title: title == freezed
@@ -538,14 +538,14 @@ class _$EventCopyWithImpl<$Res> implements $EventCopyWith<$Res> {
           ? _value.timeEnd
           : timeEnd // ignore: cast_nullable_to_non_nullable
               as DateTime,
-      location: location == freezed
-          ? _value.location
-          : location // ignore: cast_nullable_to_non_nullable
-              as String,
-      teacher: teacher == freezed
-          ? _value.teacher
-          : teacher // ignore: cast_nullable_to_non_nullable
-              as String,
+      locations: locations == freezed
+          ? _value.locations
+          : locations // ignore: cast_nullable_to_non_nullable
+              as List<Location>,
+      teachers: teachers == freezed
+          ? _value.teachers
+          : teachers // ignore: cast_nullable_to_non_nullable
+              as List<Teacher>,
     ));
   }
 
@@ -567,8 +567,8 @@ abstract class _$$_EventCopyWith<$Res> implements $EventCopyWith<$Res> {
       Course course,
       DateTime timeStart,
       DateTime timeEnd,
-      String location,
-      String teacher});
+      List<Location> locations,
+      List<Teacher> teachers});
 
   @override
   $CourseCopyWith<$Res> get course;
@@ -589,8 +589,8 @@ class __$$_EventCopyWithImpl<$Res> extends _$EventCopyWithImpl<$Res>
     Object? course = freezed,
     Object? timeStart = freezed,
     Object? timeEnd = freezed,
-    Object? location = freezed,
-    Object? teacher = freezed,
+    Object? locations = freezed,
+    Object? teachers = freezed,
   }) {
     return _then(_$_Event(
       title: title == freezed
@@ -609,14 +609,14 @@ class __$$_EventCopyWithImpl<$Res> extends _$EventCopyWithImpl<$Res>
           ? _value.timeEnd
           : timeEnd // ignore: cast_nullable_to_non_nullable
               as DateTime,
-      location: location == freezed
-          ? _value.location
-          : location // ignore: cast_nullable_to_non_nullable
-              as String,
-      teacher: teacher == freezed
-          ? _value.teacher
-          : teacher // ignore: cast_nullable_to_non_nullable
-              as String,
+      locations: locations == freezed
+          ? _value._locations
+          : locations // ignore: cast_nullable_to_non_nullable
+              as List<Location>,
+      teachers: teachers == freezed
+          ? _value._teachers
+          : teachers // ignore: cast_nullable_to_non_nullable
+              as List<Teacher>,
     ));
   }
 }
@@ -629,8 +629,10 @@ class _$_Event implements _Event {
       required this.course,
       required this.timeStart,
       required this.timeEnd,
-      required this.location,
-      required this.teacher});
+      required final List<Location> locations,
+      required final List<Teacher> teachers})
+      : _locations = locations,
+        _teachers = teachers;
 
   factory _$_Event.fromJson(Map<String, dynamic> json) =>
       _$$_EventFromJson(json);
@@ -643,14 +645,23 @@ class _$_Event implements _Event {
   final DateTime timeStart;
   @override
   final DateTime timeEnd;
+  final List<Location> _locations;
   @override
-  final String location;
+  List<Location> get locations {
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_locations);
+  }
+
+  final List<Teacher> _teachers;
   @override
-  final String teacher;
+  List<Teacher> get teachers {
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_teachers);
+  }
 
   @override
   String toString() {
-    return 'Event(title: $title, course: $course, timeStart: $timeStart, timeEnd: $timeEnd, location: $location, teacher: $teacher)';
+    return 'Event(title: $title, course: $course, timeStart: $timeStart, timeEnd: $timeEnd, locations: $locations, teachers: $teachers)';
   }
 
   @override
@@ -662,8 +673,9 @@ class _$_Event implements _Event {
             const DeepCollectionEquality().equals(other.course, course) &&
             const DeepCollectionEquality().equals(other.timeStart, timeStart) &&
             const DeepCollectionEquality().equals(other.timeEnd, timeEnd) &&
-            const DeepCollectionEquality().equals(other.location, location) &&
-            const DeepCollectionEquality().equals(other.teacher, teacher));
+            const DeepCollectionEquality()
+                .equals(other._locations, _locations) &&
+            const DeepCollectionEquality().equals(other._teachers, _teachers));
   }
 
   @JsonKey(ignore: true)
@@ -674,8 +686,8 @@ class _$_Event implements _Event {
       const DeepCollectionEquality().hash(course),
       const DeepCollectionEquality().hash(timeStart),
       const DeepCollectionEquality().hash(timeEnd),
-      const DeepCollectionEquality().hash(location),
-      const DeepCollectionEquality().hash(teacher));
+      const DeepCollectionEquality().hash(_locations),
+      const DeepCollectionEquality().hash(_teachers));
 
   @JsonKey(ignore: true)
   @override
@@ -694,8 +706,8 @@ abstract class _Event implements Event {
       required final Course course,
       required final DateTime timeStart,
       required final DateTime timeEnd,
-      required final String location,
-      required final String teacher}) = _$_Event;
+      required final List<Location> locations,
+      required final List<Teacher> teachers}) = _$_Event;
 
   factory _Event.fromJson(Map<String, dynamic> json) = _$_Event.fromJson;
 
@@ -708,12 +720,384 @@ abstract class _Event implements Event {
   @override
   DateTime get timeEnd => throw _privateConstructorUsedError;
   @override
-  String get location => throw _privateConstructorUsedError;
+  List<Location> get locations => throw _privateConstructorUsedError;
   @override
-  String get teacher => throw _privateConstructorUsedError;
+  List<Teacher> get teachers => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
   _$$_EventCopyWith<_$_Event> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+Location _$LocationFromJson(Map<String, dynamic> json) {
+  return _Location.fromJson(json);
+}
+
+/// @nodoc
+mixin _$Location {
+  String get id => throw _privateConstructorUsedError;
+  String get name => throw _privateConstructorUsedError;
+  String get building => throw _privateConstructorUsedError;
+  String get floor => throw _privateConstructorUsedError;
+  int get maxSeats => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $LocationCopyWith<Location> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $LocationCopyWith<$Res> {
+  factory $LocationCopyWith(Location value, $Res Function(Location) then) =
+      _$LocationCopyWithImpl<$Res>;
+  $Res call(
+      {String id, String name, String building, String floor, int maxSeats});
+}
+
+/// @nodoc
+class _$LocationCopyWithImpl<$Res> implements $LocationCopyWith<$Res> {
+  _$LocationCopyWithImpl(this._value, this._then);
+
+  final Location _value;
+  // ignore: unused_field
+  final $Res Function(Location) _then;
+
+  @override
+  $Res call({
+    Object? id = freezed,
+    Object? name = freezed,
+    Object? building = freezed,
+    Object? floor = freezed,
+    Object? maxSeats = freezed,
+  }) {
+    return _then(_value.copyWith(
+      id: id == freezed
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      name: name == freezed
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as String,
+      building: building == freezed
+          ? _value.building
+          : building // ignore: cast_nullable_to_non_nullable
+              as String,
+      floor: floor == freezed
+          ? _value.floor
+          : floor // ignore: cast_nullable_to_non_nullable
+              as String,
+      maxSeats: maxSeats == freezed
+          ? _value.maxSeats
+          : maxSeats // ignore: cast_nullable_to_non_nullable
+              as int,
+    ));
+  }
+}
+
+/// @nodoc
+abstract class _$$_LocationCopyWith<$Res> implements $LocationCopyWith<$Res> {
+  factory _$$_LocationCopyWith(
+          _$_Location value, $Res Function(_$_Location) then) =
+      __$$_LocationCopyWithImpl<$Res>;
+  @override
+  $Res call(
+      {String id, String name, String building, String floor, int maxSeats});
+}
+
+/// @nodoc
+class __$$_LocationCopyWithImpl<$Res> extends _$LocationCopyWithImpl<$Res>
+    implements _$$_LocationCopyWith<$Res> {
+  __$$_LocationCopyWithImpl(
+      _$_Location _value, $Res Function(_$_Location) _then)
+      : super(_value, (v) => _then(v as _$_Location));
+
+  @override
+  _$_Location get _value => super._value as _$_Location;
+
+  @override
+  $Res call({
+    Object? id = freezed,
+    Object? name = freezed,
+    Object? building = freezed,
+    Object? floor = freezed,
+    Object? maxSeats = freezed,
+  }) {
+    return _then(_$_Location(
+      id: id == freezed
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      name: name == freezed
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as String,
+      building: building == freezed
+          ? _value.building
+          : building // ignore: cast_nullable_to_non_nullable
+              as String,
+      floor: floor == freezed
+          ? _value.floor
+          : floor // ignore: cast_nullable_to_non_nullable
+              as String,
+      maxSeats: maxSeats == freezed
+          ? _value.maxSeats
+          : maxSeats // ignore: cast_nullable_to_non_nullable
+              as int,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$_Location implements _Location {
+  const _$_Location(
+      {required this.id,
+      required this.name,
+      required this.building,
+      required this.floor,
+      required this.maxSeats});
+
+  factory _$_Location.fromJson(Map<String, dynamic> json) =>
+      _$$_LocationFromJson(json);
+
+  @override
+  final String id;
+  @override
+  final String name;
+  @override
+  final String building;
+  @override
+  final String floor;
+  @override
+  final int maxSeats;
+
+  @override
+  String toString() {
+    return 'Location(id: $id, name: $name, building: $building, floor: $floor, maxSeats: $maxSeats)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$_Location &&
+            const DeepCollectionEquality().equals(other.id, id) &&
+            const DeepCollectionEquality().equals(other.name, name) &&
+            const DeepCollectionEquality().equals(other.building, building) &&
+            const DeepCollectionEquality().equals(other.floor, floor) &&
+            const DeepCollectionEquality().equals(other.maxSeats, maxSeats));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(id),
+      const DeepCollectionEquality().hash(name),
+      const DeepCollectionEquality().hash(building),
+      const DeepCollectionEquality().hash(floor),
+      const DeepCollectionEquality().hash(maxSeats));
+
+  @JsonKey(ignore: true)
+  @override
+  _$$_LocationCopyWith<_$_Location> get copyWith =>
+      __$$_LocationCopyWithImpl<_$_Location>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$_LocationToJson(this);
+  }
+}
+
+abstract class _Location implements Location {
+  const factory _Location(
+      {required final String id,
+      required final String name,
+      required final String building,
+      required final String floor,
+      required final int maxSeats}) = _$_Location;
+
+  factory _Location.fromJson(Map<String, dynamic> json) = _$_Location.fromJson;
+
+  @override
+  String get id => throw _privateConstructorUsedError;
+  @override
+  String get name => throw _privateConstructorUsedError;
+  @override
+  String get building => throw _privateConstructorUsedError;
+  @override
+  String get floor => throw _privateConstructorUsedError;
+  @override
+  int get maxSeats => throw _privateConstructorUsedError;
+  @override
+  @JsonKey(ignore: true)
+  _$$_LocationCopyWith<_$_Location> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+Teacher _$TeacherFromJson(Map<String, dynamic> json) {
+  return _Teacher.fromJson(json);
+}
+
+/// @nodoc
+mixin _$Teacher {
+  String get id => throw _privateConstructorUsedError;
+  String get firstName => throw _privateConstructorUsedError;
+  String get lastName => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $TeacherCopyWith<Teacher> get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $TeacherCopyWith<$Res> {
+  factory $TeacherCopyWith(Teacher value, $Res Function(Teacher) then) =
+      _$TeacherCopyWithImpl<$Res>;
+  $Res call({String id, String firstName, String lastName});
+}
+
+/// @nodoc
+class _$TeacherCopyWithImpl<$Res> implements $TeacherCopyWith<$Res> {
+  _$TeacherCopyWithImpl(this._value, this._then);
+
+  final Teacher _value;
+  // ignore: unused_field
+  final $Res Function(Teacher) _then;
+
+  @override
+  $Res call({
+    Object? id = freezed,
+    Object? firstName = freezed,
+    Object? lastName = freezed,
+  }) {
+    return _then(_value.copyWith(
+      id: id == freezed
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      firstName: firstName == freezed
+          ? _value.firstName
+          : firstName // ignore: cast_nullable_to_non_nullable
+              as String,
+      lastName: lastName == freezed
+          ? _value.lastName
+          : lastName // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+abstract class _$$_TeacherCopyWith<$Res> implements $TeacherCopyWith<$Res> {
+  factory _$$_TeacherCopyWith(
+          _$_Teacher value, $Res Function(_$_Teacher) then) =
+      __$$_TeacherCopyWithImpl<$Res>;
+  @override
+  $Res call({String id, String firstName, String lastName});
+}
+
+/// @nodoc
+class __$$_TeacherCopyWithImpl<$Res> extends _$TeacherCopyWithImpl<$Res>
+    implements _$$_TeacherCopyWith<$Res> {
+  __$$_TeacherCopyWithImpl(_$_Teacher _value, $Res Function(_$_Teacher) _then)
+      : super(_value, (v) => _then(v as _$_Teacher));
+
+  @override
+  _$_Teacher get _value => super._value as _$_Teacher;
+
+  @override
+  $Res call({
+    Object? id = freezed,
+    Object? firstName = freezed,
+    Object? lastName = freezed,
+  }) {
+    return _then(_$_Teacher(
+      id: id == freezed
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      firstName: firstName == freezed
+          ? _value.firstName
+          : firstName // ignore: cast_nullable_to_non_nullable
+              as String,
+      lastName: lastName == freezed
+          ? _value.lastName
+          : lastName // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$_Teacher implements _Teacher {
+  const _$_Teacher(
+      {required this.id, required this.firstName, required this.lastName});
+
+  factory _$_Teacher.fromJson(Map<String, dynamic> json) =>
+      _$$_TeacherFromJson(json);
+
+  @override
+  final String id;
+  @override
+  final String firstName;
+  @override
+  final String lastName;
+
+  @override
+  String toString() {
+    return 'Teacher(id: $id, firstName: $firstName, lastName: $lastName)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$_Teacher &&
+            const DeepCollectionEquality().equals(other.id, id) &&
+            const DeepCollectionEquality().equals(other.firstName, firstName) &&
+            const DeepCollectionEquality().equals(other.lastName, lastName));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(id),
+      const DeepCollectionEquality().hash(firstName),
+      const DeepCollectionEquality().hash(lastName));
+
+  @JsonKey(ignore: true)
+  @override
+  _$$_TeacherCopyWith<_$_Teacher> get copyWith =>
+      __$$_TeacherCopyWithImpl<_$_Teacher>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$_TeacherToJson(this);
+  }
+}
+
+abstract class _Teacher implements Teacher {
+  const factory _Teacher(
+      {required final String id,
+      required final String firstName,
+      required final String lastName}) = _$_Teacher;
+
+  factory _Teacher.fromJson(Map<String, dynamic> json) = _$_Teacher.fromJson;
+
+  @override
+  String get id => throw _privateConstructorUsedError;
+  @override
+  String get firstName => throw _privateConstructorUsedError;
+  @override
+  String get lastName => throw _privateConstructorUsedError;
+  @override
+  @JsonKey(ignore: true)
+  _$$_TeacherCopyWith<_$_Teacher> get copyWith =>
       throw _privateConstructorUsedError;
 }
 

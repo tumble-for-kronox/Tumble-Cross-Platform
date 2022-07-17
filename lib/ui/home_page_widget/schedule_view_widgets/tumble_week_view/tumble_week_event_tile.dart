@@ -2,11 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:tumble/models/api_models/schedule_model.dart';
-import 'package:tumble/models/ui_models/week_model.dart';
+import 'package:tumble/ui/home_page_widget/schedule_view_widgets/event_details/event_details_page.dart';
 
-class WeekWidget extends StatelessWidget {
-  final Week event;
-  const WeekWidget({Key? key, required this.event}) : super(key: key);
+class TumbleWeekEventTile extends StatelessWidget {
+  final Event event;
+  const TumbleWeekEventTile({Key? key, required this.event}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +40,7 @@ class WeekWidget extends StatelessWidget {
                     topLeft: Radius.circular(2),
                     bottomLeft: Radius.circular(2)),
                 color: Color(int.parse(
-                    "ff" + widget.event!.color.replaceAll("#", ""),
+                    "ff${event.course.color.replaceAll("#", "")}",
                     radix: 16)),
               ),
             ),
@@ -50,16 +50,14 @@ class WeekWidget extends StatelessWidget {
                 Container(
                   width: 100,
                   color: Color(int.parse(
-                          "ff" + widget.event!.color.replaceAll("#", ""),
+                          "ff${event.course.color.replaceAll("#", "")}",
                           radix: 16))
                       .withOpacity(0.35),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 5),
                   child: Text(
-                    DateFormat("HH:mm").format(widget.event!.start) +
-                        " - " +
-                        DateFormat("HH:mm").format(widget.event!.end),
+                    "${DateFormat("HH:mm").format(event.timeStart)} - ${DateFormat("HH:mm").format(event.timeEnd)}",
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.onSurface,
                       fontSize: 16,
@@ -77,7 +75,7 @@ class WeekWidget extends StatelessWidget {
                   right: 5,
                 ),
                 child: Text(
-                  widget.event!.title,
+                  event.title,
                   textAlign: TextAlign.end,
                   style: TextStyle(
                     color: Theme.of(context).colorScheme.onSurface,

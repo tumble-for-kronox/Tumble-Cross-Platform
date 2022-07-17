@@ -6,14 +6,17 @@ import 'package:tumble/ui/home_page_widget/bottom_nav_widget/cubit/bottom_nav_cu
 import 'package:tumble/ui/home_page_widget/bottom_nav_widget/custom_bottom_bar.dart';
 import 'package:tumble/ui/home_page_widget/cubit/home_page_cubit.dart';
 import 'package:tumble/ui/home_page_widget/home_page.dart';
-import 'package:tumble/ui/home_page_widget/schedule_view_widgets/tumble_list_view.dart';
-import 'package:tumble/ui/home_page_widget/schedule_view_widgets/tumble_week_view.dart';
+import 'package:tumble/ui/home_page_widget/schedule_view_widgets/tumble_list_view/tumble_list_view.dart';
+import 'package:tumble/ui/home_page_widget/schedule_view_widgets/tumble_week_view/tumble_week_view.dart';
 import 'package:tumble/ui/home_page_widget/school_selection_page.dart';
 import 'package:tumble/ui/main_app_widget/cubit/main_app_cubit.dart';
 import 'package:tumble/ui/main_app_widget/main_app.dart';
 import 'package:tumble/ui/search_page_widgets/cubit/search_page_cubit.dart';
 import 'package:tumble/ui/search_page_widgets/search/schedule_search_bar.dart';
 import 'package:tumble/ui/search_page_widgets/search/schedule_search_page.dart';
+import 'package:tumble/ui/search_page_widgets/search_bar_widget/cubit/schedule_search_bar_and_logo_container_cubit.dart';
+import 'package:tumble/ui/search_page_widgets/search_bar_widget/searchbar_and_logo_container.dart';
+import 'package:tumble/ui/search_page_widgets/search_page_slideable_logo.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,7 +33,9 @@ void main() async {
     ),
     BlocProvider<BottomNavCubit>(
         create: (c) => BottomNavCubit(),
-        child: const CustomBottomBar()),
+        child: Row(
+          children: const [CustomBottomBar(), HomePage()],
+        )),
 
     /// Currently shared state between all
     /// descendants of HomePage. Maybe not?
@@ -47,5 +52,11 @@ void main() async {
         ScheduleSearchBar(),
       ]),
     ),
+    BlocProvider<ScheduleSearchBarAndLogoContainerCubit>(
+        create: (c) => ScheduleSearchBarAndLogoContainerCubit(),
+        child: Row(children: const [
+          SearchBarAndLogoContainer(),
+          ScheduleSearchBar()
+        ])),
   ], child: const MainApp()));
 }

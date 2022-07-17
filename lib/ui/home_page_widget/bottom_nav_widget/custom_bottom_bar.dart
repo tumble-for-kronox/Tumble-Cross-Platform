@@ -22,10 +22,7 @@ class CustomBottomBar extends StatelessWidget {
             /// Dynamically updates the index of the bottom bar,
             /// but only actually changes page 'state' in HomePage
             /// if the state is not [HomePageError]
-            onTap: (index) {
-              onTap;
-              context.read<BottomNavCubit>().updateIndex(index);
-            },
+            onTap: onTap,
             currentIndex: state,
             backgroundColor: Theme.of(context).colorScheme.background,
             elevation: 20,
