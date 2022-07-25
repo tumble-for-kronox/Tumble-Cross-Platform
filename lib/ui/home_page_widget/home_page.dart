@@ -5,10 +5,11 @@ import 'package:tumble/theme/colors.dart';
 import 'package:tumble/ui/home_page_widget/bottom_nav_widget/cubit/bottom_nav_cubit.dart';
 import 'package:tumble/ui/home_page_widget/cubit/home_page_cubit.dart';
 import 'package:tumble/ui/home_page_widget/bottom_nav_widget/custom_bottom_bar.dart';
+import 'package:tumble/ui/home_page_widget/schedule_view_widgets/misc/tumble_app_drawer.dart';
 import 'package:tumble/ui/home_page_widget/schedule_view_widgets/no_schedule.dart';
 import 'package:tumble/ui/home_page_widget/schedule_view_widgets/tumble_list_view/tumble_list_view.dart';
 import 'package:tumble/ui/home_page_widget/schedule_view_widgets/tumble_week_view/tumble_week_view.dart';
-import 'package:tumble/ui/home_page_widget/tumble_app_bar.dart';
+import 'package:tumble/ui/home_page_widget/schedule_view_widgets/misc/tumble_app_bar.dart';
 
 class HomePage extends StatefulWidget {
   final String? currentScheduleId;
@@ -26,6 +27,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        drawer: const TumbleAppDrawer(),
         appBar: const TumbleAppBar(),
         body: FutureBuilder(
             future:

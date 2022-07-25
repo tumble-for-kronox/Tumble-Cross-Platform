@@ -1,6 +1,5 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 
 class TumbleAppBar extends StatefulWidget implements PreferredSizeWidget {
   const TumbleAppBar({Key? key}) : super(key: key);
@@ -15,6 +14,11 @@ class TumbleAppBar extends StatefulWidget implements PreferredSizeWidget {
 class _TumbleAppBarState extends State<TumbleAppBar> {
   @override
   Widget build(BuildContext context) {
-    return AppBar();
+    return AppBar(
+      leading: IconButton(
+        icon: const Icon(CupertinoIcons.gear),
+        onPressed: () => Scaffold.of(context).openDrawer(),
+      ),
+    );
   }
 }
