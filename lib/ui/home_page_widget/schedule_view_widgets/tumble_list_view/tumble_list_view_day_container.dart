@@ -20,7 +20,7 @@ class TumbleListViewDayContainer extends StatelessWidget {
         children: [
           Row(
             children: [
-              Text("${day.dayOfWeek} ${day.date}",
+              Text("${day.name} ${day.date}",
                   style: TextStyle(
                       color: Theme.of(context).colorScheme.onBackground,
                       fontSize: 17,
@@ -40,7 +40,7 @@ class TumbleListViewDayContainer extends StatelessWidget {
                     course: event.course,
                     teachers: event.teachers,
                     locations: event.locations,
-                    color: event.course.color,
+                    color: "#cccccc",
                     timeStart: event.timeStart,
                     timeEnd: event.timeEnd,
                     onTap: () {

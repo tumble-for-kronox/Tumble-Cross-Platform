@@ -23,7 +23,6 @@ mixin _$ScheduleModel {
   String get cachedAt => throw _privateConstructorUsedError;
   String get id => throw _privateConstructorUsedError;
   List<Day> get days => throw _privateConstructorUsedError;
-  Courses get courses => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -36,9 +35,7 @@ abstract class $ScheduleModelCopyWith<$Res> {
   factory $ScheduleModelCopyWith(
           ScheduleModel value, $Res Function(ScheduleModel) then) =
       _$ScheduleModelCopyWithImpl<$Res>;
-  $Res call({String cachedAt, String id, List<Day> days, Courses courses});
-
-  $CoursesCopyWith<$Res> get courses;
+  $Res call({String cachedAt, String id, List<Day> days});
 }
 
 /// @nodoc
@@ -55,7 +52,6 @@ class _$ScheduleModelCopyWithImpl<$Res>
     Object? cachedAt = freezed,
     Object? id = freezed,
     Object? days = freezed,
-    Object? courses = freezed,
   }) {
     return _then(_value.copyWith(
       cachedAt: cachedAt == freezed
@@ -70,18 +66,7 @@ class _$ScheduleModelCopyWithImpl<$Res>
           ? _value.days
           : days // ignore: cast_nullable_to_non_nullable
               as List<Day>,
-      courses: courses == freezed
-          ? _value.courses
-          : courses // ignore: cast_nullable_to_non_nullable
-              as Courses,
     ));
-  }
-
-  @override
-  $CoursesCopyWith<$Res> get courses {
-    return $CoursesCopyWith<$Res>(_value.courses, (value) {
-      return _then(_value.copyWith(courses: value));
-    });
   }
 }
 
@@ -92,10 +77,7 @@ abstract class _$$_ScheduleModelCopyWith<$Res>
           _$_ScheduleModel value, $Res Function(_$_ScheduleModel) then) =
       __$$_ScheduleModelCopyWithImpl<$Res>;
   @override
-  $Res call({String cachedAt, String id, List<Day> days, Courses courses});
-
-  @override
-  $CoursesCopyWith<$Res> get courses;
+  $Res call({String cachedAt, String id, List<Day> days});
 }
 
 /// @nodoc
@@ -114,7 +96,6 @@ class __$$_ScheduleModelCopyWithImpl<$Res>
     Object? cachedAt = freezed,
     Object? id = freezed,
     Object? days = freezed,
-    Object? courses = freezed,
   }) {
     return _then(_$_ScheduleModel(
       cachedAt: cachedAt == freezed
@@ -129,10 +110,6 @@ class __$$_ScheduleModelCopyWithImpl<$Res>
           ? _value._days
           : days // ignore: cast_nullable_to_non_nullable
               as List<Day>,
-      courses: courses == freezed
-          ? _value.courses
-          : courses // ignore: cast_nullable_to_non_nullable
-              as Courses,
     ));
   }
 }
@@ -141,10 +118,7 @@ class __$$_ScheduleModelCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_ScheduleModel implements _ScheduleModel {
   const _$_ScheduleModel(
-      {required this.cachedAt,
-      required this.id,
-      required final List<Day> days,
-      required this.courses})
+      {required this.cachedAt, required this.id, required final List<Day> days})
       : _days = days;
 
   factory _$_ScheduleModel.fromJson(Map<String, dynamic> json) =>
@@ -162,11 +136,8 @@ class _$_ScheduleModel implements _ScheduleModel {
   }
 
   @override
-  final Courses courses;
-
-  @override
   String toString() {
-    return 'ScheduleModel(cachedAt: $cachedAt, id: $id, days: $days, courses: $courses)';
+    return 'ScheduleModel(cachedAt: $cachedAt, id: $id, days: $days)';
   }
 
   @override
@@ -176,8 +147,7 @@ class _$_ScheduleModel implements _ScheduleModel {
             other is _$_ScheduleModel &&
             const DeepCollectionEquality().equals(other.cachedAt, cachedAt) &&
             const DeepCollectionEquality().equals(other.id, id) &&
-            const DeepCollectionEquality().equals(other._days, _days) &&
-            const DeepCollectionEquality().equals(other.courses, courses));
+            const DeepCollectionEquality().equals(other._days, _days));
   }
 
   @JsonKey(ignore: true)
@@ -186,8 +156,7 @@ class _$_ScheduleModel implements _ScheduleModel {
       runtimeType,
       const DeepCollectionEquality().hash(cachedAt),
       const DeepCollectionEquality().hash(id),
-      const DeepCollectionEquality().hash(_days),
-      const DeepCollectionEquality().hash(courses));
+      const DeepCollectionEquality().hash(_days));
 
   @JsonKey(ignore: true)
   @override
@@ -204,8 +173,7 @@ abstract class _ScheduleModel implements ScheduleModel {
   const factory _ScheduleModel(
       {required final String cachedAt,
       required final String id,
-      required final List<Day> days,
-      required final Courses courses}) = _$_ScheduleModel;
+      required final List<Day> days}) = _$_ScheduleModel;
 
   factory _ScheduleModel.fromJson(Map<String, dynamic> json) =
       _$_ScheduleModel.fromJson;
@@ -217,336 +185,8 @@ abstract class _ScheduleModel implements ScheduleModel {
   @override
   List<Day> get days => throw _privateConstructorUsedError;
   @override
-  Courses get courses => throw _privateConstructorUsedError;
-  @override
   @JsonKey(ignore: true)
   _$$_ScheduleModelCopyWith<_$_ScheduleModel> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-Courses _$CoursesFromJson(Map<String, dynamic> json) {
-  return _Courses.fromJson(json);
-}
-
-/// @nodoc
-mixin _$Courses {
-  CourseId get courseId => throw _privateConstructorUsedError;
-
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
-  $CoursesCopyWith<Courses> get copyWith => throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class $CoursesCopyWith<$Res> {
-  factory $CoursesCopyWith(Courses value, $Res Function(Courses) then) =
-      _$CoursesCopyWithImpl<$Res>;
-  $Res call({CourseId courseId});
-
-  $CourseIdCopyWith<$Res> get courseId;
-}
-
-/// @nodoc
-class _$CoursesCopyWithImpl<$Res> implements $CoursesCopyWith<$Res> {
-  _$CoursesCopyWithImpl(this._value, this._then);
-
-  final Courses _value;
-  // ignore: unused_field
-  final $Res Function(Courses) _then;
-
-  @override
-  $Res call({
-    Object? courseId = freezed,
-  }) {
-    return _then(_value.copyWith(
-      courseId: courseId == freezed
-          ? _value.courseId
-          : courseId // ignore: cast_nullable_to_non_nullable
-              as CourseId,
-    ));
-  }
-
-  @override
-  $CourseIdCopyWith<$Res> get courseId {
-    return $CourseIdCopyWith<$Res>(_value.courseId, (value) {
-      return _then(_value.copyWith(courseId: value));
-    });
-  }
-}
-
-/// @nodoc
-abstract class _$$_CoursesCopyWith<$Res> implements $CoursesCopyWith<$Res> {
-  factory _$$_CoursesCopyWith(
-          _$_Courses value, $Res Function(_$_Courses) then) =
-      __$$_CoursesCopyWithImpl<$Res>;
-  @override
-  $Res call({CourseId courseId});
-
-  @override
-  $CourseIdCopyWith<$Res> get courseId;
-}
-
-/// @nodoc
-class __$$_CoursesCopyWithImpl<$Res> extends _$CoursesCopyWithImpl<$Res>
-    implements _$$_CoursesCopyWith<$Res> {
-  __$$_CoursesCopyWithImpl(_$_Courses _value, $Res Function(_$_Courses) _then)
-      : super(_value, (v) => _then(v as _$_Courses));
-
-  @override
-  _$_Courses get _value => super._value as _$_Courses;
-
-  @override
-  $Res call({
-    Object? courseId = freezed,
-  }) {
-    return _then(_$_Courses(
-      courseId: courseId == freezed
-          ? _value.courseId
-          : courseId // ignore: cast_nullable_to_non_nullable
-              as CourseId,
-    ));
-  }
-}
-
-/// @nodoc
-@JsonSerializable()
-class _$_Courses implements _Courses {
-  const _$_Courses({required this.courseId});
-
-  factory _$_Courses.fromJson(Map<String, dynamic> json) =>
-      _$$_CoursesFromJson(json);
-
-  @override
-  final CourseId courseId;
-
-  @override
-  String toString() {
-    return 'Courses(courseId: $courseId)';
-  }
-
-  @override
-  bool operator ==(dynamic other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$_Courses &&
-            const DeepCollectionEquality().equals(other.courseId, courseId));
-  }
-
-  @JsonKey(ignore: true)
-  @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(courseId));
-
-  @JsonKey(ignore: true)
-  @override
-  _$$_CoursesCopyWith<_$_Courses> get copyWith =>
-      __$$_CoursesCopyWithImpl<_$_Courses>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$_CoursesToJson(this);
-  }
-}
-
-abstract class _Courses implements Courses {
-  const factory _Courses({required final CourseId courseId}) = _$_Courses;
-
-  factory _Courses.fromJson(Map<String, dynamic> json) = _$_Courses.fromJson;
-
-  @override
-  CourseId get courseId => throw _privateConstructorUsedError;
-  @override
-  @JsonKey(ignore: true)
-  _$$_CoursesCopyWith<_$_Courses> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-CourseId _$CourseIdFromJson(Map<String, dynamic> json) {
-  return _CourseId.fromJson(json);
-}
-
-/// @nodoc
-mixin _$CourseId {
-  String get id => throw _privateConstructorUsedError;
-  String get swedishName => throw _privateConstructorUsedError;
-  String get englishName => throw _privateConstructorUsedError;
-  String get color => throw _privateConstructorUsedError;
-
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
-  $CourseIdCopyWith<CourseId> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class $CourseIdCopyWith<$Res> {
-  factory $CourseIdCopyWith(CourseId value, $Res Function(CourseId) then) =
-      _$CourseIdCopyWithImpl<$Res>;
-  $Res call({String id, String swedishName, String englishName, String color});
-}
-
-/// @nodoc
-class _$CourseIdCopyWithImpl<$Res> implements $CourseIdCopyWith<$Res> {
-  _$CourseIdCopyWithImpl(this._value, this._then);
-
-  final CourseId _value;
-  // ignore: unused_field
-  final $Res Function(CourseId) _then;
-
-  @override
-  $Res call({
-    Object? id = freezed,
-    Object? swedishName = freezed,
-    Object? englishName = freezed,
-    Object? color = freezed,
-  }) {
-    return _then(_value.copyWith(
-      id: id == freezed
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      swedishName: swedishName == freezed
-          ? _value.swedishName
-          : swedishName // ignore: cast_nullable_to_non_nullable
-              as String,
-      englishName: englishName == freezed
-          ? _value.englishName
-          : englishName // ignore: cast_nullable_to_non_nullable
-              as String,
-      color: color == freezed
-          ? _value.color
-          : color // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
-  }
-}
-
-/// @nodoc
-abstract class _$$_CourseIdCopyWith<$Res> implements $CourseIdCopyWith<$Res> {
-  factory _$$_CourseIdCopyWith(
-          _$_CourseId value, $Res Function(_$_CourseId) then) =
-      __$$_CourseIdCopyWithImpl<$Res>;
-  @override
-  $Res call({String id, String swedishName, String englishName, String color});
-}
-
-/// @nodoc
-class __$$_CourseIdCopyWithImpl<$Res> extends _$CourseIdCopyWithImpl<$Res>
-    implements _$$_CourseIdCopyWith<$Res> {
-  __$$_CourseIdCopyWithImpl(
-      _$_CourseId _value, $Res Function(_$_CourseId) _then)
-      : super(_value, (v) => _then(v as _$_CourseId));
-
-  @override
-  _$_CourseId get _value => super._value as _$_CourseId;
-
-  @override
-  $Res call({
-    Object? id = freezed,
-    Object? swedishName = freezed,
-    Object? englishName = freezed,
-    Object? color = freezed,
-  }) {
-    return _then(_$_CourseId(
-      id: id == freezed
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      swedishName: swedishName == freezed
-          ? _value.swedishName
-          : swedishName // ignore: cast_nullable_to_non_nullable
-              as String,
-      englishName: englishName == freezed
-          ? _value.englishName
-          : englishName // ignore: cast_nullable_to_non_nullable
-              as String,
-      color: color == freezed
-          ? _value.color
-          : color // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
-  }
-}
-
-/// @nodoc
-@JsonSerializable()
-class _$_CourseId implements _CourseId {
-  const _$_CourseId(
-      {required this.id,
-      required this.swedishName,
-      required this.englishName,
-      required this.color});
-
-  factory _$_CourseId.fromJson(Map<String, dynamic> json) =>
-      _$$_CourseIdFromJson(json);
-
-  @override
-  final String id;
-  @override
-  final String swedishName;
-  @override
-  final String englishName;
-  @override
-  final String color;
-
-  @override
-  String toString() {
-    return 'CourseId(id: $id, swedishName: $swedishName, englishName: $englishName, color: $color)';
-  }
-
-  @override
-  bool operator ==(dynamic other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$_CourseId &&
-            const DeepCollectionEquality().equals(other.id, id) &&
-            const DeepCollectionEquality()
-                .equals(other.swedishName, swedishName) &&
-            const DeepCollectionEquality()
-                .equals(other.englishName, englishName) &&
-            const DeepCollectionEquality().equals(other.color, color));
-  }
-
-  @JsonKey(ignore: true)
-  @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(id),
-      const DeepCollectionEquality().hash(swedishName),
-      const DeepCollectionEquality().hash(englishName),
-      const DeepCollectionEquality().hash(color));
-
-  @JsonKey(ignore: true)
-  @override
-  _$$_CourseIdCopyWith<_$_CourseId> get copyWith =>
-      __$$_CourseIdCopyWithImpl<_$_CourseId>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$_CourseIdToJson(this);
-  }
-}
-
-abstract class _CourseId implements CourseId {
-  const factory _CourseId(
-      {required final String id,
-      required final String swedishName,
-      required final String englishName,
-      required final String color}) = _$_CourseId;
-
-  factory _CourseId.fromJson(Map<String, dynamic> json) = _$_CourseId.fromJson;
-
-  @override
-  String get id => throw _privateConstructorUsedError;
-  @override
-  String get swedishName => throw _privateConstructorUsedError;
-  @override
-  String get englishName => throw _privateConstructorUsedError;
-  @override
-  String get color => throw _privateConstructorUsedError;
-  @override
-  @JsonKey(ignore: true)
-  _$$_CourseIdCopyWith<_$_CourseId> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -558,10 +198,7 @@ Day _$DayFromJson(Map<String, dynamic> json) {
 mixin _$Day {
   String get name => throw _privateConstructorUsedError;
   String get date => throw _privateConstructorUsedError;
-  int get year => throw _privateConstructorUsedError;
-  int get month => throw _privateConstructorUsedError;
-  int get dayOfMonth => throw _privateConstructorUsedError;
-  int get dayOfWeek => throw _privateConstructorUsedError;
+  DateTime get isoString => throw _privateConstructorUsedError;
   int get weekNumber => throw _privateConstructorUsedError;
   List<Event> get events => throw _privateConstructorUsedError;
 
@@ -577,10 +214,7 @@ abstract class $DayCopyWith<$Res> {
   $Res call(
       {String name,
       String date,
-      int year,
-      int month,
-      int dayOfMonth,
-      int dayOfWeek,
+      DateTime isoString,
       int weekNumber,
       List<Event> events});
 }
@@ -597,10 +231,7 @@ class _$DayCopyWithImpl<$Res> implements $DayCopyWith<$Res> {
   $Res call({
     Object? name = freezed,
     Object? date = freezed,
-    Object? year = freezed,
-    Object? month = freezed,
-    Object? dayOfMonth = freezed,
-    Object? dayOfWeek = freezed,
+    Object? isoString = freezed,
     Object? weekNumber = freezed,
     Object? events = freezed,
   }) {
@@ -613,22 +244,10 @@ class _$DayCopyWithImpl<$Res> implements $DayCopyWith<$Res> {
           ? _value.date
           : date // ignore: cast_nullable_to_non_nullable
               as String,
-      year: year == freezed
-          ? _value.year
-          : year // ignore: cast_nullable_to_non_nullable
-              as int,
-      month: month == freezed
-          ? _value.month
-          : month // ignore: cast_nullable_to_non_nullable
-              as int,
-      dayOfMonth: dayOfMonth == freezed
-          ? _value.dayOfMonth
-          : dayOfMonth // ignore: cast_nullable_to_non_nullable
-              as int,
-      dayOfWeek: dayOfWeek == freezed
-          ? _value.dayOfWeek
-          : dayOfWeek // ignore: cast_nullable_to_non_nullable
-              as int,
+      isoString: isoString == freezed
+          ? _value.isoString
+          : isoString // ignore: cast_nullable_to_non_nullable
+              as DateTime,
       weekNumber: weekNumber == freezed
           ? _value.weekNumber
           : weekNumber // ignore: cast_nullable_to_non_nullable
@@ -649,10 +268,7 @@ abstract class _$$_DayCopyWith<$Res> implements $DayCopyWith<$Res> {
   $Res call(
       {String name,
       String date,
-      int year,
-      int month,
-      int dayOfMonth,
-      int dayOfWeek,
+      DateTime isoString,
       int weekNumber,
       List<Event> events});
 }
@@ -670,10 +286,7 @@ class __$$_DayCopyWithImpl<$Res> extends _$DayCopyWithImpl<$Res>
   $Res call({
     Object? name = freezed,
     Object? date = freezed,
-    Object? year = freezed,
-    Object? month = freezed,
-    Object? dayOfMonth = freezed,
-    Object? dayOfWeek = freezed,
+    Object? isoString = freezed,
     Object? weekNumber = freezed,
     Object? events = freezed,
   }) {
@@ -686,22 +299,10 @@ class __$$_DayCopyWithImpl<$Res> extends _$DayCopyWithImpl<$Res>
           ? _value.date
           : date // ignore: cast_nullable_to_non_nullable
               as String,
-      year: year == freezed
-          ? _value.year
-          : year // ignore: cast_nullable_to_non_nullable
-              as int,
-      month: month == freezed
-          ? _value.month
-          : month // ignore: cast_nullable_to_non_nullable
-              as int,
-      dayOfMonth: dayOfMonth == freezed
-          ? _value.dayOfMonth
-          : dayOfMonth // ignore: cast_nullable_to_non_nullable
-              as int,
-      dayOfWeek: dayOfWeek == freezed
-          ? _value.dayOfWeek
-          : dayOfWeek // ignore: cast_nullable_to_non_nullable
-              as int,
+      isoString: isoString == freezed
+          ? _value.isoString
+          : isoString // ignore: cast_nullable_to_non_nullable
+              as DateTime,
       weekNumber: weekNumber == freezed
           ? _value.weekNumber
           : weekNumber // ignore: cast_nullable_to_non_nullable
@@ -720,10 +321,7 @@ class _$_Day implements _Day {
   const _$_Day(
       {required this.name,
       required this.date,
-      required this.year,
-      required this.month,
-      required this.dayOfMonth,
-      required this.dayOfWeek,
+      required this.isoString,
       required this.weekNumber,
       required final List<Event> events})
       : _events = events;
@@ -735,13 +333,7 @@ class _$_Day implements _Day {
   @override
   final String date;
   @override
-  final int year;
-  @override
-  final int month;
-  @override
-  final int dayOfMonth;
-  @override
-  final int dayOfWeek;
+  final DateTime isoString;
   @override
   final int weekNumber;
   final List<Event> _events;
@@ -753,7 +345,7 @@ class _$_Day implements _Day {
 
   @override
   String toString() {
-    return 'Day(name: $name, date: $date, year: $year, month: $month, dayOfMonth: $dayOfMonth, dayOfWeek: $dayOfWeek, weekNumber: $weekNumber, events: $events)';
+    return 'Day(name: $name, date: $date, isoString: $isoString, weekNumber: $weekNumber, events: $events)';
   }
 
   @override
@@ -763,11 +355,7 @@ class _$_Day implements _Day {
             other is _$_Day &&
             const DeepCollectionEquality().equals(other.name, name) &&
             const DeepCollectionEquality().equals(other.date, date) &&
-            const DeepCollectionEquality().equals(other.year, year) &&
-            const DeepCollectionEquality().equals(other.month, month) &&
-            const DeepCollectionEquality()
-                .equals(other.dayOfMonth, dayOfMonth) &&
-            const DeepCollectionEquality().equals(other.dayOfWeek, dayOfWeek) &&
+            const DeepCollectionEquality().equals(other.isoString, isoString) &&
             const DeepCollectionEquality()
                 .equals(other.weekNumber, weekNumber) &&
             const DeepCollectionEquality().equals(other._events, _events));
@@ -779,10 +367,7 @@ class _$_Day implements _Day {
       runtimeType,
       const DeepCollectionEquality().hash(name),
       const DeepCollectionEquality().hash(date),
-      const DeepCollectionEquality().hash(year),
-      const DeepCollectionEquality().hash(month),
-      const DeepCollectionEquality().hash(dayOfMonth),
-      const DeepCollectionEquality().hash(dayOfWeek),
+      const DeepCollectionEquality().hash(isoString),
       const DeepCollectionEquality().hash(weekNumber),
       const DeepCollectionEquality().hash(_events));
 
@@ -801,10 +386,7 @@ abstract class _Day implements Day {
   const factory _Day(
       {required final String name,
       required final String date,
-      required final int year,
-      required final int month,
-      required final int dayOfMonth,
-      required final int dayOfWeek,
+      required final DateTime isoString,
       required final int weekNumber,
       required final List<Event> events}) = _$_Day;
 
@@ -815,13 +397,7 @@ abstract class _Day implements Day {
   @override
   String get date => throw _privateConstructorUsedError;
   @override
-  int get year => throw _privateConstructorUsedError;
-  @override
-  int get month => throw _privateConstructorUsedError;
-  @override
-  int get dayOfMonth => throw _privateConstructorUsedError;
-  @override
-  int get dayOfWeek => throw _privateConstructorUsedError;
+  DateTime get isoString => throw _privateConstructorUsedError;
   @override
   int get weekNumber => throw _privateConstructorUsedError;
   @override
@@ -839,12 +415,13 @@ Event _$EventFromJson(Map<String, dynamic> json) {
 mixin _$Event {
   String get id => throw _privateConstructorUsedError;
   String get title => throw _privateConstructorUsedError;
-  String get courseId => throw _privateConstructorUsedError;
+  Course get course => throw _privateConstructorUsedError;
   DateTime get timeStart => throw _privateConstructorUsedError;
   DateTime get timeEnd => throw _privateConstructorUsedError;
   List<Location> get locations => throw _privateConstructorUsedError;
   List<Teacher> get teachers => throw _privateConstructorUsedError;
   bool get isSpecial => throw _privateConstructorUsedError;
+  DateTime get lastModified => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -858,12 +435,15 @@ abstract class $EventCopyWith<$Res> {
   $Res call(
       {String id,
       String title,
-      String courseId,
+      Course course,
       DateTime timeStart,
       DateTime timeEnd,
       List<Location> locations,
       List<Teacher> teachers,
-      bool isSpecial});
+      bool isSpecial,
+      DateTime lastModified});
+
+  $CourseCopyWith<$Res> get course;
 }
 
 /// @nodoc
@@ -878,12 +458,13 @@ class _$EventCopyWithImpl<$Res> implements $EventCopyWith<$Res> {
   $Res call({
     Object? id = freezed,
     Object? title = freezed,
-    Object? courseId = freezed,
+    Object? course = freezed,
     Object? timeStart = freezed,
     Object? timeEnd = freezed,
     Object? locations = freezed,
     Object? teachers = freezed,
     Object? isSpecial = freezed,
+    Object? lastModified = freezed,
   }) {
     return _then(_value.copyWith(
       id: id == freezed
@@ -894,10 +475,10 @@ class _$EventCopyWithImpl<$Res> implements $EventCopyWith<$Res> {
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
               as String,
-      courseId: courseId == freezed
-          ? _value.courseId
-          : courseId // ignore: cast_nullable_to_non_nullable
-              as String,
+      course: course == freezed
+          ? _value.course
+          : course // ignore: cast_nullable_to_non_nullable
+              as Course,
       timeStart: timeStart == freezed
           ? _value.timeStart
           : timeStart // ignore: cast_nullable_to_non_nullable
@@ -918,7 +499,18 @@ class _$EventCopyWithImpl<$Res> implements $EventCopyWith<$Res> {
           ? _value.isSpecial
           : isSpecial // ignore: cast_nullable_to_non_nullable
               as bool,
+      lastModified: lastModified == freezed
+          ? _value.lastModified
+          : lastModified // ignore: cast_nullable_to_non_nullable
+              as DateTime,
     ));
+  }
+
+  @override
+  $CourseCopyWith<$Res> get course {
+    return $CourseCopyWith<$Res>(_value.course, (value) {
+      return _then(_value.copyWith(course: value));
+    });
   }
 }
 
@@ -930,12 +522,16 @@ abstract class _$$_EventCopyWith<$Res> implements $EventCopyWith<$Res> {
   $Res call(
       {String id,
       String title,
-      String courseId,
+      Course course,
       DateTime timeStart,
       DateTime timeEnd,
       List<Location> locations,
       List<Teacher> teachers,
-      bool isSpecial});
+      bool isSpecial,
+      DateTime lastModified});
+
+  @override
+  $CourseCopyWith<$Res> get course;
 }
 
 /// @nodoc
@@ -951,12 +547,13 @@ class __$$_EventCopyWithImpl<$Res> extends _$EventCopyWithImpl<$Res>
   $Res call({
     Object? id = freezed,
     Object? title = freezed,
-    Object? courseId = freezed,
+    Object? course = freezed,
     Object? timeStart = freezed,
     Object? timeEnd = freezed,
     Object? locations = freezed,
     Object? teachers = freezed,
     Object? isSpecial = freezed,
+    Object? lastModified = freezed,
   }) {
     return _then(_$_Event(
       id: id == freezed
@@ -967,10 +564,10 @@ class __$$_EventCopyWithImpl<$Res> extends _$EventCopyWithImpl<$Res>
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
               as String,
-      courseId: courseId == freezed
-          ? _value.courseId
-          : courseId // ignore: cast_nullable_to_non_nullable
-              as String,
+      course: course == freezed
+          ? _value.course
+          : course // ignore: cast_nullable_to_non_nullable
+              as Course,
       timeStart: timeStart == freezed
           ? _value.timeStart
           : timeStart // ignore: cast_nullable_to_non_nullable
@@ -991,6 +588,10 @@ class __$$_EventCopyWithImpl<$Res> extends _$EventCopyWithImpl<$Res>
           ? _value.isSpecial
           : isSpecial // ignore: cast_nullable_to_non_nullable
               as bool,
+      lastModified: lastModified == freezed
+          ? _value.lastModified
+          : lastModified // ignore: cast_nullable_to_non_nullable
+              as DateTime,
     ));
   }
 }
@@ -1001,12 +602,13 @@ class _$_Event implements _Event {
   const _$_Event(
       {required this.id,
       required this.title,
-      required this.courseId,
+      required this.course,
       required this.timeStart,
       required this.timeEnd,
       required final List<Location> locations,
       required final List<Teacher> teachers,
-      required this.isSpecial})
+      required this.isSpecial,
+      required this.lastModified})
       : _locations = locations,
         _teachers = teachers;
 
@@ -1018,7 +620,7 @@ class _$_Event implements _Event {
   @override
   final String title;
   @override
-  final String courseId;
+  final Course course;
   @override
   final DateTime timeStart;
   @override
@@ -1039,10 +641,12 @@ class _$_Event implements _Event {
 
   @override
   final bool isSpecial;
+  @override
+  final DateTime lastModified;
 
   @override
   String toString() {
-    return 'Event(id: $id, title: $title, courseId: $courseId, timeStart: $timeStart, timeEnd: $timeEnd, locations: $locations, teachers: $teachers, isSpecial: $isSpecial)';
+    return 'Event(id: $id, title: $title, course: $course, timeStart: $timeStart, timeEnd: $timeEnd, locations: $locations, teachers: $teachers, isSpecial: $isSpecial, lastModified: $lastModified)';
   }
 
   @override
@@ -1052,13 +656,15 @@ class _$_Event implements _Event {
             other is _$_Event &&
             const DeepCollectionEquality().equals(other.id, id) &&
             const DeepCollectionEquality().equals(other.title, title) &&
-            const DeepCollectionEquality().equals(other.courseId, courseId) &&
+            const DeepCollectionEquality().equals(other.course, course) &&
             const DeepCollectionEquality().equals(other.timeStart, timeStart) &&
             const DeepCollectionEquality().equals(other.timeEnd, timeEnd) &&
             const DeepCollectionEquality()
                 .equals(other._locations, _locations) &&
             const DeepCollectionEquality().equals(other._teachers, _teachers) &&
-            const DeepCollectionEquality().equals(other.isSpecial, isSpecial));
+            const DeepCollectionEquality().equals(other.isSpecial, isSpecial) &&
+            const DeepCollectionEquality()
+                .equals(other.lastModified, lastModified));
   }
 
   @JsonKey(ignore: true)
@@ -1067,12 +673,13 @@ class _$_Event implements _Event {
       runtimeType,
       const DeepCollectionEquality().hash(id),
       const DeepCollectionEquality().hash(title),
-      const DeepCollectionEquality().hash(courseId),
+      const DeepCollectionEquality().hash(course),
       const DeepCollectionEquality().hash(timeStart),
       const DeepCollectionEquality().hash(timeEnd),
       const DeepCollectionEquality().hash(_locations),
       const DeepCollectionEquality().hash(_teachers),
-      const DeepCollectionEquality().hash(isSpecial));
+      const DeepCollectionEquality().hash(isSpecial),
+      const DeepCollectionEquality().hash(lastModified));
 
   @JsonKey(ignore: true)
   @override
@@ -1089,12 +696,13 @@ abstract class _Event implements Event {
   const factory _Event(
       {required final String id,
       required final String title,
-      required final String courseId,
+      required final Course course,
       required final DateTime timeStart,
       required final DateTime timeEnd,
       required final List<Location> locations,
       required final List<Teacher> teachers,
-      required final bool isSpecial}) = _$_Event;
+      required final bool isSpecial,
+      required final DateTime lastModified}) = _$_Event;
 
   factory _Event.fromJson(Map<String, dynamic> json) = _$_Event.fromJson;
 
@@ -1103,7 +711,7 @@ abstract class _Event implements Event {
   @override
   String get title => throw _privateConstructorUsedError;
   @override
-  String get courseId => throw _privateConstructorUsedError;
+  Course get course => throw _privateConstructorUsedError;
   @override
   DateTime get timeStart => throw _privateConstructorUsedError;
   @override
@@ -1115,8 +723,175 @@ abstract class _Event implements Event {
   @override
   bool get isSpecial => throw _privateConstructorUsedError;
   @override
+  DateTime get lastModified => throw _privateConstructorUsedError;
+  @override
   @JsonKey(ignore: true)
   _$$_EventCopyWith<_$_Event> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+Course _$CourseFromJson(Map<String, dynamic> json) {
+  return _Course.fromJson(json);
+}
+
+/// @nodoc
+mixin _$Course {
+  String get id => throw _privateConstructorUsedError;
+  String get swedishName => throw _privateConstructorUsedError;
+  String get englishName => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $CourseCopyWith<Course> get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $CourseCopyWith<$Res> {
+  factory $CourseCopyWith(Course value, $Res Function(Course) then) =
+      _$CourseCopyWithImpl<$Res>;
+  $Res call({String id, String swedishName, String englishName});
+}
+
+/// @nodoc
+class _$CourseCopyWithImpl<$Res> implements $CourseCopyWith<$Res> {
+  _$CourseCopyWithImpl(this._value, this._then);
+
+  final Course _value;
+  // ignore: unused_field
+  final $Res Function(Course) _then;
+
+  @override
+  $Res call({
+    Object? id = freezed,
+    Object? swedishName = freezed,
+    Object? englishName = freezed,
+  }) {
+    return _then(_value.copyWith(
+      id: id == freezed
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      swedishName: swedishName == freezed
+          ? _value.swedishName
+          : swedishName // ignore: cast_nullable_to_non_nullable
+              as String,
+      englishName: englishName == freezed
+          ? _value.englishName
+          : englishName // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+abstract class _$$_CourseCopyWith<$Res> implements $CourseCopyWith<$Res> {
+  factory _$$_CourseCopyWith(_$_Course value, $Res Function(_$_Course) then) =
+      __$$_CourseCopyWithImpl<$Res>;
+  @override
+  $Res call({String id, String swedishName, String englishName});
+}
+
+/// @nodoc
+class __$$_CourseCopyWithImpl<$Res> extends _$CourseCopyWithImpl<$Res>
+    implements _$$_CourseCopyWith<$Res> {
+  __$$_CourseCopyWithImpl(_$_Course _value, $Res Function(_$_Course) _then)
+      : super(_value, (v) => _then(v as _$_Course));
+
+  @override
+  _$_Course get _value => super._value as _$_Course;
+
+  @override
+  $Res call({
+    Object? id = freezed,
+    Object? swedishName = freezed,
+    Object? englishName = freezed,
+  }) {
+    return _then(_$_Course(
+      id: id == freezed
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      swedishName: swedishName == freezed
+          ? _value.swedishName
+          : swedishName // ignore: cast_nullable_to_non_nullable
+              as String,
+      englishName: englishName == freezed
+          ? _value.englishName
+          : englishName // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$_Course implements _Course {
+  const _$_Course(
+      {required this.id, required this.swedishName, required this.englishName});
+
+  factory _$_Course.fromJson(Map<String, dynamic> json) =>
+      _$$_CourseFromJson(json);
+
+  @override
+  final String id;
+  @override
+  final String swedishName;
+  @override
+  final String englishName;
+
+  @override
+  String toString() {
+    return 'Course(id: $id, swedishName: $swedishName, englishName: $englishName)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$_Course &&
+            const DeepCollectionEquality().equals(other.id, id) &&
+            const DeepCollectionEquality()
+                .equals(other.swedishName, swedishName) &&
+            const DeepCollectionEquality()
+                .equals(other.englishName, englishName));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(id),
+      const DeepCollectionEquality().hash(swedishName),
+      const DeepCollectionEquality().hash(englishName));
+
+  @JsonKey(ignore: true)
+  @override
+  _$$_CourseCopyWith<_$_Course> get copyWith =>
+      __$$_CourseCopyWithImpl<_$_Course>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$_CourseToJson(this);
+  }
+}
+
+abstract class _Course implements Course {
+  const factory _Course(
+      {required final String id,
+      required final String swedishName,
+      required final String englishName}) = _$_Course;
+
+  factory _Course.fromJson(Map<String, dynamic> json) = _$_Course.fromJson;
+
+  @override
+  String get id => throw _privateConstructorUsedError;
+  @override
+  String get swedishName => throw _privateConstructorUsedError;
+  @override
+  String get englishName => throw _privateConstructorUsedError;
+  @override
+  @JsonKey(ignore: true)
+  _$$_CourseCopyWith<_$_Course> get copyWith =>
       throw _privateConstructorUsedError;
 }
 

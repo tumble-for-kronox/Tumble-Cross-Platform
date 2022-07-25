@@ -16,7 +16,7 @@ class EventDetailsDescriptionContainer extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              event.courseId.c,
+              event.course.id,
               maxLines: 5,
               overflow: TextOverflow.ellipsis,
               softWrap: false,

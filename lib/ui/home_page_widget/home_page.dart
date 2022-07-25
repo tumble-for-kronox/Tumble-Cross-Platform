@@ -27,11 +27,15 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        endDrawer: const TumbleAppDrawer(),
+        endDrawer: const TumbleAppDrawer(
+          limitOptions: false,
+        ),
         appBar: TumbleAppBar(
           navigateToSearch: () =>
               context.read<HomePageCubit>().navigateToSearch(context),
-          toggleFavorite: () => null,
+          toggleFavorite: () => context
+              .read<HomePageCubit>()
+              .assignFavorite(widget.currentScheduleId!),
         ),
         body: FutureBuilder(
             future:

@@ -1,53 +1,13 @@
-import 'package:flutter/foundation.dart';
-import 'package:tumble/database/database.dart';
+import 'package:tumble/models/api_models/schedule_model.dart';
 
-@immutable
-abstract class IDatabaseService {
-  /// [Schedule] table
-  // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+abstract class IDatabaseScheduleService {
+  Future addSchedule(ScheduleModel scheduleModel);
 
-  Future<int> insertSchedule(ScheduleCompanion scheduleItem);
+  Future updateSchedule(ScheduleModel scheduleModel);
 
-  Future<ScheduleData?> getSchedule(String scheduleId);
+  Future removeSchedule(String id);
 
-  Future<int> deleteSchedule(String scheduleId);
+  Future<List<ScheduleModel>> getAllSchedules();
 
-  Future<List<ScheduleData>> getAllSchedules();
-
-  Future<int?> deleteAllSchedules();
-
-  Future<DateTime?> getScheduleCachedTime(String scheduleId);
-
-  Future<List<String>?> getAllDatabaseScheduleIds();
-
-  Future<List<String>?> getGeneratedUuids(String scheduleId);
-
-  Future<void> updateSchedules(ScheduleCompanion newSchedule);
-
-  Future<String> currentDefaultSchedule();
-
-  Future<List<ScheduleData>?> getAllScheduleEntriesWithoutUuid();
-
-  Future<bool> hasFavoriteSchedule();
-
-  // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  /// [Preferences] table
-  // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Future<void> addPreferences(PreferenceData preferencesCompanion);
-
-  Future<PreferenceData?> getPreferences();
-
-  Future<int> updatePreferencesSchool(String target);
-
-  Future<bool> hasDefaultSchool();
-
-  Future<int> getDefaultViewType();
-
-  Future<String> getDefaultSchool();
-
-// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  Future<ScheduleModel?> getOneSchedule(String id);
 }

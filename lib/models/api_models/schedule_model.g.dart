@@ -13,7 +13,6 @@ _$_ScheduleModel _$$_ScheduleModelFromJson(Map<String, dynamic> json) =>
       days: (json['days'] as List<dynamic>)
           .map((e) => Day.fromJson(e as Map<String, dynamic>))
           .toList(),
-      courses: Courses.fromJson(json['courses'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$_ScheduleModelToJson(_$_ScheduleModel instance) =>
@@ -21,40 +20,12 @@ Map<String, dynamic> _$$_ScheduleModelToJson(_$_ScheduleModel instance) =>
       'cachedAt': instance.cachedAt,
       'id': instance.id,
       'days': instance.days,
-      'courses': instance.courses,
-    };
-
-_$_Courses _$$_CoursesFromJson(Map<String, dynamic> json) => _$_Courses(
-      courseId: CourseId.fromJson(json['courseId'] as Map<String, dynamic>),
-    );
-
-Map<String, dynamic> _$$_CoursesToJson(_$_Courses instance) =>
-    <String, dynamic>{
-      'courseId': instance.courseId,
-    };
-
-_$_CourseId _$$_CourseIdFromJson(Map<String, dynamic> json) => _$_CourseId(
-      id: json['id'] as String,
-      swedishName: json['swedishName'] as String,
-      englishName: json['englishName'] as String,
-      color: json['color'] as String,
-    );
-
-Map<String, dynamic> _$$_CourseIdToJson(_$_CourseId instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'swedishName': instance.swedishName,
-      'englishName': instance.englishName,
-      'color': instance.color,
     };
 
 _$_Day _$$_DayFromJson(Map<String, dynamic> json) => _$_Day(
       name: json['name'] as String,
       date: json['date'] as String,
-      year: json['year'] as int,
-      month: json['month'] as int,
-      dayOfMonth: json['dayOfMonth'] as int,
-      dayOfWeek: json['dayOfWeek'] as int,
+      isoString: DateTime.parse(json['isoString'] as String),
       weekNumber: json['weekNumber'] as int,
       events: (json['events'] as List<dynamic>)
           .map((e) => Event.fromJson(e as Map<String, dynamic>))
@@ -64,10 +35,7 @@ _$_Day _$$_DayFromJson(Map<String, dynamic> json) => _$_Day(
 Map<String, dynamic> _$$_DayToJson(_$_Day instance) => <String, dynamic>{
       'name': instance.name,
       'date': instance.date,
-      'year': instance.year,
-      'month': instance.month,
-      'dayOfMonth': instance.dayOfMonth,
-      'dayOfWeek': instance.dayOfWeek,
+      'isoString': instance.isoString.toIso8601String(),
       'weekNumber': instance.weekNumber,
       'events': instance.events,
     };
@@ -75,7 +43,7 @@ Map<String, dynamic> _$$_DayToJson(_$_Day instance) => <String, dynamic>{
 _$_Event _$$_EventFromJson(Map<String, dynamic> json) => _$_Event(
       id: json['id'] as String,
       title: json['title'] as String,
-      courseId: json['courseId'] as String,
+      course: Course.fromJson(json['course'] as Map<String, dynamic>),
       timeStart: DateTime.parse(json['timeStart'] as String),
       timeEnd: DateTime.parse(json['timeEnd'] as String),
       locations: (json['locations'] as List<dynamic>)
@@ -85,17 +53,31 @@ _$_Event _$$_EventFromJson(Map<String, dynamic> json) => _$_Event(
           .map((e) => Teacher.fromJson(e as Map<String, dynamic>))
           .toList(),
       isSpecial: json['isSpecial'] as bool,
+      lastModified: DateTime.parse(json['lastModified'] as String),
     );
 
 Map<String, dynamic> _$$_EventToJson(_$_Event instance) => <String, dynamic>{
       'id': instance.id,
       'title': instance.title,
-      'courseId': instance.courseId,
+      'course': instance.course,
       'timeStart': instance.timeStart.toIso8601String(),
       'timeEnd': instance.timeEnd.toIso8601String(),
       'locations': instance.locations,
       'teachers': instance.teachers,
       'isSpecial': instance.isSpecial,
+      'lastModified': instance.lastModified.toIso8601String(),
+    };
+
+_$_Course _$$_CourseFromJson(Map<String, dynamic> json) => _$_Course(
+      id: json['id'] as String,
+      swedishName: json['swedishName'] as String,
+      englishName: json['englishName'] as String,
+    );
+
+Map<String, dynamic> _$$_CourseToJson(_$_Course instance) => <String, dynamic>{
+      'id': instance.id,
+      'swedishName': instance.swedishName,
+      'englishName': instance.englishName,
     };
 
 _$_Location _$$_LocationFromJson(Map<String, dynamic> json) => _$_Location(

@@ -36,23 +36,17 @@ class TumbleWeekEventTile extends StatelessWidget {
             Container(
               width: 3,
               decoration: BoxDecoration(
-                borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(2),
-                    bottomLeft: Radius.circular(2)),
-                color: Color(int.parse(
-                    "ff${event.course.color.replaceAll("#", "")}",
-                    radix: 16)),
-              ),
+                  borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(2),
+                      bottomLeft: Radius.circular(2)),
+                  color: Colors.blue),
             ),
             Stack(
               alignment: Alignment.centerLeft,
               children: [
                 Container(
                   width: 100,
-                  color: Color(int.parse(
-                          "ff${event.course.color.replaceAll("#", "")}",
-                          radix: 16))
-                      .withOpacity(0.35),
+                  color: Colors.blue.withOpacity(0.35),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 5),

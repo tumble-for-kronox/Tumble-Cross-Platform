@@ -74,10 +74,7 @@ class EventDetailsPage extends StatelessWidget {
                   child: Image(
                     image:
                         const AssetImage("assets/images/detailsSplitter.png"),
-                    color: Color(int.parse(
-                            "ff${event.course.color.replaceAll("#", "")}",
-                            radix: 16))
-                        .withOpacity(0.35),
+                    color: Colors.blue.withOpacity(0.35),
                   ),
                 ),
                 Expanded(
@@ -86,10 +83,7 @@ class EventDetailsPage extends StatelessWidget {
                     child: Image(
                         image: const AssetImage(
                             "assets/images/detailsSplitter.png"),
-                        color: Color(int.parse(
-                                "ff${event.course.color.replaceAll("#", "")}",
-                                radix: 16))
-                            .withOpacity(0.35)),
+                        color: Colors.blue.withOpacity(0.35)),
                   ),
                 ),
               ],

@@ -72,7 +72,7 @@ class ScheduleCard extends StatelessWidget {
                               children: [
                                 Container(
                                     padding: const EdgeInsets.only(top: 10),
-                                    child: Text(course.name,
+                                    child: Text(course.englishName,
                                         overflow: TextOverflow.ellipsis,
                                         style: const TextStyle(
                                           color: Colors.white,

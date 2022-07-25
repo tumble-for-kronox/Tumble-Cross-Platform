@@ -1,51 +1,49 @@
+import 'package:sembast/sembast.dart';
 import 'package:tumble/database/database.dart';
+import 'package:tumble/database/interface/iaccess_stores.dart';
+import 'package:tumble/database/interface/idatabase_service.dart';
+import 'package:tumble/models/api_models/schedule_model.dart';
+import 'package:tumble/startup/get_it_instances.dart';
 
-class DatabaseRepository {
-  static var db = MyDatabase();
+class DatabaseRepository implements IDatabaseScheduleService {
+  final _scheduleStore = intMapStoreFactory.store(AccessStores.SCHEDULE_STORE);
 
-  addScheduleEntry(ScheduleCompanion scheduleItem) =>
-      db.insertSchedule(scheduleItem);
+  Future<Database> get _db async => await locator<AppDatabase>().database;
 
-  Future<int> deleteSchedules(String scheduleId) =>
-      db.deleteSchedule(scheduleId);
+  @override
+  Future addSchedule(ScheduleModel scheduleModel) async {
+    await _scheduleStore.add(await _db, scheduleModel.toJson());
+  }
 
-  Future<List<ScheduleData>?> getAllScheduleEntries() => db.getAllSchedules();
+  @override
+  Future removeSchedule(String id) async {
+    final finder = Finder(filter: Filter.byKey(id));
+    await _scheduleStore.delete(await _db, finder: finder);
+  }
 
-  Future<ScheduleData?> getScheduleEntry(String scheduleId) =>
-      db.getSchedule(scheduleId);
+  @override
+  Future updateSchedule(ScheduleModel scheduleModel) async {
+    final finder = Finder(filter: Filter.byKey(scheduleModel.id));
+    await _scheduleStore.update(await _db, scheduleModel.toJson(),
+        finder: finder);
+  }
 
-  Future<DateTime?> getScheduleCachedTime(String scheduleId) =>
-      db.getScheduleCachedTime(scheduleId);
+  @override
+  Future<List<ScheduleModel>> getAllSchedules() async {
+    final recordSnapshots = await _scheduleStore.find(await _db);
+    return recordSnapshots
+        .map((snapshot) => ScheduleModel.fromJson(snapshot.value))
+        .toList();
+  }
 
-  Future<int?> deleteAllSchedules() => db.deleteAllSchedules();
-
-  Future<List<String>?> getAllDatabaseScheduleIds() =>
-      db.getAllDatabaseScheduleIds();
-
-  Future<List<String>?> getGeneratedUuids(String scheduleId) =>
-      db.getGeneratedUuids(scheduleId);
-
-  Future<void> updateSchedules(ScheduleCompanion newSchedule) =>
-      db.updateSchedules(newSchedule);
-
-  Future<String> currentDefaultSchedule() => db.currentDefaultSchedule();
-
-  Future<List<ScheduleData>?> getAllScheduleEntriesWithoutUuid() =>
-      db.getAllScheduleEntriesWithoutUuid();
-
-  Future<bool> hasFavoriteSchedule() => db.hasFavoriteSchedule();
-
-  Future<void> addPreferences(PreferenceData preferenceData) =>
-      db.addPreferences(preferenceData);
-
-  Future<PreferenceData?> getPreferences() => db.getPreferences();
-
-  Future<int> updatePreferences(String target) =>
-      db.updatePreferencesSchool(target);
-
-  Future<bool> hasDefaultSchool() => db.hasDefaultSchool();
-
-  Future<int> getDefaultViewType() => db.getDefaultViewType();
-
-  Future<String> getDefaultSchool() => db.getDefaultSchool();
+  @override
+  Future<ScheduleModel?> getOneSchedule(String id) async {
+    final finder = Finder(filter: Filter.byKey(id));
+    final recordSnapshot =
+        await _scheduleStore.findFirst(await _db, finder: finder);
+    if (recordSnapshot != null) {
+      return ScheduleModel.fromJson(recordSnapshot.value);
+    }
+    return null;
+  }
 }

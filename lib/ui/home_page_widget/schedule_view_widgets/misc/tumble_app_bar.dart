@@ -2,10 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class TumbleAppBar extends StatefulWidget implements PreferredSizeWidget {
-  final VoidCallback navigateToSearch;
-  final VoidCallback toggleFavorite;
-  const TumbleAppBar(
-      {Key? key, required this.navigateToSearch, required this.toggleFavorite})
+  final VoidCallback? navigateToSearch;
+  final VoidCallback? toggleFavorite;
+  const TumbleAppBar({Key? key, this.navigateToSearch, this.toggleFavorite})
       : super(key: key);
 
   @override
@@ -25,17 +24,19 @@ class _TumbleAppBarState extends State<TumbleAppBar> {
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  IconButton(
-                      onPressed: widget.toggleFavorite,
-                      icon: const Icon(CupertinoIcons.bookmark)),
-                  IconButton(
-                      onPressed: widget.navigateToSearch,
-                      icon: const Icon(CupertinoIcons.search)),
-                ],
-              ),
+              widget.navigateToSearch != null
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        IconButton(
+                            onPressed: widget.toggleFavorite,
+                            icon: const Icon(CupertinoIcons.bookmark)),
+                        IconButton(
+                            onPressed: widget.navigateToSearch,
+                            icon: const Icon(CupertinoIcons.search)),
+                      ],
+                    )
+                  : Container(),
               Row(
                 children: [
                   IconButton(

@@ -3,21 +3,24 @@
 import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/src/widgets/framework.dart';
 import 'package:meta/meta.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tumble/api/repository/implementation_repository.dart';
-import 'package:tumble/database/database.dart';
 import 'package:tumble/database/database_response.dart';
-import 'package:tumble/database/repository/database_repository.dart';
 import 'package:tumble/models/ui_models/school_model.dart';
+import 'package:tumble/shared/preference_types.dart';
+import 'package:tumble/shared/setup.dart';
 import 'package:tumble/startup/get_it_instances.dart';
 import 'package:tumble/ui/home_page_widget/data/schools.dart';
+import 'package:tumble/ui/search_page_widgets/search/schedule_search_page.dart';
 
 part 'main_app_state.dart';
 
 class MainAppCubit extends Cubit<MainAppState> {
   MainAppCubit() : super(const MainAppInitial());
 
-  final _databaseService = locator<DatabaseRepository>();
   final _implementationService = locator<ImplementationRepository>();
   final List<School> _schools = Schools.schools;
 
@@ -31,8 +34,8 @@ class MainAppCubit extends Cubit<MainAppState> {
         emit(const MainAppInitial());
         break;
       case Status.HAS_FAVORITE:
-        String _scheduleId = (_databaseResponse.data as ScheduleData).id;
-        emit(MainAppSchoolSelectedAndDefault(currentScheduleId: _scheduleId));
+        emit(MainAppSchoolSelectedAndDefault(
+            currentScheduleId: _databaseResponse.data));
         break;
       case Status.HAS_DEFAULT:
         emit(const MainAppSchoolSelected());
@@ -41,9 +44,14 @@ class MainAppCubit extends Cubit<MainAppState> {
   }
 
   /// Set up when switching schools or starting
-  /// app for the first time
-  void setup(String school) async {
-    log("Setup");
-    _implementationService.schoolReset(school);
+  /// app for the first time and picking a school
+  void setup(String schoolName) async {
+    setupRequiredSharedPreferences(schoolName);
+  }
+
+  void navigateToSearch(BuildContext context) {
+    Navigator.of(context).pushAndRemoveUntil(
+        CupertinoPageRoute(builder: (context) => const ScheduleSearchPage()),
+        (Route<dynamic> route) => false);
   }
 }

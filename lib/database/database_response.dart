@@ -7,7 +7,7 @@ class DatabaseResponse<T> {
 
   DatabaseResponse.hasFavorite(this.data) : status = Status.HAS_FAVORITE;
 
-  DatabaseResponse.hasDefaut(this.data) : status = Status.HAS_DEFAULT;
+  DatabaseResponse.hasDefault(this.data) : status = Status.HAS_DEFAULT;
 
   @override
   String toString() {

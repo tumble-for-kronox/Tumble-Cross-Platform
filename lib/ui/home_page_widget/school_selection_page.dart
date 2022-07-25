@@ -49,11 +49,9 @@ class _SchoolSelectionPageState extends State<SchoolSelectionPage> {
                               context
                                   .read<MainAppCubit>()
                                   .setup(school.schoolName);
-                              Navigator.of(context).pushAndRemoveUntil(
-                                  CupertinoPageRoute(
-                                      builder: (context) =>
-                                          const ScheduleSearchPage()),
-                                  (Route<dynamic> route) => false);
+                              context
+                                  .read<MainAppCubit>()
+                                  .navigateToSearch(context);
                             },
                           ))
                       .toList(),

@@ -6,7 +6,9 @@ import 'package:tumble/ui/home_page_widget/schedule_view_widgets/misc/tumble_app
 import 'package:tumble/ui/home_page_widget/schedule_view_widgets/misc/tumble_settings_section.dart';
 
 class TumbleAppDrawer extends StatelessWidget {
-  const TumbleAppDrawer({Key? key}) : super(key: key);
+  final bool limitOptions;
+  const TumbleAppDrawer({Key? key, required this.limitOptions})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -89,13 +91,14 @@ class TumbleAppDrawer extends StatelessWidget {
               eventType: EventTypes.CANCEL_ALL_NOTIFICATIONS,
               drawerEvent: (eventType) => {null},
             ),
-            TumbleAppDrawerTile(
-              drawerTileTitle: "Cancel notifications for\nprogram",
-              subtitle: "Cancel notifications for this program",
-              prefixIcon: CupertinoIcons.text_badge_minus,
-              eventType: EventTypes.CANCEL_NOTIFICATIONS_FOR_PROGRAM,
-              drawerEvent: (eventType) => {null},
-            ),
+            limitOptions
+                ? Container()
+                : TumbleAppDrawerTile(
+                    drawerTileTitle: "Cancel notifications for\nprogram",
+                    subtitle: "Cancel notifications for this program",
+                    prefixIcon: CupertinoIcons.text_badge_minus,
+                    eventType: EventTypes.CANCEL_NOTIFICATIONS_FOR_PROGRAM,
+                    drawerEvent: (eventType) => {null}),
             TumbleAppDrawerTile(
               drawerTileTitle: "Edit notification time",
               subtitle: "Notifications will show 3 hours prior to event",

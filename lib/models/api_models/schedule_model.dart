@@ -2,6 +2,7 @@
 //
 //     final scheduleModel = scheduleModelFromJson(jsonString);
 
+import 'package:meta/meta.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'dart:convert';
 
@@ -19,7 +20,6 @@ abstract class ScheduleModel with _$ScheduleModel {
     required String cachedAt,
     required String id,
     required List<Day> days,
-    required Courses courses,
   }) = _ScheduleModel;
 
   factory ScheduleModel.fromJson(Map<String, dynamic> json) =>
@@ -27,37 +27,11 @@ abstract class ScheduleModel with _$ScheduleModel {
 }
 
 @freezed
-abstract class Courses with _$Courses {
-  const factory Courses({
-    required CourseId courseId,
-  }) = _Courses;
-
-  factory Courses.fromJson(Map<String, dynamic> json) =>
-      _$CoursesFromJson(json);
-}
-
-@freezed
-abstract class CourseId with _$CourseId {
-  const factory CourseId({
-    required String id,
-    required String swedishName,
-    required String englishName,
-    required String color,
-  }) = _CourseId;
-
-  factory CourseId.fromJson(Map<String, dynamic> json) =>
-      _$CourseIdFromJson(json);
-}
-
-@freezed
 abstract class Day with _$Day {
   const factory Day({
     required String name,
     required String date,
-    required int year,
-    required int month,
-    required int dayOfMonth,
-    required int dayOfWeek,
+    required DateTime isoString,
     required int weekNumber,
     required List<Event> events,
   }) = _Day;
@@ -70,15 +44,27 @@ abstract class Event with _$Event {
   const factory Event({
     required String id,
     required String title,
-    required String courseId,
+    required Course course,
     required DateTime timeStart,
     required DateTime timeEnd,
     required List<Location> locations,
     required List<Teacher> teachers,
     required bool isSpecial,
+    required DateTime lastModified,
   }) = _Event;
 
   factory Event.fromJson(Map<String, dynamic> json) => _$EventFromJson(json);
+}
+
+@freezed
+abstract class Course with _$Course {
+  const factory Course({
+    required String id,
+    required String swedishName,
+    required String englishName,
+  }) = _Course;
+
+  factory Course.fromJson(Map<String, dynamic> json) => _$CourseFromJson(json);
 }
 
 @freezed

@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:tumble/theme/colors.dart';
 import 'package:tumble/ui/home_page_widget/home_page.dart';
+import 'package:tumble/ui/home_page_widget/schedule_view_widgets/misc/tumble_app_bar.dart';
+import 'package:tumble/ui/home_page_widget/schedule_view_widgets/misc/tumble_app_drawer.dart';
 import 'package:tumble/ui/search_page_widgets/search/program_card.dart';
 import 'package:tumble/ui/search_page_widgets/search_bar_widget/searchbar_and_logo_container.dart';
 
@@ -20,6 +22,10 @@ class _ScheduleSearchPageState extends State<ScheduleSearchPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      endDrawer: const TumbleAppDrawer(
+        limitOptions: true,
+      ),
+      appBar: const TumbleAppBar(),
       backgroundColor: Theme.of(context).colorScheme.background,
       body: Stack(
         children: [

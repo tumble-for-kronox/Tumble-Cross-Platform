@@ -4,12 +4,14 @@ import 'dart:developer';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tumble/api/apiservices/api_response.dart';
 import 'package:tumble/api/repository/implementation_repository.dart';
 import 'package:tumble/database/repository/database_repository.dart';
 import 'package:tumble/extensions/extensions.dart';
 import 'package:tumble/models/api_models/schedule_model.dart';
 import 'package:tumble/models/ui_models/week_model.dart';
+import 'package:tumble/shared/preference_types.dart';
 import 'package:tumble/startup/get_it_instances.dart';
 
 import '../../search_page_widgets/search/schedule_search_page.dart';
@@ -19,8 +21,8 @@ part 'home_page_state.dart';
 class HomePageCubit extends Cubit<HomePageState> {
   HomePageCubit() : super(const HomePageInitial());
 
-  final _databaseService = locator<DatabaseRepository>();
-  late int _defaultViewType;
+  final _sharedPrefs = locator<SharedPreferences>();
+  int? _defaultViewType;
   final _implementationService = locator<ImplementationRepository>();
   List<HomePageState> _states = [];
 
@@ -29,14 +31,13 @@ class HomePageCubit extends Cubit<HomePageState> {
   late List<Week> _listOfWeeks;
   late List<Day> _listOfDays;
 
-  int get defaultViewType => _defaultViewType;
+  int? get defaultViewType => _defaultViewType;
   int get currentPageIndex => _currentPageIndex;
 
   /// Handles the loading of the schedule upon choosing a program
   Future<void> init(String scheduleId) async {
     emit(const HomePageLoading());
-    _defaultViewType = await _databaseService.getDefaultViewType();
-    _currentPageIndex = _defaultViewType;
+    _currentPageIndex = _defaultViewType!;
     final _schedule = await _implementationService.getSchedule(scheduleId);
 
     switch (_schedule.status) {
@@ -79,5 +80,12 @@ class HomePageCubit extends Cubit<HomePageState> {
     Navigator.of(context).push(
       CupertinoPageRoute(builder: (context) => const ScheduleSearchPage()),
     );
+  }
+
+  void assignFavorite(String scheduleId) {
+    final currentFavorites =
+        _sharedPrefs.getStringList(PreferenceTypes.favorites);
+    currentFavorites!.add(scheduleId);
+    _sharedPrefs.setStringList(PreferenceTypes.favorites, currentFavorites);
   }
 }
