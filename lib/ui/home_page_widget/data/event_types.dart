@@ -1,7 +1,7 @@
 // ignore_for_file: constant_identifier_names
 
 enum EventTypes {
-  SUPPORT,
+  CONTACT,
   CHANGE_SCHOOL,
   CHANGE_THEME,
   SET_DEFAULT_VIEW,

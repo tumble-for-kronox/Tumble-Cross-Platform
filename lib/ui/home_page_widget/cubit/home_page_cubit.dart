@@ -2,6 +2,7 @@
 
 import 'dart:developer';
 import 'package:bloc/bloc.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tumble/api/apiservices/api_response.dart';
 import 'package:tumble/api/repository/implementation_repository.dart';
@@ -10,6 +11,8 @@ import 'package:tumble/extensions/extensions.dart';
 import 'package:tumble/models/api_models/schedule_model.dart';
 import 'package:tumble/models/ui_models/week_model.dart';
 import 'package:tumble/startup/get_it_instances.dart';
+
+import '../../search_page_widgets/search/schedule_search_page.dart';
 
 part 'home_page_state.dart';
 
@@ -70,5 +73,11 @@ class HomePageCubit extends Cubit<HomePageState> {
     if (state is! HomePageError) {
       emit(_states[index]);
     }
+  }
+
+  void navigateToSearch(BuildContext context) {
+    Navigator.of(context).push(
+      CupertinoPageRoute(builder: (context) => const ScheduleSearchPage()),
+    );
   }
 }

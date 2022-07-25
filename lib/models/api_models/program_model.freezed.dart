@@ -20,8 +20,8 @@ ProgramModel _$ProgramModelFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$ProgramModel {
-  List<RequestedSchedule> get requestedSchedule =>
-      throw _privateConstructorUsedError;
+  int get count => throw _privateConstructorUsedError;
+  List<Item> get items => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -34,7 +34,7 @@ abstract class $ProgramModelCopyWith<$Res> {
   factory $ProgramModelCopyWith(
           ProgramModel value, $Res Function(ProgramModel) then) =
       _$ProgramModelCopyWithImpl<$Res>;
-  $Res call({List<RequestedSchedule> requestedSchedule});
+  $Res call({int count, List<Item> items});
 }
 
 /// @nodoc
@@ -47,13 +47,18 @@ class _$ProgramModelCopyWithImpl<$Res> implements $ProgramModelCopyWith<$Res> {
 
   @override
   $Res call({
-    Object? requestedSchedule = freezed,
+    Object? count = freezed,
+    Object? items = freezed,
   }) {
     return _then(_value.copyWith(
-      requestedSchedule: requestedSchedule == freezed
-          ? _value.requestedSchedule
-          : requestedSchedule // ignore: cast_nullable_to_non_nullable
-              as List<RequestedSchedule>,
+      count: count == freezed
+          ? _value.count
+          : count // ignore: cast_nullable_to_non_nullable
+              as int,
+      items: items == freezed
+          ? _value.items
+          : items // ignore: cast_nullable_to_non_nullable
+              as List<Item>,
     ));
   }
 }
@@ -65,7 +70,7 @@ abstract class _$$_ProgramModelCopyWith<$Res>
           _$_ProgramModel value, $Res Function(_$_ProgramModel) then) =
       __$$_ProgramModelCopyWithImpl<$Res>;
   @override
-  $Res call({List<RequestedSchedule> requestedSchedule});
+  $Res call({int count, List<Item> items});
 }
 
 /// @nodoc
@@ -81,13 +86,18 @@ class __$$_ProgramModelCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? requestedSchedule = freezed,
+    Object? count = freezed,
+    Object? items = freezed,
   }) {
     return _then(_$_ProgramModel(
-      requestedSchedule: requestedSchedule == freezed
-          ? _value._requestedSchedule
-          : requestedSchedule // ignore: cast_nullable_to_non_nullable
-              as List<RequestedSchedule>,
+      count: count == freezed
+          ? _value.count
+          : count // ignore: cast_nullable_to_non_nullable
+              as int,
+      items: items == freezed
+          ? _value._items
+          : items // ignore: cast_nullable_to_non_nullable
+              as List<Item>,
     ));
   }
 }
@@ -95,23 +105,24 @@ class __$$_ProgramModelCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$_ProgramModel implements _ProgramModel {
-  const _$_ProgramModel(
-      {required final List<RequestedSchedule> requestedSchedule})
-      : _requestedSchedule = requestedSchedule;
+  const _$_ProgramModel({required this.count, required final List<Item> items})
+      : _items = items;
 
   factory _$_ProgramModel.fromJson(Map<String, dynamic> json) =>
       _$$_ProgramModelFromJson(json);
 
-  final List<RequestedSchedule> _requestedSchedule;
   @override
-  List<RequestedSchedule> get requestedSchedule {
+  final int count;
+  final List<Item> _items;
+  @override
+  List<Item> get items {
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_requestedSchedule);
+    return EqualUnmodifiableListView(_items);
   }
 
   @override
   String toString() {
-    return 'ProgramModel(requestedSchedule: $requestedSchedule)';
+    return 'ProgramModel(count: $count, items: $items)';
   }
 
   @override
@@ -119,14 +130,16 @@ class _$_ProgramModel implements _ProgramModel {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_ProgramModel &&
-            const DeepCollectionEquality()
-                .equals(other._requestedSchedule, _requestedSchedule));
+            const DeepCollectionEquality().equals(other.count, count) &&
+            const DeepCollectionEquality().equals(other._items, _items));
   }
 
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
-      runtimeType, const DeepCollectionEquality().hash(_requestedSchedule));
+      runtimeType,
+      const DeepCollectionEquality().hash(count),
+      const DeepCollectionEquality().hash(_items));
 
   @JsonKey(ignore: true)
   @override
@@ -141,105 +154,110 @@ class _$_ProgramModel implements _ProgramModel {
 
 abstract class _ProgramModel implements ProgramModel {
   const factory _ProgramModel(
-          {required final List<RequestedSchedule> requestedSchedule}) =
-      _$_ProgramModel;
+      {required final int count,
+      required final List<Item> items}) = _$_ProgramModel;
 
   factory _ProgramModel.fromJson(Map<String, dynamic> json) =
       _$_ProgramModel.fromJson;
 
   @override
-  List<RequestedSchedule> get requestedSchedule =>
-      throw _privateConstructorUsedError;
+  int get count => throw _privateConstructorUsedError;
+  @override
+  List<Item> get items => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
   _$$_ProgramModelCopyWith<_$_ProgramModel> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
-RequestedSchedule _$RequestedScheduleFromJson(Map<String, dynamic> json) {
-  return _RequestedSchedule.fromJson(json);
+Item _$ItemFromJson(Map<String, dynamic> json) {
+  return _Item.fromJson(json);
 }
 
 /// @nodoc
-mixin _$RequestedSchedule {
-  String get scheduleId => throw _privateConstructorUsedError;
-  String get scheduleName => throw _privateConstructorUsedError;
+mixin _$Item {
+  String get id => throw _privateConstructorUsedError;
+  String get title => throw _privateConstructorUsedError;
+  String get subtitle => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $RequestedScheduleCopyWith<RequestedSchedule> get copyWith =>
-      throw _privateConstructorUsedError;
+  $ItemCopyWith<Item> get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $RequestedScheduleCopyWith<$Res> {
-  factory $RequestedScheduleCopyWith(
-          RequestedSchedule value, $Res Function(RequestedSchedule) then) =
-      _$RequestedScheduleCopyWithImpl<$Res>;
-  $Res call({String scheduleId, String scheduleName});
+abstract class $ItemCopyWith<$Res> {
+  factory $ItemCopyWith(Item value, $Res Function(Item) then) =
+      _$ItemCopyWithImpl<$Res>;
+  $Res call({String id, String title, String subtitle});
 }
 
 /// @nodoc
-class _$RequestedScheduleCopyWithImpl<$Res>
-    implements $RequestedScheduleCopyWith<$Res> {
-  _$RequestedScheduleCopyWithImpl(this._value, this._then);
+class _$ItemCopyWithImpl<$Res> implements $ItemCopyWith<$Res> {
+  _$ItemCopyWithImpl(this._value, this._then);
 
-  final RequestedSchedule _value;
+  final Item _value;
   // ignore: unused_field
-  final $Res Function(RequestedSchedule) _then;
+  final $Res Function(Item) _then;
 
   @override
   $Res call({
-    Object? scheduleId = freezed,
-    Object? scheduleName = freezed,
+    Object? id = freezed,
+    Object? title = freezed,
+    Object? subtitle = freezed,
   }) {
     return _then(_value.copyWith(
-      scheduleId: scheduleId == freezed
-          ? _value.scheduleId
-          : scheduleId // ignore: cast_nullable_to_non_nullable
+      id: id == freezed
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
               as String,
-      scheduleName: scheduleName == freezed
-          ? _value.scheduleName
-          : scheduleName // ignore: cast_nullable_to_non_nullable
+      title: title == freezed
+          ? _value.title
+          : title // ignore: cast_nullable_to_non_nullable
+              as String,
+      subtitle: subtitle == freezed
+          ? _value.subtitle
+          : subtitle // ignore: cast_nullable_to_non_nullable
               as String,
     ));
   }
 }
 
 /// @nodoc
-abstract class _$$_RequestedScheduleCopyWith<$Res>
-    implements $RequestedScheduleCopyWith<$Res> {
-  factory _$$_RequestedScheduleCopyWith(_$_RequestedSchedule value,
-          $Res Function(_$_RequestedSchedule) then) =
-      __$$_RequestedScheduleCopyWithImpl<$Res>;
+abstract class _$$_ItemCopyWith<$Res> implements $ItemCopyWith<$Res> {
+  factory _$$_ItemCopyWith(_$_Item value, $Res Function(_$_Item) then) =
+      __$$_ItemCopyWithImpl<$Res>;
   @override
-  $Res call({String scheduleId, String scheduleName});
+  $Res call({String id, String title, String subtitle});
 }
 
 /// @nodoc
-class __$$_RequestedScheduleCopyWithImpl<$Res>
-    extends _$RequestedScheduleCopyWithImpl<$Res>
-    implements _$$_RequestedScheduleCopyWith<$Res> {
-  __$$_RequestedScheduleCopyWithImpl(
-      _$_RequestedSchedule _value, $Res Function(_$_RequestedSchedule) _then)
-      : super(_value, (v) => _then(v as _$_RequestedSchedule));
+class __$$_ItemCopyWithImpl<$Res> extends _$ItemCopyWithImpl<$Res>
+    implements _$$_ItemCopyWith<$Res> {
+  __$$_ItemCopyWithImpl(_$_Item _value, $Res Function(_$_Item) _then)
+      : super(_value, (v) => _then(v as _$_Item));
 
   @override
-  _$_RequestedSchedule get _value => super._value as _$_RequestedSchedule;
+  _$_Item get _value => super._value as _$_Item;
 
   @override
   $Res call({
-    Object? scheduleId = freezed,
-    Object? scheduleName = freezed,
+    Object? id = freezed,
+    Object? title = freezed,
+    Object? subtitle = freezed,
   }) {
-    return _then(_$_RequestedSchedule(
-      scheduleId: scheduleId == freezed
-          ? _value.scheduleId
-          : scheduleId // ignore: cast_nullable_to_non_nullable
+    return _then(_$_Item(
+      id: id == freezed
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
               as String,
-      scheduleName: scheduleName == freezed
-          ? _value.scheduleName
-          : scheduleName // ignore: cast_nullable_to_non_nullable
+      title: title == freezed
+          ? _value.title
+          : title // ignore: cast_nullable_to_non_nullable
+              as String,
+      subtitle: subtitle == freezed
+          ? _value.subtitle
+          : subtitle // ignore: cast_nullable_to_non_nullable
               as String,
     ));
   }
@@ -247,67 +265,68 @@ class __$$_RequestedScheduleCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_RequestedSchedule implements _RequestedSchedule {
-  const _$_RequestedSchedule(
-      {required this.scheduleId, required this.scheduleName});
+class _$_Item implements _Item {
+  const _$_Item(
+      {required this.id, required this.title, required this.subtitle});
 
-  factory _$_RequestedSchedule.fromJson(Map<String, dynamic> json) =>
-      _$$_RequestedScheduleFromJson(json);
+  factory _$_Item.fromJson(Map<String, dynamic> json) => _$$_ItemFromJson(json);
 
   @override
-  final String scheduleId;
+  final String id;
   @override
-  final String scheduleName;
+  final String title;
+  @override
+  final String subtitle;
 
   @override
   String toString() {
-    return 'RequestedSchedule(scheduleId: $scheduleId, scheduleName: $scheduleName)';
+    return 'Item(id: $id, title: $title, subtitle: $subtitle)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_RequestedSchedule &&
-            const DeepCollectionEquality()
-                .equals(other.scheduleId, scheduleId) &&
-            const DeepCollectionEquality()
-                .equals(other.scheduleName, scheduleName));
+            other is _$_Item &&
+            const DeepCollectionEquality().equals(other.id, id) &&
+            const DeepCollectionEquality().equals(other.title, title) &&
+            const DeepCollectionEquality().equals(other.subtitle, subtitle));
   }
 
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      const DeepCollectionEquality().hash(scheduleId),
-      const DeepCollectionEquality().hash(scheduleName));
+      const DeepCollectionEquality().hash(id),
+      const DeepCollectionEquality().hash(title),
+      const DeepCollectionEquality().hash(subtitle));
 
   @JsonKey(ignore: true)
   @override
-  _$$_RequestedScheduleCopyWith<_$_RequestedSchedule> get copyWith =>
-      __$$_RequestedScheduleCopyWithImpl<_$_RequestedSchedule>(
-          this, _$identity);
+  _$$_ItemCopyWith<_$_Item> get copyWith =>
+      __$$_ItemCopyWithImpl<_$_Item>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_RequestedScheduleToJson(this);
+    return _$$_ItemToJson(this);
   }
 }
 
-abstract class _RequestedSchedule implements RequestedSchedule {
-  const factory _RequestedSchedule(
-      {required final String scheduleId,
-      required final String scheduleName}) = _$_RequestedSchedule;
+abstract class _Item implements Item {
+  const factory _Item(
+      {required final String id,
+      required final String title,
+      required final String subtitle}) = _$_Item;
 
-  factory _RequestedSchedule.fromJson(Map<String, dynamic> json) =
-      _$_RequestedSchedule.fromJson;
+  factory _Item.fromJson(Map<String, dynamic> json) = _$_Item.fromJson;
 
   @override
-  String get scheduleId => throw _privateConstructorUsedError;
+  String get id => throw _privateConstructorUsedError;
   @override
-  String get scheduleName => throw _privateConstructorUsedError;
+  String get title => throw _privateConstructorUsedError;
+  @override
+  String get subtitle => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
-  _$$_RequestedScheduleCopyWith<_$_RequestedSchedule> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$_ItemCopyWith<_$_Item> get copyWith => throw _privateConstructorUsedError;
 }

@@ -2,7 +2,6 @@
 //
 //     final programModel = programModelFromJson(jsonString);
 
-import 'package:meta/meta.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'dart:convert';
 
@@ -17,7 +16,8 @@ String programModelToJson(ProgramModel data) => json.encode(data.toJson());
 @freezed
 abstract class ProgramModel with _$ProgramModel {
   const factory ProgramModel({
-    required List<RequestedSchedule> requestedSchedule,
+    required int count,
+    required List<Item> items,
   }) = _ProgramModel;
 
   factory ProgramModel.fromJson(Map<String, dynamic> json) =>
@@ -25,12 +25,12 @@ abstract class ProgramModel with _$ProgramModel {
 }
 
 @freezed
-abstract class RequestedSchedule with _$RequestedSchedule {
-  const factory RequestedSchedule({
-    required String scheduleId,
-    required String scheduleName,
-  }) = _RequestedSchedule;
+abstract class Item with _$Item {
+  const factory Item({
+    required String id,
+    required String title,
+    required String subtitle,
+  }) = _Item;
 
-  factory RequestedSchedule.fromJson(Map<String, dynamic> json) =>
-      _$RequestedScheduleFromJson(json);
+  factory Item.fromJson(Map<String, dynamic> json) => _$ItemFromJson(json);
 }

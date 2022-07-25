@@ -4,7 +4,6 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tumble/ui/search_page_widgets/cubit/search_page_cubit.dart';
 import 'package:tumble/ui/search_page_widgets/search/schedule_search_bar.dart';
-import 'package:tumble/ui/search_page_widgets/search_bar_widget/cubit/schedule_search_bar_and_logo_container_cubit.dart';
 import 'package:tumble/ui/search_page_widgets/search_page_slideable_logo.dart';
 
 class SearchBarAndLogoContainer extends StatefulWidget {
@@ -21,7 +20,7 @@ class _SearchBarAndLogoContainerState extends State<SearchBarAndLogoContainer> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: context.read<ScheduleSearchBarAndLogoContainerCubit>().init(),
+      future: context.read<SearchPageCubit>().init(),
       builder: ((context, snapshot) {
         switch (snapshot.connectionState) {
           case ConnectionState.done:
@@ -35,10 +34,12 @@ class _SearchBarAndLogoContainerState extends State<SearchBarAndLogoContainer> {
                   Container(
                     padding:
                         const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
-                    child: BlocBuilder<ScheduleSearchBarAndLogoContainerCubit,
-                            ScheduleSearchBarAndLogoContainerState>(
+                    child: BlocBuilder<SearchPageCubit, SearchPageState>(
                         builder: (context, state) {
-                      if (state is ScheduleSearchBarAndLogoContainerFocused) {
+                      if (state is SearchPageFocused ||
+                          state is SearchPageFoundSchedules ||
+                          state is SearchPageLoading ||
+                          state is SearchPageNoSchedules) {
                         return const SlideableLogo(
                           focused: true,
                         );

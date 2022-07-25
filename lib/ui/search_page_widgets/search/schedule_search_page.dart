@@ -5,7 +5,6 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:tumble/theme/colors.dart';
 import 'package:tumble/ui/home_page_widget/home_page.dart';
 import 'package:tumble/ui/search_page_widgets/search/program_card.dart';
-import 'package:tumble/ui/search_page_widgets/search/schedule_search_bar.dart';
 import 'package:tumble/ui/search_page_widgets/search_bar_widget/searchbar_and_logo_container.dart';
 
 import '../cubit/search_page_cubit.dart';
@@ -45,15 +44,16 @@ class _ScheduleSearchPageState extends State<ScheduleSearchPage> {
                               padding: const EdgeInsets.only(top: 70),
                               children: state.programList
                                   .map((program) => ProgramCard(
-                                      programName: program.scheduleName,
-                                      programId: program.scheduleId,
+                                      programName: program.title,
+                                      programId: program.id,
                                       onTap: () {
-                                        Navigator.push(
-                                            context,
-                                            CupertinoPageRoute(
-                                                builder: (context) => HomePage(
-                                                    currentScheduleId:
-                                                        program.scheduleId)));
+                                        context
+                                            .read<SearchPageCubit>()
+                                            .resetCubit();
+                                        context
+                                            .read<SearchPageCubit>()
+                                            .navigateToHomepPage(
+                                                context, program.id);
                                       }))
                                   .toList(),
                             );

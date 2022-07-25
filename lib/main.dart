@@ -14,7 +14,6 @@ import 'package:tumble/ui/main_app_widget/main_app.dart';
 import 'package:tumble/ui/search_page_widgets/cubit/search_page_cubit.dart';
 import 'package:tumble/ui/search_page_widgets/search/schedule_search_bar.dart';
 import 'package:tumble/ui/search_page_widgets/search/schedule_search_page.dart';
-import 'package:tumble/ui/search_page_widgets/search_bar_widget/cubit/schedule_search_bar_and_logo_container_cubit.dart';
 import 'package:tumble/ui/search_page_widgets/search_bar_widget/searchbar_and_logo_container.dart';
 import 'package:tumble/ui/search_page_widgets/search_page_slideable_logo.dart';
 
@@ -50,13 +49,8 @@ void main() async {
       child: Row(children: const [
         ScheduleSearchPage(),
         ScheduleSearchBar(),
+        SearchBarAndLogoContainer()
       ]),
     ),
-    BlocProvider<ScheduleSearchBarAndLogoContainerCubit>(
-        create: (c) => ScheduleSearchBarAndLogoContainerCubit(),
-        child: Row(children: const [
-          SearchBarAndLogoContainer(),
-          ScheduleSearchBar()
-        ])),
   ], child: const MainApp()));
 }
