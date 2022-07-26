@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:tumble/models/ui_models/week_model.dart';
 import 'package:tumble/ui/home_page_widget/schedule_view_widgets/tumble_week_view/tumble_day_of_week_container.dart';
+import 'package:tumble/ui/home_page_widget/schedule_view_widgets/tumble_week_view/tumble_empty_week_event_tile.dart';
 
 class WeekMapper extends StatelessWidget {
   final Week week;
@@ -8,8 +9,14 @@ class WeekMapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-        children:
-            week.days.map((e) => const TumbleDayOfWeekContainer()).toList());
+    return Positioned.fill(
+      child: ListView(
+          padding: const EdgeInsets.only(top: 20),
+          children: week.days
+              .map((day) => TumbleDayOfWeekContainer(
+                    day: day,
+                  ))
+              .toList()),
+    );
   }
 }

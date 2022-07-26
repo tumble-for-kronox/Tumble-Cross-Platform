@@ -26,19 +26,15 @@ class TumbleWeekEventTile extends StatelessWidget {
       child: MaterialButton(
         padding: const EdgeInsets.all(0),
         onPressed: () {
-          Navigator.push(
-              context,
-              CupertinoPageRoute(
-                  builder: (context) => EventDetailsPage(event: event)));
+          Navigator.push(context, CupertinoPageRoute(builder: (context) => EventDetailsPage(event: event)));
         },
         child: Row(
+          mainAxisSize: MainAxisSize.max,
           children: [
             Container(
               width: 3,
-              decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(2),
-                      bottomLeft: Radius.circular(2)),
+              decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.only(topLeft: Radius.circular(2), bottomLeft: Radius.circular(2)),
                   color: Colors.blue),
             ),
             Stack(

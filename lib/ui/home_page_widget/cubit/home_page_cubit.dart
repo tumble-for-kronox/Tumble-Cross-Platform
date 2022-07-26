@@ -35,15 +35,16 @@ class HomePageCubit extends Cubit<HomePageState> {
   late List<Week> _listOfWeeks;
   late List<Day> _listOfDays;
 
-  int? get defaultViewType =>
-      locator<SharedPreferences>().getInt(PreferenceTypes.view);
+  int? get defaultViewType => locator<SharedPreferences>().getInt(PreferenceTypes.view);
   int get currentPageIndex => _currentPageIndex;
 
   /// Handles the loading of the schedule upon choosing a program
   Future<void> init(String scheduleId) async {
+    log("BEFORE HOME PAGE LOAD");
     emit(const HomePageLoading());
     _currentScheduleId = scheduleId;
     _currentPageIndex = defaultViewType!;
+    log("BEFORE GET SCHEDULE");
     final _response = await _implementationService.getSchedule(scheduleId);
     switch (_response.status) {
       case Status.COMPLETED:
@@ -66,6 +67,7 @@ class HomePageCubit extends Cubit<HomePageState> {
         break;
     }
   }
+
 
   void setStateParameters(String scheduleId, List<Day> listOfDays,
       List<Week> listOfWeeks, bool? updateFavorite) {

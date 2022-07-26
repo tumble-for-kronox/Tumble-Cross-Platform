@@ -9,13 +9,11 @@ class WeekNumber extends StatelessWidget {
   Widget build(BuildContext context) {
     return Positioned(
         right: 20,
-        top: MediaQuery.of(context).viewPadding.top + 50,
+        top: 20,
         child: Text(
           "w. ${week.weekNumber}",
-          style: TextStyle(
-              color: Theme.of(context).colorScheme.onBackground,
-              fontSize: 20,
-              fontWeight: FontWeight.w300),
+          style:
+              TextStyle(color: Theme.of(context).colorScheme.onBackground, fontSize: 20, fontWeight: FontWeight.w300),
         ));
   }
 }
