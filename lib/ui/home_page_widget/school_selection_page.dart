@@ -7,8 +7,9 @@ import 'package:tumble/models/ui_models/school_model.dart';
 import 'package:tumble/ui/home_page_widget/cubit/home_page_cubit.dart';
 import 'package:tumble/ui/home_page_widget/data/schools.dart';
 import 'package:tumble/ui/main_app_widget/cubit/main_app_cubit.dart';
-import 'package:tumble/ui/search_page_widgets/school_card.dart';
 import 'package:tumble/ui/search_page_widgets/search/schedule_search_page.dart';
+
+import '../search_page_widgets/search/school_card.dart';
 
 class SchoolSelectionPage extends StatefulWidget {
   const SchoolSelectionPage({

@@ -4,7 +4,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tumble/ui/search_page_widgets/cubit/search_page_cubit.dart';
 import 'package:tumble/ui/search_page_widgets/search/schedule_search_bar.dart';
-import 'package:tumble/ui/search_page_widgets/search_page_slideable_logo.dart';
+import 'package:tumble/ui/search_page_widgets/search/search_page_slideable_logo.dart';
 
 class SearchBarAndLogoContainer extends StatefulWidget {
   const SearchBarAndLogoContainer({

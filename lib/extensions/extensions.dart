@@ -10,18 +10,18 @@ import "package:collection/collection.dart";
 import 'package:tumble/models/ui_models/week_model.dart';
 
 extension ResponseParsing on Response {
-  ApiResponse<ScheduleModel> parseSchedule() {
+  ApiResponse parseSchedule() {
     if (statusCode == 200) {
       return ApiResponse.completed(scheduleModelFromJson(body));
     }
-    return ApiResponse.error(FetchResponse.error);
+    return ApiResponse.error(FetchResponse.fetchEerror);
   }
 
-  ApiResponse<ProgramModel> parsePrograms() {
+  ApiResponse parsePrograms() {
     if (statusCode == 200) {
       return ApiResponse.completed(programModelFromJson(body));
     }
-    return ApiResponse.error(FetchResponse.error);
+    return ApiResponse.error(FetchResponse.fetchEerror);
   }
 }
 
@@ -29,23 +29,27 @@ extension ScheduleParsing on ScheduleModel {
   List<Week> splitToWeek() {
     return groupBy(days, (Day day) => day.weekNumber)
         .entries
-        .map((weekNumberToDayList) => Week(weekNumber: weekNumberToDayList.key, days: weekNumberToDayList.value))
+        .map((weekNumberToDayList) => Week(
+            weekNumber: weekNumberToDayList.key,
+            days: weekNumberToDayList.value))
         .toList();
   }
 }
 
 extension HttpClientResponseParsing on HttpClientResponse {
-  Future<ApiResponse<ProgramModel>> parsePrograms() async {
+  Future<ApiResponse> parsePrograms() async {
     if (statusCode == 200) {
-      return ApiResponse.completed(programModelFromJson(await transform(utf8.decoder).join()));
+      return ApiResponse.completed(
+          programModelFromJson(await transform(utf8.decoder).join()));
     }
-    return ApiResponse.error(FetchResponse.error);
+    return ApiResponse.error(FetchResponse.fetchEerror);
   }
 
-  Future<ApiResponse<ScheduleModel>> parseSchedule() async {
+  Future<ApiResponse> parseSchedule() async {
     if (statusCode == 200) {
-      return ApiResponse.completed(scheduleModelFromJson(await transform(utf8.decoder).join()));
+      return ApiResponse.completed(
+          scheduleModelFromJson(await transform(utf8.decoder).join()));
     }
-    return ApiResponse.error(FetchResponse.error);
+    return ApiResponse.error(FetchResponse.fetchEerror);
   }
 }

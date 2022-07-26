@@ -26,5 +26,6 @@ class HomePageLoading extends HomePageState {
 }
 
 class HomePageError extends HomePageState {
-  const HomePageError();
+  final String errorType;
+  const HomePageError({required this.errorType});
 }

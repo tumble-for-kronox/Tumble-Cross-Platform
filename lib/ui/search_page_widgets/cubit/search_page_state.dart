@@ -19,7 +19,8 @@ class SearchPageFoundSchedules extends SearchPageState {
 }
 
 class SearchPageNoSchedules extends SearchPageState {
-  const SearchPageNoSchedules();
+  final String errorType;
+  const SearchPageNoSchedules({required this.errorType});
 }
 
 class SearchPageFocused extends SearchPageState {

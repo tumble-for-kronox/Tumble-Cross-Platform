@@ -12,9 +12,9 @@ import 'package:tumble/database/repository/database_repository.dart';
 import 'package:tumble/models/api_models/program_model.dart';
 import 'package:tumble/shared/preference_types.dart';
 import 'package:tumble/startup/get_it_instances.dart';
-import 'package:tumble/ui/app_default_schedule_picker.dart';
-import 'package:tumble/ui/app_notification_time_picker.dart';
-import 'package:tumble/ui/app_theme_picker.dart';
+import 'package:tumble/ui/drawer_generic/app_default_schedule_picker.dart';
+import 'package:tumble/ui/drawer_generic/app_notification_time_picker.dart';
+import 'package:tumble/ui/drawer_generic/app_theme_picker.dart';
 import 'package:tumble/ui/home_page_widget/data/event_types.dart';
 import 'package:tumble/ui/home_page_widget/home_page.dart';
 import 'package:tumble/ui/home_page_widget/school_selection_page.dart';
@@ -44,7 +44,7 @@ class SearchPageCubit extends Cubit<SearchPageState> {
         emit(SearchPageFoundSchedules(programList: program.items));
         break;
       default:
-        emit(const SearchPageNoSchedules());
+        emit(SearchPageNoSchedules(errorType: res.message!));
         break;
     }
   }

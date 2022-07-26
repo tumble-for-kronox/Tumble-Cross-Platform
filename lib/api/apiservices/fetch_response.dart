@@ -1,3 +1,4 @@
 class FetchResponse {
-  static const error = "Failed to fetch search results";
+  static const fetchEerror = "Failed to fetch search results";
+  static const timeoutError = "Search timed out";
 }

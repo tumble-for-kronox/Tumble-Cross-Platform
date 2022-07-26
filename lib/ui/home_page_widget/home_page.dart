@@ -57,7 +57,9 @@ class _HomePageState extends State<HomePage> {
                         listOfWeeks: state.listOfWeeks);
                   }
                   if (state is HomePageError) {
-                    return const NoScheduleAvailable();
+                    return NoScheduleAvailable(
+                      errorType: state.errorType,
+                    );
                   }
                   return const SpinKitThreeBounce(
                       color: CustomColors.orangePrimary);

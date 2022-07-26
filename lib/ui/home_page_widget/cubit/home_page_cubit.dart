@@ -23,7 +23,6 @@ class HomePageCubit extends Cubit<HomePageState> {
   HomePageCubit() : super(const HomePageInitial());
 
   final _sharedPrefs = locator<SharedPreferences>();
-  int? _defaultViewType;
   final _implementationService = locator<ImplementationRepository>();
   List<HomePageState> _states = [];
 
@@ -32,17 +31,19 @@ class HomePageCubit extends Cubit<HomePageState> {
   late List<Week> _listOfWeeks;
   late List<Day> _listOfDays;
 
-  int? get defaultViewType => _defaultViewType;
+  int? get defaultViewType =>
+      locator<SharedPreferences>().getInt(PreferenceTypes.view);
   int get currentPageIndex => _currentPageIndex;
 
   /// Handles the loading of the schedule upon choosing a program
   Future<void> init(String scheduleId) async {
-    // emit(const HomePageLoading());
-    _currentPageIndex = _defaultViewType!;
+    emit(const HomePageLoading());
+    _currentPageIndex = defaultViewType!;
     final _response = await _implementationService.getSchedule(scheduleId);
     log("Response: ${_response.message}\nStatus:${_response.status}");
     switch (_response.status) {
       case Status.COMPLETED:
+        log('here');
         final ScheduleModel scheduleModel = _response.data!;
 
         /// Now we have an instance of the list used in
@@ -51,10 +52,11 @@ class HomePageCubit extends Cubit<HomePageState> {
         _listOfDays = scheduleModel.days;
         _listOfWeeks = scheduleModel.splitToWeek();
         setStateParameters(scheduleId, _listOfDays, _listOfWeeks);
-        emit(HomePageListView(scheduleId: scheduleId, listOfDays: _listOfDays));
+        emit(_states[
+            locator<SharedPreferences>().getInt(PreferenceTypes.view)!]);
         break;
       case Status.ERROR:
-        emit(const HomePageError());
+        emit(HomePageError(errorType: _response.message!));
         break;
       default:
         emit(const HomePageInitial());
@@ -62,7 +64,8 @@ class HomePageCubit extends Cubit<HomePageState> {
     }
   }
 
-  void setStateParameters(String scheduleId, List<Day> listOfDays, List<Week> listOfWeeks) {
+  void setStateParameters(
+      String scheduleId, List<Day> listOfDays, List<Week> listOfWeeks) {
     _states = [
       HomePageListView(scheduleId: scheduleId, listOfDays: listOfDays),
       HomePageWeekView(scheduleId: scheduleId, listOfWeeks: listOfWeeks)
@@ -83,7 +86,8 @@ class HomePageCubit extends Cubit<HomePageState> {
   }
 
   void assignFavorite(String scheduleId) {
-    final currentFavorites = _sharedPrefs.getStringList(PreferenceTypes.favorites);
+    final currentFavorites =
+        _sharedPrefs.getStringList(PreferenceTypes.favorites);
     currentFavorites!.add(scheduleId);
     _sharedPrefs.setStringList(PreferenceTypes.favorites, currentFavorites);
   }
