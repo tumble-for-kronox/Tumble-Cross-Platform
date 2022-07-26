@@ -46,4 +46,12 @@ class DatabaseRepository implements IDatabaseScheduleService {
     }
     return null;
   }
+
+  @override
+  Future<List<String>> getAllScheduleIds() async {
+    final recordSnapshots = await _scheduleStore.find(await _db);
+    return recordSnapshots
+        .map((snapshot) => ScheduleModel.fromJson(snapshot.value).id)
+        .toList();
+  }
 }

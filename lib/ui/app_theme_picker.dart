@@ -5,7 +5,12 @@ typedef SetTheme = void Function(String themeType);
 
 class AppThemePicker extends StatelessWidget {
   final SetTheme setTheme;
-  const AppThemePicker({Key? key, required this.setTheme}) : super(key: key);
+  final Map<String, Icon> iconAndTitleSet = {
+    "Dark theme": const Icon(CupertinoIcons.moon),
+    "Light theme": const Icon(CupertinoIcons.sun_max),
+    "System theme": const Icon(CupertinoIcons.device_phone_portrait)
+  };
+  AppThemePicker({Key? key, required this.setTheme}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,46 +30,17 @@ class AppThemePicker extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.0)),
                 child: Column(
-                  children: <Widget>[
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    ListTile(
-                        leading: Icon(
-                          CupertinoIcons.moon,
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
-                        title: Text(
-                          'Dark theme',
-                          style: TextStyle(
-                              color: Theme.of(context).colorScheme.primary),
-                        ),
-                        onTap: () => setTheme('dark')),
-                    ListTile(
-                        leading: Icon(
-                          CupertinoIcons.sun_max,
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
-                        title: Text(
-                          'Light theme',
-                          style: TextStyle(
-                              color: Theme.of(context).colorScheme.primary),
-                        ),
-                        onTap: () => setTheme('dark')),
-                    ListTile(
-                        leading: Icon(
-                          CupertinoIcons.device_phone_portrait,
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
-                        title: Text(
-                          'Follow system theme',
-                          style: TextStyle(
-                              color: Theme.of(context).colorScheme.primary),
-                        ),
-                        onTap: () => setTheme('dark')),
-                    const SizedBox(height: 10)
-                  ],
-                ))),
+                    children: (iconAndTitleSet.keys)
+                        .map((key) => ListTile(
+                            leading: iconAndTitleSet[key],
+                            title: Text(
+                              key,
+                              style: TextStyle(
+                                  color: Theme.of(context).colorScheme.primary),
+                            ),
+                            onTap: () =>
+                                setTheme(key.split(' ').first.toLowerCase())))
+                        .toList()))),
       ),
     );
   }

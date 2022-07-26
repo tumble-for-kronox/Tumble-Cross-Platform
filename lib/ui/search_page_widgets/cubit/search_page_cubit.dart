@@ -8,9 +8,11 @@ import 'package:meta/meta.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tumble/api/apiservices/api_response.dart';
 import 'package:tumble/api/repository/implementation_repository.dart';
+import 'package:tumble/database/repository/database_repository.dart';
 import 'package:tumble/models/api_models/program_model.dart';
 import 'package:tumble/shared/preference_types.dart';
 import 'package:tumble/startup/get_it_instances.dart';
+import 'package:tumble/ui/app_default_schedule_picker.dart';
 import 'package:tumble/ui/app_notification_time_picker.dart';
 import 'package:tumble/ui/app_theme_picker.dart';
 import 'package:tumble/ui/home_page_widget/data/event_types.dart';
@@ -22,8 +24,10 @@ part 'search_page_state.dart';
 
 class SearchPageCubit extends Cubit<SearchPageState> {
   SearchPageCubit() : super(const SearchPageInitial());
+  final _databaseService = locator<DatabaseRepository>();
   final TextEditingController _textEditingController = TextEditingController();
   final FocusNode _focusNode = FocusNode();
+  List<String>? _storedScheduleIds;
   final _implementationService = locator<ImplementationRepository>();
 
   TextEditingController get textEditingController => _textEditingController;
@@ -58,6 +62,7 @@ class SearchPageCubit extends Cubit<SearchPageState> {
   }
 
   Future<void> init() async {
+    _storedScheduleIds = await _databaseService.getAllScheduleIds();
     _focusNode.addListener((setSearchBarFocused));
   }
 
@@ -77,11 +82,14 @@ class SearchPageCubit extends Cubit<SearchPageState> {
   }
 
   handleDrawerEvent(Enum eventType, BuildContext context) {
-    log('here');
     switch (eventType) {
       case EventType.CANCEL_ALL_NOTIFICATIONS:
+
+        /// Cancel all notifications
         break;
       case EventType.CANCEL_NOTIFICATIONS_FOR_PROGRAM:
+
+        /// Cancel all notifications tied to this schedule id
         break;
       case EventType.CHANGE_SCHOOL:
         Navigator.of(context).push(
@@ -95,6 +103,8 @@ class SearchPageCubit extends Cubit<SearchPageState> {
         ));
         break;
       case EventType.CONTACT:
+
+        /// Direct user to support page
         break;
       case EventType.EDIT_NOTIFICATION_TIME:
         Get.bottomSheet(AppNotificationTimePicker(
@@ -103,6 +113,8 @@ class SearchPageCubit extends Cubit<SearchPageState> {
         ));
         break;
       case EventType.SET_DEFAULT_SCHEDULE:
+        Get.bottomSheet(
+            AppDefaultSchedulePicker(scheduleIds: _storedScheduleIds));
         break;
       case EventType.SET_DEFAULT_VIEW:
         break;

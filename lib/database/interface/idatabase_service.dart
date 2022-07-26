@@ -9,5 +9,7 @@ abstract class IDatabaseScheduleService {
 
   Future<List<ScheduleModel>> getAllSchedules();
 
+  Future<List<String>> getAllScheduleIds();
+
   Future<ScheduleModel?> getOneSchedule(String id);
 }
