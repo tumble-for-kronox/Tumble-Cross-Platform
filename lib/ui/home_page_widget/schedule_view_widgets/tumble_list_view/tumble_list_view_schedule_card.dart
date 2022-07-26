@@ -1,29 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:tumble/models/api_models/schedule_model.dart';
+import 'package:tumble/theme/colors.dart';
 import 'package:tumble/ui/home_page_widget/schedule_view_widgets/tumble_list_view/tumble_list_view_schedule_card_location_container.dart';
 import 'package:tumble/ui/home_page_widget/schedule_view_widgets/tumble_list_view/tumble_list_view_schedule_card_ribbon.dart';
 import 'package:tumble/ui/home_page_widget/schedule_view_widgets/tumble_list_view/tumble_list_view_schedule_card_time_stamp.dart';
 
 class ScheduleCard extends StatelessWidget {
-  final String title;
-  final Course course;
-  final List<Teacher> teachers;
-  final List<Location> locations;
-  final String color;
-  final DateTime timeStart;
-  final DateTime timeEnd;
+  final Event event;
   final VoidCallback onTap;
 
   const ScheduleCard({
     Key? key,
-    required this.title,
-    required this.course,
-    required this.teachers,
-    required this.locations,
-    required this.color,
-    required this.timeStart,
-    required this.timeEnd,
+    required this.event,
     required this.onTap,
   }) : super(key: key);
 
@@ -36,10 +25,12 @@ class ScheduleCard extends StatelessWidget {
             Container(
               height: 150,
               width: double.infinity,
-              margin: const EdgeInsets.only(top: 9, left: 20, right: 20),
+              margin: const EdgeInsets.only(top: 9, left: 10, right: 10),
               alignment: Alignment.topLeft,
               decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.primary,
+                  color: event.isSpecial
+                      ? Theme.of(context).colorScheme.primary
+                      : Theme.of(context).cardColor,
                   borderRadius: BorderRadius.circular(5),
                   boxShadow: const [
                     BoxShadow(
@@ -59,10 +50,14 @@ class ScheduleCard extends StatelessWidget {
                           FractionallySizedBox(
                             widthFactor: 0.85,
                             alignment: Alignment.topLeft,
-                            child: Text(title,
+                            child: Text(event.title,
                                 overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
-                                  color: Colors.white,
+                                style: TextStyle(
+                                  color: event.isSpecial
+                                      ? CustomColors.lightColors.secondary
+                                      : Theme.of(context)
+                                          .colorScheme
+                                          .onSecondary,
                                   fontSize: 19,
                                   fontWeight: FontWeight.w400,
                                 )),
@@ -72,31 +67,40 @@ class ScheduleCard extends StatelessWidget {
                               children: [
                                 Container(
                                     padding: const EdgeInsets.only(top: 10),
-                                    child: Text(course.englishName,
+                                    child: Text(event.course.englishName,
                                         overflow: TextOverflow.ellipsis,
-                                        style: const TextStyle(
-                                          color: Colors.white,
+                                        style: TextStyle(
+                                          color: event.isSpecial
+                                              ? CustomColors
+                                                  .lightColors.secondary
+                                              : Theme.of(context)
+                                                  .colorScheme
+                                                  .onSecondary,
                                           fontSize: 16,
                                           fontWeight: FontWeight.w300,
                                         ))),
-                                Flexible(
-                                  child: Row(
-                                    children: [
-                                      ScheduleCardLocationContainer(
-                                          locations: locations),
-                                      ScheduleCardTimeStamp(
-                                          timeStart: timeStart,
-                                          timeEnd: timeEnd)
-                                    ],
-                                  ),
-                                )
+                                ScheduleCardLocationContainer(
+                                    textColor: event.isSpecial
+                                        ? CustomColors.lightColors.secondary
+                                        : Theme.of(context)
+                                            .colorScheme
+                                            .onSecondary,
+                                    locations: event.locations),
+                                ScheduleCardTimeStamp(
+                                    textColor: event.isSpecial
+                                        ? CustomColors.lightColors.secondary
+                                        : Theme.of(context)
+                                            .colorScheme
+                                            .onSecondary,
+                                    timeStart: event.timeStart,
+                                    timeEnd: event.timeEnd)
                               ],
                             ),
                           ),
                         ],
                       ))),
             ),
-            ScheduleCardRibbon(color: color)
+            ScheduleCardRibbon(color: '#cccccc')
           ],
         ));
   }

@@ -218,6 +218,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.7.0"
+  equatable:
+    dependency: "direct main"
+    description:
+      name: equatable
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.3"
   fake_async:
     dependency: transitive
     description:
@@ -791,6 +798,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.0"
+  string_to_hex:
+    dependency: "direct main"
+    description:
+      name: string_to_hex
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.2.2"
   synchronized:
     dependency: transitive
     description:

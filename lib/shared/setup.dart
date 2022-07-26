@@ -23,5 +23,5 @@ void setupRequiredSharedPreferences(String schoolName) {
   sharedPrefs.setInt(
       PreferenceTypes.notificationTime, possibleNotification ?? 60);
   sharedPrefs.setString(PreferenceTypes.school, schoolName);
-  sharedPrefs.setStringList(PreferenceTypes.favorites, []);
+  sharedPrefs.setStringList(PreferenceTypes.favorites, <String>[]);
 }

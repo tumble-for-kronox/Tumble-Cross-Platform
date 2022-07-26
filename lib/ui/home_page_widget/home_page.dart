@@ -36,9 +36,9 @@ class _HomePageState extends State<HomePage> {
         appBar: TumbleAppBar(
           navigateToSearch: () =>
               context.read<HomePageCubit>().navigateToSearch(context),
-          toggleFavorite: () => context
+          toggleFavorite: () async => await context
               .read<HomePageCubit>()
-              .assignFavorite(widget.currentScheduleId!),
+              .toggleFavorite(widget.currentScheduleId!),
         ),
         body: FutureBuilder(
             future:

@@ -1,13 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
 import 'package:intl/intl.dart';
 
 class ScheduleCardTimeStamp extends StatelessWidget {
   final DateTime timeStart;
+  final Color textColor;
   final DateTime timeEnd;
   const ScheduleCardTimeStamp(
-      {Key? key, required this.timeEnd, required this.timeStart})
+      {Key? key,
+      required this.timeEnd,
+      required this.timeStart,
+      required this.textColor})
       : super(key: key);
 
   @override
@@ -17,8 +20,8 @@ class ScheduleCardTimeStamp extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 10),
       child: Text(
         '${DateFormat.Hm().format(timeStart)} - ${DateFormat.Hm().format(timeEnd)}',
-        style: const TextStyle(
-          color: Colors.white,
+        style: TextStyle(
+          color: textColor,
           fontSize: 21,
           fontWeight: FontWeight.w300,
         ),

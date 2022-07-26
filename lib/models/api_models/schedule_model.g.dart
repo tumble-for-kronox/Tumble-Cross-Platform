@@ -19,7 +19,7 @@ Map<String, dynamic> _$$_ScheduleModelToJson(_$_ScheduleModel instance) =>
     <String, dynamic>{
       'cachedAt': instance.cachedAt,
       'id': instance.id,
-      'days': instance.days,
+      'days': instance.days.map((e) => e.toJson()).toList(),
     };
 
 _$_Day _$$_DayFromJson(Map<String, dynamic> json) => _$_Day(
@@ -37,7 +37,7 @@ Map<String, dynamic> _$$_DayToJson(_$_Day instance) => <String, dynamic>{
       'date': instance.date,
       'isoString': instance.isoString.toIso8601String(),
       'weekNumber': instance.weekNumber,
-      'events': instance.events,
+      'events': instance.events.map((e) => e.toJson()).toList(),
     };
 
 _$_Event _$$_EventFromJson(Map<String, dynamic> json) => _$_Event(
@@ -59,11 +59,11 @@ _$_Event _$$_EventFromJson(Map<String, dynamic> json) => _$_Event(
 Map<String, dynamic> _$$_EventToJson(_$_Event instance) => <String, dynamic>{
       'id': instance.id,
       'title': instance.title,
-      'course': instance.course,
+      'course': instance.course.toJson(),
       'timeStart': instance.timeStart.toIso8601String(),
       'timeEnd': instance.timeEnd.toIso8601String(),
-      'locations': instance.locations,
-      'teachers': instance.teachers,
+      'locations': instance.locations.map((e) => e.toJson()).toList(),
+      'teachers': instance.teachers.map((e) => e.toJson()).toList(),
       'isSpecial': instance.isSpecial,
       'lastModified': instance.lastModified.toIso8601String(),
     };

@@ -12,7 +12,7 @@ part 'schedule_model.g.dart';
 ScheduleModel scheduleModelFromJson(String str) =>
     ScheduleModel.fromJson(json.decode(str));
 
-String scheduleModelToJson(ScheduleModel data) => json.encode(data.toJson());
+Map<String, dynamic> scheduleModelToJson(ScheduleModel data) => data.toJson();
 
 @freezed
 abstract class ScheduleModel with _$ScheduleModel {
