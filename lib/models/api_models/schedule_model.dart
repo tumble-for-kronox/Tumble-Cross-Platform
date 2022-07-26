@@ -2,8 +2,6 @@
 //
 //     final scheduleModel = scheduleModelFromJson(jsonString);
 
-// ignore_for_file: invalid_annotation_target
-
 import 'package:meta/meta.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'dart:convert';
@@ -13,7 +11,7 @@ part 'schedule_model.g.dart';
 
 ScheduleModel scheduleModelFromJson(String str) => ScheduleModel.fromJson(json.decode(str));
 
-String scheduleModelToJson(ScheduleModel data) => json.encode(data.toJson());
+Map<String, dynamic> scheduleModelToJson(ScheduleModel data) => data.toJson();
 
 @freezed
 abstract class ScheduleModel with _$ScheduleModel {

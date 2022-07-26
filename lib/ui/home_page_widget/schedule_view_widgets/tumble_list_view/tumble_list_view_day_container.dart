@@ -22,7 +22,9 @@ class TumbleListViewDayContainer extends StatelessWidget {
             children: [
               Text("${day.name} ${day.date}",
                   style: TextStyle(
-                      color: Theme.of(context).colorScheme.onBackground, fontSize: 17, fontWeight: FontWeight.w400)),
+                      color: Theme.of(context).colorScheme.onBackground,
+                      fontSize: 17,
+                      fontWeight: FontWeight.w400)),
               Expanded(
                   child: Divider(
                 color: Theme.of(context).colorScheme.onBackground,
@@ -31,20 +33,21 @@ class TumbleListViewDayContainer extends StatelessWidget {
               ))
             ],
           ),
-          Column(
-            children: day.events
-                .map((event) => ScheduleCard(
-                    title: event.title,
-                    course: event.course,
-                    teachers: event.teachers,
-                    locations: event.locations,
-                    color: "#cccccc",
-                    timeStart: event.timeStart,
-                    timeEnd: event.timeEnd,
-                    onTap: () {
-                      Navigator.push(context, CupertinoPageRoute(builder: (context) => EventDetailsPage(event: event)));
-                    }))
-                .toList(),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 10),
+            child: Column(
+              children: day.events
+                  .map((event) => ScheduleCard(
+                      event: event,
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            CupertinoPageRoute(
+                                builder: (context) =>
+                                    EventDetailsPage(event: event)));
+                      }))
+                  .toList(),
+            ),
           )
         ],
       ),

@@ -3,7 +3,9 @@ import 'package:tumble/models/api_models/schedule_model.dart';
 
 class ScheduleCardLocationContainer extends StatelessWidget {
   final List<Location> locations;
-  const ScheduleCardLocationContainer({Key? key, required this.locations})
+  final Color textColor;
+  const ScheduleCardLocationContainer(
+      {Key? key, required this.locations, required this.textColor})
       : super(key: key);
 
   @override
@@ -15,30 +17,23 @@ class ScheduleCardLocationContainer extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.end,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          const Padding(
-            padding: EdgeInsets.only(bottom: 3),
+          Text(
+            locations.isEmpty ? "" : locations.first.name,
+            softWrap: true,
+            style: TextStyle(
+              color: textColor,
+              fontSize: 21,
+              fontWeight: FontWeight.w200,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 3),
             child: Icon(
               Icons.location_on_outlined,
               size: 20,
-              color: Colors.white,
+              color: textColor,
             ),
           ),
-          Expanded(
-            child: Column(
-                children: locations
-                    .map(
-                      (location) => Text(
-                        location.name,
-                        softWrap: true,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 21,
-                          fontWeight: FontWeight.w200,
-                        ),
-                      ),
-                    )
-                    .toList()),
-          )
         ],
       ),
     );

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:sembast/sembast.dart';
 import 'package:tumble/database/database.dart';
 import 'package:tumble/database/interface/iaccess_stores.dart';
@@ -12,13 +14,15 @@ class DatabaseRepository implements IDatabaseScheduleService {
 
   @override
   Future addSchedule(ScheduleModel scheduleModel) async {
-    await _scheduleStore.add(await _db, scheduleModel.toJson());
+    await _scheduleStore.add(await _db, scheduleModelToJson(scheduleModel));
+    log('Added schedule');
   }
 
   @override
   Future removeSchedule(String id) async {
-    final finder = Finder(filter: Filter.byKey(id));
+    final finder = Finder(filter: Filter.equals('id', id));
     await _scheduleStore.delete(await _db, finder: finder);
+    log('Removed schedule');
   }
 
   @override
@@ -38,7 +42,7 @@ class DatabaseRepository implements IDatabaseScheduleService {
 
   @override
   Future<ScheduleModel?> getOneSchedule(String id) async {
-    final finder = Finder(filter: Filter.byKey(id));
+    final finder = Finder(filter: Filter.equals('id', id));
     final recordSnapshot =
         await _scheduleStore.findFirst(await _db, finder: finder);
     if (recordSnapshot != null) {

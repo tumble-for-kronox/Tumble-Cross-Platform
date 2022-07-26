@@ -2,6 +2,7 @@
 
 import 'dart:developer';
 import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -24,7 +25,10 @@ class HomePageCubit extends Cubit<HomePageState> {
 
   final _sharedPrefs = locator<SharedPreferences>();
   final _implementationService = locator<ImplementationRepository>();
+  final _databaseService = locator<DatabaseRepository>();
+  ScheduleModel? _currentScheduleModel;
   List<HomePageState> _states = [];
+  String? _currentScheduleId;
 
   int _currentPageIndex = 0;
 
@@ -38,23 +42,22 @@ class HomePageCubit extends Cubit<HomePageState> {
   Future<void> init(String scheduleId) async {
     log("BEFORE HOME PAGE LOAD");
     emit(const HomePageLoading());
-    log("AFTER HOME PAGE LOAD");
+    _currentScheduleId = scheduleId;
     _currentPageIndex = defaultViewType!;
     log("BEFORE GET SCHEDULE");
     final _response = await _implementationService.getSchedule(scheduleId);
-    log("Response: ${_response.message}\nStatus:${_response.status}");
     switch (_response.status) {
       case Status.COMPLETED:
-        log('here');
-        final ScheduleModel scheduleModel = _response.data!;
+        _currentScheduleModel = _response.data!;
 
         /// Now we have an instance of the list used in
         /// [TumbleListView] and an instance of the list
         /// used in [TumbleWeekView]
-        _listOfDays = scheduleModel.days;
-        _listOfWeeks = scheduleModel.splitToWeek();
-        setStateParameters(scheduleId, _listOfDays, _listOfWeeks);
-        emit(_states[locator<SharedPreferences>().getInt(PreferenceTypes.view)!]);
+        _listOfDays = _currentScheduleModel!.days;
+        _listOfWeeks = _currentScheduleModel!.splitToWeek();
+        setStateParameters(scheduleId, _listOfDays, _listOfWeeks, null);
+        emit(_states[
+            locator<SharedPreferences>().getInt(PreferenceTypes.view)!]);
         break;
       case Status.ERROR:
         emit(HomePageError(errorType: _response.message!));
@@ -65,10 +68,24 @@ class HomePageCubit extends Cubit<HomePageState> {
     }
   }
 
-  void setStateParameters(String scheduleId, List<Day> listOfDays, List<Week> listOfWeeks) {
+
+  void setStateParameters(String scheduleId, List<Day> listOfDays,
+      List<Week> listOfWeeks, bool? updateFavorite) {
     _states = [
-      HomePageListView(scheduleId: scheduleId, listOfDays: listOfDays),
-      HomePageWeekView(scheduleId: scheduleId, listOfWeeks: listOfWeeks)
+      HomePageListView(
+          scheduleId: scheduleId,
+          listOfDays: listOfDays,
+          isFavorite: updateFavorite ??
+              locator<SharedPreferences>()
+                  .getStringList(PreferenceTypes.favorites)!
+                  .contains(_currentScheduleId)!),
+      HomePageWeekView(
+          scheduleId: scheduleId,
+          listOfWeeks: listOfWeeks,
+          isFavorite: updateFavorite ??
+              locator<SharedPreferences>()
+                  .getStringList(PreferenceTypes.favorites)!
+                  .contains(_currentScheduleId)!)
     ];
   }
 
@@ -85,10 +102,23 @@ class HomePageCubit extends Cubit<HomePageState> {
     );
   }
 
-  void assignFavorite(String scheduleId) {
-    final currentFavorites = _sharedPrefs.getStringList(PreferenceTypes.favorites);
-    currentFavorites!.add(scheduleId);
+  Future<void> toggleFavorite(String scheduleId) async {
+    log(_databaseService.getAllScheduleIds().toString());
+    final currentFavorites =
+        _sharedPrefs.getStringList(PreferenceTypes.favorites);
+
+    if (currentFavorites!.contains(scheduleId)) {
+      currentFavorites.remove(scheduleId);
+      await _databaseService.removeSchedule(scheduleId);
+      setStateParameters(scheduleId, _listOfDays, _listOfWeeks, false);
+    } else {
+      currentFavorites.add(scheduleId);
+      await _databaseService.addSchedule(_currentScheduleModel!);
+      setStateParameters(scheduleId, _listOfDays, _listOfWeeks, true);
+    }
     _sharedPrefs.setStringList(PreferenceTypes.favorites, currentFavorites);
+    emit(_states[_currentPageIndex]);
+    log(currentFavorites.toString());
   }
 
   handleDrawerEvent(Enum eventType, BuildContext context) {

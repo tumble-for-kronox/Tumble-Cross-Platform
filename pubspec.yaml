@@ -12,6 +12,8 @@ dependencies:
   flutter:
     sdk: flutter
   http: ^0.13.1
+  equatable: ^2.0.3
+  string_to_hex: ^0.2.2
   freezed: any
   cupertino_icons: ^1.0.5
   build_runner: ^2.1.11

@@ -41,11 +41,13 @@ class ImplementationRepository implements IImplementationService {
 
   @override
   Future<ApiResponse> getSchedule(String scheduleId) async {
-    // String pretend = await rootBundle.loadString('pretend_struct.json');
-    // return ApiResponse.completed(scheduleModelFromJson(pretend));
-    final ScheduleModel? _possibleSchedule =
-        await _databaseService.getOneSchedule(scheduleId);
-    if (_possibleSchedule != null) {
+    log(scheduleId);
+    if (_preferenceService
+        .getStringList(PreferenceTypes.favorites)!
+        .contains(scheduleId)) {
+      final ScheduleModel? _possibleSchedule =
+          await _databaseService.getOneSchedule(scheduleId);
+      log("${_possibleSchedule?.id}");
       return ApiResponse.completed(_possibleSchedule);
     }
     return await getSchedulesRequest(scheduleId);

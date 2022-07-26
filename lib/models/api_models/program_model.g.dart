@@ -17,7 +17,7 @@ _$_ProgramModel _$$_ProgramModelFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$$_ProgramModelToJson(_$_ProgramModel instance) =>
     <String, dynamic>{
       'count': instance.count,
-      'items': instance.items,
+      'items': instance.items.map((e) => e.toJson()).toList(),
     };
 
 _$_Item _$$_ItemFromJson(Map<String, dynamic> json) => _$_Item(
