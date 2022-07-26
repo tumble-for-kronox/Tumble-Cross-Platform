@@ -79,10 +79,17 @@ class ScheduleCard extends StatelessWidget {
                                           fontSize: 16,
                                           fontWeight: FontWeight.w300,
                                         ))),
-                                ScheduleCardLocationContainer(
-                                    locations: locations),
-                                ScheduleCardTimeStamp(
-                                    timeStart: timeStart, timeEnd: timeEnd)
+                                Flexible(
+                                  child: Row(
+                                    children: [
+                                      ScheduleCardLocationContainer(
+                                          locations: locations),
+                                      ScheduleCardTimeStamp(
+                                          timeStart: timeStart,
+                                          timeEnd: timeEnd)
+                                    ],
+                                  ),
+                                )
                               ],
                             ),
                           ),

@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 
 class AppDefaultSchedulePicker extends StatelessWidget {
-  final scheduleIds;
+  final List<String>? scheduleIds;
   const AppDefaultSchedulePicker({Key? key, required this.scheduleIds})
       : super(key: key);
 

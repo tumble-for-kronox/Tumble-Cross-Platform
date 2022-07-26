@@ -35,13 +35,12 @@ class TumbleAppDrawerTile extends StatelessWidget {
                 color: Theme.of(context).colorScheme.onBackground,
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 18),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Flexible(
+                  child: Text(
                     drawerTileTitle,
                     textAlign: TextAlign.left,
                     style: TextStyle(
@@ -49,20 +48,22 @@ class TumbleAppDrawerTile extends StatelessWidget {
                       fontSize: 18,
                     ),
                   ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  Text(
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+                Flexible(
+                  child: Text(
                     subtitle,
                     textAlign: TextAlign.left,
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.onBackground,
                       fontWeight: FontWeight.w200,
                     ),
-                  )
-                ],
-              ),
-            ),
+                  ),
+                )
+              ],
+            )
           ],
         ),
       ),

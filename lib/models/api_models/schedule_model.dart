@@ -2,8 +2,6 @@
 //
 //     final scheduleModel = scheduleModelFromJson(jsonString);
 
-// ignore_for_file: invalid_annotation_target
-
 import 'package:meta/meta.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'dart:convert';
@@ -20,7 +18,7 @@ String scheduleModelToJson(ScheduleModel data) => json.encode(data.toJson());
 abstract class ScheduleModel with _$ScheduleModel {
   const factory ScheduleModel({
     required String cachedAt,
-    @JsonKey(name: "_id") required String id,
+    required String id,
     required List<Day> days,
   }) = _ScheduleModel;
 
@@ -76,7 +74,7 @@ abstract class Location with _$Location {
     required String name,
     required String building,
     required String floor,
-    required String maxSeats,
+    required int maxSeats,
   }) = _Location;
 
   factory Location.fromJson(Map<String, dynamic> json) =>
