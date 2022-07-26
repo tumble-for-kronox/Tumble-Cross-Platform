@@ -21,7 +21,6 @@ ScheduleModel _$ScheduleModelFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$ScheduleModel {
   String get cachedAt => throw _privateConstructorUsedError;
-  @JsonKey(name: "_id")
   String get id => throw _privateConstructorUsedError;
   List<Day> get days => throw _privateConstructorUsedError;
 
@@ -36,7 +35,7 @@ abstract class $ScheduleModelCopyWith<$Res> {
   factory $ScheduleModelCopyWith(
           ScheduleModel value, $Res Function(ScheduleModel) then) =
       _$ScheduleModelCopyWithImpl<$Res>;
-  $Res call({String cachedAt, @JsonKey(name: "_id") String id, List<Day> days});
+  $Res call({String cachedAt, String id, List<Day> days});
 }
 
 /// @nodoc
@@ -78,7 +77,7 @@ abstract class _$$_ScheduleModelCopyWith<$Res>
           _$_ScheduleModel value, $Res Function(_$_ScheduleModel) then) =
       __$$_ScheduleModelCopyWithImpl<$Res>;
   @override
-  $Res call({String cachedAt, @JsonKey(name: "_id") String id, List<Day> days});
+  $Res call({String cachedAt, String id, List<Day> days});
 }
 
 /// @nodoc
@@ -119,9 +118,7 @@ class __$$_ScheduleModelCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_ScheduleModel implements _ScheduleModel {
   const _$_ScheduleModel(
-      {required this.cachedAt,
-      @JsonKey(name: "_id") required this.id,
-      required final List<Day> days})
+      {required this.cachedAt, required this.id, required final List<Day> days})
       : _days = days;
 
   factory _$_ScheduleModel.fromJson(Map<String, dynamic> json) =>
@@ -130,7 +127,6 @@ class _$_ScheduleModel implements _ScheduleModel {
   @override
   final String cachedAt;
   @override
-  @JsonKey(name: "_id")
   final String id;
   final List<Day> _days;
   @override
@@ -176,7 +172,7 @@ class _$_ScheduleModel implements _ScheduleModel {
 abstract class _ScheduleModel implements ScheduleModel {
   const factory _ScheduleModel(
       {required final String cachedAt,
-      @JsonKey(name: "_id") required final String id,
+      required final String id,
       required final List<Day> days}) = _$_ScheduleModel;
 
   factory _ScheduleModel.fromJson(Map<String, dynamic> json) =
@@ -185,7 +181,6 @@ abstract class _ScheduleModel implements ScheduleModel {
   @override
   String get cachedAt => throw _privateConstructorUsedError;
   @override
-  @JsonKey(name: "_id")
   String get id => throw _privateConstructorUsedError;
   @override
   List<Day> get days => throw _privateConstructorUsedError;
@@ -910,7 +905,7 @@ mixin _$Location {
   String get name => throw _privateConstructorUsedError;
   String get building => throw _privateConstructorUsedError;
   String get floor => throw _privateConstructorUsedError;
-  String get maxSeats => throw _privateConstructorUsedError;
+  int get maxSeats => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -923,7 +918,7 @@ abstract class $LocationCopyWith<$Res> {
   factory $LocationCopyWith(Location value, $Res Function(Location) then) =
       _$LocationCopyWithImpl<$Res>;
   $Res call(
-      {String id, String name, String building, String floor, String maxSeats});
+      {String id, String name, String building, String floor, int maxSeats});
 }
 
 /// @nodoc
@@ -962,7 +957,7 @@ class _$LocationCopyWithImpl<$Res> implements $LocationCopyWith<$Res> {
       maxSeats: maxSeats == freezed
           ? _value.maxSeats
           : maxSeats // ignore: cast_nullable_to_non_nullable
-              as String,
+              as int,
     ));
   }
 }
@@ -974,7 +969,7 @@ abstract class _$$_LocationCopyWith<$Res> implements $LocationCopyWith<$Res> {
       __$$_LocationCopyWithImpl<$Res>;
   @override
   $Res call(
-      {String id, String name, String building, String floor, String maxSeats});
+      {String id, String name, String building, String floor, int maxSeats});
 }
 
 /// @nodoc
@@ -1015,7 +1010,7 @@ class __$$_LocationCopyWithImpl<$Res> extends _$LocationCopyWithImpl<$Res>
       maxSeats: maxSeats == freezed
           ? _value.maxSeats
           : maxSeats // ignore: cast_nullable_to_non_nullable
-              as String,
+              as int,
     ));
   }
 }
@@ -1042,7 +1037,7 @@ class _$_Location implements _Location {
   @override
   final String floor;
   @override
-  final String maxSeats;
+  final int maxSeats;
 
   @override
   String toString() {
@@ -1088,7 +1083,7 @@ abstract class _Location implements Location {
       required final String name,
       required final String building,
       required final String floor,
-      required final String maxSeats}) = _$_Location;
+      required final int maxSeats}) = _$_Location;
 
   factory _Location.fromJson(Map<String, dynamic> json) = _$_Location.fromJson;
 
@@ -1101,7 +1096,7 @@ abstract class _Location implements Location {
   @override
   String get floor => throw _privateConstructorUsedError;
   @override
-  String get maxSeats => throw _privateConstructorUsedError;
+  int get maxSeats => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
   _$$_LocationCopyWith<_$_Location> get copyWith =>

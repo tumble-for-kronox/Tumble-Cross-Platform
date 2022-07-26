@@ -31,14 +31,16 @@ class HomePageCubit extends Cubit<HomePageState> {
   late List<Week> _listOfWeeks;
   late List<Day> _listOfDays;
 
-  int? get defaultViewType =>
-      locator<SharedPreferences>().getInt(PreferenceTypes.view);
+  int? get defaultViewType => locator<SharedPreferences>().getInt(PreferenceTypes.view);
   int get currentPageIndex => _currentPageIndex;
 
   /// Handles the loading of the schedule upon choosing a program
   Future<void> init(String scheduleId) async {
+    log("BEFORE HOME PAGE LOAD");
     emit(const HomePageLoading());
+    log("AFTER HOME PAGE LOAD");
     _currentPageIndex = defaultViewType!;
+    log("BEFORE GET SCHEDULE");
     final _response = await _implementationService.getSchedule(scheduleId);
     log("Response: ${_response.message}\nStatus:${_response.status}");
     switch (_response.status) {
@@ -52,8 +54,7 @@ class HomePageCubit extends Cubit<HomePageState> {
         _listOfDays = scheduleModel.days;
         _listOfWeeks = scheduleModel.splitToWeek();
         setStateParameters(scheduleId, _listOfDays, _listOfWeeks);
-        emit(_states[
-            locator<SharedPreferences>().getInt(PreferenceTypes.view)!]);
+        emit(_states[locator<SharedPreferences>().getInt(PreferenceTypes.view)!]);
         break;
       case Status.ERROR:
         emit(HomePageError(errorType: _response.message!));
@@ -64,8 +65,7 @@ class HomePageCubit extends Cubit<HomePageState> {
     }
   }
 
-  void setStateParameters(
-      String scheduleId, List<Day> listOfDays, List<Week> listOfWeeks) {
+  void setStateParameters(String scheduleId, List<Day> listOfDays, List<Week> listOfWeeks) {
     _states = [
       HomePageListView(scheduleId: scheduleId, listOfDays: listOfDays),
       HomePageWeekView(scheduleId: scheduleId, listOfWeeks: listOfWeeks)
@@ -86,8 +86,7 @@ class HomePageCubit extends Cubit<HomePageState> {
   }
 
   void assignFavorite(String scheduleId) {
-    final currentFavorites =
-        _sharedPrefs.getStringList(PreferenceTypes.favorites);
+    final currentFavorites = _sharedPrefs.getStringList(PreferenceTypes.favorites);
     currentFavorites!.add(scheduleId);
     _sharedPrefs.setStringList(PreferenceTypes.favorites, currentFavorites);
   }

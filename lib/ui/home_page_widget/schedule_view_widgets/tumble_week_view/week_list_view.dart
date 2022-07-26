@@ -15,16 +15,13 @@ class TumbleWeekPageContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-        height: double.infinity,
-        width: double.infinity,
-        child: Stack(
-          children: [
-            WeekMapper(week: week),
-            WeekNumber(
-              week: week,
-            )
-          ],
-        ));
+    return Stack(
+      children: [
+        WeekMapper(week: week),
+        WeekNumber(
+          week: week,
+        )
+      ],
+    );
   }
 }

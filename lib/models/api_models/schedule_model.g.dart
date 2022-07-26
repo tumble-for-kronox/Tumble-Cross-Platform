@@ -9,7 +9,7 @@ part of 'schedule_model.dart';
 _$_ScheduleModel _$$_ScheduleModelFromJson(Map<String, dynamic> json) =>
     _$_ScheduleModel(
       cachedAt: json['cachedAt'] as String,
-      id: json['_id'] as String,
+      id: json['id'] as String,
       days: (json['days'] as List<dynamic>)
           .map((e) => Day.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -18,7 +18,7 @@ _$_ScheduleModel _$$_ScheduleModelFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$$_ScheduleModelToJson(_$_ScheduleModel instance) =>
     <String, dynamic>{
       'cachedAt': instance.cachedAt,
-      '_id': instance.id,
+      'id': instance.id,
       'days': instance.days,
     };
 
@@ -85,7 +85,7 @@ _$_Location _$$_LocationFromJson(Map<String, dynamic> json) => _$_Location(
       name: json['name'] as String,
       building: json['building'] as String,
       floor: json['floor'] as String,
-      maxSeats: json['maxSeats'] as String,
+      maxSeats: json['maxSeats'] as int,
     );
 
 Map<String, dynamic> _$$_LocationToJson(_$_Location instance) =>
