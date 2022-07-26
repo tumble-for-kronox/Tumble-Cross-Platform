@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:tumble/theme/colors.dart';
+import 'package:tumble/ui/home_page_widget/cubit/home_page_cubit.dart';
 import 'package:tumble/ui/home_page_widget/home_page.dart';
 import 'package:tumble/ui/home_page_widget/schedule_view_widgets/misc/tumble_app_bar.dart';
 import 'package:tumble/ui/home_page_widget/schedule_view_widgets/misc/tumble_app_drawer.dart';
@@ -22,7 +23,10 @@ class _ScheduleSearchPageState extends State<ScheduleSearchPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      endDrawer: const TumbleAppDrawer(
+      endDrawer: TumbleAppDrawer(
+        handleDrawerEvent: (eventType) => context
+            .read<SearchPageCubit>()
+            .handleDrawerEvent(eventType, context),
         limitOptions: true,
       ),
       appBar: const TumbleAppBar(),

@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:tumble/theme/colors.dart';
 import 'package:tumble/ui/home_page_widget/home_page.dart';
 import 'package:tumble/ui/home_page_widget/school_selection_page.dart';
@@ -17,7 +18,7 @@ class MainApp extends StatefulWidget {
 
 class _MainAppState extends State<MainApp> {
   @override
-  Widget build(BuildContext context) => MaterialApp(
+  Widget build(BuildContext context) => GetMaterialApp(
         title: 'Tumble',
         theme: ThemeData(
           colorScheme: CustomColors.lightColors,
@@ -35,13 +36,17 @@ class _MainAppState extends State<MainApp> {
             builder: (context, snapshot) {
               return BlocBuilder<MainAppCubit, MainAppState>(
                 builder: (context, state) {
-                  if (state is MainAppSchoolSelectedAndDefault) {
-                    return HomePage(currentScheduleId: state.currentScheduleId);
-                  } else if (state is MainAppSchoolSelected) {
-                    return const ScheduleSearchPage();
+                  switch (state.runtimeType) {
+                    case MainAppSchoolSelectedAndDefault:
+                      return HomePage(
+                          currentScheduleId:
+                              (state as MainAppSchoolSelectedAndDefault)
+                                  .currentScheduleId);
+                    case MainAppSchoolSelected:
+                      return const ScheduleSearchPage();
+                    default:
+                      return const SchoolSelectionPage();
                   }
-                  return SchoolSelectionPage(
-                      schoolsList: context.read<MainAppCubit>().schools);
                 },
               );
             }),

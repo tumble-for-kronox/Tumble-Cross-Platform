@@ -13,6 +13,7 @@ import 'package:tumble/models/api_models/schedule_model.dart';
 import 'package:tumble/models/ui_models/week_model.dart';
 import 'package:tumble/shared/preference_types.dart';
 import 'package:tumble/startup/get_it_instances.dart';
+import 'package:tumble/ui/home_page_widget/data/event_types.dart';
 
 import '../../search_page_widgets/search/schedule_search_page.dart';
 
@@ -87,5 +88,29 @@ class HomePageCubit extends Cubit<HomePageState> {
         _sharedPrefs.getStringList(PreferenceTypes.favorites);
     currentFavorites!.add(scheduleId);
     _sharedPrefs.setStringList(PreferenceTypes.favorites, currentFavorites);
+  }
+
+  handleDrawerEvent(Enum eventType, BuildContext context) {
+    switch (eventType) {
+      case EventType.CANCEL_ALL_NOTIFICATIONS:
+        break;
+      case EventType.CANCEL_NOTIFICATIONS_FOR_PROGRAM:
+        break;
+      case EventType.CHANGE_SCHOOL:
+        Navigator.of(context).push(
+          CupertinoPageRoute(builder: (context) => const ScheduleSearchPage()),
+        );
+        break;
+      case EventType.CHANGE_THEME:
+        break;
+      case EventType.CONTACT:
+        break;
+      case EventType.EDIT_NOTIFICATION_TIME:
+        break;
+      case EventType.SET_DEFAULT_SCHEDULE:
+        break;
+      case EventType.SET_DEFAULT_VIEW:
+        break;
+    }
   }
 }

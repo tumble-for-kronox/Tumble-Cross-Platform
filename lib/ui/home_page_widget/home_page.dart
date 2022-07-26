@@ -27,7 +27,10 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        endDrawer: const TumbleAppDrawer(
+        endDrawer: TumbleAppDrawer(
+          handleDrawerEvent: (eventType) => context
+              .read<HomePageCubit>()
+              .handleDrawerEvent(eventType, context),
           limitOptions: false,
         ),
         appBar: TumbleAppBar(

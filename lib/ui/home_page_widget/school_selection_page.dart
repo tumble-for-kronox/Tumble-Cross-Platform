@@ -5,13 +5,15 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tumble/models/ui_models/school_model.dart';
 import 'package:tumble/ui/home_page_widget/cubit/home_page_cubit.dart';
+import 'package:tumble/ui/home_page_widget/data/schools.dart';
 import 'package:tumble/ui/main_app_widget/cubit/main_app_cubit.dart';
 import 'package:tumble/ui/search_page_widgets/school_card.dart';
 import 'package:tumble/ui/search_page_widgets/search/schedule_search_page.dart';
 
 class SchoolSelectionPage extends StatefulWidget {
-  final List<School>? schoolsList;
-  const SchoolSelectionPage({Key? key, this.schoolsList}) : super(key: key);
+  const SchoolSelectionPage({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<SchoolSelectionPage> createState() => _SchoolSelectionPageState();
@@ -40,7 +42,7 @@ class _SchoolSelectionPageState extends State<SchoolSelectionPage> {
                   ),
                 ),
                 Column(
-                  children: widget.schoolsList!
+                  children: Schools.schools
                       .map((school) => SchoolCard(
                             schoolName: school.schoolName,
                             schoolId: school.schoolId,
@@ -48,10 +50,7 @@ class _SchoolSelectionPageState extends State<SchoolSelectionPage> {
                             onTap: () {
                               context
                                   .read<MainAppCubit>()
-                                  .setup(school.schoolName);
-                              context
-                                  .read<MainAppCubit>()
-                                  .navigateToSearch(context);
+                                  .setup(school.schoolName, context);
                             },
                           ))
                       .toList(),

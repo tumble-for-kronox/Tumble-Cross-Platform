@@ -15,7 +15,6 @@ import 'package:tumble/ui/search_page_widgets/cubit/search_page_cubit.dart';
 import 'package:tumble/ui/search_page_widgets/search/schedule_search_bar.dart';
 import 'package:tumble/ui/search_page_widgets/search/schedule_search_page.dart';
 import 'package:tumble/ui/search_page_widgets/search_bar_widget/searchbar_and_logo_container.dart';
-import 'package:tumble/ui/search_page_widgets/search_page_slideable_logo.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -35,9 +34,6 @@ void main() async {
         child: Row(
           children: const [CustomBottomBar(), HomePage()],
         )),
-
-    /// Currently shared state between all
-    /// descendants of HomePage. Maybe not?
     BlocProvider<HomePageCubit>(
       create: (c) => HomePageCubit(),
       child: Row(

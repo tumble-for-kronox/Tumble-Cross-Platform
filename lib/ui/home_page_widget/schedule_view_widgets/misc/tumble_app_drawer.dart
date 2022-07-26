@@ -5,9 +5,13 @@ import 'package:tumble/ui/home_page_widget/data/event_types.dart';
 import 'package:tumble/ui/home_page_widget/schedule_view_widgets/misc/tumble_app_drawer_tile.dart';
 import 'package:tumble/ui/home_page_widget/schedule_view_widgets/misc/tumble_settings_section.dart';
 
+typedef HandleDrawerEvent = void Function(Enum eventType);
+
 class TumbleAppDrawer extends StatelessWidget {
+  final HandleDrawerEvent handleDrawerEvent;
   final bool limitOptions;
-  const TumbleAppDrawer({Key? key, required this.limitOptions})
+  const TumbleAppDrawer(
+      {Key? key, required this.limitOptions, required this.handleDrawerEvent})
       : super(key: key);
 
   @override
@@ -38,8 +42,8 @@ class TumbleAppDrawer extends StatelessWidget {
               drawerTileTitle: "Contact",
               subtitle: "Get support from our support team",
               prefixIcon: CupertinoIcons.bubble_left_bubble_right,
-              eventType: EventTypes.CONTACT,
-              drawerEvent: (eventType) => {null},
+              eventType: EventType.CONTACT,
+              drawerEvent: handleDrawerEvent,
             ),
           ], title: "Support"),
           const SizedBox(height: 20.0),
@@ -50,15 +54,15 @@ class TumbleAppDrawer extends StatelessWidget {
               drawerTileTitle: "Change schools",
               subtitle: "Current default school is HKR",
               prefixIcon: CupertinoIcons.arrow_right_arrow_left,
-              eventType: EventTypes.CHANGE_SCHOOL,
-              drawerEvent: (eventType) => {null},
+              eventType: EventType.CHANGE_SCHOOL,
+              drawerEvent: handleDrawerEvent,
             ),
             TumbleAppDrawerTile(
               drawerTileTitle: "Change theme",
               subtitle: "Current theme: Dark theme",
               prefixIcon: CupertinoIcons.device_phone_portrait,
-              eventType: EventTypes.CHANGE_THEME,
-              drawerEvent: (eventType) => {null},
+              eventType: EventType.CHANGE_THEME,
+              drawerEvent: handleDrawerEvent,
             ),
           ], title: "Common"),
           const SizedBox(height: 20.0),
@@ -69,15 +73,15 @@ class TumbleAppDrawer extends StatelessWidget {
               drawerTileTitle: "Set default view type",
               subtitle: "Current view: List view",
               prefixIcon: CupertinoIcons.list_dash,
-              eventType: EventTypes.SET_DEFAULT_VIEW,
-              drawerEvent: (eventType) => {null},
+              eventType: EventType.SET_DEFAULT_VIEW,
+              drawerEvent: handleDrawerEvent,
             ),
             TumbleAppDrawerTile(
               drawerTileTitle: "Set default schedule",
               subtitle: "No default schedule set",
               prefixIcon: CupertinoIcons.calendar,
-              eventType: EventTypes.SET_DEFAULT_SCHEDULE,
-              drawerEvent: (eventType) => {null},
+              eventType: EventType.SET_DEFAULT_SCHEDULE,
+              drawerEvent: handleDrawerEvent,
             ),
           ], title: "Schedule"),
           const SizedBox(height: 20.0),
@@ -88,8 +92,8 @@ class TumbleAppDrawer extends StatelessWidget {
               drawerTileTitle: "Cancel all notifications",
               subtitle: "Cancel all scheduled notifications",
               prefixIcon: CupertinoIcons.text_badge_xmark,
-              eventType: EventTypes.CANCEL_ALL_NOTIFICATIONS,
-              drawerEvent: (eventType) => {null},
+              eventType: EventType.CANCEL_ALL_NOTIFICATIONS,
+              drawerEvent: handleDrawerEvent,
             ),
             limitOptions
                 ? Container()
@@ -97,14 +101,14 @@ class TumbleAppDrawer extends StatelessWidget {
                     drawerTileTitle: "Cancel notifications for\nprogram",
                     subtitle: "Cancel notifications for this program",
                     prefixIcon: CupertinoIcons.text_badge_minus,
-                    eventType: EventTypes.CANCEL_NOTIFICATIONS_FOR_PROGRAM,
-                    drawerEvent: (eventType) => {null}),
+                    eventType: EventType.CANCEL_NOTIFICATIONS_FOR_PROGRAM,
+                    drawerEvent: handleDrawerEvent),
             TumbleAppDrawerTile(
               drawerTileTitle: "Edit notification time",
               subtitle: "Notifications will show 3 hours prior to event",
               prefixIcon: CupertinoIcons.time,
-              eventType: EventTypes.EDIT_NOTIFICATION_TIME,
-              drawerEvent: (eventType) => {null},
+              eventType: EventType.EDIT_NOTIFICATION_TIME,
+              drawerEvent: handleDrawerEvent,
             ),
           ], title: "Notifications")
         ],

@@ -1,6 +1,6 @@
 // ignore_for_file: constant_identifier_names
 
-enum EventTypes {
+enum EventType {
   CONTACT,
   CHANGE_SCHOOL,
   CHANGE_THEME,
@@ -10,3 +10,11 @@ enum EventTypes {
   CANCEL_NOTIFICATIONS_FOR_PROGRAM,
   EDIT_NOTIFICATION_TIME
 }
+
+/* class DrawerEvent {
+  final EventType type;
+  final dynamic payload;
+
+  DrawerEvent({required this.type, this.payload});
+}
+ */

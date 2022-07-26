@@ -14,6 +14,7 @@ import 'package:tumble/shared/preference_types.dart';
 import 'package:tumble/shared/setup.dart';
 import 'package:tumble/startup/get_it_instances.dart';
 import 'package:tumble/ui/home_page_widget/data/schools.dart';
+import 'package:tumble/ui/home_page_widget/school_selection_page.dart';
 import 'package:tumble/ui/search_page_widgets/search/schedule_search_page.dart';
 
 part 'main_app_state.dart';
@@ -22,9 +23,6 @@ class MainAppCubit extends Cubit<MainAppState> {
   MainAppCubit() : super(const MainAppInitial());
 
   final _implementationService = locator<ImplementationRepository>();
-  final List<School> _schools = Schools.schools;
-
-  List<School> get schools => _schools;
 
   Future<void> init() async {
     DatabaseResponse _databaseResponse =
@@ -45,11 +43,8 @@ class MainAppCubit extends Cubit<MainAppState> {
 
   /// Set up when switching schools or starting
   /// app for the first time and picking a school
-  void setup(String schoolName) async {
+  void setup(String schoolName, BuildContext context) async {
     setupRequiredSharedPreferences(schoolName);
-  }
-
-  void navigateToSearch(BuildContext context) {
     Navigator.of(context).pushAndRemoveUntil(
         CupertinoPageRoute(builder: (context) => const ScheduleSearchPage()),
         (Route<dynamic> route) => false);
