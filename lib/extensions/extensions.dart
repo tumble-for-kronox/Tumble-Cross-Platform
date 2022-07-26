@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:http/http.dart';
 import 'package:tumble/api/apiservices/api_response.dart';
 import 'package:tumble/api/apiservices/fetch_response.dart';
@@ -7,14 +10,14 @@ import "package:collection/collection.dart";
 import 'package:tumble/models/ui_models/week_model.dart';
 
 extension ResponseParsing on Response {
-  dynamic parseSchedule() {
+  ApiResponse<ScheduleModel> parseSchedule() {
     if (statusCode == 200) {
       return ApiResponse.completed(scheduleModelFromJson(body));
     }
     return ApiResponse.error(FetchResponse.error);
   }
 
-  dynamic parseProgram() {
+  ApiResponse<ProgramModel> parsePrograms() {
     if (statusCode == 200) {
       return ApiResponse.completed(programModelFromJson(body));
     }
@@ -26,9 +29,23 @@ extension ScheduleParsing on ScheduleModel {
   List<Week> splitToWeek() {
     return groupBy(days, (Day day) => day.weekNumber)
         .entries
-        .map((weekNumberToDayList) => Week(
-            weekNumber: weekNumberToDayList.key,
-            days: weekNumberToDayList.value))
+        .map((weekNumberToDayList) => Week(weekNumber: weekNumberToDayList.key, days: weekNumberToDayList.value))
         .toList();
+  }
+}
+
+extension HttpClientResponseParsing on HttpClientResponse {
+  Future<ApiResponse<ProgramModel>> parsePrograms() async {
+    if (statusCode == 200) {
+      return ApiResponse.completed(programModelFromJson(await transform(utf8.decoder).join()));
+    }
+    return ApiResponse.error(FetchResponse.error);
+  }
+
+  Future<ApiResponse<ScheduleModel>> parseSchedule() async {
+    if (statusCode == 200) {
+      return ApiResponse.completed(scheduleModelFromJson(await transform(utf8.decoder).join()));
+    }
+    return ApiResponse.error(FetchResponse.error);
   }
 }

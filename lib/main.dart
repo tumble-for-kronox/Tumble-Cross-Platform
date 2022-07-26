@@ -1,6 +1,7 @@
 import 'dart:io';
-
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tumble/startup/get_it_instances.dart';
@@ -44,11 +45,7 @@ void main() async {
     ),
     BlocProvider<SearchPageCubit>(
       create: (c) => SearchPageCubit(),
-      child: Row(children: const [
-        ScheduleSearchPage(),
-        ScheduleSearchBar(),
-        SearchBarAndLogoContainer()
-      ]),
+      child: Row(children: const [ScheduleSearchPage(), ScheduleSearchBar(), SearchBarAndLogoContainer()]),
     ),
   ], child: const MainApp()));
 }

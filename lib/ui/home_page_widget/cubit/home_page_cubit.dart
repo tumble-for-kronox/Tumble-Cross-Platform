@@ -37,13 +37,13 @@ class HomePageCubit extends Cubit<HomePageState> {
 
   /// Handles the loading of the schedule upon choosing a program
   Future<void> init(String scheduleId) async {
-    emit(const HomePageLoading());
+    // emit(const HomePageLoading());
     _currentPageIndex = _defaultViewType!;
-    final _schedule = await _implementationService.getSchedule(scheduleId);
-
-    switch (_schedule.status) {
+    final _response = await _implementationService.getSchedule(scheduleId);
+    log("Response: ${_response.message}\nStatus:${_response.status}");
+    switch (_response.status) {
       case Status.COMPLETED:
-        final ScheduleModel scheduleModel = _schedule.data;
+        final ScheduleModel scheduleModel = _response.data!;
 
         /// Now we have an instance of the list used in
         /// [TumbleListView] and an instance of the list
@@ -62,8 +62,7 @@ class HomePageCubit extends Cubit<HomePageState> {
     }
   }
 
-  void setStateParameters(
-      String scheduleId, List<Day> listOfDays, List<Week> listOfWeeks) {
+  void setStateParameters(String scheduleId, List<Day> listOfDays, List<Week> listOfWeeks) {
     _states = [
       HomePageListView(scheduleId: scheduleId, listOfDays: listOfDays),
       HomePageWeekView(scheduleId: scheduleId, listOfWeeks: listOfWeeks)
@@ -84,8 +83,7 @@ class HomePageCubit extends Cubit<HomePageState> {
   }
 
   void assignFavorite(String scheduleId) {
-    final currentFavorites =
-        _sharedPrefs.getStringList(PreferenceTypes.favorites);
+    final currentFavorites = _sharedPrefs.getStringList(PreferenceTypes.favorites);
     currentFavorites!.add(scheduleId);
     _sharedPrefs.setStringList(PreferenceTypes.favorites, currentFavorites);
   }
