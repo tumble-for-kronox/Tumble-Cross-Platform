@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:tumble/models/api_models/schedule_model.dart';
-import 'package:tumble/theme/colors.dart';
+import 'package:tumble/theme/data/colors.dart';
 import 'package:tumble/ui/main_app_widget/schedule_view_widgets/tumble_list_view/tumble_list_view_schedule_card_location_container.dart';
 import 'package:tumble/ui/main_app_widget/schedule_view_widgets/tumble_list_view/tumble_list_view_schedule_card_ribbon.dart';
 import 'package:tumble/ui/main_app_widget/schedule_view_widgets/tumble_list_view/tumble_list_view_schedule_card_time_stamp.dart';
@@ -28,16 +28,9 @@ class ScheduleCard extends StatelessWidget {
               margin: const EdgeInsets.only(top: 9, left: 10, right: 10),
               alignment: Alignment.topLeft,
               decoration: BoxDecoration(
-                  color: event.isSpecial
-                      ? Theme.of(context).colorScheme.primary
-                      : Theme.of(context).cardColor,
+                  color: event.isSpecial ? Theme.of(context).colorScheme.primary : Theme.of(context).cardColor,
                   borderRadius: BorderRadius.circular(5),
-                  boxShadow: const [
-                    BoxShadow(
-                        color: Colors.black26,
-                        blurRadius: 1,
-                        offset: Offset(0, 1))
-                  ]),
+                  boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 1, offset: Offset(0, 1))]),
               child: MaterialButton(
                   padding: const EdgeInsets.all(0),
                   onPressed: onTap,
@@ -55,9 +48,7 @@ class ScheduleCard extends StatelessWidget {
                                 style: TextStyle(
                                   color: event.isSpecial
                                       ? CustomColors.lightColors.secondary
-                                      : Theme.of(context)
-                                          .colorScheme
-                                          .onSecondary,
+                                      : Theme.of(context).colorScheme.onSecondary,
                                   fontSize: 19,
                                   fontWeight: FontWeight.w400,
                                 )),
@@ -71,27 +62,20 @@ class ScheduleCard extends StatelessWidget {
                                         overflow: TextOverflow.ellipsis,
                                         style: TextStyle(
                                           color: event.isSpecial
-                                              ? CustomColors
-                                                  .lightColors.secondary
-                                              : Theme.of(context)
-                                                  .colorScheme
-                                                  .onSecondary,
+                                              ? CustomColors.lightColors.secondary
+                                              : Theme.of(context).colorScheme.onSecondary,
                                           fontSize: 16,
                                           fontWeight: FontWeight.w300,
                                         ))),
                                 ScheduleCardLocationContainer(
                                     textColor: event.isSpecial
                                         ? CustomColors.lightColors.secondary
-                                        : Theme.of(context)
-                                            .colorScheme
-                                            .onSecondary,
+                                        : Theme.of(context).colorScheme.onSecondary,
                                     locations: event.locations),
                                 ScheduleCardTimeStamp(
                                     textColor: event.isSpecial
                                         ? CustomColors.lightColors.secondary
-                                        : Theme.of(context)
-                                            .colorScheme
-                                            .onSecondary,
+                                        : Theme.of(context).colorScheme.onSecondary,
                                     timeStart: event.timeStart,
                                     timeEnd: event.timeEnd)
                               ],
