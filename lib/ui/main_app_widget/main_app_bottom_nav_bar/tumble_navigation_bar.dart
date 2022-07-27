@@ -28,14 +28,15 @@ class TumbleNavigationBar extends StatelessWidget {
               BottomNavigationBarItem(
                   icon: Icon(CupertinoIcons.search), label: Labels.search),
               BottomNavigationBarItem(
-                  icon: Icon(CupertinoIcons.person), label: Labels.account),
+                  icon: Icon(CupertinoIcons.collections), label: Labels.list),
               BottomNavigationBarItem(
-                  icon: Icon(CupertinoIcons.list_bullet), label: Labels.list),
-              BottomNavigationBarItem(
-                  icon: Icon(CupertinoIcons.list_number), label: Labels.week),
+                  icon: Icon(CupertinoIcons.list_bullet_indent),
+                  label: Labels.week),
               BottomNavigationBarItem(
                   icon: Icon(CupertinoIcons.calendar_today),
                   label: Labels.calendar),
+              BottomNavigationBarItem(
+                  icon: Icon(CupertinoIcons.person), label: Labels.account),
             ],
           );
         },
