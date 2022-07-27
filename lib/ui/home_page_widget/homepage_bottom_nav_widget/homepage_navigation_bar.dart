@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tumble/ui/home_page_widget/bottom_nav_widget/cubit/bottom_nav_cubit.dart';
 import 'package:tumble/ui/home_page_widget/data/labels.dart';
+import 'package:tumble/ui/home_page_widget/homepage_bottom_nav_widget/cubit/bottom_nav_cubit.dart';
 
 typedef ChangePageCallBack = void Function(int index);
 

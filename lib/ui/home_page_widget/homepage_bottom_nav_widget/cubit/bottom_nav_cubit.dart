@@ -3,7 +3,7 @@ import 'package:equatable/equatable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tumble/shared/preference_types.dart';
 import 'package:tumble/startup/get_it_instances.dart';
-import 'package:tumble/ui/home_page_widget/bottom_nav_widget/data/nav_bar_items.dart';
+import 'package:tumble/ui/home_page_widget/homepage_bottom_nav_widget/data/nav_bar_items.dart';
 
 part 'navigation_state.dart';
 
