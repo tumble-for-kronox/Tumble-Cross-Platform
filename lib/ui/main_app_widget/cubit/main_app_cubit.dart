@@ -26,6 +26,7 @@ import 'package:tumble/ui/drawer_generic/app_theme_picker.dart';
 import 'package:tumble/ui/main_app_widget/data/event_types.dart';
 import 'package:tumble/ui/main_app_widget/school_selection_page.dart';
 import 'package:tumble/api/apiservices/api_response.dart' as api;
+import 'package:tumble/ui/scaffold_message.dart';
 part 'main_app_state.dart';
 
 class MainAppCubit extends Cubit<MainAppState> {
@@ -42,7 +43,8 @@ class MainAppCubit extends Cubit<MainAppState> {
   List<Week>? _listOfWeeks;
   List<Day>? _listOfDays;
 
-  int? get defaultViewType => locator<SharedPreferences>().getInt(PreferenceTypes.view);
+  int? get defaultViewType =>
+      locator<SharedPreferences>().getInt(PreferenceTypes.view);
 
   void handleDrawerEvent(Enum eventType, BuildContext context) {
     switch (eventType) {
@@ -70,13 +72,14 @@ class MainAppCubit extends Cubit<MainAppState> {
         break;
       case EventType.EDIT_NOTIFICATION_TIME:
         Get.bottomSheet(AppNotificationTimePicker(
-          setNotificationTime: (int time) =>
-              locator<SharedPreferences>().setInt(PreferenceTypes.notificationTime, time),
+          setNotificationTime: (int time) => locator<SharedPreferences>()
+              .setInt(PreferenceTypes.notificationTime, time),
         ));
         break;
       case EventType.SET_DEFAULT_SCHEDULE:
         Get.bottomSheet(AppDefaultSchedulePicker(
-            scheduleIds: locator<SharedPreferences>().getStringList(PreferenceTypes.favorites)));
+            scheduleIds: locator<SharedPreferences>()
+                .getStringList(PreferenceTypes.favorites)));
         break;
       case EventType.SET_DEFAULT_VIEW:
         break;
@@ -100,17 +103,20 @@ class MainAppCubit extends Cubit<MainAppState> {
     }
   }
 
-  Future<void> toggleFavorite() async {
-    final currentFavorites = _sharedPrefs.getStringList(PreferenceTypes.favorites);
+  Future<void> toggleFavorite(BuildContext context) async {
+    final currentFavorites =
+        _sharedPrefs.getStringList(PreferenceTypes.favorites);
 
     /// If the schedule IS saved in preferences
     if (currentFavorites!.contains(_currentScheduleId)) {
       _toggleRemove(currentFavorites);
+      showScaffoldMessage(context, "Removed schedule from bookmarks");
     }
 
     /// If the schedule IS NOT saved in preferences
     else {
       _toggleSave(currentFavorites);
+      showScaffoldMessage(context, "Saved schedule to bookmarks");
     }
   }
 
@@ -130,7 +136,8 @@ class MainAppCubit extends Cubit<MainAppState> {
     currentFavorites.remove(_currentScheduleId);
     (currentFavorites.isEmpty)
         ? _sharedPrefs.remove(PreferenceTypes.schedule)
-        : _sharedPrefs.setString(PreferenceTypes.schedule, currentFavorites.first);
+        : _sharedPrefs.setString(
+            PreferenceTypes.schedule, currentFavorites.first);
     await _databaseService.removeSchedule(_currentScheduleId!);
     emit(MainAppScheduleSelected(
         currentScheduleId: _currentScheduleModel!.id,
@@ -144,7 +151,8 @@ class MainAppCubit extends Cubit<MainAppState> {
     if (_currentScheduleId != null) {
       return;
     }
-    final ApiResponse _apiResponse = await _implementationService.getCachedBookmarkedSchedule();
+    final ApiResponse _apiResponse =
+        await _implementationService.getCachedBookmarkedSchedule();
 
     switch (_apiResponse.status) {
       case Status.CACHED:

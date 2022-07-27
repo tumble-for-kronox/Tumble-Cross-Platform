@@ -43,8 +43,9 @@ class _MainAppNavigationRootState extends State<MainAppNavigationRoot> {
                   visibleBookmark: navState.index == 1 ||
                       navState.index == 2 ||
                       navState.index == 3,
-                  toggleFavorite: () async =>
-                      await context.read<MainAppCubit>().toggleFavorite(),
+                  toggleFavorite: () async => await context
+                      .read<MainAppCubit>()
+                      .toggleFavorite(context),
                 ),
                 body: FutureBuilder(
                     future: context.read<MainAppCubit>().initCached(),
