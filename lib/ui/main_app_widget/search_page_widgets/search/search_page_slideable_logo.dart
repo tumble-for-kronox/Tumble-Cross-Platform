@@ -15,7 +15,7 @@ class SlideableLogo extends StatelessWidget {
           child: SizedOverflowBox(
             size: Size(double.infinity, (focused ? 0 : 300)),
             child: const Image(
-                height: 250,
+                height: 180,
                 image: AssetImage("assets/images/tumbleAppLogo.png")),
           ),
         ));

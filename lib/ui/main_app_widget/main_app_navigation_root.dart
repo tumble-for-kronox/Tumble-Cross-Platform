@@ -40,9 +40,9 @@ class _MainAppNavigationRootState extends State<MainAppNavigationRoot> {
                   currentThemeString: themeState.themeString,
                 ),
                 appBar: TumbleAppBar(
-                  visibleBookmark: navState.index == 2 ||
-                      navState.index == 3 ||
-                      navState.index == 4,
+                  visibleBookmark: navState.index == 1 ||
+                      navState.index == 2 ||
+                      navState.index == 3,
                   toggleFavorite: () async =>
                       await context.read<MainAppCubit>().toggleFavorite(),
                 ),

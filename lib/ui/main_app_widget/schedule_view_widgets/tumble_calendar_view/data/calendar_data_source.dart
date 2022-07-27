@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:tumble/models/api_models/schedule_model.dart';
 
@@ -8,62 +9,42 @@ import 'package:tumble/models/api_models/schedule_model.dart';
 class ScheduleDataSource extends CalendarDataSource {
   /// Creates a meeting data source, which used to set the appointment
   /// collection to the calendar
-  ScheduleDataSource(List<CalendarEvent> source) {
+  ScheduleDataSource(List<Event> source) {
     appointments = source;
   }
 
   @override
   DateTime getStartTime(int index) {
-    return _getEventData(index).from;
+    return _getEventData(index).timeStart;
   }
 
   @override
   DateTime getEndTime(int index) {
-    return _getEventData(index).to;
+    return _getEventData(index).timeEnd;
   }
 
   @override
   String getSubject(int index) {
-    return _getEventData(index).eventName;
+    return _getEventData(index).title;
   }
 
   @override
   Color getColor(int index) {
-    return _getEventData(index).background;
+    return Colors.grey;
   }
 
   @override
   bool isAllDay(int index) {
-    return _getEventData(index).isAllDay;
+    return false;
   }
 
-  CalendarEvent _getEventData(int index) {
+  Event _getEventData(int index) {
     final dynamic meeting = appointments![index];
-    late final CalendarEvent eventData;
-    if (meeting is CalendarEvent) {
+    late final Event eventData;
+    if (meeting is Event) {
       eventData = meeting;
     }
 
     return eventData;
   }
-}
-
-class CalendarEvent {
-  CalendarEvent(
-      this.eventName, this.from, this.to, this.background, this.isAllDay);
-
-  /// Event name which is equivalent to subject property of [Appointment].
-  String eventName;
-
-  /// From which is equivalent to start time property of [Appointment].
-  DateTime from;
-
-  /// To which is equivalent to end time property of [Appointment].
-  DateTime to;
-
-  /// Background which is equivalent to color property of [Appointment].
-  Color background;
-
-  /// IsAllDay which is equivalent to isAllDay property of [Appointment].
-  bool isAllDay;
 }

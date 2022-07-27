@@ -1,2 +1,2 @@
 // ignore: constant_identifier_names
-enum NavbarItem { SEARCH, USER_ACCOUNT, LIST, WEEK, CALENDAR }
+enum NavbarItem { SEARCH, LIST, WEEK, CALENDAR, USER_ACCOUNT }
