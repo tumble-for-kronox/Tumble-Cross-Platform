@@ -54,7 +54,6 @@ class _TumbleSearchPageState extends State<TumbleSearchPage> {
                                     programName: program.title,
                                     programId: program.id,
                                     onTap: () async {
-                                      context.read<MainAppCubit>().setLoading();
                                       context
                                           .read<MainAppNavigationCubit>()
                                           .getNavBarItem(NavbarItem.LIST);

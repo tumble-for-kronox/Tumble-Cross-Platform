@@ -48,7 +48,7 @@ class _MainAppNavigationRootState extends State<MainAppNavigationRoot> {
                       .toggleFavorite(context),
                 ),
                 body: FutureBuilder(
-                    future: context.read<MainAppCubit>().initCached(),
+                    future: context.read<MainAppCubit>().initMainAppCubit(),
                     builder: (BuildContext context, AsyncSnapshot snapshot) {
                       switch (navState.navbarItem) {
                         case NavbarItem.SEARCH:

@@ -11,16 +11,15 @@ import 'package:meta/meta.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tumble/api/apiservices/api_response.dart';
 import 'package:tumble/api/repository/implementation_repository.dart';
-import 'package:tumble/database/database_response.dart' as db;
 import 'package:tumble/database/repository/database_repository.dart';
 import 'package:tumble/extensions/extensions.dart';
 import 'package:tumble/models/api_models/schedule_model.dart';
 import 'package:tumble/models/ui_models/week_model.dart';
 import 'package:tumble/shared/preference_types.dart';
 import 'package:tumble/startup/get_it_instances.dart';
-import 'package:tumble/theme/cubit/theme_cubit.dart';
 import 'package:tumble/theme/repository/theme_repository.dart';
 import 'package:tumble/ui/drawer_generic/app_default_schedule_picker.dart';
+import 'package:tumble/ui/drawer_generic/app_default_view_picker.dart';
 import 'package:tumble/ui/drawer_generic/app_notification_time_picker.dart';
 import 'package:tumble/ui/drawer_generic/app_theme_picker.dart';
 import 'package:tumble/ui/main_app_widget/data/event_types.dart';
@@ -36,15 +35,19 @@ class MainAppCubit extends Cubit<MainAppState> {
   final _implementationService = locator<ImplementationRepository>();
   final _databaseService = locator<DatabaseRepository>();
   final _themeRepository = locator<ThemeRepository>();
+  final ScrollController _listViewScrollController = ScrollController();
 
+  bool _listViewToTopIsVisible = false;
   ScheduleModel? _currentScheduleModel;
   String? _currentScheduleId;
+  bool? _toggleFavorite;
 
   List<Week>? _listOfWeeks;
   List<Day>? _listOfDays;
 
   int? get defaultViewType =>
       locator<SharedPreferences>().getInt(PreferenceTypes.view);
+  ScrollController get controller => _listViewScrollController;
 
   void handleDrawerEvent(Enum eventType, BuildContext context) {
     switch (eventType) {
@@ -77,11 +80,20 @@ class MainAppCubit extends Cubit<MainAppState> {
         ));
         break;
       case EventType.SET_DEFAULT_SCHEDULE:
-        Get.bottomSheet(AppDefaultSchedulePicker(
-            scheduleIds: locator<SharedPreferences>()
-                .getStringList(PreferenceTypes.favorites)));
+        final List<String>? bookmarks = locator<SharedPreferences>()
+            .getStringList(PreferenceTypes.favorites);
+        if (bookmarks != null) {
+          Get.bottomSheet(AppDefaultSchedulePicker(
+              scheduleIds: bookmarks,
+              setDefaultSchedule: (newId) =>
+                  {_sharedPrefs.setString(PreferenceTypes.schedule, newId)}));
+        }
         break;
       case EventType.SET_DEFAULT_VIEW:
+        Get.bottomSheet(AppDefaultViewPicker(
+          setDefaultView: (int viewType) => locator<SharedPreferences>()
+              .setInt(PreferenceTypes.view, viewType),
+        ));
         break;
     }
   }
@@ -128,10 +140,11 @@ class MainAppCubit extends Cubit<MainAppState> {
             PreferenceTypes.schedule, currentFavorites.first);
     await _databaseService.removeSchedule(_currentScheduleId!);
     emit(MainAppScheduleSelected(
+        listViewToTopVisible: _listViewToTopIsVisible,
         currentScheduleId: _currentScheduleModel!.id,
         listOfDays: _listOfDays!,
         listOfWeeks: _listOfWeeks!,
-        toggledFavorite: false));
+        toggledFavorite: _toggleFavorite!));
     _sharedPrefs.setStringList(PreferenceTypes.favorites, currentFavorites);
   }
 
@@ -140,10 +153,11 @@ class MainAppCubit extends Cubit<MainAppState> {
     _sharedPrefs.setString(PreferenceTypes.schedule, _currentScheduleId!);
     await _databaseService.addSchedule(_currentScheduleModel!);
     emit(MainAppScheduleSelected(
+        listViewToTopVisible: _listViewToTopIsVisible,
         currentScheduleId: _currentScheduleModel!.id,
         listOfDays: _listOfDays!,
         listOfWeeks: _listOfWeeks!,
-        toggledFavorite: true));
+        toggledFavorite: _toggleFavorite!));
     _sharedPrefs.setStringList(PreferenceTypes.favorites, currentFavorites);
   }
 
@@ -164,11 +178,13 @@ class MainAppCubit extends Cubit<MainAppState> {
         _listOfDays = _currentScheduleModel!.days;
         _listOfWeeks = _currentScheduleModel!.splitToWeek();
         _currentScheduleId = _currentScheduleModel!.id;
+        _toggleFavorite = true;
         emit(MainAppScheduleSelected(
+            listViewToTopVisible: _listViewToTopIsVisible,
             currentScheduleId: _currentScheduleModel!.id,
             listOfDays: _currentScheduleModel!.days,
             listOfWeeks: _currentScheduleModel!.splitToWeek(),
-            toggledFavorite: true));
+            toggledFavorite: _toggleFavorite!));
         break;
       default:
         emit(state);
@@ -188,12 +204,14 @@ class MainAppCubit extends Cubit<MainAppState> {
         _listOfDays = _currentScheduleModel!.days;
         _listOfWeeks = _currentScheduleModel!.splitToWeek();
         _currentScheduleId = _currentScheduleModel!.id;
+        _toggleFavorite = false;
         log('Selected schedule id: $id');
         emit(MainAppScheduleSelected(
+            listViewToTopVisible: _listViewToTopIsVisible,
             currentScheduleId: _currentScheduleId!,
             listOfDays: _listOfDays!,
             listOfWeeks: _listOfWeeks!,
-            toggledFavorite: false));
+            toggledFavorite: _toggleFavorite!));
         break;
       case api.Status.CACHED:
         _currentScheduleModel = _response.data!;
@@ -204,11 +222,13 @@ class MainAppCubit extends Cubit<MainAppState> {
         _listOfDays = _currentScheduleModel!.days;
         _listOfWeeks = _currentScheduleModel!.splitToWeek();
         _currentScheduleId = _currentScheduleModel!.id;
+        _toggleFavorite = true;
         emit(MainAppScheduleSelected(
+            listViewToTopVisible: _listViewToTopIsVisible,
             currentScheduleId: _currentScheduleId!,
             listOfDays: _listOfDays!,
             listOfWeeks: _listOfWeeks!,
-            toggledFavorite: true));
+            toggledFavorite: _toggleFavorite!));
         break;
       case api.Status.ERROR:
         emit(MainAppInitial(_response.message!));
@@ -219,7 +239,33 @@ class MainAppCubit extends Cubit<MainAppState> {
     }
   }
 
-  void setLoading() {
-    emit(const MainAppLoading());
+  Future<void> initMainAppCubit() async {
+    await initCached();
+    _listViewScrollController.addListener((setScrollController));
+  }
+
+  setScrollController() {
+    if (_listViewScrollController.offset >= 1000) {
+      _listViewToTopIsVisible = true; // show the back-to-top button
+      emit(MainAppScheduleSelected(
+          listViewToTopVisible: _listViewToTopIsVisible,
+          currentScheduleId: _currentScheduleId!,
+          listOfDays: _listOfDays!,
+          listOfWeeks: _listOfWeeks!,
+          toggledFavorite: _toggleFavorite!));
+    } else {
+      _listViewToTopIsVisible = false; // hide the back-to-top button
+      emit(MainAppScheduleSelected(
+          listViewToTopVisible: _listViewToTopIsVisible,
+          currentScheduleId: _currentScheduleId!,
+          listOfDays: _listOfDays!,
+          listOfWeeks: _listOfWeeks!,
+          toggledFavorite: _toggleFavorite!));
+    }
+  }
+
+  void scrollToTop() {
+    _listViewScrollController.animateTo(0,
+        duration: const Duration(seconds: 1), curve: Curves.linear);
   }
 }

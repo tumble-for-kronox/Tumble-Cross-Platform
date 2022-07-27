@@ -43,6 +43,9 @@ void main() async {
       create: (c) => MainAppNavigationCubit(),
       child: Row(
         children: const [
+          TumbleListView(),
+          TumbleWeekView(),
+          TumbleCalendarView(),
           TumbleNavigationBar(),
           MainAppNavigationRoot(),
           TumbleSearchPage()

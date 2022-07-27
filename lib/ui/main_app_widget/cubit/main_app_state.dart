@@ -21,6 +21,7 @@ class MainAppLoading extends MainAppState {
 
 class MainAppScheduleSelected extends MainAppState {
   final bool toggledFavorite;
+  final bool listViewToTopVisible;
   final String currentScheduleId;
   final List<Day> listOfDays;
   final List<Week> listOfWeeks;
@@ -28,8 +29,15 @@ class MainAppScheduleSelected extends MainAppState {
       {required this.currentScheduleId,
       required this.listOfDays,
       required this.listOfWeeks,
-      required this.toggledFavorite});
+      required this.toggledFavorite,
+      required this.listViewToTopVisible});
 
   @override
-  List<Object?> get props => [currentScheduleId, listOfDays, listOfWeeks, toggledFavorite];
+  List<Object?> get props => [
+        currentScheduleId,
+        listOfDays,
+        listOfWeeks,
+        toggledFavorite,
+        listViewToTopVisible
+      ];
 }

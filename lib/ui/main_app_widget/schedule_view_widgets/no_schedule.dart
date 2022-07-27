@@ -7,7 +7,9 @@ import 'package:tumble/ui/main_app_widget/main_app_bottom_nav_bar/data/nav_bar_i
 
 class NoScheduleAvailable extends StatelessWidget {
   final String errorType;
-  const NoScheduleAvailable({Key? key, required this.errorType})
+  final CupertinoAlertDialog cupertinoAlertDialog;
+  const NoScheduleAvailable(
+      {Key? key, required this.errorType, required this.cupertinoAlertDialog})
       : super(key: key);
 
   @override
@@ -32,62 +34,7 @@ class NoScheduleAvailable extends StatelessWidget {
                   onPressed: () => showCupertinoDialog(
                       context: context,
                       builder: (context) {
-                        return CupertinoAlertDialog(
-                          content: Column(children: [
-                            Text("Schedules can be bookmarked with this icon",
-                                style: TextStyle(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onSecondary,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w600)),
-                            const SizedBox(
-                              height: 15,
-                            ),
-                            const Icon(
-                              CupertinoIcons.bookmark,
-                              size: 20,
-                            ),
-                            const SizedBox(
-                              height: 15,
-                            ),
-                            Text(
-                                "It will appear in the top left corner once you've searched for and opened your schedule",
-                                style: TextStyle(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onSecondary,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w600))
-                          ]),
-                          actions: [
-                            CupertinoDialogAction(
-                              child: Text("I understand",
-                                  style: TextStyle(
-                                      color:
-                                          Theme.of(context).colorScheme.primary,
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.w600)),
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                            ),
-                            CupertinoDialogAction(
-                              child: Text("Take me to search",
-                                  style: TextStyle(
-                                      color:
-                                          Theme.of(context).colorScheme.primary,
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.w600)),
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                                context
-                                    .read<MainAppNavigationCubit>()
-                                    .getNavBarItem(NavbarItem.SEARCH);
-                              },
-                            )
-                          ],
-                        );
+                        return cupertinoAlertDialog;
                       }),
                   icon: const Icon(CupertinoIcons.info_circle)),
             )

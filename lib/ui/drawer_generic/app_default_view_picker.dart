@@ -1,17 +1,11 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:tumble/ui/drawer_generic/data/default_views_map.dart';
 
-typedef SetNotificationTime = void Function(int time);
+typedef SetDefaultView = void Function(int viewType);
 
-class AppNotificationTimePicker extends StatelessWidget {
-  final Map<String, int> parameterMap = {
-    "15 minutes": 15,
-    "30 minutes": 30,
-    "1 hour": 60,
-    "3 hours": 180
-  };
-  final SetNotificationTime setNotificationTime;
-  AppNotificationTimePicker({Key? key, required this.setNotificationTime})
+class AppDefaultViewPicker extends StatelessWidget {
+  final SetDefaultView setDefaultView;
+  const AppDefaultViewPicker({Key? key, required this.setDefaultView})
       : super(key: key);
 
   @override
@@ -19,7 +13,7 @@ class AppNotificationTimePicker extends StatelessWidget {
     return Align(
       alignment: Alignment.bottomCenter,
       child: Container(
-        height: 240,
+        height: 180,
         margin: const EdgeInsets.only(bottom: 25, left: 12, right: 12),
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.surface,
@@ -32,14 +26,17 @@ class AppNotificationTimePicker extends StatelessWidget {
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
           child: Column(
-              children: (parameterMap.keys)
-                  .map((key) => ListTile(
+              children: (IconAndTitleSet.views)
+                  .keys
+                  .map((keyType) => ListTile(
+                      leading: IconAndTitleSet.views[keyType]!.values.first,
                       title: Text(
-                        key,
+                        keyType,
                         style: TextStyle(
-                            color: Theme.of(context).colorScheme.primary),
+                            color: Theme.of(context).colorScheme.onBackground),
                       ),
-                      onTap: () => setNotificationTime(parameterMap[key]!)))
+                      onTap: () => setDefaultView(
+                          IconAndTitleSet.views[keyType]!.keys.first)))
                   .toList()),
         )),
       ),
