@@ -59,15 +59,11 @@ class ImplementationRepository implements IImplementationService {
   /// and a default schedule)
   @override
   Future<DatabaseResponse> initSetup() async {
-    final String? _defaultSchedule =
-        _preferenceService.getString(PreferenceTypes.schedule);
     final String? _defaultSchool =
         _preferenceService.getString(PreferenceTypes.school);
 
     if (_defaultSchool != null) {
       return DatabaseResponse.hasDefault(_defaultSchool);
-    } else if (_defaultSchool != null && _defaultSchedule != null) {
-      return DatabaseResponse.hasFavorite(_defaultSchedule);
     } else {
       return DatabaseResponse.initial("Init application preferences");
     }

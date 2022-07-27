@@ -3,50 +3,153 @@
 import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/src/widgets/framework.dart';
+import 'package:get/get.dart';
 import 'package:meta/meta.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tumble/api/repository/implementation_repository.dart';
-import 'package:tumble/database/database_response.dart';
-import 'package:tumble/models/ui_models/school_model.dart';
+import 'package:tumble/database/database_response.dart' as db;
+import 'package:tumble/database/repository/database_repository.dart';
+import 'package:tumble/extensions/extensions.dart';
+import 'package:tumble/models/api_models/schedule_model.dart';
+import 'package:tumble/models/ui_models/week_model.dart';
 import 'package:tumble/shared/preference_types.dart';
-import 'package:tumble/shared/setup.dart';
 import 'package:tumble/startup/get_it_instances.dart';
-import 'package:tumble/ui/home_page_widget/data/schools.dart';
-import 'package:tumble/ui/home_page_widget/school_selection_page.dart';
-import 'package:tumble/ui/search_page_widgets/search/schedule_search_page.dart';
-
+import 'package:tumble/ui/drawer_generic/app_default_schedule_picker.dart';
+import 'package:tumble/ui/drawer_generic/app_notification_time_picker.dart';
+import 'package:tumble/ui/drawer_generic/app_theme_picker.dart';
+import 'package:tumble/ui/main_app_widget/data/event_types.dart';
+import 'package:tumble/ui/main_app_widget/school_selection_page.dart';
+import 'package:tumble/api/apiservices/api_response.dart' as api;
 part 'main_app_state.dart';
 
 class MainAppCubit extends Cubit<MainAppState> {
-  MainAppCubit() : super(const MainAppInitial());
+  MainAppCubit() : super(const MainAppInitial(null));
 
+  final _sharedPrefs = locator<SharedPreferences>();
   final _implementationService = locator<ImplementationRepository>();
+  final _databaseService = locator<DatabaseRepository>();
+  ScheduleModel? _currentScheduleModel;
+  String? _currentScheduleId;
 
-  Future<void> init() async {
-    DatabaseResponse _databaseResponse =
-        await _implementationService.initSetup();
-    switch (_databaseResponse.status) {
-      case Status.INITIAL:
-        emit(const MainAppInitial());
+  List<Week>? _listOfWeeks;
+  List<Day>? _listOfDays;
+
+  List<Week>? listOfWeeks;
+  List<Day>? listOfDays;
+  int? get defaultViewType =>
+      locator<SharedPreferences>().getInt(PreferenceTypes.view);
+
+  void handleDrawerEvent(Enum eventType, BuildContext context) {
+    switch (eventType) {
+      case EventType.CANCEL_ALL_NOTIFICATIONS:
+
+        /// Cancel all notifications
         break;
-      case Status.HAS_FAVORITE:
-        emit(MainAppSchoolSelectedAndDefault(
-            currentScheduleId: _databaseResponse.data));
+      case EventType.CANCEL_NOTIFICATIONS_FOR_PROGRAM:
+
+        /// Cancel all notifications tied to this schedule id
         break;
-      case Status.HAS_DEFAULT:
-        emit(const MainAppSchoolSelected());
+      case EventType.CHANGE_SCHOOL:
+        Navigator.of(context).push(
+          CupertinoPageRoute(builder: (context) => const SchoolSelectionPage()),
+        );
+        break;
+      case EventType.CHANGE_THEME:
+        Get.bottomSheet(AppThemePicker(
+          setTheme: (themeType) => locator<SharedPreferences>()
+              .setString(PreferenceTypes.theme, themeType),
+        ));
+        break;
+      case EventType.CONTACT:
+
+        /// Direct user to support page
+        break;
+      case EventType.EDIT_NOTIFICATION_TIME:
+        Get.bottomSheet(AppNotificationTimePicker(
+          setNotificationTime: (int time) => locator<SharedPreferences>()
+              .setInt(PreferenceTypes.notificationTime, time),
+        ));
+        break;
+      case EventType.SET_DEFAULT_SCHEDULE:
+        Get.bottomSheet(AppDefaultSchedulePicker(
+            scheduleIds: locator<SharedPreferences>()
+                .getStringList(PreferenceTypes.favorites)));
+        break;
+      case EventType.SET_DEFAULT_VIEW:
         break;
     }
   }
 
-  /// Set up when switching schools or starting
-  /// app for the first time and picking a school
-  void setup(String schoolName, BuildContext context) async {
-    setupRequiredSharedPreferences(schoolName);
-    Navigator.of(context).pushAndRemoveUntil(
-        CupertinoPageRoute(builder: (context) => const ScheduleSearchPage()),
-        (Route<dynamic> route) => false);
+  Future<void> toggleFavorite() async {
+    final currentFavorites =
+        _sharedPrefs.getStringList(PreferenceTypes.favorites);
+
+    if (currentFavorites!.contains(_currentScheduleId)) {
+      currentFavorites.remove(_currentScheduleId);
+      await _databaseService.removeSchedule(_currentScheduleId!);
+      emit(MainAppScheduleSelected(
+          currentScheduleId: _currentScheduleModel!.id,
+          listOfDays: _listOfDays!,
+          listOfWeeks: _listOfWeeks!,
+          toggledFavorite: false));
+    } else {
+      currentFavorites.add(_currentScheduleId!);
+      await _databaseService.addSchedule(_currentScheduleModel!);
+      MainAppScheduleSelected(
+          currentScheduleId: _currentScheduleModel!.id,
+          listOfDays: _listOfDays!,
+          listOfWeeks: _listOfWeeks!,
+          toggledFavorite: false);
+    }
+    _sharedPrefs.setStringList(PreferenceTypes.favorites, currentFavorites);
+  }
+
+  Future<void> init() async {
+    emit(const MainAppLoading());
+    if (_sharedPrefs.getString(PreferenceTypes.schedule) != null) {
+      final _response = await _implementationService
+          .getSchedule(_sharedPrefs.getString(PreferenceTypes.schedule)!);
+      switch (_response.status) {
+        case api.Status.REQUESTED:
+          _currentScheduleModel = _response.data!;
+
+          /// Now we have an instance of the list used in
+          /// [TumbleListView] and an instance of the list
+          /// used in [TumbleWeekView]
+          _listOfDays = _currentScheduleModel!.days;
+          _listOfWeeks = _currentScheduleModel!.splitToWeek();
+          _currentScheduleId = _currentScheduleModel!.id;
+          emit(MainAppScheduleSelected(
+              currentScheduleId: _currentScheduleModel!.id,
+              listOfDays: _listOfDays!,
+              listOfWeeks: _listOfWeeks!,
+              toggledFavorite: false));
+          break;
+        case api.Status.CACHED:
+          _currentScheduleModel = _response.data!;
+
+          /// Now we have an instance of the list used in
+          /// [TumbleListView] and an instance of the list
+          /// used in [TumbleWeekView]
+          _listOfDays = _currentScheduleModel!.days;
+          _listOfWeeks = _currentScheduleModel!.splitToWeek();
+          _currentScheduleId = _currentScheduleModel!.id;
+          emit(MainAppScheduleSelected(
+              currentScheduleId: _currentScheduleModel!.id,
+              listOfDays: _listOfDays!,
+              listOfWeeks: _listOfWeeks!,
+              toggledFavorite: true));
+          break;
+        case api.Status.ERROR:
+          emit(MainAppInitial(_response.message!));
+          break;
+        default:
+          emit(const MainAppInitial(null));
+          break;
+      }
+    }
+    emit(const MainAppInitial(null));
   }
 }

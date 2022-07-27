@@ -9,7 +9,7 @@ class ApiResponse<T> {
 
   ApiResponse.loading(this.message) : status = Status.LOADING;
 
-  ApiResponse.completed(this.data) : status = Status.COMPLETED;
+  ApiResponse.completed(this.data) : status = Status.REQUESTED;
 
   ApiResponse.error(this.message) : status = Status.ERROR;
 
@@ -19,4 +19,4 @@ class ApiResponse<T> {
   }
 }
 
-enum Status { INITIAL, LOADING, COMPLETED, ERROR }
+enum Status { INITIAL, LOADING, REQUESTED, ERROR, CACHED }
