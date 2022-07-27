@@ -27,19 +27,18 @@ class AppThemePicker extends StatelessWidget {
             child: Card(
                 elevation: 0,
                 color: Theme.of(context).colorScheme.surface,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0)),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
                 child: Column(
                     children: (iconAndTitleSet.keys)
                         .map((key) => ListTile(
                             leading: iconAndTitleSet[key],
                             title: Text(
                               key,
-                              style: TextStyle(
-                                  color: Theme.of(context).colorScheme.primary),
+                              style: TextStyle(color: Theme.of(context).colorScheme.primary),
                             ),
-                            onTap: () =>
-                                setTheme(key.split(' ').first.toLowerCase())))
+                            onTap: () {
+                              setTheme(key.split(' ').first.toLowerCase());
+                            }))
                         .toList()))),
       ),
     );

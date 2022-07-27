@@ -31,8 +31,7 @@ class _TumbleSearchPageState extends State<TumbleSearchPage> {
     return Stack(
       children: [
         Container(
-          margin:
-              EdgeInsets.only(top: MediaQuery.of(context).viewPadding.top + 50),
+          margin: EdgeInsets.only(top: MediaQuery.of(context).viewPadding.top + 50),
           alignment: Alignment.center,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -43,8 +42,7 @@ class _TumbleSearchPageState extends State<TumbleSearchPage> {
                     child: BlocBuilder<SearchPageCubit, SearchPageState>(
                       builder: (context, state) {
                         if (state is SearchPageLoading) {
-                          return const SpinKitThreeBounce(
-                              color: CustomColors.orangePrimary);
+                          return const SpinKitThreeBounce(color: CustomColors.orangePrimary);
                         }
                         if (state is SearchPageFoundSchedules) {
                           return ListView(
