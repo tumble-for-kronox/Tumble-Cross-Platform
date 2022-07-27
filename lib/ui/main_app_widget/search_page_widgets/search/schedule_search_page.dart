@@ -7,9 +7,9 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tumble/shared/preference_types.dart';
 import 'package:tumble/startup/get_it_instances.dart';
-import 'package:tumble/theme/colors.dart';
 import 'package:tumble/ui/main_app_widget/cubit/main_app_cubit.dart';
 import 'package:tumble/ui/main_app_widget/main_app.dart';
+import 'package:tumble/theme/data/colors.dart';
 import 'package:tumble/ui/main_app_widget/main_app_bottom_nav_bar/cubit/bottom_nav_cubit.dart';
 import 'package:tumble/ui/main_app_widget/main_app_bottom_nav_bar/data/nav_bar_items.dart';
 import 'package:tumble/ui/main_app_widget/search_page_widgets/search/program_card.dart';
@@ -53,13 +53,9 @@ class _TumbleSearchPageState extends State<TumbleSearchPage> {
                                     programId: program.id,
                                     onTap: () async {
                                       context.read<MainAppCubit>().setLoading();
-                                      context
-                                          .read<MainAppNavigationCubit>()
-                                          .getNavBarItem(NavbarItem.LIST);
+                                      context.read<MainAppNavigationCubit>().getNavBarItem(NavbarItem.LIST);
 
-                                      await context
-                                          .read<MainAppCubit>()
-                                          .fetchNewSchedule(program.id);
+                                      await context.read<MainAppCubit>().fetchNewSchedule(program.id);
                                     }))
                                 .toList(),
                           );

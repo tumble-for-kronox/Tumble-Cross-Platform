@@ -91,7 +91,7 @@ class TumbleAppDrawer extends StatelessWidget {
           const SizedBox(height: 20.0),
 
           /// Notifications
-          TumbleSettingsSection(tiles: [
+          /* TumbleSettingsSection(tiles: [
             TumbleAppDrawerTile(
               drawerTileTitle: "Cancel all notifications",
               subtitle: "Cancel all scheduled notifications",
@@ -114,7 +114,7 @@ class TumbleAppDrawer extends StatelessWidget {
               eventType: EventType.EDIT_NOTIFICATION_TIME,
               drawerEvent: handleDrawerEvent,
             ),
-          ], title: "Notifications")
+          ], title: "Notifications") */
         ],
       ),
     );

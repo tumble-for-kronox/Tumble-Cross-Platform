@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:tumble/ui/main_app_widget/search_page_widgets/cubit/search_page_cubit.dart';
 
@@ -28,37 +29,40 @@ class _ScheduleSearchBarState extends State<ScheduleSearchBar> {
                   color: Colors.black26, blurRadius: 3, offset: Offset(0, 2))
             ],
           ),
-          child: TextField(
-              onSubmitted: (value) async {
-                if (value.trim().isNotEmpty) {
-                  await context.read<SearchPageCubit>().search();
-                }
-              },
-              autocorrect: false,
-              focusNode: context.read<SearchPageCubit>().focusNode,
-              controller: context.read<SearchPageCubit>().textEditingController,
-              textInputAction: TextInputAction.search,
-              textAlignVertical: TextAlignVertical.center,
-              decoration: InputDecoration(
-                border: InputBorder.none,
-                hintText: "Search schedules",
-                hintMaxLines: 1,
-                contentPadding:
-                    const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-                suffixIcon: AnimatedOpacity(
-                    opacity: 0,
-                    duration: const Duration(milliseconds: 150),
-                    child: Material(
-                        color: Colors.transparent,
-                        child: IconButton(
-                          color: Theme.of(context).colorScheme.onSurface,
-                          onPressed: () async =>
-                              await context.read<SearchPageCubit>().search(),
-                          icon: const Icon(Icons.close),
-                          iconSize: 20,
-                          splashRadius: 12,
-                        ))),
-              )),
+          child: BlocBuilder<SearchPageCubit, SearchPageState>(
+            builder: (context, state) {
+              return TextField(
+                  onSubmitted: (value) async {
+                    if (value.trim().isNotEmpty) {
+                      await context.read<SearchPageCubit>().search();
+                    }
+                  },
+                  autocorrect: false,
+                  focusNode: context.read<SearchPageCubit>().focusNode,
+                  controller:
+                      context.read<SearchPageCubit>().textEditingController,
+                  textInputAction: TextInputAction.search,
+                  textAlignVertical: TextAlignVertical.center,
+                  decoration: InputDecoration(
+                    suffixIcon: () {
+                      if (state is SearchPageFocused) {
+                        return IconButton(
+                          onPressed: context
+                              .read<SearchPageCubit>()
+                              .textEditingController
+                              .clear,
+                          icon: const Icon(CupertinoIcons.clear),
+                        );
+                      }
+                    }(),
+                    border: InputBorder.none,
+                    hintText: "Search schedules",
+                    hintMaxLines: 1,
+                    contentPadding: const EdgeInsets.symmetric(
+                        vertical: 15, horizontal: 10),
+                  ));
+            },
+          ),
         )),
         Container(
           height: 50,

@@ -33,7 +33,8 @@ class SearchPageNoSchedules extends SearchPageState {
 }
 
 class SearchPageFocused extends SearchPageState {
-  const SearchPageFocused();
+  final bool clearVisible;
+  const SearchPageFocused(this.clearVisible);
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [clearVisible];
 }

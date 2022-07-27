@@ -14,7 +14,7 @@ class TumbleListViewDayContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(top: 28),
+      margin: const EdgeInsets.only(top: 10, bottom: 20),
       padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
       child: Column(
         children: [
