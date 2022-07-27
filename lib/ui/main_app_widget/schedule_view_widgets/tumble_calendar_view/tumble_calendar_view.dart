@@ -6,6 +6,7 @@ import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:tumble/models/api_models/schedule_model.dart';
 import 'package:tumble/theme/data/colors.dart';
 import 'package:tumble/ui/main_app_widget/cubit/main_app_cubit.dart';
+import 'package:tumble/ui/main_app_widget/schedule_view_widgets/event_details/event_details_page.dart';
 import 'package:tumble/ui/main_app_widget/schedule_view_widgets/no_schedule.dart';
 import 'package:tumble/ui/main_app_widget/schedule_view_widgets/tumble_calendar_view/data/calendar_data_source.dart';
 import 'package:tumble/ui/main_app_widget/schedule_view_widgets/tumble_list_view/tumble_list_view_day_container.dart';
@@ -24,15 +25,35 @@ class _TumbleCalendarViewState extends State<TumbleCalendarView> {
       builder: (context, state) {
         if (state is MainAppScheduleSelected) {
           return SfCalendar(
-            view: CalendarView.month,
-            dataSource: ScheduleDataSource(_getDataSource(state.listOfDays)),
-            // by default the month appointment display mode set as Indicator, we can
-            // change the display mode as appointment using the appointment display
-            // mode property
-            monthViewSettings: const MonthViewSettings(
-                appointmentDisplayMode:
-                    MonthAppointmentDisplayMode.appointment),
-          );
+              view: CalendarView.month,
+              dataSource: ScheduleDataSource(_getDataSource(state.listOfDays)),
+              // by default the month appointment display mode set as Indicator, we can
+              // change the display mode as appointment using the appointment display
+              // mode property
+              headerStyle: CalendarHeaderStyle(
+                  textAlign: TextAlign.center,
+                  backgroundColor: Theme.of(context).colorScheme.primary,
+                  textStyle: TextStyle(
+                      fontSize: 20,
+                      fontStyle: FontStyle.normal,
+                      letterSpacing: 5,
+                      color: Theme.of(context).colorScheme.onPrimary,
+                      fontWeight: FontWeight.w500)),
+              monthViewSettings: MonthViewSettings(
+                  navigationDirection: MonthNavigationDirection.vertical,
+                  appointmentDisplayMode:
+                      MonthAppointmentDisplayMode.appointment,
+                  monthCellStyle: MonthCellStyle(
+                    backgroundColor: Theme.of(context).colorScheme.background,
+                    trailingDatesBackgroundColor:
+                        Theme.of(context).colorScheme.background,
+                    leadingDatesBackgroundColor:
+                        Theme.of(context).colorScheme.background,
+                    textStyle: TextStyle(
+                        fontSize: 12,
+                        fontFamily: 'Roboto',
+                        color: Theme.of(context).colorScheme.onBackground),
+                  )));
         }
         if (state is MainAppLoading) {
           return const SpinKitThreeBounce(color: CustomColors.orangePrimary);
@@ -44,12 +65,20 @@ class _TumbleCalendarViewState extends State<TumbleCalendarView> {
   }
 }
 
-List<CalendarEvent> _getDataSource(List<Day> days) {
-  final List<CalendarEvent> events = <CalendarEvent>[];
+List<Event> _getDataSource(List<Day> days) {
+  final List<Event> events = <Event>[];
   for (Day day in days) {
     for (Event event in day.events) {
-      events.add(CalendarEvent(
-          event.title, event.timeStart, event.timeEnd, Colors.black, false));
+      events.add(Event(
+          id: event.id,
+          title: event.title,
+          course: event.course,
+          timeStart: event.timeStart,
+          timeEnd: event.timeEnd,
+          locations: event.locations,
+          teachers: event.teachers,
+          isSpecial: event.isSpecial,
+          lastModified: event.lastModified));
     }
   }
   return events;

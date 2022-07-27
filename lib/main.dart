@@ -13,8 +13,9 @@ import 'package:tumble/ui/drawer_generic/app_theme_picker.dart';
 import 'package:tumble/ui/main_app_widget/cubit/main_app_cubit.dart';
 import 'package:tumble/ui/main_app_widget/main_app.dart';
 import 'package:tumble/ui/main_app_widget/main_app_bottom_nav_bar/cubit/bottom_nav_cubit.dart';
-import 'package:tumble/ui/main_app_widget/main_app_bottom_nav_bar/main_app_navigation_bar.dart';
+import 'package:tumble/ui/main_app_widget/main_app_bottom_nav_bar/tumble_navigation_bar.dart';
 import 'package:tumble/ui/main_app_widget/main_app_navigation_root.dart';
+import 'package:tumble/ui/main_app_widget/schedule_view_widgets/tumble_calendar_view/tumble_calendar_view.dart';
 import 'package:tumble/ui/main_app_widget/misc/tumble_app_bar.dart';
 import 'package:tumble/ui/main_app_widget/schedule_view_widgets/tumble_calendar_view/tumble_calendar_view.dart';
 import 'package:tumble/ui/main_app_widget/schedule_view_widgets/tumble_list_view/tumble_list_view.dart';
@@ -65,11 +66,15 @@ void main() async {
     ),
     BlocProvider<SearchPageCubit>(
       create: (c) => SearchPageCubit(),
+<<<<<<< HEAD
       child: Row(children: const [
         TumbleSearchPage(),
         ScheduleSearchBar(),
         SearchBarAndLogoContainer()
       ]),
+=======
+      child: Row(children: const [TumbleSearchPage(), ScheduleSearchBar(), SearchBarAndLogoContainer()]),
+>>>>>>> 3c9afeb64288e6b42efb734cf65b646cd022907a
     ),
     BlocProvider<ThemeCubit>(
       create: (c) => ThemeCubit()..getCurrentTheme(),

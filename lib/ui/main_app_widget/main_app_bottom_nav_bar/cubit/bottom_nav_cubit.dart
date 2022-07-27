@@ -16,17 +16,17 @@ class MainAppNavigationCubit extends Cubit<MainAppNavigationState> {
       case NavbarItem.SEARCH:
         emit(const MainAppNavigationState(NavbarItem.SEARCH, 0));
         break;
-      case NavbarItem.USER_ACCOUNT:
-        emit(const MainAppNavigationState(NavbarItem.USER_ACCOUNT, 1));
-        break;
       case NavbarItem.LIST:
-        emit(const MainAppNavigationState(NavbarItem.LIST, 2));
+        emit(const MainAppNavigationState(NavbarItem.LIST, 1));
         break;
       case NavbarItem.WEEK:
-        emit(const MainAppNavigationState(NavbarItem.WEEK, 3));
+        emit(const MainAppNavigationState(NavbarItem.WEEK, 2));
         break;
       case NavbarItem.CALENDAR:
-        emit(const MainAppNavigationState(NavbarItem.CALENDAR, 4));
+        emit(const MainAppNavigationState(NavbarItem.CALENDAR, 3));
+        break;
+      case NavbarItem.USER_ACCOUNT:
+        emit(const MainAppNavigationState(NavbarItem.USER_ACCOUNT, 4));
         break;
     }
   }

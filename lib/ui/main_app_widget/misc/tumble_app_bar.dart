@@ -21,6 +21,7 @@ class _TumbleAppBarState extends State<TumbleAppBar> {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      elevation: 0,
       backgroundColor: Theme.of(context).colorScheme.background,
       actions: <Widget>[
         Expanded(
@@ -31,32 +32,41 @@ class _TumbleAppBarState extends State<TumbleAppBar> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  widget.visibleBookmark!
-                      ? BlocBuilder<MainAppCubit, MainAppState>(
-                          builder: (context, state) {
-                            if (state is MainAppScheduleSelected) {
-                              return IconButton(
-                                  onPressed: widget.toggleFavorite,
-                                  icon: Icon(
-                                      state.toggledFavorite
-                                          ? CupertinoIcons.bookmark_fill
-                                          : CupertinoIcons.bookmark,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onBackground));
-                            }
-                            return Container();
-                          },
-                        )
-                      : Container(),
+                  if (widget.visibleBookmark!)
+                    BlocBuilder<MainAppCubit, MainAppState>(
+                      builder: (context, state) {
+                        if (state is MainAppScheduleSelected) {
+                          return Padding(
+                            padding: const EdgeInsets.only(left: 5, top: 5),
+                            child: IconButton(
+                                iconSize: 30,
+                                onPressed: widget.toggleFavorite,
+                                icon: Icon(
+                                    state.toggledFavorite
+                                        ? CupertinoIcons.bookmark_fill
+                                        : CupertinoIcons.bookmark,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onBackground)),
+                          );
+                        }
+                        return Container();
+                      },
+                    )
+                  else
+                    Container(),
                 ],
               ),
               Row(
                 children: [
-                  IconButton(
-                    icon: Icon(CupertinoIcons.gear,
-                        color: Theme.of(context).colorScheme.onBackground),
-                    onPressed: () => Scaffold.of(context).openEndDrawer(),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 5, right: 5),
+                    child: IconButton(
+                      iconSize: 30,
+                      icon: Icon(CupertinoIcons.gear,
+                          color: Theme.of(context).colorScheme.onBackground),
+                      onPressed: () => Scaffold.of(context).openEndDrawer(),
+                    ),
                   ),
                 ],
               )

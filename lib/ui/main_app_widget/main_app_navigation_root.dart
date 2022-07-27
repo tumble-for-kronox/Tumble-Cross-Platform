@@ -8,7 +8,7 @@ import 'package:tumble/theme/cubit/theme_state.dart';
 import 'package:tumble/ui/main_app_widget/cubit/main_app_cubit.dart';
 import 'package:tumble/ui/main_app_widget/main_app_bottom_nav_bar/cubit/bottom_nav_cubit.dart';
 import 'package:tumble/ui/main_app_widget/main_app_bottom_nav_bar/data/nav_bar_items.dart';
-import 'package:tumble/ui/main_app_widget/main_app_bottom_nav_bar/main_app_navigation_bar.dart';
+import 'package:tumble/ui/main_app_widget/main_app_bottom_nav_bar/tumble_navigation_bar.dart';
 import 'package:tumble/ui/main_app_widget/misc/tumble_app_drawer.dart';
 import 'package:tumble/ui/main_app_widget/schedule_view_widgets/tumble_calendar_view/tumble_calendar_view.dart';
 import 'package:tumble/ui/main_app_widget/schedule_view_widgets/tumble_list_view/tumble_list_view.dart';
@@ -40,12 +40,21 @@ class _MainAppNavigationRootState extends State<MainAppNavigationRoot> {
                   currentThemeString: themeState.themeString,
                 ),
                 appBar: TumbleAppBar(
+<<<<<<< HEAD
                   visibleBookmark: navState.index == 2 || navState.index == 3,
                   toggleFavorite: () async =>
                       await context.read<MainAppCubit>().toggleFavorite(),
+=======
+                  visibleBookmark: navState.index == 1 ||
+                      navState.index == 2 ||
+                      navState.index == 3,
+                  toggleFavorite: () async => await context
+                      .read<MainAppCubit>()
+                      .toggleFavorite(context),
+>>>>>>> 3c9afeb64288e6b42efb734cf65b646cd022907a
                 ),
                 body: FutureBuilder(
-                    future: context.read<MainAppCubit>().init(),
+                    future: context.read<MainAppCubit>().initCached(),
                     builder: (BuildContext context, AsyncSnapshot snapshot) {
                       switch (navState.navbarItem) {
                         case NavbarItem.SEARCH:
