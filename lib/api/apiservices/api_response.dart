@@ -11,6 +11,8 @@ class ApiResponse<T> {
 
   ApiResponse.completed(this.data) : status = Status.REQUESTED;
 
+  ApiResponse.cached(this.data) : status = Status.CACHED;
+
   ApiResponse.error(this.message) : status = Status.ERROR;
 
   @override

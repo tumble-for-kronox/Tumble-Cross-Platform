@@ -9,7 +9,7 @@ class MainAppInitial extends MainAppState {
   const MainAppInitial(this.fetchErrorType);
 
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [fetchErrorType];
 }
 
 class MainAppLoading extends MainAppState {

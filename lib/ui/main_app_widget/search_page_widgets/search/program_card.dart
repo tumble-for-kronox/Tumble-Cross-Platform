@@ -1,9 +1,10 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class ProgramCard extends StatelessWidget {
   final String programName;
   final String programId;
-  final VoidCallback onTap;
+  final AsyncCallback onTap;
 
   const ProgramCard(
       {Key? key,

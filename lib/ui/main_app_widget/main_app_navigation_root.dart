@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -32,16 +34,17 @@ class _MainAppNavigationRootState extends State<MainAppNavigationRoot> {
               limitOptions: false,
             ),
             appBar: TumbleAppBar(
-              visibleBookmark: state.index == 2 || state.index == 3,
+              visibleBookmark:
+                  state.index == 2 || state.index == 3 || state.index == 4,
               toggleFavorite: () async =>
                   await context.read<MainAppCubit>().toggleFavorite(),
             ),
             body: FutureBuilder(
-                future: context.read<MainAppCubit>().init(),
+                future: context.read<MainAppCubit>().initCached(),
                 builder: (BuildContext context, AsyncSnapshot snapshot) {
                   switch (state.navbarItem) {
                     case NavbarItem.SEARCH:
-                      return const ScheduleSearchPage();
+                      return const TumbleSearchPage();
                     case NavbarItem.USER_ACCOUNT:
                       return Container();
                     case NavbarItem.LIST:

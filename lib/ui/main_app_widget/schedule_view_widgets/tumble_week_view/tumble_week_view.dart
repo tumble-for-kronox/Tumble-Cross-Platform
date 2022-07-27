@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:tumble/theme/colors.dart';
 import 'package:tumble/ui/main_app_widget/cubit/main_app_cubit.dart';
 import 'package:tumble/ui/main_app_widget/schedule_view_widgets/no_schedule.dart';
 import 'package:tumble/ui/main_app_widget/schedule_view_widgets/tumble_week_view/week_list_view.dart';
@@ -29,7 +31,11 @@ class _TumbleWeekViewState extends State<TumbleWeekView> {
                     }))
           ]);
         }
-        return const NoScheduleAvailable(errorType: 'No schedule selected');
+        if (state is MainAppLoading) {
+          return const SpinKitThreeBounce(color: CustomColors.orangePrimary);
+        }
+        return const NoScheduleAvailable(
+            errorType: 'No default schedule selected');
       },
     );
   }

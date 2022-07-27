@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:meta/meta.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tumble/api/apiservices/api_response.dart';
 import 'package:tumble/api/repository/implementation_repository.dart';
 import 'package:tumble/database/database_response.dart' as db;
 import 'package:tumble/database/repository/database_repository.dart';
@@ -86,70 +87,117 @@ class MainAppCubit extends Cubit<MainAppState> {
     final currentFavorites =
         _sharedPrefs.getStringList(PreferenceTypes.favorites);
 
+    /// If the schedule IS saved in preferences
     if (currentFavorites!.contains(_currentScheduleId)) {
-      currentFavorites.remove(_currentScheduleId);
-      await _databaseService.removeSchedule(_currentScheduleId!);
-      emit(MainAppScheduleSelected(
-          currentScheduleId: _currentScheduleModel!.id,
-          listOfDays: _listOfDays!,
-          listOfWeeks: _listOfWeeks!,
-          toggledFavorite: false));
-    } else {
-      currentFavorites.add(_currentScheduleId!);
-      await _databaseService.addSchedule(_currentScheduleModel!);
-      MainAppScheduleSelected(
-          currentScheduleId: _currentScheduleModel!.id,
-          listOfDays: _listOfDays!,
-          listOfWeeks: _listOfWeeks!,
-          toggledFavorite: false);
+      _toggleRemove(currentFavorites);
     }
+
+    /// If the schedule IS NOT saved in preferences
+    else {
+      _toggleSave(currentFavorites);
+    }
+  }
+
+  void _toggleSave(List<String> currentFavorites) async {
+    currentFavorites.add(_currentScheduleId!);
+    _sharedPrefs.setString(PreferenceTypes.schedule, _currentScheduleId!);
+    await _databaseService.addSchedule(_currentScheduleModel!);
+    emit(MainAppScheduleSelected(
+        currentScheduleId: _currentScheduleModel!.id,
+        listOfDays: _listOfDays!,
+        listOfWeeks: _listOfWeeks!,
+        toggledFavorite: true));
     _sharedPrefs.setStringList(PreferenceTypes.favorites, currentFavorites);
   }
 
-  Future<void> init() async {
-    emit(const MainAppLoading());
-    if (_sharedPrefs.getString(PreferenceTypes.schedule) != null) {
-      final _response = await _implementationService
-          .getSchedule(_sharedPrefs.getString(PreferenceTypes.schedule)!);
-      switch (_response.status) {
-        case api.Status.REQUESTED:
-          _currentScheduleModel = _response.data!;
+  void _toggleRemove(List<String> currentFavorites) async {
+    currentFavorites.remove(_currentScheduleId);
+    (currentFavorites.isEmpty)
+        ? _sharedPrefs.remove(PreferenceTypes.schedule)
+        : _sharedPrefs.setString(
+            PreferenceTypes.schedule, currentFavorites.first);
+    await _databaseService.removeSchedule(_currentScheduleId!);
+    emit(MainAppScheduleSelected(
+        currentScheduleId: _currentScheduleModel!.id,
+        listOfDays: _listOfDays!,
+        listOfWeeks: _listOfWeeks!,
+        toggledFavorite: false));
+    _sharedPrefs.setStringList(PreferenceTypes.favorites, currentFavorites);
+  }
 
-          /// Now we have an instance of the list used in
-          /// [TumbleListView] and an instance of the list
-          /// used in [TumbleWeekView]
-          _listOfDays = _currentScheduleModel!.days;
-          _listOfWeeks = _currentScheduleModel!.splitToWeek();
-          _currentScheduleId = _currentScheduleModel!.id;
-          emit(MainAppScheduleSelected(
-              currentScheduleId: _currentScheduleModel!.id,
-              listOfDays: _listOfDays!,
-              listOfWeeks: _listOfWeeks!,
-              toggledFavorite: false));
-          break;
-        case api.Status.CACHED:
-          _currentScheduleModel = _response.data!;
-
-          /// Now we have an instance of the list used in
-          /// [TumbleListView] and an instance of the list
-          /// used in [TumbleWeekView]
-          _listOfDays = _currentScheduleModel!.days;
-          _listOfWeeks = _currentScheduleModel!.splitToWeek();
-          _currentScheduleId = _currentScheduleModel!.id;
-          emit(MainAppScheduleSelected(
-              currentScheduleId: _currentScheduleModel!.id,
-              listOfDays: _listOfDays!,
-              listOfWeeks: _listOfWeeks!,
-              toggledFavorite: true));
-          break;
-        case api.Status.ERROR:
-          emit(MainAppInitial(_response.message!));
-          break;
-        default:
-          emit(const MainAppInitial(null));
-          break;
-      }
+  Future<void> initCached() async {
+    if (_currentScheduleId != null) {
+      return;
     }
-    emit(const MainAppInitial(null));
+    final ApiResponse _apiResponse =
+        await _implementationService.getCachedBookmarkedSchedule();
+
+    switch (_apiResponse.status) {
+      case Status.CACHED:
+        _currentScheduleModel = _apiResponse.data!;
+
+        /// Now we have an instance of the list used in
+        /// [TumbleListView] and an instance of the list
+        /// used in [TumbleWeekView]
+        _listOfDays = _currentScheduleModel!.days;
+        _listOfWeeks = _currentScheduleModel!.splitToWeek();
+        _currentScheduleId = _currentScheduleModel!.id;
+        emit(MainAppScheduleSelected(
+            currentScheduleId: _currentScheduleModel!.id,
+            listOfDays: _currentScheduleModel!.days,
+            listOfWeeks: _currentScheduleModel!.splitToWeek(),
+            toggledFavorite: true));
+        break;
+      default:
+        emit(state);
+    }
+  }
+
+  /// ON program change
+  Future<void> fetchNewSchedule(String id) async {
+    final _response = await _implementationService.getSchedule(id);
+    switch (_response.status) {
+      case api.Status.REQUESTED:
+        _currentScheduleModel = _response.data!;
+
+        /// Now we have an instance of the list used in
+        /// [TumbleListView] and an instance of the list
+        /// used in [TumbleWeekView]
+        _listOfDays = _currentScheduleModel!.days;
+        _listOfWeeks = _currentScheduleModel!.splitToWeek();
+        _currentScheduleId = _currentScheduleModel!.id;
+        log('Selected schedule id: $id');
+        emit(MainAppScheduleSelected(
+            currentScheduleId: _currentScheduleId!,
+            listOfDays: _listOfDays!,
+            listOfWeeks: _listOfWeeks!,
+            toggledFavorite: false));
+        break;
+      case api.Status.CACHED:
+        _currentScheduleModel = _response.data!;
+
+        /// Now we have an instance of the list used in
+        /// [TumbleListView] and an instance of the list
+        /// used in [TumbleWeekView]
+        _listOfDays = _currentScheduleModel!.days;
+        _listOfWeeks = _currentScheduleModel!.splitToWeek();
+        _currentScheduleId = _currentScheduleModel!.id;
+        emit(MainAppScheduleSelected(
+            currentScheduleId: _currentScheduleId!,
+            listOfDays: _listOfDays!,
+            listOfWeeks: _listOfWeeks!,
+            toggledFavorite: true));
+        break;
+      case api.Status.ERROR:
+        emit(MainAppInitial(_response.message!));
+        break;
+      default:
+        emit(state);
+        break;
+    }
+  }
+
+  void setLoading() {
+    emit(const MainAppLoading());
   }
 }

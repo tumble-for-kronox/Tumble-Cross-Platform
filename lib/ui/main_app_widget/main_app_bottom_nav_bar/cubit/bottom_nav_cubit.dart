@@ -9,8 +9,7 @@ part 'navigation_state.dart';
 
 class MainAppNavigationCubit extends Cubit<MainAppNavigationState> {
   MainAppNavigationCubit()
-      : super(MainAppNavigationState(NavbarItem.SEARCH,
-            locator<SharedPreferences>().getInt(PreferenceTypes.view)!));
+      : super(const MainAppNavigationState(NavbarItem.SEARCH, 0));
 
   void getNavBarItem(NavbarItem navbarItem) {
     switch (navbarItem) {
