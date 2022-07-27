@@ -31,6 +31,5 @@ class MainAppScheduleSelected extends MainAppState {
       required this.toggledFavorite});
 
   @override
-  List<Object?> get props =>
-      [currentScheduleId, listOfDays, listOfWeeks, toggledFavorite];
+  List<Object?> get props => [currentScheduleId, listOfDays, listOfWeeks, toggledFavorite];
 }

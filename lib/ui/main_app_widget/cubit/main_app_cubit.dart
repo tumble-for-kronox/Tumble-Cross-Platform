@@ -5,6 +5,7 @@ import 'dart:developer';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:meta/meta.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -16,6 +17,8 @@ import 'package:tumble/models/api_models/schedule_model.dart';
 import 'package:tumble/models/ui_models/week_model.dart';
 import 'package:tumble/shared/preference_types.dart';
 import 'package:tumble/startup/get_it_instances.dart';
+import 'package:tumble/theme/cubit/theme_cubit.dart';
+import 'package:tumble/theme/repository/theme_repository.dart';
 import 'package:tumble/ui/drawer_generic/app_default_schedule_picker.dart';
 import 'package:tumble/ui/drawer_generic/app_notification_time_picker.dart';
 import 'package:tumble/ui/drawer_generic/app_theme_picker.dart';
@@ -30,16 +33,15 @@ class MainAppCubit extends Cubit<MainAppState> {
   final _sharedPrefs = locator<SharedPreferences>();
   final _implementationService = locator<ImplementationRepository>();
   final _databaseService = locator<DatabaseRepository>();
+  final _themeRepository = locator<ThemeRepository>();
+
   ScheduleModel? _currentScheduleModel;
   String? _currentScheduleId;
 
   List<Week>? _listOfWeeks;
   List<Day>? _listOfDays;
 
-  List<Week>? listOfWeeks;
-  List<Day>? listOfDays;
-  int? get defaultViewType =>
-      locator<SharedPreferences>().getInt(PreferenceTypes.view);
+  int? get defaultViewType => locator<SharedPreferences>().getInt(PreferenceTypes.view);
 
   void handleDrawerEvent(Enum eventType, BuildContext context) {
     switch (eventType) {
@@ -58,8 +60,7 @@ class MainAppCubit extends Cubit<MainAppState> {
         break;
       case EventType.CHANGE_THEME:
         Get.bottomSheet(AppThemePicker(
-          setTheme: (themeType) => locator<SharedPreferences>()
-              .setString(PreferenceTypes.theme, themeType),
+          setTheme: (themeType) => changeTheme(themeType),
         ));
         break;
       case EventType.CONTACT:
@@ -68,23 +69,38 @@ class MainAppCubit extends Cubit<MainAppState> {
         break;
       case EventType.EDIT_NOTIFICATION_TIME:
         Get.bottomSheet(AppNotificationTimePicker(
-          setNotificationTime: (int time) => locator<SharedPreferences>()
-              .setInt(PreferenceTypes.notificationTime, time),
+          setNotificationTime: (int time) =>
+              locator<SharedPreferences>().setInt(PreferenceTypes.notificationTime, time),
         ));
         break;
       case EventType.SET_DEFAULT_SCHEDULE:
         Get.bottomSheet(AppDefaultSchedulePicker(
-            scheduleIds: locator<SharedPreferences>()
-                .getStringList(PreferenceTypes.favorites)));
+            scheduleIds: locator<SharedPreferences>().getStringList(PreferenceTypes.favorites)));
         break;
       case EventType.SET_DEFAULT_VIEW:
         break;
     }
   }
 
+  void changeTheme(String themeString) {
+    switch (themeString) {
+      case "light":
+        _themeRepository.saveTheme(CustomTheme.light);
+        break;
+      case "dark":
+        _themeRepository.saveTheme(CustomTheme.dark);
+        break;
+      case "system":
+        _themeRepository.saveTheme(CustomTheme.system);
+        break;
+      default:
+        _themeRepository.saveTheme(CustomTheme.system);
+        break;
+    }
+  }
+
   Future<void> toggleFavorite() async {
-    final currentFavorites =
-        _sharedPrefs.getStringList(PreferenceTypes.favorites);
+    final currentFavorites = _sharedPrefs.getStringList(PreferenceTypes.favorites);
 
     if (currentFavorites!.contains(_currentScheduleId)) {
       currentFavorites.remove(_currentScheduleId);
@@ -109,8 +125,7 @@ class MainAppCubit extends Cubit<MainAppState> {
   Future<void> init() async {
     emit(const MainAppLoading());
     if (_sharedPrefs.getString(PreferenceTypes.schedule) != null) {
-      final _response = await _implementationService
-          .getSchedule(_sharedPrefs.getString(PreferenceTypes.schedule)!);
+      final _response = await _implementationService.getSchedule(_sharedPrefs.getString(PreferenceTypes.schedule)!);
       switch (_response.status) {
         case api.Status.REQUESTED:
           _currentScheduleModel = _response.data!;
