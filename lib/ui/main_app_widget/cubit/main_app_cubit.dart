@@ -218,7 +218,6 @@ class MainAppCubit extends Cubit<MainAppState> {
         break;
     }
   }
-
   void setLoading() {
     emit(const MainAppLoading());
   }

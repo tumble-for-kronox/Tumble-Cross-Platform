@@ -41,7 +41,11 @@ void main() async {
     BlocProvider<MainAppNavigationCubit>(
       create: (c) => MainAppNavigationCubit(),
       child: Row(
-        children: const [TumbleNavigationBar(), MainAppNavigationRoot(), TumbleSearchPage()],
+        children: const [
+          TumbleNavigationBar(),
+          MainAppNavigationRoot(),
+          TumbleSearchPage()
+        ],
       ),
     ),
     BlocProvider<MainAppCubit>(
