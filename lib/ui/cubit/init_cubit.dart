@@ -1,8 +1,11 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tumble/api/repository/implementation_repository.dart';
 import 'package:tumble/database/database_response.dart';
+import 'package:tumble/shared/preference_types.dart';
+import 'package:tumble/shared/setup.dart';
 import 'package:tumble/startup/get_it_instances.dart';
 import 'package:tumble/ui/main_app_widget/cubit/main_app_cubit.dart';
 
@@ -27,6 +30,7 @@ class InitCubit extends Cubit<InitState> {
   }
 
   void setup(String schoolName) {
+    setupRequiredSharedPreferences(schoolName);
     emit(InitStateHasSchool(schoolName));
   }
 }

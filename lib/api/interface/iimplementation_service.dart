@@ -9,7 +9,9 @@ abstract class IImplementationService {
 
   Future<ApiResponse> getSchedulesRequest(scheduleId);
 
-  Future<dynamic> getSchedule(String scheduleId);
+  Future<ApiResponse> getSchedule(String scheduleId);
+
+  Future<ApiResponse> getCachedBookmarkedSchedule();
 
   Future<DatabaseResponse> initSetup();
 }
