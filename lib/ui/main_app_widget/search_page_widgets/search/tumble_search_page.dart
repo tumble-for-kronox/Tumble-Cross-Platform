@@ -7,7 +7,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tumble/shared/preference_types.dart';
 import 'package:tumble/startup/get_it_instances.dart';
-import 'package:tumble/theme/colors.dart';
+import 'package:tumble/theme/data/colors.dart';
 import 'package:tumble/ui/main_app_widget/cubit/main_app_cubit.dart';
 import 'package:tumble/ui/main_app_widget/main_app.dart';
 import 'package:tumble/ui/main_app_widget/main_app_bottom_nav_bar/cubit/bottom_nav_cubit.dart';
@@ -31,7 +31,8 @@ class _TumbleSearchPageState extends State<TumbleSearchPage> {
     return Stack(
       children: [
         Container(
-          margin: EdgeInsets.only(top: MediaQuery.of(context).viewPadding.top + 50),
+          margin:
+              EdgeInsets.only(top: MediaQuery.of(context).viewPadding.top + 50),
           alignment: Alignment.center,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -42,7 +43,8 @@ class _TumbleSearchPageState extends State<TumbleSearchPage> {
                     child: BlocBuilder<SearchPageCubit, SearchPageState>(
                       builder: (context, state) {
                         if (state is SearchPageLoading) {
-                          return const SpinKitThreeBounce(color: CustomColors.orangePrimary);
+                          return const SpinKitThreeBounce(
+                              color: CustomColors.orangePrimary);
                         }
                         if (state is SearchPageFoundSchedules) {
                           return ListView(

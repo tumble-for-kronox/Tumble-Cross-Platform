@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:tumble/models/api_models/schedule_model.dart';
-import 'package:tumble/theme/colors.dart';
+import 'package:tumble/theme/data/colors.dart';
 import 'package:tumble/ui/main_app_widget/cubit/main_app_cubit.dart';
 import 'package:tumble/ui/main_app_widget/schedule_view_widgets/no_schedule.dart';
 import 'package:tumble/ui/main_app_widget/schedule_view_widgets/tumble_calendar_view/data/calendar_data_source.dart';
