@@ -26,6 +26,7 @@ dependencies:
   animated_text_kit: ^4.2.1
   flutter_spinkit: any
   path_provider: ^2.0.9
+  syncfusion_flutter_calendar: ^20.2.40
   provider: any
   dart_extensions: ^2.2.0
   shared_preferences: ^2.0.15

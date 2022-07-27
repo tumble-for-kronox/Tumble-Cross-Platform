@@ -41,14 +41,12 @@ class ImplementationRepository implements IImplementationService {
 
   @override
   Future<ApiResponse> getSchedule(String scheduleId) async {
-    log(scheduleId);
     if (_preferenceService
         .getStringList(PreferenceTypes.favorites)!
         .contains(scheduleId)) {
       final ScheduleModel? _possibleSchedule =
           await _databaseService.getOneSchedule(scheduleId);
-      log("${_possibleSchedule?.id}");
-      return ApiResponse.completed(_possibleSchedule);
+      return ApiResponse.cached(_possibleSchedule);
     }
     return await getSchedulesRequest(scheduleId);
   }
@@ -59,17 +57,25 @@ class ImplementationRepository implements IImplementationService {
   /// and a default schedule)
   @override
   Future<DatabaseResponse> initSetup() async {
-    final String? _defaultSchedule =
-        _preferenceService.getString(PreferenceTypes.schedule);
     final String? _defaultSchool =
         _preferenceService.getString(PreferenceTypes.school);
 
     if (_defaultSchool != null) {
       return DatabaseResponse.hasDefault(_defaultSchool);
-    } else if (_defaultSchool != null && _defaultSchedule != null) {
-      return DatabaseResponse.hasFavorite(_defaultSchedule);
     } else {
       return DatabaseResponse.initial("Init application preferences");
     }
+  }
+
+  @override
+  Future<ApiResponse> getCachedBookmarkedSchedule() async {
+    log('${_preferenceService.getString(PreferenceTypes.schedule)}');
+    if (_preferenceService.getString(PreferenceTypes.schedule) != null) {
+      final ScheduleModel? _possibleSchedule =
+          await _databaseService.getOneSchedule(
+              _preferenceService.getString(PreferenceTypes.schedule)!);
+      return ApiResponse.cached(_possibleSchedule);
+    }
+    return ApiResponse.error('No cached schedule found');
   }
 }

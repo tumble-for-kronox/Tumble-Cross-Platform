@@ -5,8 +5,6 @@ class DatabaseResponse<T> {
 
   DatabaseResponse.initial(this.message) : status = Status.INITIAL;
 
-  DatabaseResponse.hasFavorite(this.data) : status = Status.HAS_FAVORITE;
-
   DatabaseResponse.hasDefault(this.data) : status = Status.HAS_DEFAULT;
 
   @override
@@ -16,4 +14,4 @@ class DatabaseResponse<T> {
 }
 
 // ignore: constant_identifier_names
-enum Status { INITIAL, HAS_FAVORITE, HAS_DEFAULT }
+enum Status { INITIAL, HAS_DEFAULT }

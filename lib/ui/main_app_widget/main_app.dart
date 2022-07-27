@@ -4,9 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:tumble/theme/colors.dart';
-import 'package:tumble/ui/home_page_widget/home_page.dart';
-import 'package:tumble/ui/home_page_widget/school_selection_page.dart';
-import 'package:tumble/ui/search_page_widgets/search/schedule_search_page.dart';
+import 'package:tumble/ui/cubit/init_cubit.dart';
+import 'package:tumble/ui/main_app_widget/main_app_navigation_root.dart';
+import 'package:tumble/ui/main_app_widget/school_selection_page.dart';
 import 'cubit/main_app_cubit.dart';
 
 class MainApp extends StatefulWidget {
@@ -32,18 +32,13 @@ class _MainAppState extends State<MainApp> {
           fontFamily: 'Roboto',
         ),
         home: FutureBuilder(
-            future: context.read<MainAppCubit>().init(),
+            future: context.read<InitCubit>().init(),
             builder: (context, snapshot) {
-              return BlocBuilder<MainAppCubit, MainAppState>(
+              return BlocBuilder<InitCubit, InitState>(
                 builder: (context, state) {
                   switch (state.runtimeType) {
-                    case MainAppSchoolSelectedAndDefault:
-                      return HomePage(
-                          currentScheduleId:
-                              (state as MainAppSchoolSelectedAndDefault)
-                                  .currentScheduleId);
-                    case MainAppSchoolSelected:
-                      return const ScheduleSearchPage();
+                    case InitStateHasSchool:
+                      return const MainAppNavigationRoot();
                     default:
                       return const SchoolSelectionPage();
                   }
