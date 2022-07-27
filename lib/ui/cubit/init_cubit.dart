@@ -17,8 +17,7 @@ class InitCubit extends Cubit<InitState> {
   final _implementationService = locator<ImplementationRepository>();
 
   Future<void> init() async {
-    DatabaseResponse _databaseResponse =
-        await _implementationService.initSetup();
+    DatabaseResponse _databaseResponse = await _implementationService.initSetup();
     switch (_databaseResponse.status) {
       case Status.INITIAL:
         emit(const InitStateInitial());
@@ -30,7 +29,7 @@ class InitCubit extends Cubit<InitState> {
   }
 
   void setup(String schoolName) {
-    setupRequiredSharedPreferences(schoolName);
+    locator<SharedPreferences>().setString(PreferenceTypes.school, schoolName);
     emit(InitStateHasSchool(schoolName));
   }
 }

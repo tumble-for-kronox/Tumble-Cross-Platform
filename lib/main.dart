@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tumble/shared/setup.dart';
 import 'package:tumble/startup/get_it_instances.dart';
 import 'package:tumble/theme/cubit/theme_cubit.dart';
 import 'package:tumble/theme/repository/theme_repository.dart';
@@ -28,6 +29,7 @@ import 'package:tumble/ui/main_app_widget/search_page_widgets/search_bar_widget/
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initSingletons();
+  setupRequiredSharedPreferences();
   runApp(MultiBlocProvider(providers: [
     BlocProvider<InitCubit>(
       create: (c) => InitCubit(),
@@ -41,11 +43,7 @@ void main() async {
     BlocProvider<MainAppNavigationCubit>(
       create: (c) => MainAppNavigationCubit(),
       child: Row(
-        children: const [
-          TumbleNavigationBar(),
-          MainAppNavigationRoot(),
-          TumbleSearchPage()
-        ],
+        children: const [TumbleNavigationBar(), MainAppNavigationRoot(), TumbleSearchPage()],
       ),
     ),
     BlocProvider<MainAppCubit>(

@@ -43,8 +43,7 @@ class MainAppCubit extends Cubit<MainAppState> {
   List<Week>? _listOfWeeks;
   List<Day>? _listOfDays;
 
-  int? get defaultViewType =>
-      locator<SharedPreferences>().getInt(PreferenceTypes.view);
+  int? get defaultViewType => locator<SharedPreferences>().getInt(PreferenceTypes.view);
 
   void handleDrawerEvent(Enum eventType, BuildContext context) {
     switch (eventType) {
@@ -72,14 +71,13 @@ class MainAppCubit extends Cubit<MainAppState> {
         break;
       case EventType.EDIT_NOTIFICATION_TIME:
         Get.bottomSheet(AppNotificationTimePicker(
-          setNotificationTime: (int time) => locator<SharedPreferences>()
-              .setInt(PreferenceTypes.notificationTime, time),
+          setNotificationTime: (int time) =>
+              locator<SharedPreferences>().setInt(PreferenceTypes.notificationTime, time),
         ));
         break;
       case EventType.SET_DEFAULT_SCHEDULE:
         Get.bottomSheet(AppDefaultSchedulePicker(
-            scheduleIds: locator<SharedPreferences>()
-                .getStringList(PreferenceTypes.favorites)));
+            scheduleIds: locator<SharedPreferences>().getStringList(PreferenceTypes.favorites)));
         break;
       case EventType.SET_DEFAULT_VIEW:
         break;
@@ -104,8 +102,7 @@ class MainAppCubit extends Cubit<MainAppState> {
   }
 
   Future<void> toggleFavorite(BuildContext context) async {
-    final currentFavorites =
-        _sharedPrefs.getStringList(PreferenceTypes.favorites);
+    final currentFavorites = _sharedPrefs.getStringList(PreferenceTypes.favorites);
 
     /// If the schedule IS saved in preferences
     if (currentFavorites!.contains(_currentScheduleId)) {
@@ -136,8 +133,7 @@ class MainAppCubit extends Cubit<MainAppState> {
     currentFavorites.remove(_currentScheduleId);
     (currentFavorites.isEmpty)
         ? _sharedPrefs.remove(PreferenceTypes.schedule)
-        : _sharedPrefs.setString(
-            PreferenceTypes.schedule, currentFavorites.first);
+        : _sharedPrefs.setString(PreferenceTypes.schedule, currentFavorites.first);
     await _databaseService.removeSchedule(_currentScheduleId!);
     emit(MainAppScheduleSelected(
         currentScheduleId: _currentScheduleModel!.id,
@@ -151,8 +147,7 @@ class MainAppCubit extends Cubit<MainAppState> {
     if (_currentScheduleId != null) {
       return;
     }
-    final ApiResponse _apiResponse =
-        await _implementationService.getCachedBookmarkedSchedule();
+    final ApiResponse _apiResponse = await _implementationService.getCachedBookmarkedSchedule();
 
     switch (_apiResponse.status) {
       case Status.CACHED:
@@ -218,6 +213,7 @@ class MainAppCubit extends Cubit<MainAppState> {
         break;
     }
   }
+
   void setLoading() {
     emit(const MainAppLoading());
   }
