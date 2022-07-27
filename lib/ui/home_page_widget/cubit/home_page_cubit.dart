@@ -35,7 +35,8 @@ class HomePageCubit extends Cubit<HomePageState> {
   late List<Week> _listOfWeeks;
   late List<Day> _listOfDays;
 
-  int? get defaultViewType => locator<SharedPreferences>().getInt(PreferenceTypes.view);
+  int? get defaultViewType =>
+      locator<SharedPreferences>().getInt(PreferenceTypes.view);
   int get currentPageIndex => _currentPageIndex;
 
   /// Handles the loading of the schedule upon choosing a program
@@ -68,7 +69,6 @@ class HomePageCubit extends Cubit<HomePageState> {
     }
   }
 
-
   void setStateParameters(String scheduleId, List<Day> listOfDays,
       List<Week> listOfWeeks, bool? updateFavorite) {
     _states = [
@@ -78,14 +78,14 @@ class HomePageCubit extends Cubit<HomePageState> {
           isFavorite: updateFavorite ??
               locator<SharedPreferences>()
                   .getStringList(PreferenceTypes.favorites)!
-                  .contains(_currentScheduleId)!),
+                  .contains(_currentScheduleId)),
       HomePageWeekView(
           scheduleId: scheduleId,
           listOfWeeks: listOfWeeks,
           isFavorite: updateFavorite ??
               locator<SharedPreferences>()
                   .getStringList(PreferenceTypes.favorites)!
-                  .contains(_currentScheduleId)!)
+                  .contains(_currentScheduleId))
     ];
   }
 

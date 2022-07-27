@@ -6,7 +6,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tumble/startup/get_it_instances.dart';
 import 'package:tumble/ui/home_page_widget/bottom_nav_widget/cubit/bottom_nav_cubit.dart';
-import 'package:tumble/ui/home_page_widget/bottom_nav_widget/custom_bottom_bar.dart';
+import 'package:tumble/ui/home_page_widget/bottom_nav_widget/homepage_navigation_bar.dart';
 import 'package:tumble/ui/home_page_widget/cubit/home_page_cubit.dart';
 import 'package:tumble/ui/home_page_widget/home_page.dart';
 import 'package:tumble/ui/home_page_widget/schedule_view_widgets/tumble_list_view/tumble_list_view.dart';
@@ -32,10 +32,10 @@ void main() async {
         ],
       ),
     ),
-    BlocProvider<BottomNavCubit>(
-        create: (c) => BottomNavCubit(),
+    BlocProvider<HomePageNavigationCubit>(
+        create: (c) => HomePageNavigationCubit(),
         child: Row(
-          children: const [CustomBottomBar(), HomePage()],
+          children: const [HomePageNavigationBar(), HomePage()],
         )),
     BlocProvider<HomePageCubit>(
       create: (c) => HomePageCubit(),
@@ -45,7 +45,11 @@ void main() async {
     ),
     BlocProvider<SearchPageCubit>(
       create: (c) => SearchPageCubit(),
-      child: Row(children: const [ScheduleSearchPage(), ScheduleSearchBar(), SearchBarAndLogoContainer()]),
+      child: Row(children: const [
+        ScheduleSearchPage(),
+        ScheduleSearchBar(),
+        SearchBarAndLogoContainer()
+      ]),
     ),
   ], child: const MainApp()));
 }

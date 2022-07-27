@@ -3,8 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:tumble/theme/colors.dart';
 import 'package:tumble/ui/home_page_widget/bottom_nav_widget/cubit/bottom_nav_cubit.dart';
+import 'package:tumble/ui/home_page_widget/bottom_nav_widget/data/nav_bar_items.dart';
+import 'package:tumble/ui/home_page_widget/bottom_nav_widget/homepage_navigation_bar.dart';
 import 'package:tumble/ui/home_page_widget/cubit/home_page_cubit.dart';
-import 'package:tumble/ui/home_page_widget/bottom_nav_widget/custom_bottom_bar.dart';
 import 'package:tumble/ui/home_page_widget/schedule_view_widgets/misc/tumble_app_drawer.dart';
 import 'package:tumble/ui/home_page_widget/schedule_view_widgets/no_schedule.dart';
 import 'package:tumble/ui/home_page_widget/schedule_view_widgets/tumble_list_view/tumble_list_view.dart';
@@ -66,9 +67,11 @@ class _HomePageState extends State<HomePage> {
                 },
               );
             }),
-        bottomNavigationBar: CustomBottomBar(onTap: (index) {
+        bottomNavigationBar: HomePageNavigationBar(onTap: (index) {
           context.read<HomePageCubit>().setPage(index);
-          context.read<BottomNavCubit>().updateIndex(index);
+          context
+              .read<HomePageNavigationCubit>()
+              .getNavBarItem(HomePageNavbarItem.values[index]);
         }));
   }
 }

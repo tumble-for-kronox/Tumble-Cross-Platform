@@ -6,15 +6,16 @@ import 'package:tumble/ui/home_page_widget/data/labels.dart';
 
 typedef ChangePageCallBack = void Function(int index);
 
-class CustomBottomBar extends StatelessWidget {
+class HomePageNavigationBar extends StatelessWidget {
   final ChangePageCallBack? onTap;
-  const CustomBottomBar({
+  const HomePageNavigationBar({
     Key? key,
     this.onTap,
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) => BlocBuilder<BottomNavCubit, int>(
+  Widget build(BuildContext context) =>
+      BlocBuilder<HomePageNavigationCubit, HomePageNavigationState>(
         builder: (context, state) {
           return BottomNavigationBar(
             type: BottomNavigationBarType.fixed,
@@ -24,7 +25,7 @@ class CustomBottomBar extends StatelessWidget {
             /// but only actually changes page 'state' in HomePage
             /// if the state is not [HomePageError]
             onTap: onTap,
-            currentIndex: state,
+            currentIndex: state.index,
             backgroundColor: Theme.of(context).colorScheme.background,
             elevation: 20,
             items: const [
