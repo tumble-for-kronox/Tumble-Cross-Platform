@@ -1,5 +1,9 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tumble/ui/main_app_widget/main_app_bottom_nav_bar/cubit/bottom_nav_cubit.dart';
+import 'package:tumble/ui/main_app_widget/main_app_bottom_nav_bar/data/nav_bar_items.dart';
 
 class NoScheduleAvailable extends StatelessWidget {
   final String errorType;
@@ -12,13 +16,82 @@ class NoScheduleAvailable extends StatelessWidget {
       Container(
         padding: const EdgeInsets.all(50.0),
         child: Center(
-            child: Text(
-          errorType,
-          style: TextStyle(
-              color: Theme.of(context).colorScheme.onBackground,
-              fontSize: 20,
-              fontWeight: FontWeight.w500),
-          textAlign: TextAlign.center,
+            child: Wrap(
+          crossAxisAlignment: WrapCrossAlignment.center,
+          children: [
+            Text(errorType,
+                style: TextStyle(
+                    color: Theme.of(context).colorScheme.onBackground,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w500)),
+            Padding(
+              padding: const EdgeInsets.only(top: 4),
+              child: IconButton(
+                  iconSize: 20,
+                  color: Theme.of(context).colorScheme.primary,
+                  onPressed: () => showCupertinoDialog(
+                      context: context,
+                      builder: (context) {
+                        return CupertinoAlertDialog(
+                          content: Column(children: [
+                            Text("Schedules can be bookmarked with this icon",
+                                style: TextStyle(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSecondary,
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w600)),
+                            const SizedBox(
+                              height: 15,
+                            ),
+                            const Icon(
+                              CupertinoIcons.bookmark,
+                              size: 20,
+                            ),
+                            const SizedBox(
+                              height: 15,
+                            ),
+                            Text(
+                                "It will appear in the top left corner once you've searched for and opened your schedule",
+                                style: TextStyle(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSecondary,
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w600))
+                          ]),
+                          actions: [
+                            CupertinoDialogAction(
+                              child: Text("I understand",
+                                  style: TextStyle(
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w600)),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                            CupertinoDialogAction(
+                              child: Text("Take me to search",
+                                  style: TextStyle(
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w600)),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                                context
+                                    .read<MainAppNavigationCubit>()
+                                    .getNavBarItem(NavbarItem.SEARCH);
+                              },
+                            )
+                          ],
+                        );
+                      }),
+                  icon: const Icon(CupertinoIcons.info_circle)),
+            )
+          ],
         )),
       ),
     ]);

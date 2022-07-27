@@ -66,15 +66,11 @@ void main() async {
     ),
     BlocProvider<SearchPageCubit>(
       create: (c) => SearchPageCubit(),
-<<<<<<< HEAD
       child: Row(children: const [
         TumbleSearchPage(),
         ScheduleSearchBar(),
         SearchBarAndLogoContainer()
       ]),
-=======
-      child: Row(children: const [TumbleSearchPage(), ScheduleSearchBar(), SearchBarAndLogoContainer()]),
->>>>>>> 3c9afeb64288e6b42efb734cf65b646cd022907a
     ),
     BlocProvider<ThemeCubit>(
       create: (c) => ThemeCubit()..getCurrentTheme(),

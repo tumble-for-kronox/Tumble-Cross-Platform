@@ -58,8 +58,7 @@ class _TumbleCalendarViewState extends State<TumbleCalendarView> {
         if (state is MainAppLoading) {
           return const SpinKitThreeBounce(color: CustomColors.orangePrimary);
         }
-        return const NoScheduleAvailable(
-            errorType: 'No default schedule selected');
+        return const NoScheduleAvailable(errorType: 'No bookmarked schedules');
       },
     );
   }

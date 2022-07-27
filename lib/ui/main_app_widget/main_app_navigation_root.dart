@@ -40,18 +40,12 @@ class _MainAppNavigationRootState extends State<MainAppNavigationRoot> {
                   currentThemeString: themeState.themeString,
                 ),
                 appBar: TumbleAppBar(
-<<<<<<< HEAD
-                  visibleBookmark: navState.index == 2 || navState.index == 3,
-                  toggleFavorite: () async =>
-                      await context.read<MainAppCubit>().toggleFavorite(),
-=======
                   visibleBookmark: navState.index == 1 ||
                       navState.index == 2 ||
                       navState.index == 3,
                   toggleFavorite: () async => await context
                       .read<MainAppCubit>()
                       .toggleFavorite(context),
->>>>>>> 3c9afeb64288e6b42efb734cf65b646cd022907a
                 ),
                 body: FutureBuilder(
                     future: context.read<MainAppCubit>().initCached(),

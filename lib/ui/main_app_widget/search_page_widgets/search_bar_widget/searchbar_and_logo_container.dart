@@ -36,16 +36,13 @@ class _SearchBarAndLogoContainerState extends State<SearchBarAndLogoContainer> {
                         const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
                     child: BlocBuilder<SearchPageCubit, SearchPageState>(
                         builder: (context, state) {
-                      if (state is SearchPageFocused ||
-                          state is SearchPageFoundSchedules ||
-                          state is SearchPageLoading ||
-                          state is SearchPageNoSchedules) {
+                      if (state is SearchPageInitial) {
                         return const SlideableLogo(
-                          focused: true,
+                          focused: false,
                         );
                       }
                       return const SlideableLogo(
-                        focused: false,
+                        focused: true,
                       );
                     }),
                   ),
