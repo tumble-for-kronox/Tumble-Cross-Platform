@@ -21,14 +21,6 @@ class NoScheduleAvailable extends StatelessWidget {
           textAlign: TextAlign.center,
         )),
       ),
-      Center(
-          child: TextButton(
-        onPressed: () => Navigator.pop(context),
-        child: const Text(
-          'Take me back',
-          style: TextStyle(fontSize: 17),
-        ),
-      ))
     ]);
   }
 }

@@ -6,9 +6,9 @@ import 'package:tumble/ui/main_app_widget/main_app_bottom_nav_bar/cubit/bottom_n
 
 typedef ChangePageCallBack = void Function(int index);
 
-class MainAppNavigationBar extends StatelessWidget {
+class TumbleNavigationBar extends StatelessWidget {
   final ChangePageCallBack? onTap;
-  const MainAppNavigationBar({
+  const TumbleNavigationBar({
     Key? key,
     this.onTap,
   }) : super(key: key);
@@ -16,23 +16,26 @@ class MainAppNavigationBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) =>
       BlocBuilder<MainAppNavigationCubit, MainAppNavigationState>(
-        builder: (context, state) {
+        builder: (context, mainappstate) {
           return BottomNavigationBar(
             type: BottomNavigationBarType.fixed,
             selectedIconTheme: const IconThemeData(size: 28),
-
-            /// Dynamically updates the index of the bottom bar,
-            /// but only actually changes page 'state' in HomePage
-            /// if the state is not [HomePageError]
             onTap: onTap,
-            currentIndex: state.index,
+            currentIndex: mainappstate.index,
             backgroundColor: Theme.of(context).colorScheme.background,
             elevation: 20,
             items: const [
               BottomNavigationBarItem(
-                  icon: Icon(CupertinoIcons.search), label: Labels.list),
+                  icon: Icon(CupertinoIcons.search), label: Labels.search),
               BottomNavigationBarItem(
-                  icon: Icon(Icons.person), label: Labels.week),
+                  icon: Icon(CupertinoIcons.person), label: Labels.account),
+              BottomNavigationBarItem(
+                  icon: Icon(CupertinoIcons.list_bullet), label: Labels.list),
+              BottomNavigationBarItem(
+                  icon: Icon(CupertinoIcons.list_number), label: Labels.week),
+              BottomNavigationBarItem(
+                  icon: Icon(CupertinoIcons.calendar_today),
+                  label: Labels.calendar),
             ],
           );
         },

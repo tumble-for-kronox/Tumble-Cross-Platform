@@ -7,6 +7,7 @@ import 'package:tumble/ui/main_app_widget/main_app_bottom_nav_bar/data/nav_bar_i
 import 'package:tumble/ui/main_app_widget/main_app_bottom_nav_bar/main_app_navigation_bar.dart';
 import 'package:tumble/ui/main_app_widget/schedule_view_widgets/misc/tumble_app_bar.dart';
 import 'package:tumble/ui/main_app_widget/schedule_view_widgets/misc/tumble_app_drawer.dart';
+import 'package:tumble/ui/main_app_widget/schedule_view_widgets/tumble_calendar_view/tumble_calendar_view.dart';
 import 'package:tumble/ui/main_app_widget/schedule_view_widgets/tumble_list_view/tumble_list_view.dart';
 import 'package:tumble/ui/main_app_widget/schedule_view_widgets/tumble_week_view/tumble_week_view.dart';
 import 'package:tumble/ui/main_app_widget/search_page_widgets/search/schedule_search_page.dart';
@@ -48,10 +49,10 @@ class _MainAppNavigationRootState extends State<MainAppNavigationRoot> {
                     case NavbarItem.WEEK:
                       return const TumbleWeekView();
                     case NavbarItem.CALENDAR:
-                      return Container();
+                      return const TumbleCalendarView();
                   }
                 }),
-            bottomNavigationBar: MainAppNavigationBar(onTap: (index) {
+            bottomNavigationBar: TumbleNavigationBar(onTap: (index) {
               context
                   .read<MainAppNavigationCubit>()
                   .getNavBarItem(NavbarItem.values[index]);
