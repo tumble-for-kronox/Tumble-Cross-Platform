@@ -1,17 +1,23 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:tumble/theme/colors.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tumble/extensions/extensions.dart';
+import 'package:tumble/startup/get_it_instances.dart';
+import 'package:tumble/theme/data/colors.dart';
 import 'package:tumble/ui/main_app_widget/data/event_types.dart';
-import 'package:tumble/ui/main_app_widget/schedule_view_widgets/misc/tumble_app_drawer_tile.dart';
-import 'package:tumble/ui/main_app_widget/schedule_view_widgets/misc/tumble_settings_section.dart';
+
+import '../../../shared/preference_types.dart';
+import 'tumble_app_drawer_tile.dart';
+import 'tumble_settings_section.dart';
 
 typedef HandleDrawerEvent = void Function(Enum eventType);
 
 class TumbleAppDrawer extends StatelessWidget {
   final HandleDrawerEvent handleDrawerEvent;
   final bool limitOptions;
+  final String currentThemeString;
   const TumbleAppDrawer(
-      {Key? key, required this.limitOptions, required this.handleDrawerEvent})
+      {Key? key, required this.limitOptions, required this.handleDrawerEvent, required this.currentThemeString})
       : super(key: key);
 
   @override
@@ -30,9 +36,7 @@ class TumbleAppDrawer extends StatelessWidget {
                   padding: EdgeInsets.symmetric(vertical: 13, horizontal: 20),
                   child: Align(
                     alignment: Alignment.centerLeft,
-                    child: Text('Settings',
-                        style: TextStyle(
-                            fontSize: 26, fontWeight: FontWeight.w400)),
+                    child: Text('Settings', style: TextStyle(fontSize: 26, fontWeight: FontWeight.w400)),
                   )),
             ),
           ),
@@ -59,7 +63,7 @@ class TumbleAppDrawer extends StatelessWidget {
             ),
             TumbleAppDrawerTile(
               drawerTileTitle: "Change theme",
-              subtitle: "Current theme: Dark theme",
+              subtitle: "Current theme: $currentThemeString Theme",
               prefixIcon: CupertinoIcons.device_phone_portrait,
               eventType: EventType.CHANGE_THEME,
               drawerEvent: handleDrawerEvent,

@@ -8,8 +8,7 @@ import 'package:tumble/ui/main_app_widget/main_app_bottom_nav_bar/data/nav_bar_i
 part 'navigation_state.dart';
 
 class MainAppNavigationCubit extends Cubit<MainAppNavigationState> {
-  MainAppNavigationCubit()
-      : super(const MainAppNavigationState(NavbarItem.SEARCH, 0));
+  MainAppNavigationCubit() : super(const MainAppNavigationState(NavbarItem.SEARCH, 0));
 
   void getNavBarItem(NavbarItem navbarItem) {
     switch (navbarItem) {

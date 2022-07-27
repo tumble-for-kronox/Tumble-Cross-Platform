@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:tumble/models/api_models/schedule_model.dart';
-import 'package:tumble/theme/colors.dart';
 import 'package:tumble/ui/main_app_widget/cubit/main_app_cubit.dart';
 import 'package:tumble/ui/main_app_widget/schedule_view_widgets/no_schedule.dart';
+import '../../../../theme/data/colors.dart';
 import 'tumble_list_view_day_container.dart';
 
 class TumbleListView extends StatelessWidget {
