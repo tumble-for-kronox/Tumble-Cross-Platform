@@ -13,7 +13,7 @@ import 'package:tumble/ui/main_app_widget/misc/tumble_app_drawer.dart';
 import 'package:tumble/ui/main_app_widget/schedule_view_widgets/tumble_calendar_view/tumble_calendar_view.dart';
 import 'package:tumble/ui/main_app_widget/schedule_view_widgets/tumble_list_view/tumble_list_view.dart';
 import 'package:tumble/ui/main_app_widget/schedule_view_widgets/tumble_week_view/tumble_week_view.dart';
-import 'package:tumble/ui/main_app_widget/search_page_widgets/search/schedule_search_page.dart';
+import 'package:tumble/ui/main_app_widget/search_page_widgets/search/tumble_search_page.dart';
 
 import 'misc/tumble_app_bar.dart';
 
@@ -48,7 +48,7 @@ class _MainAppNavigationRootState extends State<MainAppNavigationRoot> {
                       .toggleFavorite(context),
                 ),
                 body: FutureBuilder(
-                    future: context.read<MainAppCubit>().initCached(),
+                    future: context.read<MainAppCubit>().initMainAppCubit(),
                     builder: (BuildContext context, AsyncSnapshot snapshot) {
                       switch (navState.navbarItem) {
                         case NavbarItem.SEARCH:

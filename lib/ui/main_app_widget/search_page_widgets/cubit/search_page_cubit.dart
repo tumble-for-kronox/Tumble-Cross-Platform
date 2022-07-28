@@ -13,42 +13,60 @@ import 'package:tumble/startup/get_it_instances.dart';
 part 'search_page_state.dart';
 
 class SearchPageCubit extends Cubit<SearchPageState> {
-  SearchPageCubit() : super(const SearchPageInitial());
-  final _databaseService = locator<DatabaseRepository>();
+  SearchPageCubit()
+      : super(const SearchPageState(
+            false, SearchPageStatus.INITIAL, false, null, null));
+
   final _textEditingController = TextEditingController();
   final FocusNode _focusNode = FocusNode();
-  List<String>? _storedScheduleIds;
-  bool _clearVisible = false;
   final _implementationService = locator<ImplementationRepository>();
 
   TextEditingController get textEditingController => _textEditingController;
-  bool get clearVisible => _clearVisible;
   FocusNode get focusNode => _focusNode;
 
   Future<void> search() async {
-    emit(const SearchPageLoading());
+    emit(state.copyWith(status: SearchPageStatus.LOADING));
     String query = textEditingController.text;
-    ApiResponse res = await _implementationService.getProgramsRequest(query);
-    switch (res.status) {
-      case Status.REQUESTED:
-        ProgramModel program = res.data as ProgramModel;
-        emit(SearchPageFoundSchedules(programList: program.items));
-        break;
-      default:
-        emit(SearchPageNoSchedules(errorType: res.message!));
-        break;
+    ApiResponse apiResponse =
+        await _implementationService.getProgramsRequest(query);
+
+    if (state.focused) {
+      switch (apiResponse.status) {
+        case ApiStatus.REQUESTED:
+          ProgramModel program = apiResponse.data as ProgramModel;
+          emit(state.copyWith(
+              status: SearchPageStatus.FOUND, programList: program.items));
+          break;
+        case ApiStatus.ERROR:
+          emit(state.copyWith(
+              status: SearchPageStatus.ERROR,
+              errorMessage: apiResponse.message));
+          break;
+        default:
+          log('In default');
+          break;
+      }
     }
+    return;
+  }
+
+  void setLoading() {
+    emit(state.copyWith(status: SearchPageStatus.LOADING));
   }
 
   void resetCubit() {
-    _textEditingController.text = '';
-    emit(const SearchPageInitial());
+    _focusNode.unfocus();
+    _textEditingController.clear();
+    emit(state.copyWith(
+        status: SearchPageStatus.INITIAL,
+        clearButtonVisible: false,
+        programList: null,
+        errorMessage: null,
+        focused: false));
   }
 
   Future<void> init() async {
-    _storedScheduleIds = await _databaseService.getAllScheduleIds();
     _focusNode.addListener((setSearchBarFocused));
-    _textEditingController.addListener((setClearButton));
   }
 
   @override
@@ -60,20 +78,10 @@ class SearchPageCubit extends Cubit<SearchPageState> {
 
   setSearchBarFocused() {
     if (_focusNode.hasFocus) {
-      emit(SearchPageFocused(_clearVisible));
+      emit(state.copyWith(clearButtonVisible: true, focused: true));
     } else if (!_focusNode.hasFocus &&
         _textEditingController.text.trim().isEmpty) {
-      emit(const SearchPageInitial());
-    }
-  }
-
-  setClearButton() {
-    if (_textEditingController.text.isEmpty) {
-      _clearVisible = false;
-      emit(state);
-    } else {
-      _clearVisible = true;
-      emit(state);
+      emit(state.copyWith(clearButtonVisible: false, focused: false));
     }
   }
 }

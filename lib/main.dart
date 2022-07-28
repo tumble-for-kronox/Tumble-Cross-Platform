@@ -17,12 +17,13 @@ import 'package:tumble/ui/main_app_widget/main_app_bottom_nav_bar/tumble_navigat
 import 'package:tumble/ui/main_app_widget/main_app_navigation_root.dart';
 import 'package:tumble/ui/main_app_widget/schedule_view_widgets/tumble_calendar_view/tumble_calendar_view.dart';
 import 'package:tumble/ui/main_app_widget/misc/tumble_app_bar.dart';
+import 'package:tumble/ui/main_app_widget/schedule_view_widgets/tumble_calendar_view/tumble_calendar_view.dart';
 import 'package:tumble/ui/main_app_widget/schedule_view_widgets/tumble_list_view/tumble_list_view.dart';
 import 'package:tumble/ui/main_app_widget/schedule_view_widgets/tumble_week_view/tumble_week_view.dart';
 import 'package:tumble/ui/main_app_widget/school_selection_page.dart';
 import 'package:tumble/ui/main_app_widget/search_page_widgets/cubit/search_page_cubit.dart';
 import 'package:tumble/ui/main_app_widget/search_page_widgets/search/schedule_search_bar.dart';
-import 'package:tumble/ui/main_app_widget/search_page_widgets/search/schedule_search_page.dart';
+import 'package:tumble/ui/main_app_widget/search_page_widgets/search/tumble_search_page.dart';
 import 'package:tumble/ui/main_app_widget/search_page_widgets/search_bar_widget/searchbar_and_logo_container.dart';
 
 void main() async {
@@ -42,6 +43,9 @@ void main() async {
       create: (c) => MainAppNavigationCubit(),
       child: Row(
         children: const [
+          TumbleListView(),
+          TumbleWeekView(),
+          TumbleCalendarView(),
           TumbleNavigationBar(),
           MainAppNavigationRoot(),
           TumbleSearchPage()
@@ -65,7 +69,11 @@ void main() async {
     ),
     BlocProvider<SearchPageCubit>(
       create: (c) => SearchPageCubit(),
-      child: Row(children: const [TumbleSearchPage(), ScheduleSearchBar(), SearchBarAndLogoContainer()]),
+      child: Row(children: const [
+        TumbleSearchPage(),
+        ScheduleSearchBar(),
+        SearchBarAndLogoContainer()
+      ]),
     ),
     BlocProvider<ThemeCubit>(
       create: (c) => ThemeCubit()..getCurrentTheme(),

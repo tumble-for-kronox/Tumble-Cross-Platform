@@ -3,9 +3,9 @@ class DatabaseResponse<T> {
   T? data;
   String? message;
 
-  DatabaseResponse.initial(this.message) : status = Status.INITIAL;
+  DatabaseResponse.initial(this.message) : status = Status.NO_SCHOOL;
 
-  DatabaseResponse.hasDefault(this.data) : status = Status.HAS_DEFAULT;
+  DatabaseResponse.hasDefault(this.data) : status = Status.HAS_SCHOOL;
 
   @override
   String toString() {
@@ -14,4 +14,4 @@ class DatabaseResponse<T> {
 }
 
 // ignore: constant_identifier_names
-enum Status { INITIAL, HAS_DEFAULT }
+enum Status { NO_SCHOOL, HAS_SCHOOL }

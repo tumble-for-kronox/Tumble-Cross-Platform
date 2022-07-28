@@ -9,7 +9,7 @@ class ScheduleCardRibbon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        margin: const EdgeInsets.only(top: 9, right: 20),
+        margin: const EdgeInsets.only(top: 9, right: 9),
         alignment: Alignment.topRight,
         child: Image(
             width: 50,
