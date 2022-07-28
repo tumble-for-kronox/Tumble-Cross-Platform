@@ -12,25 +12,24 @@ import 'package:tumble/ui/main_app_widget/cubit/main_app_cubit.dart';
 part 'init_state.dart';
 
 class InitCubit extends Cubit<InitState> {
-  InitCubit() : super(const InitStateInitial());
+  InitCubit() : super(const InitState(defaultSchool: null, status: InitStatus.INITIAL));
 
   final _implementationService = locator<ImplementationRepository>();
 
   Future<void> init() async {
-    DatabaseResponse _databaseResponse =
-        await _implementationService.initSetup();
-    switch (_databaseResponse.status) {
-      case Status.INITIAL:
-        emit(const InitStateInitial());
+    DatabaseResponse databaseResponse = await _implementationService.initSetup();
+    switch (databaseResponse.status) {
+      case Status.NO_SCHOOL:
+        emit(state);
         break;
-      case Status.HAS_DEFAULT:
-        emit(InitStateHasSchool(_databaseResponse.data));
+      case Status.HAS_SCHOOL:
+        emit(InitState(defaultSchool: databaseResponse.data, status: InitStatus.HAS_SCHOOL));
         break;
     }
   }
 
   void setup(String schoolName) {
-    setupRequiredSharedPreferences(schoolName);
-    emit(InitStateHasSchool(schoolName));
+    locator<SharedPreferences>().setString(PreferenceTypes.school, schoolName);
+    emit(state.copyWith(defaultSchool: schoolName));
   }
 }

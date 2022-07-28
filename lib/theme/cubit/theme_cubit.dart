@@ -16,11 +16,11 @@ class ThemeCubit extends Cubit<ThemeState> {
                 .getString(PreferenceTypes.theme)!
                 .capitalize()));
 
-  final ThemePersistense _themeRepository = locator<ThemeRepository>();
+  final ThemePersistense themeRepository = locator<ThemeRepository>();
   late StreamSubscription<CustomTheme> _themeSubscription;
 
   void getCurrentTheme() {
-    _themeSubscription = _themeRepository.getTheme().listen((customTheme) {
+    _themeSubscription = themeRepository.getTheme().listen((customTheme) {
       switch (customTheme) {
         case CustomTheme.light:
           emit(state.copyWith(themeMode: ThemeMode.light));
@@ -41,7 +41,7 @@ class ThemeCubit extends Cubit<ThemeState> {
   @override
   Future<void> close() {
     _themeSubscription.cancel();
-    _themeRepository.dispose();
+    themeRepository.dispose();
     return super.close();
   }
 }

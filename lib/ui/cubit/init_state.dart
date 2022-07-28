@@ -1,23 +1,16 @@
 part of 'init_cubit.dart';
 
-@immutable
+// ignore: constant_identifier_names
+enum InitStatus { INITIAL, NO_SCHOOL, HAS_SCHOOL }
+
 class InitState extends Equatable {
-  const InitState();
-  @override
-  List<Object?> get props => [];
-}
+  final InitStatus status;
+  final String? defaultSchool;
+  const InitState({required this.defaultSchool, required this.status});
 
-class InitStateInitial extends InitState {
-  const InitStateInitial();
-}
-
-class InitStateNoSchool extends InitState {
-  const InitStateNoSchool();
-}
-
-class InitStateHasSchool extends InitState {
-  final String defaultSchool;
-  const InitStateHasSchool(this.defaultSchool);
+  InitState copyWith({InitStatus? status, String? defaultSchool}) => InitState(
+      defaultSchool: defaultSchool ?? this.defaultSchool,
+      status: status ?? this.status);
 
   @override
   List<Object?> get props => [defaultSchool];

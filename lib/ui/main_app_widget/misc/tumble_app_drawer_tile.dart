@@ -28,11 +28,14 @@ class TumbleAppDrawerTile extends StatelessWidget {
         onPressed: () => drawerEvent(eventType),
         child: Row(
           children: [
-            SizedBox(
-              width: 35,
-              child: Icon(
-                prefixIcon,
-                color: Theme.of(context).colorScheme.onBackground,
+            Padding(
+              padding: const EdgeInsets.only(right: 10),
+              child: SizedBox(
+                width: 35,
+                child: Icon(
+                  prefixIcon,
+                  color: Theme.of(context).colorScheme.onBackground,
+                ),
               ),
             ),
             Column(
@@ -63,7 +66,7 @@ class TumbleAppDrawerTile extends StatelessWidget {
                   ),
                 )
               ],
-            )
+            ),
           ],
         ),
       ),

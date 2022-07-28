@@ -1,35 +1,63 @@
+// ignore_for_file: constant_identifier_names
+
 part of 'main_app_cubit.dart';
 
-abstract class MainAppState extends Equatable {
-  const MainAppState();
+enum MainAppStatus {
+  INITIAL,
+  LOADING,
+  SCHEDULE_SELECTED,
+  FETCH_ERROR,
+  EMPTY_SCHEDULE
 }
 
-class MainAppInitial extends MainAppState {
-  final String? fetchErrorType;
-  const MainAppInitial(this.fetchErrorType);
-
-  @override
-  List<Object?> get props => [fetchErrorType];
-}
-
-class MainAppLoading extends MainAppState {
-  const MainAppLoading();
-
-  @override
-  List<Object?> get props => [];
-}
-
-class MainAppScheduleSelected extends MainAppState {
+class MainAppState extends Equatable {
+  final MainAppStatus status;
   final bool toggledFavorite;
-  final String currentScheduleId;
-  final List<Day> listOfDays;
-  final List<Week> listOfWeeks;
-  const MainAppScheduleSelected(
-      {required this.currentScheduleId,
+  final bool listViewToTopButtonVisible;
+  final String? currentScheduleId;
+  final List<Day>? listOfDays;
+  final List<Week>? listOfWeeks;
+  final String? message;
+  final ScheduleModel? scheduleModel;
+  const MainAppState(
+      {required this.status,
+      required this.scheduleModel,
+      required this.currentScheduleId,
       required this.listOfDays,
       required this.listOfWeeks,
-      required this.toggledFavorite});
+      required this.toggledFavorite,
+      required this.listViewToTopButtonVisible,
+      required this.message});
+
+  MainAppState copyWith(
+          {MainAppStatus? status,
+          bool? toggledFavorite,
+          bool? listViewToTopButtonVisible,
+          String? currentScheduleId,
+          List<Day>? listOfDays,
+          List<Week>? listOfWeeks,
+          String? message,
+          ScheduleModel? scheduleModel}) =>
+      MainAppState(
+          status: status ?? this.status,
+          toggledFavorite: toggledFavorite ?? this.toggledFavorite,
+          listViewToTopButtonVisible:
+              listViewToTopButtonVisible ?? this.listViewToTopButtonVisible,
+          currentScheduleId: currentScheduleId ?? this.currentScheduleId,
+          listOfDays: listOfDays ?? this.listOfDays,
+          listOfWeeks: listOfWeeks ?? this.listOfWeeks,
+          message: message ?? this.message,
+          scheduleModel: scheduleModel ?? this.scheduleModel);
 
   @override
-  List<Object?> get props => [currentScheduleId, listOfDays, listOfWeeks, toggledFavorite];
+  List<Object?> get props => [
+        status,
+        currentScheduleId,
+        listOfDays,
+        listOfWeeks,
+        toggledFavorite,
+        listViewToTopButtonVisible,
+        message,
+        scheduleModel
+      ];
 }

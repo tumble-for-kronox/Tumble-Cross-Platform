@@ -28,9 +28,16 @@ class ScheduleCard extends StatelessWidget {
               margin: const EdgeInsets.only(top: 9, left: 10, right: 10),
               alignment: Alignment.topLeft,
               decoration: BoxDecoration(
-                  color: event.isSpecial ? Theme.of(context).colorScheme.primary : Theme.of(context).cardColor,
+                  color: event.isSpecial
+                      ? Theme.of(context).colorScheme.primary
+                      : Theme.of(context).cardColor,
                   borderRadius: BorderRadius.circular(5),
-                  boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 1, offset: Offset(0, 1))]),
+                  boxShadow: const [
+                    BoxShadow(
+                        color: Colors.black26,
+                        blurRadius: 1,
+                        offset: Offset(0, 1))
+                  ]),
               child: MaterialButton(
                   padding: const EdgeInsets.all(0),
                   onPressed: onTap,
@@ -48,7 +55,9 @@ class ScheduleCard extends StatelessWidget {
                                 style: TextStyle(
                                   color: event.isSpecial
                                       ? CustomColors.lightColors.secondary
-                                      : Theme.of(context).colorScheme.onSecondary,
+                                      : Theme.of(context)
+                                          .colorScheme
+                                          .onSecondary,
                                   fontSize: 19,
                                   fontWeight: FontWeight.w400,
                                 )),
@@ -62,20 +71,27 @@ class ScheduleCard extends StatelessWidget {
                                         overflow: TextOverflow.ellipsis,
                                         style: TextStyle(
                                           color: event.isSpecial
-                                              ? CustomColors.lightColors.secondary
-                                              : Theme.of(context).colorScheme.onSecondary,
+                                              ? CustomColors
+                                                  .lightColors.secondary
+                                              : Theme.of(context)
+                                                  .colorScheme
+                                                  .onSecondary,
                                           fontSize: 16,
                                           fontWeight: FontWeight.w300,
                                         ))),
                                 ScheduleCardLocationContainer(
                                     textColor: event.isSpecial
                                         ? CustomColors.lightColors.secondary
-                                        : Theme.of(context).colorScheme.onSecondary,
+                                        : Theme.of(context)
+                                            .colorScheme
+                                            .onSecondary,
                                     locations: event.locations),
                                 ScheduleCardTimeStamp(
                                     textColor: event.isSpecial
                                         ? CustomColors.lightColors.secondary
-                                        : Theme.of(context).colorScheme.onSecondary,
+                                        : Theme.of(context)
+                                            .colorScheme
+                                            .onSecondary,
                                     timeStart: event.timeStart,
                                     timeEnd: event.timeEnd)
                               ],
@@ -84,7 +100,7 @@ class ScheduleCard extends StatelessWidget {
                         ],
                       ))),
             ),
-            ScheduleCardRibbon(color: '#cccccc')
+            const ScheduleCardRibbon(color: '#cccccc')
           ],
         ));
   }

@@ -40,10 +40,11 @@ class _MainAppState extends State<MainApp> {
                 builder: (context, snapshot) {
                   return BlocBuilder<InitCubit, InitState>(
                     builder: (context, state) {
-                      switch (state.runtimeType) {
-                        case InitStateHasSchool:
+                      switch (state.status) {
+                        case InitStatus.HAS_SCHOOL:
                           return const MainAppNavigationRoot();
-                        default:
+                        case InitStatus.INITIAL:
+                        case InitStatus.NO_SCHOOL:
                           return const SchoolSelectionPage();
                       }
                     },
