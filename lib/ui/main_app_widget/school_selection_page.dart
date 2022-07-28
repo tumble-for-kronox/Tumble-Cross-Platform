@@ -41,15 +41,11 @@ class _SchoolSelectionPageState extends State<SchoolSelectionPage> {
                 Column(
                   children: Schools.schools
                       .map((school) => SchoolCard(
-                            schoolName: school.schoolName,
-                            schoolId: school.schoolId,
-                            schoolLogo: school.schoolLogo,
-                            selectSchool: (schoolName) => {
-                              context
-                                  .read<InitCubit>()
-                                  .setup(schoolName, context)
-                            },
-                          ))
+                          schoolName: school.schoolName,
+                          schoolId: school.schoolId,
+                          schoolLogo: school.schoolLogo,
+                          selectSchool: () =>
+                              context.read<InitCubit>().setup(context, school)))
                       .toList(),
                 ),
               ],

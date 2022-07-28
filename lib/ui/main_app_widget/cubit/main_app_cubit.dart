@@ -174,7 +174,7 @@ class MainAppCubit extends Cubit<MainAppState> {
 
   void scrollToTop() {
     _listViewScrollController.animateTo(0,
-        duration: const Duration(seconds: 1), curve: Curves.linear);
+        duration: const Duration(seconds: 1), curve: Curves.easeInOut);
   }
 
   setLoading() {

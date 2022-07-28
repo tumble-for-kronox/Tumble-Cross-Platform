@@ -7,12 +7,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tumble/api/repository/implementation_repository.dart';
 import 'package:tumble/database/database_response.dart';
-import 'package:tumble/database/repository/database_repository.dart';
+import 'package:tumble/models/ui_models/school_model.dart';
 import 'package:tumble/shared/preference_types.dart';
 import 'package:tumble/shared/setup.dart';
 import 'package:tumble/startup/get_it_instances.dart';
 import 'package:tumble/ui/main_app_widget/cubit/main_app_cubit.dart';
 import 'package:tumble/ui/main_app_widget/main_app_navigation_root.dart';
+
+import '../main_app_widget/login_page/login_page_root.dart';
+import '../main_app_widget/main_app_navigation_root.dart';
 
 part 'init_state.dart';
 
@@ -21,6 +24,7 @@ class InitCubit extends Cubit<InitState> {
       : super(const InitState(defaultSchool: null, status: InitStatus.INITIAL));
 
   final _implementationService = locator<ImplementationRepository>();
+  final _sharedPrefs = locator<SharedPreferences>();
 
   Future<void> init() async {
     log('here');
@@ -28,7 +32,7 @@ class InitCubit extends Cubit<InitState> {
         await _implementationService.initSetup();
     switch (databaseResponse.status) {
       case Status.NO_SCHOOL:
-        emit(state);
+        emit(const InitState(defaultSchool: null, status: InitStatus.INITIAL));
         break;
       case Status.HAS_SCHOOL:
         emit(InitState(
@@ -38,18 +42,24 @@ class InitCubit extends Cubit<InitState> {
     }
   }
 
-  void setup(String schoolName, BuildContext context) {
-    locator<SharedPreferences>().clear();
+  void changeSchool(BuildContext context, School school) {
+    _sharedPrefs.clear();
     setupRequiredSharedPreferences();
-    locator<SharedPreferences>().setString(PreferenceTypes.school, schoolName);
-    if (state.status == InitStatus.INITIAL) {
-      emit(InitState(defaultSchool: schoolName, status: InitStatus.HAS_SCHOOL));
+    _sharedPrefs.setString(PreferenceTypes.school, school.schoolName);
+    emit(InitState(
+        defaultSchool: school.schoolName, status: InitStatus.HAS_SCHOOL));
+    Navigator.of(context).pushAndRemoveUntil(
+        CupertinoPageRoute(builder: (context) => const MainAppNavigationRoot()),
+        (Route<dynamic> route) => false);
+    log("Changed school: ${school.schoolName}");
+  }
+
+  void setup(BuildContext context, School school) async {
+    if (school.loginRequired) {
+      Navigator.of(context).push(
+          CupertinoPageRoute(builder: (context) => const LoginPageRoot()));
     } else {
-      emit(state.copyWith(defaultSchool: schoolName));
-      Navigator.of(context).pushAndRemoveUntil(
-          CupertinoPageRoute(
-              builder: (context) => const MainAppNavigationRoot()),
-          (Route<dynamic> route) => false);
+      changeSchool(context, school);
     }
   }
 }

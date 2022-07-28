@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:tumble/helpers/school_enum.dart';
-
-typedef SelectSchool = void Function(String schoolName);
+import 'package:tumble/models/ui_models/school_model.dart';
 
 class SchoolCard extends StatelessWidget {
   final SchoolEnum schoolId;
   final String schoolName;
   final String schoolLogo;
-  final SelectSchool selectSchool;
+  final VoidCallback selectSchool;
 
   const SchoolCard({
     Key? key,
@@ -35,7 +34,7 @@ class SchoolCard extends StatelessWidget {
           ]),
       child: MaterialButton(
         padding: const EdgeInsets.all(0),
-        onPressed: () => selectSchool(schoolName),
+        onPressed: selectSchool,
         child: Row(
           children: [
             const SizedBox(
