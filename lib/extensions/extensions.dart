@@ -25,14 +25,32 @@ extension ResponseParsing on Response {
     }
     return ApiResponse.error(FetchResponse.fetchEerror);
   }
-}
 
-extension ScheduleParsing on ScheduleModel {
-  List<Week> splitToWeek() {
-    return groupBy(days, (Day day) => day.weekNumber)
-        .entries
-        .map((weekNumberToDayList) => Week(weekNumber: weekNumberToDayList.key, days: weekNumberToDayList.value))
-        .toList();
+  ApiResponse parseUser() {
+    if (statusCode == 200) {
+      return ApiResponse.completed("");
+    } else if (statusCode == 401) {
+      return ApiResponse.error(FetchResponse.loginError);
+    }
+    return ApiResponse.error(FetchResponse.unknownError);
+  }
+
+  ApiResponse parseUserEvents() {
+    if (statusCode == 200) {
+      return ApiResponse.completed("");
+    } else if (statusCode == 401) {
+      return ApiResponse.error(FetchResponse.authenticationError);
+    }
+    return ApiResponse.error(FetchResponse.unknownError);
+  }
+
+  ApiResponse parseRegisterOrUnregister() {
+    if (statusCode == 200) {
+      return ApiResponse.completed(true);
+    } else if (statusCode == 401) {
+      return ApiResponse.error(FetchResponse.authenticationError);
+    }
+    return ApiResponse.error(FetchResponse.unknownError);
   }
 }
 
@@ -49,6 +67,42 @@ extension HttpClientResponseParsing on HttpClientResponse {
       return ApiResponse.completed(scheduleModelFromJson(await transform(utf8.decoder).join()));
     }
     return ApiResponse.error(FetchResponse.fetchEerror);
+  }
+
+  Future<ApiResponse> parseUser() async {
+    if (statusCode == 200) {
+      return ApiResponse.completed("");
+    } else if (statusCode == 401) {
+      return ApiResponse.error(FetchResponse.loginError);
+    }
+    return ApiResponse.error(FetchResponse.unknownError);
+  }
+
+  Future<ApiResponse> parseUserEvents() async {
+    if (statusCode == 200) {
+      return ApiResponse.completed("");
+    } else if (statusCode == 401) {
+      return ApiResponse.error(FetchResponse.authenticationError);
+    }
+    return ApiResponse.error(FetchResponse.unknownError);
+  }
+
+  ApiResponse parseRegisterOrUnregister() {
+    if (statusCode == 200) {
+      return ApiResponse.completed(true);
+    } else if (statusCode == 401) {
+      return ApiResponse.error(FetchResponse.authenticationError);
+    }
+    return ApiResponse.error(FetchResponse.unknownError);
+  }
+}
+
+extension ScheduleParsing on ScheduleModel {
+  List<Week> splitToWeek() {
+    return groupBy(days, (Day day) => day.weekNumber)
+        .entries
+        .map((weekNumberToDayList) => Week(weekNumber: weekNumberToDayList.key, days: weekNumberToDayList.value))
+        .toList();
   }
 }
 
