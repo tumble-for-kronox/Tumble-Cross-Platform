@@ -35,7 +35,7 @@ Future<void> setupKronoxSession() async {
   final storedPassword = await secureStorage.read(key: SecureStorageKeys.password);
 
   if (storedUsername != null && storedPassword != null) {
-    ApiResponse<KronoxUserModel?> loggedInUser = await userRepository.postUserLogin(storedUsername, storedUsername);
+    ApiResponse loggedInUser = await userRepository.postUserLogin(storedUsername, storedUsername);
 
     switch (loggedInUser.status) {
       case ApiStatus.REQUESTED:

@@ -12,6 +12,7 @@ import 'package:tumble/shared/preference_types.dart';
 import 'package:tumble/shared/setup.dart';
 import 'package:tumble/startup/get_it_instances.dart';
 import 'package:tumble/ui/main_app_widget/cubit/main_app_cubit.dart';
+import 'package:tumble/ui/main_app_widget/login_page/cubit/login_page_state.dart';
 
 import '../main_app_widget/login_page/login_page_root.dart';
 import '../main_app_widget/main_app_navigation_root.dart';
@@ -48,6 +49,7 @@ class InitCubit extends Cubit<InitState> {
 
   void setup(BuildContext context, School school) async {
     if (school.loginRequired) {
+      context.read<LoginPageCubit>().setSchool(school);
       Navigator.of(context).push(CupertinoPageRoute(builder: (context) => const LoginPageRoot()));
     } else {
       changeSchool(context, school);

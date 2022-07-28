@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -72,6 +73,7 @@ extension HttpClientResponseParsing on HttpClientResponse {
   }
 
   Future<ApiResponse> parseUser() async {
+    log("Login status: $statusCode");
     if (statusCode == 200) {
       return ApiResponse.completed(kronoxUserModelFromJson(await transform(utf8.decoder).join()));
     } else if (statusCode == 401) {

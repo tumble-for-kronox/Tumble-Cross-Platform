@@ -25,7 +25,7 @@ class UserRepository implements IUserService {
   }
 
   @override
-  Future<ApiResponse<KronoxUserModel?>> postUserLogin(String? username, String? password) async {
+  Future<ApiResponse> postUserLogin(String? username, String? password) async {
     final school = _sharedPrefs.getString(PreferenceTypes.school)!;
     username ??= await _secureStorage.read(key: SecureStorageKeys.username);
     password ??= await _secureStorage.read(key: SecureStorageKeys.password);
