@@ -9,9 +9,9 @@ import 'dart:convert';
 part 'kronox_user_model.freezed.dart';
 part 'kronox_user_model.g.dart';
 
-KronoxUserModel kronoxUserFromJson(String str) => KronoxUserModel.fromJson(json.decode(str));
+KronoxUserModel kronoxUserModelFromJson(String str) => KronoxUserModel.fromJson(json.decode(str));
 
-String kronoxUserToJson(KronoxUserModel data) => json.encode(data.toJson());
+Map<String, dynamic> kronoxUserModelToJson(KronoxUserModel data) => data.toJson();
 
 @freezed
 abstract class KronoxUserModel with _$KronoxUserModel {

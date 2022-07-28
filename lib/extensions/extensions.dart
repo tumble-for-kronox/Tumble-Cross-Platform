@@ -6,9 +6,11 @@ import 'package:http/http.dart';
 import 'package:string_to_hex/string_to_hex.dart';
 import 'package:tumble/api/apiservices/api_response.dart';
 import 'package:tumble/api/apiservices/fetch_response.dart';
+import 'package:tumble/models/api_models/kronox_user_model.dart';
 import 'package:tumble/models/api_models/program_model.dart';
 import 'package:tumble/models/api_models/schedule_model.dart';
 import "package:collection/collection.dart";
+import 'package:tumble/models/api_models/user_event_collection_model.dart';
 import 'package:tumble/models/ui_models/week_model.dart';
 
 extension ResponseParsing on Response {
@@ -28,7 +30,7 @@ extension ResponseParsing on Response {
 
   ApiResponse parseUser() {
     if (statusCode == 200) {
-      return ApiResponse.completed("");
+      return ApiResponse.completed(kronoxUserModelFromJson(body));
     } else if (statusCode == 401) {
       return ApiResponse.error(FetchResponse.loginError);
     }
@@ -37,7 +39,7 @@ extension ResponseParsing on Response {
 
   ApiResponse parseUserEvents() {
     if (statusCode == 200) {
-      return ApiResponse.completed("");
+      return ApiResponse.completed(userEventCollectionModelFromJson(body));
     } else if (statusCode == 401) {
       return ApiResponse.error(FetchResponse.authenticationError);
     }
@@ -71,7 +73,7 @@ extension HttpClientResponseParsing on HttpClientResponse {
 
   Future<ApiResponse> parseUser() async {
     if (statusCode == 200) {
-      return ApiResponse.completed("");
+      return ApiResponse.completed(kronoxUserModelFromJson(await transform(utf8.decoder).join()));
     } else if (statusCode == 401) {
       return ApiResponse.error(FetchResponse.loginError);
     }
@@ -80,7 +82,7 @@ extension HttpClientResponseParsing on HttpClientResponse {
 
   Future<ApiResponse> parseUserEvents() async {
     if (statusCode == 200) {
-      return ApiResponse.completed("");
+      return ApiResponse.completed(userEventCollectionModelFromJson(await transform(utf8.decoder).join()));
     } else if (statusCode == 401) {
       return ApiResponse.error(FetchResponse.authenticationError);
     }
