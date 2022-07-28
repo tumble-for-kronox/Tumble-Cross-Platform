@@ -37,24 +37,7 @@ class _MainAppNavigationRootState extends State<MainAppNavigationRoot> {
         return BlocBuilder<ThemeCubit, ThemeState>(
           builder: ((context, themeState) {
             return Scaffold(
-                endDrawer: TumbleAppDrawer(
-                  defaultSchool: Schools.schools
-                      .firstWhere((school) =>
-                          school.schoolName ==
-                          context
-                              .read<MainAppCubit>()
-                              .sharedPrefs
-                              .getString(PreferenceTypes.school))
-                      .schoolId
-                      .name
-                      .toUpperCase(),
-                  viewType: "",
-                  handleDrawerEvent: (eventType) => context
-                      .read<MainAppCubit>()
-                      .handleDrawerEvent(eventType, context),
-                  limitOptions: false,
-                  currentThemeString: themeState.themeString,
-                ),
+                endDrawer: TumbleAppDrawer(),
                 appBar: TumbleAppBar(
                   visibleBookmark: navState.index == 1 ||
                       navState.index == 2 ||

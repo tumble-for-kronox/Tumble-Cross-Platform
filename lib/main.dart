@@ -16,6 +16,7 @@ import 'package:tumble/ui/main_app_widget/main_app.dart';
 import 'package:tumble/ui/main_app_widget/main_app_bottom_nav_bar/cubit/bottom_nav_cubit.dart';
 import 'package:tumble/ui/main_app_widget/main_app_bottom_nav_bar/tumble_navigation_bar.dart';
 import 'package:tumble/ui/main_app_widget/main_app_navigation_root.dart';
+import 'package:tumble/ui/main_app_widget/misc/tumble_app_drawer.dart';
 import 'package:tumble/ui/main_app_widget/schedule_view_widgets/tumble_calendar_view/tumble_calendar_view.dart';
 import 'package:tumble/ui/main_app_widget/misc/tumble_app_bar.dart';
 import 'package:tumble/ui/main_app_widget/schedule_view_widgets/tumble_calendar_view/tumble_calendar_view.dart';
@@ -26,6 +27,8 @@ import 'package:tumble/ui/main_app_widget/search_page_widgets/cubit/search_page_
 import 'package:tumble/ui/main_app_widget/search_page_widgets/search/schedule_search_bar.dart';
 import 'package:tumble/ui/main_app_widget/search_page_widgets/search/tumble_search_page.dart';
 import 'package:tumble/ui/main_app_widget/search_page_widgets/search_bar_widget/searchbar_and_logo_container.dart';
+
+import 'ui/main_app_widget/misc/tumble_drawer/cubit/drawer_state.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -71,11 +74,19 @@ void main() async {
     ),
     BlocProvider<SearchPageCubit>(
       create: (c) => SearchPageCubit(),
-      child: Row(children: const [TumbleSearchPage(), ScheduleSearchBar(), SearchBarAndLogoContainer()]),
+      child: Row(children: const [
+        TumbleSearchPage(),
+        ScheduleSearchBar(),
+        SearchBarAndLogoContainer()
+      ]),
     ),
     BlocProvider<ThemeCubit>(
       create: (c) => ThemeCubit()..getCurrentTheme(),
       child: Row(children: const [MainApp()]),
     ),
+    BlocProvider<DrawerCubit>(
+      create: (c) => DrawerCubit(),
+      child: const TumbleAppDrawer(),
+    )
   ], child: const MainApp()));
 }

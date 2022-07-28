@@ -44,81 +44,10 @@ class MainAppCubit extends Cubit<MainAppState> {
   final _sharedPrefs = locator<SharedPreferences>();
   final _implementationService = locator<ImplementationRepository>();
   final _databaseService = locator<DatabaseRepository>();
-  final _themeRepository = locator<ThemeRepository>();
   final ScrollController _listViewScrollController = ScrollController();
 
   ScrollController get controller => _listViewScrollController;
   SharedPreferences get sharedPrefs => _sharedPrefs;
-
-  void handleDrawerEvent(Enum eventType, BuildContext context) {
-    switch (eventType) {
-      case EventType.CANCEL_ALL_NOTIFICATIONS:
-
-        /// Cancel all notifications
-        break;
-      case EventType.CANCEL_NOTIFICATIONS_FOR_PROGRAM:
-
-        /// Cancel all notifications tied to this schedule id
-        break;
-      case EventType.CHANGE_SCHOOL:
-        Navigator.of(context).push(
-          CupertinoPageRoute(builder: (context) => const SchoolSelectionPage()),
-        );
-        break;
-      case EventType.CHANGE_THEME:
-        Get.bottomSheet(AppThemePicker(setTheme: (themeType) {
-          changeTheme(themeType);
-          Navigator.of(context).pop();
-        }));
-        break;
-      case EventType.CONTACT:
-
-        /// Direct user to support page
-        break;
-      case EventType.EDIT_NOTIFICATION_TIME:
-        Get.bottomSheet(AppNotificationTimePicker(
-          setNotificationTime: (int time) => locator<SharedPreferences>()
-              .setInt(PreferenceTypes.notificationTime, time),
-        ));
-        break;
-      case EventType.SET_DEFAULT_SCHEDULE:
-        final List<String>? bookmarks = locator<SharedPreferences>()
-            .getStringList(PreferenceTypes.favorites);
-        log(bookmarks.toString());
-        if (bookmarks != null) {
-          Get.bottomSheet(AppDefaultSchedulePicker(
-              scheduleIds: bookmarks,
-              setDefaultSchedule: (newId) {
-                _sharedPrefs.setString(PreferenceTypes.schedule, newId);
-                Navigator.of(context).pop();
-              }));
-        }
-        break;
-      case EventType.SET_DEFAULT_VIEW:
-        Get.bottomSheet(AppDefaultViewPicker(
-          setDefaultView: (int viewType) => locator<SharedPreferences>()
-              .setInt(PreferenceTypes.view, viewType),
-        ));
-        break;
-    }
-  }
-
-  void changeTheme(String themeString) {
-    switch (themeString) {
-      case "light":
-        _themeRepository.saveTheme(CustomTheme.light);
-        break;
-      case "dark":
-        _themeRepository.saveTheme(CustomTheme.dark);
-        break;
-      case "system":
-        _themeRepository.saveTheme(CustomTheme.system);
-        break;
-      default:
-        _themeRepository.saveTheme(CustomTheme.system);
-        break;
-    }
-  }
 
   Future<void> toggleFavorite(BuildContext context) async {
     final currentFavorites =
