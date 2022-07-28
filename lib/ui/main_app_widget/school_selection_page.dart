@@ -19,7 +19,6 @@ class SchoolSelectionPage extends StatefulWidget {
 class _SchoolSelectionPageState extends State<SchoolSelectionPage> {
   @override
   Widget build(BuildContext context) {
-    log(context.read<InitCubit>().state.status.toString());
     return Scaffold(
       extendBodyBehindAppBar: true,
       body: Container(

@@ -50,7 +50,8 @@ class DrawerCubit extends Cubit<DrawerState> {
       case EventType.SET_DEFAULT_SCHEDULE:
         final List<String>? bookmarks = locator<SharedPreferences>()
             .getStringList(PreferenceTypes.favorites);
-        if (bookmarks != null) {
+        log(bookmarks.toString());
+        if (bookmarks != null && bookmarks.isNotEmpty) {
           Get.bottomSheet(AppDefaultSchedulePicker(
               scheduleIds: bookmarks,
               setDefaultSchedule: (newId) {
@@ -64,7 +65,6 @@ class DrawerCubit extends Cubit<DrawerState> {
       case EventType.SET_DEFAULT_VIEW:
         Get.bottomSheet(AppDefaultViewPicker(
           setDefaultView: (viewType) {
-            log(viewType.toString());
             locator<SharedPreferences>().setInt(PreferenceTypes.view, viewType);
             emit(state.copyWith(
                 viewType: ScheduleViewTypes.viewTypesMap[viewType]));

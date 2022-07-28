@@ -56,7 +56,6 @@ class MainAppCubit extends Cubit<MainAppState> {
       _toggleSave(currentFavorites);
       showScaffoldMessage(context, "Saved schedule to bookmarks");
     }
-    log(currentFavorites.toString());
   }
 
   void _toggleRemove(List<String> currentFavorites) async {
@@ -77,6 +76,9 @@ class MainAppCubit extends Cubit<MainAppState> {
     emit(state.copyWith(toggledFavorite: true));
 
     _sharedPrefs.setStringList(PreferenceTypes.favorites, currentFavorites);
+    log(locator<SharedPreferences>()
+        .getStringList(PreferenceTypes.favorites)
+        .toString());
   }
 
   Future<void> initCached() async {

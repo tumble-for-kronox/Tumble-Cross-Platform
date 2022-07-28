@@ -28,7 +28,9 @@ void setupRequiredSharedPreferences() {
   possibleSchool == null
       ? null
       : sharedPrefs.setString(PreferenceTypes.school, possibleSchool);
-  sharedPrefs.setStringList(PreferenceTypes.favorites, <String>[]);
+  sharedPrefs.getStringList(PreferenceTypes.favorites) == null
+      ? sharedPrefs.setStringList(PreferenceTypes.favorites, <String>[])
+      : null;
 }
 
 Future<void> setupKronoxSession() async {

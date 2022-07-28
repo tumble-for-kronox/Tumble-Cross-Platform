@@ -27,7 +27,6 @@ class InitCubit extends Cubit<InitState> {
   final _sharedPrefs = locator<SharedPreferences>();
 
   Future<void> init() async {
-    log('here');
     DatabaseResponse databaseResponse =
         await _implementationService.initSetup();
     switch (databaseResponse.status) {
@@ -51,7 +50,6 @@ class InitCubit extends Cubit<InitState> {
     Navigator.of(context).pushAndRemoveUntil(
         CupertinoPageRoute(builder: (context) => const MainAppNavigationRoot()),
         (Route<dynamic> route) => false);
-    log("Changed school: ${school.schoolName}");
   }
 
   void setup(BuildContext context, School school) async {
