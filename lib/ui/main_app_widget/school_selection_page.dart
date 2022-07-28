@@ -42,9 +42,7 @@ class _SchoolSelectionPageState extends State<SchoolSelectionPage> {
                             schoolId: school.schoolId,
                             schoolLogo: school.schoolLogo,
                             onTap: () {
-                              context
-                                  .read<InitCubit>()
-                                  .setup(school.schoolName);
+                              context.read<InitCubit>().setup(context, school);
                             },
                           ))
                       .toList(),

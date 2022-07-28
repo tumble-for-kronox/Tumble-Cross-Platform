@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,6 +9,7 @@ import 'package:tumble/theme/cubit/theme_cubit.dart';
 import 'package:tumble/theme/cubit/theme_state.dart';
 import 'package:tumble/theme/data/colors.dart';
 import 'package:tumble/ui/cubit/init_cubit.dart';
+import 'package:tumble/ui/main_app_widget/login_page/login_page_root.dart';
 import 'package:tumble/ui/main_app_widget/main_app_navigation_root.dart';
 import 'package:tumble/ui/main_app_widget/school_selection_page.dart';
 import 'cubit/main_app_cubit.dart';
@@ -44,7 +47,6 @@ class _MainAppState extends State<MainApp> {
                         case InitStatus.HAS_SCHOOL:
                           return const MainAppNavigationRoot();
                         case InitStatus.INITIAL:
-                        case InitStatus.NO_SCHOOL:
                           return const SchoolSelectionPage();
                       }
                     },

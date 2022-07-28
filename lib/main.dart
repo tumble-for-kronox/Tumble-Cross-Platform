@@ -12,6 +12,7 @@ import 'package:tumble/theme/repository/theme_repository.dart';
 import 'package:tumble/ui/cubit/init_cubit.dart';
 import 'package:tumble/ui/drawer_generic/app_theme_picker.dart';
 import 'package:tumble/ui/main_app_widget/cubit/main_app_cubit.dart';
+import 'package:tumble/ui/main_app_widget/login_page/login_page_root.dart';
 import 'package:tumble/ui/main_app_widget/main_app.dart';
 import 'package:tumble/ui/main_app_widget/main_app_bottom_nav_bar/cubit/bottom_nav_cubit.dart';
 import 'package:tumble/ui/main_app_widget/main_app_bottom_nav_bar/tumble_navigation_bar.dart';
@@ -27,10 +28,13 @@ import 'package:tumble/ui/main_app_widget/search_page_widgets/search/schedule_se
 import 'package:tumble/ui/main_app_widget/search_page_widgets/search/tumble_search_page.dart';
 import 'package:tumble/ui/main_app_widget/search_page_widgets/search_bar_widget/searchbar_and_logo_container.dart';
 
+import 'ui/main_app_widget/login_page/cubit/login_page_state.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initSingletons();
   setupRequiredSharedPreferences();
+  setupKronoxSession();
   runApp(MultiBlocProvider(providers: [
     BlocProvider<InitCubit>(
       create: (c) => InitCubit(),
@@ -38,6 +42,7 @@ void main() async {
         children: const [
           MainApp(),
           SchoolSelectionPage(),
+          LoginPageRoot(),
         ],
       ),
     ),
@@ -71,11 +76,24 @@ void main() async {
     ),
     BlocProvider<SearchPageCubit>(
       create: (c) => SearchPageCubit(),
-      child: Row(children: const [TumbleSearchPage(), ScheduleSearchBar(), SearchBarAndLogoContainer()]),
+      child: Row(children: const [
+        TumbleSearchPage(),
+        ScheduleSearchBar(),
+        SearchBarAndLogoContainer(),
+      ]),
     ),
     BlocProvider<ThemeCubit>(
       create: (c) => ThemeCubit()..getCurrentTheme(),
-      child: Row(children: const [MainApp()]),
+      child: Row(children: const [
+        MainApp(),
+      ]),
     ),
+    BlocProvider<LoginPageCubit>(
+        create: (c) => LoginPageCubit(),
+        child: Row(
+          children: const [
+            LoginPageRoot(),
+          ],
+        ))
   ], child: const MainApp()));
 }

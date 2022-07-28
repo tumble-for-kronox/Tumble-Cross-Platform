@@ -55,9 +55,24 @@ class DatabaseRepository implements IDatabaseScheduleService {
     return recordSnapshots.map((snapshot) => ScheduleModel.fromJson(snapshot.value).id).toList();
   }
 
-  Future addUser() async {}
+  @override
+  Future setUserSession(KronoxUserModel kronoxUser) async {
+    await _userStore.add(await _db, kronoxUserModelToJson(kronoxUser));
+    log('Added user');
+  }
 
-  Future removeUser() async {}
+  @override
+  Future removeUserSession() async {
+    await _userStore.delete(await _db);
+    log('Deleted all user data');
+  }
 
-  Future<KronoxUserModel?> getUser() async {}
+  @override
+  Future<KronoxUserModel?> getUserSession() async {
+    final sessionSnapshot = await _userStore.findFirst(await _db);
+    if (sessionSnapshot == null) {
+      return null;
+    }
+    return KronoxUserModel.fromJson(sessionSnapshot.value);
+  }
 }
