@@ -3,8 +3,9 @@ part of 'drawer_state.dart';
 class DrawerCubit extends Cubit<DrawerState> {
   DrawerCubit()
       : super(DrawerState(
-            theme:
-                locator<SharedPreferences>().getString(PreferenceTypes.theme)!,
+            theme: locator<SharedPreferences>()
+                .getString(PreferenceTypes.theme)!
+                .capitalize,
             viewType: ScheduleViewTypes.viewTypesMap[
                 locator<SharedPreferences>().getInt(PreferenceTypes.view)],
             schedule: locator<SharedPreferences>()
@@ -30,7 +31,8 @@ class DrawerCubit extends Cubit<DrawerState> {
         );
         break;
       case EventType.CHANGE_THEME:
-        Get.bottomSheet(AppThemePicker(setTheme: (themeType) {
+        Get.bottomSheet(AppThemePicker(setTheme: (String themeType) {
+          emit(state.copyWith(theme: themeType.capitalize));
           changeTheme(themeType);
           Navigator.of(context).pop();
         }));
@@ -61,10 +63,12 @@ class DrawerCubit extends Cubit<DrawerState> {
         break;
       case EventType.SET_DEFAULT_VIEW:
         Get.bottomSheet(AppDefaultViewPicker(
-          setDefaultView: (int viewType) {
+          setDefaultView: (viewType) {
+            log(viewType.toString());
             locator<SharedPreferences>().setInt(PreferenceTypes.view, viewType);
             emit(state.copyWith(
                 viewType: ScheduleViewTypes.viewTypesMap[viewType]));
+            Navigator.of(context).pop();
           },
         ));
         break;
@@ -86,5 +90,22 @@ class DrawerCubit extends Cubit<DrawerState> {
         _themeRepository.saveTheme(CustomTheme.system);
         break;
     }
+  }
+
+  void setNameForNextSchool(String schoolName) {
+    emit(state.copyWith(school: schoolName));
+  }
+
+  void refresh() {
+    emit(DrawerState(
+        theme: locator<SharedPreferences>()
+            .getString(PreferenceTypes.theme)!
+            .capitalize,
+        viewType: ScheduleViewTypes.viewTypesMap[
+            locator<SharedPreferences>().getInt(PreferenceTypes.view)],
+        schedule:
+            locator<SharedPreferences>().getString(PreferenceTypes.schedule),
+        school:
+            locator<SharedPreferences>().getString(PreferenceTypes.school)));
   }
 }

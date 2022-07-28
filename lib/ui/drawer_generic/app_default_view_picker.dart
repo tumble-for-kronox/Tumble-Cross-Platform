@@ -36,7 +36,7 @@ class AppDefaultViewPicker extends StatelessWidget {
                             color: Theme.of(context).colorScheme.onBackground),
                       ),
                       onTap: () => setDefaultView(
-                          IconAndTitleSet.views[keyType]!.keys.first)))
+                          IconAndTitleSet.views[keyType]!.keys.first - 1)))
                   .toList()),
         )),
       ),

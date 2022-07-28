@@ -92,7 +92,13 @@ void main() async {
     ),
     BlocProvider<DrawerCubit>(
       create: (c) => DrawerCubit(),
-      child: const TumbleAppDrawer(),
+      child: Row(
+        children: const [
+          TumbleAppDrawer(),
+          SchoolSelectionPage(),
+          MainAppNavigationRoot()
+        ],
+      ),
     ),
     BlocProvider<LoginPageCubit>(
         create: (c) => LoginPageCubit(),

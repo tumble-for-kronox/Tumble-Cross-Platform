@@ -16,7 +16,9 @@ class TumbleAppDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<DrawerCubit, DrawerState>(
+    return BlocConsumer<DrawerCubit, DrawerState>(
+      listenWhen: (previous, current) => previous.schedule != current.schedule,
+      listener: (context, state) => context.read<DrawerCubit>().refresh(),
       builder: (context, state) {
         return Drawer(
           width: 350,
@@ -57,7 +59,8 @@ class TumbleAppDrawer extends StatelessWidget {
               TumbleSettingsSection(tiles: [
                 TumbleAppDrawerTile(
                   drawerTileTitle: "Change schools",
-                  subtitle: "Current school: ${state.school}",
+                  subtitle:
+                      "Current school: ${context.watch<DrawerCubit>().state.school}",
                   prefixIcon: CupertinoIcons.arrow_right_arrow_left,
                   eventType: EventType.CHANGE_SCHOOL,
                   drawerEvent: (eventType) => context
@@ -66,7 +69,8 @@ class TumbleAppDrawer extends StatelessWidget {
                 ),
                 TumbleAppDrawerTile(
                   drawerTileTitle: "Change theme",
-                  subtitle: "Current theme:  ${state.theme}",
+                  subtitle:
+                      "Current theme:  ${context.watch<DrawerCubit>().state.theme}",
                   prefixIcon: CupertinoIcons.device_phone_portrait,
                   eventType: EventType.CHANGE_THEME,
                   drawerEvent: (eventType) => context
@@ -80,7 +84,7 @@ class TumbleAppDrawer extends StatelessWidget {
               TumbleSettingsSection(tiles: [
                 TumbleAppDrawerTile(
                     drawerTileTitle: "Set default view type",
-                    subtitle: "Current view: ",
+                    subtitle: "Current view: ${state.viewType}",
                     prefixIcon: CupertinoIcons.list_dash,
                     eventType: EventType.SET_DEFAULT_VIEW,
                     drawerEvent: (eventType) => context
@@ -88,7 +92,9 @@ class TumbleAppDrawer extends StatelessWidget {
                         .handleDrawerEvent(eventType, context)),
                 TumbleAppDrawerTile(
                     drawerTileTitle: "Set default schedule",
-                    subtitle: "No default schedule set",
+                    subtitle: state.schedule != null
+                        ? "Default schedule: \n${context.watch<DrawerCubit>().state.schedule}"
+                        : "No default schedule set",
                     prefixIcon: CupertinoIcons.calendar,
                     eventType: EventType.SET_DEFAULT_SCHEDULE,
                     drawerEvent: (eventType) => context

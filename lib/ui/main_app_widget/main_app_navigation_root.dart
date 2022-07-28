@@ -15,6 +15,7 @@ import 'package:tumble/ui/main_app_widget/main_app_bottom_nav_bar/cubit/bottom_n
 import 'package:tumble/ui/main_app_widget/main_app_bottom_nav_bar/data/nav_bar_items.dart';
 import 'package:tumble/ui/main_app_widget/main_app_bottom_nav_bar/tumble_navigation_bar.dart';
 import 'package:tumble/ui/main_app_widget/misc/tumble_app_drawer.dart';
+import 'package:tumble/ui/main_app_widget/misc/tumble_drawer/cubit/drawer_state.dart';
 import 'package:tumble/ui/main_app_widget/schedule_view_widgets/tumble_calendar_view/tumble_calendar_view.dart';
 import 'package:tumble/ui/main_app_widget/schedule_view_widgets/tumble_list_view/tumble_list_view.dart';
 import 'package:tumble/ui/main_app_widget/schedule_view_widgets/tumble_week_view/tumble_week_view.dart';
@@ -37,14 +38,14 @@ class _MainAppNavigationRootState extends State<MainAppNavigationRoot> {
         return BlocBuilder<ThemeCubit, ThemeState>(
           builder: ((context, themeState) {
             return Scaffold(
-                endDrawer: TumbleAppDrawer(),
+                endDrawer: const TumbleAppDrawer(),
                 appBar: TumbleAppBar(
                   visibleBookmark: navState.index == 1 ||
                       navState.index == 2 ||
                       navState.index == 3,
-                  toggleFavorite: () async => await context
-                      .read<MainAppCubit>()
-                      .toggleFavorite(context),
+                  toggleFavorite: () async {
+                    await context.read<MainAppCubit>().toggleFavorite(context);
+                  },
                 ),
                 body: FutureBuilder(
                     future: context.read<MainAppCubit>().initMainAppCubit(),

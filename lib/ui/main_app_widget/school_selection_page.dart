@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tumble/ui/cubit/init_cubit.dart';
 import 'package:tumble/ui/main_app_widget/data/schools.dart';
+import 'package:tumble/ui/main_app_widget/misc/tumble_drawer/cubit/drawer_state.dart';
 import 'package:tumble/ui/main_app_widget/search_page_widgets/search/school_card.dart';
 
 class SchoolSelectionPage extends StatefulWidget {
@@ -44,8 +45,12 @@ class _SchoolSelectionPageState extends State<SchoolSelectionPage> {
                           schoolName: school.schoolName,
                           schoolId: school.schoolId,
                           schoolLogo: school.schoolLogo,
-                          selectSchool: () =>
-                              context.read<InitCubit>().setup(context, school)))
+                          selectSchool: () {
+                            context
+                                .read<DrawerCubit>()
+                                .setNameForNextSchool(school.schoolName);
+                            context.read<InitCubit>().setup(context, school);
+                          }))
                       .toList(),
                 ),
               ],

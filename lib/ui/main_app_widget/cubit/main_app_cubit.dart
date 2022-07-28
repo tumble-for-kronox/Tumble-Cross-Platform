@@ -17,15 +17,7 @@ import 'package:tumble/models/api_models/schedule_model.dart';
 import 'package:tumble/models/ui_models/week_model.dart';
 import 'package:tumble/shared/preference_types.dart';
 import 'package:tumble/startup/get_it_instances.dart';
-import 'package:tumble/theme/repository/theme_repository.dart';
-import 'package:tumble/ui/drawer_generic/app_default_schedule_picker.dart';
-import 'package:tumble/ui/drawer_generic/app_default_view_picker.dart';
-import 'package:tumble/ui/drawer_generic/app_notification_time_picker.dart';
-import 'package:tumble/ui/drawer_generic/app_theme_picker.dart';
-import 'package:tumble/ui/main_app_widget/data/event_types.dart';
-import 'package:tumble/ui/main_app_widget/school_selection_page.dart';
 import 'package:tumble/api/apiservices/api_response.dart' as api;
-import 'package:tumble/ui/main_app_widget/search_page_widgets/cubit/search_page_cubit.dart';
 import 'package:tumble/ui/scaffold_message.dart';
 part 'main_app_state.dart';
 
