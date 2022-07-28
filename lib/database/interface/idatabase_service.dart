@@ -12,4 +12,6 @@ abstract class IDatabaseScheduleService {
   Future<List<String>> getAllScheduleIds();
 
   Future<ScheduleModel?> getOneSchedule(String id);
+
+  Future removeAllSchedules();
 }

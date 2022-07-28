@@ -1,8 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tumble/ui/main_app_widget/main_app_bottom_nav_bar/cubit/bottom_nav_cubit.dart';
-import 'package:tumble/ui/main_app_widget/main_app_bottom_nav_bar/data/nav_bar_items.dart';
 
 class NoScheduleAvailable extends StatelessWidget {
   final String errorType;
@@ -26,7 +23,7 @@ class NoScheduleAvailable extends StatelessWidget {
                     fontSize: 20,
                     fontWeight: FontWeight.w500)),
             Padding(
-              padding: const EdgeInsets.only(top: 4),
+              padding: const EdgeInsets.only(top: 3, left: 3),
               child: IconButton(
                   iconSize: 20,
                   color: Theme.of(context).colorScheme.primary,

@@ -3,9 +3,14 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tumble/shared/preference_types.dart';
+import 'package:tumble/startup/get_it_instances.dart';
 import 'package:tumble/theme/cubit/theme_cubit.dart';
 import 'package:tumble/theme/cubit/theme_state.dart';
+import 'package:tumble/ui/drawer_generic/data/default_views_map.dart';
 import 'package:tumble/ui/main_app_widget/cubit/main_app_cubit.dart';
+import 'package:tumble/ui/main_app_widget/data/schools.dart';
 import 'package:tumble/ui/main_app_widget/main_app_bottom_nav_bar/cubit/bottom_nav_cubit.dart';
 import 'package:tumble/ui/main_app_widget/main_app_bottom_nav_bar/data/nav_bar_items.dart';
 import 'package:tumble/ui/main_app_widget/main_app_bottom_nav_bar/tumble_navigation_bar.dart';
@@ -33,6 +38,17 @@ class _MainAppNavigationRootState extends State<MainAppNavigationRoot> {
           builder: ((context, themeState) {
             return Scaffold(
                 endDrawer: TumbleAppDrawer(
+                  defaultSchool: Schools.schools
+                      .firstWhere((school) =>
+                          school.schoolName ==
+                          context
+                              .read<MainAppCubit>()
+                              .sharedPrefs
+                              .getString(PreferenceTypes.school))
+                      .schoolId
+                      .name
+                      .toUpperCase(),
+                  viewType: "",
                   handleDrawerEvent: (eventType) => context
                       .read<MainAppCubit>()
                       .handleDrawerEvent(eventType, context),

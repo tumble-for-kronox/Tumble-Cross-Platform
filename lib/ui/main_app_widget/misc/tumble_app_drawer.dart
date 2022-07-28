@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tumble/ui/main_app_widget/data/event_types.dart';
+import 'package:tumble/ui/main_app_widget/data/schools.dart';
 import 'tumble_app_drawer_tile.dart';
 import 'tumble_settings_section.dart';
 
@@ -8,10 +9,15 @@ typedef HandleDrawerEvent = void Function(Enum eventType);
 
 class TumbleAppDrawer extends StatelessWidget {
   final HandleDrawerEvent handleDrawerEvent;
+  final String defaultSchool;
+  final String viewType;
   final bool limitOptions;
   final String currentThemeString;
+
   const TumbleAppDrawer(
       {Key? key,
+      required this.viewType,
+      required this.defaultSchool,
       required this.limitOptions,
       required this.handleDrawerEvent,
       required this.currentThemeString})
@@ -55,7 +61,7 @@ class TumbleAppDrawer extends StatelessWidget {
           TumbleSettingsSection(tiles: [
             TumbleAppDrawerTile(
               drawerTileTitle: "Change schools",
-              subtitle: "Current default school is HKR",
+              subtitle: "Current school: $defaultSchool",
               prefixIcon: CupertinoIcons.arrow_right_arrow_left,
               eventType: EventType.CHANGE_SCHOOL,
               drawerEvent: handleDrawerEvent,
@@ -74,7 +80,7 @@ class TumbleAppDrawer extends StatelessWidget {
           TumbleSettingsSection(tiles: [
             TumbleAppDrawerTile(
               drawerTileTitle: "Set default view type",
-              subtitle: "Current view: List view",
+              subtitle: "Current view: $viewType",
               prefixIcon: CupertinoIcons.list_dash,
               eventType: EventType.SET_DEFAULT_VIEW,
               drawerEvent: handleDrawerEvent,

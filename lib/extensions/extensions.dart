@@ -25,16 +25,6 @@ extension ResponseParsing on Response {
     return ApiResponse.error(FetchResponse.fetchEerror);
   }
 
-<<<<<<< HEAD
-extension ScheduleParsing on ScheduleModel {
-  List<Week> splitToWeek() {
-    return groupBy(days, (Day day) => day.weekNumber)
-        .entries
-        .map((weekNumberToDayList) => Week(
-            weekNumber: weekNumberToDayList.key,
-            days: weekNumberToDayList.value))
-        .toList();
-=======
   ApiResponse parseUser() {
     if (statusCode == 200) {
       return ApiResponse.completed("");
@@ -60,7 +50,6 @@ extension ScheduleParsing on ScheduleModel {
       return ApiResponse.error(FetchResponse.authenticationError);
     }
     return ApiResponse.error(FetchResponse.unknownError);
->>>>>>> 6529c832d6f50addf5fad7ce0e80e65ef1c8e2f9
   }
 }
 
@@ -113,7 +102,9 @@ extension ScheduleParsing on ScheduleModel {
   List<Week> splitToWeek() {
     return groupBy(days, (Day day) => day.weekNumber)
         .entries
-        .map((weekNumberToDayList) => Week(weekNumber: weekNumberToDayList.key, days: weekNumberToDayList.value))
+        .map((weekNumberToDayList) => Week(
+            weekNumber: weekNumberToDayList.key,
+            days: weekNumberToDayList.value))
         .toList();
   }
 }

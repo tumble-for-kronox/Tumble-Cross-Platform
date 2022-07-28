@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tumble/ui/cubit/init_cubit.dart';
@@ -16,6 +18,7 @@ class SchoolSelectionPage extends StatefulWidget {
 class _SchoolSelectionPageState extends State<SchoolSelectionPage> {
   @override
   Widget build(BuildContext context) {
+    log(context.read<InitCubit>().state.status.toString());
     return Scaffold(
       extendBodyBehindAppBar: true,
       body: Container(
@@ -28,7 +31,7 @@ class _SchoolSelectionPageState extends State<SchoolSelectionPage> {
                 Padding(
                   padding: const EdgeInsets.only(top: 50, right: 20, left: 20),
                   child: Text(
-                    "Choose your school",
+                    "Choose your university",
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.onBackground,
                       fontSize: 26,
@@ -41,10 +44,10 @@ class _SchoolSelectionPageState extends State<SchoolSelectionPage> {
                             schoolName: school.schoolName,
                             schoolId: school.schoolId,
                             schoolLogo: school.schoolLogo,
-                            onTap: () {
+                            selectSchool: (schoolName) => {
                               context
                                   .read<InitCubit>()
-                                  .setup(school.schoolName);
+                                  .setup(schoolName, context)
                             },
                           ))
                       .toList(),

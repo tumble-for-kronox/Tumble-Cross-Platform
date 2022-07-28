@@ -48,6 +48,7 @@ class MainAppCubit extends Cubit<MainAppState> {
   final ScrollController _listViewScrollController = ScrollController();
 
   ScrollController get controller => _listViewScrollController;
+  SharedPreferences get sharedPrefs => _sharedPrefs;
 
   void handleDrawerEvent(Enum eventType, BuildContext context) {
     switch (eventType) {
@@ -65,9 +66,10 @@ class MainAppCubit extends Cubit<MainAppState> {
         );
         break;
       case EventType.CHANGE_THEME:
-        Get.bottomSheet(AppThemePicker(
-          setTheme: (themeType) => changeTheme(themeType),
-        ));
+        Get.bottomSheet(AppThemePicker(setTheme: (themeType) {
+          changeTheme(themeType);
+          Navigator.of(context).pop();
+        }));
         break;
       case EventType.CONTACT:
 
@@ -75,21 +77,27 @@ class MainAppCubit extends Cubit<MainAppState> {
         break;
       case EventType.EDIT_NOTIFICATION_TIME:
         Get.bottomSheet(AppNotificationTimePicker(
-          setNotificationTime: (int time) =>
-              locator<SharedPreferences>().setInt(PreferenceTypes.notificationTime, time),
+          setNotificationTime: (int time) => locator<SharedPreferences>()
+              .setInt(PreferenceTypes.notificationTime, time),
         ));
         break;
       case EventType.SET_DEFAULT_SCHEDULE:
-        final List<String>? bookmarks = locator<SharedPreferences>().getStringList(PreferenceTypes.favorites);
+        final List<String>? bookmarks = locator<SharedPreferences>()
+            .getStringList(PreferenceTypes.favorites);
+        log(bookmarks.toString());
         if (bookmarks != null) {
           Get.bottomSheet(AppDefaultSchedulePicker(
               scheduleIds: bookmarks,
-              setDefaultSchedule: (newId) => {_sharedPrefs.setString(PreferenceTypes.schedule, newId)}));
+              setDefaultSchedule: (newId) {
+                _sharedPrefs.setString(PreferenceTypes.schedule, newId);
+                Navigator.of(context).pop();
+              }));
         }
         break;
       case EventType.SET_DEFAULT_VIEW:
         Get.bottomSheet(AppDefaultViewPicker(
-          setDefaultView: (int viewType) => locator<SharedPreferences>().setInt(PreferenceTypes.view, viewType),
+          setDefaultView: (int viewType) => locator<SharedPreferences>()
+              .setInt(PreferenceTypes.view, viewType),
         ));
         break;
     }
@@ -113,7 +121,8 @@ class MainAppCubit extends Cubit<MainAppState> {
   }
 
   Future<void> toggleFavorite(BuildContext context) async {
-    final currentFavorites = _sharedPrefs.getStringList(PreferenceTypes.favorites);
+    final currentFavorites =
+        _sharedPrefs.getStringList(PreferenceTypes.favorites);
 
     /// If the schedule IS saved in preferences
     if (currentFavorites!.contains(state.currentScheduleId)) {
@@ -126,13 +135,15 @@ class MainAppCubit extends Cubit<MainAppState> {
       _toggleSave(currentFavorites);
       showScaffoldMessage(context, "Saved schedule to bookmarks");
     }
+    log(currentFavorites.toString());
   }
 
   void _toggleRemove(List<String> currentFavorites) async {
     currentFavorites.remove(state.currentScheduleId);
     (currentFavorites.isEmpty)
         ? _sharedPrefs.remove(PreferenceTypes.schedule)
-        : _sharedPrefs.setString(PreferenceTypes.schedule, currentFavorites.first);
+        : _sharedPrefs.setString(
+            PreferenceTypes.schedule, currentFavorites.first);
     await _databaseService.removeSchedule(state.currentScheduleId!);
     emit(state.copyWith(toggledFavorite: false));
     _sharedPrefs.setStringList(PreferenceTypes.favorites, currentFavorites);
@@ -152,12 +163,14 @@ class MainAppCubit extends Cubit<MainAppState> {
     if (state.currentScheduleId != null) {
       return;
     }
-    final ApiResponse _apiResponse = await _implementationService.getCachedBookmarkedSchedule();
+    final ApiResponse _apiResponse =
+        await _implementationService.getCachedBookmarkedSchedule();
 
     switch (_apiResponse.status) {
       case ApiStatus.CACHED:
         ScheduleModel currentScheduleModel = _apiResponse.data!;
-        if (currentScheduleModel.days.any((element) => element.events.isNotEmpty)) {
+        if (currentScheduleModel.days
+            .any((element) => element.events.isNotEmpty)) {
           emit(state.copyWith(
               status: MainAppStatus.SCHEDULE_SELECTED,
               currentScheduleId: currentScheduleModel.id,
@@ -180,7 +193,8 @@ class MainAppCubit extends Cubit<MainAppState> {
     switch (_apiResponse.status) {
       case api.ApiStatus.REQUESTED:
         ScheduleModel currentScheduleModel = _apiResponse.data!;
-        if (currentScheduleModel.days.any((element) => element.events.isNotEmpty)) {
+        if (currentScheduleModel.days
+            .any((element) => element.events.isNotEmpty)) {
           emit(state.copyWith(
               status: MainAppStatus.SCHEDULE_SELECTED,
               currentScheduleId: currentScheduleModel.id,
@@ -194,7 +208,8 @@ class MainAppCubit extends Cubit<MainAppState> {
         break;
       case api.ApiStatus.CACHED:
         ScheduleModel currentScheduleModel = _apiResponse.data!;
-        if (currentScheduleModel.days.any((element) => element.events.isNotEmpty)) {
+        if (currentScheduleModel.days
+            .any((element) => element.events.isNotEmpty)) {
           emit(state.copyWith(
               status: MainAppStatus.SCHEDULE_SELECTED,
               currentScheduleId: currentScheduleModel.id,
@@ -206,7 +221,8 @@ class MainAppCubit extends Cubit<MainAppState> {
         }
         break;
       case api.ApiStatus.ERROR:
-        emit(state.copyWith(message: _apiResponse.message, status: MainAppStatus.FETCH_ERROR));
+        emit(state.copyWith(
+            message: _apiResponse.message, status: MainAppStatus.FETCH_ERROR));
         break;
       default:
         emit(state);
@@ -228,7 +244,8 @@ class MainAppCubit extends Cubit<MainAppState> {
   }
 
   void scrollToTop() {
-    _listViewScrollController.animateTo(0, duration: const Duration(seconds: 1), curve: Curves.linear);
+    _listViewScrollController.animateTo(0,
+        duration: const Duration(seconds: 1), curve: Curves.linear);
   }
 
   setLoading() {
