@@ -13,7 +13,6 @@ dependencies:
     sdk: flutter
   http: ^0.13.1
   equatable: ^2.0.3
-  string_to_hex: ^0.2.2
   freezed: any
   cupertino_icons: ^1.0.5
   build_runner: ^2.1.11
@@ -22,18 +21,13 @@ dependencies:
   flutter_bloc: ^8.0.1
   permission_handler: ^9.2.0
   intl: ^0.17.0
-  collection: ^1.14.13
-  animated_text_kit: ^4.2.1
   flutter_spinkit: any
   path_provider: ^2.0.9
   syncfusion_flutter_calendar: ^20.2.40
-  provider: any
   dart_extensions: ^2.2.0
   shared_preferences: ^2.0.15
   cron: ^0.5.0
   get: ^4.6.5
-  modal_bottom_sheet: ^2.1.0
-  firebase_messaging: ^11.4.2
   freezed_annotation: ^2.0.3
   json_annotation: ^4.5.0
 

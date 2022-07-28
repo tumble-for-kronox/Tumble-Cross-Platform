@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
-import 'package:string_to_hex/string_to_hex.dart';
 import 'package:tumble/api/apiservices/api_response.dart';
 import 'package:tumble/api/apiservices/fetch_response.dart';
 import 'package:tumble/models/api_models/program_model.dart';
@@ -31,7 +30,9 @@ extension ScheduleParsing on ScheduleModel {
   List<Week> splitToWeek() {
     return groupBy(days, (Day day) => day.weekNumber)
         .entries
-        .map((weekNumberToDayList) => Week(weekNumber: weekNumberToDayList.key, days: weekNumberToDayList.value))
+        .map((weekNumberToDayList) => Week(
+            weekNumber: weekNumberToDayList.key,
+            days: weekNumberToDayList.value))
         .toList();
   }
 }
@@ -39,23 +40,21 @@ extension ScheduleParsing on ScheduleModel {
 extension HttpClientResponseParsing on HttpClientResponse {
   Future<ApiResponse> parsePrograms() async {
     if (statusCode == 200) {
-      return ApiResponse.completed(programModelFromJson(await transform(utf8.decoder).join()));
+      return ApiResponse.completed(
+          programModelFromJson(await transform(utf8.decoder).join()));
     }
     return ApiResponse.error(FetchResponse.fetchEerror);
   }
 
   Future<ApiResponse> parseSchedule() async {
     if (statusCode == 200) {
-      return ApiResponse.completed(scheduleModelFromJson(await transform(utf8.decoder).join()));
+      return ApiResponse.completed(
+          scheduleModelFromJson(await transform(utf8.decoder).join()));
     }
     return ApiResponse.error(FetchResponse.fetchEerror);
   }
 }
 
 extension StringParse on String {
-  int toHex() {
-    return int.parse(StringToHex.toHexString(this), radix: 16);
-  }
-
   String capitalize() => this[0].toUpperCase() + substring(1);
 }
