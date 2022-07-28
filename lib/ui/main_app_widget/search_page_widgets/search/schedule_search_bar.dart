@@ -34,6 +34,7 @@ class _ScheduleSearchBarState extends State<ScheduleSearchBar> {
               return TextField(
                   onSubmitted: (value) async {
                     if (value.trim().isNotEmpty) {
+                      context.read<SearchPageCubit>().setLoading();
                       await context.read<SearchPageCubit>().search();
                     }
                   },
@@ -45,12 +46,10 @@ class _ScheduleSearchBarState extends State<ScheduleSearchBar> {
                   textAlignVertical: TextAlignVertical.center,
                   decoration: InputDecoration(
                     suffixIcon: () {
-                      if (state is SearchPageFocused) {
+                      if (state.clearButtonVisible) {
                         return IconButton(
-                          onPressed: context
-                              .read<SearchPageCubit>()
-                              .textEditingController
-                              .clear,
+                          onPressed: () =>
+                              context.read<SearchPageCubit>().resetCubit(),
                           icon: const Icon(CupertinoIcons.clear),
                         );
                       }
@@ -80,6 +79,7 @@ class _ScheduleSearchBarState extends State<ScheduleSearchBar> {
             shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(5))),
             onPressed: () async {
+              context.read<SearchPageCubit>().setLoading();
               await context.read<SearchPageCubit>().search();
             },
             disabledColor: Colors.orange.shade200,

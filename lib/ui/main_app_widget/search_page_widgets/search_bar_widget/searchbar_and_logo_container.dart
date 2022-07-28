@@ -26,7 +26,7 @@ class _SearchBarAndLogoContainerState extends State<SearchBarAndLogoContainer> {
           case ConnectionState.done:
             return Container(
               margin: EdgeInsets.only(
-                  top: MediaQuery.of(context).viewPadding.top + 50),
+                  top: MediaQuery.of(context).viewPadding.top + 20),
               alignment: Alignment.center,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -36,13 +36,8 @@ class _SearchBarAndLogoContainerState extends State<SearchBarAndLogoContainer> {
                         const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
                     child: BlocBuilder<SearchPageCubit, SearchPageState>(
                         builder: (context, state) {
-                      if (state is SearchPageInitial) {
-                        return const SlideableLogo(
-                          focused: false,
-                        );
-                      }
-                      return const SlideableLogo(
-                        focused: true,
+                      return SlideableLogo(
+                        focused: state.focused,
                       );
                     }),
                   ),

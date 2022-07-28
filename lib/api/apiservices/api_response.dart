@@ -1,19 +1,15 @@
 // ignore_for_file: constant_identifier_names
 
 class ApiResponse<T> {
-  Status status;
+  ApiStatus status;
   T? data;
   String? message;
 
-  ApiResponse.initial(this.message) : status = Status.INITIAL;
+  ApiResponse.completed(this.data) : status = ApiStatus.REQUESTED;
 
-  ApiResponse.loading(this.message) : status = Status.LOADING;
+  ApiResponse.cached(this.data) : status = ApiStatus.CACHED;
 
-  ApiResponse.completed(this.data) : status = Status.REQUESTED;
-
-  ApiResponse.cached(this.data) : status = Status.CACHED;
-
-  ApiResponse.error(this.message) : status = Status.ERROR;
+  ApiResponse.error(this.message) : status = ApiStatus.ERROR;
 
   @override
   String toString() {
@@ -21,4 +17,4 @@ class ApiResponse<T> {
   }
 }
 
-enum Status { INITIAL, LOADING, REQUESTED, ERROR, CACHED }
+enum ApiStatus { INITIAL, LOADING, REQUESTED, ERROR, CACHED }

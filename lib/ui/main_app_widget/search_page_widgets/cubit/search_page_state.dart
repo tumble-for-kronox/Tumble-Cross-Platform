@@ -1,40 +1,33 @@
+// ignore_for_file: constant_identifier_names
+
 part of 'search_page_cubit.dart';
 
-@immutable
-abstract class SearchPageState extends Equatable {
-  const SearchPageState();
-}
+enum SearchPageStatus { INITIAL, LOADING, FOUND, NO_SCHEDULES, ERROR }
 
-class SearchPageInitial extends SearchPageState {
-  const SearchPageInitial();
+class SearchPageState extends Equatable {
+  final SearchPageStatus status;
+  final bool focused;
+  final bool clearButtonVisible;
+  final String? errorMessage;
+  final List<Item>? programList;
+
+  const SearchPageState(this.focused, this.status, this.clearButtonVisible,
+      this.errorMessage, this.programList);
+
+  SearchPageState copyWith(
+          {bool? focused,
+          SearchPageStatus? status,
+          bool? clearButtonVisible,
+          String? errorMessage,
+          List<Item>? programList}) =>
+      SearchPageState(
+          focused ?? this.focused,
+          status ?? this.status,
+          clearButtonVisible ?? this.clearButtonVisible,
+          errorMessage ?? this.errorMessage,
+          programList ?? this.programList);
 
   @override
-  List<Object?> get props => [];
-}
-
-class SearchPageLoading extends SearchPageState {
-  const SearchPageLoading();
-  @override
-  List<Object?> get props => [];
-}
-
-class SearchPageFoundSchedules extends SearchPageState {
-  final List<Item> programList;
-  const SearchPageFoundSchedules({required this.programList});
-  @override
-  List<Object?> get props => [programList];
-}
-
-class SearchPageNoSchedules extends SearchPageState {
-  final String errorType;
-  const SearchPageNoSchedules({required this.errorType});
-  @override
-  List<Object?> get props => [errorType];
-}
-
-class SearchPageFocused extends SearchPageState {
-  final bool clearVisible;
-  const SearchPageFocused(this.clearVisible);
-  @override
-  List<Object?> get props => [clearVisible];
+  List<Object?> get props =>
+      [clearButtonVisible, errorMessage, programList, focused, status];
 }

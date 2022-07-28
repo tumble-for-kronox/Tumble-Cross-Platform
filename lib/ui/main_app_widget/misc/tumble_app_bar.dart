@@ -35,22 +35,24 @@ class _TumbleAppBarState extends State<TumbleAppBar> {
                   if (widget.visibleBookmark!)
                     BlocBuilder<MainAppCubit, MainAppState>(
                       builder: (context, state) {
-                        if (state is MainAppScheduleSelected) {
-                          return Padding(
-                            padding: const EdgeInsets.only(left: 5, top: 5),
-                            child: IconButton(
-                                iconSize: 30,
-                                onPressed: widget.toggleFavorite,
-                                icon: Icon(
-                                    state.toggledFavorite
-                                        ? CupertinoIcons.bookmark_fill
-                                        : CupertinoIcons.bookmark,
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onBackground)),
-                          );
+                        switch (state.status) {
+                          case MainAppStatus.SCHEDULE_SELECTED:
+                            return Padding(
+                              padding: const EdgeInsets.only(left: 5, top: 5),
+                              child: IconButton(
+                                  iconSize: 30,
+                                  onPressed: widget.toggleFavorite,
+                                  icon: Icon(
+                                      state.toggledFavorite
+                                          ? CupertinoIcons.bookmark_fill
+                                          : CupertinoIcons.bookmark,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onBackground)),
+                            );
+                          default:
+                            return Container();
                         }
-                        return Container();
                       },
                     )
                   else

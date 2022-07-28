@@ -7,7 +7,7 @@ import 'package:tumble/ui/main_app_widget/main_app_bottom_nav_bar/data/nav_bar_i
 
 class NoScheduleAvailable extends StatelessWidget {
   final String errorType;
-  final CupertinoAlertDialog cupertinoAlertDialog;
+  final CupertinoAlertDialog? cupertinoAlertDialog;
   const NoScheduleAvailable(
       {Key? key, required this.errorType, required this.cupertinoAlertDialog})
       : super(key: key);
@@ -31,11 +31,13 @@ class NoScheduleAvailable extends StatelessWidget {
               child: IconButton(
                   iconSize: 20,
                   color: Theme.of(context).colorScheme.primary,
-                  onPressed: () => showCupertinoDialog(
-                      context: context,
-                      builder: (context) {
-                        return cupertinoAlertDialog;
-                      }),
+                  onPressed: () => cupertinoAlertDialog != null
+                      ? showCupertinoDialog(
+                          context: context,
+                          builder: (context) {
+                            return cupertinoAlertDialog!;
+                          })
+                      : null,
                   icon: const Icon(CupertinoIcons.info_circle)),
             )
           ],

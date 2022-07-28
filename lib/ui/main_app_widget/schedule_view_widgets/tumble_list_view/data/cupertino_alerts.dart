@@ -90,7 +90,41 @@ class CustomCupertinoAlerts {
           },
         ),
         CupertinoDialogAction(
-          child: Text("Take me to back search",
+          child: Text("Take me to search",
+              style: TextStyle(
+                  color: Theme.of(context).colorScheme.primary,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600)),
+          onPressed: () {
+            Navigator.of(context).pop();
+            navigateToSearchFromView();
+          },
+        )
+      ],
+    );
+  }
+
+  static CupertinoAlertDialog fetchError(
+      BuildContext context, NavigateToSearchFromView navigateToSearchFromView) {
+    return CupertinoAlertDialog(
+      content: Column(children: [
+        Text("There was an error retrieveing this schedule",
+            style: TextStyle(
+                color: Theme.of(context).colorScheme.onSecondary,
+                fontSize: 15,
+                fontWeight: FontWeight.w600)),
+        const SizedBox(
+          height: 20,
+        ),
+        Text("Please try again",
+            style: TextStyle(
+                color: Theme.of(context).colorScheme.onSecondary,
+                fontSize: 14,
+                fontWeight: FontWeight.w600))
+      ]),
+      actions: [
+        CupertinoDialogAction(
+          child: Text("Take me to search",
               style: TextStyle(
                   color: Theme.of(context).colorScheme.primary,
                   fontSize: 13,

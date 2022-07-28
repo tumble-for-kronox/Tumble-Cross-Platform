@@ -25,11 +25,21 @@ import 'package:tumble/ui/drawer_generic/app_theme_picker.dart';
 import 'package:tumble/ui/main_app_widget/data/event_types.dart';
 import 'package:tumble/ui/main_app_widget/school_selection_page.dart';
 import 'package:tumble/api/apiservices/api_response.dart' as api;
+import 'package:tumble/ui/main_app_widget/search_page_widgets/cubit/search_page_cubit.dart';
 import 'package:tumble/ui/scaffold_message.dart';
 part 'main_app_state.dart';
 
 class MainAppCubit extends Cubit<MainAppState> {
-  MainAppCubit() : super(const MainAppInitial(null));
+  MainAppCubit()
+      : super(const MainAppState(
+            status: MainAppStatus.INITIAL,
+            currentScheduleId: null,
+            listOfDays: null,
+            listOfWeeks: null,
+            toggledFavorite: false,
+            listViewToTopButtonVisible: false,
+            message: null,
+            scheduleModel: null));
 
   final _sharedPrefs = locator<SharedPreferences>();
   final _implementationService = locator<ImplementationRepository>();
@@ -37,16 +47,6 @@ class MainAppCubit extends Cubit<MainAppState> {
   final _themeRepository = locator<ThemeRepository>();
   final ScrollController _listViewScrollController = ScrollController();
 
-  bool _listViewToTopIsVisible = false;
-  ScheduleModel? _currentScheduleModel;
-  String? _currentScheduleId;
-  bool? _toggleFavorite;
-
-  List<Week>? _listOfWeeks;
-  List<Day>? _listOfDays;
-
-  int? get defaultViewType =>
-      locator<SharedPreferences>().getInt(PreferenceTypes.view);
   ScrollController get controller => _listViewScrollController;
 
   void handleDrawerEvent(Enum eventType, BuildContext context) {
@@ -120,7 +120,7 @@ class MainAppCubit extends Cubit<MainAppState> {
         _sharedPrefs.getStringList(PreferenceTypes.favorites);
 
     /// If the schedule IS saved in preferences
-    if (currentFavorites!.contains(_currentScheduleId)) {
+    if (currentFavorites!.contains(state.currentScheduleId)) {
       _toggleRemove(currentFavorites);
       showScaffoldMessage(context, "Removed schedule from bookmarks");
     }
@@ -133,58 +133,48 @@ class MainAppCubit extends Cubit<MainAppState> {
   }
 
   void _toggleRemove(List<String> currentFavorites) async {
-    currentFavorites.remove(_currentScheduleId);
+    currentFavorites.remove(state.currentScheduleId);
     (currentFavorites.isEmpty)
         ? _sharedPrefs.remove(PreferenceTypes.schedule)
         : _sharedPrefs.setString(
             PreferenceTypes.schedule, currentFavorites.first);
-    await _databaseService.removeSchedule(_currentScheduleId!);
-    emit(MainAppScheduleSelected(
-        listViewToTopVisible: _listViewToTopIsVisible,
-        currentScheduleId: _currentScheduleModel!.id,
-        listOfDays: _listOfDays!,
-        listOfWeeks: _listOfWeeks!,
-        toggledFavorite: _toggleFavorite!));
+    await _databaseService.removeSchedule(state.currentScheduleId!);
+    emit(state.copyWith(toggledFavorite: false));
     _sharedPrefs.setStringList(PreferenceTypes.favorites, currentFavorites);
   }
 
   void _toggleSave(List<String> currentFavorites) async {
-    currentFavorites.add(_currentScheduleId!);
-    _sharedPrefs.setString(PreferenceTypes.schedule, _currentScheduleId!);
-    await _databaseService.addSchedule(_currentScheduleModel!);
-    emit(MainAppScheduleSelected(
-        listViewToTopVisible: _listViewToTopIsVisible,
-        currentScheduleId: _currentScheduleModel!.id,
-        listOfDays: _listOfDays!,
-        listOfWeeks: _listOfWeeks!,
-        toggledFavorite: _toggleFavorite!));
+    currentFavorites.add(state.currentScheduleId!);
+    _sharedPrefs.setString(PreferenceTypes.schedule, state.currentScheduleId!);
+    await _databaseService.addSchedule(state.scheduleModel!);
+    emit(state.copyWith(toggledFavorite: true));
+
     _sharedPrefs.setStringList(PreferenceTypes.favorites, currentFavorites);
   }
 
   Future<void> initCached() async {
-    if (_currentScheduleId != null) {
+    /// Prevents app from loading default schedule when state is changed
+    if (state.currentScheduleId != null) {
       return;
     }
     final ApiResponse _apiResponse =
         await _implementationService.getCachedBookmarkedSchedule();
 
     switch (_apiResponse.status) {
-      case Status.CACHED:
-        _currentScheduleModel = _apiResponse.data!;
-
-        /// Now we have an instance of the list used in
-        /// [TumbleListView] and an instance of the list
-        /// used in [TumbleWeekView]
-        _listOfDays = _currentScheduleModel!.days;
-        _listOfWeeks = _currentScheduleModel!.splitToWeek();
-        _currentScheduleId = _currentScheduleModel!.id;
-        _toggleFavorite = true;
-        emit(MainAppScheduleSelected(
-            listViewToTopVisible: _listViewToTopIsVisible,
-            currentScheduleId: _currentScheduleModel!.id,
-            listOfDays: _currentScheduleModel!.days,
-            listOfWeeks: _currentScheduleModel!.splitToWeek(),
-            toggledFavorite: _toggleFavorite!));
+      case ApiStatus.CACHED:
+        ScheduleModel currentScheduleModel = _apiResponse.data!;
+        if (currentScheduleModel.days
+            .any((element) => element.events.isNotEmpty)) {
+          emit(state.copyWith(
+              status: MainAppStatus.SCHEDULE_SELECTED,
+              currentScheduleId: currentScheduleModel.id,
+              listOfDays: currentScheduleModel.days,
+              listOfWeeks: currentScheduleModel.splitToWeek(),
+              toggledFavorite: true,
+              scheduleModel: currentScheduleModel));
+        } else {
+          emit(state.copyWith(status: MainAppStatus.EMPTY_SCHEDULE));
+        }
         break;
       default:
         emit(state);
@@ -193,45 +183,40 @@ class MainAppCubit extends Cubit<MainAppState> {
 
   /// ON program change
   Future<void> fetchNewSchedule(String id) async {
-    final _response = await _implementationService.getSchedule(id);
-    switch (_response.status) {
-      case api.Status.REQUESTED:
-        _currentScheduleModel = _response.data!;
-
-        /// Now we have an instance of the list used in
-        /// [TumbleListView] and an instance of the list
-        /// used in [TumbleWeekView]
-        _listOfDays = _currentScheduleModel!.days;
-        _listOfWeeks = _currentScheduleModel!.splitToWeek();
-        _currentScheduleId = _currentScheduleModel!.id;
-        _toggleFavorite = false;
-        log('Selected schedule id: $id');
-        emit(MainAppScheduleSelected(
-            listViewToTopVisible: _listViewToTopIsVisible,
-            currentScheduleId: _currentScheduleId!,
-            listOfDays: _listOfDays!,
-            listOfWeeks: _listOfWeeks!,
-            toggledFavorite: _toggleFavorite!));
+    final _apiResponse = await _implementationService.getSchedule(id);
+    switch (_apiResponse.status) {
+      case api.ApiStatus.REQUESTED:
+        ScheduleModel currentScheduleModel = _apiResponse.data!;
+        if (currentScheduleModel.days
+            .any((element) => element.events.isNotEmpty)) {
+          emit(state.copyWith(
+              status: MainAppStatus.SCHEDULE_SELECTED,
+              currentScheduleId: currentScheduleModel.id,
+              listOfDays: currentScheduleModel.days,
+              listOfWeeks: currentScheduleModel.splitToWeek(),
+              toggledFavorite: false,
+              scheduleModel: currentScheduleModel));
+        } else {
+          emit(state.copyWith(status: MainAppStatus.EMPTY_SCHEDULE));
+        }
         break;
-      case api.Status.CACHED:
-        _currentScheduleModel = _response.data!;
-
-        /// Now we have an instance of the list used in
-        /// [TumbleListView] and an instance of the list
-        /// used in [TumbleWeekView]
-        _listOfDays = _currentScheduleModel!.days;
-        _listOfWeeks = _currentScheduleModel!.splitToWeek();
-        _currentScheduleId = _currentScheduleModel!.id;
-        _toggleFavorite = true;
-        emit(MainAppScheduleSelected(
-            listViewToTopVisible: _listViewToTopIsVisible,
-            currentScheduleId: _currentScheduleId!,
-            listOfDays: _listOfDays!,
-            listOfWeeks: _listOfWeeks!,
-            toggledFavorite: _toggleFavorite!));
+      case api.ApiStatus.CACHED:
+        ScheduleModel currentScheduleModel = _apiResponse.data!;
+        if (currentScheduleModel.days
+            .any((element) => element.events.isNotEmpty)) {
+          emit(state.copyWith(
+              status: MainAppStatus.SCHEDULE_SELECTED,
+              currentScheduleId: currentScheduleModel.id,
+              listOfDays: currentScheduleModel.days,
+              listOfWeeks: currentScheduleModel.splitToWeek(),
+              toggledFavorite: true));
+        } else {
+          emit(state.copyWith(status: MainAppStatus.EMPTY_SCHEDULE));
+        }
         break;
-      case api.Status.ERROR:
-        emit(MainAppInitial(_response.message!));
+      case api.ApiStatus.ERROR:
+        emit(state.copyWith(
+            message: _apiResponse.message, status: MainAppStatus.FETCH_ERROR));
         break;
       default:
         emit(state);
@@ -246,21 +231,9 @@ class MainAppCubit extends Cubit<MainAppState> {
 
   setScrollController() {
     if (_listViewScrollController.offset >= 1000) {
-      _listViewToTopIsVisible = true; // show the back-to-top button
-      emit(MainAppScheduleSelected(
-          listViewToTopVisible: _listViewToTopIsVisible,
-          currentScheduleId: _currentScheduleId!,
-          listOfDays: _listOfDays!,
-          listOfWeeks: _listOfWeeks!,
-          toggledFavorite: _toggleFavorite!));
+      emit(state.copyWith(listViewToTopButtonVisible: true));
     } else {
-      _listViewToTopIsVisible = false; // hide the back-to-top button
-      emit(MainAppScheduleSelected(
-          listViewToTopVisible: _listViewToTopIsVisible,
-          currentScheduleId: _currentScheduleId!,
-          listOfDays: _listOfDays!,
-          listOfWeeks: _listOfWeeks!,
-          toggledFavorite: _toggleFavorite!));
+      emit(state.copyWith(listViewToTopButtonVisible: false));
     }
   }
 
@@ -268,4 +241,10 @@ class MainAppCubit extends Cubit<MainAppState> {
     _listViewScrollController.animateTo(0,
         duration: const Duration(seconds: 1), curve: Curves.linear);
   }
+
+  setLoading() {
+    emit(state.copyWith(status: MainAppStatus.LOADING));
+  }
+
+  void setEmptySchedule() {}
 }
