@@ -17,15 +17,7 @@ import 'package:tumble/models/api_models/schedule_model.dart';
 import 'package:tumble/models/ui_models/week_model.dart';
 import 'package:tumble/shared/preference_types.dart';
 import 'package:tumble/startup/get_it_instances.dart';
-import 'package:tumble/theme/repository/theme_repository.dart';
-import 'package:tumble/ui/drawer_generic/app_default_schedule_picker.dart';
-import 'package:tumble/ui/drawer_generic/app_default_view_picker.dart';
-import 'package:tumble/ui/drawer_generic/app_notification_time_picker.dart';
-import 'package:tumble/ui/drawer_generic/app_theme_picker.dart';
-import 'package:tumble/ui/main_app_widget/data/event_types.dart';
-import 'package:tumble/ui/main_app_widget/school_selection_page.dart';
 import 'package:tumble/api/apiservices/api_response.dart' as api;
-import 'package:tumble/ui/main_app_widget/search_page_widgets/cubit/search_page_cubit.dart';
 import 'package:tumble/ui/scaffold_message.dart';
 part 'main_app_state.dart';
 
@@ -44,76 +36,14 @@ class MainAppCubit extends Cubit<MainAppState> {
   final _sharedPrefs = locator<SharedPreferences>();
   final _implementationService = locator<ImplementationRepository>();
   final _databaseService = locator<DatabaseRepository>();
-  final _themeRepository = locator<ThemeRepository>();
   final ScrollController _listViewScrollController = ScrollController();
 
   ScrollController get controller => _listViewScrollController;
-
-  void handleDrawerEvent(Enum eventType, BuildContext context) {
-    switch (eventType) {
-      case EventType.CANCEL_ALL_NOTIFICATIONS:
-
-        /// Cancel all notifications
-        break;
-      case EventType.CANCEL_NOTIFICATIONS_FOR_PROGRAM:
-
-        /// Cancel all notifications tied to this schedule id
-        break;
-      case EventType.CHANGE_SCHOOL:
-        Navigator.of(context).push(
-          CupertinoPageRoute(builder: (context) => const SchoolSelectionPage()),
-        );
-        break;
-      case EventType.CHANGE_THEME:
-        Get.bottomSheet(AppThemePicker(
-          setTheme: (themeType) => changeTheme(themeType),
-        ));
-        break;
-      case EventType.CONTACT:
-
-        /// Direct user to support page
-        break;
-      case EventType.EDIT_NOTIFICATION_TIME:
-        Get.bottomSheet(AppNotificationTimePicker(
-          setNotificationTime: (int time) =>
-              locator<SharedPreferences>().setInt(PreferenceTypes.notificationTime, time),
-        ));
-        break;
-      case EventType.SET_DEFAULT_SCHEDULE:
-        final List<String>? bookmarks = locator<SharedPreferences>().getStringList(PreferenceTypes.favorites);
-        if (bookmarks != null) {
-          Get.bottomSheet(AppDefaultSchedulePicker(
-              scheduleIds: bookmarks,
-              setDefaultSchedule: (newId) => {_sharedPrefs.setString(PreferenceTypes.schedule, newId)}));
-        }
-        break;
-      case EventType.SET_DEFAULT_VIEW:
-        Get.bottomSheet(AppDefaultViewPicker(
-          setDefaultView: (int viewType) => locator<SharedPreferences>().setInt(PreferenceTypes.view, viewType),
-        ));
-        break;
-    }
-  }
-
-  void changeTheme(String themeString) {
-    switch (themeString) {
-      case "light":
-        _themeRepository.saveTheme(CustomTheme.light);
-        break;
-      case "dark":
-        _themeRepository.saveTheme(CustomTheme.dark);
-        break;
-      case "system":
-        _themeRepository.saveTheme(CustomTheme.system);
-        break;
-      default:
-        _themeRepository.saveTheme(CustomTheme.system);
-        break;
-    }
-  }
+  SharedPreferences get sharedPrefs => _sharedPrefs;
 
   Future<void> toggleFavorite(BuildContext context) async {
-    final currentFavorites = _sharedPrefs.getStringList(PreferenceTypes.favorites);
+    final currentFavorites =
+        _sharedPrefs.getStringList(PreferenceTypes.favorites);
 
     /// If the schedule IS saved in preferences
     if (currentFavorites!.contains(state.currentScheduleId)) {
@@ -132,7 +62,8 @@ class MainAppCubit extends Cubit<MainAppState> {
     currentFavorites.remove(state.currentScheduleId);
     (currentFavorites.isEmpty)
         ? _sharedPrefs.remove(PreferenceTypes.schedule)
-        : _sharedPrefs.setString(PreferenceTypes.schedule, currentFavorites.first);
+        : _sharedPrefs.setString(
+            PreferenceTypes.schedule, currentFavorites.first);
     await _databaseService.removeSchedule(state.currentScheduleId!);
     emit(state.copyWith(toggledFavorite: false));
     _sharedPrefs.setStringList(PreferenceTypes.favorites, currentFavorites);
@@ -145,6 +76,9 @@ class MainAppCubit extends Cubit<MainAppState> {
     emit(state.copyWith(toggledFavorite: true));
 
     _sharedPrefs.setStringList(PreferenceTypes.favorites, currentFavorites);
+    log(locator<SharedPreferences>()
+        .getStringList(PreferenceTypes.favorites)
+        .toString());
   }
 
   Future<void> initCached() async {
@@ -152,12 +86,14 @@ class MainAppCubit extends Cubit<MainAppState> {
     if (state.currentScheduleId != null) {
       return;
     }
-    final ApiResponse _apiResponse = await _implementationService.getCachedBookmarkedSchedule();
+    final ApiResponse _apiResponse =
+        await _implementationService.getCachedBookmarkedSchedule();
 
     switch (_apiResponse.status) {
       case ApiStatus.CACHED:
         ScheduleModel currentScheduleModel = _apiResponse.data!;
-        if (currentScheduleModel.days.any((element) => element.events.isNotEmpty)) {
+        if (currentScheduleModel.days
+            .any((element) => element.events.isNotEmpty)) {
           emit(state.copyWith(
               status: MainAppStatus.SCHEDULE_SELECTED,
               currentScheduleId: currentScheduleModel.id,
@@ -180,7 +116,8 @@ class MainAppCubit extends Cubit<MainAppState> {
     switch (_apiResponse.status) {
       case api.ApiStatus.REQUESTED:
         ScheduleModel currentScheduleModel = _apiResponse.data!;
-        if (currentScheduleModel.days.any((element) => element.events.isNotEmpty)) {
+        if (currentScheduleModel.days
+            .any((element) => element.events.isNotEmpty)) {
           emit(state.copyWith(
               status: MainAppStatus.SCHEDULE_SELECTED,
               currentScheduleId: currentScheduleModel.id,
@@ -194,7 +131,8 @@ class MainAppCubit extends Cubit<MainAppState> {
         break;
       case api.ApiStatus.CACHED:
         ScheduleModel currentScheduleModel = _apiResponse.data!;
-        if (currentScheduleModel.days.any((element) => element.events.isNotEmpty)) {
+        if (currentScheduleModel.days
+            .any((element) => element.events.isNotEmpty)) {
           emit(state.copyWith(
               status: MainAppStatus.SCHEDULE_SELECTED,
               currentScheduleId: currentScheduleModel.id,
@@ -206,7 +144,8 @@ class MainAppCubit extends Cubit<MainAppState> {
         }
         break;
       case api.ApiStatus.ERROR:
-        emit(state.copyWith(message: _apiResponse.message, status: MainAppStatus.FETCH_ERROR));
+        emit(state.copyWith(
+            message: _apiResponse.message, status: MainAppStatus.FETCH_ERROR));
         break;
       default:
         emit(state);
@@ -228,7 +167,8 @@ class MainAppCubit extends Cubit<MainAppState> {
   }
 
   void scrollToTop() {
-    _listViewScrollController.animateTo(0, duration: const Duration(seconds: 1), curve: Curves.easeInOut);
+    _listViewScrollController.animateTo(0,
+        duration: const Duration(seconds: 1), curve: Curves.easeInOut);
   }
 
   setLoading() {

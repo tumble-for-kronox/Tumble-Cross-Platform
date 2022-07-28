@@ -3,13 +3,19 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tumble/shared/preference_types.dart';
+import 'package:tumble/startup/get_it_instances.dart';
 import 'package:tumble/theme/cubit/theme_cubit.dart';
 import 'package:tumble/theme/cubit/theme_state.dart';
+import 'package:tumble/ui/drawer_generic/data/default_views_map.dart';
 import 'package:tumble/ui/main_app_widget/cubit/main_app_cubit.dart';
+import 'package:tumble/ui/main_app_widget/data/schools.dart';
 import 'package:tumble/ui/main_app_widget/main_app_bottom_nav_bar/cubit/bottom_nav_cubit.dart';
 import 'package:tumble/ui/main_app_widget/main_app_bottom_nav_bar/data/nav_bar_items.dart';
 import 'package:tumble/ui/main_app_widget/main_app_bottom_nav_bar/tumble_navigation_bar.dart';
-import 'package:tumble/ui/main_app_widget/misc/tumble_app_drawer.dart';
+import 'package:tumble/ui/main_app_widget/misc/tumble_drawer/tumble_app_drawer.dart';
+import 'package:tumble/ui/main_app_widget/misc/tumble_drawer/cubit/drawer_state.dart';
 import 'package:tumble/ui/main_app_widget/schedule_view_widgets/tumble_calendar_view/tumble_calendar_view.dart';
 import 'package:tumble/ui/main_app_widget/schedule_view_widgets/tumble_list_view/tumble_list_view.dart';
 import 'package:tumble/ui/main_app_widget/schedule_view_widgets/tumble_week_view/tumble_week_view.dart';
@@ -32,13 +38,7 @@ class _MainAppNavigationRootState extends State<MainAppNavigationRoot> {
         return BlocBuilder<ThemeCubit, ThemeState>(
           builder: ((context, themeState) {
             return Scaffold(
-                endDrawer: TumbleAppDrawer(
-                  handleDrawerEvent: (eventType) => context
-                      .read<MainAppCubit>()
-                      .handleDrawerEvent(eventType, context),
-                  limitOptions: false,
-                  currentThemeString: themeState.themeString,
-                ),
+                endDrawer: const TumbleAppDrawer(),
                 appBar: TumbleAppBar(
                   visibleBookmark: navState.index == 1 ||
                       navState.index == 2 ||

@@ -1,7 +1,10 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tumble/ui/cubit/init_cubit.dart';
 import 'package:tumble/ui/main_app_widget/data/schools.dart';
+import 'package:tumble/ui/main_app_widget/misc/tumble_drawer/cubit/drawer_state.dart';
 import 'package:tumble/ui/main_app_widget/search_page_widgets/search/school_card.dart';
 
 class SchoolSelectionPage extends StatefulWidget {
@@ -28,7 +31,7 @@ class _SchoolSelectionPageState extends State<SchoolSelectionPage> {
                 Padding(
                   padding: const EdgeInsets.only(top: 50, right: 20, left: 20),
                   child: Text(
-                    "Choose your school",
+                    "Choose your university",
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.onBackground,
                       fontSize: 26,
@@ -38,13 +41,15 @@ class _SchoolSelectionPageState extends State<SchoolSelectionPage> {
                 Column(
                   children: Schools.schools
                       .map((school) => SchoolCard(
-                            schoolName: school.schoolName,
-                            schoolId: school.schoolId,
-                            schoolLogo: school.schoolLogo,
-                            onTap: () {
-                              context.read<InitCubit>().setup(context, school);
-                            },
-                          ))
+                          schoolName: school.schoolName,
+                          schoolId: school.schoolId,
+                          schoolLogo: school.schoolLogo,
+                          selectSchool: () {
+                            context
+                                .read<DrawerCubit>()
+                                .setNameForNextSchool(school.schoolName);
+                            context.read<InitCubit>().setup(context, school);
+                          }))
                       .toList(),
                 ),
               ],

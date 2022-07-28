@@ -11,8 +11,8 @@ import 'package:tumble/models/ui_models/school_model.dart';
 import 'package:tumble/shared/preference_types.dart';
 import 'package:tumble/shared/setup.dart';
 import 'package:tumble/startup/get_it_instances.dart';
-import 'package:tumble/ui/main_app_widget/cubit/main_app_cubit.dart';
 import 'package:tumble/ui/main_app_widget/login_page/cubit/login_page_state.dart';
+import 'package:tumble/ui/main_app_widget/main_app_navigation_root.dart';
 
 import '../main_app_widget/login_page/login_page_root.dart';
 import '../main_app_widget/main_app_navigation_root.dart';
@@ -44,7 +44,6 @@ class InitCubit extends Cubit<InitState> {
     emit(InitState(defaultSchool: school.schoolName, status: InitStatus.HAS_SCHOOL));
     Navigator.of(context).pushAndRemoveUntil(
         CupertinoPageRoute(builder: (context) => const MainAppNavigationRoot()), (Route<dynamic> route) => false);
-    log("Changed school: ${school.schoolName}");
   }
 
   void setup(BuildContext context, School school) async {

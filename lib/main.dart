@@ -17,6 +17,7 @@ import 'package:tumble/ui/main_app_widget/main_app.dart';
 import 'package:tumble/ui/main_app_widget/main_app_bottom_nav_bar/cubit/bottom_nav_cubit.dart';
 import 'package:tumble/ui/main_app_widget/main_app_bottom_nav_bar/tumble_navigation_bar.dart';
 import 'package:tumble/ui/main_app_widget/main_app_navigation_root.dart';
+import 'package:tumble/ui/main_app_widget/misc/tumble_drawer/tumble_app_drawer.dart';
 import 'package:tumble/ui/main_app_widget/schedule_view_widgets/tumble_calendar_view/tumble_calendar_view.dart';
 import 'package:tumble/ui/main_app_widget/misc/tumble_app_bar.dart';
 import 'package:tumble/ui/main_app_widget/schedule_view_widgets/tumble_calendar_view/tumble_calendar_view.dart';
@@ -28,6 +29,7 @@ import 'package:tumble/ui/main_app_widget/search_page_widgets/search/schedule_se
 import 'package:tumble/ui/main_app_widget/search_page_widgets/search/tumble_search_page.dart';
 import 'package:tumble/ui/main_app_widget/search_page_widgets/search_bar_widget/searchbar_and_logo_container.dart';
 
+import 'ui/main_app_widget/misc/tumble_drawer/cubit/drawer_state.dart';
 import 'ui/main_app_widget/login_page/cubit/login_page_state.dart';
 
 void main() async {
@@ -87,6 +89,16 @@ void main() async {
       child: Row(children: const [
         MainApp(),
       ]),
+    ),
+    BlocProvider<DrawerCubit>(
+      create: (c) => DrawerCubit(),
+      child: Row(
+        children: const [
+          TumbleAppDrawer(),
+          SchoolSelectionPage(),
+          MainAppNavigationRoot()
+        ],
+      ),
     ),
     BlocProvider<LoginPageCubit>(
         create: (c) => LoginPageCubit(),

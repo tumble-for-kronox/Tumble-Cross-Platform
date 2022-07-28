@@ -43,7 +43,6 @@ class SearchPageCubit extends Cubit<SearchPageState> {
               errorMessage: apiResponse.message));
           break;
         default:
-          log('In default');
           break;
       }
     }
@@ -55,14 +54,17 @@ class SearchPageCubit extends Cubit<SearchPageState> {
   }
 
   void resetCubit() {
-    _focusNode.unfocus();
-    _textEditingController.clear();
-    emit(state.copyWith(
-        status: SearchPageStatus.INITIAL,
-        clearButtonVisible: false,
-        programList: null,
-        errorMessage: null,
-        focused: false));
+    if (textEditingController.text.isNotEmpty) {
+      _textEditingController.clear();
+    } else {
+      _focusNode.unfocus();
+      emit(state.copyWith(
+          status: SearchPageStatus.INITIAL,
+          clearButtonVisible: false,
+          programList: null,
+          errorMessage: null,
+          focused: false));
+    }
   }
 
   Future<void> init() async {

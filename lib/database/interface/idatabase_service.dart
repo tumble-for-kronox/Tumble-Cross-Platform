@@ -14,6 +14,7 @@ abstract class IDatabaseScheduleService {
 
   Future<ScheduleModel?> getOneSchedule(String id);
 
+  Future removeAllSchedules();
   Future setUserSession(KronoxUserModel kronoxUser);
 
   Future removeUserSession();
