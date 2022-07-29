@@ -1,10 +1,15 @@
 part of 'login_page_state.dart';
 
 class LoginPageCubit extends Cubit<LoginPageState> {
-  LoginPageCubit() : super(LoginPageState(status: LoginPageStatus.INITIAL));
+  LoginPageCubit()
+      : super(LoginPageState(
+          status: LoginPageStatus.INITIAL,
+          usernameController: TextEditingController(),
+          passwordController: TextEditingController(),
+          rememberUser: false,
+        ));
 
   final _userRepo = locator<UserRepository>();
-  final _databaseRepo = locator<DatabaseRepository>();
   final _secureStorage = locator<SecureStorageRepository>();
 
   void submitLogin(BuildContext context) async {
@@ -21,11 +26,10 @@ class LoginPageCubit extends Cubit<LoginPageState> {
 
     switch (userRes.status) {
       case ApiStatus.REQUESTED:
-        _databaseRepo.setUserSession(userRes.data!);
-        if (state.rememberUser) {
+        if (state.rememberUser!) {
           storeUserCreds(username, password);
         }
-        emit(state.copyWith(status: LoginPageStatus.SUCCESS));
+        emit(state.copyWith(status: LoginPageStatus.SUCCESS, userSession: userRes.data!));
         break;
       case ApiStatus.ERROR:
         emit(state.copyWith(status: LoginPageStatus.INITIAL, errorMessage: userRes.message));
@@ -37,12 +41,20 @@ class LoginPageCubit extends Cubit<LoginPageState> {
   bool formValidated() {
     final password = state.passwordController.text;
     final username = state.usernameController.text;
-    log("username: ${state.usernameController.text}");
     return password != "" && username != "";
   }
 
   void setSchool(School school) {
     emit(state.copyWith(school: school));
+  }
+
+  void emitCleanInitState() {
+    emit(LoginPageState(
+      status: LoginPageStatus.INITIAL,
+      usernameController: TextEditingController(),
+      passwordController: TextEditingController(),
+      rememberUser: false,
+    ));
   }
 
   void updateRememberMe(bool? value) {

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:tumble/models/ui_models/school_model.dart';
+import 'package:tumble/ui/auth_cubit/auth_cubit.dart';
 import 'package:tumble/ui/cubit/init_cubit.dart';
 import 'package:tumble/ui/main_app_widget/login_page/cubit/login_page_state.dart';
 import 'package:tumble/ui/scaffold_message.dart';
@@ -24,9 +25,11 @@ class _LoginPageRootState extends State<LoginPageRoot> {
       listener: ((context, state) {
         if (state.status == LoginPageStatus.SUCCESS) {
           showScaffoldMessage(context, FetchResponse.loginSuccess);
-          context.read<InitCubit>().changeSchool(context, state.school!);
+          BlocProvider.of<AuthCubit>(context).setUserSession(state.userSession!);
+          BlocProvider.of<InitCubit>(context).changeSchool(context, state.school!);
         } else if (state.status == LoginPageStatus.INITIAL && state.errorMessage != null) {
           showScaffoldMessage(context, state.errorMessage!);
+          BlocProvider.of<LoginPageCubit>(context).emitCleanInitState();
         }
       }),
       builder: (context, state) {
@@ -92,7 +95,7 @@ Widget _form(LoginPageState state, BuildContext context) {
 
 Widget _formSubmitButton(LoginPageState state, BuildContext context) {
   return TextButton(
-    onPressed: () => context.read<LoginPageCubit>().submitLogin(context),
+    onPressed: () => BlocProvider.of<LoginPageCubit>(context).submitLogin(context),
     child: const Text("Login"),
   );
 }
@@ -100,7 +103,7 @@ Widget _formSubmitButton(LoginPageState state, BuildContext context) {
 Widget _formRememberMeCheckBox(LoginPageState state, BuildContext context) {
   return Checkbox(
     value: state.rememberUser,
-    onChanged: (value) => context.read<LoginPageCubit>().updateRememberMe(value),
+    onChanged: (value) => BlocProvider.of<LoginPageCubit>(context).updateRememberMe(value),
   );
 }
 

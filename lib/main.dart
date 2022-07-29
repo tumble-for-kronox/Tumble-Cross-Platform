@@ -9,6 +9,7 @@ import 'package:tumble/shared/setup.dart';
 import 'package:tumble/startup/get_it_instances.dart';
 import 'package:tumble/theme/cubit/theme_cubit.dart';
 import 'package:tumble/theme/repository/theme_repository.dart';
+import 'package:tumble/ui/auth_cubit/auth_cubit.dart';
 import 'package:tumble/ui/cubit/init_cubit.dart';
 import 'package:tumble/ui/drawer_generic/app_theme_picker.dart';
 import 'package:tumble/ui/main_app_widget/cubit/main_app_cubit.dart';
@@ -36,7 +37,6 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initSingletons();
   setupRequiredSharedPreferences();
-  setupKronoxSession();
   runApp(MultiBlocProvider(providers: [
     BlocProvider<InitCubit>(
       create: (c) => InitCubit(),
@@ -93,19 +93,24 @@ void main() async {
     BlocProvider<DrawerCubit>(
       create: (c) => DrawerCubit(),
       child: Row(
-        children: const [
-          TumbleAppDrawer(),
-          SchoolSelectionPage(),
-          MainAppNavigationRoot()
-        ],
+        children: const [TumbleAppDrawer(), SchoolSelectionPage(), MainAppNavigationRoot()],
       ),
     ),
     BlocProvider<LoginPageCubit>(
-        create: (c) => LoginPageCubit(),
-        child: Row(
-          children: const [
-            LoginPageRoot(),
-          ],
-        ))
+      create: (c) => LoginPageCubit(),
+      child: Row(
+        children: const [
+          LoginPageRoot(),
+        ],
+      ),
+    ),
+    BlocProvider<AuthCubit>(
+      create: (c) => AuthCubit(),
+      child: Row(
+        children: const [
+          LoginPageRoot(),
+        ],
+      ),
+    )
   ], child: const MainApp()));
 }

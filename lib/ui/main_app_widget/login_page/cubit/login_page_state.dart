@@ -20,15 +20,19 @@ class LoginPageState extends Equatable {
   final LoginPageStatus status;
   final String? errorMessage;
   final School? school;
-  final bool rememberUser;
-  final TextEditingController usernameController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
+  final bool? rememberUser;
+  final KronoxUserModel? userSession;
+  final TextEditingController usernameController;
+  final TextEditingController passwordController;
 
-  LoginPageState({
+  const LoginPageState({
     required this.status,
+    required this.usernameController,
+    required this.passwordController,
+    required this.rememberUser,
+    this.userSession,
     this.errorMessage,
     this.school,
-    this.rememberUser = false,
   });
 
   LoginPageState copyWith({
@@ -36,15 +40,21 @@ class LoginPageState extends Equatable {
     String? errorMessage,
     School? school,
     bool? rememberUser,
+    TextEditingController? usernameController,
+    TextEditingController? passwordController,
+    KronoxUserModel? userSession,
   }) {
     return LoginPageState(
       status: status ?? this.status,
+      usernameController: usernameController ?? this.usernameController,
+      passwordController: passwordController ?? this.passwordController,
       errorMessage: errorMessage ?? this.errorMessage,
       school: school ?? this.school,
       rememberUser: rememberUser ?? this.rememberUser,
+      userSession: userSession ?? this.userSession,
     );
   }
 
   @override
-  List<Object?> get props => [status, usernameController, passwordController];
+  List<Object?> get props => [status, usernameController, passwordController, rememberUser];
 }

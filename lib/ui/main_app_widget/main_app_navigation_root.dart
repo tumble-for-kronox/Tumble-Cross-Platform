@@ -8,6 +8,7 @@ import 'package:tumble/shared/preference_types.dart';
 import 'package:tumble/startup/get_it_instances.dart';
 import 'package:tumble/theme/cubit/theme_cubit.dart';
 import 'package:tumble/theme/cubit/theme_state.dart';
+import 'package:tumble/ui/auth_cubit/auth_cubit.dart';
 import 'package:tumble/ui/drawer_generic/data/default_views_map.dart';
 import 'package:tumble/ui/main_app_widget/cubit/main_app_cubit.dart';
 import 'package:tumble/ui/main_app_widget/data/schools.dart';
@@ -35,40 +36,38 @@ class _MainAppNavigationRootState extends State<MainAppNavigationRoot> {
   Widget build(BuildContext context) {
     return BlocBuilder<MainAppNavigationCubit, MainAppNavigationState>(
       builder: (context, navState) {
-        return BlocBuilder<ThemeCubit, ThemeState>(
-          builder: ((context, themeState) {
-            return Scaffold(
-                endDrawer: const TumbleAppDrawer(),
-                appBar: TumbleAppBar(
-                  visibleBookmark: navState.index == 1 ||
-                      navState.index == 2 ||
-                      navState.index == 3,
-                  toggleFavorite: () async => await context
-                      .read<MainAppCubit>()
-                      .toggleFavorite(context),
-                ),
-                body: FutureBuilder(
-                    future: context.read<MainAppCubit>().initMainAppCubit(),
-                    builder: (BuildContext context, AsyncSnapshot snapshot) {
-                      switch (navState.navbarItem) {
-                        case NavbarItem.SEARCH:
-                          return const TumbleSearchPage();
-                        case NavbarItem.USER_ACCOUNT:
-                          return Container();
-                        case NavbarItem.LIST:
-                          return const TumbleListView();
-                        case NavbarItem.WEEK:
-                          return const TumbleWeekView();
-                        case NavbarItem.CALENDAR:
-                          return const TumbleCalendarView();
-                      }
-                    }),
-                bottomNavigationBar: TumbleNavigationBar(onTap: (index) {
-                  context
-                      .read<MainAppNavigationCubit>()
-                      .getNavBarItem(NavbarItem.values[index]);
-                }));
-          }),
+        return BlocBuilder<AuthCubit, AuthState>(
+          builder: (context, state) {
+            return BlocBuilder<ThemeCubit, ThemeState>(
+              builder: ((context, themeState) {
+                return Scaffold(
+                    endDrawer: const TumbleAppDrawer(),
+                    appBar: TumbleAppBar(
+                      visibleBookmark: navState.index == 1 || navState.index == 2 || navState.index == 3,
+                      toggleFavorite: () async => await context.read<MainAppCubit>().toggleFavorite(context),
+                    ),
+                    body: FutureBuilder(
+                        future: context.read<MainAppCubit>().initMainAppCubit(),
+                        builder: (BuildContext context, AsyncSnapshot snapshot) {
+                          switch (navState.navbarItem) {
+                            case NavbarItem.SEARCH:
+                              return const TumbleSearchPage();
+                            case NavbarItem.USER_ACCOUNT:
+                              return Container();
+                            case NavbarItem.LIST:
+                              return const TumbleListView();
+                            case NavbarItem.WEEK:
+                              return const TumbleWeekView();
+                            case NavbarItem.CALENDAR:
+                              return const TumbleCalendarView();
+                          }
+                        }),
+                    bottomNavigationBar: TumbleNavigationBar(onTap: (index) {
+                      context.read<MainAppNavigationCubit>().getNavBarItem(NavbarItem.values[index]);
+                    }));
+              }),
+            );
+          },
         );
       },
     );

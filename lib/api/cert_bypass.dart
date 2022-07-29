@@ -21,7 +21,6 @@ class HttpService {
       client.badCertificateCallback = ((X509Certificate cert, String host, int port) => true);
       HttpClientRequest request = await client.postUrl(url).timeout(const Duration(seconds: 10));
       request.headers.add("Content-Type", "application/json; charset=UTF-8");
-      log(body);
       request.add(utf8.encode(body));
       return await request.close();
     } on Exception {

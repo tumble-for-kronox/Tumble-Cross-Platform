@@ -8,6 +8,7 @@ import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:tumble/theme/cubit/theme_cubit.dart';
 import 'package:tumble/theme/cubit/theme_state.dart';
 import 'package:tumble/theme/data/colors.dart';
+import 'package:tumble/ui/auth_cubit/auth_cubit.dart';
 import 'package:tumble/ui/cubit/init_cubit.dart';
 import 'package:tumble/ui/main_app_widget/login_page/login_page_root.dart';
 import 'package:tumble/ui/main_app_widget/main_app_navigation_root.dart';
@@ -44,11 +45,11 @@ class _MainAppState extends State<MainApp> {
             ),
             themeMode: state.themeMode,
             home: FutureBuilder(
-                future: context.read<InitCubit>().init(),
+                future: BlocProvider.of<InitCubit>(context).init(),
                 builder: (context, snapshot) {
                   return BlocBuilder<InitCubit, InitState>(
-                    builder: (context, state) {
-                      switch (state.status) {
+                    builder: (initContext, initState) {
+                      switch (initState.status) {
                         case InitStatus.HAS_SCHOOL:
                           return const MainAppNavigationRoot();
                         case InitStatus.INITIAL:
