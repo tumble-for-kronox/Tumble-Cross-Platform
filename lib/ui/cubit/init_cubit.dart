@@ -48,7 +48,8 @@ class InitCubit extends Cubit<InitState> {
     emit(InitState(
         defaultSchool: school.schoolName, status: InitStatus.HAS_SCHOOL));
     Navigator.of(context).pushAndRemoveUntil(
-        CupertinoPageRoute(builder: (context) => const MainAppNavigationRoot()),
+        CupertinoPageRoute(
+            builder: (context) => const MainAppNavigationRootPage()),
         (Route<dynamic> route) => false);
   }
 

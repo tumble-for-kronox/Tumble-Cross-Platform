@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get/get.dart';
 import 'package:tumble/ui/cubit/init_cubit.dart';
 import 'package:tumble/ui/main_app_widget/main_app.dart';
 import 'package:tumble/ui/main_app_widget/misc/tumble_app_bar.dart';

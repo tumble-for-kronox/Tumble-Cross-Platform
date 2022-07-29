@@ -23,14 +23,15 @@ import 'package:tumble/ui/main_app_widget/search_page_widgets/search/tumble_sear
 
 import 'misc/tumble_app_bar.dart';
 
-class MainAppNavigationRoot extends StatefulWidget {
-  const MainAppNavigationRoot({Key? key}) : super(key: key);
+class MainAppNavigationRootPage extends StatefulWidget {
+  const MainAppNavigationRootPage({Key? key}) : super(key: key);
 
   @override
-  State<MainAppNavigationRoot> createState() => _MainAppNavigationRootState();
+  State<MainAppNavigationRootPage> createState() =>
+      _MainAppNavigationRootPageState();
 }
 
-class _MainAppNavigationRootState extends State<MainAppNavigationRoot> {
+class _MainAppNavigationRootPageState extends State<MainAppNavigationRootPage> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<MainAppNavigationCubit, MainAppNavigationState>(

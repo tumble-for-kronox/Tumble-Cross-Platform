@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:tumble/theme/cubit/theme_cubit.dart';
 import 'package:tumble/theme/cubit/theme_state.dart';
 import 'package:tumble/theme/data/colors.dart';
@@ -12,6 +11,7 @@ import 'package:tumble/ui/cubit/init_cubit.dart';
 import 'package:tumble/ui/main_app_widget/login_page/login_page_root.dart';
 import 'package:tumble/ui/main_app_widget/main_app_navigation_root.dart';
 import 'package:tumble/ui/main_app_widget/school_selection_page.dart';
+import 'package:tumble/ui/navigation/app_navigator.dart';
 import 'cubit/main_app_cubit.dart';
 
 class MainApp extends StatefulWidget {
@@ -23,34 +23,38 @@ class MainApp extends StatefulWidget {
 
 class _MainAppState extends State<MainApp> {
   @override
-  Widget build(BuildContext context) => BlocBuilder<ThemeCubit, ThemeState>(
-      builder: ((context, state) => GetMaterialApp(
-            title: 'Tumble',
-            theme: ThemeData(
-              colorScheme: CustomColors.lightColors,
-              fontFamily: 'Roboto',
-            ),
-            darkTheme: ThemeData(
-              colorScheme: CustomColors.darkColors,
-              bottomNavigationBarTheme: BottomNavigationBarThemeData(
-                selectedItemColor: CustomColors.darkColors.primary,
+  Widget build(BuildContext context) {
+    final navigator = BlocProvider.of<AppNavigator>(context);
+    return BlocBuilder<ThemeCubit, ThemeState>(
+        builder: ((context, state) => MaterialApp(
+              debugShowCheckedModeBanner: false,
+              title: 'Tumble',
+              theme: ThemeData(
+                colorScheme: CustomColors.lightColors,
+                fontFamily: 'Roboto',
               ),
-              fontFamily: 'Roboto',
-            ),
-            themeMode: state.themeMode,
-            home: FutureBuilder(
-                future: context.read<InitCubit>().init(),
-                builder: (context, snapshot) {
-                  return BlocBuilder<InitCubit, InitState>(
-                    builder: (context, state) {
-                      switch (state.status) {
-                        case InitStatus.HAS_SCHOOL:
-                          return const MainAppNavigationRoot();
-                        case InitStatus.INITIAL:
-                          return const SchoolSelectionPage();
-                      }
-                    },
-                  );
-                }),
-          )));
+              darkTheme: ThemeData(
+                colorScheme: CustomColors.darkColors,
+                bottomNavigationBarTheme: BottomNavigationBarThemeData(
+                  selectedItemColor: CustomColors.darkColors.primary,
+                ),
+                fontFamily: 'Roboto',
+              ),
+              themeMode: state.themeMode,
+              home: FutureBuilder(
+                  future: context.read<InitCubit>().init(),
+                  builder: (context, snapshot) {
+                    return BlocBuilder<InitCubit, InitState>(
+                      builder: (context, state) {
+                        switch (state.status) {
+                          case InitStatus.HAS_SCHOOL:
+                            return const MainAppNavigationRootPage();
+                          case InitStatus.INITIAL:
+                            return const SchoolSelectionPage();
+                        }
+                      },
+                    );
+                  }),
+            )));
+  }
 }
