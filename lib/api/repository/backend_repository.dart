@@ -124,7 +124,6 @@ class BackendRepository implements IBackendService {
   Future postUserLogin(String username, String password, String defaultSchool) async {
     final school = (Schools.schools.where((school) => school.schoolName == defaultSchool).single).schoolId.index;
     final Map<String, String> body = {ApiEndPoints.username: username, ApiEndPoints.password: password};
-
     if (kDebugMode) {
       var uri =
           Uri.https(ApiEndPoints.debugBaseUrl, ApiEndPoints.postUserLogin, {ApiEndPoints.school: school.toString()});

@@ -10,11 +10,13 @@ import 'package:tumble/shared/preference_types.dart';
 import 'package:tumble/shared/secure_storage_keys.dart';
 import 'package:tumble/startup/get_it_instances.dart';
 
+import '../../database/repository/secure_storage_repository.dart';
+
 class UserRepository implements IUserService {
   final _backendRepository = locator<BackendRepository>();
   final _sharedPrefs = locator<SharedPreferences>();
   final _databaseRepository = locator<DatabaseRepository>();
-  final _secureStorage = locator<FlutterSecureStorage>();
+  final _secureStorage = locator<SecureStorageRepository>();
 
   @override
   Future<ApiResponse<UserEventCollectionModel>> getUserEvents() async {
@@ -27,8 +29,8 @@ class UserRepository implements IUserService {
   @override
   Future<ApiResponse> postUserLogin(String? username, String? password) async {
     final school = _sharedPrefs.getString(PreferenceTypes.school)!;
-    username ??= await _secureStorage.read(key: SecureStorageKeys.username);
-    password ??= await _secureStorage.read(key: SecureStorageKeys.password);
+    username ??= await _secureStorage.getUsername();
+    password ??= await _secureStorage.getPassword();
 
     return await _backendRepository.postUserLogin(username!, password!, school);
   }

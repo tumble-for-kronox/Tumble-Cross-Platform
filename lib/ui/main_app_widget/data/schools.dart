@@ -8,7 +8,7 @@ class Schools {
       schoolId: SchoolEnum.hkr,
       schoolName: 'Kristianstad University',
       schoolLogo: 'assets/school_logos/hkr_logo.png',
-      loginRequired: false,
+      loginRequired: true,
     ),
     School(
       schoolId: SchoolEnum.mau,

@@ -30,33 +30,34 @@ class _LoginPageRootState extends State<LoginPageRoot> {
         }
       }),
       builder: (context, state) {
-        switch (state.status) {
-          case LoginPageStatus.INITIAL:
-            return _initialState(state, context);
-          case LoginPageStatus.LOADING:
-            return const SpinKitThreeBounce(color: CustomColors.orangePrimary);
-          default:
-            return _initialState(state, context);
-        }
+        return Scaffold(
+          appBar: _appBar(state, context),
+          body: SafeArea(
+            child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: () {
+                  switch (state.status) {
+                    case LoginPageStatus.INITIAL:
+                      return _initialState(state, context);
+                    case LoginPageStatus.LOADING:
+                      return const SpinKitThreeBounce(color: CustomColors.orangePrimary);
+                    default:
+                      return _initialState(state, context);
+                  }
+                }()),
+          ),
+        );
       },
     );
   }
 }
 
 Widget _initialState(LoginPageState state, BuildContext context) {
-  return Scaffold(
-    appBar: _appBar(state, context),
-    body: SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          children: [
-            const Text("Login"),
-            _form(state, context),
-          ],
-        ),
-      ),
-    ),
+  return Column(
+    children: [
+      const Text("Login"),
+      _form(state, context),
+    ],
   );
 }
 
@@ -82,6 +83,7 @@ Widget _form(LoginPageState state, BuildContext context) {
       children: [
         _formUsernameField(state, context),
         _formPasswordField(state, context),
+        _formRememberMeCheckBox(state, context),
         _formSubmitButton(state, context),
       ],
     ),
@@ -90,10 +92,15 @@ Widget _form(LoginPageState state, BuildContext context) {
 
 Widget _formSubmitButton(LoginPageState state, BuildContext context) {
   return TextButton(
-    onPressed: context.read<LoginPageCubit>().formValidated()
-        ? () => context.read<LoginPageCubit>().submitLogin(context)
-        : null,
+    onPressed: () => context.read<LoginPageCubit>().submitLogin(context),
     child: const Text("Login"),
+  );
+}
+
+Widget _formRememberMeCheckBox(LoginPageState state, BuildContext context) {
+  return Checkbox(
+    value: state.rememberUser,
+    onChanged: (value) => context.read<LoginPageCubit>().updateRememberMe(value),
   );
 }
 

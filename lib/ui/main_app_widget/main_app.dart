@@ -23,6 +23,11 @@ class MainApp extends StatefulWidget {
 
 class _MainAppState extends State<MainApp> {
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) => BlocBuilder<ThemeCubit, ThemeState>(
       builder: ((context, state) => GetMaterialApp(
             title: 'Tumble',
