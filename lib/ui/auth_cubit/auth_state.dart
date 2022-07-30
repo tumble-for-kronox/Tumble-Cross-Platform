@@ -1,6 +1,6 @@
 part of 'auth_cubit.dart';
 
-enum AuthStatus { AUTHENTICATED, UNAUTHENTICATED }
+enum AuthStatus { AUTHENTICATED, UNAUTHENTICATED, INITIAL, REFRESHING }
 
 class AuthState extends Equatable {
   final AuthStatus status;

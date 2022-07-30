@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:tumble/api/apiservices/fetch_response.dart';
@@ -30,13 +31,10 @@ class _TumbleWeekViewState extends State<TumbleWeekView> {
             return NoScheduleAvailable(
               errorType: 'No bookmarked schedules',
               cupertinoAlertDialog: CustomCupertinoAlerts.noBookMarkedSchedules(
-                  context,
-                  () => context
-                      .read<MainAppNavigationCubit>()
-                      .getNavBarItem(NavbarItem.SEARCH)),
+                  context, () => context.read<MainAppNavigationCubit>().getNavBarItem(NavbarItem.SEARCH)),
             );
           case MainAppStatus.LOADING:
-            return const SpinKitThreeBounce(color: CustomColors.orangePrimary);
+            return SpinKitThreeBounce(color: Theme.of(context).colorScheme.primary);
           case MainAppStatus.SCHEDULE_SELECTED:
             return Stack(children: [
               SizedBox(
@@ -56,12 +54,8 @@ class _TumbleWeekViewState extends State<TumbleWeekView> {
           case MainAppStatus.EMPTY_SCHEDULE:
             return NoScheduleAvailable(
               errorType: FetchResponse.emptyScheduleError,
-              cupertinoAlertDialog:
-                  CustomCupertinoAlerts.scheduleContainsNoViews(
-                      context,
-                      () => context
-                          .read<MainAppNavigationCubit>()
-                          .getNavBarItem(NavbarItem.SEARCH)),
+              cupertinoAlertDialog: CustomCupertinoAlerts.scheduleContainsNoViews(
+                  context, () => context.read<MainAppNavigationCubit>().getNavBarItem(NavbarItem.SEARCH)),
             );
         }
       },

@@ -6,7 +6,6 @@ class LoginPageCubit extends Cubit<LoginPageState> {
           status: LoginPageStatus.INITIAL,
           usernameController: TextEditingController(),
           passwordController: TextEditingController(),
-          rememberUser: false,
         ));
 
   final _userRepo = locator<UserRepository>();
@@ -24,11 +23,11 @@ class LoginPageCubit extends Cubit<LoginPageState> {
     emit(state.copyWith(status: LoginPageStatus.LOADING));
     ApiResponse userRes = await _userRepo.postUserLogin(username, password);
 
+    state.usernameController.clear();
+    state.passwordController.clear();
     switch (userRes.status) {
       case ApiStatus.REQUESTED:
-        if (state.rememberUser!) {
-          storeUserCreds(username, password);
-        }
+        storeUserCreds((userRes.data! as KronoxUserModel).refreshToken);
         emit(state.copyWith(status: LoginPageStatus.SUCCESS, userSession: userRes.data!));
         break;
       case ApiStatus.ERROR:
@@ -44,7 +43,7 @@ class LoginPageCubit extends Cubit<LoginPageState> {
     return password != "" && username != "";
   }
 
-  void setSchool(School school) {
+  void setSchool(School? school) {
     emit(state.copyWith(school: school));
   }
 
@@ -53,18 +52,10 @@ class LoginPageCubit extends Cubit<LoginPageState> {
       status: LoginPageStatus.INITIAL,
       usernameController: TextEditingController(),
       passwordController: TextEditingController(),
-      rememberUser: false,
     ));
   }
 
-  void updateRememberMe(bool? value) {
-    log(value.toString());
-    emit(state.copyWith(rememberUser: value));
-    log(state.rememberUser.toString());
-  }
-
-  void storeUserCreds(String username, String password) {
-    _secureStorage.setUsername(username);
-    _secureStorage.setPassword(password);
+  void storeUserCreds(String token) {
+    _secureStorage.setRefreshToken(token);
   }
 }

@@ -3,13 +3,17 @@ import 'dart:developer';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tumble/api/apiservices/api_response.dart';
 import 'package:tumble/api/repository/user_repository.dart';
 import 'package:tumble/database/repository/database_repository.dart';
 import 'package:tumble/database/repository/secure_storage_repository.dart';
+import 'package:tumble/extensions/extensions.dart';
 import 'package:tumble/models/api_models/kronox_user_model.dart';
 import 'package:tumble/models/ui_models/school_model.dart';
+import 'package:tumble/shared/preference_types.dart';
 import 'package:tumble/startup/get_it_instances.dart';
+import 'package:tumble/ui/main_app_widget/data/schools.dart';
 import 'package:tumble/ui/scaffold_message.dart';
 
 part 'login_page_cubit.dart';
@@ -20,7 +24,6 @@ class LoginPageState extends Equatable {
   final LoginPageStatus status;
   final String? errorMessage;
   final School? school;
-  final bool? rememberUser;
   final KronoxUserModel? userSession;
   final TextEditingController usernameController;
   final TextEditingController passwordController;
@@ -29,7 +32,6 @@ class LoginPageState extends Equatable {
     required this.status,
     required this.usernameController,
     required this.passwordController,
-    required this.rememberUser,
     this.userSession,
     this.errorMessage,
     this.school,
@@ -39,7 +41,6 @@ class LoginPageState extends Equatable {
     LoginPageStatus? status,
     String? errorMessage,
     School? school,
-    bool? rememberUser,
     TextEditingController? usernameController,
     TextEditingController? passwordController,
     KronoxUserModel? userSession,
@@ -50,11 +51,10 @@ class LoginPageState extends Equatable {
       passwordController: passwordController ?? this.passwordController,
       errorMessage: errorMessage ?? this.errorMessage,
       school: school ?? this.school,
-      rememberUser: rememberUser ?? this.rememberUser,
       userSession: userSession ?? this.userSession,
     );
   }
 
   @override
-  List<Object?> get props => [status, usernameController, passwordController, rememberUser];
+  List<Object?> get props => [status, usernameController, passwordController];
 }

@@ -11,36 +11,42 @@ import 'package:tumble/startup/get_it_instances.dart';
 part 'auth_state.dart';
 
 class AuthCubit extends Cubit<AuthState> {
-  AuthCubit() : super(const AuthState(status: AuthStatus.UNAUTHENTICATED)) {
+  AuthCubit() : super(const AuthState(status: AuthStatus.INITIAL)) {
     login();
   }
 
   Future<void> login() async {
-    log("LOGIN CALLED");
+    emit(state.copyWith(status: AuthStatus.INITIAL));
     final secureStorage = locator<SecureStorageRepository>();
     final userRepository = locator<UserRepository>();
 
-    final storedUsername = await secureStorage.getUsername();
-    final storedPassword = await secureStorage.getPassword();
+    final refreshToken = await secureStorage.getRefreshToken();
 
-    if (storedUsername != null && storedPassword != null) {
-      ApiResponse loggedInUser = await userRepository.postUserLogin(storedUsername, storedPassword);
+    if (refreshToken != null) {
+      ApiResponse loggedInUser = await userRepository.getRefreshSession(refreshToken);
 
       switch (loggedInUser.status) {
         case ApiStatus.REQUESTED:
           setUserSession(loggedInUser.data!);
           log("Successfully logged in user: ${loggedInUser.data}");
-          break;
+          return;
         default:
+          emit(state.copyWith(status: AuthStatus.UNAUTHENTICATED));
           log("Failed to login user.");
           return;
       }
     }
+    emit(state.copyWith(status: AuthStatus.UNAUTHENTICATED));
   }
 
   void setUserSession(KronoxUserModel user) {
     emit(state.copyWith(status: AuthStatus.AUTHENTICATED, userSession: user));
   }
 
-  void logout() => emit(state.copyWith(status: AuthStatus.UNAUTHENTICATED, userSession: null));
+  void logout() {
+    locator<SecureStorageRepository>().clear();
+    emit(state.copyWith(status: AuthStatus.UNAUTHENTICATED, userSession: null));
+  }
+
+  bool get authenticated => state.status == AuthStatus.AUTHENTICATED;
 }

@@ -17,7 +17,7 @@ _$_UserEventCollectionModel _$$_UserEventCollectionModelFromJson(
           .map((e) =>
               AvailableUserEventModel.fromJson(e as Map<String, dynamic>))
           .toList(),
-      availableEvents: (json['availableEvents'] as List<dynamic>)
+      unregisteredEvents: (json['unregisteredEvents'] as List<dynamic>)
           .map((e) =>
               AvailableUserEventModel.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -29,6 +29,6 @@ Map<String, dynamic> _$$_UserEventCollectionModelToJson(
       'upcomingEvents': instance.upcomingEvents.map((e) => e.toJson()).toList(),
       'registeredEvents':
           instance.registeredEvents.map((e) => e.toJson()).toList(),
-      'availableEvents':
-          instance.availableEvents.map((e) => e.toJson()).toList(),
+      'unregisteredEvents':
+          instance.unregisteredEvents.map((e) => e.toJson()).toList(),
     };

@@ -12,11 +12,9 @@ class ToTopButton extends StatelessWidget {
       height: 50,
       width: 50,
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surface,
+        color: Theme.of(context).colorScheme.primary,
         borderRadius: BorderRadius.circular(5),
-        boxShadow: const <BoxShadow>[
-          BoxShadow(color: Colors.black26, blurRadius: 3, offset: Offset(0, 2))
-        ],
+        boxShadow: const <BoxShadow>[BoxShadow(color: Colors.black26, blurRadius: 3, offset: Offset(0, 2))],
       ),
       child: MaterialButton(
           onPressed: scrollToTop,
@@ -26,12 +24,11 @@ class ToTopButton extends StatelessWidget {
             children: [
               Icon(
                 Icons.keyboard_arrow_up_sharp,
-                color: Theme.of(context).colorScheme.onSurface,
+                color: Theme.of(context).colorScheme.onPrimary,
               ),
               Text(
                 'TOP',
-                style:
-                    TextStyle(color: Theme.of(context).colorScheme.onSurface),
+                style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
               )
             ],
           )),

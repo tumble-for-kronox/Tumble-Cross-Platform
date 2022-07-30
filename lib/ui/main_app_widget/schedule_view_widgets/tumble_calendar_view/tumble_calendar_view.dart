@@ -35,21 +35,16 @@ class _TumbleCalendarViewState extends State<TumbleCalendarView> {
             return NoScheduleAvailable(
               errorType: 'No bookmarked schedules',
               cupertinoAlertDialog: CustomCupertinoAlerts.noBookMarkedSchedules(
-                  context,
-                  () => context
-                      .read<MainAppNavigationCubit>()
-                      .getNavBarItem(NavbarItem.SEARCH)),
+                  context, () => context.read<MainAppNavigationCubit>().getNavBarItem(NavbarItem.SEARCH)),
             );
           case MainAppStatus.LOADING:
-            return const SpinKitThreeBounce(color: CustomColors.orangePrimary);
+            return SpinKitThreeBounce(color: Theme.of(context).colorScheme.primary);
 
           case MainAppStatus.SCHEDULE_SELECTED:
             return SfCalendar(
-                onTap: (calendarTapDetails) =>
-                    log(calendarTapDetails.appointments!.toList().toString()),
+                onTap: (calendarTapDetails) => log(calendarTapDetails.appointments!.toList().toString()),
                 view: CalendarView.month,
-                dataSource:
-                    ScheduleDataSource(_getDataSource(state.listOfDays!)),
+                dataSource: ScheduleDataSource(_getDataSource(state.listOfDays!)),
                 headerStyle: CalendarHeaderStyle(
                     textAlign: TextAlign.center,
                     backgroundColor: Theme.of(context).colorScheme.primary,
@@ -61,37 +56,25 @@ class _TumbleCalendarViewState extends State<TumbleCalendarView> {
                         fontWeight: FontWeight.w500)),
                 monthViewSettings: MonthViewSettings(
                     navigationDirection: MonthNavigationDirection.vertical,
-                    appointmentDisplayMode:
-                        MonthAppointmentDisplayMode.appointment,
+                    appointmentDisplayMode: MonthAppointmentDisplayMode.appointment,
                     monthCellStyle: MonthCellStyle(
                       backgroundColor: Theme.of(context).colorScheme.background,
-                      trailingDatesBackgroundColor:
-                          Theme.of(context).colorScheme.background,
-                      leadingDatesBackgroundColor:
-                          Theme.of(context).colorScheme.background,
+                      trailingDatesBackgroundColor: Theme.of(context).colorScheme.background,
+                      leadingDatesBackgroundColor: Theme.of(context).colorScheme.background,
                       textStyle: TextStyle(
-                          fontSize: 12,
-                          fontFamily: 'Roboto',
-                          color: Theme.of(context).colorScheme.onBackground),
+                          fontSize: 12, fontFamily: 'Roboto', color: Theme.of(context).colorScheme.onBackground),
                     )));
           case MainAppStatus.FETCH_ERROR:
             return NoScheduleAvailable(
               errorType: state.message!,
               cupertinoAlertDialog: CustomCupertinoAlerts.fetchError(
-                  context,
-                  () => context
-                      .read<MainAppNavigationCubit>()
-                      .getNavBarItem(NavbarItem.SEARCH)),
+                  context, () => context.read<MainAppNavigationCubit>().getNavBarItem(NavbarItem.SEARCH)),
             );
           case MainAppStatus.EMPTY_SCHEDULE:
             return NoScheduleAvailable(
               errorType: FetchResponse.emptyScheduleError,
-              cupertinoAlertDialog:
-                  CustomCupertinoAlerts.scheduleContainsNoViews(
-                      context,
-                      () => context
-                          .read<MainAppNavigationCubit>()
-                          .getNavBarItem(NavbarItem.SEARCH)),
+              cupertinoAlertDialog: CustomCupertinoAlerts.scheduleContainsNoViews(
+                  context, () => context.read<MainAppNavigationCubit>().getNavBarItem(NavbarItem.SEARCH)),
             );
         }
       },

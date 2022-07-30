@@ -7,22 +7,17 @@ class SecureStorageRepository implements ISecureStorage {
   final AndroidOptions aOptions = const AndroidOptions(encryptedSharedPreferences: true);
 
   @override
-  Future<String?> getPassword() async {
-    return await secureStorage.read(key: SecureStorageKeys.password, aOptions: aOptions);
+  Future<String?> getRefreshToken() async {
+    return await secureStorage.read(key: SecureStorageKeys.refreshToken, aOptions: aOptions);
   }
 
   @override
-  Future<String?> getUsername() async {
-    return await secureStorage.read(key: SecureStorageKeys.username, aOptions: aOptions);
+  void setRefreshToken(String token) {
+    secureStorage.write(key: SecureStorageKeys.refreshToken, value: token, aOptions: aOptions);
   }
 
   @override
-  void setPassword(String password) {
-    secureStorage.write(key: SecureStorageKeys.password, value: password, aOptions: aOptions);
-  }
-
-  @override
-  void setUsername(String username) {
-    secureStorage.write(key: SecureStorageKeys.username, value: username, aOptions: aOptions);
+  void clear() {
+    secureStorage.deleteAll();
   }
 }

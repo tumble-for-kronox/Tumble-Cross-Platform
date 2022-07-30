@@ -26,13 +26,10 @@ class TumbleListView extends StatelessWidget {
             return NoScheduleAvailable(
               errorType: 'No bookmarked schedules',
               cupertinoAlertDialog: CustomCupertinoAlerts.noBookMarkedSchedules(
-                  context,
-                  () => context
-                      .read<MainAppNavigationCubit>()
-                      .getNavBarItem(NavbarItem.SEARCH)),
+                  context, () => context.read<MainAppNavigationCubit>().getNavBarItem(NavbarItem.SEARCH)),
             );
           case MainAppStatus.LOADING:
-            return const SpinKitThreeBounce(color: CustomColors.orangePrimary);
+            return SpinKitThreeBounce(color: Theme.of(context).colorScheme.primary);
           case MainAppStatus.SCHEDULE_SELECTED:
             return Stack(
               children: [
@@ -50,9 +47,7 @@ class TumbleListView extends StatelessWidget {
                   bottom: 35,
                   right: state.listViewToTopButtonVisible ? 35 : -60,
                   duration: const Duration(milliseconds: 200),
-                  child: ToTopButton(
-                      scrollToTop: () =>
-                          context.read<MainAppCubit>().scrollToTop()),
+                  child: ToTopButton(scrollToTop: () => context.read<MainAppCubit>().scrollToTop()),
                 ),
               ],
             );
@@ -61,12 +56,8 @@ class TumbleListView extends StatelessWidget {
           case MainAppStatus.EMPTY_SCHEDULE:
             return NoScheduleAvailable(
               errorType: FetchResponse.emptyScheduleError,
-              cupertinoAlertDialog:
-                  CustomCupertinoAlerts.scheduleContainsNoViews(
-                      context,
-                      () => context
-                          .read<MainAppNavigationCubit>()
-                          .getNavBarItem(NavbarItem.SEARCH)),
+              cupertinoAlertDialog: CustomCupertinoAlerts.scheduleContainsNoViews(
+                  context, () => context.read<MainAppNavigationCubit>().getNavBarItem(NavbarItem.SEARCH)),
             );
         }
       },

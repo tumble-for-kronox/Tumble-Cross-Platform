@@ -1,9 +1,7 @@
 abstract class ISecureStorage {
-  Future<String?> getUsername();
+  Future<String?> getRefreshToken();
 
-  Future<String?> getPassword();
+  void setRefreshToken(String token);
 
-  void setUsername(String username);
-
-  void setPassword(String password);
+  void clear();
 }

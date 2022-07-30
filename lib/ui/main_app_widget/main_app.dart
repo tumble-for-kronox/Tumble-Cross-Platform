@@ -47,14 +47,18 @@ class _MainAppState extends State<MainApp> {
             home: FutureBuilder(
                 future: BlocProvider.of<InitCubit>(context).init(),
                 builder: (context, snapshot) {
-                  return BlocBuilder<InitCubit, InitState>(
-                    builder: (initContext, initState) {
-                      switch (initState.status) {
-                        case InitStatus.HAS_SCHOOL:
-                          return const MainAppNavigationRoot();
-                        case InitStatus.INITIAL:
-                          return const SchoolSelectionPage();
-                      }
+                  return BlocBuilder<AuthCubit, AuthState>(
+                    builder: (context, state) {
+                      return BlocBuilder<InitCubit, InitState>(
+                        builder: (context, initState) {
+                          switch (initState.status) {
+                            case InitStatus.HAS_SCHOOL:
+                              return const MainAppNavigationRoot();
+                            case InitStatus.INITIAL:
+                              return const SchoolSelectionPage();
+                          }
+                        },
+                      );
                     },
                   );
                 }),

@@ -11,6 +11,9 @@ abstract class IBackendService {
   /// [HttpGet]
   Future<dynamic> getUserEvents(String sessionToken, String defaultSchool);
 
+  /// [HttpGet]
+  Future<dynamic> getRefreshSession(String refreshToken, String defaultSchool);
+
   /// [HttpPost]
   Future<dynamic> postUserLogin(String username, String password, String defaultSchool);
 
