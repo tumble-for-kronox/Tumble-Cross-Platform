@@ -16,7 +16,7 @@ class AuthenticatedPage extends StatelessWidget {
           loggedIn: true,
           onPressed: BlocProvider.of<AuthCubit>(context).logout,
         ),
-        const Expanded(child: UserEventList()),
+        const UserEventList(),
       ],
     );
   }

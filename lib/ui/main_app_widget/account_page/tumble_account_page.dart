@@ -16,19 +16,21 @@ class TumbleAccountPage extends StatefulWidget {
 class _TumbleAccountPageState extends State<TumbleAccountPage> {
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: BlocBuilder<AuthCubit, AuthState>(builder: (context, state) {
-          switch (state.status) {
-            case AuthStatus.AUTHENTICATED:
-              return const AuthenticatedPage();
-            case AuthStatus.UNAUTHENTICATED:
-              return const UnauthenticatedPage();
-            default:
-              return SpinKitThreeBounce(color: Theme.of(context).colorScheme.primary);
-          }
-        }),
+    return SingleChildScrollView(
+      child: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: BlocBuilder<AuthCubit, AuthState>(builder: (context, state) {
+            switch (state.status) {
+              case AuthStatus.AUTHENTICATED:
+                return const AuthenticatedPage();
+              case AuthStatus.UNAUTHENTICATED:
+                return const UnauthenticatedPage();
+              default:
+                return SpinKitThreeBounce(color: Theme.of(context).colorScheme.primary);
+            }
+          }),
+        ),
       ),
     );
   }

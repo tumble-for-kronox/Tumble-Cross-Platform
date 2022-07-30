@@ -3,8 +3,8 @@ import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:tumble/models/api_models/available_user_event_model.dart';
 
-class AvailableEventCardSmall extends StatelessWidget {
-  const AvailableEventCardSmall({Key? key, required this.event}) : super(key: key);
+class AvailableEventCard extends StatelessWidget {
+  const AvailableEventCard({Key? key, required this.event}) : super(key: key);
 
   final AvailableUserEventModel event;
 
