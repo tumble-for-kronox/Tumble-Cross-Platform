@@ -8,7 +8,9 @@ import 'package:tumble/shared/preference_types.dart';
 import 'package:tumble/startup/get_it_instances.dart';
 import 'package:tumble/theme/cubit/theme_cubit.dart';
 import 'package:tumble/theme/cubit/theme_state.dart';
+import 'package:tumble/ui/auth_cubit/auth_cubit.dart';
 import 'package:tumble/ui/drawer_generic/data/default_views_map.dart';
+import 'package:tumble/ui/main_app_widget/account_page/tumble_account_page.dart';
 import 'package:tumble/ui/main_app_widget/cubit/main_app_cubit.dart';
 import 'package:tumble/ui/main_app_widget/data/schools.dart';
 import 'package:tumble/ui/main_app_widget/main_app_bottom_nav_bar/cubit/bottom_nav_cubit.dart';
@@ -38,14 +40,11 @@ class _MainAppNavigationRootState extends State<MainAppNavigationRoot> {
         return BlocBuilder<ThemeCubit, ThemeState>(
           builder: ((context, themeState) {
             return Scaffold(
+                backgroundColor: Theme.of(context).colorScheme.background,
                 endDrawer: const TumbleAppDrawer(),
                 appBar: TumbleAppBar(
-                  visibleBookmark: navState.index == 1 ||
-                      navState.index == 2 ||
-                      navState.index == 3,
-                  toggleFavorite: () async => await context
-                      .read<MainAppCubit>()
-                      .toggleFavorite(context),
+                  visibleBookmark: navState.index == 1 || navState.index == 2 || navState.index == 3,
+                  toggleFavorite: () async => await context.read<MainAppCubit>().toggleFavorite(context),
                 ),
                 body: FutureBuilder(
                     future: context.read<MainAppCubit>().initMainAppCubit(),
@@ -54,7 +53,7 @@ class _MainAppNavigationRootState extends State<MainAppNavigationRoot> {
                         case NavbarItem.SEARCH:
                           return const TumbleSearchPage();
                         case NavbarItem.USER_ACCOUNT:
-                          return Container();
+                          return const TumbleAccountPage();
                         case NavbarItem.LIST:
                           return const TumbleListView();
                         case NavbarItem.WEEK:
@@ -64,9 +63,7 @@ class _MainAppNavigationRootState extends State<MainAppNavigationRoot> {
                       }
                     }),
                 bottomNavigationBar: TumbleNavigationBar(onTap: (index) {
-                  context
-                      .read<MainAppNavigationCubit>()
-                      .getNavBarItem(NavbarItem.values[index]);
+                  context.read<MainAppNavigationCubit>().getNavBarItem(NavbarItem.values[index]);
                 }));
           }),
         );

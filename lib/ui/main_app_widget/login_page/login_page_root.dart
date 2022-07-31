@@ -1,12 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get/get.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:tumble/models/ui_models/school_model.dart';
+import 'package:tumble/ui/auth_cubit/auth_cubit.dart';
 import 'package:tumble/ui/cubit/init_cubit.dart';
-import 'package:tumble/ui/main_app_widget/main_app.dart';
-import 'package:tumble/ui/main_app_widget/misc/tumble_app_bar.dart';
+import 'package:tumble/ui/main_app_widget/login_page/cubit/login_page_state.dart';
+import 'package:tumble/ui/scaffold_message.dart';
+
+import '../../../api/apiservices/fetch_response.dart';
+import '../../../theme/data/colors.dart';
 
 class LoginPageRoot extends StatefulWidget {
   const LoginPageRoot({Key? key}) : super(key: key);
@@ -18,42 +21,147 @@ class LoginPageRoot extends StatefulWidget {
 class _LoginPageRootState extends State<LoginPageRoot> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-          leading: IconButton(
-              icon: const Icon(Icons.arrow_back),
-              onPressed: () {
-                Navigator.of(context).pop();
-              })),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            children: [
-              const Text("Login"),
-              Form(
-                  child: Column(
-                children: [
-                  TextFormField(
-                    decoration: const InputDecoration(
-                      hintText: "username",
-                    ),
-                  ),
-                  TextFormField(
-                    decoration: const InputDecoration(
-                      hintText: "password",
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: () => {},
-                    child: const Text("Login"),
-                  )
-                ],
-              ))
-            ],
+    return BlocConsumer<LoginPageCubit, LoginPageState>(
+      listener: ((context, state) {
+        if (state.status == LoginPageStatus.SUCCESS) {
+          showScaffoldMessage(context, FetchResponse.loginSuccess);
+          BlocProvider.of<AuthCubit>(context).setUserSession(state.userSession!);
+          if (state.school != null) {
+            BlocProvider.of<InitCubit>(context).changeSchool(context, state.school!);
+          } else {
+            Navigator.of(context).pop();
+          }
+        } else if (state.status == LoginPageStatus.INITIAL && state.errorMessage != null) {
+          showScaffoldMessage(context, state.errorMessage!);
+          BlocProvider.of<LoginPageCubit>(context).emitCleanInitState();
+        }
+      }),
+      builder: (context, state) {
+        return Scaffold(
+          backgroundColor: Theme.of(context).colorScheme.background,
+          appBar: _appBar(state, context),
+          body: SafeArea(
+            child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: () {
+                  switch (state.status) {
+                    case LoginPageStatus.INITIAL:
+                      return _initialState(state, context);
+                    case LoginPageStatus.LOADING:
+                      return SpinKitThreeBounce(color: Theme.of(context).colorScheme.primary);
+                    default:
+                      return _initialState(state, context);
+                  }
+                }()),
+          ),
+        );
+      },
+    );
+  }
+}
+
+Widget _initialState(LoginPageState state, BuildContext context) {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Padding(
+        padding: const EdgeInsets.only(bottom: 20),
+        child: Text(
+          "Login to Kronox",
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.onBackground,
+            fontWeight: FontWeight.w600,
+            fontSize: 24,
           ),
         ),
       ),
-    );
-  }
+      _form(state, context),
+    ],
+  );
+}
+
+PreferredSizeWidget _appBar(LoginPageState state, BuildContext context) {
+  return AppBar(
+      backgroundColor: Theme.of(context).colorScheme.background,
+      leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            state.passwordController.clear();
+            state.usernameController.clear();
+            Navigator.of(context).pop();
+          }));
+}
+
+Widget _form(LoginPageState state, BuildContext context) {
+  return Form(
+    onWillPop: () async {
+      state.passwordController.clear();
+      state.usernameController.clear();
+      return true;
+    },
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _formUsernameField(state, context),
+        _formPasswordField(state, context),
+        Padding(
+          padding: const EdgeInsets.only(top: 30),
+          child: _formSubmitButton(state, context),
+        ),
+      ],
+    ),
+  );
+}
+
+Widget _formSubmitButton(LoginPageState state, BuildContext context) {
+  return MaterialButton(
+    color: Theme.of(context).colorScheme.primary,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.all(Radius.circular(5)),
+    ),
+    onPressed: () => BlocProvider.of<LoginPageCubit>(context).submitLogin(context),
+    child: const Text("Login"),
+  );
+}
+
+Widget _formUsernameField(LoginPageState state, BuildContext context) {
+  return TextFormField(
+    controller: state.usernameController,
+    decoration: InputDecoration(
+      icon: Icon(
+        CupertinoIcons.person,
+        color: Theme.of(context).colorScheme.onBackground,
+      ),
+      label: const Text("Username"),
+      floatingLabelBehavior: FloatingLabelBehavior.auto,
+    ),
+    keyboardType: TextInputType.emailAddress,
+    textInputAction: TextInputAction.done,
+    onFieldSubmitted: (String s) => BlocProvider.of<LoginPageCubit>(context).submitLogin(context),
+    autovalidateMode: AutovalidateMode.onUserInteraction,
+    validator: (String? text) {
+      return text == "" ? "Username/Email cannot be empty." : null;
+    },
+  );
+}
+
+Widget _formPasswordField(LoginPageState state, BuildContext context) {
+  return TextFormField(
+    controller: state.passwordController,
+    obscureText: true,
+    decoration: InputDecoration(
+      icon: Icon(
+        CupertinoIcons.lock,
+        color: Theme.of(context).colorScheme.onBackground,
+      ),
+      label: const Text("Password"),
+      floatingLabelBehavior: FloatingLabelBehavior.auto,
+    ),
+    textInputAction: TextInputAction.done,
+    onFieldSubmitted: (String s) => BlocProvider.of<LoginPageCubit>(context).submitLogin(context),
+    autovalidateMode: AutovalidateMode.onUserInteraction,
+    validator: (String? text) {
+      return text == "" ? "Password cannot be empty." : null;
+    },
+  );
 }

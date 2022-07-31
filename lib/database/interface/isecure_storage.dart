@@ -1,0 +1,7 @@
+abstract class ISecureStorage {
+  Future<String?> getRefreshToken();
+
+  void setRefreshToken(String token);
+
+  void clear();
+}

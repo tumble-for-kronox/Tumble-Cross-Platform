@@ -21,6 +21,7 @@ class TumbleAppDrawer extends StatelessWidget {
     return BlocBuilder<DrawerCubit, DrawerState>(
       builder: (context, state) {
         return Drawer(
+          backgroundColor: Theme.of(context).colorScheme.surface,
           width: 350,
           child: ListView(
             padding: EdgeInsets.zero,
@@ -31,13 +32,10 @@ class TumbleAppDrawer extends StatelessWidget {
                   margin: EdgeInsets.all(0.0),
                   padding: EdgeInsets.all(0.0),
                   child: Padding(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 13, horizontal: 20),
+                      padding: EdgeInsets.symmetric(vertical: 13, horizontal: 20),
                       child: Align(
                         alignment: Alignment.centerLeft,
-                        child: Text('Settings',
-                            style: TextStyle(
-                                fontSize: 26, fontWeight: FontWeight.w400)),
+                        child: Text('Settings', style: TextStyle(fontSize: 26, fontWeight: FontWeight.w400)),
                       )),
                 ),
               ),
@@ -48,9 +46,7 @@ class TumbleAppDrawer extends StatelessWidget {
                   subtitle: "Get support from our support team",
                   prefixIcon: CupertinoIcons.bubble_left_bubble_right,
                   eventType: EventType.CONTACT,
-                  drawerEvent: (eventType) => context
-                      .read<DrawerCubit>()
-                      .handleDrawerEvent(eventType, context),
+                  drawerEvent: (eventType) => context.read<DrawerCubit>().handleDrawerEvent(eventType, context),
                 ),
               ], title: "Support"),
               const SizedBox(height: 20.0),
@@ -59,23 +55,17 @@ class TumbleAppDrawer extends StatelessWidget {
               TumbleSettingsSection(tiles: [
                 TumbleAppDrawerTile(
                   drawerTileTitle: "Change schools",
-                  subtitle:
-                      "Current school: ${context.read<DrawerCubit>().state.school}",
+                  subtitle: "Current school: ${context.read<DrawerCubit>().state.school}",
                   prefixIcon: CupertinoIcons.arrow_right_arrow_left,
                   eventType: EventType.CHANGE_SCHOOL,
-                  drawerEvent: (eventType) => context
-                      .read<DrawerCubit>()
-                      .handleDrawerEvent(eventType, context),
+                  drawerEvent: (eventType) => context.read<DrawerCubit>().handleDrawerEvent(eventType, context),
                 ),
                 TumbleAppDrawerTile(
                   drawerTileTitle: "Change theme",
-                  subtitle:
-                      "Current theme:  ${context.read<DrawerCubit>().state.theme}",
+                  subtitle: "Current theme:  ${context.read<DrawerCubit>().state.theme}",
                   prefixIcon: CupertinoIcons.device_phone_portrait,
                   eventType: EventType.CHANGE_THEME,
-                  drawerEvent: (eventType) => context
-                      .read<DrawerCubit>()
-                      .handleDrawerEvent(eventType, context),
+                  drawerEvent: (eventType) => context.read<DrawerCubit>().handleDrawerEvent(eventType, context),
                 ),
               ], title: "Common"),
               const SizedBox(height: 20.0),
@@ -87,20 +77,15 @@ class TumbleAppDrawer extends StatelessWidget {
                     subtitle: "Current view: ${state.viewType}",
                     prefixIcon: CupertinoIcons.list_dash,
                     eventType: EventType.SET_DEFAULT_VIEW,
-                    drawerEvent: (eventType) => context
-                        .read<DrawerCubit>()
-                        .handleDrawerEvent(eventType, context)),
+                    drawerEvent: (eventType) => context.read<DrawerCubit>().handleDrawerEvent(eventType, context)),
                 TumbleAppDrawerTile(
                     drawerTileTitle: "Set default schedule",
-                    subtitle:
-                        context.watch<DrawerCubit>().state.schedule != null
-                            ? "Default schedule: \n${state.schedule}"
-                            : "No default schedule set",
+                    subtitle: context.watch<DrawerCubit>().state.schedule != null
+                        ? "Default schedule: \n${state.schedule}"
+                        : "No default schedule set",
                     prefixIcon: CupertinoIcons.calendar,
                     eventType: EventType.SET_DEFAULT_SCHEDULE,
-                    drawerEvent: (eventType) => context
-                        .read<DrawerCubit>()
-                        .handleDrawerEvent(eventType, context)),
+                    drawerEvent: (eventType) => context.read<DrawerCubit>().handleDrawerEvent(eventType, context)),
               ], title: "Schedule"),
               const SizedBox(height: 20.0),
 

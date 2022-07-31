@@ -27,8 +27,8 @@ mixin _$AvailableUserEventModel {
   DateTime get eventStart => throw _privateConstructorUsedError;
   DateTime get eventEnd => throw _privateConstructorUsedError;
   DateTime get lastSignupDate => throw _privateConstructorUsedError;
-  String get participatorId => throw _privateConstructorUsedError;
-  String get supportId => throw _privateConstructorUsedError;
+  String? get participatorId => throw _privateConstructorUsedError;
+  String? get supportId => throw _privateConstructorUsedError;
   String get anonymousCode => throw _privateConstructorUsedError;
   bool get isRegistered => throw _privateConstructorUsedError;
   bool get supportAvailable => throw _privateConstructorUsedError;
@@ -52,8 +52,8 @@ abstract class $AvailableUserEventModelCopyWith<$Res> {
       DateTime eventStart,
       DateTime eventEnd,
       DateTime lastSignupDate,
-      String participatorId,
-      String supportId,
+      String? participatorId,
+      String? supportId,
       String anonymousCode,
       bool isRegistered,
       bool supportAvailable,
@@ -112,11 +112,11 @@ class _$AvailableUserEventModelCopyWithImpl<$Res>
       participatorId: participatorId == freezed
           ? _value.participatorId
           : participatorId // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       supportId: supportId == freezed
           ? _value.supportId
           : supportId // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       anonymousCode: anonymousCode == freezed
           ? _value.anonymousCode
           : anonymousCode // ignore: cast_nullable_to_non_nullable
@@ -151,8 +151,8 @@ abstract class _$$_AvailableUserEventModelCopyWith<$Res>
       DateTime eventStart,
       DateTime eventEnd,
       DateTime lastSignupDate,
-      String participatorId,
-      String supportId,
+      String? participatorId,
+      String? supportId,
       String anonymousCode,
       bool isRegistered,
       bool supportAvailable,
@@ -214,11 +214,11 @@ class __$$_AvailableUserEventModelCopyWithImpl<$Res>
       participatorId: participatorId == freezed
           ? _value.participatorId
           : participatorId // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       supportId: supportId == freezed
           ? _value.supportId
           : supportId // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       anonymousCode: anonymousCode == freezed
           ? _value.anonymousCode
           : anonymousCode // ignore: cast_nullable_to_non_nullable
@@ -272,9 +272,9 @@ class _$_AvailableUserEventModel implements _AvailableUserEventModel {
   @override
   final DateTime lastSignupDate;
   @override
-  final String participatorId;
+  final String? participatorId;
   @override
-  final String supportId;
+  final String? supportId;
   @override
   final String anonymousCode;
   @override
@@ -353,8 +353,8 @@ abstract class _AvailableUserEventModel implements AvailableUserEventModel {
           required final DateTime eventStart,
           required final DateTime eventEnd,
           required final DateTime lastSignupDate,
-          required final String participatorId,
-          required final String supportId,
+          required final String? participatorId,
+          required final String? supportId,
           required final String anonymousCode,
           required final bool isRegistered,
           required final bool supportAvailable,
@@ -377,9 +377,9 @@ abstract class _AvailableUserEventModel implements AvailableUserEventModel {
   @override
   DateTime get lastSignupDate => throw _privateConstructorUsedError;
   @override
-  String get participatorId => throw _privateConstructorUsedError;
+  String? get participatorId => throw _privateConstructorUsedError;
   @override
-  String get supportId => throw _privateConstructorUsedError;
+  String? get supportId => throw _privateConstructorUsedError;
   @override
   String get anonymousCode => throw _privateConstructorUsedError;
   @override

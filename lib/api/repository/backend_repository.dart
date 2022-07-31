@@ -14,7 +14,7 @@ class BackendRepository implements IBackendService {
   /// [HttpGet]
   @override
   Future<ApiResponse> getSchedule(String scheduleId, String defaultSchool) async {
-    final school = (Schools.schools.where((school) => school.schoolName == defaultSchool).single).schoolId.index;
+    final school = Schools().fromString(defaultSchool).schoolId.index;
 
     if (kDebugMode) {
       var uri = Uri.https(ApiEndPoints.debugBaseUrl, '${ApiEndPoints.getOneSchedule}$scheduleId', {
@@ -37,7 +37,7 @@ class BackendRepository implements IBackendService {
   /// [HttpGet]
   @override
   Future<ApiResponse> getPrograms(String searchQuery, String defaultSchool) async {
-    final school = (Schools.schools.where((school) => school.schoolName == defaultSchool).single).schoolId.index;
+    final school = Schools().fromString(defaultSchool).schoolId.index;
 
     if (kDebugMode) {
       var uri = Uri.https(ApiEndPoints.debugBaseUrl, ApiEndPoints.getSchedules,
@@ -59,28 +59,59 @@ class BackendRepository implements IBackendService {
   /// [HttpGet]
   @override
   Future getUserEvents(String sessionToken, String defaultSchool) async {
-    final school = (Schools.schools.where((school) => school.schoolName == defaultSchool).single).schoolId.index;
+    final school = Schools().fromString(defaultSchool).schoolId.index;
 
     if (kDebugMode) {
-      var uri = Uri.https(ApiEndPoints.debugBaseUrl, ApiEndPoints.getSchedules,
+      var uri = Uri.https(ApiEndPoints.debugBaseUrl, ApiEndPoints.getUserEvents,
           {ApiEndPoints.sessionToken: sessionToken, ApiEndPoints.school: school.toString()});
       final response = await HttpService.sendGetRequestToServer(uri);
       if (response == null) {
         return ApiResponse.error(FetchResponse.timeoutError);
       }
-      return await response.parsePrograms();
+
+      return await response.parseUserEvents();
     } else {
       var uri = Uri.https(ApiEndPoints.baseUrl, ApiEndPoints.getSchedules,
           {ApiEndPoints.sessionToken: sessionToken, ApiEndPoints.school: school.toString()});
       final response = await compute(http.get, uri);
-      return response.parsePrograms();
+      return response.parseUserEvents();
+    }
+  }
+
+  /// [HttpGet]
+  @override
+  Future getRefreshSession(String refreshToken, String defaultSchool) async {
+    final school = Schools().fromString(defaultSchool).schoolId.index;
+    Map<String, String> headers = {"Authorization": refreshToken};
+
+    if (kDebugMode) {
+      var uri = Uri.https(
+        ApiEndPoints.debugBaseUrl,
+        ApiEndPoints.getRefreshSession,
+        {ApiEndPoints.school: school.toString()},
+      );
+
+      final response = await HttpService.sendGetRequestToServer(uri, headers: headers);
+      if (response == null) {
+        return ApiResponse.error(FetchResponse.timeoutError);
+      }
+      return await response.parseUser();
+    } else {
+      var uri = Uri.https(
+        ApiEndPoints.baseUrl,
+        ApiEndPoints.getRefreshSession,
+        {ApiEndPoints.school: school.toString()},
+      );
+
+      final response = await http.get(uri, headers: headers);
+      return response.parseUser();
     }
   }
 
   /// [HttpPut]
   @override
   Future putRegisterUserEvent(String eventId, String sessionToken, String defaultSchool) async {
-    final school = (Schools.schools.where((school) => school.schoolName == defaultSchool).single).schoolId.index;
+    final school = Schools().fromString(defaultSchool).schoolId.index;
 
     if (kDebugMode) {
       var uri =
@@ -101,7 +132,7 @@ class BackendRepository implements IBackendService {
   /// [HttpPut]
   @override
   Future putUnregisterUserEvent(String eventId, String sessionToken, String defaultSchool) async {
-    final school = (Schools.schools.where((school) => school.schoolName == defaultSchool).single).schoolId.index;
+    final school = Schools().fromString(defaultSchool).schoolId.index;
 
     if (kDebugMode) {
       var uri =
@@ -122,9 +153,8 @@ class BackendRepository implements IBackendService {
   /// [HttpPost]
   @override
   Future postUserLogin(String username, String password, String defaultSchool) async {
-    final school = (Schools.schools.where((school) => school.schoolName == defaultSchool).single).schoolId.index;
+    final school = Schools().fromString(defaultSchool).schoolId.index;
     final Map<String, String> body = {ApiEndPoints.username: username, ApiEndPoints.password: password};
-
     if (kDebugMode) {
       var uri =
           Uri.https(ApiEndPoints.debugBaseUrl, ApiEndPoints.postUserLogin, {ApiEndPoints.school: school.toString()});

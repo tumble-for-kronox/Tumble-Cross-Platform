@@ -1,16 +1,13 @@
-import 'dart:io';
-import 'dart:typed_data';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tumble/shared/setup.dart';
 import 'package:tumble/startup/get_it_instances.dart';
 import 'package:tumble/theme/cubit/theme_cubit.dart';
-import 'package:tumble/theme/repository/theme_repository.dart';
+import 'package:tumble/ui/auth_cubit/auth_cubit.dart';
 import 'package:tumble/ui/cubit/init_cubit.dart';
-import 'package:tumble/ui/drawer_generic/app_theme_picker.dart';
+import 'package:tumble/ui/main_app_widget/account_page/user_event_list/cubit/user_event_list_cubit.dart';
+import 'package:tumble/ui/main_app_widget/account_page/user_event_list/user_event_list.dart';
 import 'package:tumble/ui/main_app_widget/cubit/main_app_cubit.dart';
 import 'package:tumble/ui/main_app_widget/login_page/login_page_root.dart';
 import 'package:tumble/ui/main_app_widget/main_app.dart';
@@ -20,7 +17,6 @@ import 'package:tumble/ui/main_app_widget/main_app_navigation_root.dart';
 import 'package:tumble/ui/main_app_widget/misc/tumble_drawer/tumble_app_drawer.dart';
 import 'package:tumble/ui/main_app_widget/schedule_view_widgets/tumble_calendar_view/tumble_calendar_view.dart';
 import 'package:tumble/ui/main_app_widget/misc/tumble_app_bar.dart';
-import 'package:tumble/ui/main_app_widget/schedule_view_widgets/tumble_calendar_view/tumble_calendar_view.dart';
 import 'package:tumble/ui/main_app_widget/schedule_view_widgets/tumble_list_view/tumble_list_view.dart';
 import 'package:tumble/ui/main_app_widget/schedule_view_widgets/tumble_week_view/tumble_week_view.dart';
 import 'package:tumble/ui/main_app_widget/school_selection_page.dart';
@@ -36,7 +32,6 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initSingletons();
   setupRequiredSharedPreferences();
-  setupKronoxSession();
   runApp(MultiBlocProvider(providers: [
     BlocProvider<InitCubit>(
       create: (c) => InitCubit(),
@@ -93,19 +88,33 @@ void main() async {
     BlocProvider<DrawerCubit>(
       create: (c) => DrawerCubit(),
       child: Row(
-        children: const [
-          TumbleAppDrawer(),
-          SchoolSelectionPage(),
-          MainAppNavigationRoot()
-        ],
+        children: const [TumbleAppDrawer(), SchoolSelectionPage(), MainAppNavigationRoot()],
       ),
     ),
     BlocProvider<LoginPageCubit>(
-        create: (c) => LoginPageCubit(),
-        child: Row(
-          children: const [
-            LoginPageRoot(),
-          ],
-        ))
+      create: (c) => LoginPageCubit(),
+      child: Row(
+        children: const [
+          LoginPageRoot(),
+        ],
+      ),
+    ),
+    BlocProvider<AuthCubit>(
+      create: (c) => AuthCubit(),
+      child: Row(
+        children: const [
+          LoginPageRoot(),
+          UserEventList(),
+        ],
+      ),
+    ),
+    BlocProvider<UserEventListCubit>(
+      create: (c) => UserEventListCubit(),
+      child: Row(
+        children: const [
+          UserEventList(),
+        ],
+      ),
+    ),
   ], child: const MainApp()));
 }

@@ -25,7 +25,7 @@ mixin _$UserEventCollectionModel {
       throw _privateConstructorUsedError;
   List<AvailableUserEventModel> get registeredEvents =>
       throw _privateConstructorUsedError;
-  List<AvailableUserEventModel> get availableEvents =>
+  List<AvailableUserEventModel> get unregisteredEvents =>
       throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -42,7 +42,7 @@ abstract class $UserEventCollectionModelCopyWith<$Res> {
   $Res call(
       {List<UpcomingUserEventModel> upcomingEvents,
       List<AvailableUserEventModel> registeredEvents,
-      List<AvailableUserEventModel> availableEvents});
+      List<AvailableUserEventModel> unregisteredEvents});
 }
 
 /// @nodoc
@@ -58,7 +58,7 @@ class _$UserEventCollectionModelCopyWithImpl<$Res>
   $Res call({
     Object? upcomingEvents = freezed,
     Object? registeredEvents = freezed,
-    Object? availableEvents = freezed,
+    Object? unregisteredEvents = freezed,
   }) {
     return _then(_value.copyWith(
       upcomingEvents: upcomingEvents == freezed
@@ -69,9 +69,9 @@ class _$UserEventCollectionModelCopyWithImpl<$Res>
           ? _value.registeredEvents
           : registeredEvents // ignore: cast_nullable_to_non_nullable
               as List<AvailableUserEventModel>,
-      availableEvents: availableEvents == freezed
-          ? _value.availableEvents
-          : availableEvents // ignore: cast_nullable_to_non_nullable
+      unregisteredEvents: unregisteredEvents == freezed
+          ? _value.unregisteredEvents
+          : unregisteredEvents // ignore: cast_nullable_to_non_nullable
               as List<AvailableUserEventModel>,
     ));
   }
@@ -88,7 +88,7 @@ abstract class _$$_UserEventCollectionModelCopyWith<$Res>
   $Res call(
       {List<UpcomingUserEventModel> upcomingEvents,
       List<AvailableUserEventModel> registeredEvents,
-      List<AvailableUserEventModel> availableEvents});
+      List<AvailableUserEventModel> unregisteredEvents});
 }
 
 /// @nodoc
@@ -107,7 +107,7 @@ class __$$_UserEventCollectionModelCopyWithImpl<$Res>
   $Res call({
     Object? upcomingEvents = freezed,
     Object? registeredEvents = freezed,
-    Object? availableEvents = freezed,
+    Object? unregisteredEvents = freezed,
   }) {
     return _then(_$_UserEventCollectionModel(
       upcomingEvents: upcomingEvents == freezed
@@ -118,9 +118,9 @@ class __$$_UserEventCollectionModelCopyWithImpl<$Res>
           ? _value._registeredEvents
           : registeredEvents // ignore: cast_nullable_to_non_nullable
               as List<AvailableUserEventModel>,
-      availableEvents: availableEvents == freezed
-          ? _value._availableEvents
-          : availableEvents // ignore: cast_nullable_to_non_nullable
+      unregisteredEvents: unregisteredEvents == freezed
+          ? _value._unregisteredEvents
+          : unregisteredEvents // ignore: cast_nullable_to_non_nullable
               as List<AvailableUserEventModel>,
     ));
   }
@@ -132,10 +132,10 @@ class _$_UserEventCollectionModel implements _UserEventCollectionModel {
   const _$_UserEventCollectionModel(
       {required final List<UpcomingUserEventModel> upcomingEvents,
       required final List<AvailableUserEventModel> registeredEvents,
-      required final List<AvailableUserEventModel> availableEvents})
+      required final List<AvailableUserEventModel> unregisteredEvents})
       : _upcomingEvents = upcomingEvents,
         _registeredEvents = registeredEvents,
-        _availableEvents = availableEvents;
+        _unregisteredEvents = unregisteredEvents;
 
   factory _$_UserEventCollectionModel.fromJson(Map<String, dynamic> json) =>
       _$$_UserEventCollectionModelFromJson(json);
@@ -154,16 +154,16 @@ class _$_UserEventCollectionModel implements _UserEventCollectionModel {
     return EqualUnmodifiableListView(_registeredEvents);
   }
 
-  final List<AvailableUserEventModel> _availableEvents;
+  final List<AvailableUserEventModel> _unregisteredEvents;
   @override
-  List<AvailableUserEventModel> get availableEvents {
+  List<AvailableUserEventModel> get unregisteredEvents {
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_availableEvents);
+    return EqualUnmodifiableListView(_unregisteredEvents);
   }
 
   @override
   String toString() {
-    return 'UserEventCollectionModel(upcomingEvents: $upcomingEvents, registeredEvents: $registeredEvents, availableEvents: $availableEvents)';
+    return 'UserEventCollectionModel(upcomingEvents: $upcomingEvents, registeredEvents: $registeredEvents, unregisteredEvents: $unregisteredEvents)';
   }
 
   @override
@@ -176,7 +176,7 @@ class _$_UserEventCollectionModel implements _UserEventCollectionModel {
             const DeepCollectionEquality()
                 .equals(other._registeredEvents, _registeredEvents) &&
             const DeepCollectionEquality()
-                .equals(other._availableEvents, _availableEvents));
+                .equals(other._unregisteredEvents, _unregisteredEvents));
   }
 
   @JsonKey(ignore: true)
@@ -185,7 +185,7 @@ class _$_UserEventCollectionModel implements _UserEventCollectionModel {
       runtimeType,
       const DeepCollectionEquality().hash(_upcomingEvents),
       const DeepCollectionEquality().hash(_registeredEvents),
-      const DeepCollectionEquality().hash(_availableEvents));
+      const DeepCollectionEquality().hash(_unregisteredEvents));
 
   @JsonKey(ignore: true)
   @override
@@ -203,7 +203,7 @@ abstract class _UserEventCollectionModel implements UserEventCollectionModel {
   const factory _UserEventCollectionModel(
           {required final List<UpcomingUserEventModel> upcomingEvents,
           required final List<AvailableUserEventModel> registeredEvents,
-          required final List<AvailableUserEventModel> availableEvents}) =
+          required final List<AvailableUserEventModel> unregisteredEvents}) =
       _$_UserEventCollectionModel;
 
   factory _UserEventCollectionModel.fromJson(Map<String, dynamic> json) =
@@ -216,7 +216,7 @@ abstract class _UserEventCollectionModel implements UserEventCollectionModel {
   List<AvailableUserEventModel> get registeredEvents =>
       throw _privateConstructorUsedError;
   @override
-  List<AvailableUserEventModel> get availableEvents =>
+  List<AvailableUserEventModel> get unregisteredEvents =>
       throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
