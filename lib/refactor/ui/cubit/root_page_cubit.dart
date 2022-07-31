@@ -19,4 +19,6 @@ class RootPageCubit extends Cubit<RootPageState> {
         .setString(PreferenceTypes.school, school.schoolName);
     emit(state.copyWith(needSchool: false));
   }
+
+  init() {}
 }

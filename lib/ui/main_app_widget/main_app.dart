@@ -43,18 +43,7 @@ class _MainAppState extends State<MainApp> {
                   future: context.read<InitCubit>().init(),
                   builder: (context, snapshot) {
                     return BlocListener<InitCubit, InitState>(
-                        listener: (context, state) {
-                          /* if (state.status == InitStatus.NAVIGATE) {
-                            log('Correct');
-                            navigator.push(
-                              'MainAppNavigationRootPage',
-                            );
-                          }
-                          if (state.status ==
-                              InitStatus.NAVIGATE_LOGIN_REQUIRED) {
-                            navigator.push('LoginPageRoot');
-                          } */
-                        },
+                        listener: (context, state) {},
                         child: const SchoolSelectionPage());
                   }),
             )));
