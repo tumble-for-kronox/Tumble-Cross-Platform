@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tumble/core/database/responses/change_response.dart';
 import 'package:tumble/core/navigation/app_navigator.dart';
 import 'package:tumble/core/navigation/navigation_route_labels.dart';
 import 'package:tumble/core/ui/cubit/init_cubit.dart';
 import 'package:tumble/core/ui/main_app_widget/data/schools.dart';
 import 'package:tumble/core/ui/main_app_widget/search_page_widgets/search/school_card.dart';
+import 'package:tumble/core/ui/scaffold_message.dart';
 
 class SchoolSelectionPage extends StatefulWidget {
   const SchoolSelectionPage({
@@ -51,7 +53,9 @@ class _SchoolSelectionPageState extends State<SchoolSelectionPage> {
                             } else {
                               BlocProvider.of<InitCubit>(context)
                                   .changeSchool(school);
-                              navigator.push(NavigationRouteLabels
+                              showScaffoldMessage(context,
+                                  '${ChangeResponse.changeSchool} ${BlocProvider.of<InitCubit>(context).state.defaultSchool}');
+                              navigator.pushAndRemoveAll(NavigationRouteLabels
                                   .mainAppNavigationRootPage);
                             }
                           }))
