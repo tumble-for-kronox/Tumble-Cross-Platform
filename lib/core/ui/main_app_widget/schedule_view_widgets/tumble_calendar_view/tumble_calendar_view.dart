@@ -39,7 +39,8 @@ class _TumbleCalendarViewState extends State<TumbleCalendarView> {
                   navigator),
             );
           case MainAppStatus.LOADING:
-            return const SpinKitThreeBounce(color: CustomColors.orangePrimary);
+            return SpinKitThreeBounce(
+                color: Theme.of(context).colorScheme.primary);
 
           case MainAppStatus.SCHEDULE_SELECTED:
             return SfCalendar(

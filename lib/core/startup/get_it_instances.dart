@@ -6,19 +6,19 @@ import 'package:tumble/core/api/repository/implementation_repository.dart';
 import 'package:tumble/core/api/repository/user_repository.dart';
 import 'package:tumble/core/database/database.dart';
 import 'package:tumble/core/database/repository/database_repository.dart';
+import 'package:tumble/core/database/repository/secure_storage_repository.dart';
 import 'package:tumble/core/theme/repository/theme_repository.dart';
 
 final GetIt locator = GetIt.instance;
 
 Future<void> initSingletons() async {
   SharedPreferences sharedPref = await SharedPreferences.getInstance();
-  FlutterSecureStorage secureStorage = const FlutterSecureStorage();
-  locator.registerLazySingleton(() => secureStorage);
+  locator.registerLazySingleton(() => sharedPref);
+  locator.registerLazySingleton(() => SecureStorageRepository());
   locator.registerLazySingleton(() => BackendRepository());
-  locator.registerLazySingleton(() => DatabaseRepository());
   locator.registerLazySingleton(() => AppDatabase());
+  locator.registerLazySingleton(() => DatabaseRepository());
+  locator.registerLazySingleton(() => ThemeRepository());
   locator.registerLazySingleton(() => ImplementationRepository());
   locator.registerLazySingleton(() => UserRepository());
-  locator.registerLazySingleton(() => sharedPref);
-  locator.registerLazySingleton(() => ThemeRepository());
 }

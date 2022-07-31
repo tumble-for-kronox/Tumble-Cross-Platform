@@ -35,7 +35,8 @@ class TumbleListView extends StatelessWidget {
                   navigator),
             );
           case MainAppStatus.LOADING:
-            return const SpinKitThreeBounce(color: CustomColors.orangePrimary);
+            return SpinKitThreeBounce(
+                color: Theme.of(context).colorScheme.primary);
           case MainAppStatus.SCHEDULE_SELECTED:
             return Stack(
               children: [

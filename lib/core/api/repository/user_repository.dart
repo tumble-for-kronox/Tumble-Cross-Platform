@@ -10,48 +10,47 @@ import 'package:tumble/core/shared/preference_types.dart';
 import 'package:tumble/core/shared/secure_storage_keys.dart';
 import 'package:tumble/core/startup/get_it_instances.dart';
 
+import '../../database/repository/secure_storage_repository.dart';
+
 class UserRepository implements IUserService {
   final _backendRepository = locator<BackendRepository>();
   final _sharedPrefs = locator<SharedPreferences>();
-  final _databaseRepository = locator<DatabaseRepository>();
-  final _secureStorage = locator<FlutterSecureStorage>();
+  final _secureStorage = locator<SecureStorageRepository>();
 
   @override
-  Future<ApiResponse<UserEventCollectionModel>> getUserEvents() async {
+  Future<ApiResponse> getUserEvents(String sessionToken) async {
     final school = _sharedPrefs.getString(PreferenceTypes.school)!;
-    final sessionToken =
-        (await _databaseRepository.getUserSession())!.sessionToken;
 
     return await _backendRepository.getUserEvents(sessionToken, school);
   }
 
   @override
-  Future<ApiResponse<KronoxUserModel?>> postUserLogin(
-      String? username, String? password) async {
+  Future<ApiResponse> postUserLogin(String username, String password) async {
     final school = _sharedPrefs.getString(PreferenceTypes.school)!;
-    username ??= await _secureStorage.read(key: SecureStorageKeys.username);
-    password ??= await _secureStorage.read(key: SecureStorageKeys.password);
 
-    return await _backendRepository.postUserLogin(username!, password!, school);
+    return await _backendRepository.postUserLogin(username, password, school);
   }
 
   @override
-  Future putRegisterUserEvent(String eventId) async {
+  Future putRegisterUserEvent(String eventId, String sessionToken) async {
     final school = _sharedPrefs.getString(PreferenceTypes.school)!;
-    final sessionToken =
-        (await _databaseRepository.getUserSession())!.sessionToken;
 
     return await _backendRepository.putRegisterUserEvent(
         eventId, sessionToken, school);
   }
 
   @override
-  Future putUnregisterUserEvent(String eventId) async {
+  Future putUnregisterUserEvent(String eventId, String sessionToken) async {
     final school = _sharedPrefs.getString(PreferenceTypes.school)!;
-    final sessionToken =
-        (await _databaseRepository.getUserSession())!.sessionToken;
 
     return await _backendRepository.putUnregisterUserEvent(
         eventId, sessionToken, school);
+  }
+
+  @override
+  Future<ApiResponse> getRefreshSession(String refreshToken) async {
+    final school = _sharedPrefs.getString(PreferenceTypes.school)!;
+
+    return await _backendRepository.getRefreshSession(refreshToken, school);
   }
 }

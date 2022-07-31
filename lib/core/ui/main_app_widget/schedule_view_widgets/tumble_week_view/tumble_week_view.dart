@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:tumble/core/api/apiservices/fetch_response.dart';
@@ -39,7 +40,8 @@ class _TumbleWeekViewState extends State<TumbleWeekView> {
                   navigator),
             );
           case MainAppStatus.LOADING:
-            return const SpinKitThreeBounce(color: CustomColors.orangePrimary);
+            return SpinKitThreeBounce(
+                color: Theme.of(context).colorScheme.primary);
           case MainAppStatus.SCHEDULE_SELECTED:
             return Stack(children: [
               SizedBox(

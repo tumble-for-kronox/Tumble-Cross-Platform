@@ -26,6 +26,7 @@ class TumbleAppDrawer extends StatelessWidget {
     return BlocBuilder<DrawerCubit, DrawerState>(
       builder: (context, state) {
         return Drawer(
+          backgroundColor: Theme.of(context).colorScheme.surface,
           width: 350,
           child: ListView(
             padding: EdgeInsets.zero,

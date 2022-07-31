@@ -19,6 +19,7 @@ abstract class KronoxUserModel with _$KronoxUserModel {
     required String name,
     required String username,
     required String sessionToken,
+    required String refreshToken,
   }) = _KronoxUserModel;
 
   factory KronoxUserModel.fromJson(Map<String, dynamic> json) => _$KronoxUserModelFromJson(json);

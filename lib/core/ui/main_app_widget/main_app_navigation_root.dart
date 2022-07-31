@@ -6,6 +6,7 @@ import 'package:tumble/core/ui/main_app_widget/cubit/main_app_cubit.dart';
 import 'package:tumble/core/ui/main_app_widget/main_app_bottom_nav_bar/cubit/bottom_nav_cubit.dart';
 import 'package:tumble/core/ui/main_app_widget/main_app_bottom_nav_bar/data/nav_bar_items.dart';
 import 'package:tumble/core/ui/main_app_widget/main_app_bottom_nav_bar/tumble_navigation_bar.dart';
+import 'package:tumble/core/ui/main_app_widget/misc/tumble_drawer/main_app_widget/account_page/tumble_account_page.dart';
 import 'package:tumble/core/ui/main_app_widget/misc/tumble_drawer/tumble_app_drawer.dart';
 import 'package:tumble/core/ui/main_app_widget/schedule_view_widgets/tumble_calendar_view/tumble_calendar_view.dart';
 import 'package:tumble/core/ui/main_app_widget/schedule_view_widgets/tumble_list_view/tumble_list_view.dart';
@@ -30,6 +31,7 @@ class _MainAppNavigationRootPageState extends State<MainAppNavigationRootPage> {
         return BlocBuilder<ThemeCubit, ThemeState>(
           builder: ((context, themeState) {
             return Scaffold(
+                backgroundColor: Theme.of(context).colorScheme.background,
                 endDrawer: const TumbleAppDrawer(),
                 appBar: TumbleAppBar(
                   visibleBookmark: navState.index == 1 ||
@@ -46,7 +48,7 @@ class _MainAppNavigationRootPageState extends State<MainAppNavigationRootPage> {
                         case NavbarItem.SEARCH:
                           return const TumbleSearchPage();
                         case NavbarItem.USER_ACCOUNT:
-                          return Container();
+                          return const TumbleAccountPage();
                         case NavbarItem.LIST:
                           return const TumbleListView();
                         case NavbarItem.WEEK:

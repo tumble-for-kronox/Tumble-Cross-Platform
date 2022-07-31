@@ -23,6 +23,7 @@ mixin _$KronoxUserModel {
   String get name => throw _privateConstructorUsedError;
   String get username => throw _privateConstructorUsedError;
   String get sessionToken => throw _privateConstructorUsedError;
+  String get refreshToken => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -35,7 +36,8 @@ abstract class $KronoxUserModelCopyWith<$Res> {
   factory $KronoxUserModelCopyWith(
           KronoxUserModel value, $Res Function(KronoxUserModel) then) =
       _$KronoxUserModelCopyWithImpl<$Res>;
-  $Res call({String name, String username, String sessionToken});
+  $Res call(
+      {String name, String username, String sessionToken, String refreshToken});
 }
 
 /// @nodoc
@@ -52,6 +54,7 @@ class _$KronoxUserModelCopyWithImpl<$Res>
     Object? name = freezed,
     Object? username = freezed,
     Object? sessionToken = freezed,
+    Object? refreshToken = freezed,
   }) {
     return _then(_value.copyWith(
       name: name == freezed
@@ -66,6 +69,10 @@ class _$KronoxUserModelCopyWithImpl<$Res>
           ? _value.sessionToken
           : sessionToken // ignore: cast_nullable_to_non_nullable
               as String,
+      refreshToken: refreshToken == freezed
+          ? _value.refreshToken
+          : refreshToken // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -77,7 +84,8 @@ abstract class _$$_KronoxUserModelCopyWith<$Res>
           _$_KronoxUserModel value, $Res Function(_$_KronoxUserModel) then) =
       __$$_KronoxUserModelCopyWithImpl<$Res>;
   @override
-  $Res call({String name, String username, String sessionToken});
+  $Res call(
+      {String name, String username, String sessionToken, String refreshToken});
 }
 
 /// @nodoc
@@ -96,6 +104,7 @@ class __$$_KronoxUserModelCopyWithImpl<$Res>
     Object? name = freezed,
     Object? username = freezed,
     Object? sessionToken = freezed,
+    Object? refreshToken = freezed,
   }) {
     return _then(_$_KronoxUserModel(
       name: name == freezed
@@ -110,6 +119,10 @@ class __$$_KronoxUserModelCopyWithImpl<$Res>
           ? _value.sessionToken
           : sessionToken // ignore: cast_nullable_to_non_nullable
               as String,
+      refreshToken: refreshToken == freezed
+          ? _value.refreshToken
+          : refreshToken // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -118,7 +131,10 @@ class __$$_KronoxUserModelCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_KronoxUserModel implements _KronoxUserModel {
   const _$_KronoxUserModel(
-      {required this.name, required this.username, required this.sessionToken});
+      {required this.name,
+      required this.username,
+      required this.sessionToken,
+      required this.refreshToken});
 
   factory _$_KronoxUserModel.fromJson(Map<String, dynamic> json) =>
       _$$_KronoxUserModelFromJson(json);
@@ -129,10 +145,12 @@ class _$_KronoxUserModel implements _KronoxUserModel {
   final String username;
   @override
   final String sessionToken;
+  @override
+  final String refreshToken;
 
   @override
   String toString() {
-    return 'KronoxUserModel(name: $name, username: $username, sessionToken: $sessionToken)';
+    return 'KronoxUserModel(name: $name, username: $username, sessionToken: $sessionToken, refreshToken: $refreshToken)';
   }
 
   @override
@@ -143,7 +161,9 @@ class _$_KronoxUserModel implements _KronoxUserModel {
             const DeepCollectionEquality().equals(other.name, name) &&
             const DeepCollectionEquality().equals(other.username, username) &&
             const DeepCollectionEquality()
-                .equals(other.sessionToken, sessionToken));
+                .equals(other.sessionToken, sessionToken) &&
+            const DeepCollectionEquality()
+                .equals(other.refreshToken, refreshToken));
   }
 
   @JsonKey(ignore: true)
@@ -152,7 +172,8 @@ class _$_KronoxUserModel implements _KronoxUserModel {
       runtimeType,
       const DeepCollectionEquality().hash(name),
       const DeepCollectionEquality().hash(username),
-      const DeepCollectionEquality().hash(sessionToken));
+      const DeepCollectionEquality().hash(sessionToken),
+      const DeepCollectionEquality().hash(refreshToken));
 
   @JsonKey(ignore: true)
   @override
@@ -169,7 +190,8 @@ abstract class _KronoxUserModel implements KronoxUserModel {
   const factory _KronoxUserModel(
       {required final String name,
       required final String username,
-      required final String sessionToken}) = _$_KronoxUserModel;
+      required final String sessionToken,
+      required final String refreshToken}) = _$_KronoxUserModel;
 
   factory _KronoxUserModel.fromJson(Map<String, dynamic> json) =
       _$_KronoxUserModel.fromJson;
@@ -180,6 +202,8 @@ abstract class _KronoxUserModel implements KronoxUserModel {
   String get username => throw _privateConstructorUsedError;
   @override
   String get sessionToken => throw _privateConstructorUsedError;
+  @override
+  String get refreshToken => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
   _$$_KronoxUserModelCopyWith<_$_KronoxUserModel> get copyWith =>

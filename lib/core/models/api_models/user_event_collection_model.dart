@@ -23,7 +23,7 @@ abstract class UserEventCollectionModel with _$UserEventCollectionModel {
   const factory UserEventCollectionModel({
     required List<UpcomingUserEventModel> upcomingEvents,
     required List<AvailableUserEventModel> registeredEvents,
-    required List<AvailableUserEventModel> availableEvents,
+    required List<AvailableUserEventModel> unregisteredEvents,
   }) = _UserEventCollectionModel;
 
   factory UserEventCollectionModel.fromJson(Map<String, dynamic> json) =>

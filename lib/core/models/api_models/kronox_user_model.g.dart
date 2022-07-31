@@ -11,6 +11,7 @@ _$_KronoxUserModel _$$_KronoxUserModelFromJson(Map<String, dynamic> json) =>
       name: json['name'] as String,
       username: json['username'] as String,
       sessionToken: json['sessionToken'] as String,
+      refreshToken: json['refreshToken'] as String,
     );
 
 Map<String, dynamic> _$$_KronoxUserModelToJson(_$_KronoxUserModel instance) =>
@@ -18,4 +19,5 @@ Map<String, dynamic> _$$_KronoxUserModelToJson(_$_KronoxUserModel instance) =>
       'name': instance.name,
       'username': instance.username,
       'sessionToken': instance.sessionToken,
+      'refreshToken': instance.refreshToken,
     };
