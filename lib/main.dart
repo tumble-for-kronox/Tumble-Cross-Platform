@@ -1,120 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tumble/shared/setup.dart';
-import 'package:tumble/startup/get_it_instances.dart';
-import 'package:tumble/theme/cubit/theme_cubit.dart';
-import 'package:tumble/ui/auth_cubit/auth_cubit.dart';
-import 'package:tumble/ui/cubit/init_cubit.dart';
-import 'package:tumble/ui/main_app_widget/account_page/user_event_list/cubit/user_event_list_cubit.dart';
-import 'package:tumble/ui/main_app_widget/account_page/user_event_list/user_event_list.dart';
-import 'package:tumble/ui/main_app_widget/cubit/main_app_cubit.dart';
-import 'package:tumble/ui/main_app_widget/login_page/login_page_root.dart';
-import 'package:tumble/ui/main_app_widget/main_app.dart';
-import 'package:tumble/ui/main_app_widget/main_app_bottom_nav_bar/cubit/bottom_nav_cubit.dart';
-import 'package:tumble/ui/main_app_widget/main_app_bottom_nav_bar/tumble_navigation_bar.dart';
-import 'package:tumble/ui/main_app_widget/main_app_navigation_root.dart';
-import 'package:tumble/ui/main_app_widget/misc/tumble_drawer/tumble_app_drawer.dart';
-import 'package:tumble/ui/main_app_widget/schedule_view_widgets/tumble_calendar_view/tumble_calendar_view.dart';
-import 'package:tumble/ui/main_app_widget/misc/tumble_app_bar.dart';
-import 'package:tumble/ui/main_app_widget/schedule_view_widgets/tumble_list_view/tumble_list_view.dart';
-import 'package:tumble/ui/main_app_widget/schedule_view_widgets/tumble_week_view/tumble_week_view.dart';
-import 'package:tumble/ui/main_app_widget/school_selection_page.dart';
-import 'package:tumble/ui/main_app_widget/search_page_widgets/cubit/search_page_cubit.dart';
-import 'package:tumble/ui/main_app_widget/search_page_widgets/search/schedule_search_bar.dart';
-import 'package:tumble/ui/main_app_widget/search_page_widgets/search/tumble_search_page.dart';
-import 'package:tumble/ui/main_app_widget/search_page_widgets/search_bar_widget/searchbar_and_logo_container.dart';
-
-import 'ui/main_app_widget/misc/tumble_drawer/cubit/drawer_state.dart';
-import 'ui/main_app_widget/login_page/cubit/login_page_state.dart';
+import 'package:tumble/core/app.dart';
+import 'package:tumble/core/shared/setup.dart';
+import 'package:tumble/core/startup/get_it_instances.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initSingletons();
   setupRequiredSharedPreferences();
-  runApp(MultiBlocProvider(providers: [
-    BlocProvider<InitCubit>(
-      create: (c) => InitCubit(),
-      child: Row(
-        children: const [
-          MainApp(),
-          SchoolSelectionPage(),
-          LoginPageRoot(),
-        ],
-      ),
-    ),
-    BlocProvider<MainAppNavigationCubit>(
-      create: (c) => MainAppNavigationCubit(),
-      child: Row(
-        children: const [
-          TumbleListView(),
-          TumbleWeekView(),
-          TumbleCalendarView(),
-          TumbleNavigationBar(),
-          MainAppNavigationRoot(),
-          TumbleSearchPage()
-        ],
-      ),
-    ),
-    BlocProvider<MainAppCubit>(
-      create: (c) => MainAppCubit(),
-      child: Row(
-        children: const [
-          TumbleAppBar(),
-          TumbleSearchPage(),
-          TumbleCalendarView(),
-          TumbleWeekView(),
-          TumbleListView(),
-          MainAppNavigationRoot(),
-          MainApp(),
-          SchoolSelectionPage(),
-        ],
-      ),
-    ),
-    BlocProvider<SearchPageCubit>(
-      create: (c) => SearchPageCubit(),
-      child: Row(children: const [
-        TumbleSearchPage(),
-        ScheduleSearchBar(),
-        SearchBarAndLogoContainer(),
-      ]),
-    ),
-    BlocProvider<ThemeCubit>(
-      create: (c) => ThemeCubit()..getCurrentTheme(),
-      child: Row(children: const [
-        MainApp(),
-      ]),
-    ),
-    BlocProvider<DrawerCubit>(
-      create: (c) => DrawerCubit(),
-      child: Row(
-        children: const [TumbleAppDrawer(), SchoolSelectionPage(), MainAppNavigationRoot()],
-      ),
-    ),
-    BlocProvider<LoginPageCubit>(
-      create: (c) => LoginPageCubit(),
-      child: Row(
-        children: const [
-          LoginPageRoot(),
-        ],
-      ),
-    ),
-    BlocProvider<AuthCubit>(
-      create: (c) => AuthCubit(),
-      child: Row(
-        children: const [
-          LoginPageRoot(),
-          UserEventList(),
-        ],
-      ),
-    ),
-    BlocProvider<UserEventListCubit>(
-      create: (c) => UserEventListCubit(),
-      child: Row(
-        children: const [
-          UserEventList(),
-        ],
-      ),
-    ),
-  ], child: const MainApp()));
+  runApp(const App());
 }
