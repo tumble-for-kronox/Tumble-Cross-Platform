@@ -1,38 +1,7 @@
-import 'dart:io';
-import 'dart:typed_data';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tumble/refactor/core/app.dart';
-import 'package:tumble/refactor/core/navigation/app_navigator.dart';
-import 'package:tumble/shared/setup.dart';
-import 'package:tumble/startup/get_it_instances.dart';
-import 'package:tumble/theme/cubit/theme_cubit.dart';
-import 'package:tumble/theme/repository/theme_repository.dart';
-import 'package:tumble/ui/cubit/init_cubit.dart';
-import 'package:tumble/ui/drawer_generic/app_theme_picker.dart';
-import 'package:tumble/ui/main_app_widget/cubit/main_app_cubit.dart';
-import 'package:tumble/ui/main_app_widget/login_page/login_page_root.dart';
-import 'package:tumble/ui/main_app_widget/main_app.dart';
-import 'package:tumble/ui/main_app_widget/main_app_bottom_nav_bar/cubit/bottom_nav_cubit.dart';
-import 'package:tumble/ui/main_app_widget/main_app_bottom_nav_bar/tumble_navigation_bar.dart';
-import 'package:tumble/ui/main_app_widget/main_app_navigation_root.dart';
-import 'package:tumble/ui/main_app_widget/misc/tumble_drawer/tumble_app_drawer.dart';
-import 'package:tumble/ui/main_app_widget/schedule_view_widgets/tumble_calendar_view/tumble_calendar_view.dart';
-import 'package:tumble/ui/main_app_widget/misc/tumble_app_bar.dart';
-import 'package:tumble/ui/main_app_widget/schedule_view_widgets/tumble_calendar_view/tumble_calendar_view.dart';
-import 'package:tumble/ui/main_app_widget/schedule_view_widgets/tumble_list_view/tumble_list_view.dart';
-import 'package:tumble/ui/main_app_widget/schedule_view_widgets/tumble_week_view/tumble_week_view.dart';
-import 'package:tumble/ui/main_app_widget/school_selection_page.dart';
-import 'package:tumble/ui/main_app_widget/search_page_widgets/cubit/search_page_cubit.dart';
-import 'package:tumble/ui/main_app_widget/search_page_widgets/search/schedule_search_bar.dart';
-import 'package:tumble/ui/main_app_widget/search_page_widgets/search/tumble_search_page.dart';
-import 'package:tumble/ui/main_app_widget/search_page_widgets/search_bar_widget/searchbar_and_logo_container.dart';
-
-import 'ui/main_app_widget/misc/tumble_drawer/cubit/drawer_state.dart';
-import 'ui/main_app_widget/login_page/cubit/login_page_state.dart';
+import 'package:tumble/core/app.dart';
+import 'package:tumble/core/shared/setup.dart';
+import 'package:tumble/core/startup/get_it_instances.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
