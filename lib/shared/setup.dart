@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -31,6 +33,9 @@ void setupRequiredSharedPreferences() {
   sharedPrefs.getStringList(PreferenceTypes.favorites) == null
       ? sharedPrefs.setStringList(PreferenceTypes.favorites, <String>[])
       : null;
+  if (sharedPrefs.getString(PreferenceTypes.school) != null) {
+    log(sharedPrefs.getString(PreferenceTypes.school)!);
+  }
 }
 
 Future<void> setupKronoxSession() async {

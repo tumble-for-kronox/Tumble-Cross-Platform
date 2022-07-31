@@ -1,7 +1,7 @@
 part of 'init_cubit.dart';
 
 // ignore: constant_identifier_names
-enum InitStatus { INITIAL, HAS_SCHOOL }
+enum InitStatus { INITIAL, NAVIGATE_LOGIN_REQUIRED, NAVIGATE }
 
 class InitState extends Equatable {
   final InitStatus status;
@@ -11,7 +11,9 @@ class InitState extends Equatable {
     required this.status,
   });
 
-  InitState copyWith({InitStatus? status, String? defaultSchool, bool? loginRequired}) => InitState(
+  InitState copyWith(
+          {InitStatus? status, String? defaultSchool, bool? loginRequired}) =>
+      InitState(
         defaultSchool: defaultSchool ?? this.defaultSchool,
         status: status ?? this.status,
       );

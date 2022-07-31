@@ -1,7 +1,10 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
+import 'package:tumble/refactor/core/navigation/app_navigator.dart';
+import 'package:tumble/refactor/ui/cubit/root_page_cubit.dart';
 import 'package:tumble/ui/cubit/init_cubit.dart';
 import 'package:tumble/ui/main_app_widget/data/schools.dart';
 import 'package:tumble/ui/main_app_widget/misc/tumble_drawer/cubit/drawer_state.dart';
@@ -19,6 +22,7 @@ class SchoolSelectionPage extends StatefulWidget {
 class _SchoolSelectionPageState extends State<SchoolSelectionPage> {
   @override
   Widget build(BuildContext context) {
+    final navigator = BlocProvider.of<AppNavigator>(context);
     return Scaffold(
       extendBodyBehindAppBar: true,
       body: Container(
@@ -45,10 +49,9 @@ class _SchoolSelectionPageState extends State<SchoolSelectionPage> {
                           schoolId: school.schoolId,
                           schoolLogo: school.schoolLogo,
                           selectSchool: () {
-                            context
-                                .read<DrawerCubit>()
-                                .setNameForNextSchool(school.schoolName);
-                            context.read<InitCubit>().setup(context, school);
+                            navigator.pushAndRemoveUntil('RootPage',
+                                lastPage: 'SchoolSelectionPage',
+                                arguments: school);
                           }))
                       .toList(),
                 ),

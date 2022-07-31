@@ -1,6 +1,8 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tumble/ui/navigation/app_navigator.dart';
+import 'package:tumble/refactor/core/navigation/app_navigator.dart';
 
 class AppNavigatorProvider extends StatefulWidget {
   final List<String> initialPages;

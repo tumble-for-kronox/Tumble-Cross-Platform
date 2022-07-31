@@ -5,6 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tumble/refactor/core/app.dart';
+import 'package:tumble/refactor/core/navigation/app_navigator.dart';
 import 'package:tumble/shared/setup.dart';
 import 'package:tumble/startup/get_it_instances.dart';
 import 'package:tumble/theme/cubit/theme_cubit.dart';
@@ -28,7 +30,6 @@ import 'package:tumble/ui/main_app_widget/search_page_widgets/cubit/search_page_
 import 'package:tumble/ui/main_app_widget/search_page_widgets/search/schedule_search_bar.dart';
 import 'package:tumble/ui/main_app_widget/search_page_widgets/search/tumble_search_page.dart';
 import 'package:tumble/ui/main_app_widget/search_page_widgets/search_bar_widget/searchbar_and_logo_container.dart';
-import 'package:tumble/ui/navigation/app_navigator.dart';
 
 import 'ui/main_app_widget/misc/tumble_drawer/cubit/drawer_state.dart';
 import 'ui/main_app_widget/login_page/cubit/login_page_state.dart';
@@ -38,76 +39,5 @@ void main() async {
   await initSingletons();
   setupRequiredSharedPreferences();
   setupKronoxSession();
-  runApp(MultiBlocProvider(providers: [
-    BlocProvider<InitCubit>(
-      create: (c) => InitCubit(),
-      child: Row(
-        children: const [
-          MainApp(),
-          SchoolSelectionPage(),
-          LoginPageRoot(),
-        ],
-      ),
-    ),
-    BlocProvider<MainAppNavigationCubit>(
-      create: (c) => MainAppNavigationCubit(),
-      child: Row(
-        children: const [
-          TumbleListView(),
-          TumbleWeekView(),
-          TumbleCalendarView(),
-          TumbleNavigationBar(),
-          MainAppNavigationRootPage(),
-          TumbleSearchPage()
-        ],
-      ),
-    ),
-    BlocProvider<MainAppCubit>(
-      create: (c) => MainAppCubit(),
-      child: Row(
-        children: const [
-          TumbleAppBar(),
-          TumbleSearchPage(),
-          TumbleCalendarView(),
-          TumbleWeekView(),
-          TumbleListView(),
-          MainAppNavigationRootPage(),
-          MainApp(),
-          SchoolSelectionPage(),
-        ],
-      ),
-    ),
-    BlocProvider<SearchPageCubit>(
-      create: (c) => SearchPageCubit(),
-      child: Row(children: const [
-        TumbleSearchPage(),
-        ScheduleSearchBar(),
-        SearchBarAndLogoContainer(),
-      ]),
-    ),
-    BlocProvider<ThemeCubit>(
-      create: (c) => ThemeCubit()..getCurrentTheme(),
-      child: Row(children: const [
-        MainApp(),
-      ]),
-    ),
-    BlocProvider<DrawerCubit>(
-      create: (c) => DrawerCubit(),
-      child: Row(
-        children: const [
-          TumbleAppDrawer(),
-          SchoolSelectionPage(),
-          MainAppNavigationRootPage()
-        ],
-      ),
-    ),
-    BlocProvider<LoginPageCubit>(
-        create: (c) => LoginPageCubit(),
-        child: Row(
-          children: const [
-            LoginPageRoot(),
-          ],
-        )),
-    BlocProvider<AppNavigator>(create: (_) => AppNavigator()),
-  ], child: const MainApp()));
+  runApp(const App());
 }

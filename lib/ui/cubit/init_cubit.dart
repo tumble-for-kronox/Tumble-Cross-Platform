@@ -34,9 +34,9 @@ class InitCubit extends Cubit<InitState> {
         emit(const InitState(defaultSchool: null, status: InitStatus.INITIAL));
         break;
       case Status.HAS_SCHOOL:
+        log('Status has school');
         emit(InitState(
-            defaultSchool: databaseResponse.data,
-            status: InitStatus.HAS_SCHOOL));
+            defaultSchool: databaseResponse.data, status: InitStatus.NAVIGATE));
         break;
     }
   }
@@ -46,11 +46,7 @@ class InitCubit extends Cubit<InitState> {
     setupRequiredSharedPreferences();
     _sharedPrefs.setString(PreferenceTypes.school, school.schoolName);
     emit(InitState(
-        defaultSchool: school.schoolName, status: InitStatus.HAS_SCHOOL));
-    Navigator.of(context).pushAndRemoveUntil(
-        CupertinoPageRoute(
-            builder: (context) => const MainAppNavigationRootPage()),
-        (Route<dynamic> route) => false);
+        defaultSchool: school.schoolName, status: InitStatus.NAVIGATE));
   }
 
   void setup(BuildContext context, School school) async {

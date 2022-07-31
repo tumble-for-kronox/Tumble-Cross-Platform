@@ -9,12 +9,12 @@ import 'package:tumble/ui/drawer_generic/app_theme_picker.dart';
 import 'package:tumble/ui/main_app_widget/data/event_types.dart';
 import 'package:tumble/ui/main_app_widget/data/schools.dart';
 import 'package:tumble/ui/main_app_widget/misc/tumble_drawer/cubit/drawer_state.dart';
-import 'package:tumble/ui/navigation/app_navigator.dart';
 import '../tumble_app_drawer_tile.dart';
 import '../tumble_settings_section.dart';
 
 typedef HandleDrawerEvent = void Function(
-    Enum eventType, AppNavigator navigator);
+  Enum eventType,
+);
 
 class TumbleAppDrawer extends StatelessWidget {
   const TumbleAppDrawer({
@@ -23,7 +23,6 @@ class TumbleAppDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final navigator = BlocProvider.of<AppNavigator>(context);
     return BlocBuilder<DrawerCubit, DrawerState>(
       builder: (context, state) {
         return Drawer(
@@ -55,7 +54,7 @@ class TumbleAppDrawer extends StatelessWidget {
                   prefixIcon: CupertinoIcons.bubble_left_bubble_right,
                   eventType: EventType.CONTACT,
                   drawerEvent: (eventType) =>
-                      handleDrawerEvent(eventType, context, navigator),
+                      handleDrawerEvent(eventType, context),
                 ),
               ], title: "Support"),
               const SizedBox(height: 20.0),
@@ -71,7 +70,6 @@ class TumbleAppDrawer extends StatelessWidget {
                   drawerEvent: (eventType) => handleDrawerEvent(
                     eventType,
                     context,
-                    navigator,
                   ),
                 ),
                 TumbleAppDrawerTile(
@@ -83,7 +81,6 @@ class TumbleAppDrawer extends StatelessWidget {
                   drawerEvent: (eventType) => handleDrawerEvent(
                     eventType,
                     context,
-                    navigator,
                   ),
                 ),
               ], title: "Common"),
@@ -99,7 +96,6 @@ class TumbleAppDrawer extends StatelessWidget {
                     drawerEvent: (eventType) => handleDrawerEvent(
                           eventType,
                           context,
-                          navigator,
                         )),
                 TumbleAppDrawerTile(
                     drawerTileTitle: "Set default schedule",
@@ -112,7 +108,6 @@ class TumbleAppDrawer extends StatelessWidget {
                     drawerEvent: (eventType) => handleDrawerEvent(
                           eventType,
                           context,
-                          navigator,
                         )),
               ], title: "Schedule"),
               const SizedBox(height: 20.0),
@@ -123,8 +118,7 @@ class TumbleAppDrawer extends StatelessWidget {
     );
   }
 
-  void handleDrawerEvent(
-      Enum eventType, BuildContext context, AppNavigator navigator) {
+  void handleDrawerEvent(Enum eventType, BuildContext context) {
     switch (eventType) {
       case EventType.CANCEL_ALL_NOTIFICATIONS:
 
@@ -135,7 +129,6 @@ class TumbleAppDrawer extends StatelessWidget {
         /// Cancel all notifications tied to this schedule id
         break;
       case EventType.CHANGE_SCHOOL:
-        navigator.push('SchoolSelectionPage');
         break;
       case EventType.CHANGE_THEME:
         showModalBottomSheet(
@@ -159,7 +152,6 @@ class TumbleAppDrawer extends StatelessWidget {
                   scheduleIds: context.read<DrawerCubit>().state.bookmarks!,
                   setDefaultSchedule: (newId) {
                     context.read<DrawerCubit>().setSchedule(newId);
-                    Navigator.of(context).pop();
                   }));
         }
         break;
@@ -169,7 +161,6 @@ class TumbleAppDrawer extends StatelessWidget {
             builder: (context) => AppDefaultViewPicker(
                   setDefaultView: (viewType) {
                     context.read<DrawerCubit>().setView(viewType);
-                    Navigator.of(context).pop();
                   },
                 ));
         break;
