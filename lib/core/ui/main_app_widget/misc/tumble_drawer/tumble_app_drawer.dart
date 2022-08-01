@@ -47,7 +47,7 @@ class TumbleAppDrawer extends StatelessWidget {
                           padding: EdgeInsets.symmetric(
                               vertical: 13, horizontal: 20),
                           child: Align(
-                            alignment: Alignment.centerRight,
+                            alignment: Alignment.centerLeft,
                             child: Text('Settings',
                                 style: TextStyle(
                                     fontSize: 26, fontWeight: FontWeight.w400)),

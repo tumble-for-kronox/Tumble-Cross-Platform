@@ -71,4 +71,8 @@ class LoginPageCubit extends Cubit<LoginPageState> {
   void togglePasswordVisibility() {
     emit(state.copyWith(passwordHidden: !state.passwordHidden));
   }
+
+  void setUserLoggedIn() {
+    emit(state.copyWith(status: LoginPageStatus.SUCCESS));
+  }
 }

@@ -43,13 +43,34 @@ class UserInfo extends StatelessWidget {
             ),
           ),
           const SizedBox(
-            height: 30,
+            height: 15,
           ),
           Text(
-            'Hello $name!',
+            loggedIn
+                ? "Welcome ${name!.split(" ")[0]}!"
+                : "Connect your Kronox account by logging in.",
+            textAlign: TextAlign.center,
             style: TextStyle(
-                color: Theme.of(context).colorScheme.onPrimary, fontSize: 16),
-          )
+                fontSize: 16,
+                fontWeight: FontWeight.w400,
+                color: Theme.of(context).colorScheme.onPrimary),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 10, left: 70, right: 70),
+            child: OutlinedButton(
+                onPressed: onPressed,
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all<Color>(
+                      Theme.of(context).colorScheme.onPrimary),
+                  shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12.0))),
+                ),
+                child: Text(loggedIn ? "Sign out" : "Sign in",
+                    style: const TextStyle(
+                      fontSize: 16,
+                      color: Color.fromARGB(255, 42, 42, 42),
+                    ))),
+          ),
         ],
       ),
     );

@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
@@ -31,6 +32,11 @@ class _LoginPageRootState extends State<LoginPageRoot> {
     final navigator = BlocProvider.of<AppNavigator>(context);
     return BlocConsumer<LoginPageCubit, LoginPageState>(
       listener: ((context, state) async {
+        if (state.status == LoginPageStatus.INITIAL) {
+          if (BlocProvider.of<AuthCubit>(context).authenticated) {
+            context.read<LoginPageCubit>().setUserLoggedIn();
+          }
+        }
         if (state.status == LoginPageStatus.SUCCESS) {
           BlocProvider.of<DrawerCubit>(context)
               .updateSchool(widget.schoolName!);
@@ -83,7 +89,9 @@ Widget _initialState(
                     width: 15,
                   ),
                   Text(
-                    state.status == LoginPageStatus.SUCCESS
+                    state.status == LoginPageStatus.SUCCESS ||
+                            BlocProvider.of<AuthCubit>(context).authenticated &&
+                                state.status == LoginPageStatus.INITIAL
                         ? "Signed in to Kronox!"
                         : "Sign in to Kronox",
                     style: TextStyle(
@@ -98,7 +106,9 @@ Widget _initialState(
                 height: 40,
               ),
               Text(
-                state.status == LoginPageStatus.SUCCESS
+                state.status == LoginPageStatus.SUCCESS ||
+                        BlocProvider.of<AuthCubit>(context).authenticated &&
+                            state.status == LoginPageStatus.INITIAL
                     ? "You've sucessfully signed into your\nUniversity via Kronox"
                     : "This university requires a Kronox\naccount to proceed",
                 textAlign: TextAlign.center,
@@ -133,6 +143,17 @@ Widget _initialState(
                 ),
                 child: BlocBuilder<LoginPageCubit, LoginPageState>(
                   builder: (context, state) {
+                    if (BlocProvider.of<AuthCubit>(context).authenticated &&
+                        state.status == LoginPageStatus.INITIAL) {
+                      return SizedBox(
+                        height: double.infinity,
+                        child: Lottie.asset(
+                            'assets/animations/lottie_success_burst.json',
+                            width: 100,
+                            height: 100,
+                            repeat: false),
+                      );
+                    }
                     switch (state.status) {
                       case LoginPageStatus.LOADING:
                         return const SpinKitThreeBounce(
