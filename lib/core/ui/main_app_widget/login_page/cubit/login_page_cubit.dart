@@ -11,7 +11,7 @@ class LoginPageCubit extends Cubit<LoginPageState> {
   final _userRepo = locator<UserRepository>();
   final _secureStorage = locator<SecureStorageRepository>();
 
-  void submitLogin(BuildContext context, School school) async {
+  void submitLogin(BuildContext context, String school) async {
     final username = state.usernameController.text;
     final password = state.passwordController.text;
     if (!formValidated()) {
@@ -32,7 +32,7 @@ class LoginPageCubit extends Cubit<LoginPageState> {
         storeUserCreds((userRes.data! as KronoxUserModel).refreshToken);
         locator<SharedPreferences>().setString(
           PreferenceTypes.school,
-          school.schoolName,
+          school,
         );
         emit(state.copyWith(
             status: LoginPageStatus.SUCCESS, userSession: userRes.data!));

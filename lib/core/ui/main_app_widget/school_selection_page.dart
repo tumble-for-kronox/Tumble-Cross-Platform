@@ -5,6 +5,7 @@ import 'package:tumble/core/navigation/app_navigator.dart';
 import 'package:tumble/core/navigation/navigation_route_labels.dart';
 import 'package:tumble/core/ui/cubit/init_cubit.dart';
 import 'package:tumble/core/ui/main_app_widget/data/schools.dart';
+import 'package:tumble/core/ui/main_app_widget/misc/tumble_drawer/cubit/drawer_state.dart';
 import 'package:tumble/core/ui/main_app_widget/search_page_widgets/search/school_card.dart';
 import 'package:tumble/core/ui/scaffold_message.dart';
 
@@ -50,7 +51,7 @@ class _SchoolSelectionPageState extends State<SchoolSelectionPage> {
                             if (school.loginRequired) {
                               navigator.push(
                                   NavigationRouteLabels.loginPageRoot,
-                                  arguments: school);
+                                  arguments: school.schoolName);
                             } else {
                               BlocProvider.of<InitCubit>(context)
                                   .changeSchool(school);
@@ -58,6 +59,8 @@ class _SchoolSelectionPageState extends State<SchoolSelectionPage> {
                                   '${ChangeResponse.changeSchool} ${BlocProvider.of<InitCubit>(context).state.defaultSchool}');
                               navigator.pushAndRemoveAll(NavigationRouteLabels
                                   .mainAppNavigationRootPage);
+                              BlocProvider.of<DrawerCubit>(context)
+                                  .setNameForNextSchool(school.schoolName);
                             }
                           }))
                       .toList(),

@@ -41,7 +41,7 @@ class CustomCupertinoAlerts {
                   fontSize: 13,
                   fontWeight: FontWeight.w600)),
           onPressed: () {
-            navigator.pop();
+            Navigator.of(context, rootNavigator: true).pop();
           },
         ),
         CupertinoDialogAction(
@@ -51,7 +51,7 @@ class CustomCupertinoAlerts {
                   fontSize: 13,
                   fontWeight: FontWeight.w600)),
           onPressed: () {
-            navigator.pop();
+            Navigator.of(context, rootNavigator: true).pop();
             navigateToSearchFromView();
           },
         )
@@ -89,7 +89,7 @@ class CustomCupertinoAlerts {
                   fontSize: 13,
                   fontWeight: FontWeight.w600)),
           onPressed: () {
-            navigator.pop();
+            Navigator.of(context, rootNavigator: true).pop();
           },
         ),
         CupertinoDialogAction(
@@ -99,7 +99,7 @@ class CustomCupertinoAlerts {
                   fontSize: 13,
                   fontWeight: FontWeight.w600)),
           onPressed: () {
-            navigator.pop();
+            Navigator.of(context, rootNavigator: true).pop();
             navigateToSearchFromView();
           },
         )
@@ -135,7 +135,7 @@ class CustomCupertinoAlerts {
                   fontSize: 13,
                   fontWeight: FontWeight.w600)),
           onPressed: () {
-            navigator.pop();
+            Navigator.of(context, rootNavigator: true).pop();
             navigateToSearchFromView();
           },
         )

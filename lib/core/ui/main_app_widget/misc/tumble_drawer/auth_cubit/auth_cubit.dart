@@ -46,7 +46,8 @@ class AuthCubit extends Cubit<AuthState> {
 
   void logout() {
     locator<SecureStorageRepository>().clear();
-    emit(state.copyWith(status: AuthStatus.UNAUTHENTICATED, userSession: null));
+    emit(
+        const AuthState(status: AuthStatus.UNAUTHENTICATED, userSession: null));
   }
 
   bool get authenticated => state.status == AuthStatus.AUTHENTICATED;

@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 
 class UserInfo extends StatelessWidget {
-  const UserInfo({Key? key, this.name, required this.loggedIn, required this.onPressed}) : super(key: key);
+  const UserInfo(
+      {Key? key, this.name, required this.loggedIn, required this.onPressed})
+      : super(key: key);
 
   final String? name;
   final bool loggedIn;
@@ -25,7 +25,9 @@ class UserInfo extends StatelessWidget {
             ),
           ),
           Text(
-            loggedIn ? "Welcome ${name!.split(" ")[0]}!" : "Connect your Kronox account by logging in.",
+            loggedIn
+                ? "Welcome ${name!.split(" ")[0]}!"
+                : "Connect your Kronox account by logging in.",
             textAlign: TextAlign.center,
             style: const TextStyle(
               fontSize: 20,
@@ -37,7 +39,7 @@ class UserInfo extends StatelessWidget {
             child: TextButton(
               onPressed: onPressed,
               child: Text(
-                loggedIn ? "Logout" : "Login",
+                loggedIn ? "Sign out" : "Sign in",
                 style: const TextStyle(fontSize: 16),
               ),
             ),

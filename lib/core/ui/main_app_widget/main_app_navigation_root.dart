@@ -31,6 +31,7 @@ class _MainAppNavigationRootPageState extends State<MainAppNavigationRootPage> {
         return BlocBuilder<ThemeCubit, ThemeState>(
           builder: ((context, themeState) {
             return Scaffold(
+                extendBody: true,
                 backgroundColor: Theme.of(context).colorScheme.background,
                 endDrawer: const TumbleAppDrawer(),
                 appBar: TumbleAppBar(
@@ -46,15 +47,25 @@ class _MainAppNavigationRootPageState extends State<MainAppNavigationRootPage> {
                     builder: (BuildContext context, AsyncSnapshot snapshot) {
                       switch (navState.navbarItem) {
                         case NavbarItem.SEARCH:
-                          return const TumbleSearchPage();
+                          return const AnimatedSwitcher(
+                              duration: Duration(milliseconds: 250),
+                              child: TumbleSearchPage());
                         case NavbarItem.USER_ACCOUNT:
-                          return const TumbleAccountPage();
+                          return const AnimatedSwitcher(
+                              duration: Duration(milliseconds: 250),
+                              child: TumbleAccountPage());
                         case NavbarItem.LIST:
-                          return const TumbleListView();
+                          return const AnimatedSwitcher(
+                              duration: Duration(milliseconds: 250),
+                              child: TumbleListView());
                         case NavbarItem.WEEK:
-                          return const TumbleWeekView();
+                          return const AnimatedSwitcher(
+                              duration: Duration(milliseconds: 250),
+                              child: TumbleWeekView());
                         case NavbarItem.CALENDAR:
-                          return const TumbleCalendarView();
+                          return const AnimatedSwitcher(
+                              duration: Duration(milliseconds: 250),
+                              child: TumbleCalendarView());
                       }
                     }),
                 bottomNavigationBar: TumbleNavigationBar(onTap: (index) {

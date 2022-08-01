@@ -37,7 +37,7 @@ class Routes {
         break;
       case NavigationRouteLabels.loginPageRoot:
         pageClass = LoginPageRoot(
-          school: arguments,
+          schoolName: arguments,
         );
         break;
       case NavigationRouteLabels.tumbleSearchPage:

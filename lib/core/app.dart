@@ -13,7 +13,11 @@ import 'package:tumble/core/ui/main_app_widget/login_page/login_page_root.dart';
 import 'package:tumble/core/ui/main_app.dart';
 import 'package:tumble/core/ui/main_app_widget/main_app_bottom_nav_bar/cubit/bottom_nav_cubit.dart';
 import 'package:tumble/core/ui/main_app_widget/main_app_navigation_root.dart';
+import 'package:tumble/core/ui/main_app_widget/misc/tumble_drawer/auth_cubit/auth_cubit.dart';
 import 'package:tumble/core/ui/main_app_widget/misc/tumble_drawer/cubit/drawer_state.dart';
+import 'package:tumble/core/ui/main_app_widget/misc/tumble_drawer/main_app_widget/account_page/authenticated_page.dart';
+import 'package:tumble/core/ui/main_app_widget/misc/tumble_drawer/main_app_widget/account_page/user_event_list/cubit/user_event_list_cubit.dart';
+import 'package:tumble/core/ui/main_app_widget/misc/tumble_drawer/main_app_widget/account_page/user_event_list/user_event_list.dart';
 import 'package:tumble/core/ui/main_app_widget/misc/tumble_drawer/tumble_app_drawer.dart';
 import 'package:tumble/core/ui/main_app_widget/schedule_view_widgets/tumble_calendar_view/tumble_calendar_view.dart';
 import 'package:tumble/core/ui/main_app_widget/misc/tumble_app_bar.dart';
@@ -102,15 +106,34 @@ class _AppState extends State<App> {
               child: Row(
                 children: const [
                   LoginPageRoot(),
+                  AuthenticatedPage(),
                 ],
               )),
           BlocProvider<AppNavigator>(create: (_) => AppNavigator()),
+          BlocProvider<AuthCubit>(
+            create: (c) => AuthCubit(),
+            child: Row(
+              children: const [
+                LoginPageRoot(),
+                UserEventList(),
+              ],
+            ),
+          ),
+          BlocProvider<UserEventListCubit>(
+            create: (c) => UserEventListCubit(),
+            child: Row(
+              children: const [
+                UserEventList(),
+              ],
+            ),
+          ),
         ],
         child: BlocBuilder<ThemeCubit, ThemeState>(
             builder: ((context, state) => MaterialApp(
                   debugShowCheckedModeBanner: false,
                   title: 'Tumble',
                   theme: ThemeData(
+                    canvasColor: Colors.transparent,
                     colorScheme: CustomColors.lightColors,
                     fontFamily: 'Roboto',
                   ),

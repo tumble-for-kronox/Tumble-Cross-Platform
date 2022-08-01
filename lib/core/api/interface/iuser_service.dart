@@ -7,7 +7,7 @@ abstract class IUserService {
   Future<ApiResponse> getUserEvents(String sessionToken);
 
   Future<ApiResponse> postUserLogin(
-      String username, String password, School school);
+      String username, String password, String school);
 
   Future<ApiResponse> getRefreshSession(String refreshToken);
 

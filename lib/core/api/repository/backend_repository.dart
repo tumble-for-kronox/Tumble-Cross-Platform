@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart';
 import 'package:tumble/core/api/apiservices/api_endpoints.dart';
@@ -174,6 +175,7 @@ class BackendRepository implements IBackendService {
   Future postUserLogin(
       String username, String password, String defaultSchool) async {
     final school = Schools().fromString(defaultSchool).schoolId.index;
+    log(school.toString());
     final Map<String, String> body = {
       ApiEndPoints.username: username,
       ApiEndPoints.password: password

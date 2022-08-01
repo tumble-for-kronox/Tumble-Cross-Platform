@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tumble/core/navigation/navigation_routes.dart';
@@ -65,6 +67,8 @@ class AppNavigator extends Cubit<List<Page>> {
 
   bool pop() {
     List<Page> list = List.from(state);
+    log(List.from(state).toString());
+    log(list.length.toString());
     if (list.length <= 1) return false;
     list.removeLast();
     emit(list);

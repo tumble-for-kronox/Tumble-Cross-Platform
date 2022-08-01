@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -7,6 +9,7 @@ import 'package:lottie/lottie.dart';
 import 'package:tumble/core/api/apiservices/fetch_response.dart';
 import 'package:tumble/core/models/ui_models/school_model.dart';
 import 'package:tumble/core/navigation/app_navigator.dart';
+import 'package:tumble/core/navigation/navigation_route_labels.dart';
 import 'package:tumble/core/theme/data/colors.dart';
 import 'package:tumble/core/ui/cubit/init_cubit.dart';
 import 'package:tumble/core/ui/main_app_widget/misc/tumble_drawer/auth_cubit/auth_cubit.dart';
@@ -15,8 +18,8 @@ import 'package:tumble/core/ui/main_app_widget/misc/tumble_drawer/cubit/drawer_s
 import 'package:tumble/core/ui/scaffold_message.dart';
 
 class LoginPageRoot extends StatefulWidget {
-  final School? school;
-  const LoginPageRoot({Key? key, this.school}) : super(key: key);
+  final String? schoolName;
+  const LoginPageRoot({Key? key, this.schoolName}) : super(key: key);
 
   @override
   State<LoginPageRoot> createState() => _LoginPageRootState();
@@ -27,13 +30,16 @@ class _LoginPageRootState extends State<LoginPageRoot> {
   Widget build(BuildContext context) {
     final navigator = BlocProvider.of<AppNavigator>(context);
     return BlocConsumer<LoginPageCubit, LoginPageState>(
-      listener: ((context, state) {
+      listener: ((context, state) async {
         if (state.status == LoginPageStatus.SUCCESS) {
           BlocProvider.of<DrawerCubit>(context)
-              .updateSchool(widget.school!.schoolName);
+              .updateSchool(widget.schoolName!);
           showScaffoldMessage(context, FetchResponse.loginSuccess);
           BlocProvider.of<AuthCubit>(context)
               .setUserSession(state.userSession!);
+          Future.delayed(Duration(seconds: 1));
+          navigator.pushAndRemoveAll(
+              NavigationRouteLabels.mainAppNavigationRootPage);
           if (state.school != null) {
             BlocProvider.of<InitCubit>(context).changeSchool(state.school!);
           } else {
@@ -49,14 +55,15 @@ class _LoginPageRootState extends State<LoginPageRoot> {
         return Scaffold(
             backgroundColor: Theme.of(context).colorScheme.primary,
             appBar: _appBar(state, context, navigator),
-            body: _initialState(state, context, widget.school!));
+            resizeToAvoidBottomInset: false,
+            body: _initialState(state, context, widget.schoolName!));
       },
     );
   }
 }
 
 Widget _initialState(
-    LoginPageState state, BuildContext context, School school) {
+    LoginPageState state, BuildContext context, String school) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -65,19 +72,36 @@ Widget _initialState(
         child: Center(
           child: Column(
             children: [
-              Text(
-                "Sign in to Kronox",
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.onPrimary,
-                  fontWeight: FontWeight.w500,
-                  fontSize: 31,
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CircleAvatar(
+                    backgroundColor: CustomColors.lightColors.background,
+                    child: const Image(
+                        image: AssetImage('assets/images/tumbleAppLogo.png')),
+                  ),
+                  const SizedBox(
+                    width: 15,
+                  ),
+                  Text(
+                    state.status == LoginPageStatus.SUCCESS
+                        ? "Signed in to Kronox!"
+                        : "Sign in to Kronox",
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onPrimary,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 31,
+                    ),
+                  ),
+                ],
               ),
               const SizedBox(
                 height: 40,
               ),
               Text(
-                'This university requires a Kronox\naccount to proceed',
+                state.status == LoginPageStatus.SUCCESS
+                    ? "You've sucessfully signed into your\nUniversity via Kronox"
+                    : "This university requires a Kronox\naccount to proceed",
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.onPrimary,
@@ -116,8 +140,14 @@ Widget _initialState(
                           color: CustomColors.orangePrimary,
                         );
                       case LoginPageStatus.SUCCESS:
-                        return Lottie.asset(
-                            'assets/animations/lottie_success_burst.json');
+                        return SizedBox(
+                          height: double.infinity,
+                          child: Lottie.asset(
+                              'assets/animations/lottie_success_burst.json',
+                              width: 100,
+                              height: 100,
+                              repeat: false),
+                        );
                       default:
                         return _form(state, context, school);
                     }
@@ -144,7 +174,7 @@ PreferredSizeWidget _appBar(
           }));
 }
 
-Widget _form(LoginPageState state, BuildContext context, School school) {
+Widget _form(LoginPageState state, BuildContext context, String school) {
   return Form(
     onWillPop: () async {
       state.passwordController.clear();
@@ -177,7 +207,7 @@ Widget _form(LoginPageState state, BuildContext context, School school) {
 }
 
 Widget _formSubmitButton(
-    LoginPageState state, BuildContext context, School school) {
+    LoginPageState state, BuildContext context, String school) {
   return Container(
     padding: const EdgeInsets.only(left: 80, right: 80, bottom: 50),
     width: double.infinity,
@@ -212,7 +242,7 @@ Widget _formSubmitButton(
 }
 
 Widget _formUsernameField(
-    LoginPageState state, BuildContext context, School school) {
+    LoginPageState state, BuildContext context, String school) {
   return Container(
     padding: const EdgeInsets.only(right: 15),
     width: 340,
@@ -260,7 +290,7 @@ Widget _formUsernameField(
 }
 
 Widget _formPasswordField(
-    LoginPageState state, BuildContext context, School school) {
+    LoginPageState state, BuildContext context, String school) {
   return Container(
     padding: const EdgeInsets.only(right: 15),
     width: 340,
