@@ -48,4 +48,8 @@ class DrawerCubit extends Cubit<DrawerState> {
     locator<SharedPreferences>().setInt(PreferenceTypes.view, viewType);
     emit(state.copyWith(viewType: ScheduleViewTypes.viewTypesMap[viewType]));
   }
+
+  void updateSchool(String schoolName) {
+    emit(state.copyWith(school: schoolName));
+  }
 }

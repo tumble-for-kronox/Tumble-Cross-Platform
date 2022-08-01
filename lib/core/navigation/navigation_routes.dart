@@ -36,7 +36,9 @@ class Routes {
         pageClass = const SchoolSelectionPage();
         break;
       case NavigationRouteLabels.loginPageRoot:
-        pageClass = const LoginPageRoot();
+        pageClass = LoginPageRoot(
+          school: arguments,
+        );
         break;
       case NavigationRouteLabels.tumbleSearchPage:
         pageClass = const TumbleSearchPage();

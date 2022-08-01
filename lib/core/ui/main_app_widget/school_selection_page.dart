@@ -48,8 +48,9 @@ class _SchoolSelectionPageState extends State<SchoolSelectionPage> {
                           schoolLogo: school.schoolLogo,
                           selectSchool: () {
                             if (school.loginRequired) {
-                              navigator
-                                  .push(NavigationRouteLabels.loginPageRoot);
+                              navigator.push(
+                                  NavigationRouteLabels.loginPageRoot,
+                                  arguments: school);
                             } else {
                               BlocProvider.of<InitCubit>(context)
                                   .changeSchool(school);

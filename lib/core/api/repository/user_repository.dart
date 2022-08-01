@@ -6,6 +6,7 @@ import 'package:tumble/core/api/repository/backend_repository.dart';
 import 'package:tumble/core/database/repository/database_repository.dart';
 import 'package:tumble/core/models/api_models/kronox_user_model.dart';
 import 'package:tumble/core/models/api_models/user_event_collection_model.dart';
+import 'package:tumble/core/models/ui_models/school_model.dart';
 import 'package:tumble/core/shared/preference_types.dart';
 import 'package:tumble/core/shared/secure_storage_keys.dart';
 import 'package:tumble/core/startup/get_it_instances.dart';
@@ -25,10 +26,10 @@ class UserRepository implements IUserService {
   }
 
   @override
-  Future<ApiResponse> postUserLogin(String username, String password) async {
-    final school = _sharedPrefs.getString(PreferenceTypes.school)!;
-
-    return await _backendRepository.postUserLogin(username, password, school);
+  Future<ApiResponse> postUserLogin(
+      String username, String password, School school) async {
+    return await _backendRepository.postUserLogin(
+        username, password, school.schoolName);
   }
 
   @override

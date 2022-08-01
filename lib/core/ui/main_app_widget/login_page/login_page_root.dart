@@ -5,17 +5,18 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:lottie/lottie.dart';
 import 'package:tumble/core/api/apiservices/fetch_response.dart';
-import 'package:tumble/core/database/responses/change_response.dart';
+import 'package:tumble/core/models/ui_models/school_model.dart';
 import 'package:tumble/core/navigation/app_navigator.dart';
 import 'package:tumble/core/theme/data/colors.dart';
 import 'package:tumble/core/ui/cubit/init_cubit.dart';
-import 'package:tumble/core/ui/main_app_widget/login_page/text_field_container.dart';
 import 'package:tumble/core/ui/main_app_widget/misc/tumble_drawer/auth_cubit/auth_cubit.dart';
 import 'package:tumble/core/ui/main_app_widget/login_page/cubit/login_page_state.dart';
+import 'package:tumble/core/ui/main_app_widget/misc/tumble_drawer/cubit/drawer_state.dart';
 import 'package:tumble/core/ui/scaffold_message.dart';
 
 class LoginPageRoot extends StatefulWidget {
-  const LoginPageRoot({Key? key}) : super(key: key);
+  final School? school;
+  const LoginPageRoot({Key? key, this.school}) : super(key: key);
 
   @override
   State<LoginPageRoot> createState() => _LoginPageRootState();
@@ -28,6 +29,8 @@ class _LoginPageRootState extends State<LoginPageRoot> {
     return BlocConsumer<LoginPageCubit, LoginPageState>(
       listener: ((context, state) {
         if (state.status == LoginPageStatus.SUCCESS) {
+          BlocProvider.of<DrawerCubit>(context)
+              .updateSchool(widget.school!.schoolName);
           showScaffoldMessage(context, FetchResponse.loginSuccess);
           BlocProvider.of<AuthCubit>(context)
               .setUserSession(state.userSession!);
@@ -46,13 +49,14 @@ class _LoginPageRootState extends State<LoginPageRoot> {
         return Scaffold(
             backgroundColor: Theme.of(context).colorScheme.primary,
             appBar: _appBar(state, context, navigator),
-            body: _initialState(state, context));
+            body: _initialState(state, context, widget.school!));
       },
     );
   }
 }
 
-Widget _initialState(LoginPageState state, BuildContext context) {
+Widget _initialState(
+    LoginPageState state, BuildContext context, School school) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -115,7 +119,7 @@ Widget _initialState(LoginPageState state, BuildContext context) {
                         return Lottie.asset(
                             'assets/animations/lottie_success_burst.json');
                       default:
-                        return _form(state, context);
+                        return _form(state, context, school);
                     }
                   },
                 )),
@@ -140,7 +144,7 @@ PreferredSizeWidget _appBar(
           }));
 }
 
-Widget _form(LoginPageState state, BuildContext context) {
+Widget _form(LoginPageState state, BuildContext context, School school) {
   return Form(
     onWillPop: () async {
       state.passwordController.clear();
@@ -154,28 +158,33 @@ Widget _form(LoginPageState state, BuildContext context) {
         children: [
           Column(
             children: [
-              _formUsernameField(state, context),
+              _formUsernameField(
+                state,
+                context,
+                school,
+              ),
               const SizedBox(
                 height: 35,
               ),
-              _formPasswordField(state, context),
+              _formPasswordField(state, context, school),
             ],
           ),
-          _formSubmitButton(state, context),
+          _formSubmitButton(state, context, school),
         ],
       ),
     ),
   );
 }
 
-Widget _formSubmitButton(LoginPageState state, BuildContext context) {
+Widget _formSubmitButton(
+    LoginPageState state, BuildContext context, School school) {
   return Container(
     padding: const EdgeInsets.only(left: 80, right: 80, bottom: 50),
     width: double.infinity,
     height: 105,
     child: OutlinedButton(
       onPressed: () =>
-          BlocProvider.of<LoginPageCubit>(context).submitLogin(context),
+          BlocProvider.of<LoginPageCubit>(context).submitLogin(context, school),
       style: ButtonStyle(
         backgroundColor:
             MaterialStateProperty.all<Color>(CustomColors.orangePrimary),
@@ -202,7 +211,8 @@ Widget _formSubmitButton(LoginPageState state, BuildContext context) {
   );
 }
 
-Widget _formUsernameField(LoginPageState state, BuildContext context) {
+Widget _formUsernameField(
+    LoginPageState state, BuildContext context, School school) {
   return Container(
     padding: const EdgeInsets.only(right: 15),
     width: 340,
@@ -240,7 +250,7 @@ Widget _formUsernameField(LoginPageState state, BuildContext context) {
       keyboardType: TextInputType.emailAddress,
       textInputAction: TextInputAction.done,
       onFieldSubmitted: (String s) =>
-          BlocProvider.of<LoginPageCubit>(context).submitLogin(context),
+          BlocProvider.of<LoginPageCubit>(context).submitLogin(context, school),
       autovalidateMode: AutovalidateMode.onUserInteraction,
       validator: (String? text) {
         return text == "" ? "Username/Email cannot be empty." : null;
@@ -249,7 +259,8 @@ Widget _formUsernameField(LoginPageState state, BuildContext context) {
   );
 }
 
-Widget _formPasswordField(LoginPageState state, BuildContext context) {
+Widget _formPasswordField(
+    LoginPageState state, BuildContext context, School school) {
   return Container(
     padding: const EdgeInsets.only(right: 15),
     width: 340,
@@ -291,7 +302,10 @@ Widget _formPasswordField(LoginPageState state, BuildContext context) {
               borderRadius: BorderRadius.circular(20))),
       textInputAction: TextInputAction.done,
       onFieldSubmitted: (String s) =>
-          BlocProvider.of<LoginPageCubit>(context).submitLogin(context),
+          BlocProvider.of<LoginPageCubit>(context).submitLogin(
+        context,
+        school,
+      ),
       autovalidateMode: AutovalidateMode.onUserInteraction,
       validator: (String? text) {
         return text == "" ? "Password cannot be empty." : null;
