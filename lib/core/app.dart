@@ -122,8 +122,9 @@ class _AppState extends State<App> {
                     fontFamily: 'Roboto',
                   ),
                   themeMode: state.themeMode,
-                  home: const AppNavigatorProvider(
-                      initialPages: [NavigationRouteLabels.mainAppPage]),
+                  home: const AppNavigatorProvider(initialPages: [
+                    NavigationRouteLabels.mainAppPage,
+                  ]),
                 ))));
   }
 }

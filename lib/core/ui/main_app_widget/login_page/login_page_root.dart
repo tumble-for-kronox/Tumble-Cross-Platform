@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:lottie/lottie.dart';
 import 'package:tumble/core/api/apiservices/fetch_response.dart';
 import 'package:tumble/core/database/responses/change_response.dart';
 import 'package:tumble/core/navigation/app_navigator.dart';
@@ -45,17 +46,7 @@ class _LoginPageRootState extends State<LoginPageRoot> {
         return Scaffold(
             backgroundColor: Theme.of(context).colorScheme.primary,
             appBar: _appBar(state, context, navigator),
-            body: () {
-              switch (state.status) {
-                case LoginPageStatus.INITIAL:
-                  return _initialState(state, context);
-                case LoginPageStatus.LOADING:
-                  return SpinKitThreeBounce(
-                      color: Theme.of(context).colorScheme.primary);
-                default:
-                  return _initialState(state, context);
-              }
-            }());
+            body: _initialState(state, context));
       },
     );
   }
@@ -75,7 +66,7 @@ Widget _initialState(LoginPageState state, BuildContext context) {
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.onPrimary,
                   fontWeight: FontWeight.w500,
-                  fontSize: 30,
+                  fontSize: 31,
                 ),
               ),
               const SizedBox(
@@ -113,7 +104,21 @@ Widget _initialState(LoginPageState state, BuildContext context) {
                     ),
                   ],
                 ),
-                child: _form(state, context)),
+                child: BlocBuilder<LoginPageCubit, LoginPageState>(
+                  builder: (context, state) {
+                    switch (state.status) {
+                      case LoginPageStatus.LOADING:
+                        return const SpinKitThreeBounce(
+                          color: CustomColors.orangePrimary,
+                        );
+                      case LoginPageStatus.SUCCESS:
+                        return Lottie.asset(
+                            'assets/animations/lottie_success_burst.json');
+                      default:
+                        return _form(state, context);
+                    }
+                  },
+                )),
           ],
         ),
       ),
@@ -156,10 +161,7 @@ Widget _form(LoginPageState state, BuildContext context) {
               _formPasswordField(state, context),
             ],
           ),
-          Padding(
-            padding: const EdgeInsets.only(top: 30, bottom: 90),
-            child: _formSubmitButton(state, context),
-          ),
+          _formSubmitButton(state, context),
         ],
       ),
     ),
@@ -167,50 +169,37 @@ Widget _form(LoginPageState state, BuildContext context) {
 }
 
 Widget _formSubmitButton(LoginPageState state, BuildContext context) {
-  return Padding(
-    padding: const EdgeInsets.only(left: 80, right: 80),
-    child: Expanded(
-      child: SizedBox(
-        width: double.infinity,
-        height: 50,
-        child: OutlinedButton(
-          onPressed: null,
-          style: ButtonStyle(
-            backgroundColor:
-                MaterialStateProperty.all<Color>(CustomColors.orangePrimary),
-            shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12.0))),
+  return Container(
+    padding: const EdgeInsets.only(left: 80, right: 80, bottom: 50),
+    width: double.infinity,
+    height: 105,
+    child: OutlinedButton(
+      onPressed: () =>
+          BlocProvider.of<LoginPageCubit>(context).submitLogin(context),
+      style: ButtonStyle(
+        backgroundColor:
+            MaterialStateProperty.all<Color>(CustomColors.orangePrimary),
+        shape: MaterialStateProperty.all(
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0))),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Icon(
+            CupertinoIcons.arrow_right_to_line_alt,
+            color: Theme.of(context).colorScheme.onPrimary,
           ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Icon(
-                CupertinoIcons.arrow_right_to_line_alt,
-                color: Theme.of(context).colorScheme.onPrimary,
-              ),
-              Padding(
-                  padding: const EdgeInsets.only(right: 65),
-                  child: Text("Sign in",
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: Theme.of(context).colorScheme.onPrimary,
-                      ))),
-            ],
-          ),
-        ),
+          Padding(
+              padding: const EdgeInsets.only(right: 65),
+              child: Text("Sign in",
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Theme.of(context).colorScheme.onPrimary,
+                  ))),
+        ],
       ),
     ),
   );
-
-  /* return MaterialButton(
-    color: Theme.of(context).colorScheme.primary,
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.all(Radius.circular(5)),
-    ),
-    onPressed: () =>
-        BlocProvider.of<LoginPageCubit>(context).submitLogin(context),
-    child: const Text("Sign in"),
-  ); */
 }
 
 Widget _formUsernameField(LoginPageState state, BuildContext context) {
@@ -218,6 +207,7 @@ Widget _formUsernameField(LoginPageState state, BuildContext context) {
     padding: const EdgeInsets.only(right: 15),
     width: 340,
     child: TextFormField(
+      autocorrect: false,
       style: const TextStyle(fontSize: 14),
       controller: state.usernameController,
       decoration: InputDecoration(
@@ -264,10 +254,17 @@ Widget _formPasswordField(LoginPageState state, BuildContext context) {
     padding: const EdgeInsets.only(right: 15),
     width: 340,
     child: TextFormField(
+      autocorrect: false,
       style: const TextStyle(fontSize: 14),
       controller: state.passwordController,
-      obscureText: true,
+      obscureText: state.passwordHidden,
       decoration: InputDecoration(
+          suffixIcon: IconButton(
+              onPressed: () => BlocProvider.of<LoginPageCubit>(context)
+                  .togglePasswordVisibility(),
+              icon: !state.passwordHidden
+                  ? const Icon(CupertinoIcons.eye)
+                  : const Icon(CupertinoIcons.eye_slash)),
           icon: Icon(CupertinoIcons.lock,
               color: Theme.of(context).colorScheme.onBackground),
           labelText: 'Password',

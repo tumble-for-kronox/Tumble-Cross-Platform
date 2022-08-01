@@ -3,10 +3,10 @@ part of 'login_page_state.dart';
 class LoginPageCubit extends Cubit<LoginPageState> {
   LoginPageCubit()
       : super(LoginPageState(
-          status: LoginPageStatus.INITIAL,
-          usernameController: TextEditingController(),
-          passwordController: TextEditingController(),
-        ));
+            status: LoginPageStatus.INITIAL,
+            usernameController: TextEditingController(),
+            passwordController: TextEditingController(),
+            passwordHidden: true));
 
   final _userRepo = locator<UserRepository>();
   final _secureStorage = locator<SecureStorageRepository>();
@@ -14,7 +14,6 @@ class LoginPageCubit extends Cubit<LoginPageState> {
   void submitLogin(BuildContext context) async {
     final username = state.usernameController.text;
     final password = state.passwordController.text;
-
     if (!formValidated()) {
       emit(state.copyWith(
           status: LoginPageStatus.INITIAL,
@@ -53,6 +52,7 @@ class LoginPageCubit extends Cubit<LoginPageState> {
 
   void emitCleanInitState() {
     emit(LoginPageState(
+      passwordHidden: true,
       status: LoginPageStatus.INITIAL,
       usernameController: TextEditingController(),
       passwordController: TextEditingController(),
@@ -61,5 +61,9 @@ class LoginPageCubit extends Cubit<LoginPageState> {
 
   void storeUserCreds(String token) {
     _secureStorage.setRefreshToken(token);
+  }
+
+  void togglePasswordVisibility() {
+    emit(state.copyWith(passwordHidden: !state.passwordHidden));
   }
 }
