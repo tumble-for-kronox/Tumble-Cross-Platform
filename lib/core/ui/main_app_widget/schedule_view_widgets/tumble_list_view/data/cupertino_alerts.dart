@@ -13,7 +13,7 @@ class CustomCupertinoAlerts {
       content: Column(children: [
         Text("Schedules can be bookmarked with this icon",
             style: TextStyle(
-                color: Theme.of(context).colorScheme.onSecondary,
+                color: Theme.of(context).colorScheme.onBackground,
                 fontSize: 15,
                 fontWeight: FontWeight.w600)),
         const SizedBox(
@@ -29,7 +29,7 @@ class CustomCupertinoAlerts {
         Text(
             "It will appear in the top left corner once you've searched for and opened your schedule",
             style: TextStyle(
-                color: Theme.of(context).colorScheme.onSecondary,
+                color: Theme.of(context).colorScheme.onBackground,
                 fontSize: 15,
                 fontWeight: FontWeight.w600))
       ]),
@@ -68,7 +68,7 @@ class CustomCupertinoAlerts {
         Text(
             "This schedule appears to be empty but still in the Kronox database",
             style: TextStyle(
-                color: Theme.of(context).colorScheme.onSecondary,
+                color: Theme.of(context).colorScheme.onBackground,
                 fontSize: 15,
                 fontWeight: FontWeight.w600)),
         const SizedBox(
@@ -77,7 +77,7 @@ class CustomCupertinoAlerts {
         Text(
             "Kronox stores schedules even if they do not contain any data, so our searches might ocassionally find emtpy schedules",
             style: TextStyle(
-                color: Theme.of(context).colorScheme.onSecondary,
+                color: Theme.of(context).colorScheme.onBackground,
                 fontSize: 14,
                 fontWeight: FontWeight.w600))
       ]),
@@ -115,7 +115,7 @@ class CustomCupertinoAlerts {
       content: Column(children: [
         Text("There was an error retrieveing this schedule",
             style: TextStyle(
-                color: Theme.of(context).colorScheme.onSecondary,
+                color: Theme.of(context).colorScheme.onBackground,
                 fontSize: 15,
                 fontWeight: FontWeight.w600)),
         const SizedBox(
@@ -123,7 +123,7 @@ class CustomCupertinoAlerts {
         ),
         Text("Please try again",
             style: TextStyle(
-                color: Theme.of(context).colorScheme.onSecondary,
+                color: Theme.of(context).colorScheme.onBackground,
                 fontSize: 14,
                 fontWeight: FontWeight.w600))
       ]),

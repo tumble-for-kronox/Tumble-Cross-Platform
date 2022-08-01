@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:tumble/core/theme/data/colors.dart';
 
 class UserInfo extends StatelessWidget {
   const UserInfo(
@@ -12,38 +13,43 @@ class UserInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(20),
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 15),
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: CustomColors.orangePrimary,
+        borderRadius: const BorderRadius.only(
+          bottomLeft: Radius.circular(40.0),
+          bottomRight: Radius.circular(40.0),
+          topLeft: Radius.circular(40.0),
+          topRight: Radius.circular(40.0),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black87.withOpacity(.3),
+            blurRadius: 6.0,
+          ),
+        ],
+      ),
       child: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.only(bottom: 30, top: 10),
+          CircleAvatar(
+            radius: 50.0,
+            backgroundColor: Theme.of(context).colorScheme.secondary,
             child: Icon(
-              size: 100,
-              CupertinoIcons.person_circle_fill,
+              size: 50,
+              CupertinoIcons.person,
               color: Theme.of(context).colorScheme.onBackground,
             ),
           ),
+          const SizedBox(
+            height: 30,
+          ),
           Text(
-            loggedIn
-                ? "Welcome ${name!.split(" ")[0]}!"
-                : "Connect your Kronox account by logging in.",
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 10),
-            child: TextButton(
-              onPressed: onPressed,
-              child: Text(
-                loggedIn ? "Sign out" : "Sign in",
-                style: const TextStyle(fontSize: 16),
-              ),
-            ),
-          ),
+            'Hello $name!',
+            style: TextStyle(
+                color: Theme.of(context).colorScheme.onPrimary, fontSize: 16),
+          )
         ],
       ),
     );

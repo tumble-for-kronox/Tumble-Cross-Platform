@@ -116,7 +116,15 @@ extension ScheduleParsing on ScheduleModel {
 }
 
 extension StringParse on String {
-  String capitalize() => this[0].toUpperCase() + substring(1);
+  String capitalize() => this[0].toUpperCase() + substring(1).toLowerCase();
+
+  String humanize() {
+    List<String> stringFragments = split('_');
+    for (int i = 0; i < stringFragments.length; i++) {
+      stringFragments[i] = stringFragments[i].capitalize();
+    }
+    return stringFragments.join(' ');
+  }
 }
 
 extension GetSchoolFromString on Schools {

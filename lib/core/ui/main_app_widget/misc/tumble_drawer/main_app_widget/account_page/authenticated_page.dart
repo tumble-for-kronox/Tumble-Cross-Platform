@@ -20,6 +20,9 @@ class AuthenticatedPage extends StatelessWidget {
             BlocProvider.of<LoginPageCubit>(context).emitCleanInitState();
           },
         ),
+        const SizedBox(
+          height: 60,
+        ),
         const UserEventList(),
       ],
     );

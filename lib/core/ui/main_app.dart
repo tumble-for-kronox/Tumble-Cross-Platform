@@ -22,10 +22,14 @@ class _MainAppState extends State<MainApp> {
               debugShowCheckedModeBanner: false,
               title: 'Tumble',
               theme: ThemeData(
+                bottomSheetTheme: const BottomSheetThemeData(
+                    backgroundColor: Colors.transparent),
                 colorScheme: CustomColors.lightColors,
                 fontFamily: 'Roboto',
               ),
               darkTheme: ThemeData(
+                bottomSheetTheme: const BottomSheetThemeData(
+                    backgroundColor: Colors.transparent),
                 colorScheme: CustomColors.darkColors,
                 bottomNavigationBarTheme: BottomNavigationBarThemeData(
                   selectedItemColor: CustomColors.darkColors.primary,

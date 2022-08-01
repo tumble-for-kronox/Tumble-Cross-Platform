@@ -28,53 +28,48 @@ class _MainAppNavigationRootPageState extends State<MainAppNavigationRootPage> {
   Widget build(BuildContext context) {
     return BlocBuilder<MainAppNavigationCubit, MainAppNavigationState>(
       builder: (context, navState) {
-        return BlocBuilder<ThemeCubit, ThemeState>(
-          builder: ((context, themeState) {
-            return Scaffold(
-                extendBody: true,
-                backgroundColor: Theme.of(context).colorScheme.background,
-                endDrawer: const TumbleAppDrawer(),
-                appBar: TumbleAppBar(
-                  visibleBookmark: navState.index == 1 ||
-                      navState.index == 2 ||
-                      navState.index == 3,
-                  toggleFavorite: () async => await context
-                      .read<MainAppCubit>()
-                      .toggleFavorite(context),
-                ),
-                body: FutureBuilder(
-                    future: context.read<MainAppCubit>().initMainAppCubit(),
-                    builder: (BuildContext context, AsyncSnapshot snapshot) {
-                      switch (navState.navbarItem) {
-                        case NavbarItem.SEARCH:
-                          return const AnimatedSwitcher(
-                              duration: Duration(milliseconds: 250),
-                              child: TumbleSearchPage());
-                        case NavbarItem.USER_ACCOUNT:
-                          return const AnimatedSwitcher(
-                              duration: Duration(milliseconds: 250),
-                              child: TumbleAccountPage());
-                        case NavbarItem.LIST:
-                          return const AnimatedSwitcher(
-                              duration: Duration(milliseconds: 250),
-                              child: TumbleListView());
-                        case NavbarItem.WEEK:
-                          return const AnimatedSwitcher(
-                              duration: Duration(milliseconds: 250),
-                              child: TumbleWeekView());
-                        case NavbarItem.CALENDAR:
-                          return const AnimatedSwitcher(
-                              duration: Duration(milliseconds: 250),
-                              child: TumbleCalendarView());
-                      }
-                    }),
-                bottomNavigationBar: TumbleNavigationBar(onTap: (index) {
-                  context
-                      .read<MainAppNavigationCubit>()
-                      .getNavBarItem(NavbarItem.values[index]);
-                }));
-          }),
-        );
+        return Scaffold(
+            extendBody: true,
+            backgroundColor: Theme.of(context).colorScheme.background,
+            endDrawer: const TumbleAppDrawer(),
+            appBar: TumbleAppBar(
+              visibleBookmark: navState.index == 1 ||
+                  navState.index == 2 ||
+                  navState.index == 3,
+              toggleFavorite: () async =>
+                  await context.read<MainAppCubit>().toggleFavorite(context),
+            ),
+            body: FutureBuilder(
+                future: context.read<MainAppCubit>().initMainAppCubit(),
+                builder: (BuildContext context, AsyncSnapshot snapshot) {
+                  switch (navState.navbarItem) {
+                    case NavbarItem.SEARCH:
+                      return const AnimatedSwitcher(
+                          duration: Duration(milliseconds: 250),
+                          child: TumbleSearchPage());
+                    case NavbarItem.LIST:
+                      return const AnimatedSwitcher(
+                          duration: Duration(milliseconds: 250),
+                          child: TumbleListView());
+                    case NavbarItem.WEEK:
+                      return const AnimatedSwitcher(
+                          duration: Duration(milliseconds: 250),
+                          child: TumbleWeekView());
+                    case NavbarItem.CALENDAR:
+                      return const AnimatedSwitcher(
+                          duration: Duration(milliseconds: 250),
+                          child: TumbleCalendarView());
+                    case NavbarItem.USER_ACCOUNT:
+                      return const AnimatedSwitcher(
+                          duration: Duration(milliseconds: 250),
+                          child: TumbleAccountPage());
+                  }
+                }),
+            bottomNavigationBar: TumbleNavigationBar(onTap: (index) {
+              context
+                  .read<MainAppNavigationCubit>()
+                  .getNavBarItem(NavbarItem.values[index]);
+            }));
       },
     );
   }

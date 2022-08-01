@@ -14,8 +14,9 @@ class NoScheduleAvailable extends StatelessWidget {
       Container(
         padding: const EdgeInsets.all(50.0),
         child: Center(
-            child: Wrap(
-          crossAxisAlignment: WrapCrossAlignment.center,
+            child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(errorType,
                 style: TextStyle(
@@ -23,7 +24,7 @@ class NoScheduleAvailable extends StatelessWidget {
                     fontSize: 20,
                     fontWeight: FontWeight.w500)),
             Padding(
-              padding: const EdgeInsets.only(top: 3, left: 3),
+              padding: const EdgeInsets.only(top: 0, left: 3),
               child: IconButton(
                   iconSize: 20,
                   color: Theme.of(context).colorScheme.primary,

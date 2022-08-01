@@ -37,7 +37,6 @@ class _LoginPageRootState extends State<LoginPageRoot> {
           showScaffoldMessage(context, FetchResponse.loginSuccess);
           BlocProvider.of<AuthCubit>(context)
               .setUserSession(state.userSession!);
-          Future.delayed(Duration(seconds: 1));
           navigator.pushAndRemoveAll(
               NavigationRouteLabels.mainAppNavigationRootPage);
           if (state.school != null) {
@@ -119,7 +118,7 @@ Widget _initialState(
             Container(
                 width: double.infinity,
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Theme.of(context).colorScheme.background,
                   borderRadius: const BorderRadius.only(
                     topRight: Radius.circular(40.0),
                     topLeft: Radius.circular(40.0),

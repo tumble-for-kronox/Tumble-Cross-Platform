@@ -33,22 +33,41 @@ class _UserEventListState extends State<UserEventList> {
           BlocProvider.of<AuthCubit>(context).state.userSession!.sessionToken,
         ),
       builder: (context, state) {
-        return Builder(
-          builder: (context) {
-            switch (state.status) {
-              case UserEventListStatus.LOADING:
-                return SpinKitThreeBounce(
-                    color: Theme.of(context).colorScheme.primary);
-              case UserEventListStatus.LOADED:
-                return _loaded(context, state);
-              case UserEventListStatus.ERROR:
-                return Text(
-                  "We couldn't get your exams, try again in a bit.",
-                  style: TextStyle(
-                      color: Theme.of(context).colorScheme.onBackground),
-                );
-            }
-          },
+        return Container(
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.secondary,
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(20.0),
+              topRight: Radius.circular(20.0),
+              bottomLeft: Radius.circular(20.0),
+              bottomRight: Radius.circular(20.0),
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black87.withOpacity(.3),
+                blurRadius: 6.0,
+              ),
+            ],
+          ),
+          child: Builder(
+            builder: (context) {
+              switch (state.status) {
+                case UserEventListStatus.LOADING:
+                  return SpinKitThreeBounce(
+                      color: Theme.of(context).colorScheme.primary);
+                case UserEventListStatus.LOADED:
+                  return _loaded(context, state);
+                case UserEventListStatus.ERROR:
+                  return Text(
+                    "We couldn't get your exams, try again in a bit.",
+                    style: TextStyle(
+                        color: Theme.of(context).colorScheme.onBackground),
+                  );
+              }
+            },
+          ),
         );
       },
     );
@@ -77,35 +96,26 @@ Widget _loaded(BuildContext context, UserEventListState state) {
                 .map((e) => AvailableEventCard(event: e))
                 .toList(),
       ),
-      Padding(
-        padding: const EdgeInsets.only(top: 20),
-        child: TextButton(
-          onPressed: () => {},
-          style: ButtonStyle(
-              side: MaterialStateProperty.all(BorderSide(
-            color: Theme.of(context).colorScheme.primary,
-          ))),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
-              Text(
-                "See all exams",
-                style: TextStyle(
-                  fontSize: 16,
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(left: 5),
-                child: Icon(
-                  CupertinoIcons.chevron_down,
-                  size: 20,
-                ),
-              ),
-            ],
+      Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Text(
+            "See all exams",
+            style: TextStyle(
+                color: Theme.of(context).colorScheme.onBackground,
+                fontSize: 14),
           ),
-        ),
-      )
+          FloatingActionButton(
+            onPressed: () => {},
+            elevation: 0,
+            child: const Icon(
+              CupertinoIcons.chevron_down_circle,
+              size: 25,
+            ),
+          ),
+        ],
+      ),
     ],
   );
 }

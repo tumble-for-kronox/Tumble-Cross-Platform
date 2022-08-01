@@ -47,7 +47,7 @@ class TumbleAppDrawer extends StatelessWidget {
                           padding: EdgeInsets.symmetric(
                               vertical: 13, horizontal: 20),
                           child: Align(
-                            alignment: Alignment.centerLeft,
+                            alignment: Alignment.centerRight,
                             child: Text('Settings',
                                 style: TextStyle(
                                     fontSize: 26, fontWeight: FontWeight.w400)),
@@ -58,7 +58,7 @@ class TumbleAppDrawer extends StatelessWidget {
                   TumbleSettingsSection(tiles: [
                     TumbleAppDrawerTile(
                       drawerTileTitle: "Contact",
-                      subtitle: "Get support from our support team",
+                      subtitle: "Get support",
                       prefixIcon: CupertinoIcons.bubble_left_bubble_right,
                       eventType: EventType.CONTACT,
                       drawerEvent: (eventType) => handleDrawerEvent(
@@ -68,14 +68,19 @@ class TumbleAppDrawer extends StatelessWidget {
                       ),
                     ),
                   ], title: "Support"),
-                  const SizedBox(height: 20.0),
+                  Divider(
+                    height: 50.0,
+                    color: Theme.of(context).colorScheme.onBackground,
+                    indent: 20,
+                    endIndent: 30,
+                  ),
 
                   /// Common
                   TumbleSettingsSection(tiles: [
                     TumbleAppDrawerTile(
                       drawerTileTitle: "Change schools",
                       subtitle:
-                          "Current school: ${(Schools.schools.firstWhere((school) => school.schoolName == context.read<DrawerCubit>().state.school)).schoolId.name.capitalize()}",
+                          "Current school: ${(Schools.schools.firstWhere((school) => school.schoolName == context.read<DrawerCubit>().state.school)).schoolId.name.toUpperCase()}",
                       prefixIcon: CupertinoIcons.arrow_right_arrow_left,
                       eventType: EventType.CHANGE_SCHOOL,
                       drawerEvent: (eventType) => handleDrawerEvent(
@@ -97,7 +102,12 @@ class TumbleAppDrawer extends StatelessWidget {
                       ),
                     ),
                   ], title: "Common"),
-                  const SizedBox(height: 20.0),
+                  Divider(
+                    height: 50.0,
+                    color: Theme.of(context).colorScheme.onBackground,
+                    indent: 20,
+                    endIndent: 30,
+                  ),
 
                   /// Schedule
                   TumbleSettingsSection(tiles: [
@@ -122,7 +132,6 @@ class TumbleAppDrawer extends StatelessWidget {
                         drawerEvent: (eventType) =>
                             handleDrawerEvent(eventType, context, navigator)),
                   ], title: "Schedule"),
-                  const SizedBox(height: 20.0),
                 ],
               ),
             ),
@@ -151,7 +160,7 @@ class TumbleAppDrawer extends StatelessWidget {
             context: context,
             builder: (context) => AppThemePicker(setTheme: (String themeType) {
                   context.read<DrawerCubit>().changeTheme(themeType);
-                  navigator.pop();
+                  Navigator.of(context).pop();
                 }));
         break;
       case EventType.CONTACT:
@@ -168,7 +177,7 @@ class TumbleAppDrawer extends StatelessWidget {
                   scheduleIds: context.read<DrawerCubit>().state.bookmarks!,
                   setDefaultSchedule: (newId) {
                     context.read<DrawerCubit>().setSchedule(newId);
-                    navigator.pop();
+                    Navigator.of(context).pop();
                   }));
         }
         break;
@@ -178,7 +187,7 @@ class TumbleAppDrawer extends StatelessWidget {
             builder: (context) => AppDefaultViewPicker(
                   setDefaultView: (viewType) {
                     context.read<DrawerCubit>().setView(viewType);
-                    navigator.pop();
+                    Navigator.of(context).pop();
                   },
                 ));
         break;

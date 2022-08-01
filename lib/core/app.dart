@@ -130,24 +130,26 @@ class _AppState extends State<App> {
         ],
         child: BlocBuilder<ThemeCubit, ThemeState>(
             builder: ((context, state) => MaterialApp(
-                  debugShowCheckedModeBanner: false,
-                  title: 'Tumble',
-                  theme: ThemeData(
-                    canvasColor: Colors.transparent,
-                    colorScheme: CustomColors.lightColors,
-                    fontFamily: 'Roboto',
+                debugShowCheckedModeBanner: false,
+                title: 'Tumble',
+                theme: ThemeData(
+                  bottomSheetTheme: const BottomSheetThemeData(
+                      backgroundColor: Colors.transparent),
+                  colorScheme: CustomColors.lightColors,
+                  fontFamily: 'Roboto',
+                ),
+                darkTheme: ThemeData(
+                  bottomSheetTheme: const BottomSheetThemeData(
+                      backgroundColor: Colors.transparent),
+                  colorScheme: CustomColors.darkColors,
+                  bottomNavigationBarTheme: BottomNavigationBarThemeData(
+                    selectedItemColor: CustomColors.darkColors.primary,
                   ),
-                  darkTheme: ThemeData(
-                    colorScheme: CustomColors.darkColors,
-                    bottomNavigationBarTheme: BottomNavigationBarThemeData(
-                      selectedItemColor: CustomColors.darkColors.primary,
-                    ),
-                    fontFamily: 'Roboto',
-                  ),
-                  themeMode: state.themeMode,
-                  home: const AppNavigatorProvider(initialPages: [
-                    NavigationRouteLabels.mainAppPage,
-                  ]),
-                ))));
+                  fontFamily: 'Roboto',
+                ),
+                themeMode: state.themeMode,
+                home: const AppNavigatorProvider(initialPages: [
+                  NavigationRouteLabels.mainAppPage,
+                ])))));
   }
 }

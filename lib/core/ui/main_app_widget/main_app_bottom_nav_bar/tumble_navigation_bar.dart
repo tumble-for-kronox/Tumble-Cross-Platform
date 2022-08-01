@@ -17,14 +17,16 @@ class TumbleNavigationBar extends StatelessWidget {
     return BlocBuilder<MainAppNavigationCubit, MainAppNavigationState>(
       builder: (context, mainappstate) {
         return DotNavigationBar(
-          marginR: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+          backgroundColor: Theme.of(context).colorScheme.background,
+          marginR: const EdgeInsets.symmetric(horizontal: 15, vertical: 0),
           boxShadow: [
             BoxShadow(
-                color: Colors.black87.withOpacity(.15),
-                spreadRadius: 5.9,
-                blurRadius: 20),
+                color:
+                    Theme.of(context).colorScheme.onBackground.withOpacity(.3),
+                spreadRadius: .25,
+                blurRadius: 5),
           ],
-          itemPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+          itemPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 4),
           currentIndex: mainappstate.index,
           onTap: onTap,
           dotIndicatorColor: CustomColors.orangePrimary,

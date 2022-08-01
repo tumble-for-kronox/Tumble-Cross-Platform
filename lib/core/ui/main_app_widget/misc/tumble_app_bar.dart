@@ -2,7 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tumble/core/extensions/extensions.dart';
 import 'package:tumble/core/ui/main_app_widget/cubit/main_app_cubit.dart';
+import 'package:tumble/core/ui/main_app_widget/main_app_bottom_nav_bar/cubit/bottom_nav_cubit.dart';
 
 class TumbleAppBar extends StatefulWidget implements PreferredSizeWidget {
   final AsyncCallback? toggleFavorite;
@@ -30,7 +32,6 @@ class _TumbleAppBarState extends State<TumbleAppBar> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   if (widget.visibleBookmark!)
                     BlocBuilder<MainAppCubit, MainAppState>(
@@ -51,14 +52,35 @@ class _TumbleAppBarState extends State<TumbleAppBar> {
                                           .onBackground)),
                             );
                           default:
-                            return Container();
+                            return Padding(
+                              padding: const EdgeInsets.only(top: 5, right: 5),
+                              child: IconButton(
+                                  iconSize: 30,
+                                  onPressed: widget.toggleFavorite,
+                                  icon: const Icon(CupertinoIcons.bookmark,
+                                      color: Colors.transparent)),
+                            );
                         }
                       },
                     )
                   else
-                    Container(),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 5, right: 5),
+                      child: IconButton(
+                          iconSize: 30,
+                          onPressed: widget.toggleFavorite,
+                          icon: const Icon(CupertinoIcons.bookmark,
+                              color: Colors.transparent)),
+                    ),
                 ],
               ),
+              BlocBuilder<MainAppNavigationCubit, MainAppNavigationState>(
+                  builder: ((context, state) => Text(
+                        state.navbarItem.name.humanize(),
+                        style: TextStyle(
+                            fontSize: 20,
+                            color: Theme.of(context).colorScheme.onBackground),
+                      ))),
               Row(
                 children: [
                   Padding(
