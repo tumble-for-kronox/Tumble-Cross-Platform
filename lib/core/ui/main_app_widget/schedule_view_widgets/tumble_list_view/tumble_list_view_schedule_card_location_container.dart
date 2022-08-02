@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tumble/core/models/api_models/schedule_model.dart';
 
@@ -18,18 +19,18 @@ class ScheduleCardLocationContainer extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           Text(
-            locations.isEmpty ? "" : locations.first.name,
+            locations.isEmpty ? "Unknown" : locations.first.id,
             softWrap: true,
             style: TextStyle(
               color: textColor,
-              fontSize: 21,
-              fontWeight: FontWeight.w200,
+              fontSize: locations.isEmpty ? 14 : 21,
+              fontWeight: FontWeight.w300,
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(bottom: 3),
+            padding: const EdgeInsets.only(bottom: 2, left: 10),
             child: Icon(
-              Icons.location_on_outlined,
+              CupertinoIcons.location,
               size: 20,
               color: textColor,
             ),

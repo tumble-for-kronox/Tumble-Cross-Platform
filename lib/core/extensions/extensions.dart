@@ -18,14 +18,14 @@ extension ResponseParsing on Response {
     if (statusCode == 200) {
       return ApiResponse.completed(scheduleModelFromJson(body));
     }
-    return ApiResponse.error(FetchResponse.fetchEerror);
+    return ApiResponse.error(FetchResponse.scheduleFetchError);
   }
 
   ApiResponse parsePrograms() {
     if (statusCode == 200) {
       return ApiResponse.completed(programModelFromJson(body));
     }
-    return ApiResponse.error(FetchResponse.fetchEerror);
+    return ApiResponse.error(FetchResponse.programFetchEerror);
   }
 
   ApiResponse parseUser() {
@@ -62,7 +62,7 @@ extension HttpClientResponseParsing on HttpClientResponse {
       return ApiResponse.completed(
           programModelFromJson(await transform(utf8.decoder).join()));
     }
-    return ApiResponse.error(FetchResponse.fetchEerror);
+    return ApiResponse.error(FetchResponse.programFetchEerror);
   }
 
   Future<ApiResponse> parseSchedule() async {
@@ -70,7 +70,7 @@ extension HttpClientResponseParsing on HttpClientResponse {
       return ApiResponse.completed(
           scheduleModelFromJson(await transform(utf8.decoder).join()));
     }
-    return ApiResponse.error(FetchResponse.fetchEerror);
+    return ApiResponse.error(FetchResponse.scheduleFetchError);
   }
 
   Future<ApiResponse> parseUser() async {

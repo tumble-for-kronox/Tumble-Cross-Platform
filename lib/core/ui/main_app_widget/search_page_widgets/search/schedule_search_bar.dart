@@ -53,7 +53,22 @@ class _ScheduleSearchBarState extends State<ScheduleSearchBar> {
                               .colorScheme
                               .onSecondary
                               .withOpacity(.5)),
-                      prefixIcon: const Icon(CupertinoIcons.search),
+                      prefixIcon: IconButton(
+                        icon: const Icon(
+                          CupertinoIcons.search,
+                        ),
+                        onPressed: () async {
+                          if (context
+                              .read<SearchPageCubit>()
+                              .textEditingController
+                              .text
+                              .trim()
+                              .isNotEmpty) {
+                            context.read<SearchPageCubit>().setLoading();
+                            await context.read<SearchPageCubit>().search();
+                          }
+                        },
+                      ),
                       suffixIcon: () {
                         if (state.clearButtonVisible) {
                           return IconButton(

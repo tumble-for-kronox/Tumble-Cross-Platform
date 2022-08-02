@@ -171,5 +171,15 @@ class MainAppCubit extends Cubit<MainAppState> {
     emit(state.copyWith(status: MainAppStatus.LOADING));
   }
 
-  void setEmptySchedule() {}
+  void setupForNextSchool() {
+    emit(const MainAppState(
+        status: MainAppStatus.INITIAL,
+        currentScheduleId: null,
+        listOfDays: null,
+        listOfWeeks: null,
+        toggledFavorite: false,
+        listViewToTopButtonVisible: false,
+        message: null,
+        scheduleModel: null));
+  }
 }

@@ -1,5 +1,6 @@
 class FetchResponse {
-  static const fetchEerror = "No schedule found in program";
+  static const programFetchEerror = "No program found";
+  static const scheduleFetchError = "No schedule found";
   static const timeoutError = "Search timed out";
   static const emptyScheduleError = "Schedule is empty";
   static const loginError = "Login unsuccessful";

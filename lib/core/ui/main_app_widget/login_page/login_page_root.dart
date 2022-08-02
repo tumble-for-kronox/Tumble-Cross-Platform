@@ -13,6 +13,7 @@ import 'package:tumble/core/navigation/app_navigator.dart';
 import 'package:tumble/core/navigation/navigation_route_labels.dart';
 import 'package:tumble/core/theme/data/colors.dart';
 import 'package:tumble/core/ui/cubit/init_cubit.dart';
+import 'package:tumble/core/ui/main_app_widget/cubit/main_app_cubit.dart';
 import 'package:tumble/core/ui/main_app_widget/misc/tumble_drawer/auth_cubit/auth_cubit.dart';
 import 'package:tumble/core/ui/main_app_widget/login_page/cubit/login_page_state.dart';
 import 'package:tumble/core/ui/main_app_widget/misc/tumble_drawer/cubit/drawer_state.dart';
@@ -39,7 +40,8 @@ class _LoginPageRootState extends State<LoginPageRoot> {
         }
         if (state.status == LoginPageStatus.SUCCESS) {
           BlocProvider.of<DrawerCubit>(context)
-              .updateSchool(widget.schoolName!);
+              .setupForNextSchool(widget.schoolName!);
+          BlocProvider.of<MainAppCubit>(context).setupForNextSchool();
           showScaffoldMessage(context, FetchResponse.loginSuccess);
           BlocProvider.of<AuthCubit>(context)
               .setUserSession(state.userSession!);
@@ -236,8 +238,9 @@ Widget _formSubmitButton(
     width: double.infinity,
     height: 105,
     child: OutlinedButton(
-      onPressed: () =>
-          BlocProvider.of<LoginPageCubit>(context).submitLogin(context, school),
+      onPressed: () {
+        BlocProvider.of<LoginPageCubit>(context).submitLogin(context, school);
+      },
       style: ButtonStyle(
         backgroundColor:
             MaterialStateProperty.all<Color>(CustomColors.orangePrimary),

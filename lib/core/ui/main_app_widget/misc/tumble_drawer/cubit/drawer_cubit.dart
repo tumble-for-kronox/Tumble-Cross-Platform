@@ -36,7 +36,17 @@ class DrawerCubit extends Cubit<DrawerState> {
   }
 
   void setupForNextSchool(String schoolName) {
-    emit(state.copyWith(school: schoolName, bookmarks: []));
+    emit(DrawerState(
+        theme: locator<SharedPreferences>()
+            .getString(PreferenceTypes.theme)!
+            .capitalize(),
+        viewType: ScheduleViewTypes.viewTypesMap[
+            locator<SharedPreferences>().getInt(PreferenceTypes.view)],
+        schedule:
+            locator<SharedPreferences>().getString(PreferenceTypes.schedule),
+        school: locator<SharedPreferences>().getString(PreferenceTypes.school),
+        bookmarks: locator<SharedPreferences>()
+            .getStringList(PreferenceTypes.favorites)));
   }
 
   void setSchedule(String newId) {

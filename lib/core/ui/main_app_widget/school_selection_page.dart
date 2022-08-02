@@ -4,7 +4,10 @@ import 'package:tumble/core/database/responses/change_response.dart';
 import 'package:tumble/core/navigation/app_navigator.dart';
 import 'package:tumble/core/navigation/navigation_route_labels.dart';
 import 'package:tumble/core/ui/cubit/init_cubit.dart';
+import 'package:tumble/core/ui/main_app_widget/cubit/main_app_cubit.dart';
 import 'package:tumble/core/ui/main_app_widget/data/schools.dart';
+import 'package:tumble/core/ui/main_app_widget/login_page/cubit/login_page_state.dart';
+import 'package:tumble/core/ui/main_app_widget/misc/tumble_drawer/auth_cubit/auth_cubit.dart';
 import 'package:tumble/core/ui/main_app_widget/misc/tumble_drawer/cubit/drawer_state.dart';
 import 'package:tumble/core/ui/main_app_widget/search_page_widgets/search/school_card.dart';
 import 'package:tumble/core/ui/scaffold_message.dart';
@@ -55,12 +58,17 @@ class _SchoolSelectionPageState extends State<SchoolSelectionPage> {
                             } else {
                               BlocProvider.of<InitCubit>(context)
                                   .changeSchool(school);
+                              BlocProvider.of<AuthCubit>(context).logout();
+                              BlocProvider.of<LoginPageCubit>(context)
+                                  .emitCleanInitState();
+                              BlocProvider.of<DrawerCubit>(context)
+                                  .setupForNextSchool(school.schoolName);
+                              BlocProvider.of<MainAppCubit>(context)
+                                  .setupForNextSchool();
                               showScaffoldMessage(context,
                                   '${ChangeResponse.changeSchool} ${BlocProvider.of<InitCubit>(context).state.defaultSchool}');
                               navigator.pushAndRemoveAll(NavigationRouteLabels
                                   .mainAppNavigationRootPage);
-                              BlocProvider.of<DrawerCubit>(context)
-                                  .setupForNextSchool(school.schoolName);
                             }
                           }))
                       .toList(),

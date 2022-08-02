@@ -27,7 +27,6 @@ class _MainAppNavigationRootPageState extends State<MainAppNavigationRootPage> {
     return BlocBuilder<MainAppNavigationCubit, MainAppNavigationState>(
       builder: (context, navState) {
         return Scaffold(
-            extendBody: true,
             backgroundColor: Theme.of(context).colorScheme.background,
             endDrawer: const TumbleAppDrawer(),
             appBar: TumbleAppBar(

@@ -59,7 +59,7 @@ class TumbleListView extends StatelessWidget {
                   ),
                 ),
                 AnimatedPositioned(
-                  bottom: 105,
+                  bottom: 30,
                   right: state.listViewToTopButtonVisible ? 35 : -60,
                   duration: const Duration(milliseconds: 200),
                   child: ToTopButton(

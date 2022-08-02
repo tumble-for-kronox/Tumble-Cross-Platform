@@ -2,7 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:tumble/core/models/api_models/schedule_model.dart';
-import 'package:tumble/core/ui/main_app_widget/schedule_view_widgets/event_details/event_details_page.dart';
+import 'package:tumble/core/theme/data/colors.dart';
+import 'package:tumble/core/ui/main_app_widget/schedule_view_widgets/event_modal.dart';
 
 class TumbleWeekEventTile extends StatelessWidget {
   final Event event;
@@ -26,28 +27,36 @@ class TumbleWeekEventTile extends StatelessWidget {
       child: MaterialButton(
         padding: const EdgeInsets.all(0),
         onPressed: () {
-          Navigator.push(
-              context,
-              CupertinoPageRoute(
-                  builder: (context) => EventDetailsPage(event: event)));
+          showModalBottomSheet(
+              isScrollControlled: true,
+              context: context,
+              builder: (context) => TumbleEventModal(
+                  event: event,
+                  color: event.isSpecial
+                      ? Colors.redAccent
+                      : CustomColors.orangePrimary));
         },
         child: Row(
           mainAxisSize: MainAxisSize.max,
           children: [
             Container(
               width: 3,
-              decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.only(
+              decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.only(
                       topLeft: Radius.circular(2),
                       bottomLeft: Radius.circular(2)),
-                  color: Colors.blue),
+                  color: event.isSpecial
+                      ? Colors.redAccent
+                      : CustomColors.orangePrimary),
             ),
             Stack(
               alignment: Alignment.centerLeft,
               children: [
                 Container(
                   width: 100,
-                  color: Colors.blue.withOpacity(0.35),
+                  color: event.isSpecial
+                      ? Colors.redAccent.withOpacity(0.35)
+                      : CustomColors.orangePrimary.withOpacity(0.35),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 5),
