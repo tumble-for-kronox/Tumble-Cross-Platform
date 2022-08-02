@@ -3,13 +3,15 @@ import 'package:flutter/material.dart';
 
 class ProgramCard extends StatelessWidget {
   final String programName;
-  final String programId;
+  final String programSubtitle;
+  final String schoolName;
   final AsyncCallback onTap;
 
   const ProgramCard(
       {Key? key,
+      required this.schoolName,
       required this.programName,
-      required this.programId,
+      required this.programSubtitle,
       required this.onTap})
       : super(key: key);
 
@@ -36,20 +38,52 @@ class ProgramCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    programId,
+                    programSubtitle.length > 28
+                        ? '${programSubtitle.substring(0, 28)}...'
+                        : programSubtitle,
                     textAlign: TextAlign.left,
                     style: const TextStyle(
                         fontSize: 19, fontWeight: FontWeight.w400),
                   ),
-                  Text(
-                    programName,
-                    textAlign: TextAlign.left,
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis,
-                    softWrap: true,
-                    style: const TextStyle(
-                      fontSize: 19,
-                      fontWeight: FontWeight.w200,
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Container(
+                    padding: const EdgeInsets.only(left: 5),
+                    child: Row(
+                      children: [
+                        Text(
+                          programName.split(RegExp(r'\s-')).first,
+                          textAlign: TextAlign.left,
+                          maxLines: 3,
+                          overflow: TextOverflow.ellipsis,
+                          softWrap: true,
+                          style: const TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.w200,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  Align(
+                    alignment: Alignment.bottomRight,
+                    child: Container(
+                      padding: const EdgeInsets.only(left: 5),
+                      child: Text(
+                        schoolName,
+                        textAlign: TextAlign.right,
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
+                        softWrap: true,
+                        style: const TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w200,
+                        ),
+                      ),
                     ),
                   ),
                 ],

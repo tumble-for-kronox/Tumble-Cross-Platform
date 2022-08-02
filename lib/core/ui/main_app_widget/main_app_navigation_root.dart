@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tumble/core/theme/cubit/theme_cubit.dart';
-import 'package:tumble/core/theme/cubit/theme_state.dart';
+import 'package:tumble/core/ui/main_app_widget/account_page/tumble_account_page.dart';
 import 'package:tumble/core/ui/main_app_widget/cubit/main_app_cubit.dart';
 import 'package:tumble/core/ui/main_app_widget/main_app_bottom_nav_bar/cubit/bottom_nav_cubit.dart';
 import 'package:tumble/core/ui/main_app_widget/main_app_bottom_nav_bar/data/nav_bar_items.dart';
 import 'package:tumble/core/ui/main_app_widget/main_app_bottom_nav_bar/tumble_navigation_bar.dart';
-import 'package:tumble/core/ui/main_app_widget/misc/tumble_drawer/main_app_widget/account_page/tumble_account_page.dart';
 import 'package:tumble/core/ui/main_app_widget/misc/tumble_drawer/tumble_app_drawer.dart';
 import 'package:tumble/core/ui/main_app_widget/schedule_view_widgets/tumble_calendar_view/tumble_calendar_view.dart';
 import 'package:tumble/core/ui/main_app_widget/schedule_view_widgets/tumble_list_view/tumble_list_view.dart';

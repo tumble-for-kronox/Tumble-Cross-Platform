@@ -1,6 +1,3 @@
-import 'dart:developer';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -12,8 +9,6 @@ import 'package:tumble/core/ui/main_app_widget/main_app_bottom_nav_bar/data/nav_
 import 'package:tumble/core/ui/main_app_widget/schedule_view_widgets/no_schedule.dart';
 import 'package:tumble/core/ui/main_app_widget/schedule_view_widgets/tumble_list_view/data/cupertino_alerts.dart';
 import 'package:tumble/core/ui/main_app_widget/schedule_view_widgets/tumble_week_view/week_list_view.dart';
-
-import '../../../../theme/data/colors.dart';
 
 class TumbleWeekView extends StatefulWidget {
   const TumbleWeekView({Key? key}) : super(key: key);
@@ -57,7 +52,15 @@ class _TumbleWeekViewState extends State<TumbleWeekView> {
                       }))
             ]);
           case MainAppStatus.FETCH_ERROR:
-            return Container();
+            return NoScheduleAvailable(
+              errorType: state.message!,
+              cupertinoAlertDialog: CustomCupertinoAlerts.fetchError(
+                  context,
+                  () => context
+                      .read<MainAppNavigationCubit>()
+                      .getNavBarItem(NavbarItem.SEARCH),
+                  navigator),
+            );
           case MainAppStatus.EMPTY_SCHEDULE:
             return NoScheduleAvailable(
               errorType: FetchResponse.emptyScheduleError,

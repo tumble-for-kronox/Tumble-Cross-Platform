@@ -17,7 +17,7 @@ class AppDefaultViewPicker extends StatelessWidget {
         margin: const EdgeInsets.only(bottom: 25, left: 12, right: 12),
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.surface,
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(20),
         ),
         child: SizedBox.expand(
             child: Card(

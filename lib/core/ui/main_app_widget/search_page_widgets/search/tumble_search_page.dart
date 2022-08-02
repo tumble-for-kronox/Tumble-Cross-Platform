@@ -1,7 +1,10 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:tumble/core/ui/cubit/init_cubit.dart';
 import 'package:tumble/core/ui/main_app_widget/cubit/main_app_cubit.dart';
 import 'package:tumble/core/theme/data/colors.dart';
 import 'package:tumble/core/ui/main_app_widget/main_app_bottom_nav_bar/cubit/bottom_nav_cubit.dart';
@@ -31,6 +34,8 @@ class _TumbleSearchPageState extends State<TumbleSearchPage> {
           alignment: Alignment.center,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.max,
             children: [
               Expanded(
                 child: AnimatedSwitcher(
@@ -44,7 +49,11 @@ class _TumbleSearchPageState extends State<TumbleSearchPage> {
                               children: state.programList!
                                   .map((program) => ProgramCard(
                                       programName: program.title,
-                                      programId: program.id,
+                                      programSubtitle: program.subtitle,
+                                      schoolName:
+                                          BlocProvider.of<InitCubit>(context)
+                                              .state
+                                              .defaultSchool!,
                                       onTap: () async {
                                         context
                                             .read<MainAppCubit>()

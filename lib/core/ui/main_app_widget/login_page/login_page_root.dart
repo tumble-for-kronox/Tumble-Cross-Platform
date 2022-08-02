@@ -109,8 +109,8 @@ Widget _initialState(
                 state.status == LoginPageStatus.SUCCESS ||
                         BlocProvider.of<AuthCubit>(context).authenticated &&
                             state.status == LoginPageStatus.INITIAL
-                    ? "You've sucessfully signed into your\nUniversity via Kronox"
-                    : "This university requires a Kronox\naccount to proceed",
+                    ? "You've sucessfully signed into $school via Kronox"
+                    : "Sign in to Kronox with your student credentials\nfor $school for\nthe best user experience",
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.onPrimary,
@@ -147,11 +147,14 @@ Widget _initialState(
                         state.status == LoginPageStatus.INITIAL) {
                       return SizedBox(
                         height: double.infinity,
-                        child: Lottie.asset(
-                            'assets/animations/lottie_success_burst.json',
-                            width: 100,
-                            height: 100,
-                            repeat: false),
+                        child: Padding(
+                          padding: const EdgeInsets.all(60.0),
+                          child: Lottie.asset(
+                              'assets/animations/lottie_success_burst.json',
+                              width: 50,
+                              height: 50,
+                              repeat: false),
+                        ),
                       );
                     }
                     switch (state.status) {
@@ -164,8 +167,8 @@ Widget _initialState(
                           height: double.infinity,
                           child: Lottie.asset(
                               'assets/animations/lottie_success_burst.json',
-                              width: 100,
-                              height: 100,
+                              width: 50,
+                              height: 50,
                               repeat: false),
                         );
                       default:

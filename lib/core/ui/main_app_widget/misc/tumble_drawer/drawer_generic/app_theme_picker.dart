@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tumble/core/ui/main_app_widget/misc/tumble_drawer/drawer_generic/data/default_views_map.dart';
+import 'package:tumble/core/ui/scaffold_message.dart';
 
 typedef SetTheme = void Function(String themeType);
 
@@ -17,7 +18,7 @@ class AppThemePicker extends StatelessWidget {
         margin: const EdgeInsets.only(bottom: 25, left: 12, right: 12),
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.surface,
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(20),
         ),
         child: SizedBox.expand(
             child: Card(
@@ -37,6 +38,8 @@ class AppThemePicker extends StatelessWidget {
                                       .onBackground),
                             ),
                             onTap: () {
+                              showScaffoldMessage(context,
+                                  'Theme sucessfully changed to ${key.split(' ').first.toLowerCase()}');
                               setTheme(key.split(' ').first.toLowerCase());
                             }))
                         .toList()))),

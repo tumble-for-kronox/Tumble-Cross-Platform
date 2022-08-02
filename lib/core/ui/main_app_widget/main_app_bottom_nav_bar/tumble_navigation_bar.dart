@@ -16,43 +16,53 @@ class TumbleNavigationBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<MainAppNavigationCubit, MainAppNavigationState>(
       builder: (context, mainappstate) {
-        return DotNavigationBar(
-          backgroundColor: Theme.of(context).colorScheme.background,
-          marginR: const EdgeInsets.symmetric(horizontal: 15, vertical: 0),
-          boxShadow: [
-            BoxShadow(
-                color:
-                    Theme.of(context).colorScheme.onBackground.withOpacity(.3),
-                spreadRadius: .25,
-                blurRadius: 5),
-          ],
-          itemPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 4),
-          currentIndex: mainappstate.index,
-          onTap: onTap,
-          dotIndicatorColor: CustomColors.orangePrimary,
-          borderRadius: 15,
-          items: [
-            DotNavigationBarItem(
-              icon: const Icon(CupertinoIcons.search),
-              selectedColor: CustomColors.orangePrimary,
+        return Container(
+          decoration: BoxDecoration(
+            borderRadius: const BorderRadius.all(Radius.circular(20)),
+            boxShadow: [
+              BoxShadow(
+                  color: Theme.of(context)
+                      .colorScheme
+                      .onBackground
+                      .withOpacity(.1),
+                  spreadRadius: 0,
+                  blurRadius: 5),
+            ],
+          ),
+          child: ClipRRect(
+            borderRadius: const BorderRadius.all(
+              Radius.circular(20.0),
             ),
-            DotNavigationBarItem(
-              icon: const Icon(CupertinoIcons.collections),
-              selectedColor: CustomColors.orangePrimary,
+            child: BottomNavigationBar(
+              type: BottomNavigationBarType.fixed,
+              selectedIconTheme: const IconThemeData(size: 24),
+              unselectedIconTheme: const IconThemeData(size: 22),
+              onTap: onTap,
+              selectedFontSize: 12,
+              unselectedFontSize: 10,
+              showUnselectedLabels: false,
+              currentIndex: mainappstate.index,
+              backgroundColor: Theme.of(context).colorScheme.background,
+              elevation: 100,
+              items: const [
+                BottomNavigationBarItem(
+                    icon: Icon(
+                      CupertinoIcons.search,
+                    ),
+                    label: Labels.search),
+                BottomNavigationBarItem(
+                    icon: Icon(CupertinoIcons.collections), label: Labels.list),
+                BottomNavigationBarItem(
+                    icon: Icon(CupertinoIcons.list_bullet_indent),
+                    label: Labels.week),
+                BottomNavigationBarItem(
+                    icon: Icon(CupertinoIcons.calendar_today),
+                    label: Labels.calendar),
+                BottomNavigationBarItem(
+                    icon: Icon(CupertinoIcons.person), label: Labels.account),
+              ],
             ),
-            DotNavigationBarItem(
-              icon: const Icon(CupertinoIcons.list_bullet_indent),
-              selectedColor: CustomColors.orangePrimary,
-            ),
-            DotNavigationBarItem(
-              icon: const Icon(CupertinoIcons.calendar),
-              selectedColor: CustomColors.orangePrimary,
-            ),
-            DotNavigationBarItem(
-              icon: const Icon(CupertinoIcons.person),
-              selectedColor: CustomColors.orangePrimary,
-            ),
-          ],
+          ),
         );
       },
     );

@@ -35,8 +35,8 @@ class DrawerCubit extends Cubit<DrawerState> {
     }
   }
 
-  void setNameForNextSchool(String schoolName) {
-    emit(state.copyWith(school: schoolName));
+  void setupForNextSchool(String schoolName) {
+    emit(state.copyWith(school: schoolName, bookmarks: []));
   }
 
   void setSchedule(String newId) {

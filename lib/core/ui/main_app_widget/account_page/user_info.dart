@@ -17,29 +17,23 @@ class UserInfo extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 15),
       width: double.infinity,
       decoration: BoxDecoration(
-        color: CustomColors.orangePrimary,
+        color: Theme.of(context).colorScheme.secondary,
         borderRadius: const BorderRadius.only(
           bottomLeft: Radius.circular(40.0),
           bottomRight: Radius.circular(40.0),
           topLeft: Radius.circular(40.0),
           topRight: Radius.circular(40.0),
         ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black87.withOpacity(.3),
-            blurRadius: 6.0,
-          ),
-        ],
       ),
       child: Column(
         children: [
           CircleAvatar(
             radius: 50.0,
-            backgroundColor: Theme.of(context).colorScheme.secondary,
+            backgroundColor: Theme.of(context).colorScheme.onSecondary,
             child: Icon(
               size: 50,
               CupertinoIcons.person,
-              color: Theme.of(context).colorScheme.onBackground,
+              color: Theme.of(context).colorScheme.secondary,
             ),
           ),
           const SizedBox(
@@ -47,13 +41,13 @@ class UserInfo extends StatelessWidget {
           ),
           Text(
             loggedIn
-                ? "Welcome ${name!.split(" ")[0]}!"
+                ? "Welcome ${name!.split(" ")[0]}"
                 : "Connect your Kronox account by logging in.",
             textAlign: TextAlign.center,
             style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w400,
-                color: Theme.of(context).colorScheme.onPrimary),
+                color: Theme.of(context).colorScheme.onBackground),
           ),
           Padding(
             padding: const EdgeInsets.only(top: 10, left: 70, right: 70),
@@ -61,14 +55,14 @@ class UserInfo extends StatelessWidget {
                 onPressed: onPressed,
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all<Color>(
-                      Theme.of(context).colorScheme.onPrimary),
+                      CustomColors.orangePrimary),
                   shape: MaterialStateProperty.all(RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12.0))),
                 ),
                 child: Text(loggedIn ? "Sign out" : "Sign in",
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 16,
-                      color: Color.fromARGB(255, 42, 42, 42),
+                      color: Theme.of(context).colorScheme.onPrimary,
                     ))),
           ),
         ],

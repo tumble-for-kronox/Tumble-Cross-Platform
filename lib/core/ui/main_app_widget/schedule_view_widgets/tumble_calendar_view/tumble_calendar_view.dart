@@ -59,7 +59,9 @@ class _TumbleCalendarViewState extends State<TumbleCalendarView> {
                         color: Theme.of(context).colorScheme.onPrimary,
                         fontWeight: FontWeight.w500)),
                 monthViewSettings: MonthViewSettings(
+                    showAgenda: true,
                     navigationDirection: MonthNavigationDirection.vertical,
+                    agendaViewHeight: 200,
                     appointmentDisplayMode:
                         MonthAppointmentDisplayMode.appointment,
                     monthCellStyle: MonthCellStyle(

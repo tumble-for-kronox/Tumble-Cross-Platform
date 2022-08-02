@@ -2,9 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:tumble/core/models/api_models/available_user_event_model.dart';
+import 'package:tumble/core/models/api_models/schedule_model.dart';
+import 'package:tumble/core/ui/main_app_widget/account_page/available_event_card.dart';
+import 'package:tumble/core/ui/main_app_widget/account_page/user_event_list/cubit/user_event_list_cubit.dart';
 import 'package:tumble/core/ui/main_app_widget/misc/tumble_drawer/auth_cubit/auth_cubit.dart';
-import 'package:tumble/core/ui/main_app_widget/misc/tumble_drawer/main_app_widget/account_page/user_event_list/cubit/user_event_list_cubit.dart';
-import 'package:tumble/core/ui/main_app_widget/misc/tumble_drawer/main_app_widget/account_page/widgets/available_event_card.dart';
 
 class UserEventList extends StatefulWidget {
   const UserEventList({Key? key}) : super(key: key);
@@ -44,12 +46,6 @@ class _UserEventListState extends State<UserEventList> {
               bottomLeft: Radius.circular(20.0),
               bottomRight: Radius.circular(20.0),
             ),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black87.withOpacity(.3),
-                blurRadius: 6.0,
-              ),
-            ],
           ),
           child: Builder(
             builder: (context) {

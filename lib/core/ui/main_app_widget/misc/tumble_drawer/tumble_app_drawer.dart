@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tumble/core/extensions/extensions.dart';
 import 'package:tumble/core/navigation/app_navigator.dart';
 import 'package:tumble/core/navigation/navigation_route_labels.dart';
 import 'package:tumble/core/ui/main_app_widget/data/event_types.dart';
@@ -47,10 +46,12 @@ class TumbleAppDrawer extends StatelessWidget {
                           padding: EdgeInsets.symmetric(
                               vertical: 13, horizontal: 20),
                           child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text('Settings',
+                            alignment: Alignment.centerRight,
+                            child: Text('SETTINGS',
                                 style: TextStyle(
-                                    fontSize: 26, fontWeight: FontWeight.w400)),
+                                    letterSpacing: 2,
+                                    fontSize: 26,
+                                    fontWeight: FontWeight.w500)),
                           )),
                     ),
                   ),

@@ -60,7 +60,7 @@ class _SchoolSelectionPageState extends State<SchoolSelectionPage> {
                               navigator.pushAndRemoveAll(NavigationRouteLabels
                                   .mainAppNavigationRootPage);
                               BlocProvider.of<DrawerCubit>(context)
-                                  .setNameForNextSchool(school.schoolName);
+                                  .setupForNextSchool(school.schoolName);
                             }
                           }))
                       .toList(),

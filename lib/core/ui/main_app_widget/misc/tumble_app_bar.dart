@@ -74,13 +74,20 @@ class _TumbleAppBarState extends State<TumbleAppBar> {
                     ),
                 ],
               ),
-              BlocBuilder<MainAppNavigationCubit, MainAppNavigationState>(
-                  builder: ((context, state) => Text(
-                        state.navbarItem.name.humanize(),
-                        style: TextStyle(
-                            fontSize: 20,
-                            color: Theme.of(context).colorScheme.onBackground),
-                      ))),
+              Container(
+                padding: const EdgeInsets.only(top: 15),
+                child:
+                    BlocBuilder<MainAppNavigationCubit, MainAppNavigationState>(
+                        builder: ((context, state) => Text(
+                              state.navbarItem.name.humanize().toUpperCase(),
+                              style: TextStyle(
+                                  fontSize: 15,
+                                  letterSpacing: 2,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onBackground),
+                            ))),
+              ),
               Row(
                 children: [
                   Padding(

@@ -9,13 +9,16 @@ class WeekMapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Positioned.fill(
-      child: ListView(
-          padding: const EdgeInsets.only(top: 20),
-          children: week.days
-              .map((day) => TumbleDayOfWeekContainer(
-                    day: day,
-                  ))
-              .toList()),
+      child: Container(
+        padding: const EdgeInsets.only(top: 20),
+        child: ListView(
+            padding: const EdgeInsets.only(top: 20),
+            children: week.days
+                .map((day) => TumbleDayOfWeekContainer(
+                      day: day,
+                    ))
+                .toList()),
+      ),
     );
   }
 }

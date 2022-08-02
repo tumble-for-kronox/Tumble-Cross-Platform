@@ -6,13 +6,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:tumble/core/api/apiservices/fetch_response.dart';
 import 'package:tumble/core/navigation/app_navigator.dart';
+import 'package:tumble/core/ui/main_app.dart';
 import 'package:tumble/core/ui/main_app_widget/cubit/main_app_cubit.dart';
 import 'package:tumble/core/ui/main_app_widget/main_app_bottom_nav_bar/cubit/bottom_nav_cubit.dart';
 import 'package:tumble/core/ui/main_app_widget/main_app_bottom_nav_bar/data/nav_bar_items.dart';
 import 'package:tumble/core/ui/main_app_widget/schedule_view_widgets/no_schedule.dart';
 import 'package:tumble/core/ui/main_app_widget/schedule_view_widgets/tumble_list_view/data/cupertino_alerts.dart';
 import 'package:tumble/core/ui/main_app_widget/schedule_view_widgets/tumble_list_view/data/to_top_button.dart';
-import '../../../../theme/data/colors.dart';
 import 'tumble_list_view_day_container.dart';
 
 class TumbleListView extends StatelessWidget {
@@ -40,18 +40,26 @@ class TumbleListView extends StatelessWidget {
           case MainAppStatus.SCHEDULE_SELECTED:
             return Stack(
               children: [
-                SingleChildScrollView(
-                  controller: context.read<MainAppCubit>().controller,
-                  child: Column(
-                      children: state.listOfDays!
-                          .where((day) => day.events.isNotEmpty)
-                          .map((day) => TumbleListViewDayContainer(
-                                day: day,
-                              ))
-                          .toList()),
+                RefreshIndicator(
+                  onRefresh: () async {
+                    context.read<MainAppCubit>().setLoading();
+                    await context
+                        .read<MainAppCubit>()
+                        .fetchNewSchedule(state.currentScheduleId!);
+                  },
+                  child: SingleChildScrollView(
+                    controller: context.read<MainAppCubit>().controller,
+                    child: Column(
+                        children: state.listOfDays!
+                            .where((day) => day.events.isNotEmpty)
+                            .map((day) => TumbleListViewDayContainer(
+                                  day: day,
+                                ))
+                            .toList()),
+                  ),
                 ),
                 AnimatedPositioned(
-                  bottom: 35,
+                  bottom: 105,
                   right: state.listViewToTopButtonVisible ? 35 : -60,
                   duration: const Duration(milliseconds: 200),
                   child: ToTopButton(
@@ -61,7 +69,16 @@ class TumbleListView extends StatelessWidget {
               ],
             );
           case MainAppStatus.FETCH_ERROR:
-            return Container();
+            return NoScheduleAvailable(
+              errorType: state.message!,
+              cupertinoAlertDialog: CustomCupertinoAlerts.fetchError(
+                  context,
+                  () => context
+                      .read<MainAppNavigationCubit>()
+                      .getNavBarItem(NavbarItem.SEARCH),
+                  navigator),
+            );
+
           case MainAppStatus.EMPTY_SCHEDULE:
             return NoScheduleAvailable(
               errorType: FetchResponse.emptyScheduleError,

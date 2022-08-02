@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:tumble/core/ui/scaffold_message.dart';
 
 typedef SetDefaultSchedule = void Function(String id);
 
@@ -19,7 +20,7 @@ class AppDefaultSchedulePicker extends StatelessWidget {
         margin: const EdgeInsets.only(bottom: 25, left: 12, right: 12),
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.surface,
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(20),
         ),
         child: SizedBox.expand(
             child: Card(
@@ -37,7 +38,11 @@ class AppDefaultSchedulePicker extends StatelessWidget {
                               color:
                                   Theme.of(context).colorScheme.onBackground),
                         ),
-                        onTap: () => setDefaultSchedule(id)))
+                        onTap: () {
+                          setDefaultSchedule(id);
+                          showScaffoldMessage(
+                              context, "Default schedule is now set to $id");
+                        }))
                     .toList()),
           ),
         )),
