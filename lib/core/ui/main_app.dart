@@ -5,6 +5,7 @@ import 'package:tumble/core/theme/cubit/theme_state.dart';
 import 'package:tumble/core/theme/data/colors.dart';
 import 'package:tumble/core/ui/cubit/init_cubit.dart';
 import 'package:tumble/core/ui/main_app_widget/main_app_navigation_root.dart';
+import 'package:tumble/core/ui/main_app_widget/misc/tumble_drawer/auth_cubit/auth_cubit.dart';
 import 'package:tumble/core/ui/main_app_widget/school_selection_page.dart';
 
 class MainApp extends StatefulWidget {
@@ -38,15 +39,21 @@ class _MainAppState extends State<MainApp> {
               ),
               themeMode: state.themeMode,
               home: FutureBuilder(
-                  future: context.read<InitCubit>().init(),
+                  future: BlocProvider.of<InitCubit>(context).init(),
                   builder: (context, snapshot) {
                     return BlocBuilder<InitCubit, InitState>(
                       builder: (context, state) {
                         switch (state.status) {
                           case InitStatus.INITIAL:
-                            return const SchoolSelectionPage();
+                            return BlocProvider.value(
+                              value: BlocProvider.of<InitCubit>(context),
+                              child: const SchoolSelectionPage(),
+                            );
                           case InitStatus.HAS_SCHOOL:
-                            return const MainAppNavigationRootPage();
+                            return BlocProvider.value(
+                              value: BlocProvider.of<AuthCubit>(context),
+                              child: const MainAppNavigationRootPage(),
+                            );
                         }
                       },
                     );

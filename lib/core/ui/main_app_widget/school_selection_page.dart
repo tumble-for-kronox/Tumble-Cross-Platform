@@ -59,12 +59,6 @@ class _SchoolSelectionPageState extends State<SchoolSelectionPage> {
                               BlocProvider.of<InitCubit>(context)
                                   .changeSchool(school);
                               BlocProvider.of<AuthCubit>(context).logout();
-                              BlocProvider.of<LoginPageCubit>(context)
-                                  .emitCleanInitState();
-                              BlocProvider.of<DrawerCubit>(context)
-                                  .setupForNextSchool(school.schoolName);
-                              BlocProvider.of<MainAppCubit>(context)
-                                  .setupForNextSchool();
                               showScaffoldMessage(context,
                                   '${ChangeResponse.changeSchool} ${BlocProvider.of<InitCubit>(context).state.defaultSchool}');
                               navigator.pushAndRemoveAll(NavigationRouteLabels

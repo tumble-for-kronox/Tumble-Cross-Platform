@@ -17,32 +17,34 @@ class DatabaseRepository implements IDatabaseScheduleService {
   @override
   Future addSchedule(ScheduleModel scheduleModel) async {
     await _scheduleStore.add(await _db, scheduleModelToJson(scheduleModel));
-    log('Added schedule');
   }
 
   @override
   Future removeSchedule(String id) async {
     final finder = Finder(filter: Filter.equals('id', id));
     await _scheduleStore.delete(await _db, finder: finder);
-    log('Removed schedule');
   }
 
   @override
   Future updateSchedule(ScheduleModel scheduleModel) async {
     final finder = Finder(filter: Filter.byKey(scheduleModel.id));
-    await _scheduleStore.update(await _db, scheduleModel.toJson(), finder: finder);
+    await _scheduleStore.update(await _db, scheduleModel.toJson(),
+        finder: finder);
   }
 
   @override
   Future<List<ScheduleModel>> getAllSchedules() async {
     final recordSnapshots = await _scheduleStore.find(await _db);
-    return recordSnapshots.map((snapshot) => ScheduleModel.fromJson(snapshot.value)).toList();
+    return recordSnapshots
+        .map((snapshot) => ScheduleModel.fromJson(snapshot.value))
+        .toList();
   }
 
   @override
   Future<ScheduleModel?> getOneSchedule(String id) async {
     final finder = Finder(filter: Filter.equals('id', id));
-    final recordSnapshot = await _scheduleStore.findFirst(await _db, finder: finder);
+    final recordSnapshot =
+        await _scheduleStore.findFirst(await _db, finder: finder);
     if (recordSnapshot != null) {
       return ScheduleModel.fromJson(recordSnapshot.value);
     }
@@ -52,7 +54,9 @@ class DatabaseRepository implements IDatabaseScheduleService {
   @override
   Future<List<String>> getAllScheduleIds() async {
     final recordSnapshots = await _scheduleStore.find(await _db);
-    return recordSnapshots.map((snapshot) => ScheduleModel.fromJson(snapshot.value).id).toList();
+    return recordSnapshots
+        .map((snapshot) => ScheduleModel.fromJson(snapshot.value).id)
+        .toList();
   }
 
   @override
@@ -63,23 +67,19 @@ class DatabaseRepository implements IDatabaseScheduleService {
   @override
   Future setUserSession(KronoxUserModel kronoxUser) async {
     await _userStore.add(await _db, kronoxUserModelToJson(kronoxUser));
-    log('Added user');
   }
 
   @override
   Future removeUserSession() async {
     await _userStore.delete(await _db);
-    log('Deleted all user data');
   }
 
   @override
   Future<KronoxUserModel?> getUserSession() async {
     final sessionSnapshot = await _userStore.findFirst(await _db);
     if (sessionSnapshot == null) {
-      log("User not found in store.");
       return null;
     }
-    log("User found in store.");
     return KronoxUserModel.fromJson(sessionSnapshot.value);
   }
 }

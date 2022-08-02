@@ -38,7 +38,7 @@ class TumbleListViewDayContainer extends StatelessWidget {
             ],
           ),
           Padding(
-            padding: const EdgeInsets.only(bottom: 10),
+            padding: const EdgeInsets.only(bottom: 10, top: 2),
             child: Column(
               children: day.events
                   .map((event) => ScheduleCard(

@@ -40,8 +40,11 @@ class UserRepository implements IUserService {
 
   @override
   Future<ApiResponse> getRefreshSession(String refreshToken) async {
-    final school = _sharedPrefs.getString(PreferenceTypes.school)!;
+    String? school = _sharedPrefs.getString(PreferenceTypes.school);
 
-    return await _backendRepository.getRefreshSession(refreshToken, school);
+    if (school != null) {
+      return await _backendRepository.getRefreshSession(refreshToken, school);
+    }
+    return ApiResponse.error('No school');
   }
 }

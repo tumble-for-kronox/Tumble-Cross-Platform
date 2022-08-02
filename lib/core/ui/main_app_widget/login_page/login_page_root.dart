@@ -1,22 +1,15 @@
-import 'dart:developer';
-import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:lottie/lottie.dart';
 import 'package:tumble/core/api/apiservices/fetch_response.dart';
-import 'package:tumble/core/models/ui_models/school_model.dart';
 import 'package:tumble/core/navigation/app_navigator.dart';
 import 'package:tumble/core/navigation/navigation_route_labels.dart';
 import 'package:tumble/core/theme/data/colors.dart';
 import 'package:tumble/core/ui/cubit/init_cubit.dart';
-import 'package:tumble/core/ui/main_app_widget/cubit/main_app_cubit.dart';
 import 'package:tumble/core/ui/main_app_widget/misc/tumble_drawer/auth_cubit/auth_cubit.dart';
 import 'package:tumble/core/ui/main_app_widget/login_page/cubit/login_page_state.dart';
-import 'package:tumble/core/ui/main_app_widget/misc/tumble_drawer/cubit/drawer_state.dart';
 import 'package:tumble/core/ui/scaffold_message.dart';
 
 class LoginPageRoot extends StatefulWidget {
@@ -31,40 +24,42 @@ class _LoginPageRootState extends State<LoginPageRoot> {
   @override
   Widget build(BuildContext context) {
     final navigator = BlocProvider.of<AppNavigator>(context);
-    return BlocConsumer<LoginPageCubit, LoginPageState>(
-      listener: ((context, state) async {
-        if (state.status == LoginPageStatus.INITIAL) {
-          if (BlocProvider.of<AuthCubit>(context).authenticated) {
-            context.read<LoginPageCubit>().setUserLoggedIn();
+    return BlocProvider(
+      create: (context) => LoginPageCubit(),
+      child: BlocConsumer<LoginPageCubit, LoginPageState>(
+        listener: ((context, state) async {
+          switch (state.status) {
+            case LoginPageStatus.INITIAL:
+              if (state.errorMessage != null) {
+                showScaffoldMessage(context, state.errorMessage!);
+              } else if (BlocProvider.of<AuthCubit>(context).authenticated) {
+                context.read<LoginPageCubit>().setUserLoggedIn();
+              }
+              break;
+            case LoginPageStatus.SUCCESS:
+              BlocProvider.of<AuthCubit>(context)
+                  .setUserSession(state.userSession!);
+              showScaffoldMessage(context, FetchResponse.loginSuccess);
+              navigator.pushAndRemoveAll(
+                  NavigationRouteLabels.mainAppNavigationRootPage);
+              if (state.school != null) {
+                BlocProvider.of<InitCubit>(context).changeSchool(state.school!);
+              } else {
+                navigator.pop();
+              }
+              break;
+            default:
+              break;
           }
-        }
-        if (state.status == LoginPageStatus.SUCCESS) {
-          BlocProvider.of<DrawerCubit>(context)
-              .setupForNextSchool(widget.schoolName!);
-          BlocProvider.of<MainAppCubit>(context).setupForNextSchool();
-          showScaffoldMessage(context, FetchResponse.loginSuccess);
-          BlocProvider.of<AuthCubit>(context)
-              .setUserSession(state.userSession!);
-          navigator.pushAndRemoveAll(
-              NavigationRouteLabels.mainAppNavigationRootPage);
-          if (state.school != null) {
-            BlocProvider.of<InitCubit>(context).changeSchool(state.school!);
-          } else {
-            navigator.pop();
-          }
-        } else if (state.status == LoginPageStatus.INITIAL &&
-            state.errorMessage != null) {
-          showScaffoldMessage(context, state.errorMessage!);
-          BlocProvider.of<LoginPageCubit>(context).emitCleanInitState();
-        }
-      }),
-      builder: (context, state) {
-        return Scaffold(
-            backgroundColor: Theme.of(context).colorScheme.primary,
-            appBar: _appBar(state, context, navigator),
-            resizeToAvoidBottomInset: false,
-            body: _initialState(state, context, widget.schoolName!));
-      },
+        }),
+        builder: (context, state) {
+          return Scaffold(
+              backgroundColor: Theme.of(context).colorScheme.primary,
+              appBar: _appBar(state, context, navigator),
+              resizeToAvoidBottomInset: false,
+              body: _initialState(state, context, widget.schoolName!));
+        },
+      ),
     );
   }
 }

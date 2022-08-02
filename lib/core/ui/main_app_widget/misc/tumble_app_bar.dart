@@ -6,7 +6,7 @@ import 'package:tumble/core/extensions/extensions.dart';
 import 'package:tumble/core/ui/main_app_widget/cubit/main_app_cubit.dart';
 import 'package:tumble/core/ui/main_app_widget/main_app_bottom_nav_bar/cubit/bottom_nav_cubit.dart';
 
-class TumbleAppBar extends StatefulWidget implements PreferredSizeWidget {
+class TumbleAppBar extends StatefulWidget {
   final AsyncCallback? toggleFavorite;
   final bool? visibleBookmark;
   const TumbleAppBar({Key? key, this.toggleFavorite, this.visibleBookmark})
@@ -14,9 +14,6 @@ class TumbleAppBar extends StatefulWidget implements PreferredSizeWidget {
 
   @override
   State<TumbleAppBar> createState() => _TumbleAppBarState();
-
-  @override
-  Size get preferredSize => const Size.fromHeight(60);
 }
 
 class _TumbleAppBarState extends State<TumbleAppBar> {

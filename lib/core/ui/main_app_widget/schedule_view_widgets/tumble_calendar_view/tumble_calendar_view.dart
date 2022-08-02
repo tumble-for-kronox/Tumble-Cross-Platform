@@ -44,8 +44,6 @@ class _TumbleCalendarViewState extends State<TumbleCalendarView> {
 
           case MainAppStatus.SCHEDULE_SELECTED:
             return SfCalendar(
-                onTap: (calendarTapDetails) =>
-                    log(calendarTapDetails.appointments!.toList().toString()),
                 view: CalendarView.month,
                 dataSource:
                     ScheduleDataSource(_getDataSource(state.listOfDays!)),

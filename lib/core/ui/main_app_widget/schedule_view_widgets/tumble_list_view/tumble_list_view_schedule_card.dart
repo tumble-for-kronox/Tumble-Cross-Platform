@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shimmer/shimmer.dart';
@@ -27,7 +28,7 @@ class ScheduleCard extends StatelessWidget {
         child: Stack(
           children: [
             Container(
-              height: 135,
+              height: 140,
               width: double.infinity,
               margin: const EdgeInsets.only(top: 9, left: 10, right: 10),
               alignment: Alignment.topLeft,
@@ -50,7 +51,7 @@ class ScheduleCard extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           FractionallySizedBox(
-                            widthFactor: 0.85,
+                            widthFactor: 1,
                             alignment: Alignment.topLeft,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -58,31 +59,49 @@ class ScheduleCard extends StatelessWidget {
                                 Container(
                                   padding: const EdgeInsets.only(left: 2),
                                   child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Container(
-                                        width: 5,
-                                        height: 5,
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: event.isSpecial
-                                              ? Colors.redAccent
-                                              : CustomColors.orangePrimary,
-                                        ),
+                                      Row(
+                                        children: [
+                                          Container(
+                                            width: 5,
+                                            height: 5,
+                                            decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              color: event.isSpecial
+                                                  ? Colors.redAccent
+                                                  : CustomColors.orangePrimary,
+                                            ),
+                                          ),
+                                          const SizedBox(width: 6),
+                                          Container(
+                                            padding:
+                                                const EdgeInsets.only(top: 1),
+                                            child: Text(
+                                              '${DateFormat('EEEE').format(event.timeStart)}, ${DateFormat.Hm().format(event.timeStart)} - ${DateFormat.Hm().format(event.timeEnd)}',
+                                              style: TextStyle(
+                                                  fontSize: 13,
+                                                  fontWeight: FontWeight.w400,
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .onSecondary,
+                                                  letterSpacing: .5),
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                      const SizedBox(width: 4),
                                       Container(
-                                        padding: const EdgeInsets.only(top: 1),
-                                        child: Text(
-                                          '${DateFormat('EEEE').format(event.timeStart)}, ${DateFormat.Hm().format(event.timeStart)} - ${DateFormat.Hm().format(event.timeEnd)}',
-                                          style: TextStyle(
-                                              fontSize: 13,
-                                              fontWeight: FontWeight.w400,
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .onSecondary,
-                                              letterSpacing: .5),
-                                        ),
-                                      ),
+                                        padding:
+                                            const EdgeInsets.only(right: 12),
+                                        child: event.isSpecial
+                                            ? const Icon(
+                                                CupertinoIcons
+                                                    .exclamationmark_square,
+                                                size: 20,
+                                              )
+                                            : null,
+                                      )
                                     ],
                                   ),
                                 ),
@@ -141,7 +160,7 @@ class ScheduleCard extends StatelessWidget {
                           topLeft: Radius.circular(10),
                           bottomLeft: Radius.circular(10))),
                   width: 8,
-                  height: 135,
+                  height: 140,
                 )),
           ],
         ));

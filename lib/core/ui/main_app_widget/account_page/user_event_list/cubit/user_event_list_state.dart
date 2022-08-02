@@ -7,7 +7,7 @@ class UserEventListState extends Equatable {
   final bool refreshSession;
   final UserEventCollectionModel? userEvents;
 
-  UserEventListState({
+  const UserEventListState({
     required this.status,
     this.userEvents,
     this.refreshSession = false,

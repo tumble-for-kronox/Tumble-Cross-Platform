@@ -30,7 +30,7 @@ class _UserEventListState extends State<UserEventList> {
                   .sessionToken);
         }
       },
-      bloc: BlocProvider.of(context)
+      bloc: BlocProvider.of<UserEventListCubit>(context)
         ..getUserEvents(
           BlocProvider.of<AuthCubit>(context).state.userSession!.sessionToken,
         ),

@@ -23,7 +23,10 @@ class _TumbleAccountPageState extends State<TumbleAccountPage> {
           child: BlocBuilder<AuthCubit, AuthState>(builder: (context, state) {
             switch (state.status) {
               case AuthStatus.AUTHENTICATED:
-                return const AuthenticatedPage();
+                return BlocProvider.value(
+                  value: BlocProvider.of<AuthCubit>(context),
+                  child: const AuthenticatedPage(),
+                );
               case AuthStatus.UNAUTHENTICATED:
                 return const UnauthenticatedPage();
               default:

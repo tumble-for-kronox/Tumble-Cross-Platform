@@ -159,7 +159,7 @@ class TumbleAppDrawer extends StatelessWidget {
       case EventType.CHANGE_THEME:
         showModalBottomSheet(
             context: context,
-            builder: (context) => AppThemePicker(setTheme: (String themeType) {
+            builder: (_) => AppThemePicker(setTheme: (String themeType) {
                   context.read<DrawerCubit>().changeTheme(themeType);
                   Navigator.of(context).pop();
                 }));
@@ -174,7 +174,7 @@ class TumbleAppDrawer extends StatelessWidget {
         if (context.read<DrawerCubit>().state.bookmarks!.isNotEmpty) {
           showModalBottomSheet(
               context: context,
-              builder: (context) => AppDefaultSchedulePicker(
+              builder: (_) => AppDefaultSchedulePicker(
                   scheduleIds: context.read<DrawerCubit>().state.bookmarks!,
                   setDefaultSchedule: (newId) {
                     context.read<DrawerCubit>().setSchedule(newId);
@@ -185,7 +185,7 @@ class TumbleAppDrawer extends StatelessWidget {
       case EventType.SET_DEFAULT_VIEW:
         showModalBottomSheet(
             context: context,
-            builder: (context) => AppDefaultViewPicker(
+            builder: (_) => AppDefaultViewPicker(
                   setDefaultView: (viewType) {
                     context.read<DrawerCubit>().setView(viewType);
                     Navigator.of(context).pop();

@@ -9,7 +9,7 @@ part 'user_event_list_state.dart';
 
 class UserEventListCubit extends Cubit<UserEventListState> {
   UserEventListCubit()
-      : super(UserEventListState(status: UserEventListStatus.LOADING));
+      : super(const UserEventListState(status: UserEventListStatus.LOADING));
 
   final UserRepository _userRepository = locator<UserRepository>();
 
@@ -26,10 +26,7 @@ class UserEventListCubit extends Cubit<UserEventListState> {
             refreshSession: false));
         break;
       case ApiStatus.UNAUTHORIZED:
-        emit(state.copyWith(
-          status: UserEventListStatus.LOADING,
-          refreshSession: true,
-        ));
+        emit(state.copyWith());
         break;
       default:
         emit(state.copyWith(

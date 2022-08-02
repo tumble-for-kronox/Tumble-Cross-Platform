@@ -88,7 +88,10 @@ class _TumbleSearchPageState extends State<TumbleSearchPage> {
             ],
           ),
         ),
-        const SearchBarAndLogoContainer(),
+        BlocProvider.value(
+          value: BlocProvider.of<SearchPageCubit>(context),
+          child: const SearchBarAndLogoContainer(),
+        ),
       ],
     );
   }

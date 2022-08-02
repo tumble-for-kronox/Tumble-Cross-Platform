@@ -29,7 +29,6 @@ class InitCubit extends Cubit<InitState> {
         emit(const InitState(defaultSchool: null, status: InitStatus.INITIAL));
         break;
       case Status.HAS_SCHOOL:
-        log('Status has school');
         emit(InitState(
             defaultSchool: databaseResponse.data,
             status: InitStatus.HAS_SCHOOL));

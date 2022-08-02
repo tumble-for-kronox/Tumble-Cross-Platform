@@ -23,7 +23,7 @@ class ScheduleCardLocationContainer extends StatelessWidget {
             softWrap: true,
             style: TextStyle(
               color: textColor,
-              fontSize: locations.isEmpty ? 14 : 21,
+              fontSize: locations.isEmpty ? 14 : 19,
               fontWeight: FontWeight.w300,
             ),
           ),

@@ -29,11 +29,9 @@ class AuthCubit extends Cubit<AuthState> {
       switch (loggedInUser.status) {
         case ApiStatus.REQUESTED:
           setUserSession(loggedInUser.data!);
-          log("Successfully logged in user: ${loggedInUser.data}");
           return;
         default:
           emit(state.copyWith(status: AuthStatus.UNAUTHENTICATED));
-          log("Failed to login user.");
           return;
       }
     }

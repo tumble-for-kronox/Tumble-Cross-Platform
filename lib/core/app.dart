@@ -7,27 +7,7 @@ import 'package:tumble/core/theme/cubit/theme_cubit.dart';
 import 'package:tumble/core/theme/cubit/theme_state.dart';
 import 'package:tumble/core/theme/data/colors.dart';
 import 'package:tumble/core/ui/cubit/init_cubit.dart';
-import 'package:tumble/core/ui/main_app_widget/account_page/authenticated_page.dart';
-import 'package:tumble/core/ui/main_app_widget/account_page/user_event_list/cubit/user_event_list_cubit.dart';
-import 'package:tumble/core/ui/main_app_widget/account_page/user_event_list/user_event_list.dart';
-import 'package:tumble/core/ui/main_app_widget/cubit/main_app_cubit.dart';
-import 'package:tumble/core/ui/main_app_widget/login_page/cubit/login_page_state.dart';
-import 'package:tumble/core/ui/main_app_widget/login_page/login_page_root.dart';
-import 'package:tumble/core/ui/main_app.dart';
-import 'package:tumble/core/ui/main_app_widget/main_app_bottom_nav_bar/cubit/bottom_nav_cubit.dart';
-import 'package:tumble/core/ui/main_app_widget/main_app_navigation_root.dart';
 import 'package:tumble/core/ui/main_app_widget/misc/tumble_drawer/auth_cubit/auth_cubit.dart';
-import 'package:tumble/core/ui/main_app_widget/misc/tumble_drawer/cubit/drawer_state.dart';
-import 'package:tumble/core/ui/main_app_widget/misc/tumble_drawer/tumble_app_drawer.dart';
-import 'package:tumble/core/ui/main_app_widget/schedule_view_widgets/tumble_calendar_view/tumble_calendar_view.dart';
-import 'package:tumble/core/ui/main_app_widget/misc/tumble_app_bar.dart';
-import 'package:tumble/core/ui/main_app_widget/schedule_view_widgets/tumble_list_view/tumble_list_view.dart';
-import 'package:tumble/core/ui/main_app_widget/schedule_view_widgets/tumble_week_view/tumble_week_view.dart';
-import 'package:tumble/core/ui/main_app_widget/school_selection_page.dart';
-import 'package:tumble/core/ui/main_app_widget/search_page_widgets/cubit/search_page_cubit.dart';
-import 'package:tumble/core/ui/main_app_widget/search_page_widgets/search/schedule_search_bar.dart';
-import 'package:tumble/core/ui/main_app_widget/search_page_widgets/search/tumble_search_page.dart';
-import 'package:tumble/core/ui/main_app_widget/search_page_widgets/search_bar_widget/searchbar_and_logo_container.dart';
 
 class App extends StatefulWidget {
   const App({Key? key}) : super(key: key);
@@ -45,111 +25,47 @@ class _AppState extends State<App> {
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
-        providers: [
-          BlocProvider<InitCubit>(
-            create: (c) => InitCubit(),
-            child: Row(
-              children: const [
-                MainApp(),
-                SchoolSelectionPage(),
-                LoginPageRoot(),
-              ],
-            ),
-          ),
-          BlocProvider<MainAppNavigationCubit>(
-            create: (c) => MainAppNavigationCubit(),
-            child: Row(
-              children: const [MainApp()],
-            ),
-          ),
-          BlocProvider<MainAppCubit>(
-            create: (c) => MainAppCubit(),
-            child: Row(
-              children: const [
-                TumbleAppBar(),
-                TumbleSearchPage(),
-                TumbleCalendarView(),
-                TumbleWeekView(),
-                TumbleListView(),
-                MainAppNavigationRootPage(),
-                MainApp(),
-                SchoolSelectionPage(),
-              ],
-            ),
-          ),
-          BlocProvider<SearchPageCubit>(
-            create: (c) => SearchPageCubit(),
-            child: Row(children: const [
-              TumbleSearchPage(),
-              ScheduleSearchBar(),
-              SearchBarAndLogoContainer(),
-            ]),
-          ),
-          BlocProvider<ThemeCubit>(
-            create: (c) => ThemeCubit()..getCurrentTheme(),
-            child: Row(children: const [
-              MainApp(),
-            ]),
-          ),
-          BlocProvider<DrawerCubit>(
-            create: (c) => DrawerCubit(),
-            child: Row(
-              children: const [
-                TumbleAppDrawer(),
-                SchoolSelectionPage(),
-                MainAppNavigationRootPage()
-              ],
-            ),
-          ),
-          BlocProvider<LoginPageCubit>(
-              create: (c) => LoginPageCubit(),
-              child: Row(
-                children: const [
-                  LoginPageRoot(),
-                  AuthenticatedPage(),
+      providers: [
+        BlocProvider<AppNavigator>(create: (_) => AppNavigator()),
+        BlocProvider<InitCubit>(create: (_) => InitCubit()),
+        BlocProvider<AuthCubit>(create: (_) => AuthCubit()),
+        BlocProvider<ThemeCubit>(create: (c) => ThemeCubit()..getCurrentTheme())
+      ],
+      child: BlocBuilder<ThemeCubit, ThemeState>(
+          builder: ((context, state) => MaterialApp(
+              debugShowCheckedModeBanner: false,
+              title: 'Tumble',
+              theme: ThemeData(
+                bottomSheetTheme: const BottomSheetThemeData(
+                    backgroundColor: Colors.transparent),
+                colorScheme: CustomColors.lightColors,
+                fontFamily: 'Roboto',
+              ),
+              darkTheme: ThemeData(
+                bottomSheetTheme: const BottomSheetThemeData(
+                    backgroundColor: Colors.transparent),
+                colorScheme: CustomColors.darkColors,
+                bottomNavigationBarTheme: BottomNavigationBarThemeData(
+                  selectedItemColor: CustomColors.darkColors.primary,
+                ),
+                fontFamily: 'Roboto',
+              ),
+              themeMode: state.themeMode,
+              home: MultiBlocProvider(
+                providers: [
+                  BlocProvider.value(
+                      value: BlocProvider.of<AppNavigator>(context)),
+                  BlocProvider.value(
+                      value: BlocProvider.of<InitCubit>(context)),
+                  BlocProvider.value(
+                      value: BlocProvider.of<AuthCubit>(context)),
+                  BlocProvider.value(
+                      value: BlocProvider.of<ThemeCubit>(context)),
                 ],
-              )),
-          BlocProvider<AppNavigator>(create: (_) => AppNavigator()),
-          BlocProvider<AuthCubit>(
-            create: (c) => AuthCubit(),
-            child: Row(
-              children: const [
-                LoginPageRoot(),
-                UserEventList(),
-              ],
-            ),
-          ),
-          BlocProvider<UserEventListCubit>(
-            create: (c) => UserEventListCubit(),
-            child: Row(
-              children: const [
-                UserEventList(),
-              ],
-            ),
-          ),
-        ],
-        child: BlocBuilder<ThemeCubit, ThemeState>(
-            builder: ((context, state) => MaterialApp(
-                debugShowCheckedModeBanner: false,
-                title: 'Tumble',
-                theme: ThemeData(
-                  bottomSheetTheme: const BottomSheetThemeData(
-                      backgroundColor: Colors.transparent),
-                  colorScheme: CustomColors.lightColors,
-                  fontFamily: 'Roboto',
-                ),
-                darkTheme: ThemeData(
-                  bottomSheetTheme: const BottomSheetThemeData(
-                      backgroundColor: Colors.transparent),
-                  colorScheme: CustomColors.darkColors,
-                  bottomNavigationBarTheme: BottomNavigationBarThemeData(
-                    selectedItemColor: CustomColors.darkColors.primary,
-                  ),
-                  fontFamily: 'Roboto',
-                ),
-                themeMode: state.themeMode,
-                home: const AppNavigatorProvider(initialPages: [
+                child: const AppNavigatorProvider(initialPages: [
                   NavigationRouteLabels.mainAppPage,
-                ])))));
+                ]),
+              )))),
+    );
   }
 }

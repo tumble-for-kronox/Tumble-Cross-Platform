@@ -55,15 +55,6 @@ class LoginPageCubit extends Cubit<LoginPageState> {
     emit(state.copyWith(school: school));
   }
 
-  void emitCleanInitState() {
-    emit(LoginPageState(
-      passwordHidden: true,
-      status: LoginPageStatus.INITIAL,
-      usernameController: TextEditingController(),
-      passwordController: TextEditingController(),
-    ));
-  }
-
   void storeUserCreds(String token) {
     _secureStorage.setRefreshToken(token);
   }

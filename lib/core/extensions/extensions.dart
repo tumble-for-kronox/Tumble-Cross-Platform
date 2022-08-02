@@ -74,7 +74,6 @@ extension HttpClientResponseParsing on HttpClientResponse {
   }
 
   Future<ApiResponse> parseUser() async {
-    log("Login status: $statusCode");
     if (statusCode == 200) {
       return ApiResponse.completed(
           kronoxUserModelFromJson(await transform(utf8.decoder).join()));

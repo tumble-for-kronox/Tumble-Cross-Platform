@@ -37,12 +37,14 @@ class _ScheduleSearchBarState extends State<ScheduleSearchBar> {
                 return TextField(
                     onSubmitted: (value) async {
                       if (value.trim().isNotEmpty) {
-                        context.read<SearchPageCubit>().setLoading();
-                        await context.read<SearchPageCubit>().search();
+                        BlocProvider.of<SearchPageCubit>(context).setLoading();
+                        await BlocProvider.of<SearchPageCubit>(context)
+                            .search();
                       }
                     },
                     autocorrect: false,
-                    focusNode: context.read<SearchPageCubit>().focusNode,
+                    focusNode:
+                        BlocProvider.of<SearchPageCubit>(context).focusNode,
                     controller:
                         context.read<SearchPageCubit>().textEditingController,
                     textInputAction: TextInputAction.search,
@@ -58,14 +60,15 @@ class _ScheduleSearchBarState extends State<ScheduleSearchBar> {
                           CupertinoIcons.search,
                         ),
                         onPressed: () async {
-                          if (context
-                              .read<SearchPageCubit>()
+                          if (BlocProvider.of<SearchPageCubit>(context)
                               .textEditingController
                               .text
                               .trim()
                               .isNotEmpty) {
-                            context.read<SearchPageCubit>().setLoading();
-                            await context.read<SearchPageCubit>().search();
+                            BlocProvider.of<SearchPageCubit>(context)
+                                .setLoading();
+                            await BlocProvider.of<SearchPageCubit>(context)
+                                .search();
                           }
                         },
                       ),
@@ -73,7 +76,8 @@ class _ScheduleSearchBarState extends State<ScheduleSearchBar> {
                         if (state.clearButtonVisible) {
                           return IconButton(
                             onPressed: () =>
-                                context.read<SearchPageCubit>().resetCubit(),
+                                BlocProvider.of<SearchPageCubit>(context)
+                                    .resetCubit(),
                             icon: const Icon(CupertinoIcons.clear),
                           );
                         }
@@ -89,34 +93,6 @@ class _ScheduleSearchBarState extends State<ScheduleSearchBar> {
               },
             ),
           )),
-          /* Container(
-            height: 50,
-            width: 50,
-            margin: const EdgeInsets.only(left: 20),
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.primary,
-              borderRadius: BorderRadius.circular(5),
-              boxShadow: const <BoxShadow>[
-                BoxShadow(
-                    color: Colors.black26, blurRadius: 3, offset: Offset(0, 2))
-              ],
-            ),
-            child: MaterialButton(
-              shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(5))),
-              onPressed: () async {
-                context.read<SearchPageCubit>().setLoading();
-                await context.read<SearchPageCubit>().search();
-              },
-              disabledColor: Colors.orange.shade200,
-              visualDensity: VisualDensity.compact,
-              splashColor: Colors.white.withOpacity(0.4),
-              child: Icon(
-                CupertinoIcons.search,
-                color: Theme.of(context).colorScheme.onPrimary,
-              ),
-            ),
-          ), */
         ],
       ),
     );

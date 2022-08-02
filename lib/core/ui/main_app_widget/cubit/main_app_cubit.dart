@@ -72,9 +72,6 @@ class MainAppCubit extends Cubit<MainAppState> {
     emit(state.copyWith(toggledFavorite: true));
 
     _sharedPrefs.setStringList(PreferenceTypes.favorites, currentFavorites);
-    log(locator<SharedPreferences>()
-        .getStringList(PreferenceTypes.favorites)
-        .toString());
   }
 
   Future<void> initCached() async {
