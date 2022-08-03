@@ -197,13 +197,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.2.3"
-  dot_navigation_bar:
-    dependency: "direct main"
-    description:
-      name: dot_navigation_bar
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.1+4"
   drift:
     dependency: transitive
     description:
@@ -758,13 +751,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.2"
-  shimmer:
-    dependency: "direct main"
-    description:
-      name: shimmer
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.0"
   sky_engine:
     dependency: transitive
     description: flutter

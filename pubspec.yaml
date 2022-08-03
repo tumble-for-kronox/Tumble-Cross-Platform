@@ -12,7 +12,6 @@ dependencies:
   flutter:
     sdk: flutter
   http: ^0.13.1
-  shimmer: ^2.0.0
   equatable: ^2.0.3
   freezed: any
   cupertino_icons: ^1.0.5
@@ -22,7 +21,6 @@ dependencies:
   flutter_bloc: ^8.0.1
   permission_handler: ^9.2.0
   lottie: ^1.4.0
-  dot_navigation_bar: ^1.0.1+4
   intl: ^0.17.0
   flutter_spinkit: any
   path_provider: ^2.0.9

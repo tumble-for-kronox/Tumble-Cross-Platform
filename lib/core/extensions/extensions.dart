@@ -11,7 +11,7 @@ import 'package:tumble/core/models/api_models/schedule_model.dart';
 import 'package:tumble/core/models/api_models/user_event_collection_model.dart';
 import 'package:tumble/core/models/ui_models/school_model.dart';
 import 'package:tumble/core/models/ui_models/week_model.dart';
-import 'package:tumble/core/ui/main_app_widget/data/schools.dart';
+import 'package:tumble/core/ui/main_app/data/schools.dart';
 
 extension ResponseParsing on Response {
   ApiResponse parseSchedule() {

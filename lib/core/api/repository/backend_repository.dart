@@ -9,7 +9,7 @@ import 'package:tumble/core/api/apiservices/fetch_response.dart';
 import 'package:tumble/core/api/cert_bypass.dart';
 import 'package:tumble/core/api/interface/ibackend_service.dart';
 import 'package:tumble/core/extensions/extensions.dart';
-import 'package:tumble/core/ui/main_app_widget/data/schools.dart';
+import 'package:tumble/core/ui/main_app/data/schools.dart';
 
 class BackendRepository implements IBackendService {
   /// [HttpGet]

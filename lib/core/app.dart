@@ -6,8 +6,8 @@ import 'package:tumble/core/navigation/navigation_route_labels.dart';
 import 'package:tumble/core/theme/cubit/theme_cubit.dart';
 import 'package:tumble/core/theme/cubit/theme_state.dart';
 import 'package:tumble/core/theme/data/colors.dart';
-import 'package:tumble/core/ui/cubit/init_cubit.dart';
-import 'package:tumble/core/ui/main_app_widget/misc/tumble_drawer/auth_cubit/auth_cubit.dart';
+import 'package:tumble/core/ui/init_cubit/init_cubit.dart';
+import 'package:tumble/core/ui/login/cubit/auth_cubit.dart';
 
 class App extends StatefulWidget {
   const App({Key? key}) : super(key: key);
