@@ -111,11 +111,10 @@ class AuthCubit extends Cubit<AuthState> {
     final userRepository = locator<UserRepository>();
 
     final refreshToken = await secureStorage.getRefreshToken();
-
     if (refreshToken != null) {
       ApiResponse loggedInUser =
           await userRepository.getRefreshSession(refreshToken);
-
+      log(loggedInUser.status.name);
       switch (loggedInUser.status) {
         case ApiStatus.REQUESTED:
           emit(state.copyWith(

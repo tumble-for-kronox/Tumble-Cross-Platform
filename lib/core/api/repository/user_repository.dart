@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tumble/core/api/apiservices/api_response.dart';
 import 'package:tumble/core/api/interface/iuser_service.dart';
@@ -41,7 +43,6 @@ class UserRepository implements IUserService {
   @override
   Future<ApiResponse> getRefreshSession(String refreshToken) async {
     String? school = _sharedPrefs.getString(PreferenceTypes.school);
-
     if (school != null) {
       return await _backendRepository.getRefreshSession(refreshToken, school);
     }
