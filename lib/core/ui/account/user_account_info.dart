@@ -26,7 +26,6 @@ class _UserAccountInfo extends State<UserAccountInfo> {
               children: [
                 Container(
                   height: 150,
-                  padding: const EdgeInsets.only(left: 20, top: 30),
                   decoration: BoxDecoration(
                     boxShadow: [
                       BoxShadow(
@@ -40,45 +39,79 @@ class _UserAccountInfo extends State<UserAccountInfo> {
                     color: Theme.of(context).colorScheme.surface,
                     borderRadius: BorderRadius.circular(15),
                   ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        'Hello!',
-                        style: TextStyle(
-                            fontSize: 16,
-                            color: Theme.of(context).colorScheme.onSecondary),
+                      Container(
+                        padding: const EdgeInsets.all(20),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Hello!',
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onSecondary),
+                            ),
+                            const SizedBox(height: 10),
+                            Text(
+                              BlocProvider.of<AuthCubit>(context)
+                                  .state
+                                  .userSession!
+                                  .name,
+                              style: TextStyle(
+                                  fontSize: 22,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onBackground),
+                            ),
+                            const SizedBox(height: 15),
+                            Row(
+                              children: [
+                                Icon(
+                                  CupertinoIcons.book,
+                                  color:
+                                      Theme.of(context).colorScheme.onSecondary,
+                                  size: 18,
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                Text(
+                                  locator<SharedPreferences>()
+                                      .getString(PreferenceTypes.school)!,
+                                  style: TextStyle(
+                                      fontSize: 15,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onSecondary),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
-                      const SizedBox(height: 10),
-                      Text(
-                        BlocProvider.of<AuthCubit>(context)
-                            .state
-                            .userSession!
-                            .name,
-                        style: TextStyle(
-                            fontSize: 22,
-                            color: Theme.of(context).colorScheme.onBackground),
-                      ),
-                      const SizedBox(height: 15),
-                      Row(
-                        children: [
-                          Icon(
-                            CupertinoIcons.book,
-                            color: Theme.of(context).colorScheme.onSecondary,
-                            size: 18,
+                      Padding(
+                        padding: const EdgeInsets.only(top: 10, right: 10),
+                        child: Align(
+                          alignment: Alignment.topRight,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(14),
+                            child: Image.asset(
+                              Schools.schools
+                                  .where((school) =>
+                                      school.schoolName ==
+                                      locator<SharedPreferences>()
+                                          .getString(PreferenceTypes.school))
+                                  .first
+                                  .schoolLogo,
+                              height: 100,
+                              width: 100,
+                            ),
                           ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          Text(
-                            locator<SharedPreferences>()
-                                .getString(PreferenceTypes.school)!,
-                            style: TextStyle(
-                                fontSize: 15,
-                                color:
-                                    Theme.of(context).colorScheme.onSecondary),
-                          ),
-                        ],
+                        ),
                       ),
                     ],
                   ),
@@ -86,13 +119,14 @@ class _UserAccountInfo extends State<UserAccountInfo> {
                 Container(
                   padding: const EdgeInsets.only(top: 40),
                   width: double.maxFinite,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisSize: MainAxisSize.max,
                     children: [
                       Container(
-                        width: 165,
-                        height: 250,
+                        width: 320,
+                        height: 140,
                         decoration: BoxDecoration(
                           boxShadow: [
                             BoxShadow(
@@ -112,8 +146,6 @@ class _UserAccountInfo extends State<UserAccountInfo> {
                             Container(
                                 padding: const EdgeInsets.all(12),
                                 child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Icon(
                                       CupertinoIcons.pen,
@@ -121,21 +153,27 @@ class _UserAccountInfo extends State<UserAccountInfo> {
                                       color:
                                           CustomColors.lightColors.background,
                                     ),
-                                    Text(
-                                      'Upcoming exams',
-                                      style: TextStyle(
-                                          fontSize: 15,
-                                          color: CustomColors
-                                              .lightColors.background),
+                                    Container(
+                                      padding: const EdgeInsets.only(left: 2),
+                                      child: Text(
+                                        'Upcoming exams',
+                                        style: TextStyle(
+                                            fontSize: 15,
+                                            color: CustomColors
+                                                .lightColors.background),
+                                      ),
                                     ),
                                   ],
                                 ))
                           ],
                         ),
                       ),
+                      const SizedBox(
+                        height: 20,
+                      ),
                       Container(
-                        width: 165,
-                        height: 250,
+                        width: 320,
+                        height: 140,
                         decoration: BoxDecoration(
                           boxShadow: [
                             BoxShadow(
@@ -155,8 +193,6 @@ class _UserAccountInfo extends State<UserAccountInfo> {
                             Container(
                                 padding: const EdgeInsets.all(12),
                                 child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Icon(
                                       CupertinoIcons.pen,
@@ -164,12 +200,15 @@ class _UserAccountInfo extends State<UserAccountInfo> {
                                       color:
                                           CustomColors.lightColors.background,
                                     ),
-                                    Text('Upcoming exams',
-                                        style: TextStyle(
-                                          fontSize: 15,
-                                          color: CustomColors
-                                              .lightColors.background,
-                                        )),
+                                    Container(
+                                      padding: const EdgeInsets.only(left: 5),
+                                      child: Text('Courses',
+                                          style: TextStyle(
+                                            fontSize: 15,
+                                            color: CustomColors
+                                                .lightColors.background,
+                                          )),
+                                    ),
                                   ],
                                 ))
                           ],
@@ -181,61 +220,6 @@ class _UserAccountInfo extends State<UserAccountInfo> {
               ],
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(top: 30, right: 20),
-            child: Align(
-              alignment: Alignment.topRight,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(14),
-                child: Image.asset(
-                  Schools.schools
-                      .where((school) =>
-                          school.schoolName ==
-                          locator<SharedPreferences>()
-                              .getString(PreferenceTypes.school))
-                      .first
-                      .schoolLogo,
-                  height: 100,
-                  width: 100,
-                ),
-              ),
-            ),
-          ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: SizedBox(
-              height: 40,
-              width: 120,
-              child: OutlinedButton(
-                onPressed: () {
-                  BlocProvider.of<AuthCubit>(context).logout();
-                },
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all<Color>(
-                      CustomColors.orangePrimary),
-                  shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12.0))),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Icon(
-                      CupertinoIcons.arrow_right_square,
-                      color: Theme.of(context).colorScheme.onPrimary,
-                      size: 18,
-                    ),
-                    Padding(
-                        padding: const EdgeInsets.only(right: 10),
-                        child: Text("Sign out",
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Theme.of(context).colorScheme.onPrimary,
-                            ))),
-                  ],
-                ),
-              ),
-            ),
-          )
         ],
       );
 }
