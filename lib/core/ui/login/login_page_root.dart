@@ -232,7 +232,7 @@ Widget _formSubmitButton(AuthState state, BuildContext context, String school) {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Icon(
-            CupertinoIcons.arrow_right_to_line_alt,
+            CupertinoIcons.arrow_right_square,
             color: Theme.of(context).colorScheme.onPrimary,
           ),
           Padding(

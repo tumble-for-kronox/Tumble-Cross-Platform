@@ -111,7 +111,7 @@ class _MainAppNavigationRootPageState extends State<MainAppNavigationRootPage> {
                                         BlocProvider.of<MainAppNavigationCubit>(
                                             context)),
                               ], child: const TumbleCalendarView()));
-                        case NavbarItem.USER_ACCOUNT:
+                        case NavbarItem.ACCOUNT:
                           return AnimatedSwitcher(
                               duration: const Duration(milliseconds: 250),
                               child: MultiBlocProvider(providers: [
