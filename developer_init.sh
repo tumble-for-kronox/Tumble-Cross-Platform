@@ -8,7 +8,7 @@ dir="log"
 if [ ! -d $dir ]; then
   mkdir -p $dir;
 fi
-echo "Cleaning flutter workspace.."
+echo "Cleaning flutter workspace.." > $dir/log.txt
 flutter clean
 echo "Acquiring necessary flutter pub packages from pubspec.yaml file.."
 flutter pub get > $dir/log.txt
