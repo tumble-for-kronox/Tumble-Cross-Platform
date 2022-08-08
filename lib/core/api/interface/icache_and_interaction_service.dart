@@ -3,7 +3,7 @@ import 'package:tumble/core/api/apiservices/api_response.dart';
 import 'package:tumble/core/database/database_response.dart';
 
 @immutable
-abstract class IImplementationService {
+abstract class ICacheAndInteractionService {
   Future<dynamic> getProgramsRequest(String searchQuery);
 
   Future<ApiResponse> getSchedulesRequest(scheduleId);

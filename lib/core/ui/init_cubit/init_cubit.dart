@@ -19,13 +19,13 @@ class InitCubit extends Cubit<InitState> {
   InitCubit()
       : super(const InitState(defaultSchool: null, status: InitStatus.INITIAL));
 
-  final _implementationService = locator<ImplementationRepository>();
+  final _cacheAndInteractionService = locator<CacheAndInteractionRepository>();
   final _databaseService = locator<DatabaseRepository>();
   final _sharedPrefs = locator<SharedPreferences>();
 
   Future<void> init() async {
     DatabaseResponse databaseResponse =
-        await _implementationService.initSetup();
+        await _cacheAndInteractionService.initSetup();
     switch (databaseResponse.status) {
       case Status.NO_SCHOOL:
         emit(const InitState(defaultSchool: null, status: InitStatus.INITIAL));
@@ -44,6 +44,6 @@ class InitCubit extends Cubit<InitState> {
     _sharedPrefs.setString(PreferenceTypes.school, schoolName);
     _databaseService.removeAllSchedules();
     _databaseService.removeAllCachedCourseColors();
-    emit(state.copyWith(defaultSchool: schoolName));
+    emit(InitState(defaultSchool: schoolName, status: InitStatus.HAS_SCHOOL));
   }
 }

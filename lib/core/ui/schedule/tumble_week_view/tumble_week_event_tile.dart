@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:tumble/core/models/api_models/schedule_model.dart';
-import 'package:tumble/core/models/ui_models/course_model.dart';
+import 'package:tumble/core/models/ui_models/course_ui_model.dart';
 import 'package:tumble/core/theme/data/colors.dart';
 import 'package:tumble/core/ui/main_app/cubit/main_app_cubit.dart';
 import 'package:tumble/core/ui/schedule/event_modal.dart';
@@ -16,6 +16,7 @@ class TumbleWeekEventTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final courseColor = cubit.getColorForCourse(event);
     return Container(
       height: 23,
       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
@@ -39,10 +40,7 @@ class TumbleWeekEventTile extends StatelessWidget {
                   event: event,
                   color: event.isSpecial
                       ? Colors.redAccent
-                      : Color(cubit.state.scheduleModelAndCourses!.courses
-                          .firstWhere((CourseUiModel? courseUiModel) =>
-                              courseUiModel!.courseId == event.course.id)!
-                          .color)));
+                      : courseColor));
         },
         child: Row(
           mainAxisSize: MainAxisSize.max,
@@ -55,10 +53,7 @@ class TumbleWeekEventTile extends StatelessWidget {
                       bottomLeft: Radius.circular(2)),
                   color: event.isSpecial
                       ? Colors.redAccent
-                      : Color(cubit.state.scheduleModelAndCourses!.courses
-                          .firstWhere((CourseUiModel? courseUiModel) =>
-                              courseUiModel!.courseId == event.course.id)!
-                          .color)),
+                      : courseColor),
             ),
             Stack(
               alignment: Alignment.centerLeft,
@@ -67,10 +62,7 @@ class TumbleWeekEventTile extends StatelessWidget {
                   width: 100,
                   color: event.isSpecial
                       ? Colors.redAccent.withOpacity(0.35)
-                      : Color(cubit.state.scheduleModelAndCourses!.courses
-                              .firstWhere((CourseUiModel? courseUiModel) =>
-                                  courseUiModel!.courseId == event.course.id)!
-                              .color)
+                      : courseColor
                           .withOpacity(0.35),
                 ),
                 Padding(

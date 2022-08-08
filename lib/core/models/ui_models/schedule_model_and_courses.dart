@@ -1,5 +1,5 @@
 import 'package:tumble/core/models/api_models/schedule_model.dart';
-import 'package:tumble/core/models/ui_models/course_model.dart';
+import 'package:tumble/core/models/ui_models/course_ui_model.dart';
 
 class ScheduleModelAndCourses {
   final ScheduleModel scheduleModel;

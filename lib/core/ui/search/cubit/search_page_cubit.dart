@@ -18,7 +18,7 @@ class SearchPageCubit extends Cubit<SearchPageState> {
 
   final _textEditingController = TextEditingController();
   final FocusNode _focusNode = FocusNode();
-  final _implementationService = locator<ImplementationRepository>();
+  final _cacheAndInteractionService = locator<CacheAndInteractionRepository>();
 
   TextEditingController get textEditingController => _textEditingController;
   FocusNode get focusNode => _focusNode;
@@ -27,7 +27,7 @@ class SearchPageCubit extends Cubit<SearchPageState> {
     emit(state.copyWith(status: SearchPageStatus.LOADING));
     String query = textEditingController.text;
     ApiResponse apiResponse =
-        await _implementationService.getProgramsRequest(query);
+        await _cacheAndInteractionService.getProgramsRequest(query);
 
     if (state.focused) {
       switch (apiResponse.status) {

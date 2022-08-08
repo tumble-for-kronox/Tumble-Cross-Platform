@@ -4,7 +4,7 @@ import 'dart:developer';
 
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tumble/core/api/apiservices/api_response.dart';
-import 'package:tumble/core/api/interface/iimplementation_service.dart';
+import 'package:tumble/core/api/interface/icache_and_interaction_service.dart';
 import 'package:tumble/core/api/repository/backend_repository.dart';
 import 'package:tumble/core/database/database_response.dart';
 import 'package:tumble/core/database/repository/database_repository.dart';
@@ -12,7 +12,7 @@ import 'package:tumble/core/models/api_models/schedule_model.dart';
 import 'package:tumble/core/shared/preference_types.dart';
 import 'package:tumble/core/startup/get_it_instances.dart';
 
-class ImplementationRepository implements IImplementationService {
+class CacheAndInteractionRepository implements ICacheAndInteractionService {
   final _backendService = locator<BackendRepository>();
   final _preferenceService = locator<SharedPreferences>();
   final _databaseService = locator<DatabaseRepository>();

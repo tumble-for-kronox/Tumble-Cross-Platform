@@ -7,8 +7,8 @@ import 'package:meta/meta.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'dart:convert';
 
-part 'course_model.freezed.dart';
-part 'course_model.g.dart';
+part 'course_ui_model.freezed.dart';
+part 'course_ui_model.g.dart';
 
 CourseUiModel courseUiModelFromJson(String str) =>
     CourseUiModel.fromJson(json.decode(str));

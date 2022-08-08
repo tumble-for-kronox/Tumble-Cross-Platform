@@ -39,8 +39,7 @@ class _LoginPageRootState extends State<LoginPageRoot> {
             showScaffoldMessage(context, FetchResponse.loginSuccess);
             BlocProvider.of<InitCubit>(context)
                 .changeSchool(widget.schoolName!);
-            navigator.pushAndRemoveAll(
-                NavigationRouteLabels.mainAppNavigationRootPage);
+            navigator.pushAndRemoveAll(NavigationRouteLabels.mainAppPage);
             break;
           default:
             break;

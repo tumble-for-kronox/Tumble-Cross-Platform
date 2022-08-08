@@ -19,6 +19,6 @@ Future<void> initSingletons() async {
   locator.registerLazySingleton(() => AppDatabase());
   locator.registerLazySingleton(() => DatabaseRepository());
   locator.registerLazySingleton(() => ThemeRepository());
-  locator.registerLazySingleton(() => ImplementationRepository());
+  locator.registerLazySingleton(() => CacheAndInteractionRepository());
   locator.registerLazySingleton(() => UserRepository());
 }

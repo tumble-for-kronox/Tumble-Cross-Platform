@@ -7,7 +7,7 @@ import 'package:tumble/core/database/interface/iaccess_stores.dart';
 import 'package:tumble/core/database/interface/idatabase_service.dart';
 import 'package:tumble/core/models/api_models/kronox_user_model.dart';
 import 'package:tumble/core/models/api_models/schedule_model.dart';
-import 'package:tumble/core/models/ui_models/course_model.dart';
+import 'package:tumble/core/models/ui_models/course_ui_model.dart';
 import 'package:tumble/core/startup/get_it_instances.dart';
 
 class DatabaseRepository implements IDatabaseScheduleService {

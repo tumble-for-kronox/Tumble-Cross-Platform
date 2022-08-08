@@ -40,12 +40,7 @@ class UserInfo extends StatelessWidget {
                       locator<SharedPreferences>()
                           .getString(PreferenceTypes.school))
                   .first
-                  .schoolLogo) /* Icon(
-              size: 50,
-              CupertinoIcons.person,
-              color: Theme.of(context).colorScheme.secondary,
-            ), */
-              ),
+                  .schoolLogo)),
           const SizedBox(
             height: 25,
           ),

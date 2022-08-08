@@ -29,7 +29,7 @@ class _AppState extends State<App> {
         BlocProvider<AppNavigator>(create: (_) => AppNavigator()),
         BlocProvider<InitCubit>(create: (_) => InitCubit()),
         BlocProvider<AuthCubit>(create: (_) => AuthCubit()),
-        BlocProvider<ThemeCubit>(create: (c) => ThemeCubit()..getCurrentTheme())
+        BlocProvider<ThemeCubit>(create: (_) => ThemeCubit()..getCurrentTheme())
       ],
       child: BlocBuilder<ThemeCubit, ThemeState>(
           builder: ((context, state) => MaterialApp(

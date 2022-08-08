@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:tumble/core/models/api_models/schedule_model.dart';
-import 'package:tumble/core/models/ui_models/course_model.dart';
+import 'package:tumble/core/models/ui_models/course_ui_model.dart';
 import 'package:tumble/core/theme/data/colors.dart';
 import 'package:tumble/core/ui/main_app/cubit/main_app_cubit.dart';
 import 'package:tumble/core/ui/main_app/main_app.dart';
@@ -46,11 +46,7 @@ class TumbleListViewDayContainer extends StatelessWidget {
                       event: event,
                       color: event.isSpecial
                           ? Colors.redAccent
-                          : Color(mainAppCubit
-                              .state.scheduleModelAndCourses!.courses
-                              .firstWhere((CourseUiModel? courseUiModel) =>
-                                  courseUiModel!.courseId == event.course.id)!
-                              .color),
+                          : mainAppCubit.getColorForCourse(event),
                       onTap: () {
                         showModalBottomSheet(
                             isScrollControlled: true,
@@ -59,13 +55,7 @@ class TumbleListViewDayContainer extends StatelessWidget {
                                 event: event,
                                 color: event.isSpecial
                                     ? Colors.redAccent
-                                    : Color(mainAppCubit
-                                        .state.scheduleModelAndCourses!.courses
-                                        .firstWhere(
-                                            (CourseUiModel? courseUiModel) =>
-                                                courseUiModel!.courseId ==
-                                                event.course.id)!
-                                        .color)));
+                                    : mainAppCubit.getColorForCourse(event)));
                       }))
                   .toList(),
             ),

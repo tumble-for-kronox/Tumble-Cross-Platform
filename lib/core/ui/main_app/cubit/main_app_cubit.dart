@@ -9,9 +9,8 @@ import 'package:tumble/core/api/apiservices/api_response.dart';
 import 'package:tumble/core/api/repository/implementation_repository.dart';
 import 'package:tumble/core/database/repository/database_repository.dart';
 import 'package:tumble/core/extensions/extensions.dart';
-import 'package:tumble/core/helpers/color_picker.dart';
 import 'package:tumble/core/models/api_models/schedule_model.dart';
-import 'package:tumble/core/models/ui_models/course_model.dart';
+import 'package:tumble/core/models/ui_models/course_ui_model.dart';
 import 'package:tumble/core/models/ui_models/schedule_model_and_courses.dart';
 import 'package:tumble/core/models/ui_models/week_model.dart';
 import 'package:tumble/core/shared/preference_types.dart';
@@ -33,7 +32,7 @@ class MainAppCubit extends Cubit<MainAppState> {
             scheduleModelAndCourses: null));
 
   final _sharedPrefs = locator<SharedPreferences>();
-  final _implementationService = locator<ImplementationRepository>();
+  final _cacheAndInteractionService = locator<CacheAndInteractionRepository>();
   final _databaseService = locator<DatabaseRepository>();
   final ScrollController _listViewScrollController = ScrollController();
 
@@ -79,12 +78,14 @@ class MainAppCubit extends Cubit<MainAppState> {
   }
 
   Future<void> initCached() async {
-    /// Prevents app from loading default schedule when state is changed
+    /// Prevents app from loading default schedule when state is changed.
+    /// For example if the user has a default schedule on boot, but has
+    /// loaded a different one from search.
     if (state.currentScheduleId != null) {
       return;
     }
     final ApiResponse _apiResponse =
-        await _implementationService.getCachedBookmarkedSchedule();
+        await _cacheAndInteractionService.getCachedBookmarkedSchedule();
 
     switch (_apiResponse.status) {
       case ApiStatus.CACHED:
@@ -110,15 +111,13 @@ class MainAppCubit extends Cubit<MainAppState> {
     }
   }
 
-  /// ON program change
+  /// ON program change, refresh or initial select
   Future<void> fetchNewSchedule(String id) async {
-    final _apiResponse = await _implementationService.getSchedule(id);
-    log(_apiResponse.status.name);
+    final _apiResponse = await _cacheAndInteractionService.getSchedule(id);
     switch (_apiResponse.status) {
       case api.ApiStatus.REQUESTED:
         ScheduleModel currentScheduleModel = _apiResponse.data!;
-        if (currentScheduleModel.days
-            .any((element) => element.events.isNotEmpty)) {
+        if (currentScheduleModel.isNotPhonySchedule()) {
           List<CourseUiModel?> courseUiModels =
               currentScheduleModel.findNewCourses();
           for (CourseUiModel? courseUiModel in courseUiModels) {
@@ -126,24 +125,24 @@ class MainAppCubit extends Cubit<MainAppState> {
               _databaseService.addCourseInstance(courseUiModel);
             }
           }
-          emit(state.copyWith(
+          emit(MainAppState(
               status: MainAppStatus.SCHEDULE_SELECTED,
               currentScheduleId: currentScheduleModel.id,
               listOfDays: currentScheduleModel.days,
               listOfWeeks: currentScheduleModel.splitToWeek(),
               toggledFavorite: false,
               scheduleModelAndCourses: ScheduleModelAndCourses(
-                  scheduleModel: currentScheduleModel,
-                  courses: courseUiModels)));
+                  scheduleModel: currentScheduleModel, courses: courseUiModels),
+              listViewToTopButtonVisible: false,
+              message: null));
         } else {
           emit(state.copyWith(status: MainAppStatus.EMPTY_SCHEDULE));
         }
         break;
       case api.ApiStatus.CACHED:
         ScheduleModel currentScheduleModel = _apiResponse.data!;
-        if (currentScheduleModel.days
-            .any((element) => element.events.isNotEmpty)) {
-          emit(state.copyWith(
+        if (currentScheduleModel.isNotPhonySchedule()) {
+          emit(MainAppState(
               status: MainAppStatus.SCHEDULE_SELECTED,
               currentScheduleId: currentScheduleModel.id,
               listOfDays: currentScheduleModel.days,
@@ -151,7 +150,9 @@ class MainAppCubit extends Cubit<MainAppState> {
               toggledFavorite: true,
               scheduleModelAndCourses: ScheduleModelAndCourses(
                   scheduleModel: currentScheduleModel,
-                  courses: await _databaseService.getCachedCoursesFromId(id))));
+                  courses: await _databaseService.getCachedCoursesFromId(id)),
+              listViewToTopButtonVisible: false,
+              message: null));
         } else {
           emit(state.copyWith(status: MainAppStatus.EMPTY_SCHEDULE));
         }
@@ -188,7 +189,18 @@ class MainAppCubit extends Cubit<MainAppState> {
     emit(state.copyWith(status: MainAppStatus.LOADING));
   }
 
-  Future<Color> parseCourseColorById(String id) {
-    return _databaseService.getCourseColor(id);
+  @override
+  Future<void> close() {
+    _listViewScrollController.dispose();
+    return super.close();
+  }
+
+  Color getColorForCourse(Event event) {
+    return Color(state.scheduleModelAndCourses!.courses
+        .firstWhere(
+            (CourseUiModel? courseUiModel) =>
+        courseUiModel!.courseId ==
+            event.course.id)!
+        .color);
   }
 }

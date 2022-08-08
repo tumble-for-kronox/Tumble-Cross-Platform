@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:tumble/core/models/api_models/kronox_user_model.dart';
 import 'package:tumble/core/models/api_models/schedule_model.dart';
-import 'package:tumble/core/models/ui_models/course_model.dart';
+import 'package:tumble/core/models/ui_models/course_ui_model.dart';
 
 abstract class IDatabaseScheduleService {
   Future addSchedule(ScheduleModel scheduleModel);

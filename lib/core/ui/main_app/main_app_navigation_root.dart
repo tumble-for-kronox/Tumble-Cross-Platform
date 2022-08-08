@@ -59,7 +59,7 @@ class _MainAppNavigationRootPageState extends State<MainAppNavigationRootPage> {
                 body: FutureBuilder(
                     future: BlocProvider.of<MainAppCubit>(context)
                         .initMainAppCubit(),
-                    builder: (BuildContext context, _) {
+                    builder: (_, snapshot) {
                       switch (navState.navbarItem) {
                         case NavbarItem.SEARCH:
                           return AnimatedSwitcher(

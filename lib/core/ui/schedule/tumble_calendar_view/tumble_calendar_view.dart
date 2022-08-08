@@ -3,8 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:tumble/core/api/apiservices/fetch_response.dart';
-import 'package:tumble/core/models/api_models/schedule_model.dart';
-import 'package:tumble/core/models/ui_models/course_model.dart';
 import 'package:tumble/core/navigation/app_navigator.dart';
 import 'package:tumble/core/theme/data/colors.dart';
 import 'package:tumble/core/ui/bottom_nav_bar/cubit/bottom_nav_cubit.dart';
@@ -44,13 +42,13 @@ class _TumbleCalendarViewState extends State<TumbleCalendarView> {
 
           case MainAppStatus.SCHEDULE_SELECTED:
             return FutureBuilder(
-                future: _getCalendarDataSource(
+                future: getCalendarDataSource(
                     state.listOfDays!, BlocProvider.of<MainAppCubit>(context)),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     return SfCalendar(
                         view: CalendarView.month,
-                        dataSource: snapshot.data as _AppointmentDataSource,
+                        dataSource: snapshot.data as AppointmentDataSource,
                         headerStyle: CalendarHeaderStyle(
                             textAlign: TextAlign.center,
                             backgroundColor:
@@ -114,31 +112,3 @@ class _TumbleCalendarViewState extends State<TumbleCalendarView> {
   }
 }
 
-Future<_AppointmentDataSource> _getCalendarDataSource(
-    List<Day> days, MainAppCubit cubit) async {
-  List<Appointment> appointments = <Appointment>[];
-  for (Day day in days) {
-    for (Event event in day.events) {
-      appointments.add(Appointment(
-        startTime: event.timeStart,
-        endTime: event.timeEnd,
-        subject: event.title,
-        color: Color(cubit.state.scheduleModelAndCourses!.courses
-                .firstWhere((CourseUiModel? courseUiModel) =>
-                    courseUiModel!.courseId == event.course.id)!
-                .color)
-            .withOpacity(0.35),
-        startTimeZone: '',
-        endTimeZone: '',
-      ));
-    }
-  }
-
-  return _AppointmentDataSource(appointments);
-}
-
-class _AppointmentDataSource extends CalendarDataSource {
-  _AppointmentDataSource(List<Appointment> source) {
-    appointments = source;
-  }
-}

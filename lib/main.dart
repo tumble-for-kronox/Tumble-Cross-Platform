@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tumble/core/app.dart';
 import 'package:tumble/core/shared/setup.dart';
 import 'package:tumble/core/startup/get_it_instances.dart';
