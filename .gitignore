@@ -49,5 +49,14 @@ app.*.map.json
 
 
 # Freezed
-*.g.dart
-*.freezed.dart
+lib/core/models/**/*.g.dart
+lib/core/models/**/*.freezed.dart
+
+/.dart_tool
+/test/**/*.g.dart
+/test/**/*.freezed.dart
+# Remove the following pattern if you wish to check in your lock file
+pubspec.lock
+event_struct.json
+pretend_struct.json
+log/log.txt
