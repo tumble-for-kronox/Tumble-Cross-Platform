@@ -35,15 +35,18 @@ class _AuthenticatedPage extends State<AuthenticatedPage>
             labelColor: Theme.of(context).colorScheme.onBackground,
             tabs: const [
               Tab(
-                icon: Icon(CupertinoIcons.person),
+                icon: Icon(
+                  CupertinoIcons.person,
+                  size: 25,
+                ),
               ),
               Tab(
-                icon: Icon(CupertinoIcons.pencil),
+                icon: Icon(CupertinoIcons.pencil_ellipsis_rectangle, size: 25),
               )
             ]),
         Container(
           padding: const EdgeInsets.only(bottom: 5),
-          height: 570,
+          height: MediaQuery.of(context).size.height - 245,
           width: double.maxFinite,
           child: TabBarView(controller: tabController, children: [
             BlocProvider.value(

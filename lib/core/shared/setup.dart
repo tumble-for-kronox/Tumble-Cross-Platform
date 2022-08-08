@@ -13,7 +13,7 @@ void setupRequiredSharedPreferences() {
   final possibleSchool = sharedPrefs.getString(PreferenceTypes.school);
 
   /// Check if previously attempted fetches are null, assign accordingly
-  sharedPrefs.setString(PreferenceTypes.theme, possibleTheme ?? 'dark');
+  sharedPrefs.setString(PreferenceTypes.theme, possibleTheme ?? 'system');
   sharedPrefs.setInt(
       PreferenceTypes.view, possibleView ?? ScheduleViewTypes.list);
   sharedPrefs.setInt(

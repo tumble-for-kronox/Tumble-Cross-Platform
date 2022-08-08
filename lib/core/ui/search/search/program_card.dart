@@ -37,13 +37,13 @@ class ProgramCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    programSubtitle.length > 28
-                        ? '${programSubtitle.substring(0, 28)}...'
-                        : programSubtitle,
-                    textAlign: TextAlign.left,
-                    style: const TextStyle(
-                        fontSize: 19, fontWeight: FontWeight.w400),
+                  Flexible(
+                    child: Text(
+                      programSubtitle,
+                      textAlign: TextAlign.left,
+                      style: const TextStyle(
+                          fontSize: 19, fontWeight: FontWeight.w400),
+                    ),
                   ),
                   const SizedBox(
                     height: 10,
@@ -52,15 +52,17 @@ class ProgramCard extends StatelessWidget {
                     padding: const EdgeInsets.only(left: 5),
                     child: Row(
                       children: [
-                        Text(
-                          programName.split(RegExp(r'\s-')).first,
-                          textAlign: TextAlign.left,
-                          maxLines: 3,
-                          overflow: TextOverflow.ellipsis,
-                          softWrap: true,
-                          style: const TextStyle(
-                            fontSize: 17,
-                            fontWeight: FontWeight.w200,
+                        Flexible(
+                          child: Text(
+                            programName.split(RegExp(r'\s-')).first,
+                            textAlign: TextAlign.left,
+                            maxLines: 3,
+                            overflow: TextOverflow.ellipsis,
+                            softWrap: true,
+                            style: const TextStyle(
+                              fontSize: 17,
+                              fontWeight: FontWeight.w200,
+                            ),
                           ),
                         ),
                       ],
@@ -73,15 +75,17 @@ class ProgramCard extends StatelessWidget {
                     alignment: Alignment.bottomRight,
                     child: Container(
                       padding: const EdgeInsets.only(left: 5),
-                      child: Text(
-                        schoolName,
-                        textAlign: TextAlign.right,
-                        maxLines: 3,
-                        overflow: TextOverflow.ellipsis,
-                        softWrap: true,
-                        style: const TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w200,
+                      child: Flexible(
+                        child: Text(
+                          schoolName,
+                          textAlign: TextAlign.right,
+                          maxLines: 3,
+                          overflow: TextOverflow.ellipsis,
+                          softWrap: true,
+                          style: const TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w200,
+                          ),
                         ),
                       ),
                     ),
