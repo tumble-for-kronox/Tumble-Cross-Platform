@@ -18,10 +18,10 @@ class MainAppState extends Equatable {
   final List<Day>? listOfDays;
   final List<Week>? listOfWeeks;
   final String? message;
-  final ScheduleModel? scheduleModel;
+  final ScheduleModelAndCourses? scheduleModelAndCourses;
   const MainAppState(
       {required this.status,
-      required this.scheduleModel,
+      required this.scheduleModelAndCourses,
       required this.currentScheduleId,
       required this.listOfDays,
       required this.listOfWeeks,
@@ -37,7 +37,7 @@ class MainAppState extends Equatable {
           List<Day>? listOfDays,
           List<Week>? listOfWeeks,
           String? message,
-          ScheduleModel? scheduleModel}) =>
+          ScheduleModelAndCourses? scheduleModelAndCourses}) =>
       MainAppState(
           status: status ?? this.status,
           toggledFavorite: toggledFavorite ?? this.toggledFavorite,
@@ -47,7 +47,8 @@ class MainAppState extends Equatable {
           listOfDays: listOfDays ?? this.listOfDays,
           listOfWeeks: listOfWeeks ?? this.listOfWeeks,
           message: message ?? this.message,
-          scheduleModel: scheduleModel ?? this.scheduleModel);
+          scheduleModelAndCourses:
+              scheduleModelAndCourses ?? this.scheduleModelAndCourses);
 
   @override
   List<Object?> get props => [
@@ -58,6 +59,6 @@ class MainAppState extends Equatable {
         toggledFavorite,
         listViewToTopButtonVisible,
         message,
-        scheduleModel
+        scheduleModelAndCourses
       ];
 }

@@ -4,6 +4,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:tumble/core/api/apiservices/fetch_response.dart';
 import 'package:tumble/core/models/api_models/schedule_model.dart';
+import 'package:tumble/core/models/ui_models/course_model.dart';
 import 'package:tumble/core/navigation/app_navigator.dart';
 import 'package:tumble/core/theme/data/colors.dart';
 import 'package:tumble/core/ui/bottom_nav_bar/cubit/bottom_nav_cubit.dart';
@@ -118,12 +119,15 @@ Future<_AppointmentDataSource> _getCalendarDataSource(
   List<Appointment> appointments = <Appointment>[];
   for (Day day in days) {
     for (Event event in day.events) {
-      Color color = await cubit.parseCourseColorById(event.course.id);
       appointments.add(Appointment(
         startTime: event.timeStart,
         endTime: event.timeEnd,
         subject: event.title,
-        color: color,
+        color: Color(cubit.state.scheduleModelAndCourses!.courses
+                .firstWhere((CourseUiModel? courseUiModel) =>
+                    courseUiModel!.courseId == event.course.id)!
+                .color)
+            .withOpacity(0.35),
         startTimeZone: '',
         endTimeZone: '',
       ));

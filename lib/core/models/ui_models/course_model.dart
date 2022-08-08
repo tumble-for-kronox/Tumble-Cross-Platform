@@ -18,7 +18,8 @@ Map<String, dynamic> courseUiModelToJson(CourseUiModel data) => data.toJson();
 @freezed
 abstract class CourseUiModel with _$CourseUiModel {
   const factory CourseUiModel({
-    required String id,
+    required String scheduleId,
+    required String courseId,
     required int color,
   }) = _CourseUiModel;
 

@@ -12,6 +12,7 @@ import 'package:tumble/core/extensions/extensions.dart';
 import 'package:tumble/core/helpers/color_picker.dart';
 import 'package:tumble/core/models/api_models/schedule_model.dart';
 import 'package:tumble/core/models/ui_models/course_model.dart';
+import 'package:tumble/core/models/ui_models/schedule_model_and_courses.dart';
 import 'package:tumble/core/models/ui_models/week_model.dart';
 import 'package:tumble/core/shared/preference_types.dart';
 import 'package:tumble/core/startup/get_it_instances.dart';
@@ -29,7 +30,7 @@ class MainAppCubit extends Cubit<MainAppState> {
             toggledFavorite: false,
             listViewToTopButtonVisible: false,
             message: null,
-            scheduleModel: null));
+            scheduleModelAndCourses: null));
 
   final _sharedPrefs = locator<SharedPreferences>();
   final _implementationService = locator<ImplementationRepository>();
@@ -70,7 +71,8 @@ class MainAppCubit extends Cubit<MainAppState> {
   void _toggleSave(List<String> currentFavorites) async {
     currentFavorites.add(state.currentScheduleId!);
     _sharedPrefs.setString(PreferenceTypes.schedule, state.currentScheduleId!);
-    await _databaseService.addSchedule(state.scheduleModel!);
+    await _databaseService
+        .addSchedule(state.scheduleModelAndCourses!.scheduleModel);
     emit(state.copyWith(toggledFavorite: true));
 
     _sharedPrefs.setStringList(PreferenceTypes.favorites, currentFavorites);
@@ -95,7 +97,10 @@ class MainAppCubit extends Cubit<MainAppState> {
               listOfDays: currentScheduleModel.days,
               listOfWeeks: currentScheduleModel.splitToWeek(),
               toggledFavorite: true,
-              scheduleModel: currentScheduleModel));
+              scheduleModelAndCourses: ScheduleModelAndCourses(
+                  scheduleModel: currentScheduleModel,
+                  courses: await _databaseService
+                      .getCachedCoursesFromId(currentScheduleModel.id))));
         } else {
           emit(state.copyWith(status: MainAppStatus.EMPTY_SCHEDULE));
         }
@@ -108,30 +113,28 @@ class MainAppCubit extends Cubit<MainAppState> {
   /// ON program change
   Future<void> fetchNewSchedule(String id) async {
     final _apiResponse = await _implementationService.getSchedule(id);
+    log(_apiResponse.status.name);
     switch (_apiResponse.status) {
       case api.ApiStatus.REQUESTED:
         ScheduleModel currentScheduleModel = _apiResponse.data!;
         if (currentScheduleModel.days
             .any((element) => element.events.isNotEmpty)) {
-          var readCourses = await _databaseService.getAllCachedCourses();
-
-          for (Day day in currentScheduleModel.days) {
-            for (Event event in day.events) {
-              if (!readCourses.contains(event.course.id)) {
-                await _databaseService.addCourseInstance(CourseUiModel(
-                    id: event.course.id,
-                    color: ColorPicker().getRandomHexColor()));
-              }
+          List<CourseUiModel?> courseUiModels =
+              currentScheduleModel.findNewCourses();
+          for (CourseUiModel? courseUiModel in courseUiModels) {
+            if (courseUiModel != null) {
+              _databaseService.addCourseInstance(courseUiModel);
             }
           }
-
           emit(state.copyWith(
               status: MainAppStatus.SCHEDULE_SELECTED,
               currentScheduleId: currentScheduleModel.id,
               listOfDays: currentScheduleModel.days,
               listOfWeeks: currentScheduleModel.splitToWeek(),
               toggledFavorite: false,
-              scheduleModel: currentScheduleModel));
+              scheduleModelAndCourses: ScheduleModelAndCourses(
+                  scheduleModel: currentScheduleModel,
+                  courses: courseUiModels)));
         } else {
           emit(state.copyWith(status: MainAppStatus.EMPTY_SCHEDULE));
         }
@@ -145,7 +148,10 @@ class MainAppCubit extends Cubit<MainAppState> {
               currentScheduleId: currentScheduleModel.id,
               listOfDays: currentScheduleModel.days,
               listOfWeeks: currentScheduleModel.splitToWeek(),
-              toggledFavorite: true));
+              toggledFavorite: true,
+              scheduleModelAndCourses: ScheduleModelAndCourses(
+                  scheduleModel: currentScheduleModel,
+                  courses: await _databaseService.getCachedCoursesFromId(id))));
         } else {
           emit(state.copyWith(status: MainAppStatus.EMPTY_SCHEDULE));
         }

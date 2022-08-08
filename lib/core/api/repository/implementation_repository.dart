@@ -1,5 +1,7 @@
 // ignore_for_file: no_leading_underscores_for_local_identifiers
 
+import 'dart:developer';
+
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tumble/core/api/apiservices/api_response.dart';
 import 'package:tumble/core/api/interface/iimplementation_service.dart';
@@ -37,6 +39,7 @@ class ImplementationRepository implements IImplementationService {
 
   @override
   Future<ApiResponse> getSchedule(String scheduleId) async {
+    log(scheduleId);
     if (_preferenceService
         .getStringList(PreferenceTypes.favorites)!
         .contains(scheduleId)) {

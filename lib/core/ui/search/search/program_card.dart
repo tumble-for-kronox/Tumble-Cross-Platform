@@ -22,7 +22,7 @@ class ProgramCard extends StatelessWidget {
         Container(
           color: Theme.of(context).colorScheme.background,
           width: double.infinity,
-          height: 110,
+          height: 125,
           child: TextButton(
             onPressed: onTap,
             style: ButtonStyle(
@@ -52,17 +52,15 @@ class ProgramCard extends StatelessWidget {
                     padding: const EdgeInsets.only(left: 5),
                     child: Row(
                       children: [
-                        Flexible(
-                          child: Text(
-                            programName.split(RegExp(r'\s-')).first,
-                            textAlign: TextAlign.left,
-                            maxLines: 3,
-                            overflow: TextOverflow.ellipsis,
-                            softWrap: true,
-                            style: const TextStyle(
-                              fontSize: 17,
-                              fontWeight: FontWeight.w200,
-                            ),
+                        Text(
+                          programName.split(RegExp(r'\s-')).first,
+                          textAlign: TextAlign.left,
+                          maxLines: 3,
+                          overflow: TextOverflow.ellipsis,
+                          softWrap: true,
+                          style: const TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.w200,
                           ),
                         ),
                       ],
@@ -75,17 +73,15 @@ class ProgramCard extends StatelessWidget {
                     alignment: Alignment.bottomRight,
                     child: Container(
                       padding: const EdgeInsets.only(left: 5),
-                      child: Flexible(
-                        child: Text(
-                          schoolName,
-                          textAlign: TextAlign.right,
-                          maxLines: 3,
-                          overflow: TextOverflow.ellipsis,
-                          softWrap: true,
-                          style: const TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w200,
-                          ),
+                      child: Text(
+                        schoolName,
+                        textAlign: TextAlign.right,
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
+                        softWrap: true,
+                        style: const TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w200,
                         ),
                       ),
                     ),

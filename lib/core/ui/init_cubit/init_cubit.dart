@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tumble/core/api/repository/implementation_repository.dart';
 import 'package:tumble/core/database/database_response.dart';
+import 'package:tumble/core/database/repository/database_repository.dart';
 import 'package:tumble/core/models/ui_models/school_model.dart';
 import 'package:tumble/core/shared/preference_types.dart';
 import 'package:tumble/core/shared/setup.dart';
@@ -19,6 +20,7 @@ class InitCubit extends Cubit<InitState> {
       : super(const InitState(defaultSchool: null, status: InitStatus.INITIAL));
 
   final _implementationService = locator<ImplementationRepository>();
+  final _databaseService = locator<DatabaseRepository>();
   final _sharedPrefs = locator<SharedPreferences>();
 
   Future<void> init() async {
@@ -40,6 +42,8 @@ class InitCubit extends Cubit<InitState> {
     _sharedPrefs.clear();
     setupRequiredSharedPreferences();
     _sharedPrefs.setString(PreferenceTypes.school, schoolName);
+    _databaseService.removeAllSchedules();
+    _databaseService.removeAllCachedCourseColors();
     emit(state.copyWith(defaultSchool: schoolName));
   }
 }

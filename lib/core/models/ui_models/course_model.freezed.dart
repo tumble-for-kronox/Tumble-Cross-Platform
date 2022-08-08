@@ -20,7 +20,8 @@ CourseUiModel _$CourseUiModelFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$CourseUiModel {
-  String get id => throw _privateConstructorUsedError;
+  String get scheduleId => throw _privateConstructorUsedError;
+  String get courseId => throw _privateConstructorUsedError;
   int get color => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -34,7 +35,7 @@ abstract class $CourseUiModelCopyWith<$Res> {
   factory $CourseUiModelCopyWith(
           CourseUiModel value, $Res Function(CourseUiModel) then) =
       _$CourseUiModelCopyWithImpl<$Res>;
-  $Res call({String id, int color});
+  $Res call({String scheduleId, String courseId, int color});
 }
 
 /// @nodoc
@@ -48,13 +49,18 @@ class _$CourseUiModelCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? id = freezed,
+    Object? scheduleId = freezed,
+    Object? courseId = freezed,
     Object? color = freezed,
   }) {
     return _then(_value.copyWith(
-      id: id == freezed
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
+      scheduleId: scheduleId == freezed
+          ? _value.scheduleId
+          : scheduleId // ignore: cast_nullable_to_non_nullable
+              as String,
+      courseId: courseId == freezed
+          ? _value.courseId
+          : courseId // ignore: cast_nullable_to_non_nullable
               as String,
       color: color == freezed
           ? _value.color
@@ -71,7 +77,7 @@ abstract class _$$_CourseUiModelCopyWith<$Res>
           _$_CourseUiModel value, $Res Function(_$_CourseUiModel) then) =
       __$$_CourseUiModelCopyWithImpl<$Res>;
   @override
-  $Res call({String id, int color});
+  $Res call({String scheduleId, String courseId, int color});
 }
 
 /// @nodoc
@@ -87,13 +93,18 @@ class __$$_CourseUiModelCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? id = freezed,
+    Object? scheduleId = freezed,
+    Object? courseId = freezed,
     Object? color = freezed,
   }) {
     return _then(_$_CourseUiModel(
-      id: id == freezed
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
+      scheduleId: scheduleId == freezed
+          ? _value.scheduleId
+          : scheduleId // ignore: cast_nullable_to_non_nullable
+              as String,
+      courseId: courseId == freezed
+          ? _value.courseId
+          : courseId // ignore: cast_nullable_to_non_nullable
               as String,
       color: color == freezed
           ? _value.color
@@ -106,19 +117,22 @@ class __$$_CourseUiModelCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$_CourseUiModel implements _CourseUiModel {
-  const _$_CourseUiModel({required this.id, required this.color});
+  const _$_CourseUiModel(
+      {required this.scheduleId, required this.courseId, required this.color});
 
   factory _$_CourseUiModel.fromJson(Map<String, dynamic> json) =>
       _$$_CourseUiModelFromJson(json);
 
   @override
-  final String id;
+  final String scheduleId;
+  @override
+  final String courseId;
   @override
   final int color;
 
   @override
   String toString() {
-    return 'CourseUiModel(id: $id, color: $color)';
+    return 'CourseUiModel(scheduleId: $scheduleId, courseId: $courseId, color: $color)';
   }
 
   @override
@@ -126,7 +140,9 @@ class _$_CourseUiModel implements _CourseUiModel {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_CourseUiModel &&
-            const DeepCollectionEquality().equals(other.id, id) &&
+            const DeepCollectionEquality()
+                .equals(other.scheduleId, scheduleId) &&
+            const DeepCollectionEquality().equals(other.courseId, courseId) &&
             const DeepCollectionEquality().equals(other.color, color));
   }
 
@@ -134,7 +150,8 @@ class _$_CourseUiModel implements _CourseUiModel {
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      const DeepCollectionEquality().hash(id),
+      const DeepCollectionEquality().hash(scheduleId),
+      const DeepCollectionEquality().hash(courseId),
       const DeepCollectionEquality().hash(color));
 
   @JsonKey(ignore: true)
@@ -150,13 +167,17 @@ class _$_CourseUiModel implements _CourseUiModel {
 
 abstract class _CourseUiModel implements CourseUiModel {
   const factory _CourseUiModel(
-      {required final String id, required final int color}) = _$_CourseUiModel;
+      {required final String scheduleId,
+      required final String courseId,
+      required final int color}) = _$_CourseUiModel;
 
   factory _CourseUiModel.fromJson(Map<String, dynamic> json) =
       _$_CourseUiModel.fromJson;
 
   @override
-  String get id => throw _privateConstructorUsedError;
+  String get scheduleId => throw _privateConstructorUsedError;
+  @override
+  String get courseId => throw _privateConstructorUsedError;
   @override
   int get color => throw _privateConstructorUsedError;
   @override

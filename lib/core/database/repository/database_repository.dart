@@ -65,7 +65,8 @@ class DatabaseRepository implements IDatabaseScheduleService {
 
   @override
   Future removeAllSchedules() async {
-    _scheduleStore.delete(await _db);
+    await _scheduleStore.delete(await _db);
+    log('Removed all cached schedules');
   }
 
   @override
@@ -107,7 +108,23 @@ class DatabaseRepository implements IDatabaseScheduleService {
   Future<List<String>> getAllCachedCourses() async {
     final recordSnapshots = await _courseColorStore.find(await _db);
     return recordSnapshots
-        .map((snapshot) => CourseUiModel.fromJson(snapshot.value).id)
+        .map((snapshot) => CourseUiModel.fromJson(snapshot.value).courseId)
+        .toList();
+  }
+
+  @override
+  Future removeAllCachedCourseColors() async {
+    await _courseColorStore.delete(await _db);
+    log('Removed all cached course colors');
+  }
+
+  @override
+  Future<List<CourseUiModel>> getCachedCoursesFromId(String scheduleId) async {
+    final finder = Finder(filter: Filter.equals('scheduleId', scheduleId));
+    final recordSnapshot =
+        await _courseColorStore.find(await _db, finder: finder);
+    return recordSnapshot
+        .map((snapshot) => CourseUiModel.fromJson(snapshot.value))
         .toList();
   }
 }

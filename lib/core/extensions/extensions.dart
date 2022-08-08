@@ -5,10 +5,12 @@ import 'package:http/http.dart';
 import "package:collection/collection.dart";
 import 'package:tumble/core/api/apiservices/api_response.dart';
 import 'package:tumble/core/api/apiservices/fetch_response.dart';
+import 'package:tumble/core/helpers/color_picker.dart';
 import 'package:tumble/core/models/api_models/kronox_user_model.dart';
 import 'package:tumble/core/models/api_models/program_model.dart';
 import 'package:tumble/core/models/api_models/schedule_model.dart';
 import 'package:tumble/core/models/api_models/user_event_collection_model.dart';
+import 'package:tumble/core/models/ui_models/course_model.dart';
 import 'package:tumble/core/models/ui_models/school_model.dart';
 import 'package:tumble/core/models/ui_models/week_model.dart';
 import 'package:tumble/core/ui/main_app/data/schools.dart';
@@ -111,6 +113,26 @@ extension ScheduleParsing on ScheduleModel {
             weekNumber: weekNumberToDayList.key,
             days: weekNumberToDayList.value))
         .toList();
+  }
+
+  List<CourseUiModel?> findNewCourses() {
+    List<String> seen = [];
+    List<CourseUiModel?> courseUiModels =
+        (days.expand((element) => element.events).toList())
+            .map((event) {
+              final courseId = event.course.id;
+              if (!seen.contains(courseId)) {
+                seen.add(courseId);
+                return CourseUiModel(
+                    scheduleId: id,
+                    courseId: courseId,
+                    color: ColorPicker().getRandomHexColor());
+              }
+            })
+            .whereType<CourseUiModel>()
+            .toList();
+    log(courseUiModels.toString());
+    return courseUiModels;
   }
 }
 

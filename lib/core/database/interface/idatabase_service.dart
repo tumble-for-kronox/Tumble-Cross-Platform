@@ -28,4 +28,8 @@ abstract class IDatabaseScheduleService {
   Future<Color> getCourseColor(String id);
 
   Future<List<String>> getAllCachedCourses();
+
+  Future<List<CourseUiModel>> getCachedCoursesFromId(String scheduleId);
+
+  Future removeAllCachedCourseColors();
 }

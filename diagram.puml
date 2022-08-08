@@ -1,0 +1,2094 @@
+set PLANTUML_LIMIT_SIZE=8192
+@startuml
+
+set namespaceSeparator ::
+
+class "tumble::core::shared::view_types.dart::ScheduleViewTypes" {
+  {static} +int list
+  {static} +int week
+  {static} +int calendar
+  {static} +Map<int, String> viewTypesMap
+}
+
+class "tumble::core::shared::secure_storage_keys.dart::SecureStorageKeys" {
+  {static} +String refreshToken
+}
+
+class "tumble::core::shared::preference_types.dart::PreferenceTypes" {
+  {static} +String schedule
+  {static} +String school
+  {static} +String view
+  {static} +String theme
+  {static} +String notificationTime
+  {static} +String favorites
+}
+
+class "tumble::core::navigation::navigation_routes.dart::Routes" {
+  {static} +List<String> pages
+  {static} +Page<dynamic> getPage()
+}
+
+class "tumble::core::navigation::app_navigator.dart::AppNavigator" {
+  +void init()
+  +bool push()
+  +bool pushReplace()
+  +bool pushAndRemoveUntil()
+  +bool pushAndRemoveAll()
+  +bool pop()
+  +bool popUntil()
+  +bool addAfter()
+  +bool remove()
+}
+
+"bloc::src::cubit.dart::Cubit" <|-- "tumble::core::navigation::app_navigator.dart::AppNavigator"
+
+class "tumble::core::navigation::navigation_route_labels.dart::NavigationRouteLabels" {
+  {static} +String rootPage
+  {static} +String mainAppPage
+  {static} +String mainAppNavigationRootPage
+  {static} +String schoolSelectionPage
+  {static} +String loginPageRoot
+  {static} +String tumbleSearchPage
+  {static} +String tumbleListView
+  {static} +String tumbleWeekView
+  {static} +String tumbleCalendarView
+}
+
+class "tumble::core::navigation::app_navigator_provider.dart::AppNavigatorProvider" {
+  +List<String> initialPages
+  +State<AppNavigatorProvider> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "tumble::core::navigation::app_navigator_provider.dart::AppNavigatorProvider"
+
+class "tumble::core::navigation::app_navigator_provider.dart::_AppNavigatorProviderState" {
+  +void initState()
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "tumble::core::navigation::app_navigator_provider.dart::_AppNavigatorProviderState"
+
+class "tumble::core::models::ui_models::week_model.dart::Week" {
+  +int weekNumber
+  +List<Day> days
+}
+
+class "tumble::core::models::ui_models::school_model.dart::School" {
+  +SchoolEnum schoolId
+  +String schoolName
+  +String schoolLogo
+  +bool loginRequired
+}
+
+"tumble::core::models::ui_models::school_model.dart::School" o-- "tumble::core::helpers::school_enum.dart::SchoolEnum"
+
+abstract class "tumble::core::models::api_models::upcoming_user_event_model.dart::UpcomingUserEventModel" {
+}
+
+"tumble::core::models::api_models::upcoming_user_event_model.dart::_$UpcomingUserEventModel" <|-- "tumble::core::models::api_models::upcoming_user_event_model.dart::UpcomingUserEventModel"
+
+abstract class "tumble::core::models::api_models::upcoming_user_event_model.dart::$UpcomingUserEventModelCopyWith" {
+  +$Res call()
+}
+
+class "tumble::core::models::api_models::upcoming_user_event_model.dart::_$UpcomingUserEventModelCopyWithImpl" {
+  -UpcomingUserEventModel _value
+  -$Res Function(UpcomingUserEventModel) _then
+  +$Res call()
+}
+
+"tumble::core::models::api_models::upcoming_user_event_model.dart::_$UpcomingUserEventModelCopyWithImpl" o-- "tumble::core::models::api_models::upcoming_user_event_model.dart::UpcomingUserEventModel"
+"tumble::core::models::api_models::upcoming_user_event_model.dart::_$UpcomingUserEventModelCopyWithImpl" o-- "null::$Res Function(UpcomingUserEventModel)"
+"tumble::core::models::api_models::upcoming_user_event_model.dart::$UpcomingUserEventModelCopyWith" <|-- "tumble::core::models::api_models::upcoming_user_event_model.dart::_$UpcomingUserEventModelCopyWithImpl"
+
+abstract class "tumble::core::models::api_models::upcoming_user_event_model.dart::_$$_UpcomingUserEventModelCopyWith" {
+  +$Res call()
+}
+
+"tumble::core::models::api_models::upcoming_user_event_model.dart::$UpcomingUserEventModelCopyWith" <|-- "tumble::core::models::api_models::upcoming_user_event_model.dart::_$$_UpcomingUserEventModelCopyWith"
+
+class "tumble::core::models::api_models::upcoming_user_event_model.dart::__$$_UpcomingUserEventModelCopyWithImpl" {
+  -_$_UpcomingUserEventModel _value
+  +$Res call()
+}
+
+"tumble::core::models::api_models::upcoming_user_event_model.dart::__$$_UpcomingUserEventModelCopyWithImpl" o-- "tumble::core::models::api_models::upcoming_user_event_model.dart::_$_UpcomingUserEventModel"
+"tumble::core::models::api_models::upcoming_user_event_model.dart::_$UpcomingUserEventModelCopyWithImpl" <|-- "tumble::core::models::api_models::upcoming_user_event_model.dart::__$$_UpcomingUserEventModelCopyWithImpl"
+"tumble::core::models::api_models::upcoming_user_event_model.dart::_$$_UpcomingUserEventModelCopyWith" <|-- "tumble::core::models::api_models::upcoming_user_event_model.dart::__$$_UpcomingUserEventModelCopyWithImpl"
+
+class "tumble::core::models::api_models::upcoming_user_event_model.dart::_$_UpcomingUserEventModel" {
+  +String title
+  +String type
+  +DateTime eventStart
+  +DateTime eventEnd
+  +DateTime firstSignupDate
+  +int hashCode
+  +_$$_UpcomingUserEventModelCopyWith<_$_UpcomingUserEventModel> copyWith
+  +String toString()
+  +bool ==()
+  +Map<String, dynamic> toJson()
+}
+
+"tumble::core::models::api_models::upcoming_user_event_model.dart::_$_UpcomingUserEventModel" o-- "tumble::core::models::api_models::upcoming_user_event_model.dart::_$$_UpcomingUserEventModelCopyWith<_$_UpcomingUserEventModel>"
+"tumble::core::models::api_models::upcoming_user_event_model.dart::_UpcomingUserEventModel" <|-- "tumble::core::models::api_models::upcoming_user_event_model.dart::_$_UpcomingUserEventModel"
+
+abstract class "tumble::core::models::api_models::upcoming_user_event_model.dart::_UpcomingUserEventModel" {
+  +String title
+  +String type
+  +DateTime eventStart
+  +DateTime eventEnd
+  +DateTime firstSignupDate
+  +_$$_UpcomingUserEventModelCopyWith<_$_UpcomingUserEventModel> copyWith
+}
+
+"tumble::core::models::api_models::upcoming_user_event_model.dart::_UpcomingUserEventModel" o-- "tumble::core::models::api_models::upcoming_user_event_model.dart::_$$_UpcomingUserEventModelCopyWith<_$_UpcomingUserEventModel>"
+"tumble::core::models::api_models::upcoming_user_event_model.dart::UpcomingUserEventModel" <|-- "tumble::core::models::api_models::upcoming_user_event_model.dart::_UpcomingUserEventModel"
+
+abstract class "tumble::core::models::api_models::upcoming_user_event_model.dart::_$UpcomingUserEventModel" {
+  +String title
+  +String type
+  +DateTime eventStart
+  +DateTime eventEnd
+  +DateTime firstSignupDate
+  +$UpcomingUserEventModelCopyWith<UpcomingUserEventModel> copyWith
+  +Map<String, dynamic> toJson()
+}
+
+"tumble::core::models::api_models::upcoming_user_event_model.dart::_$UpcomingUserEventModel" o-- "tumble::core::models::api_models::upcoming_user_event_model.dart::$UpcomingUserEventModelCopyWith<UpcomingUserEventModel>"
+
+abstract class "tumble::core::models::api_models::schedule_model.dart::ScheduleModel" {
+}
+
+"tumble::core::models::api_models::schedule_model.dart::_$ScheduleModel" <|-- "tumble::core::models::api_models::schedule_model.dart::ScheduleModel"
+
+abstract class "tumble::core::models::api_models::schedule_model.dart::Day" {
+}
+
+"tumble::core::models::api_models::schedule_model.dart::_$Day" <|-- "tumble::core::models::api_models::schedule_model.dart::Day"
+
+abstract class "tumble::core::models::api_models::schedule_model.dart::Event" {
+}
+
+"tumble::core::models::api_models::schedule_model.dart::_$Event" <|-- "tumble::core::models::api_models::schedule_model.dart::Event"
+
+abstract class "tumble::core::models::api_models::schedule_model.dart::Course" {
+}
+
+"tumble::core::models::api_models::schedule_model.dart::_$Course" <|-- "tumble::core::models::api_models::schedule_model.dart::Course"
+
+abstract class "tumble::core::models::api_models::schedule_model.dart::Location" {
+}
+
+"tumble::core::models::api_models::schedule_model.dart::_$Location" <|-- "tumble::core::models::api_models::schedule_model.dart::Location"
+
+abstract class "tumble::core::models::api_models::schedule_model.dart::Teacher" {
+}
+
+"tumble::core::models::api_models::schedule_model.dart::_$Teacher" <|-- "tumble::core::models::api_models::schedule_model.dart::Teacher"
+
+abstract class "tumble::core::models::api_models::schedule_model.dart::$ScheduleModelCopyWith" {
+  +$Res call()
+}
+
+class "tumble::core::models::api_models::schedule_model.dart::_$ScheduleModelCopyWithImpl" {
+  -ScheduleModel _value
+  -$Res Function(ScheduleModel) _then
+  +$Res call()
+}
+
+"tumble::core::models::api_models::schedule_model.dart::_$ScheduleModelCopyWithImpl" o-- "tumble::core::models::api_models::schedule_model.dart::ScheduleModel"
+"tumble::core::models::api_models::schedule_model.dart::_$ScheduleModelCopyWithImpl" o-- "null::$Res Function(ScheduleModel)"
+"tumble::core::models::api_models::schedule_model.dart::$ScheduleModelCopyWith" <|-- "tumble::core::models::api_models::schedule_model.dart::_$ScheduleModelCopyWithImpl"
+
+abstract class "tumble::core::models::api_models::schedule_model.dart::_$$_ScheduleModelCopyWith" {
+  +$Res call()
+}
+
+"tumble::core::models::api_models::schedule_model.dart::$ScheduleModelCopyWith" <|-- "tumble::core::models::api_models::schedule_model.dart::_$$_ScheduleModelCopyWith"
+
+class "tumble::core::models::api_models::schedule_model.dart::__$$_ScheduleModelCopyWithImpl" {
+  -_$_ScheduleModel _value
+  +$Res call()
+}
+
+"tumble::core::models::api_models::schedule_model.dart::__$$_ScheduleModelCopyWithImpl" o-- "tumble::core::models::api_models::schedule_model.dart::_$_ScheduleModel"
+"tumble::core::models::api_models::schedule_model.dart::_$ScheduleModelCopyWithImpl" <|-- "tumble::core::models::api_models::schedule_model.dart::__$$_ScheduleModelCopyWithImpl"
+"tumble::core::models::api_models::schedule_model.dart::_$$_ScheduleModelCopyWith" <|-- "tumble::core::models::api_models::schedule_model.dart::__$$_ScheduleModelCopyWithImpl"
+
+class "tumble::core::models::api_models::schedule_model.dart::_$_ScheduleModel" {
+  +String cachedAt
+  +String id
+  -List<Day> _days
+  +List<Day> days
+  +int hashCode
+  +_$$_ScheduleModelCopyWith<_$_ScheduleModel> copyWith
+  +String toString()
+  +bool ==()
+  +Map<String, dynamic> toJson()
+}
+
+"tumble::core::models::api_models::schedule_model.dart::_$_ScheduleModel" o-- "tumble::core::models::api_models::schedule_model.dart::_$$_ScheduleModelCopyWith<_$_ScheduleModel>"
+"tumble::core::models::api_models::schedule_model.dart::_ScheduleModel" <|-- "tumble::core::models::api_models::schedule_model.dart::_$_ScheduleModel"
+
+abstract class "tumble::core::models::api_models::schedule_model.dart::_ScheduleModel" {
+  +String cachedAt
+  +String id
+  +List<Day> days
+  +_$$_ScheduleModelCopyWith<_$_ScheduleModel> copyWith
+}
+
+"tumble::core::models::api_models::schedule_model.dart::_ScheduleModel" o-- "tumble::core::models::api_models::schedule_model.dart::_$$_ScheduleModelCopyWith<_$_ScheduleModel>"
+"tumble::core::models::api_models::schedule_model.dart::ScheduleModel" <|-- "tumble::core::models::api_models::schedule_model.dart::_ScheduleModel"
+
+abstract class "tumble::core::models::api_models::schedule_model.dart::$DayCopyWith" {
+  +$Res call()
+}
+
+class "tumble::core::models::api_models::schedule_model.dart::_$DayCopyWithImpl" {
+  -Day _value
+  -$Res Function(Day) _then
+  +$Res call()
+}
+
+"tumble::core::models::api_models::schedule_model.dart::_$DayCopyWithImpl" o-- "tumble::core::models::api_models::schedule_model.dart::Day"
+"tumble::core::models::api_models::schedule_model.dart::_$DayCopyWithImpl" o-- "null::$Res Function(Day)"
+"tumble::core::models::api_models::schedule_model.dart::$DayCopyWith" <|-- "tumble::core::models::api_models::schedule_model.dart::_$DayCopyWithImpl"
+
+abstract class "tumble::core::models::api_models::schedule_model.dart::_$$_DayCopyWith" {
+  +$Res call()
+}
+
+"tumble::core::models::api_models::schedule_model.dart::$DayCopyWith" <|-- "tumble::core::models::api_models::schedule_model.dart::_$$_DayCopyWith"
+
+class "tumble::core::models::api_models::schedule_model.dart::__$$_DayCopyWithImpl" {
+  -_$_Day _value
+  +$Res call()
+}
+
+"tumble::core::models::api_models::schedule_model.dart::__$$_DayCopyWithImpl" o-- "tumble::core::models::api_models::schedule_model.dart::_$_Day"
+"tumble::core::models::api_models::schedule_model.dart::_$DayCopyWithImpl" <|-- "tumble::core::models::api_models::schedule_model.dart::__$$_DayCopyWithImpl"
+"tumble::core::models::api_models::schedule_model.dart::_$$_DayCopyWith" <|-- "tumble::core::models::api_models::schedule_model.dart::__$$_DayCopyWithImpl"
+
+class "tumble::core::models::api_models::schedule_model.dart::_$_Day" {
+  +String name
+  +String date
+  +DateTime isoString
+  +int weekNumber
+  -List<Event> _events
+  +List<Event> events
+  +int hashCode
+  +_$$_DayCopyWith<_$_Day> copyWith
+  +String toString()
+  +bool ==()
+  +Map<String, dynamic> toJson()
+}
+
+"tumble::core::models::api_models::schedule_model.dart::_$_Day" o-- "tumble::core::models::api_models::schedule_model.dart::_$$_DayCopyWith<_$_Day>"
+"tumble::core::models::api_models::schedule_model.dart::_Day" <|-- "tumble::core::models::api_models::schedule_model.dart::_$_Day"
+
+abstract class "tumble::core::models::api_models::schedule_model.dart::_Day" {
+  +String name
+  +String date
+  +DateTime isoString
+  +int weekNumber
+  +List<Event> events
+  +_$$_DayCopyWith<_$_Day> copyWith
+}
+
+"tumble::core::models::api_models::schedule_model.dart::_Day" o-- "tumble::core::models::api_models::schedule_model.dart::_$$_DayCopyWith<_$_Day>"
+"tumble::core::models::api_models::schedule_model.dart::Day" <|-- "tumble::core::models::api_models::schedule_model.dart::_Day"
+
+abstract class "tumble::core::models::api_models::schedule_model.dart::$EventCopyWith" {
+  +$CourseCopyWith<$Res> course
+  +$Res call()
+}
+
+"tumble::core::models::api_models::schedule_model.dart::$EventCopyWith" o-- "tumble::core::models::api_models::schedule_model.dart::$CourseCopyWith<$Res>"
+
+class "tumble::core::models::api_models::schedule_model.dart::_$EventCopyWithImpl" {
+  -Event _value
+  -$Res Function(Event) _then
+  +$CourseCopyWith<$Res> course
+  +$Res call()
+}
+
+"tumble::core::models::api_models::schedule_model.dart::_$EventCopyWithImpl" o-- "tumble::core::models::api_models::schedule_model.dart::Event"
+"tumble::core::models::api_models::schedule_model.dart::_$EventCopyWithImpl" o-- "null::$Res Function(Event)"
+"tumble::core::models::api_models::schedule_model.dart::_$EventCopyWithImpl" o-- "tumble::core::models::api_models::schedule_model.dart::$CourseCopyWith<$Res>"
+"tumble::core::models::api_models::schedule_model.dart::$EventCopyWith" <|-- "tumble::core::models::api_models::schedule_model.dart::_$EventCopyWithImpl"
+
+abstract class "tumble::core::models::api_models::schedule_model.dart::_$$_EventCopyWith" {
+  +$CourseCopyWith<$Res> course
+  +$Res call()
+}
+
+"tumble::core::models::api_models::schedule_model.dart::_$$_EventCopyWith" o-- "tumble::core::models::api_models::schedule_model.dart::$CourseCopyWith<$Res>"
+"tumble::core::models::api_models::schedule_model.dart::$EventCopyWith" <|-- "tumble::core::models::api_models::schedule_model.dart::_$$_EventCopyWith"
+
+class "tumble::core::models::api_models::schedule_model.dart::__$$_EventCopyWithImpl" {
+  -_$_Event _value
+  +$Res call()
+}
+
+"tumble::core::models::api_models::schedule_model.dart::__$$_EventCopyWithImpl" o-- "tumble::core::models::api_models::schedule_model.dart::_$_Event"
+"tumble::core::models::api_models::schedule_model.dart::_$EventCopyWithImpl" <|-- "tumble::core::models::api_models::schedule_model.dart::__$$_EventCopyWithImpl"
+"tumble::core::models::api_models::schedule_model.dart::_$$_EventCopyWith" <|-- "tumble::core::models::api_models::schedule_model.dart::__$$_EventCopyWithImpl"
+
+class "tumble::core::models::api_models::schedule_model.dart::_$_Event" {
+  +String id
+  +String title
+  +Course course
+  +DateTime timeStart
+  +DateTime timeEnd
+  -List<Location> _locations
+  -List<Teacher> _teachers
+  +bool isSpecial
+  +DateTime lastModified
+  +List<Location> locations
+  +List<Teacher> teachers
+  +int hashCode
+  +_$$_EventCopyWith<_$_Event> copyWith
+  +String toString()
+  +bool ==()
+  +Map<String, dynamic> toJson()
+}
+
+"tumble::core::models::api_models::schedule_model.dart::_$_Event" o-- "tumble::core::models::api_models::schedule_model.dart::Course"
+"tumble::core::models::api_models::schedule_model.dart::_$_Event" o-- "tumble::core::models::api_models::schedule_model.dart::_$$_EventCopyWith<_$_Event>"
+"tumble::core::models::api_models::schedule_model.dart::_Event" <|-- "tumble::core::models::api_models::schedule_model.dart::_$_Event"
+
+abstract class "tumble::core::models::api_models::schedule_model.dart::_Event" {
+  +String id
+  +String title
+  +Course course
+  +DateTime timeStart
+  +DateTime timeEnd
+  +List<Location> locations
+  +List<Teacher> teachers
+  +bool isSpecial
+  +DateTime lastModified
+  +_$$_EventCopyWith<_$_Event> copyWith
+}
+
+"tumble::core::models::api_models::schedule_model.dart::_Event" o-- "tumble::core::models::api_models::schedule_model.dart::Course"
+"tumble::core::models::api_models::schedule_model.dart::_Event" o-- "tumble::core::models::api_models::schedule_model.dart::_$$_EventCopyWith<_$_Event>"
+"tumble::core::models::api_models::schedule_model.dart::Event" <|-- "tumble::core::models::api_models::schedule_model.dart::_Event"
+
+abstract class "tumble::core::models::api_models::schedule_model.dart::$CourseCopyWith" {
+  +$Res call()
+}
+
+class "tumble::core::models::api_models::schedule_model.dart::_$CourseCopyWithImpl" {
+  -Course _value
+  -$Res Function(Course) _then
+  +$Res call()
+}
+
+"tumble::core::models::api_models::schedule_model.dart::_$CourseCopyWithImpl" o-- "tumble::core::models::api_models::schedule_model.dart::Course"
+"tumble::core::models::api_models::schedule_model.dart::_$CourseCopyWithImpl" o-- "null::$Res Function(Course)"
+"tumble::core::models::api_models::schedule_model.dart::$CourseCopyWith" <|-- "tumble::core::models::api_models::schedule_model.dart::_$CourseCopyWithImpl"
+
+abstract class "tumble::core::models::api_models::schedule_model.dart::_$$_CourseCopyWith" {
+  +$Res call()
+}
+
+"tumble::core::models::api_models::schedule_model.dart::$CourseCopyWith" <|-- "tumble::core::models::api_models::schedule_model.dart::_$$_CourseCopyWith"
+
+class "tumble::core::models::api_models::schedule_model.dart::__$$_CourseCopyWithImpl" {
+  -_$_Course _value
+  +$Res call()
+}
+
+"tumble::core::models::api_models::schedule_model.dart::__$$_CourseCopyWithImpl" o-- "tumble::core::models::api_models::schedule_model.dart::_$_Course"
+"tumble::core::models::api_models::schedule_model.dart::_$CourseCopyWithImpl" <|-- "tumble::core::models::api_models::schedule_model.dart::__$$_CourseCopyWithImpl"
+"tumble::core::models::api_models::schedule_model.dart::_$$_CourseCopyWith" <|-- "tumble::core::models::api_models::schedule_model.dart::__$$_CourseCopyWithImpl"
+
+class "tumble::core::models::api_models::schedule_model.dart::_$_Course" {
+  +String id
+  +String swedishName
+  +String englishName
+  +int hashCode
+  +_$$_CourseCopyWith<_$_Course> copyWith
+  +String toString()
+  +bool ==()
+  +Map<String, dynamic> toJson()
+}
+
+"tumble::core::models::api_models::schedule_model.dart::_$_Course" o-- "tumble::core::models::api_models::schedule_model.dart::_$$_CourseCopyWith<_$_Course>"
+"tumble::core::models::api_models::schedule_model.dart::_Course" <|-- "tumble::core::models::api_models::schedule_model.dart::_$_Course"
+
+abstract class "tumble::core::models::api_models::schedule_model.dart::_Course" {
+  +String id
+  +String swedishName
+  +String englishName
+  +_$$_CourseCopyWith<_$_Course> copyWith
+}
+
+"tumble::core::models::api_models::schedule_model.dart::_Course" o-- "tumble::core::models::api_models::schedule_model.dart::_$$_CourseCopyWith<_$_Course>"
+"tumble::core::models::api_models::schedule_model.dart::Course" <|-- "tumble::core::models::api_models::schedule_model.dart::_Course"
+
+abstract class "tumble::core::models::api_models::schedule_model.dart::$LocationCopyWith" {
+  +$Res call()
+}
+
+class "tumble::core::models::api_models::schedule_model.dart::_$LocationCopyWithImpl" {
+  -Location _value
+  -$Res Function(Location) _then
+  +$Res call()
+}
+
+"tumble::core::models::api_models::schedule_model.dart::_$LocationCopyWithImpl" o-- "tumble::core::models::api_models::schedule_model.dart::Location"
+"tumble::core::models::api_models::schedule_model.dart::_$LocationCopyWithImpl" o-- "null::$Res Function(Location)"
+"tumble::core::models::api_models::schedule_model.dart::$LocationCopyWith" <|-- "tumble::core::models::api_models::schedule_model.dart::_$LocationCopyWithImpl"
+
+abstract class "tumble::core::models::api_models::schedule_model.dart::_$$_LocationCopyWith" {
+  +$Res call()
+}
+
+"tumble::core::models::api_models::schedule_model.dart::$LocationCopyWith" <|-- "tumble::core::models::api_models::schedule_model.dart::_$$_LocationCopyWith"
+
+class "tumble::core::models::api_models::schedule_model.dart::__$$_LocationCopyWithImpl" {
+  -_$_Location _value
+  +$Res call()
+}
+
+"tumble::core::models::api_models::schedule_model.dart::__$$_LocationCopyWithImpl" o-- "tumble::core::models::api_models::schedule_model.dart::_$_Location"
+"tumble::core::models::api_models::schedule_model.dart::_$LocationCopyWithImpl" <|-- "tumble::core::models::api_models::schedule_model.dart::__$$_LocationCopyWithImpl"
+"tumble::core::models::api_models::schedule_model.dart::_$$_LocationCopyWith" <|-- "tumble::core::models::api_models::schedule_model.dart::__$$_LocationCopyWithImpl"
+
+class "tumble::core::models::api_models::schedule_model.dart::_$_Location" {
+  +String id
+  +String name
+  +String building
+  +String floor
+  +int maxSeats
+  +int hashCode
+  +_$$_LocationCopyWith<_$_Location> copyWith
+  +String toString()
+  +bool ==()
+  +Map<String, dynamic> toJson()
+}
+
+"tumble::core::models::api_models::schedule_model.dart::_$_Location" o-- "tumble::core::models::api_models::schedule_model.dart::_$$_LocationCopyWith<_$_Location>"
+"tumble::core::models::api_models::schedule_model.dart::_Location" <|-- "tumble::core::models::api_models::schedule_model.dart::_$_Location"
+
+abstract class "tumble::core::models::api_models::schedule_model.dart::_Location" {
+  +String id
+  +String name
+  +String building
+  +String floor
+  +int maxSeats
+  +_$$_LocationCopyWith<_$_Location> copyWith
+}
+
+"tumble::core::models::api_models::schedule_model.dart::_Location" o-- "tumble::core::models::api_models::schedule_model.dart::_$$_LocationCopyWith<_$_Location>"
+"tumble::core::models::api_models::schedule_model.dart::Location" <|-- "tumble::core::models::api_models::schedule_model.dart::_Location"
+
+abstract class "tumble::core::models::api_models::schedule_model.dart::$TeacherCopyWith" {
+  +$Res call()
+}
+
+class "tumble::core::models::api_models::schedule_model.dart::_$TeacherCopyWithImpl" {
+  -Teacher _value
+  -$Res Function(Teacher) _then
+  +$Res call()
+}
+
+"tumble::core::models::api_models::schedule_model.dart::_$TeacherCopyWithImpl" o-- "tumble::core::models::api_models::schedule_model.dart::Teacher"
+"tumble::core::models::api_models::schedule_model.dart::_$TeacherCopyWithImpl" o-- "null::$Res Function(Teacher)"
+"tumble::core::models::api_models::schedule_model.dart::$TeacherCopyWith" <|-- "tumble::core::models::api_models::schedule_model.dart::_$TeacherCopyWithImpl"
+
+abstract class "tumble::core::models::api_models::schedule_model.dart::_$$_TeacherCopyWith" {
+  +$Res call()
+}
+
+"tumble::core::models::api_models::schedule_model.dart::$TeacherCopyWith" <|-- "tumble::core::models::api_models::schedule_model.dart::_$$_TeacherCopyWith"
+
+class "tumble::core::models::api_models::schedule_model.dart::__$$_TeacherCopyWithImpl" {
+  -_$_Teacher _value
+  +$Res call()
+}
+
+"tumble::core::models::api_models::schedule_model.dart::__$$_TeacherCopyWithImpl" o-- "tumble::core::models::api_models::schedule_model.dart::_$_Teacher"
+"tumble::core::models::api_models::schedule_model.dart::_$TeacherCopyWithImpl" <|-- "tumble::core::models::api_models::schedule_model.dart::__$$_TeacherCopyWithImpl"
+"tumble::core::models::api_models::schedule_model.dart::_$$_TeacherCopyWith" <|-- "tumble::core::models::api_models::schedule_model.dart::__$$_TeacherCopyWithImpl"
+
+class "tumble::core::models::api_models::schedule_model.dart::_$_Teacher" {
+  +String id
+  +String firstName
+  +String lastName
+  +int hashCode
+  +_$$_TeacherCopyWith<_$_Teacher> copyWith
+  +String toString()
+  +bool ==()
+  +Map<String, dynamic> toJson()
+}
+
+"tumble::core::models::api_models::schedule_model.dart::_$_Teacher" o-- "tumble::core::models::api_models::schedule_model.dart::_$$_TeacherCopyWith<_$_Teacher>"
+"tumble::core::models::api_models::schedule_model.dart::_Teacher" <|-- "tumble::core::models::api_models::schedule_model.dart::_$_Teacher"
+
+abstract class "tumble::core::models::api_models::schedule_model.dart::_Teacher" {
+  +String id
+  +String firstName
+  +String lastName
+  +_$$_TeacherCopyWith<_$_Teacher> copyWith
+}
+
+"tumble::core::models::api_models::schedule_model.dart::_Teacher" o-- "tumble::core::models::api_models::schedule_model.dart::_$$_TeacherCopyWith<_$_Teacher>"
+"tumble::core::models::api_models::schedule_model.dart::Teacher" <|-- "tumble::core::models::api_models::schedule_model.dart::_Teacher"
+
+abstract class "tumble::core::models::api_models::schedule_model.dart::_$ScheduleModel" {
+  +String cachedAt
+  +String id
+  +List<Day> days
+  +$ScheduleModelCopyWith<ScheduleModel> copyWith
+  +Map<String, dynamic> toJson()
+}
+
+"tumble::core::models::api_models::schedule_model.dart::_$ScheduleModel" o-- "tumble::core::models::api_models::schedule_model.dart::$ScheduleModelCopyWith<ScheduleModel>"
+
+abstract class "tumble::core::models::api_models::schedule_model.dart::_$Day" {
+  +String name
+  +String date
+  +DateTime isoString
+  +int weekNumber
+  +List<Event> events
+  +$DayCopyWith<Day> copyWith
+  +Map<String, dynamic> toJson()
+}
+
+"tumble::core::models::api_models::schedule_model.dart::_$Day" o-- "tumble::core::models::api_models::schedule_model.dart::$DayCopyWith<Day>"
+
+abstract class "tumble::core::models::api_models::schedule_model.dart::_$Event" {
+  +String id
+  +String title
+  +Course course
+  +DateTime timeStart
+  +DateTime timeEnd
+  +List<Location> locations
+  +List<Teacher> teachers
+  +bool isSpecial
+  +DateTime lastModified
+  +$EventCopyWith<Event> copyWith
+  +Map<String, dynamic> toJson()
+}
+
+"tumble::core::models::api_models::schedule_model.dart::_$Event" o-- "tumble::core::models::api_models::schedule_model.dart::Course"
+"tumble::core::models::api_models::schedule_model.dart::_$Event" o-- "tumble::core::models::api_models::schedule_model.dart::$EventCopyWith<Event>"
+
+abstract class "tumble::core::models::api_models::schedule_model.dart::_$Course" {
+  +String id
+  +String swedishName
+  +String englishName
+  +$CourseCopyWith<Course> copyWith
+  +Map<String, dynamic> toJson()
+}
+
+"tumble::core::models::api_models::schedule_model.dart::_$Course" o-- "tumble::core::models::api_models::schedule_model.dart::$CourseCopyWith<Course>"
+
+abstract class "tumble::core::models::api_models::schedule_model.dart::_$Location" {
+  +String id
+  +String name
+  +String building
+  +String floor
+  +int maxSeats
+  +$LocationCopyWith<Location> copyWith
+  +Map<String, dynamic> toJson()
+}
+
+"tumble::core::models::api_models::schedule_model.dart::_$Location" o-- "tumble::core::models::api_models::schedule_model.dart::$LocationCopyWith<Location>"
+
+abstract class "tumble::core::models::api_models::schedule_model.dart::_$Teacher" {
+  +String id
+  +String firstName
+  +String lastName
+  +$TeacherCopyWith<Teacher> copyWith
+  +Map<String, dynamic> toJson()
+}
+
+"tumble::core::models::api_models::schedule_model.dart::_$Teacher" o-- "tumble::core::models::api_models::schedule_model.dart::$TeacherCopyWith<Teacher>"
+
+abstract class "tumble::core::models::api_models::user_event_collection_model.dart::UserEventCollectionModel" {
+}
+
+"tumble::core::models::api_models::user_event_collection_model.dart::_$UserEventCollectionModel" <|-- "tumble::core::models::api_models::user_event_collection_model.dart::UserEventCollectionModel"
+
+abstract class "tumble::core::models::api_models::user_event_collection_model.dart::$UserEventCollectionModelCopyWith" {
+  +$Res call()
+}
+
+class "tumble::core::models::api_models::user_event_collection_model.dart::_$UserEventCollectionModelCopyWithImpl" {
+  -UserEventCollectionModel _value
+  -$Res Function(UserEventCollectionModel) _then
+  +$Res call()
+}
+
+"tumble::core::models::api_models::user_event_collection_model.dart::_$UserEventCollectionModelCopyWithImpl" o-- "tumble::core::models::api_models::user_event_collection_model.dart::UserEventCollectionModel"
+"tumble::core::models::api_models::user_event_collection_model.dart::_$UserEventCollectionModelCopyWithImpl" o-- "null::$Res Function(UserEventCollectionModel)"
+"tumble::core::models::api_models::user_event_collection_model.dart::$UserEventCollectionModelCopyWith" <|-- "tumble::core::models::api_models::user_event_collection_model.dart::_$UserEventCollectionModelCopyWithImpl"
+
+abstract class "tumble::core::models::api_models::user_event_collection_model.dart::_$$_UserEventCollectionModelCopyWith" {
+  +$Res call()
+}
+
+"tumble::core::models::api_models::user_event_collection_model.dart::$UserEventCollectionModelCopyWith" <|-- "tumble::core::models::api_models::user_event_collection_model.dart::_$$_UserEventCollectionModelCopyWith"
+
+class "tumble::core::models::api_models::user_event_collection_model.dart::__$$_UserEventCollectionModelCopyWithImpl" {
+  -_$_UserEventCollectionModel _value
+  +$Res call()
+}
+
+"tumble::core::models::api_models::user_event_collection_model.dart::__$$_UserEventCollectionModelCopyWithImpl" o-- "tumble::core::models::api_models::user_event_collection_model.dart::_$_UserEventCollectionModel"
+"tumble::core::models::api_models::user_event_collection_model.dart::_$UserEventCollectionModelCopyWithImpl" <|-- "tumble::core::models::api_models::user_event_collection_model.dart::__$$_UserEventCollectionModelCopyWithImpl"
+"tumble::core::models::api_models::user_event_collection_model.dart::_$$_UserEventCollectionModelCopyWith" <|-- "tumble::core::models::api_models::user_event_collection_model.dart::__$$_UserEventCollectionModelCopyWithImpl"
+
+class "tumble::core::models::api_models::user_event_collection_model.dart::_$_UserEventCollectionModel" {
+  -List<UpcomingUserEventModel> _upcomingEvents
+  -List<AvailableUserEventModel> _registeredEvents
+  -List<AvailableUserEventModel> _unregisteredEvents
+  +List<UpcomingUserEventModel> upcomingEvents
+  +List<AvailableUserEventModel> registeredEvents
+  +List<AvailableUserEventModel> unregisteredEvents
+  +int hashCode
+  +_$$_UserEventCollectionModelCopyWith<_$_UserEventCollectionModel> copyWith
+  +String toString()
+  +bool ==()
+  +Map<String, dynamic> toJson()
+}
+
+"tumble::core::models::api_models::user_event_collection_model.dart::_$_UserEventCollectionModel" o-- "tumble::core::models::api_models::user_event_collection_model.dart::_$$_UserEventCollectionModelCopyWith<_$_UserEventCollectionModel>"
+"tumble::core::models::api_models::user_event_collection_model.dart::_UserEventCollectionModel" <|-- "tumble::core::models::api_models::user_event_collection_model.dart::_$_UserEventCollectionModel"
+
+abstract class "tumble::core::models::api_models::user_event_collection_model.dart::_UserEventCollectionModel" {
+  +List<UpcomingUserEventModel> upcomingEvents
+  +List<AvailableUserEventModel> registeredEvents
+  +List<AvailableUserEventModel> unregisteredEvents
+  +_$$_UserEventCollectionModelCopyWith<_$_UserEventCollectionModel> copyWith
+}
+
+"tumble::core::models::api_models::user_event_collection_model.dart::_UserEventCollectionModel" o-- "tumble::core::models::api_models::user_event_collection_model.dart::_$$_UserEventCollectionModelCopyWith<_$_UserEventCollectionModel>"
+"tumble::core::models::api_models::user_event_collection_model.dart::UserEventCollectionModel" <|-- "tumble::core::models::api_models::user_event_collection_model.dart::_UserEventCollectionModel"
+
+abstract class "tumble::core::models::api_models::user_event_collection_model.dart::_$UserEventCollectionModel" {
+  +List<UpcomingUserEventModel> upcomingEvents
+  +List<AvailableUserEventModel> registeredEvents
+  +List<AvailableUserEventModel> unregisteredEvents
+  +$UserEventCollectionModelCopyWith<UserEventCollectionModel> copyWith
+  +Map<String, dynamic> toJson()
+}
+
+"tumble::core::models::api_models::user_event_collection_model.dart::_$UserEventCollectionModel" o-- "tumble::core::models::api_models::user_event_collection_model.dart::$UserEventCollectionModelCopyWith<UserEventCollectionModel>"
+
+abstract class "tumble::core::models::api_models::kronox_user_model.dart::KronoxUserModel" {
+}
+
+"tumble::core::models::api_models::kronox_user_model.dart::_$KronoxUserModel" <|-- "tumble::core::models::api_models::kronox_user_model.dart::KronoxUserModel"
+
+abstract class "tumble::core::models::api_models::kronox_user_model.dart::$KronoxUserModelCopyWith" {
+  +$Res call()
+}
+
+class "tumble::core::models::api_models::kronox_user_model.dart::_$KronoxUserModelCopyWithImpl" {
+  -KronoxUserModel _value
+  -$Res Function(KronoxUserModel) _then
+  +$Res call()
+}
+
+"tumble::core::models::api_models::kronox_user_model.dart::_$KronoxUserModelCopyWithImpl" o-- "tumble::core::models::api_models::kronox_user_model.dart::KronoxUserModel"
+"tumble::core::models::api_models::kronox_user_model.dart::_$KronoxUserModelCopyWithImpl" o-- "null::$Res Function(KronoxUserModel)"
+"tumble::core::models::api_models::kronox_user_model.dart::$KronoxUserModelCopyWith" <|-- "tumble::core::models::api_models::kronox_user_model.dart::_$KronoxUserModelCopyWithImpl"
+
+abstract class "tumble::core::models::api_models::kronox_user_model.dart::_$$_KronoxUserModelCopyWith" {
+  +$Res call()
+}
+
+"tumble::core::models::api_models::kronox_user_model.dart::$KronoxUserModelCopyWith" <|-- "tumble::core::models::api_models::kronox_user_model.dart::_$$_KronoxUserModelCopyWith"
+
+class "tumble::core::models::api_models::kronox_user_model.dart::__$$_KronoxUserModelCopyWithImpl" {
+  -_$_KronoxUserModel _value
+  +$Res call()
+}
+
+"tumble::core::models::api_models::kronox_user_model.dart::__$$_KronoxUserModelCopyWithImpl" o-- "tumble::core::models::api_models::kronox_user_model.dart::_$_KronoxUserModel"
+"tumble::core::models::api_models::kronox_user_model.dart::_$KronoxUserModelCopyWithImpl" <|-- "tumble::core::models::api_models::kronox_user_model.dart::__$$_KronoxUserModelCopyWithImpl"
+"tumble::core::models::api_models::kronox_user_model.dart::_$$_KronoxUserModelCopyWith" <|-- "tumble::core::models::api_models::kronox_user_model.dart::__$$_KronoxUserModelCopyWithImpl"
+
+class "tumble::core::models::api_models::kronox_user_model.dart::_$_KronoxUserModel" {
+  +String name
+  +String username
+  +String sessionToken
+  +String refreshToken
+  +int hashCode
+  +_$$_KronoxUserModelCopyWith<_$_KronoxUserModel> copyWith
+  +String toString()
+  +bool ==()
+  +Map<String, dynamic> toJson()
+}
+
+"tumble::core::models::api_models::kronox_user_model.dart::_$_KronoxUserModel" o-- "tumble::core::models::api_models::kronox_user_model.dart::_$$_KronoxUserModelCopyWith<_$_KronoxUserModel>"
+"tumble::core::models::api_models::kronox_user_model.dart::_KronoxUserModel" <|-- "tumble::core::models::api_models::kronox_user_model.dart::_$_KronoxUserModel"
+
+abstract class "tumble::core::models::api_models::kronox_user_model.dart::_KronoxUserModel" {
+  +String name
+  +String username
+  +String sessionToken
+  +String refreshToken
+  +_$$_KronoxUserModelCopyWith<_$_KronoxUserModel> copyWith
+}
+
+"tumble::core::models::api_models::kronox_user_model.dart::_KronoxUserModel" o-- "tumble::core::models::api_models::kronox_user_model.dart::_$$_KronoxUserModelCopyWith<_$_KronoxUserModel>"
+"tumble::core::models::api_models::kronox_user_model.dart::KronoxUserModel" <|-- "tumble::core::models::api_models::kronox_user_model.dart::_KronoxUserModel"
+
+abstract class "tumble::core::models::api_models::kronox_user_model.dart::_$KronoxUserModel" {
+  +String name
+  +String username
+  +String sessionToken
+  +String refreshToken
+  +$KronoxUserModelCopyWith<KronoxUserModel> copyWith
+  +Map<String, dynamic> toJson()
+}
+
+"tumble::core::models::api_models::kronox_user_model.dart::_$KronoxUserModel" o-- "tumble::core::models::api_models::kronox_user_model.dart::$KronoxUserModelCopyWith<KronoxUserModel>"
+
+abstract class "tumble::core::models::api_models::program_model.dart::ProgramModel" {
+}
+
+"tumble::core::models::api_models::program_model.dart::_$ProgramModel" <|-- "tumble::core::models::api_models::program_model.dart::ProgramModel"
+
+abstract class "tumble::core::models::api_models::program_model.dart::Item" {
+}
+
+"tumble::core::models::api_models::program_model.dart::_$Item" <|-- "tumble::core::models::api_models::program_model.dart::Item"
+
+abstract class "tumble::core::models::api_models::program_model.dart::$ProgramModelCopyWith" {
+  +$Res call()
+}
+
+class "tumble::core::models::api_models::program_model.dart::_$ProgramModelCopyWithImpl" {
+  -ProgramModel _value
+  -$Res Function(ProgramModel) _then
+  +$Res call()
+}
+
+"tumble::core::models::api_models::program_model.dart::_$ProgramModelCopyWithImpl" o-- "tumble::core::models::api_models::program_model.dart::ProgramModel"
+"tumble::core::models::api_models::program_model.dart::_$ProgramModelCopyWithImpl" o-- "null::$Res Function(ProgramModel)"
+"tumble::core::models::api_models::program_model.dart::$ProgramModelCopyWith" <|-- "tumble::core::models::api_models::program_model.dart::_$ProgramModelCopyWithImpl"
+
+abstract class "tumble::core::models::api_models::program_model.dart::_$$_ProgramModelCopyWith" {
+  +$Res call()
+}
+
+"tumble::core::models::api_models::program_model.dart::$ProgramModelCopyWith" <|-- "tumble::core::models::api_models::program_model.dart::_$$_ProgramModelCopyWith"
+
+class "tumble::core::models::api_models::program_model.dart::__$$_ProgramModelCopyWithImpl" {
+  -_$_ProgramModel _value
+  +$Res call()
+}
+
+"tumble::core::models::api_models::program_model.dart::__$$_ProgramModelCopyWithImpl" o-- "tumble::core::models::api_models::program_model.dart::_$_ProgramModel"
+"tumble::core::models::api_models::program_model.dart::_$ProgramModelCopyWithImpl" <|-- "tumble::core::models::api_models::program_model.dart::__$$_ProgramModelCopyWithImpl"
+"tumble::core::models::api_models::program_model.dart::_$$_ProgramModelCopyWith" <|-- "tumble::core::models::api_models::program_model.dart::__$$_ProgramModelCopyWithImpl"
+
+class "tumble::core::models::api_models::program_model.dart::_$_ProgramModel" {
+  +int count
+  -List<Item> _items
+  +List<Item> items
+  +int hashCode
+  +_$$_ProgramModelCopyWith<_$_ProgramModel> copyWith
+  +String toString()
+  +bool ==()
+  +Map<String, dynamic> toJson()
+}
+
+"tumble::core::models::api_models::program_model.dart::_$_ProgramModel" o-- "tumble::core::models::api_models::program_model.dart::_$$_ProgramModelCopyWith<_$_ProgramModel>"
+"tumble::core::models::api_models::program_model.dart::_ProgramModel" <|-- "tumble::core::models::api_models::program_model.dart::_$_ProgramModel"
+
+abstract class "tumble::core::models::api_models::program_model.dart::_ProgramModel" {
+  +int count
+  +List<Item> items
+  +_$$_ProgramModelCopyWith<_$_ProgramModel> copyWith
+}
+
+"tumble::core::models::api_models::program_model.dart::_ProgramModel" o-- "tumble::core::models::api_models::program_model.dart::_$$_ProgramModelCopyWith<_$_ProgramModel>"
+"tumble::core::models::api_models::program_model.dart::ProgramModel" <|-- "tumble::core::models::api_models::program_model.dart::_ProgramModel"
+
+abstract class "tumble::core::models::api_models::program_model.dart::$ItemCopyWith" {
+  +$Res call()
+}
+
+class "tumble::core::models::api_models::program_model.dart::_$ItemCopyWithImpl" {
+  -Item _value
+  -$Res Function(Item) _then
+  +$Res call()
+}
+
+"tumble::core::models::api_models::program_model.dart::_$ItemCopyWithImpl" o-- "tumble::core::models::api_models::program_model.dart::Item"
+"tumble::core::models::api_models::program_model.dart::_$ItemCopyWithImpl" o-- "null::$Res Function(Item)"
+"tumble::core::models::api_models::program_model.dart::$ItemCopyWith" <|-- "tumble::core::models::api_models::program_model.dart::_$ItemCopyWithImpl"
+
+abstract class "tumble::core::models::api_models::program_model.dart::_$$_ItemCopyWith" {
+  +$Res call()
+}
+
+"tumble::core::models::api_models::program_model.dart::$ItemCopyWith" <|-- "tumble::core::models::api_models::program_model.dart::_$$_ItemCopyWith"
+
+class "tumble::core::models::api_models::program_model.dart::__$$_ItemCopyWithImpl" {
+  -_$_Item _value
+  +$Res call()
+}
+
+"tumble::core::models::api_models::program_model.dart::__$$_ItemCopyWithImpl" o-- "tumble::core::models::api_models::program_model.dart::_$_Item"
+"tumble::core::models::api_models::program_model.dart::_$ItemCopyWithImpl" <|-- "tumble::core::models::api_models::program_model.dart::__$$_ItemCopyWithImpl"
+"tumble::core::models::api_models::program_model.dart::_$$_ItemCopyWith" <|-- "tumble::core::models::api_models::program_model.dart::__$$_ItemCopyWithImpl"
+
+class "tumble::core::models::api_models::program_model.dart::_$_Item" {
+  +String id
+  +String title
+  +String subtitle
+  +int hashCode
+  +_$$_ItemCopyWith<_$_Item> copyWith
+  +String toString()
+  +bool ==()
+  +Map<String, dynamic> toJson()
+}
+
+"tumble::core::models::api_models::program_model.dart::_$_Item" o-- "tumble::core::models::api_models::program_model.dart::_$$_ItemCopyWith<_$_Item>"
+"tumble::core::models::api_models::program_model.dart::_Item" <|-- "tumble::core::models::api_models::program_model.dart::_$_Item"
+
+abstract class "tumble::core::models::api_models::program_model.dart::_Item" {
+  +String id
+  +String title
+  +String subtitle
+  +_$$_ItemCopyWith<_$_Item> copyWith
+}
+
+"tumble::core::models::api_models::program_model.dart::_Item" o-- "tumble::core::models::api_models::program_model.dart::_$$_ItemCopyWith<_$_Item>"
+"tumble::core::models::api_models::program_model.dart::Item" <|-- "tumble::core::models::api_models::program_model.dart::_Item"
+
+abstract class "tumble::core::models::api_models::program_model.dart::_$ProgramModel" {
+  +int count
+  +List<Item> items
+  +$ProgramModelCopyWith<ProgramModel> copyWith
+  +Map<String, dynamic> toJson()
+}
+
+"tumble::core::models::api_models::program_model.dart::_$ProgramModel" o-- "tumble::core::models::api_models::program_model.dart::$ProgramModelCopyWith<ProgramModel>"
+
+abstract class "tumble::core::models::api_models::program_model.dart::_$Item" {
+  +String id
+  +String title
+  +String subtitle
+  +$ItemCopyWith<Item> copyWith
+  +Map<String, dynamic> toJson()
+}
+
+"tumble::core::models::api_models::program_model.dart::_$Item" o-- "tumble::core::models::api_models::program_model.dart::$ItemCopyWith<Item>"
+
+abstract class "tumble::core::models::api_models::available_user_event_model.dart::AvailableUserEventModel" {
+}
+
+"tumble::core::models::api_models::available_user_event_model.dart::_$AvailableUserEventModel" <|-- "tumble::core::models::api_models::available_user_event_model.dart::AvailableUserEventModel"
+
+abstract class "tumble::core::models::api_models::available_user_event_model.dart::$AvailableUserEventModelCopyWith" {
+  +$Res call()
+}
+
+class "tumble::core::models::api_models::available_user_event_model.dart::_$AvailableUserEventModelCopyWithImpl" {
+  -AvailableUserEventModel _value
+  -$Res Function(AvailableUserEventModel) _then
+  +$Res call()
+}
+
+"tumble::core::models::api_models::available_user_event_model.dart::_$AvailableUserEventModelCopyWithImpl" o-- "tumble::core::models::api_models::available_user_event_model.dart::AvailableUserEventModel"
+"tumble::core::models::api_models::available_user_event_model.dart::_$AvailableUserEventModelCopyWithImpl" o-- "null::$Res Function(AvailableUserEventModel)"
+"tumble::core::models::api_models::available_user_event_model.dart::$AvailableUserEventModelCopyWith" <|-- "tumble::core::models::api_models::available_user_event_model.dart::_$AvailableUserEventModelCopyWithImpl"
+
+abstract class "tumble::core::models::api_models::available_user_event_model.dart::_$$_AvailableUserEventModelCopyWith" {
+  +$Res call()
+}
+
+"tumble::core::models::api_models::available_user_event_model.dart::$AvailableUserEventModelCopyWith" <|-- "tumble::core::models::api_models::available_user_event_model.dart::_$$_AvailableUserEventModelCopyWith"
+
+class "tumble::core::models::api_models::available_user_event_model.dart::__$$_AvailableUserEventModelCopyWithImpl" {
+  -_$_AvailableUserEventModel _value
+  +$Res call()
+}
+
+"tumble::core::models::api_models::available_user_event_model.dart::__$$_AvailableUserEventModelCopyWithImpl" o-- "tumble::core::models::api_models::available_user_event_model.dart::_$_AvailableUserEventModel"
+"tumble::core::models::api_models::available_user_event_model.dart::_$AvailableUserEventModelCopyWithImpl" <|-- "tumble::core::models::api_models::available_user_event_model.dart::__$$_AvailableUserEventModelCopyWithImpl"
+"tumble::core::models::api_models::available_user_event_model.dart::_$$_AvailableUserEventModelCopyWith" <|-- "tumble::core::models::api_models::available_user_event_model.dart::__$$_AvailableUserEventModelCopyWithImpl"
+
+class "tumble::core::models::api_models::available_user_event_model.dart::_$_AvailableUserEventModel" {
+  +String id
+  +String title
+  +String type
+  +DateTime eventStart
+  +DateTime eventEnd
+  +DateTime lastSignupDate
+  +String? participatorId
+  +String? supportId
+  +String anonymousCode
+  +bool isRegistered
+  +bool supportAvailable
+  +bool requiresChoosingLocation
+  +int hashCode
+  +_$$_AvailableUserEventModelCopyWith<_$_AvailableUserEventModel> copyWith
+  +String toString()
+  +bool ==()
+  +Map<String, dynamic> toJson()
+}
+
+"tumble::core::models::api_models::available_user_event_model.dart::_$_AvailableUserEventModel" o-- "tumble::core::models::api_models::available_user_event_model.dart::_$$_AvailableUserEventModelCopyWith<_$_AvailableUserEventModel>"
+"tumble::core::models::api_models::available_user_event_model.dart::_AvailableUserEventModel" <|-- "tumble::core::models::api_models::available_user_event_model.dart::_$_AvailableUserEventModel"
+
+abstract class "tumble::core::models::api_models::available_user_event_model.dart::_AvailableUserEventModel" {
+  +String id
+  +String title
+  +String type
+  +DateTime eventStart
+  +DateTime eventEnd
+  +DateTime lastSignupDate
+  +String? participatorId
+  +String? supportId
+  +String anonymousCode
+  +bool isRegistered
+  +bool supportAvailable
+  +bool requiresChoosingLocation
+  +_$$_AvailableUserEventModelCopyWith<_$_AvailableUserEventModel> copyWith
+}
+
+"tumble::core::models::api_models::available_user_event_model.dart::_AvailableUserEventModel" o-- "tumble::core::models::api_models::available_user_event_model.dart::_$$_AvailableUserEventModelCopyWith<_$_AvailableUserEventModel>"
+"tumble::core::models::api_models::available_user_event_model.dart::AvailableUserEventModel" <|-- "tumble::core::models::api_models::available_user_event_model.dart::_AvailableUserEventModel"
+
+abstract class "tumble::core::models::api_models::available_user_event_model.dart::_$AvailableUserEventModel" {
+  +String id
+  +String title
+  +String type
+  +DateTime eventStart
+  +DateTime eventEnd
+  +DateTime lastSignupDate
+  +String? participatorId
+  +String? supportId
+  +String anonymousCode
+  +bool isRegistered
+  +bool supportAvailable
+  +bool requiresChoosingLocation
+  +$AvailableUserEventModelCopyWith<AvailableUserEventModel> copyWith
+  +Map<String, dynamic> toJson()
+}
+
+"tumble::core::models::api_models::available_user_event_model.dart::_$AvailableUserEventModel" o-- "tumble::core::models::api_models::available_user_event_model.dart::$AvailableUserEventModelCopyWith<AvailableUserEventModel>"
+
+class "tumble::core::ui::schedule::tumble_list_view::tumble_list_view_schedule_card.dart::ScheduleCard" {
+  +Event event
+  +void Function() onTap
+  +Widget build()
+}
+
+"tumble::core::ui::schedule::tumble_list_view::tumble_list_view_schedule_card.dart::ScheduleCard" o-- "tumble::core::models::api_models::schedule_model.dart::Event"
+"tumble::core::ui::schedule::tumble_list_view::tumble_list_view_schedule_card.dart::ScheduleCard" o-- "dart::ui::void Function()"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "tumble::core::ui::schedule::tumble_list_view::tumble_list_view_schedule_card.dart::ScheduleCard"
+
+class "tumble::core::ui::schedule::tumble_list_view::tumble_list_view.dart::TumbleListView" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "tumble::core::ui::schedule::tumble_list_view::tumble_list_view.dart::TumbleListView"
+
+class "tumble::core::ui::schedule::tumble_list_view::tumble_list_view_schedule_card_time_stamp.dart::ScheduleCardTimeStamp" {
+  +DateTime timeStart
+  +Color textColor
+  +DateTime timeEnd
+  +Widget build()
+}
+
+"tumble::core::ui::schedule::tumble_list_view::tumble_list_view_schedule_card_time_stamp.dart::ScheduleCardTimeStamp" o-- "dart::ui::Color"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "tumble::core::ui::schedule::tumble_list_view::tumble_list_view_schedule_card_time_stamp.dart::ScheduleCardTimeStamp"
+
+class "tumble::core::ui::schedule::tumble_list_view::tumble_list_view_schedule_card_ribbon.dart::ScheduleCardRibbon" {
+  +Color color
+  +Widget build()
+}
+
+"tumble::core::ui::schedule::tumble_list_view::tumble_list_view_schedule_card_ribbon.dart::ScheduleCardRibbon" o-- "dart::ui::Color"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "tumble::core::ui::schedule::tumble_list_view::tumble_list_view_schedule_card_ribbon.dart::ScheduleCardRibbon"
+
+class "tumble::core::ui::schedule::tumble_list_view::data::to_top_button.dart::ToTopButton" {
+  +void Function() scrollToTop
+  +Widget build()
+}
+
+"tumble::core::ui::schedule::tumble_list_view::data::to_top_button.dart::ToTopButton" o-- "dart::ui::void Function()"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "tumble::core::ui::schedule::tumble_list_view::data::to_top_button.dart::ToTopButton"
+
+class "tumble::core::ui::schedule::tumble_list_view::data::cupertino_alerts.dart::CustomCupertinoAlerts" {
+  {static} +CupertinoAlertDialog noBookMarkedSchedules()
+  {static} +CupertinoAlertDialog scheduleContainsNoViews()
+  {static} +CupertinoAlertDialog fetchError()
+}
+
+class "tumble::core::ui::schedule::tumble_list_view::tumble_list_view_schedule_card_location_container.dart::ScheduleCardLocationContainer" {
+  +List<Location> locations
+  +Color textColor
+  +Widget build()
+}
+
+"tumble::core::ui::schedule::tumble_list_view::tumble_list_view_schedule_card_location_container.dart::ScheduleCardLocationContainer" o-- "dart::ui::Color"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "tumble::core::ui::schedule::tumble_list_view::tumble_list_view_schedule_card_location_container.dart::ScheduleCardLocationContainer"
+
+class "tumble::core::ui::schedule::tumble_list_view::tumble_list_view_day_container.dart::TumbleListViewDayContainer" {
+  +Day day
+  +Widget build()
+}
+
+"tumble::core::ui::schedule::tumble_list_view::tumble_list_view_day_container.dart::TumbleListViewDayContainer" o-- "tumble::core::models::api_models::schedule_model.dart::Day"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "tumble::core::ui::schedule::tumble_list_view::tumble_list_view_day_container.dart::TumbleListViewDayContainer"
+
+class "tumble::core::ui::schedule::tumble_calendar_view::tumble_calendar_view.dart::TumbleCalendarView" {
+  +State<TumbleCalendarView> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "tumble::core::ui::schedule::tumble_calendar_view::tumble_calendar_view.dart::TumbleCalendarView"
+
+class "tumble::core::ui::schedule::tumble_calendar_view::tumble_calendar_view.dart::_TumbleCalendarViewState" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "tumble::core::ui::schedule::tumble_calendar_view::tumble_calendar_view.dart::_TumbleCalendarViewState"
+
+class "tumble::core::ui::schedule::tumble_calendar_view::data::calendar_data_source.dart::ScheduleDataSource" {
+  +DateTime getStartTime()
+  +DateTime getEndTime()
+  +String getSubject()
+  +Color getColor()
+  +bool isAllDay()
+  -Event _getEventData()
+}
+
+"syncfusion_flutter_calendar::src::calendar::appointment_engine::calendar_datasource.dart::CalendarDataSource" <|-- "tumble::core::ui::schedule::tumble_calendar_view::data::calendar_data_source.dart::ScheduleDataSource"
+
+class "tumble::core::ui::schedule::no_schedule.dart::NoScheduleAvailable" {
+  +String errorType
+  +CupertinoAlertDialog? cupertinoAlertDialog
+  +Widget build()
+}
+
+"tumble::core::ui::schedule::no_schedule.dart::NoScheduleAvailable" o-- "flutter::src::cupertino::dialog.dart::CupertinoAlertDialog"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "tumble::core::ui::schedule::no_schedule.dart::NoScheduleAvailable"
+
+class "tumble::core::ui::schedule::modal_info_row.dart::ModalInfoRow" {
+  +List<Location>? locations
+  +List<Teacher>? teachers
+  +Icon icon
+  +String title
+  +String? subtitle
+  +Widget build()
+}
+
+"tumble::core::ui::schedule::modal_info_row.dart::ModalInfoRow" o-- "flutter::src::widgets::icon.dart::Icon"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "tumble::core::ui::schedule::modal_info_row.dart::ModalInfoRow"
+
+class "tumble::core::ui::schedule::tumble_week_view::tumble_day_of_week_divider.dart::DayOfWeekDivider" {
+  +Day day
+  +Widget build()
+}
+
+"tumble::core::ui::schedule::tumble_week_view::tumble_day_of_week_divider.dart::DayOfWeekDivider" o-- "tumble::core::models::api_models::schedule_model.dart::Day"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "tumble::core::ui::schedule::tumble_week_view::tumble_day_of_week_divider.dart::DayOfWeekDivider"
+
+class "tumble::core::ui::schedule::tumble_week_view::week_number.dart::WeekNumber" {
+  +Week week
+  +Widget build()
+}
+
+"tumble::core::ui::schedule::tumble_week_view::week_number.dart::WeekNumber" o-- "tumble::core::models::ui_models::week_model.dart::Week"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "tumble::core::ui::schedule::tumble_week_view::week_number.dart::WeekNumber"
+
+class "tumble::core::ui::schedule::tumble_week_view::week_mapper.dart::WeekMapper" {
+  +Week week
+  +Widget build()
+}
+
+"tumble::core::ui::schedule::tumble_week_view::week_mapper.dart::WeekMapper" o-- "tumble::core::models::ui_models::week_model.dart::Week"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "tumble::core::ui::schedule::tumble_week_view::week_mapper.dart::WeekMapper"
+
+class "tumble::core::ui::schedule::tumble_week_view::tumble_week_event_tile.dart::TumbleWeekEventTile" {
+  +Event event
+  +Widget build()
+}
+
+"tumble::core::ui::schedule::tumble_week_view::tumble_week_event_tile.dart::TumbleWeekEventTile" o-- "tumble::core::models::api_models::schedule_model.dart::Event"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "tumble::core::ui::schedule::tumble_week_view::tumble_week_event_tile.dart::TumbleWeekEventTile"
+
+class "tumble::core::ui::schedule::tumble_week_view::tumble_empty_week_event_tile.dart::TumbleEmptyWeekEventTile" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "tumble::core::ui::schedule::tumble_week_view::tumble_empty_week_event_tile.dart::TumbleEmptyWeekEventTile"
+
+class "tumble::core::ui::schedule::tumble_week_view::tumble_day_of_week_container.dart::TumbleDayOfWeekContainer" {
+  +Day day
+  +Widget build()
+}
+
+"tumble::core::ui::schedule::tumble_week_view::tumble_day_of_week_container.dart::TumbleDayOfWeekContainer" o-- "tumble::core::models::api_models::schedule_model.dart::Day"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "tumble::core::ui::schedule::tumble_week_view::tumble_day_of_week_container.dart::TumbleDayOfWeekContainer"
+
+class "tumble::core::ui::schedule::tumble_week_view::week_list_view.dart::TumbleWeekPageContainer" {
+  +Week week
+  +String scheduleId
+  +Widget build()
+}
+
+"tumble::core::ui::schedule::tumble_week_view::week_list_view.dart::TumbleWeekPageContainer" o-- "tumble::core::models::ui_models::week_model.dart::Week"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "tumble::core::ui::schedule::tumble_week_view::week_list_view.dart::TumbleWeekPageContainer"
+
+class "tumble::core::ui::schedule::tumble_week_view::tumble_week_view.dart::TumbleWeekView" {
+  +State<TumbleWeekView> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "tumble::core::ui::schedule::tumble_week_view::tumble_week_view.dart::TumbleWeekView"
+
+class "tumble::core::ui::schedule::tumble_week_view::tumble_week_view.dart::_TumbleWeekViewState" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "tumble::core::ui::schedule::tumble_week_view::tumble_week_view.dart::_TumbleWeekViewState"
+
+class "tumble::core::ui::schedule::event_modal.dart::TumbleEventModal" {
+  +Event event
+  +Color color
+  +Widget build()
+}
+
+"tumble::core::ui::schedule::event_modal.dart::TumbleEventModal" o-- "tumble::core::models::api_models::schedule_model.dart::Event"
+"tumble::core::ui::schedule::event_modal.dart::TumbleEventModal" o-- "dart::ui::Color"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "tumble::core::ui::schedule::event_modal.dart::TumbleEventModal"
+
+class "tumble::core::ui::login::cubit::auth_cubit.dart::AuthCubit" {
+  -UserRepository _userRepo
+  -SecureStorageRepository _secureStorage
+  +bool authenticated
+  +Future<void> getUserEvents()
+  +void submitLogin()
+  +bool formValidated()
+  +void setSchool()
+  +void storeUserCreds()
+  +void togglePasswordVisibility()
+  +void setUserLoggedIn()
+  +Future<void> login()
+  +void setUserSession()
+  +void logout()
+}
+
+"tumble::core::ui::login::cubit::auth_cubit.dart::AuthCubit" o-- "tumble::core::api::repository::user_repository.dart::UserRepository"
+"tumble::core::ui::login::cubit::auth_cubit.dart::AuthCubit" o-- "tumble::core::database::repository::secure_storage_repository.dart::SecureStorageRepository"
+"bloc::src::cubit.dart::Cubit" <|-- "tumble::core::ui::login::cubit::auth_cubit.dart::AuthCubit"
+
+class "tumble::core::ui::login::cubit::auth_cubit.dart::AuthState" {
+  +AuthStatus authStatus
+  +UserEventListStatus userEventListStatus
+  +KronoxUserModel? userSession
+  +String? errorMessage
+  +School? school
+  +TextEditingController usernameController
+  +TextEditingController passwordController
+  +bool passwordHidden
+  +bool refreshSession
+  +UserEventCollectionModel? userEvents
+  +List<Object?> props
+  +AuthState copyWith()
+}
+
+"tumble::core::ui::login::cubit::auth_cubit.dart::AuthState" o-- "tumble::core::ui::login::cubit::auth_cubit.dart::AuthStatus"
+"tumble::core::ui::login::cubit::auth_cubit.dart::AuthState" o-- "tumble::core::ui::account::user_event_list::cubit::user_event_list_cubit.dart::UserEventListStatus"
+"tumble::core::ui::login::cubit::auth_cubit.dart::AuthState" o-- "tumble::core::models::api_models::kronox_user_model.dart::KronoxUserModel"
+"tumble::core::ui::login::cubit::auth_cubit.dart::AuthState" o-- "tumble::core::models::ui_models::school_model.dart::School"
+"tumble::core::ui::login::cubit::auth_cubit.dart::AuthState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"tumble::core::ui::login::cubit::auth_cubit.dart::AuthState" o-- "tumble::core::models::api_models::user_event_collection_model.dart::UserEventCollectionModel"
+"equatable::src::equatable.dart::Equatable" <|-- "tumble::core::ui::login::cubit::auth_cubit.dart::AuthState"
+
+class "tumble::core::ui::login::cubit::auth_cubit.dart::AuthStatus" {
+  +int index
+  {static} +List<AuthStatus> values
+  {static} +AuthStatus AUTHENTICATED
+  {static} +AuthStatus UNAUTHENTICATED
+  {static} +AuthStatus INITIAL
+  {static} +AuthStatus LOADING
+}
+
+"tumble::core::ui::login::cubit::auth_cubit.dart::AuthStatus" o-- "tumble::core::ui::login::cubit::auth_cubit.dart::AuthStatus"
+"dart::core::Enum" <|-- "tumble::core::ui::login::cubit::auth_cubit.dart::AuthStatus"
+
+class "tumble::core::ui::login::login_page_root.dart::LoginPageRoot" {
+  +String? schoolName
+  +State<LoginPageRoot> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "tumble::core::ui::login::login_page_root.dart::LoginPageRoot"
+
+class "tumble::core::ui::login::login_page_root.dart::_LoginPageRootState" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "tumble::core::ui::login::login_page_root.dart::_LoginPageRootState"
+
+class "tumble::core::ui::bottom_nav_bar::tumble_navigation_bar.dart::TumbleNavigationBar" {
+  +void Function(int)? onTap
+  +Widget build()
+}
+
+"tumble::core::ui::bottom_nav_bar::tumble_navigation_bar.dart::TumbleNavigationBar" o-- "tumble::core::ui::bottom_nav_bar::tumble_navigation_bar.dart::void Function(int)"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "tumble::core::ui::bottom_nav_bar::tumble_navigation_bar.dart::TumbleNavigationBar"
+
+class "tumble::core::ui::bottom_nav_bar::cubit::bottom_nav_cubit.dart::MainAppNavigationCubit" {
+  +void getNavBarItem()
+}
+
+"bloc::src::cubit.dart::Cubit" <|-- "tumble::core::ui::bottom_nav_bar::cubit::bottom_nav_cubit.dart::MainAppNavigationCubit"
+
+class "tumble::core::ui::bottom_nav_bar::cubit::bottom_nav_cubit.dart::MainAppNavigationState" {
+  +NavbarItem navbarItem
+  +int index
+  +List<Object> props
+}
+
+"tumble::core::ui::bottom_nav_bar::cubit::bottom_nav_cubit.dart::MainAppNavigationState" o-- "tumble::core::ui::bottom_nav_bar::data::nav_bar_items.dart::NavbarItem"
+"equatable::src::equatable.dart::Equatable" <|-- "tumble::core::ui::bottom_nav_bar::cubit::bottom_nav_cubit.dart::MainAppNavigationState"
+
+class "tumble::core::ui::bottom_nav_bar::data::nav_bar_items.dart::NavbarItem" {
+  +int index
+  {static} +List<NavbarItem> values
+  {static} +NavbarItem SEARCH
+  {static} +NavbarItem LIST
+  {static} +NavbarItem WEEK
+  {static} +NavbarItem CALENDAR
+  {static} +NavbarItem ACCOUNT
+}
+
+"tumble::core::ui::bottom_nav_bar::data::nav_bar_items.dart::NavbarItem" o-- "tumble::core::ui::bottom_nav_bar::data::nav_bar_items.dart::NavbarItem"
+"dart::core::Enum" <|-- "tumble::core::ui::bottom_nav_bar::data::nav_bar_items.dart::NavbarItem"
+
+class "tumble::core::ui::main_app::main_app_navigation_root.dart::MainAppNavigationRootPage" {
+  +State<MainAppNavigationRootPage> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "tumble::core::ui::main_app::main_app_navigation_root.dart::MainAppNavigationRootPage"
+
+class "tumble::core::ui::main_app::main_app_navigation_root.dart::_MainAppNavigationRootPageState" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "tumble::core::ui::main_app::main_app_navigation_root.dart::_MainAppNavigationRootPageState"
+
+class "tumble::core::ui::main_app::cubit::main_app_cubit.dart::MainAppCubit" {
+  -SharedPreferences _sharedPrefs
+  -ImplementationRepository _implementationService
+  -DatabaseRepository _databaseService
+  -ScrollController _listViewScrollController
+  +ScrollController controller
+  +SharedPreferences sharedPrefs
+  +Future<void> toggleFavorite()
+  -void _toggleRemove()
+  -void _toggleSave()
+  +Future<void> initCached()
+  +Future<void> fetchNewSchedule()
+  +Future<void> initMainAppCubit()
+  +dynamic setScrollController()
+  +void scrollToTop()
+  +dynamic setLoading()
+  +void setupForNextSchool()
+}
+
+"tumble::core::ui::main_app::cubit::main_app_cubit.dart::MainAppCubit" o-- "shared_preferences::shared_preferences.dart::SharedPreferences"
+"tumble::core::ui::main_app::cubit::main_app_cubit.dart::MainAppCubit" o-- "tumble::core::api::repository::implementation_repository.dart::ImplementationRepository"
+"tumble::core::ui::main_app::cubit::main_app_cubit.dart::MainAppCubit" o-- "tumble::core::database::repository::database_repository.dart::DatabaseRepository"
+"tumble::core::ui::main_app::cubit::main_app_cubit.dart::MainAppCubit" o-- "flutter::src::widgets::scroll_controller.dart::ScrollController"
+"bloc::src::cubit.dart::Cubit" <|-- "tumble::core::ui::main_app::cubit::main_app_cubit.dart::MainAppCubit"
+
+class "tumble::core::ui::main_app::cubit::main_app_cubit.dart::MainAppState" {
+  +MainAppStatus status
+  +bool toggledFavorite
+  +bool listViewToTopButtonVisible
+  +String? currentScheduleId
+  +List<Day>? listOfDays
+  +List<Week>? listOfWeeks
+  +String? message
+  +ScheduleModel? scheduleModel
+  +List<Object?> props
+  +MainAppState copyWith()
+}
+
+"tumble::core::ui::main_app::cubit::main_app_cubit.dart::MainAppState" o-- "tumble::core::ui::main_app::cubit::main_app_cubit.dart::MainAppStatus"
+"tumble::core::ui::main_app::cubit::main_app_cubit.dart::MainAppState" o-- "tumble::core::models::api_models::schedule_model.dart::ScheduleModel"
+"equatable::src::equatable.dart::Equatable" <|-- "tumble::core::ui::main_app::cubit::main_app_cubit.dart::MainAppState"
+
+class "tumble::core::ui::main_app::cubit::main_app_cubit.dart::MainAppStatus" {
+  +int index
+  {static} +List<MainAppStatus> values
+  {static} +MainAppStatus INITIAL
+  {static} +MainAppStatus LOADING
+  {static} +MainAppStatus SCHEDULE_SELECTED
+  {static} +MainAppStatus FETCH_ERROR
+  {static} +MainAppStatus EMPTY_SCHEDULE
+}
+
+"tumble::core::ui::main_app::cubit::main_app_cubit.dart::MainAppStatus" o-- "tumble::core::ui::main_app::cubit::main_app_cubit.dart::MainAppStatus"
+"dart::core::Enum" <|-- "tumble::core::ui::main_app::cubit::main_app_cubit.dart::MainAppStatus"
+
+class "tumble::core::ui::main_app::data::event_types.dart::EventType" {
+  +int index
+  {static} +List<EventType> values
+  {static} +EventType CONTACT
+  {static} +EventType CHANGE_SCHOOL
+  {static} +EventType CHANGE_THEME
+  {static} +EventType SET_DEFAULT_VIEW
+  {static} +EventType SET_DEFAULT_SCHEDULE
+  {static} +EventType CANCEL_ALL_NOTIFICATIONS
+  {static} +EventType CANCEL_NOTIFICATIONS_FOR_PROGRAM
+  {static} +EventType EDIT_NOTIFICATION_TIME
+}
+
+"tumble::core::ui::main_app::data::event_types.dart::EventType" o-- "tumble::core::ui::main_app::data::event_types.dart::EventType"
+"dart::core::Enum" <|-- "tumble::core::ui::main_app::data::event_types.dart::EventType"
+
+class "tumble::core::ui::main_app::data::schools.dart::Schools" {
+  {static} +List<School> schools
+}
+
+class "tumble::core::ui::main_app::data::labels.dart::Labels" {
+  {static} +String week
+  {static} +String list
+  {static} +String calendar
+  {static} +String search
+  {static} +String account
+}
+
+class "tumble::core::ui::main_app::misc::tumble_drawer::tumble_app_drawer.dart::TumbleAppDrawer" {
+  +Widget build()
+  +void handleDrawerEvent()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "tumble::core::ui::main_app::misc::tumble_drawer::tumble_app_drawer.dart::TumbleAppDrawer"
+
+class "tumble::core::ui::main_app::misc::tumble_drawer::cubit::drawer_state.dart::DrawerState" {
+  +String? viewType
+  +String? school
+  +String? theme
+  +String? schedule
+  +List<String>? bookmarks
+  +List<Object?> props
+  +DrawerState copyWith()
+}
+
+"equatable::src::equatable.dart::Equatable" <|-- "tumble::core::ui::main_app::misc::tumble_drawer::cubit::drawer_state.dart::DrawerState"
+
+class "tumble::core::ui::main_app::misc::tumble_drawer::cubit::drawer_state.dart::DrawerCubit" {
+  -ThemeRepository _themeRepository
+  +void changeTheme()
+  +void setupForNextSchool()
+  +void setSchedule()
+  +void setView()
+  +void updateSchool()
+}
+
+"tumble::core::ui::main_app::misc::tumble_drawer::cubit::drawer_state.dart::DrawerCubit" o-- "tumble::core::theme::repository::theme_repository.dart::ThemeRepository"
+"bloc::src::cubit.dart::Cubit" <|-- "tumble::core::ui::main_app::misc::tumble_drawer::cubit::drawer_state.dart::DrawerCubit"
+
+class "tumble::core::ui::main_app::misc::tumble_drawer::drawer_generic::app_theme_picker.dart::AppThemePicker" {
+  +void Function(String) setTheme
+  +Widget build()
+}
+
+"tumble::core::ui::main_app::misc::tumble_drawer::drawer_generic::app_theme_picker.dart::AppThemePicker" o-- "tumble::core::ui::main_app::misc::tumble_drawer::drawer_generic::app_theme_picker.dart::void Function(String)"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "tumble::core::ui::main_app::misc::tumble_drawer::drawer_generic::app_theme_picker.dart::AppThemePicker"
+
+class "tumble::core::ui::main_app::misc::tumble_drawer::drawer_generic::app_default_view_picker.dart::AppDefaultViewPicker" {
+  +void Function(int) setDefaultView
+  +Widget build()
+}
+
+"tumble::core::ui::main_app::misc::tumble_drawer::drawer_generic::app_default_view_picker.dart::AppDefaultViewPicker" o-- "tumble::core::ui::main_app::misc::tumble_drawer::drawer_generic::app_default_view_picker.dart::void Function(int)"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "tumble::core::ui::main_app::misc::tumble_drawer::drawer_generic::app_default_view_picker.dart::AppDefaultViewPicker"
+
+class "tumble::core::ui::main_app::misc::tumble_drawer::drawer_generic::data::default_views_map.dart::IconAndTitleSet" {
+  {static} +Map<String, Map<int, Icon>> views
+  {static} +Map<String, Icon> themes
+}
+
+class "tumble::core::ui::main_app::misc::tumble_drawer::drawer_generic::app_default_schedule_picker.dart::AppDefaultSchedulePicker" {
+  +List<String> scheduleIds
+  +void Function(String) setDefaultSchedule
+  +Widget build()
+}
+
+"tumble::core::ui::main_app::misc::tumble_drawer::drawer_generic::app_default_schedule_picker.dart::AppDefaultSchedulePicker" o-- "tumble::core::ui::main_app::misc::tumble_drawer::drawer_generic::app_default_schedule_picker.dart::void Function(String)"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "tumble::core::ui::main_app::misc::tumble_drawer::drawer_generic::app_default_schedule_picker.dart::AppDefaultSchedulePicker"
+
+class "tumble::core::ui::main_app::misc::tumble_drawer::drawer_generic::app_notification_time_picker.dart::AppNotificationTimePicker" {
+  +Map<String, int> parameterMap
+  +void Function(int) setNotificationTime
+  +Widget build()
+}
+
+"tumble::core::ui::main_app::misc::tumble_drawer::drawer_generic::app_notification_time_picker.dart::AppNotificationTimePicker" o-- "tumble::core::ui::main_app::misc::tumble_drawer::drawer_generic::app_notification_time_picker.dart::void Function(int)"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "tumble::core::ui::main_app::misc::tumble_drawer::drawer_generic::app_notification_time_picker.dart::AppNotificationTimePicker"
+
+class "tumble::core::ui::main_app::misc::tumble_app_drawer_tile.dart::TumbleAppDrawerTile" {
+  +IconData prefixIcon
+  +String drawerTileTitle
+  +String subtitle
+  +Enum eventType
+  +void Function(Enum) drawerEvent
+  +Widget build()
+}
+
+"tumble::core::ui::main_app::misc::tumble_app_drawer_tile.dart::TumbleAppDrawerTile" o-- "flutter::src::widgets::icon_data.dart::IconData"
+"tumble::core::ui::main_app::misc::tumble_app_drawer_tile.dart::TumbleAppDrawerTile" o-- "tumble::core::ui::main_app::misc::tumble_app_drawer_tile.dart::void Function(Enum)"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "tumble::core::ui::main_app::misc::tumble_app_drawer_tile.dart::TumbleAppDrawerTile"
+
+class "tumble::core::ui::main_app::misc::tumble_settings_section.dart::TumbleSettingsSection" {
+  +List<Widget> tiles
+  +String title
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "tumble::core::ui::main_app::misc::tumble_settings_section.dart::TumbleSettingsSection"
+
+class "tumble::core::ui::main_app::misc::tumble_app_bar.dart::TumbleAppBar" {
+  +Future<void> Function()? toggleFavorite
+  +bool? visibleBookmark
+  +State<TumbleAppBar> createState()
+}
+
+"tumble::core::ui::main_app::misc::tumble_app_bar.dart::TumbleAppBar" o-- "flutter::src::foundation::basic_types.dart::Future<void> Function()"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "tumble::core::ui::main_app::misc::tumble_app_bar.dart::TumbleAppBar"
+
+class "tumble::core::ui::main_app::misc::tumble_app_bar.dart::_TumbleAppBarState" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "tumble::core::ui::main_app::misc::tumble_app_bar.dart::_TumbleAppBarState"
+
+class "tumble::core::ui::main_app::main_app.dart::MainApp" {
+  +State<MainApp> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "tumble::core::ui::main_app::main_app.dart::MainApp"
+
+class "tumble::core::ui::main_app::main_app.dart::_MainAppState" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "tumble::core::ui::main_app::main_app.dart::_MainAppState"
+
+class "tumble::core::ui::main_app::school_selection_page.dart::SchoolSelectionPage" {
+  +State<SchoolSelectionPage> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "tumble::core::ui::main_app::school_selection_page.dart::SchoolSelectionPage"
+
+class "tumble::core::ui::main_app::school_selection_page.dart::_SchoolSelectionPageState" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "tumble::core::ui::main_app::school_selection_page.dart::_SchoolSelectionPageState"
+
+class "tumble::core::ui::init_cubit::init_cubit.dart::InitCubit" {
+  -ImplementationRepository _implementationService
+  -SharedPreferences _sharedPrefs
+  +Future<void> init()
+  +void changeSchool()
+}
+
+"tumble::core::ui::init_cubit::init_cubit.dart::InitCubit" o-- "tumble::core::api::repository::implementation_repository.dart::ImplementationRepository"
+"tumble::core::ui::init_cubit::init_cubit.dart::InitCubit" o-- "shared_preferences::shared_preferences.dart::SharedPreferences"
+"bloc::src::cubit.dart::Cubit" <|-- "tumble::core::ui::init_cubit::init_cubit.dart::InitCubit"
+
+class "tumble::core::ui::init_cubit::init_cubit.dart::InitState" {
+  +InitStatus status
+  +String? defaultSchool
+  +List<Object?> props
+  +InitState copyWith()
+}
+
+"tumble::core::ui::init_cubit::init_cubit.dart::InitState" o-- "tumble::core::ui::init_cubit::init_cubit.dart::InitStatus"
+"equatable::src::equatable.dart::Equatable" <|-- "tumble::core::ui::init_cubit::init_cubit.dart::InitState"
+
+class "tumble::core::ui::init_cubit::init_cubit.dart::InitStatus" {
+  +int index
+  {static} +List<InitStatus> values
+  {static} +InitStatus INITIAL
+  {static} +InitStatus HAS_SCHOOL
+}
+
+"tumble::core::ui::init_cubit::init_cubit.dart::InitStatus" o-- "tumble::core::ui::init_cubit::init_cubit.dart::InitStatus"
+"dart::core::Enum" <|-- "tumble::core::ui::init_cubit::init_cubit.dart::InitStatus"
+
+class "tumble::core::ui::search::cubit::search_page_cubit.dart::SearchPageCubit" {
+  -TextEditingController _textEditingController
+  -FocusNode _focusNode
+  -ImplementationRepository _implementationService
+  +TextEditingController textEditingController
+  +FocusNode focusNode
+  +Future<void> search()
+  +void setLoading()
+  +void resetCubit()
+  +Future<void> init()
+  +Future<void> close()
+  +dynamic setSearchBarFocused()
+}
+
+"tumble::core::ui::search::cubit::search_page_cubit.dart::SearchPageCubit" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"tumble::core::ui::search::cubit::search_page_cubit.dart::SearchPageCubit" o-- "flutter::src::widgets::focus_manager.dart::FocusNode"
+"tumble::core::ui::search::cubit::search_page_cubit.dart::SearchPageCubit" o-- "tumble::core::api::repository::implementation_repository.dart::ImplementationRepository"
+"bloc::src::cubit.dart::Cubit" <|-- "tumble::core::ui::search::cubit::search_page_cubit.dart::SearchPageCubit"
+
+class "tumble::core::ui::search::cubit::search_page_cubit.dart::SearchPageState" {
+  +SearchPageStatus status
+  +bool focused
+  +bool clearButtonVisible
+  +String? errorMessage
+  +List<Item>? programList
+  +List<Object?> props
+  +SearchPageState copyWith()
+}
+
+"tumble::core::ui::search::cubit::search_page_cubit.dart::SearchPageState" o-- "tumble::core::ui::search::cubit::search_page_cubit.dart::SearchPageStatus"
+"equatable::src::equatable.dart::Equatable" <|-- "tumble::core::ui::search::cubit::search_page_cubit.dart::SearchPageState"
+
+class "tumble::core::ui::search::cubit::search_page_cubit.dart::SearchPageStatus" {
+  +int index
+  {static} +List<SearchPageStatus> values
+  {static} +SearchPageStatus INITIAL
+  {static} +SearchPageStatus LOADING
+  {static} +SearchPageStatus FOUND
+  {static} +SearchPageStatus NO_SCHEDULES
+  {static} +SearchPageStatus ERROR
+}
+
+"tumble::core::ui::search::cubit::search_page_cubit.dart::SearchPageStatus" o-- "tumble::core::ui::search::cubit::search_page_cubit.dart::SearchPageStatus"
+"dart::core::Enum" <|-- "tumble::core::ui::search::cubit::search_page_cubit.dart::SearchPageStatus"
+
+class "tumble::core::ui::search::search::search_error_message.dart::SearchErrorMessage" {
+  +String errorType
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "tumble::core::ui::search::search::search_error_message.dart::SearchErrorMessage"
+
+class "tumble::core::ui::search::search::search_page_slideable_logo.dart::SlideableLogo" {
+  +bool focused
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "tumble::core::ui::search::search::search_page_slideable_logo.dart::SlideableLogo"
+
+class "tumble::core::ui::search::search::program_card.dart::ProgramCard" {
+  +String programName
+  +String programSubtitle
+  +String schoolName
+  +Future<void> Function() onTap
+  +Widget build()
+}
+
+"tumble::core::ui::search::search::program_card.dart::ProgramCard" o-- "flutter::src::foundation::basic_types.dart::Future<void> Function()"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "tumble::core::ui::search::search::program_card.dart::ProgramCard"
+
+class "tumble::core::ui::search::search::schedule_search_bar.dart::ScheduleSearchBar" {
+  +State<ScheduleSearchBar> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "tumble::core::ui::search::search::schedule_search_bar.dart::ScheduleSearchBar"
+
+class "tumble::core::ui::search::search::schedule_search_bar.dart::_ScheduleSearchBarState" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "tumble::core::ui::search::search::schedule_search_bar.dart::_ScheduleSearchBarState"
+
+class "tumble::core::ui::search::search::tumble_search_page.dart::TumbleSearchPage" {
+  +State<TumbleSearchPage> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "tumble::core::ui::search::search::tumble_search_page.dart::TumbleSearchPage"
+
+class "tumble::core::ui::search::search::tumble_search_page.dart::_TumbleSearchPageState" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "tumble::core::ui::search::search::tumble_search_page.dart::_TumbleSearchPageState"
+
+class "tumble::core::ui::search::search::school_card.dart::SchoolCard" {
+  +SchoolEnum schoolId
+  +String schoolName
+  +String schoolLogo
+  +void Function() selectSchool
+  +Widget build()
+}
+
+"tumble::core::ui::search::search::school_card.dart::SchoolCard" o-- "tumble::core::helpers::school_enum.dart::SchoolEnum"
+"tumble::core::ui::search::search::school_card.dart::SchoolCard" o-- "dart::ui::void Function()"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "tumble::core::ui::search::search::school_card.dart::SchoolCard"
+
+class "tumble::core::ui::search::search::searchbar_and_logo_container.dart::SearchBarAndLogoContainer" {
+  +State<SearchBarAndLogoContainer> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "tumble::core::ui::search::search::searchbar_and_logo_container.dart::SearchBarAndLogoContainer"
+
+class "tumble::core::ui::search::search::searchbar_and_logo_container.dart::_SearchBarAndLogoContainerState" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "tumble::core::ui::search::search::searchbar_and_logo_container.dart::_SearchBarAndLogoContainerState"
+
+class "tumble::core::ui::account::authenticated_page.dart::AuthenticatedPage" {
+  +State<StatefulWidget> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "tumble::core::ui::account::authenticated_page.dart::AuthenticatedPage"
+
+class "tumble::core::ui::account::authenticated_page.dart::_AuthenticatedPage" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "tumble::core::ui::account::authenticated_page.dart::_AuthenticatedPage"
+"flutter::src::widgets::ticker_provider.dart::TickerProviderStateMixin" <|-- "tumble::core::ui::account::authenticated_page.dart::_AuthenticatedPage"
+
+class "tumble::core::ui::account::user_account_info.dart::UserAccountInfo" {
+  +State<UserAccountInfo> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "tumble::core::ui::account::user_account_info.dart::UserAccountInfo"
+
+class "tumble::core::ui::account::user_account_info.dart::_UserAccountInfo" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "tumble::core::ui::account::user_account_info.dart::_UserAccountInfo"
+
+class "tumble::core::ui::account::unauthenticated_page.dart::UnauthenticatedPage" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "tumble::core::ui::account::unauthenticated_page.dart::UnauthenticatedPage"
+
+class "tumble::core::ui::account::user_info.dart::UserInfo" {
+  +String? name
+  +bool loggedIn
+  +void Function() onPressed
+  +Widget build()
+}
+
+"tumble::core::ui::account::user_info.dart::UserInfo" o-- "null::void Function()"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "tumble::core::ui::account::user_info.dart::UserInfo"
+
+class "tumble::core::ui::account::user_event_list::cubit::user_event_list_cubit.dart::UserEventListCubit" {
+  -UserRepository _userRepository
+  +Future<void> getUserEvents()
+}
+
+"tumble::core::ui::account::user_event_list::cubit::user_event_list_cubit.dart::UserEventListCubit" o-- "tumble::core::api::repository::user_repository.dart::UserRepository"
+"bloc::src::cubit.dart::Cubit" <|-- "tumble::core::ui::account::user_event_list::cubit::user_event_list_cubit.dart::UserEventListCubit"
+
+class "tumble::core::ui::account::user_event_list::cubit::user_event_list_cubit.dart::UserEventListState" {
+  +UserEventListStatus status
+  +bool refreshSession
+  +UserEventCollectionModel? userEvents
+  +List<Object?> props
+  +UserEventListState copyWith()
+}
+
+"tumble::core::ui::account::user_event_list::cubit::user_event_list_cubit.dart::UserEventListState" o-- "tumble::core::ui::account::user_event_list::cubit::user_event_list_cubit.dart::UserEventListStatus"
+"tumble::core::ui::account::user_event_list::cubit::user_event_list_cubit.dart::UserEventListState" o-- "tumble::core::models::api_models::user_event_collection_model.dart::UserEventCollectionModel"
+"equatable::src::equatable.dart::Equatable" <|-- "tumble::core::ui::account::user_event_list::cubit::user_event_list_cubit.dart::UserEventListState"
+
+class "tumble::core::ui::account::user_event_list::cubit::user_event_list_cubit.dart::UserEventListStatus" {
+  +int index
+  {static} +List<UserEventListStatus> values
+  {static} +UserEventListStatus LOADING
+  {static} +UserEventListStatus LOADED
+  {static} +UserEventListStatus ERROR
+}
+
+"tumble::core::ui::account::user_event_list::cubit::user_event_list_cubit.dart::UserEventListStatus" o-- "tumble::core::ui::account::user_event_list::cubit::user_event_list_cubit.dart::UserEventListStatus"
+"dart::core::Enum" <|-- "tumble::core::ui::account::user_event_list::cubit::user_event_list_cubit.dart::UserEventListStatus"
+
+class "tumble::core::ui::account::user_event_list::user_event_list.dart::UserEventList" {
+  +State<UserEventList> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "tumble::core::ui::account::user_event_list::user_event_list.dart::UserEventList"
+
+class "tumble::core::ui::account::user_event_list::user_event_list.dart::_UserEventListState" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "tumble::core::ui::account::user_event_list::user_event_list.dart::_UserEventListState"
+
+class "tumble::core::ui::account::tumble_account_page.dart::TumbleAccountPage" {
+  +State<TumbleAccountPage> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "tumble::core::ui::account::tumble_account_page.dart::TumbleAccountPage"
+
+class "tumble::core::ui::account::tumble_account_page.dart::_TumbleAccountPageState" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "tumble::core::ui::account::tumble_account_page.dart::_TumbleAccountPageState"
+
+class "tumble::core::ui::account::available_event_card.dart::AvailableEventCard" {
+  +AvailableUserEventModel event
+  +Widget build()
+}
+
+"tumble::core::ui::account::available_event_card.dart::AvailableEventCard" o-- "tumble::core::models::api_models::available_user_event_model.dart::AvailableUserEventModel"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "tumble::core::ui::account::available_event_card.dart::AvailableEventCard"
+
+abstract class "tumble::core::database::interface::idatabase_service.dart::IDatabaseScheduleService" {
+  +Future<dynamic> addSchedule()
+  +Future<dynamic> updateSchedule()
+  +Future<dynamic> removeSchedule()
+  +Future<List<ScheduleModel>> getAllSchedules()
+  +Future<List<String>> getAllScheduleIds()
+  +Future<ScheduleModel?> getOneSchedule()
+  +Future<dynamic> removeAllSchedules()
+  +Future<dynamic> setUserSession()
+  +Future<dynamic> removeUserSession()
+  +Future<KronoxUserModel?> getUserSession()
+}
+
+class "tumble::core::database::interface::iaccess_stores.dart::AccessStores" {
+  {static} +String SCHEDULE_STORE
+  {static} +String USER_STORE
+  {static} +String PREFERENCE_STORE
+}
+
+abstract class "tumble::core::database::interface::isecure_storage.dart::ISecureStorage" {
+  +Future<String?> getRefreshToken()
+  +void setRefreshToken()
+  +void clear()
+}
+
+class "tumble::core::database::responses::change_response.dart::ChangeResponse" {
+  {static} +String changeSchool
+}
+
+class "tumble::core::database::database.dart::AppDatabase" {
+  -Completer<Database>? _dbOpenCompleter
+  -Database? _database
+  +Future<Database> database
+  -Future<dynamic> _openDatabase()
+}
+
+"tumble::core::database::database.dart::AppDatabase" o-- "dart::async::Completer<Database>"
+"tumble::core::database::database.dart::AppDatabase" o-- "sembast::src::api::v2::database.dart::Database"
+
+class "tumble::core::database::database_response.dart::DatabaseResponse" {
+  +Status status
+  +T? data
+  +String? message
+  +String toString()
+}
+
+"tumble::core::database::database_response.dart::DatabaseResponse" o-- "tumble::core::database::database_response.dart::Status"
+
+class "tumble::core::database::database_response.dart::Status" {
+  +int index
+  {static} +List<Status> values
+  {static} +Status NO_SCHOOL
+  {static} +Status HAS_SCHOOL
+}
+
+"tumble::core::database::database_response.dart::Status" o-- "tumble::core::database::database_response.dart::Status"
+"dart::core::Enum" <|-- "tumble::core::database::database_response.dart::Status"
+
+class "tumble::core::database::repository::database_repository.dart::DatabaseRepository" {
+  -StoreRef<int, Map<String, Object?>> _scheduleStore
+  -StoreRef<int, Map<String, Object?>> _userStore
+  -Future<Database> _db
+  +Future<dynamic> addSchedule()
+  +Future<dynamic> removeSchedule()
+  +Future<dynamic> updateSchedule()
+  +Future<List<ScheduleModel>> getAllSchedules()
+  +Future<ScheduleModel?> getOneSchedule()
+  +Future<List<String>> getAllScheduleIds()
+  +Future<dynamic> removeAllSchedules()
+  +Future<dynamic> setUserSession()
+  +Future<dynamic> removeUserSession()
+  +Future<KronoxUserModel?> getUserSession()
+}
+
+"tumble::core::database::repository::database_repository.dart::DatabaseRepository" o-- "sembast::src::api::store_ref.dart::StoreRef<int, Map<String, Object>>"
+"tumble::core::database::interface::idatabase_service.dart::IDatabaseScheduleService" <|-- "tumble::core::database::repository::database_repository.dart::DatabaseRepository"
+
+class "tumble::core::database::repository::secure_storage_repository.dart::SecureStorageRepository" {
+  +FlutterSecureStorage secureStorage
+  +AndroidOptions aOptions
+  +Future<String?> getRefreshToken()
+  +void setRefreshToken()
+  +void clear()
+}
+
+"tumble::core::database::repository::secure_storage_repository.dart::SecureStorageRepository" o-- "flutter_secure_storage::flutter_secure_storage.dart::FlutterSecureStorage"
+"tumble::core::database::repository::secure_storage_repository.dart::SecureStorageRepository" o-- "flutter_secure_storage::flutter_secure_storage.dart::AndroidOptions"
+"tumble::core::database::interface::isecure_storage.dart::ISecureStorage" <|-- "tumble::core::database::repository::secure_storage_repository.dart::SecureStorageRepository"
+
+class "tumble::core::helpers::color_picker.dart::ColorPicker" {
+  {static} +String getRandomHexColor()
+}
+
+class "tumble::core::helpers::school_enum.dart::SchoolEnum" {
+  +int index
+  {static} +List<SchoolEnum> values
+  {static} +SchoolEnum hkr
+  {static} +SchoolEnum mau
+  {static} +SchoolEnum oru
+  {static} +SchoolEnum ltu
+  {static} +SchoolEnum hig
+  {static} +SchoolEnum sh
+  {static} +SchoolEnum hv
+  {static} +SchoolEnum hb
+  {static} +SchoolEnum mdh
+}
+
+"tumble::core::helpers::school_enum.dart::SchoolEnum" o-- "tumble::core::helpers::school_enum.dart::SchoolEnum"
+"dart::core::Enum" <|-- "tumble::core::helpers::school_enum.dart::SchoolEnum"
+
+class "tumble::core::api::cert_bypass.dart::HttpService" {
+  {static} +Future<HttpClientResponse?> sendGetRequestToServer()
+  {static} +Future<HttpClientResponse?> sendPostRequestToServer()
+  {static} +Future<HttpClientResponse?> sendPutRequestToServer()
+}
+
+abstract class "tumble::core::api::interface::inotification_service.dart::INotificationService" {
+  +Future<void> createScheduleReminderNotification()
+}
+
+abstract class "tumble::core::api::interface::ibackend_service.dart::IBackendService" {
+  +Future<dynamic> getSchedule()
+  +Future<dynamic> getPrograms()
+  +Future<dynamic> getUserEvents()
+  +Future<dynamic> getRefreshSession()
+  +Future<dynamic> postUserLogin()
+  +Future<dynamic> putRegisterUserEvent()
+  +Future<dynamic> putUnregisterUserEvent()
+}
+
+abstract class "tumble::core::api::interface::iimplementation_service.dart::IImplementationService" {
+  +Future<dynamic> getProgramsRequest()
+  +Future<ApiResponse<dynamic>> getSchedulesRequest()
+  +Future<ApiResponse<dynamic>> getSchedule()
+  +Future<ApiResponse<dynamic>> getCachedBookmarkedSchedule()
+  +Future<DatabaseResponse<dynamic>> initSetup()
+}
+
+abstract class "tumble::core::api::interface::iuser_service.dart::IUserService" {
+  +Future<ApiResponse<dynamic>> getUserEvents()
+  +Future<ApiResponse<dynamic>> postUserLogin()
+  +Future<ApiResponse<dynamic>> getRefreshSession()
+  +Future<dynamic> putRegisterUserEvent()
+  +Future<dynamic> putUnregisterUserEvent()
+}
+
+class "tumble::core::api::repository::backend_repository.dart::BackendRepository" {
+  +Future<ApiResponse<dynamic>> getSchedule()
+  +Future<ApiResponse<dynamic>> getPrograms()
+  +Future<dynamic> getUserEvents()
+  +Future<dynamic> getRefreshSession()
+  +Future<dynamic> putRegisterUserEvent()
+  +Future<dynamic> putUnregisterUserEvent()
+  +Future<dynamic> postUserLogin()
+}
+
+"tumble::core::api::interface::ibackend_service.dart::IBackendService" <|-- "tumble::core::api::repository::backend_repository.dart::BackendRepository"
+
+class "tumble::core::api::repository::user_repository.dart::UserRepository" {
+  -BackendRepository _backendRepository
+  -SharedPreferences _sharedPrefs
+  +Future<ApiResponse<dynamic>> getUserEvents()
+  +Future<ApiResponse<dynamic>> postUserLogin()
+  +Future<dynamic> putRegisterUserEvent()
+  +Future<dynamic> putUnregisterUserEvent()
+  +Future<ApiResponse<dynamic>> getRefreshSession()
+}
+
+"tumble::core::api::repository::user_repository.dart::UserRepository" o-- "tumble::core::api::repository::backend_repository.dart::BackendRepository"
+"tumble::core::api::repository::user_repository.dart::UserRepository" o-- "shared_preferences::shared_preferences.dart::SharedPreferences"
+"tumble::core::api::interface::iuser_service.dart::IUserService" <|-- "tumble::core::api::repository::user_repository.dart::UserRepository"
+
+class "tumble::core::api::repository::implementation_repository.dart::ImplementationRepository" {
+  -BackendRepository _backendService
+  -SharedPreferences _preferenceService
+  -DatabaseRepository _databaseService
+  +Future<ApiResponse<dynamic>> getProgramsRequest()
+  +Future<ApiResponse<dynamic>> getSchedulesRequest()
+  +Future<ApiResponse<dynamic>> getSchedule()
+  +Future<DatabaseResponse<dynamic>> initSetup()
+  +Future<ApiResponse<dynamic>> getCachedBookmarkedSchedule()
+}
+
+"tumble::core::api::repository::implementation_repository.dart::ImplementationRepository" o-- "tumble::core::api::repository::backend_repository.dart::BackendRepository"
+"tumble::core::api::repository::implementation_repository.dart::ImplementationRepository" o-- "shared_preferences::shared_preferences.dart::SharedPreferences"
+"tumble::core::api::repository::implementation_repository.dart::ImplementationRepository" o-- "tumble::core::database::repository::database_repository.dart::DatabaseRepository"
+"tumble::core::api::interface::iimplementation_service.dart::IImplementationService" <|-- "tumble::core::api::repository::implementation_repository.dart::ImplementationRepository"
+
+class "tumble::core::api::apiservices::exception_types.dart::AppException" {
+  -dynamic _message
+  -dynamic _prefix
+  +String toString()
+}
+
+"dart::core::Exception" <|-- "tumble::core::api::apiservices::exception_types.dart::AppException"
+
+class "tumble::core::api::apiservices::exception_types.dart::FetchDataException" {
+}
+
+"tumble::core::api::apiservices::exception_types.dart::AppException" <|-- "tumble::core::api::apiservices::exception_types.dart::FetchDataException"
+
+class "tumble::core::api::apiservices::exception_types.dart::BadRequestException" {
+}
+
+"tumble::core::api::apiservices::exception_types.dart::AppException" <|-- "tumble::core::api::apiservices::exception_types.dart::BadRequestException"
+
+class "tumble::core::api::apiservices::exception_types.dart::InvalidInputException" {
+}
+
+"tumble::core::api::apiservices::exception_types.dart::AppException" <|-- "tumble::core::api::apiservices::exception_types.dart::InvalidInputException"
+
+class "tumble::core::api::apiservices::fetch_response.dart::FetchResponse" {
+  {static} +String programFetchEerror
+  {static} +String scheduleFetchError
+  {static} +String timeoutError
+  {static} +String emptyScheduleError
+  {static} +String loginError
+  {static} +String unknownError
+  {static} +String authenticationError
+  {static} +String loginSuccess
+}
+
+class "tumble::core::api::apiservices::api_response.dart::ApiResponse" {
+  +ApiStatus status
+  +T? data
+  +String? message
+  +String toString()
+}
+
+"tumble::core::api::apiservices::api_response.dart::ApiResponse" o-- "tumble::core::api::apiservices::api_response.dart::ApiStatus"
+
+class "tumble::core::api::apiservices::api_response.dart::ApiStatus" {
+  +int index
+  {static} +List<ApiStatus> values
+  {static} +ApiStatus INITIAL
+  {static} +ApiStatus LOADING
+  {static} +ApiStatus REQUESTED
+  {static} +ApiStatus ERROR
+  {static} +ApiStatus CACHED
+  {static} +ApiStatus UNAUTHORIZED
+}
+
+"tumble::core::api::apiservices::api_response.dart::ApiStatus" o-- "tumble::core::api::apiservices::api_response.dart::ApiStatus"
+"dart::core::Enum" <|-- "tumble::core::api::apiservices::api_response.dart::ApiStatus"
+
+class "tumble::core::api::apiservices::api_endpoints.dart::ApiEndPoints" {
+  {static} +String debugBaseUrl
+  {static} +String baseUrl
+  {static} +String getSchedules
+  {static} +String getOneSchedule
+  {static} +String postUserLogin
+  {static} +String getUserEvents
+  {static} +String getRefreshSession
+  {static} +String eventId
+  {static} +String school
+  {static} +String startTag
+  {static} +String search
+  {static} +String sessionToken
+  {static} +String password
+  {static} +String username
+}
+
+class "tumble::core::theme::cubit::theme_state.dart::ThemeState" {
+  +ThemeMode themeMode
+  +String themeString
+  +List<Object?> props
+  +ThemeState copyWith()
+}
+
+"tumble::core::theme::cubit::theme_state.dart::ThemeState" o-- "flutter::src::material::app.dart::ThemeMode"
+"equatable::src::equatable.dart::Equatable" <|-- "tumble::core::theme::cubit::theme_state.dart::ThemeState"
+
+class "tumble::core::theme::cubit::theme_cubit.dart::ThemeCubit" {
+  +ThemePersistense themeRepository
+  -StreamSubscription<CustomTheme> _themeSubscription
+  +void getCurrentTheme()
+  +Future<void> close()
+}
+
+"tumble::core::theme::cubit::theme_cubit.dart::ThemeCubit" o-- "tumble::core::theme::repository::theme_repository.dart::ThemePersistense"
+"tumble::core::theme::cubit::theme_cubit.dart::ThemeCubit" o-- "dart::async::StreamSubscription<CustomTheme>"
+"bloc::src::cubit.dart::Cubit" <|-- "tumble::core::theme::cubit::theme_cubit.dart::ThemeCubit"
+
+class "tumble::core::theme::data::colors.dart::CustomColors" {
+  {static} +Color orangePrimary
+  {static} +Color orangePrimaryVariant
+  {static} +ColorScheme lightColors
+  {static} +ColorScheme darkColors
+}
+
+"tumble::core::theme::data::colors.dart::CustomColors" o-- "dart::ui::Color"
+"tumble::core::theme::data::colors.dart::CustomColors" o-- "flutter::src::material::color_scheme.dart::ColorScheme"
+
+abstract class "tumble::core::theme::data::app_theme.dart::AppTheme" {
+  {static} +ThemeData lightTheme
+  {static} +ThemeData darkTheme
+}
+
+"tumble::core::theme::data::app_theme.dart::AppTheme" o-- "flutter::src::material::theme_data.dart::ThemeData"
+
+abstract class "tumble::core::theme::repository::theme_repository.dart::ThemePersistense" {
+  +Stream<CustomTheme> getTheme()
+  +Future<void> saveTheme()
+  +void dispose()
+}
+
+class "tumble::core::theme::repository::theme_repository.dart::ThemeRepository" {
+  -SharedPreferences _sharedPreferences
+  -StreamController<CustomTheme> _controller
+  -void _init()
+  +Stream<CustomTheme> getTheme()
+  +Future<void> saveTheme()
+  +void dispose()
+}
+
+"tumble::core::theme::repository::theme_repository.dart::ThemeRepository" o-- "shared_preferences::shared_preferences.dart::SharedPreferences"
+"tumble::core::theme::repository::theme_repository.dart::ThemeRepository" o-- "dart::async::StreamController<CustomTheme>"
+"tumble::core::theme::repository::theme_repository.dart::ThemePersistense" <|-- "tumble::core::theme::repository::theme_repository.dart::ThemeRepository"
+
+class "tumble::core::theme::repository::theme_repository.dart::CustomTheme" {
+  +int index
+  {static} +List<CustomTheme> values
+  {static} +CustomTheme light
+  {static} +CustomTheme dark
+  {static} +CustomTheme system
+}
+
+"tumble::core::theme::repository::theme_repository.dart::CustomTheme" o-- "tumble::core::theme::repository::theme_repository.dart::CustomTheme"
+"dart::core::Enum" <|-- "tumble::core::theme::repository::theme_repository.dart::CustomTheme"
+
+class "tumble::core::app.dart::App" {
+  +State<App> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "tumble::core::app.dart::App"
+
+class "tumble::core::app.dart::_AppState" {
+  +void initState()
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "tumble::core::app.dart::_AppState"
+
+
+@enduml
