@@ -5,6 +5,7 @@ import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:tumble/core/api/apiservices/fetch_response.dart';
 import 'package:tumble/core/models/api_models/schedule_model.dart';
 import 'package:tumble/core/navigation/app_navigator.dart';
+import 'package:tumble/core/theme/data/colors.dart';
 import 'package:tumble/core/ui/bottom_nav_bar/cubit/bottom_nav_cubit.dart';
 import 'package:tumble/core/ui/bottom_nav_bar/data/nav_bar_items.dart';
 import 'package:tumble/core/ui/main_app/cubit/main_app_cubit.dart';
@@ -41,36 +42,50 @@ class _TumbleCalendarViewState extends State<TumbleCalendarView> {
                 color: Theme.of(context).colorScheme.primary);
 
           case MainAppStatus.SCHEDULE_SELECTED:
-            return SfCalendar(
-                view: CalendarView.month,
-                dataSource:
-                    ScheduleDataSource(_getDataSource(state.listOfDays!)),
-                headerStyle: CalendarHeaderStyle(
-                    textAlign: TextAlign.center,
-                    backgroundColor: Theme.of(context).colorScheme.primary,
-                    textStyle: TextStyle(
-                        fontSize: 20,
-                        fontStyle: FontStyle.normal,
-                        letterSpacing: 5,
-                        color: Theme.of(context).colorScheme.onPrimary,
-                        fontWeight: FontWeight.w500)),
-                monthViewSettings: MonthViewSettings(
-                    showAgenda: true,
-                    navigationDirection: MonthNavigationDirection.vertical,
-                    agendaViewHeight: 200,
-                    appointmentDisplayMode:
-                        MonthAppointmentDisplayMode.appointment,
-                    monthCellStyle: MonthCellStyle(
-                      backgroundColor: Theme.of(context).colorScheme.background,
-                      trailingDatesBackgroundColor:
-                          Theme.of(context).colorScheme.background,
-                      leadingDatesBackgroundColor:
-                          Theme.of(context).colorScheme.background,
-                      textStyle: TextStyle(
-                          fontSize: 12,
-                          fontFamily: 'Roboto',
-                          color: Theme.of(context).colorScheme.onBackground),
-                    )));
+            return FutureBuilder(
+                future: _getCalendarDataSource(
+                    state.listOfDays!, BlocProvider.of<MainAppCubit>(context)),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return SfCalendar(
+                        view: CalendarView.month,
+                        dataSource: snapshot.data as _AppointmentDataSource,
+                        headerStyle: CalendarHeaderStyle(
+                            textAlign: TextAlign.center,
+                            backgroundColor:
+                                Theme.of(context).colorScheme.primary,
+                            textStyle: TextStyle(
+                                fontSize: 20,
+                                fontStyle: FontStyle.normal,
+                                letterSpacing: 5,
+                                color: Theme.of(context).colorScheme.onPrimary,
+                                fontWeight: FontWeight.w500)),
+                        monthViewSettings: MonthViewSettings(
+                            showAgenda: true,
+                            navigationDirection:
+                                MonthNavigationDirection.vertical,
+                            agendaViewHeight: 200,
+                            appointmentDisplayMode:
+                                MonthAppointmentDisplayMode.appointment,
+                            monthCellStyle: MonthCellStyle(
+                              backgroundColor:
+                                  Theme.of(context).colorScheme.background,
+                              trailingDatesBackgroundColor:
+                                  Theme.of(context).colorScheme.background,
+                              leadingDatesBackgroundColor:
+                                  Theme.of(context).colorScheme.background,
+                              textStyle: TextStyle(
+                                  fontSize: 12,
+                                  fontFamily: 'Roboto',
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onBackground),
+                            )));
+                  }
+                  return const SpinKitThreeBounce(
+                    color: CustomColors.orangePrimary,
+                  );
+                });
           case MainAppStatus.FETCH_ERROR:
             return NoScheduleAvailable(
               errorType: state.message!,
@@ -98,21 +113,28 @@ class _TumbleCalendarViewState extends State<TumbleCalendarView> {
   }
 }
 
-List<Event> _getDataSource(List<Day> days) {
-  final List<Event> events = <Event>[];
+Future<_AppointmentDataSource> _getCalendarDataSource(
+    List<Day> days, MainAppCubit cubit) async {
+  List<Appointment> appointments = <Appointment>[];
   for (Day day in days) {
     for (Event event in day.events) {
-      events.add(Event(
-          id: event.id,
-          title: event.title,
-          course: event.course,
-          timeStart: event.timeStart,
-          timeEnd: event.timeEnd,
-          locations: event.locations,
-          teachers: event.teachers,
-          isSpecial: event.isSpecial,
-          lastModified: event.lastModified));
+      Color color = await cubit.parseCourseColorById(event.course.id);
+      appointments.add(Appointment(
+        startTime: event.timeStart,
+        endTime: event.timeEnd,
+        subject: event.title,
+        color: color,
+        startTimeZone: '',
+        endTimeZone: '',
+      ));
     }
   }
-  return events;
+
+  return _AppointmentDataSource(appointments);
+}
+
+class _AppointmentDataSource extends CalendarDataSource {
+  _AppointmentDataSource(List<Appointment> source) {
+    appointments = source;
+  }
 }

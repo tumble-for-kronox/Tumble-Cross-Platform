@@ -1,5 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:tumble/core/models/api_models/kronox_user_model.dart';
 import 'package:tumble/core/models/api_models/schedule_model.dart';
+import 'package:tumble/core/models/ui_models/course_model.dart';
 
 abstract class IDatabaseScheduleService {
   Future addSchedule(ScheduleModel scheduleModel);
@@ -20,4 +22,10 @@ abstract class IDatabaseScheduleService {
   Future removeUserSession();
 
   Future<KronoxUserModel?> getUserSession();
+
+  Future addCourseInstance(CourseUiModel courseUiModel);
+
+  Future<Color> getCourseColor(String id);
+
+  Future<List<String>> getAllCachedCourses();
 }

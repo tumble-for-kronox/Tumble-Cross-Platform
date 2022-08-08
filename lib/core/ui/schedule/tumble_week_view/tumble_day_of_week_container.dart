@@ -1,12 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:tumble/core/models/api_models/schedule_model.dart';
+import 'package:tumble/core/ui/main_app/cubit/main_app_cubit.dart';
 import 'package:tumble/core/ui/schedule/tumble_week_view/tumble_day_of_week_divider.dart';
 import 'package:tumble/core/ui/schedule/tumble_week_view/tumble_empty_week_event_tile.dart';
 import 'package:tumble/core/ui/schedule/tumble_week_view/tumble_week_event_tile.dart';
 
 class TumbleDayOfWeekContainer extends StatelessWidget {
   final Day day;
-  const TumbleDayOfWeekContainer({Key? key, required this.day})
+  final MainAppCubit cubit;
+  const TumbleDayOfWeekContainer(
+      {Key? key, required this.day, required this.cubit})
       : super(key: key);
 
   @override
@@ -20,7 +23,9 @@ class TumbleDayOfWeekContainer extends StatelessWidget {
           )
         : Column(
             children: <Widget>[DayOfWeekDivider(day: day)] +
-                day.events.map((e) => TumbleWeekEventTile(event: e)).toList(),
+                day.events
+                    .map((e) => TumbleWeekEventTile(event: e, cubit: cubit))
+                    .toList(),
           );
   }
 }

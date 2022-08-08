@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:tumble/core/models/api_models/schedule_model.dart';
 import 'package:tumble/core/theme/data/colors.dart';
+import 'package:tumble/core/ui/main_app/cubit/main_app_cubit.dart';
+import 'package:tumble/core/ui/main_app/main_app.dart';
 import 'package:tumble/core/ui/schedule/event_modal.dart';
 import 'package:tumble/core/ui/schedule/tumble_list_view/tumble_list_view_schedule_card.dart';
 
 class TumbleListViewDayContainer extends StatelessWidget {
   final Day day;
-  const TumbleListViewDayContainer({
-    Key? key,
-    required this.day,
-  }) : super(key: key);
+  final MainAppCubit mainAppCubit;
+  const TumbleListViewDayContainer(
+      {Key? key, required this.day, required this.mainAppCubit})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -37,17 +41,31 @@ class TumbleListViewDayContainer extends StatelessWidget {
             padding: const EdgeInsets.only(bottom: 10, top: 2),
             child: Column(
               children: day.events
-                  .map((event) => ScheduleCard(
-                      event: event,
-                      onTap: () {
-                        showModalBottomSheet(
-                            isScrollControlled: true,
-                            context: context,
-                            builder: (context) => TumbleEventModal(
-                                event: event,
-                                color: event.isSpecial
-                                    ? Colors.redAccent
-                                    : CustomColors.orangePrimary));
+                  .map((event) => FutureBuilder(
+                      future:
+                          mainAppCubit.parseCourseColorById(event.course.id),
+                      builder: (BuildContext context,
+                          AsyncSnapshot<dynamic> snapshot) {
+                        if (snapshot.hasData) {
+                          return ScheduleCard(
+                              event: event,
+                              color: event.isSpecial
+                                  ? Colors.redAccent
+                                  : snapshot.data,
+                              onTap: () {
+                                showModalBottomSheet(
+                                    isScrollControlled: true,
+                                    context: context,
+                                    builder: (context) => TumbleEventModal(
+                                        event: event,
+                                        color: event.isSpecial
+                                            ? Colors.redAccent
+                                            : snapshot.data));
+                              });
+                        }
+                        return const SpinKitThreeBounce(
+                          color: CustomColors.orangePrimary,
+                        );
                       }))
                   .toList(),
             ),

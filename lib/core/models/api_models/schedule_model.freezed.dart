@@ -826,7 +826,7 @@ class __$$_CourseCopyWithImpl<$Res> extends _$CourseCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$_Course implements _Course {
-  const _$_Course(
+  _$_Course(
       {required this.id, required this.swedishName, required this.englishName});
 
   factory _$_Course.fromJson(Map<String, dynamic> json) =>
@@ -876,7 +876,7 @@ class _$_Course implements _Course {
 }
 
 abstract class _Course implements Course {
-  const factory _Course(
+  factory _Course(
       {required final String id,
       required final String swedishName,
       required final String englishName}) = _$_Course;

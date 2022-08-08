@@ -9,11 +9,13 @@ import 'package:tumble/core/ui/schedule/tumble_list_view/tumble_list_view_schedu
 class ScheduleCard extends StatelessWidget {
   final Event event;
   final VoidCallback onTap;
+  final Color color;
 
   const ScheduleCard({
     Key? key,
     required this.event,
     required this.onTap,
+    required this.color,
   }) : super(key: key);
 
   @override
@@ -64,9 +66,7 @@ class ScheduleCard extends StatelessWidget {
                                             height: 5,
                                             decoration: BoxDecoration(
                                               shape: BoxShape.circle,
-                                              color: event.isSpecial
-                                                  ? Colors.redAccent
-                                                  : CustomColors.orangePrimary,
+                                              color: color,
                                             ),
                                           ),
                                           const SizedBox(width: 6),
@@ -148,9 +148,7 @@ class ScheduleCard extends StatelessWidget {
                 alignment: Alignment.topLeft,
                 child: Container(
                   decoration: BoxDecoration(
-                      color: event.isSpecial
-                          ? Colors.redAccent
-                          : CustomColors.orangePrimary,
+                      color: color,
                       borderRadius: const BorderRadius.only(
                           topLeft: Radius.circular(10),
                           bottomLeft: Radius.circular(10))),

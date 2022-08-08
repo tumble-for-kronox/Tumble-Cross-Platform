@@ -18,7 +18,7 @@ dependencies:
   build_runner: ^2.1.11
   sembast: ^3.2.0+1
   get_it: ^7.2.0
-  flutter_bloc: ^8.0.1
+  flutter_bloc: any
   permission_handler: ^9.2.0
   lottie: ^1.4.0
   intl: ^0.17.0

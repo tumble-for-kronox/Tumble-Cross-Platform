@@ -9,28 +9,28 @@ import 'package:tumble/core/models/api_models/schedule_model.dart';
 class ScheduleDataSource extends CalendarDataSource {
   /// Creates a meeting data source, which used to set the appointment
   /// collection to the calendar
-  ScheduleDataSource(List<Event> source) {
+  ScheduleDataSource(List<Appointment> source) {
     appointments = source;
   }
 
   @override
   DateTime getStartTime(int index) {
-    return _getEventData(index).timeStart;
+    return _getEventData(index).startTime;
   }
 
   @override
   DateTime getEndTime(int index) {
-    return _getEventData(index).timeEnd;
+    return _getEventData(index).endTime;
   }
 
   @override
   String getSubject(int index) {
-    return _getEventData(index).title;
+    return _getEventData(index).subject;
   }
 
   @override
   Color getColor(int index) {
-    return Colors.grey;
+    return _getEventData(index).color;
   }
 
   @override
@@ -38,10 +38,10 @@ class ScheduleDataSource extends CalendarDataSource {
     return false;
   }
 
-  Event _getEventData(int index) {
+  Appointment _getEventData(int index) {
     final dynamic meeting = appointments![index];
-    late final Event eventData;
-    if (meeting is Event) {
+    late final Appointment eventData;
+    if (meeting is Appointment) {
       eventData = meeting;
     }
 

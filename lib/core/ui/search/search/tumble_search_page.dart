@@ -57,7 +57,7 @@ class _TumbleSearchPageState extends State<TumbleSearchPage> {
                                             .setLoading();
                                         BlocProvider.of<MainAppNavigationCubit>(
                                                 context)
-                                            .getNavBarItem(NavbarItem.LIST);
+                                            .getNavBarItem(NavbarItem.WEEK);
 
                                         await BlocProvider.of<MainAppCubit>(
                                                 context)

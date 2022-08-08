@@ -9,7 +9,9 @@ import 'package:tumble/core/api/apiservices/api_response.dart';
 import 'package:tumble/core/api/repository/implementation_repository.dart';
 import 'package:tumble/core/database/repository/database_repository.dart';
 import 'package:tumble/core/extensions/extensions.dart';
+import 'package:tumble/core/helpers/color_picker.dart';
 import 'package:tumble/core/models/api_models/schedule_model.dart';
+import 'package:tumble/core/models/ui_models/course_model.dart';
 import 'package:tumble/core/models/ui_models/week_model.dart';
 import 'package:tumble/core/shared/preference_types.dart';
 import 'package:tumble/core/startup/get_it_instances.dart';
@@ -111,6 +113,18 @@ class MainAppCubit extends Cubit<MainAppState> {
         ScheduleModel currentScheduleModel = _apiResponse.data!;
         if (currentScheduleModel.days
             .any((element) => element.events.isNotEmpty)) {
+          var readCourses = await _databaseService.getAllCachedCourses();
+
+          for (Day day in currentScheduleModel.days) {
+            for (Event event in day.events) {
+              if (!readCourses.contains(event.course.id)) {
+                await _databaseService.addCourseInstance(CourseUiModel(
+                    id: event.course.id,
+                    color: ColorPicker().getRandomHexColor()));
+              }
+            }
+          }
+
           emit(state.copyWith(
               status: MainAppStatus.SCHEDULE_SELECTED,
               currentScheduleId: currentScheduleModel.id,
@@ -168,15 +182,7 @@ class MainAppCubit extends Cubit<MainAppState> {
     emit(state.copyWith(status: MainAppStatus.LOADING));
   }
 
-  void setupForNextSchool() {
-    emit(const MainAppState(
-        status: MainAppStatus.INITIAL,
-        currentScheduleId: null,
-        listOfDays: null,
-        listOfWeeks: null,
-        toggledFavorite: false,
-        listViewToTopButtonVisible: false,
-        message: null,
-        scheduleModel: null));
+  Future<Color> parseCourseColorById(String id) {
+    return _databaseService.getCourseColor(id);
   }
 }

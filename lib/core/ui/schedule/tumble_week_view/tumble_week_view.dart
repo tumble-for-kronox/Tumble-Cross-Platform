@@ -47,6 +47,7 @@ class _TumbleWeekViewState extends State<TumbleWeekView> {
                             .map((e) => TumbleWeekPageContainer(
                                   scheduleId: state.currentScheduleId!,
                                   week: e,
+                                  cubit: BlocProvider.of<MainAppCubit>(context),
                                 ))
                             .toList()[index];
                       }))
