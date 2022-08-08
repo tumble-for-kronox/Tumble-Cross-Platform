@@ -37,7 +37,7 @@ class UserInfo extends StatelessWidget {
               child: Image.asset(Schools.schools
                   .where((school) =>
                       school.schoolName ==
-                      locator<SharedPreferences>()
+                      getIt<SharedPreferences>()
                           .getString(PreferenceTypes.school))
                   .first
                   .schoolLogo)),

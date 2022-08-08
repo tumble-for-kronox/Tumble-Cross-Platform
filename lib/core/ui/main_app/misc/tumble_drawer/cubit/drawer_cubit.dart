@@ -3,19 +3,19 @@ part of 'drawer_state.dart';
 class DrawerCubit extends Cubit<DrawerState> {
   DrawerCubit()
       : super(DrawerState(
-            theme: locator<SharedPreferences>()
+            theme: getIt<SharedPreferences>()
                 .getString(PreferenceTypes.theme)!
                 .capitalize(),
             viewType: ScheduleViewTypes.viewTypesMap[
-                locator<SharedPreferences>().getInt(PreferenceTypes.view)],
-            schedule: locator<SharedPreferences>()
+                getIt<SharedPreferences>().getInt(PreferenceTypes.view)],
+            schedule: getIt<SharedPreferences>()
                 .getString(PreferenceTypes.schedule),
             school:
-                locator<SharedPreferences>().getString(PreferenceTypes.school),
-            bookmarks: locator<SharedPreferences>()
+                getIt<SharedPreferences>().getString(PreferenceTypes.school),
+            bookmarks: getIt<SharedPreferences>()
                 .getStringList(PreferenceTypes.favorites)));
 
-  final _themeRepository = locator<ThemeRepository>();
+  final _themeRepository = getIt<ThemeRepository>();
 
   void changeTheme(String themeString) {
     emit(state.copyWith(theme: themeString.capitalize()));
@@ -37,25 +37,25 @@ class DrawerCubit extends Cubit<DrawerState> {
 
   void setupForNextSchool(String schoolName) {
     emit(DrawerState(
-        theme: locator<SharedPreferences>()
+        theme: getIt<SharedPreferences>()
             .getString(PreferenceTypes.theme)!
             .capitalize(),
         viewType: ScheduleViewTypes.viewTypesMap[
-            locator<SharedPreferences>().getInt(PreferenceTypes.view)],
+            getIt<SharedPreferences>().getInt(PreferenceTypes.view)],
         schedule:
-            locator<SharedPreferences>().getString(PreferenceTypes.schedule),
-        school: locator<SharedPreferences>().getString(PreferenceTypes.school),
-        bookmarks: locator<SharedPreferences>()
+            getIt<SharedPreferences>().getString(PreferenceTypes.schedule),
+        school: getIt<SharedPreferences>().getString(PreferenceTypes.school),
+        bookmarks: getIt<SharedPreferences>()
             .getStringList(PreferenceTypes.favorites)));
   }
 
   void setSchedule(String newId) {
-    locator<SharedPreferences>().setString(PreferenceTypes.schedule, newId);
+    getIt<SharedPreferences>().setString(PreferenceTypes.schedule, newId);
     emit(state.copyWith(schedule: newId));
   }
 
   void setView(int viewType) {
-    locator<SharedPreferences>().setInt(PreferenceTypes.view, viewType);
+    getIt<SharedPreferences>().setInt(PreferenceTypes.view, viewType);
     emit(state.copyWith(viewType: ScheduleViewTypes.viewTypesMap[viewType]));
   }
 

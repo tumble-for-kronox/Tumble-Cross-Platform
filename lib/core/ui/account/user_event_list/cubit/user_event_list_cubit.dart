@@ -11,7 +11,7 @@ class UserEventListCubit extends Cubit<UserEventListState> {
   UserEventListCubit()
       : super(const UserEventListState(status: UserEventListStatus.LOADING));
 
-  final UserRepository _userRepository = locator<UserRepository>();
+  final UserRepository _userRepository = getIt<UserRepository>();
 
   Future<void> getUserEvents(String sessionToken) async {
     emit(state.copyWith(status: UserEventListStatus.LOADING));

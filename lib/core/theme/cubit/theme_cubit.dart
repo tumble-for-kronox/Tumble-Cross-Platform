@@ -12,11 +12,11 @@ import '../../startup/get_it_instances.dart';
 class ThemeCubit extends Cubit<ThemeState> {
   ThemeCubit()
       : super(ThemeState(
-            themeString: locator<SharedPreferences>()
+            themeString: getIt<SharedPreferences>()
                 .getString(PreferenceTypes.theme)!
                 .capitalize()));
 
-  final ThemePersistense themeRepository = locator<ThemeRepository>();
+  final ThemePersistense themeRepository = getIt<ThemeRepository>();
   late StreamSubscription<CustomTheme> _themeSubscription;
 
   void getCurrentTheme() {

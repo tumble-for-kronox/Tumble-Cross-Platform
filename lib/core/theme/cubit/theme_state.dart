@@ -14,7 +14,7 @@ class ThemeState extends Equatable {
 
   ThemeState copyWith({ThemeMode? themeMode}) => ThemeState(
         themeMode: themeMode ?? this.themeMode,
-        themeString: locator<SharedPreferences>()
+        themeString: getIt<SharedPreferences>()
             .getString(PreferenceTypes.theme)!
             .capitalize(),
       );

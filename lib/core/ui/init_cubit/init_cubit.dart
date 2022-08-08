@@ -5,7 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tumble/core/api/repository/implementation_repository.dart';
+import 'package:tumble/core/api/repository/icache_and_interaction_repository.dart';
 import 'package:tumble/core/database/database_response.dart';
 import 'package:tumble/core/database/repository/database_repository.dart';
 import 'package:tumble/core/models/ui_models/school_model.dart';
@@ -19,9 +19,9 @@ class InitCubit extends Cubit<InitState> {
   InitCubit()
       : super(const InitState(defaultSchool: null, status: InitStatus.INITIAL));
 
-  final _cacheAndInteractionService = locator<CacheAndInteractionRepository>();
-  final _databaseService = locator<DatabaseRepository>();
-  final _sharedPrefs = locator<SharedPreferences>();
+  final _cacheAndInteractionService = getIt<CacheAndInteractionRepository>();
+  final _databaseService = getIt<DatabaseRepository>();
+  final _sharedPrefs = getIt<SharedPreferences>();
 
   Future<void> init() async {
     DatabaseResponse databaseResponse =

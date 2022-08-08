@@ -29,7 +29,7 @@ class TumbleListView extends StatelessWidget {
                       .read<MainAppNavigationCubit>()
                       .getNavBarItem(NavbarItem.SEARCH),
                   navigator),
-              errorType: 'No bookmarked schedules',
+              errorType: state.message!,
             );
           case MainAppStatus.LOADING:
             return SpinKitThreeBounce(
@@ -80,7 +80,7 @@ class TumbleListView extends StatelessWidget {
 
           case MainAppStatus.EMPTY_SCHEDULE:
             return NoScheduleAvailable(
-              errorType: FetchResponse.emptyScheduleError,
+              errorType: RuntimeErrorType.emptyScheduleError,
               cupertinoAlertDialog:
                   CustomCupertinoAlerts.scheduleContainsNoViews(
                       context,

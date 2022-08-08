@@ -4,7 +4,7 @@ import 'package:tumble/core/shared/view_types.dart';
 import 'package:tumble/core/startup/get_it_instances.dart';
 
 void setupRequiredSharedPreferences() {
-  final sharedPrefs = locator<SharedPreferences>();
+  final sharedPrefs = getIt<SharedPreferences>();
 
   final possibleTheme = sharedPrefs.getString(PreferenceTypes.theme);
   final possibleView = sharedPrefs.getInt(PreferenceTypes.view);

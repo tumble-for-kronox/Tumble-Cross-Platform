@@ -13,4 +13,6 @@ abstract class ICacheAndInteractionService {
   Future<ApiResponse> getCachedBookmarkedSchedule();
 
   Future<DatabaseResponse> initSetup();
+
+  Future<ApiResponse> refreshDefaultSchedule();
 }

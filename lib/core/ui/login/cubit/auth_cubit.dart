@@ -26,8 +26,8 @@ class AuthCubit extends Cubit<AuthState> {
             passwordHidden: true)) {
     login();
   }
-  final _userRepo = locator<UserRepository>();
-  final _secureStorage = locator<SecureStorageRepository>();
+  final _userRepo = getIt<UserRepository>();
+  final _secureStorage = getIt<SecureStorageRepository>();
 
   Future<void> getUserEvents(String sessionToken) async {
     emit(state.copyWith(userEventListStatus: UserEventListStatus.LOADING));
@@ -68,7 +68,7 @@ class AuthCubit extends Cubit<AuthState> {
     switch (userRes.status) {
       case ApiStatus.REQUESTED:
         storeUserCreds((userRes.data! as KronoxUserModel).refreshToken);
-        locator<SharedPreferences>().setString(
+        getIt<SharedPreferences>().setString(
           PreferenceTypes.school,
           school,
         );
@@ -107,8 +107,8 @@ class AuthCubit extends Cubit<AuthState> {
 
   Future<void> login() async {
     emit(state.copyWith(authStatus: AuthStatus.INITIAL));
-    final secureStorage = locator<SecureStorageRepository>();
-    final userRepository = locator<UserRepository>();
+    final secureStorage = getIt<SecureStorageRepository>();
+    final userRepository = getIt<UserRepository>();
 
     final refreshToken = await secureStorage.getRefreshToken();
     if (refreshToken != null) {
@@ -134,7 +134,7 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   void logout() {
-    locator<SecureStorageRepository>().clear();
+    getIt<SecureStorageRepository>().clear();
     emit(state.copyWith(
         authStatus: AuthStatus.UNAUTHENTICATED, userSession: null));
   }

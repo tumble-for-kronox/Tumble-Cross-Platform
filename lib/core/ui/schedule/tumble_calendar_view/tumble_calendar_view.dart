@@ -28,7 +28,7 @@ class _TumbleCalendarViewState extends State<TumbleCalendarView> {
         switch (state.status) {
           case MainAppStatus.INITIAL:
             return NoScheduleAvailable(
-              errorType: 'No bookmarked schedules',
+              errorType: state.message!,
               cupertinoAlertDialog: CustomCupertinoAlerts.noBookMarkedSchedules(
                   context,
                   () => context
@@ -75,7 +75,6 @@ class _TumbleCalendarViewState extends State<TumbleCalendarView> {
                                   Theme.of(context).colorScheme.background,
                               textStyle: TextStyle(
                                   fontSize: 12,
-                                  fontFamily: 'Roboto',
                                   color: Theme.of(context)
                                       .colorScheme
                                       .onBackground),
@@ -97,7 +96,7 @@ class _TumbleCalendarViewState extends State<TumbleCalendarView> {
             );
           case MainAppStatus.EMPTY_SCHEDULE:
             return NoScheduleAvailable(
-              errorType: FetchResponse.emptyScheduleError,
+              errorType: RuntimeErrorType.emptyScheduleError,
               cupertinoAlertDialog:
                   CustomCupertinoAlerts.scheduleContainsNoViews(
                       context,

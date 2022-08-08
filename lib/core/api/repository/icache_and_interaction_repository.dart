@@ -1,9 +1,8 @@
-// ignore_for_file: no_leading_underscores_for_local_identifiers
-
 import 'dart:developer';
 
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tumble/core/api/apiservices/api_response.dart';
+import 'package:tumble/core/api/apiservices/fetch_response.dart';
 import 'package:tumble/core/api/interface/icache_and_interaction_service.dart';
 import 'package:tumble/core/api/repository/backend_repository.dart';
 import 'package:tumble/core/database/database_response.dart';
@@ -13,9 +12,9 @@ import 'package:tumble/core/shared/preference_types.dart';
 import 'package:tumble/core/startup/get_it_instances.dart';
 
 class CacheAndInteractionRepository implements ICacheAndInteractionService {
-  final _backendService = locator<BackendRepository>();
-  final _preferenceService = locator<SharedPreferences>();
-  final _databaseService = locator<DatabaseRepository>();
+  final _backendService = getIt<BackendRepository>();
+  final _preferenceService = getIt<SharedPreferences>();
+  final _databaseService = getIt<DatabaseRepository>();
 
   @override
   Future<ApiResponse> getProgramsRequest(String searchQuery) async {
@@ -29,7 +28,7 @@ class CacheAndInteractionRepository implements ICacheAndInteractionService {
   @override
   Future<ApiResponse> getSchedulesRequest(scheduleId) async {
     /// User cannot get this far in the app without having a default
-    /// school, therefore null check is OK
+    /// school stored, therefore null check operator is OK
     String defaultSchool =
         _preferenceService.getString(PreferenceTypes.school)!;
     ApiResponse response =
@@ -39,14 +38,17 @@ class CacheAndInteractionRepository implements ICacheAndInteractionService {
 
   @override
   Future<ApiResponse> getSchedule(String scheduleId) async {
-    log(scheduleId);
-    if (_preferenceService
+    final bool favoritesContainsThisScheduleId = _preferenceService
         .getStringList(PreferenceTypes.favorites)!
-        .contains(scheduleId)) {
-      final ScheduleModel? _possibleSchedule =
-          await _databaseService.getOneSchedule(scheduleId);
-      return ApiResponse.cached(_possibleSchedule);
+        .contains(scheduleId);
+
+    if (favoritesContainsThisScheduleId) {
+      final ScheduleModel userCachedSchedule =
+          await _getCachedSchedule(scheduleId);
+      return ApiResponse.cached(userCachedSchedule);
     }
+
+    /// fetch from backend
     return await getSchedulesRequest(scheduleId);
   }
 
@@ -56,11 +58,11 @@ class CacheAndInteractionRepository implements ICacheAndInteractionService {
   /// and a default schedule)
   @override
   Future<DatabaseResponse> initSetup() async {
-    final String? _defaultSchool =
+    final String? defaultSchool =
         _preferenceService.getString(PreferenceTypes.school);
 
-    if (_defaultSchool != null) {
-      return DatabaseResponse.hasDefault(_defaultSchool);
+    if (defaultSchool != null) {
+      return DatabaseResponse.hasDefault(defaultSchool);
     } else {
       return DatabaseResponse.initial("Init application preferences");
     }
@@ -68,12 +70,23 @@ class CacheAndInteractionRepository implements ICacheAndInteractionService {
 
   @override
   Future<ApiResponse> getCachedBookmarkedSchedule() async {
-    if (_preferenceService.getString(PreferenceTypes.schedule) != null) {
-      final ScheduleModel? _possibleSchedule =
-          await _databaseService.getOneSchedule(
-              _preferenceService.getString(PreferenceTypes.schedule)!);
-      return ApiResponse.cached(_possibleSchedule);
+    final bool userHasCachedSchedule =
+        _preferenceService.getString(PreferenceTypes.schedule) != null;
+    if (userHasCachedSchedule) {
+      ScheduleModel userCachedSchedule = await _getCachedSchedule(null);
+      return ApiResponse.cached(userCachedSchedule);
     }
-    return ApiResponse.error('No cached schedule found');
+    return ApiResponse.error(RuntimeErrorType.noCachedSchedule);
+  }
+
+  Future<ScheduleModel> _getCachedSchedule(String? scheduleId) async {
+    return (await _databaseService.getOneSchedule(scheduleId ??
+      _preferenceService.getString(PreferenceTypes.schedule)!))!;
+  }
+
+  @override
+  Future<ApiResponse> refreshDefaultSchedule() async {
+    String defaultScheduleId = _preferenceService.getString(PreferenceTypes.schedule)!;
+    return await getSchedulesRequest(defaultScheduleId);
   }
 }

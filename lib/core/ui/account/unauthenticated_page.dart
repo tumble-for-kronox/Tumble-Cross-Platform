@@ -16,7 +16,7 @@ class UnauthenticatedPage extends StatelessWidget {
     return UserInfo(
         loggedIn: false,
         onPressed: () => navigator.push(NavigationRouteLabels.loginPageRoot,
-            arguments: locator<SharedPreferences>()
+            arguments: getIt<SharedPreferences>()
                 .getString(PreferenceTypes.school)));
   }
 }

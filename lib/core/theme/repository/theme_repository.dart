@@ -17,7 +17,7 @@ class ThemeRepository implements ThemePersistense {
     _init();
   }
 
-  final SharedPreferences _sharedPreferences = locator<SharedPreferences>();
+  final SharedPreferences _sharedPreferences = getIt<SharedPreferences>();
 
   final _controller = StreamController<CustomTheme>();
 

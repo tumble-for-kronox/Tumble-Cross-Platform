@@ -1,5 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:tumble/core/api/apiservices/fetch_response.dart';
 import 'package:tumble/core/models/api_models/schedule_model.dart';
 
 class ModalInfoRow extends StatelessWidget {
@@ -41,7 +41,7 @@ class ModalInfoRow extends StatelessWidget {
                 if (locations != null) {
                   return locations!.isNotEmpty
                       ? locations!.map((location) => location.id).join(', ')
-                      : 'No locations available for this event';
+                      : RuntimeErrorType.missingLocations;
                 }
                 if (teachers != null) {
                   return teachers!.isNotEmpty
@@ -49,7 +49,7 @@ class ModalInfoRow extends StatelessWidget {
                           .map((teacher) =>
                               '${teacher.firstName} ${teacher.lastName}')
                           .join(', ')
-                      : 'No teachers available for this event';
+                      : RuntimeErrorType.missingLocations;
                 }
                 return subtitle!.length < 38
                     ? subtitle!

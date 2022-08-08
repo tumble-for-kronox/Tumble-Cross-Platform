@@ -8,8 +8,8 @@ import 'package:tumble/core/shared/preference_types.dart';
 import 'package:tumble/core/startup/get_it_instances.dart';
 
 class UserRepository implements IUserService {
-  final _backendRepository = locator<BackendRepository>();
-  final _sharedPrefs = locator<SharedPreferences>();
+  final _backendRepository = getIt<BackendRepository>();
+  final _sharedPrefs = getIt<SharedPreferences>();
 
   @override
   Future<ApiResponse> getUserEvents(String sessionToken) async {

@@ -25,7 +25,7 @@ class BackendRepository implements IBackendService {
       });
       final response = await HttpService.sendGetRequestToServer(uri);
       if (response == null) {
-        return ApiResponse.error(FetchResponse.timeoutError);
+        return ApiResponse.error(RuntimeErrorType.timeoutError);
       }
       return response.parseSchedule();
     } else {
@@ -52,7 +52,7 @@ class BackendRepository implements IBackendService {
       });
       final response = await HttpService.sendGetRequestToServer(uri);
       if (response == null) {
-        return ApiResponse.error(FetchResponse.timeoutError);
+        return ApiResponse.error(RuntimeErrorType.timeoutError);
       }
       return await response.parsePrograms();
     } else {
@@ -79,7 +79,7 @@ class BackendRepository implements IBackendService {
       });
       final response = await HttpService.sendGetRequestToServer(uri);
       if (response == null) {
-        return ApiResponse.error(FetchResponse.timeoutError);
+        return ApiResponse.error(RuntimeErrorType.timeoutError);
       }
 
       return await response.parseUserEvents();
@@ -109,7 +109,7 @@ class BackendRepository implements IBackendService {
       final response =
           await HttpService.sendGetRequestToServer(uri, headers: headers);
       if (response == null) {
-        return ApiResponse.error(FetchResponse.timeoutError);
+        return ApiResponse.error(RuntimeErrorType.timeoutError);
       }
       return await response.parseUser();
     } else {
@@ -136,7 +136,7 @@ class BackendRepository implements IBackendService {
 
       final response = await HttpService.sendPutRequestToServer(uri);
       if (response == null) {
-        return ApiResponse.error(FetchResponse.timeoutError);
+        return ApiResponse.error(RuntimeErrorType.timeoutError);
       }
       return response.parseRegisterOrUnregister();
     } else {
@@ -159,7 +159,7 @@ class BackendRepository implements IBackendService {
 
       final response = await HttpService.sendPutRequestToServer(uri);
       if (response == null) {
-        return ApiResponse.error(FetchResponse.timeoutError);
+        return ApiResponse.error(RuntimeErrorType.timeoutError);
       }
       return response.parseRegisterOrUnregister();
     } else {
@@ -186,7 +186,7 @@ class BackendRepository implements IBackendService {
       final response =
           await HttpService.sendPostRequestToServer(uri, jsonEncode(body));
       if (response == null) {
-        return ApiResponse.error(FetchResponse.timeoutError);
+        return ApiResponse.error(RuntimeErrorType.timeoutError);
       }
       return await response.parseUser();
     } else {

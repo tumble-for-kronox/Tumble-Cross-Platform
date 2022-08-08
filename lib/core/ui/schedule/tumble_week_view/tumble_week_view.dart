@@ -26,7 +26,7 @@ class _TumbleWeekViewState extends State<TumbleWeekView> {
         switch (state.status) {
           case MainAppStatus.INITIAL:
             return NoScheduleAvailable(
-              errorType: 'No bookmarked schedules',
+              errorType: state.message!,
               cupertinoAlertDialog: CustomCupertinoAlerts.noBookMarkedSchedules(
                   context,
                   () => context
@@ -64,7 +64,7 @@ class _TumbleWeekViewState extends State<TumbleWeekView> {
             );
           case MainAppStatus.EMPTY_SCHEDULE:
             return NoScheduleAvailable(
-              errorType: FetchResponse.emptyScheduleError,
+              errorType: RuntimeErrorType.emptyScheduleError,
               cupertinoAlertDialog:
                   CustomCupertinoAlerts.scheduleContainsNoViews(
                       context,

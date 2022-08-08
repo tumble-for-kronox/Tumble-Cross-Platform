@@ -80,7 +80,7 @@ class _UserAccountInfo extends State<UserAccountInfo> {
                                   width: 10,
                                 ),
                                 Text(
-                                  locator<SharedPreferences>()
+                                  getIt<SharedPreferences>()
                                       .getString(PreferenceTypes.school)!,
                                   style: TextStyle(
                                       fontSize: 15,
@@ -103,7 +103,7 @@ class _UserAccountInfo extends State<UserAccountInfo> {
                               Schools.schools
                                   .where((school) =>
                                       school.schoolName ==
-                                      locator<SharedPreferences>()
+                                      getIt<SharedPreferences>()
                                           .getString(PreferenceTypes.school))
                                   .first
                                   .schoolLogo,

@@ -16,7 +16,7 @@ class DatabaseRepository implements IDatabaseScheduleService {
   final _courseColorStore =
       intMapStoreFactory.store(AccessStores.COURSE_COLOR_STORE);
 
-  Future<Database> get _db async => await locator<AppDatabase>().database;
+  Future<Database> get _db async => await getIt<AppDatabase>().database;
 
   @override
   Future addSchedule(ScheduleModel scheduleModel) async {
