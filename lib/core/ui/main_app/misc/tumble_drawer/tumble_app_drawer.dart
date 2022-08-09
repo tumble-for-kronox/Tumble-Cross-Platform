@@ -83,10 +83,7 @@ class TumbleAppDrawer extends StatelessWidget {
                     TumbleAppDrawerTile(
                       drawerTileTitle: "Change schools",
                       subtitle:
-                          "Current school: ${(Schools.schools
-                                .firstWhere((school) =>
-                                  school.schoolName == context.read<DrawerCubit>()
-                                      .state.school)).schoolId.name.toUpperCase()}",
+                          "Current school: ${(Schools.schools.firstWhere((school) => school.schoolName == context.read<DrawerCubit>().state.school)).schoolId.name.toUpperCase()}",
                       prefixIcon: CupertinoIcons.arrow_right_arrow_left,
                       eventType: EventType.CHANGE_SCHOOL,
                       drawerEvent: (eventType) => handleDrawerEvent(
@@ -174,8 +171,9 @@ class TumbleAppDrawer extends StatelessWidget {
                   setDefaultSchedule: (newId) async {
                     context.read<DrawerCubit>().setSchedule(newId);
                     BlocProvider.of<MainAppCubit>(context).setLoading();
-                    await BlocProvider.of<MainAppCubit>(context).swapScheduleDefaultView(newId);
-                    navigator.pop();
+                    Navigator.of(context).pop();
+                    await BlocProvider.of<MainAppCubit>(context)
+                        .swapScheduleDefaultView(newId);
                   }));
         }
         break;

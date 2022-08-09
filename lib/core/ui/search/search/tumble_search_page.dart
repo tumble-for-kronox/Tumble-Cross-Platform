@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tumble/core/shared/preference_types.dart';
+import 'package:tumble/core/startup/get_it_instances.dart';
 import 'package:tumble/core/ui/bottom_nav_bar/cubit/bottom_nav_cubit.dart';
 import 'package:tumble/core/ui/bottom_nav_bar/data/nav_bar_items.dart';
 import 'package:tumble/core/theme/data/colors.dart';
@@ -57,7 +60,10 @@ class _TumbleSearchPageState extends State<TumbleSearchPage> {
                                             .setLoading();
                                         BlocProvider.of<MainAppNavigationCubit>(
                                                 context)
-                                            .getNavBarItem(NavbarItem.WEEK);
+                                            .getNavBarItem(NavbarItem.values[
+                                                BlocProvider.of<MainAppCubit>(
+                                                        context)
+                                                    .viewType]);
 
                                         await BlocProvider.of<MainAppCubit>(
                                                 context)

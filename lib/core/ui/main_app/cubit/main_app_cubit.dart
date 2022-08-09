@@ -39,8 +39,7 @@ class MainAppCubit extends Cubit<MainAppState> {
 
   ScrollController get controller => _listViewScrollController;
   SharedPreferences get sharedPrefs => _sharedPrefs;
-
-
+  int get viewType => getIt<SharedPreferences>().getInt(PreferenceTypes.view)!;
 
   Future<void> init() async {
     await tryCached();
@@ -162,7 +161,9 @@ class MainAppCubit extends Cubit<MainAppState> {
               listViewToTopButtonVisible: false,
               message: null));
         } else {
-          emit(state.copyWith(status: MainAppStatus.EMPTY_SCHEDULE, message: RuntimeErrorType.noBookmarks));
+          emit(state.copyWith(
+              status: MainAppStatus.EMPTY_SCHEDULE,
+              message: RuntimeErrorType.noBookmarks));
         }
         break;
       case api.ApiStatus.ERROR:
@@ -176,11 +177,14 @@ class MainAppCubit extends Cubit<MainAppState> {
   }
 
   Future<void> swapScheduleDefaultView(String id) async {
-    ScheduleModel? newDefaultSchedule = await _databaseService.getOneSchedule(id);
-    if(newDefaultSchedule != null) {
-      emit(MainAppState(status: MainAppStatus.SCHEDULE_SELECTED, scheduleModelAndCourses: ScheduleModelAndCourses(
-          scheduleModel: newDefaultSchedule,
-          courses: await _databaseService.getCachedCoursesFromId(id)),
+    ScheduleModel? newDefaultSchedule =
+        await _databaseService.getOneSchedule(id);
+    if (newDefaultSchedule != null) {
+      emit(MainAppState(
+          status: MainAppStatus.SCHEDULE_SELECTED,
+          scheduleModelAndCourses: ScheduleModelAndCourses(
+              scheduleModel: newDefaultSchedule,
+              courses: await _databaseService.getCachedCoursesFromId(id)),
           currentScheduleId: id,
           listOfDays: newDefaultSchedule.days,
           listOfWeeks: newDefaultSchedule.splitToWeek(),
@@ -216,10 +220,8 @@ class MainAppCubit extends Cubit<MainAppState> {
 
   Color getColorForCourse(Event event) {
     return Color(state.scheduleModelAndCourses!.courses
-        .firstWhere(
-            (CourseUiModel? courseUiModel) =>
-        courseUiModel!.courseId ==
-            event.course.id)!
+        .firstWhere((CourseUiModel? courseUiModel) =>
+            courseUiModel!.courseId == event.course.id)!
         .color);
   }
 }
