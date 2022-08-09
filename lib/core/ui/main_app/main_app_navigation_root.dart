@@ -34,8 +34,11 @@ class _MainAppNavigationRootPageState extends State<MainAppNavigationRootPage> {
           builder: (context, navState) {
             return Scaffold(
                 backgroundColor: Theme.of(context).colorScheme.background,
-                endDrawer: BlocProvider(
-                  create: (context) => DrawerCubit(),
+                endDrawer: MultiBlocProvider(
+                  providers: [
+                    BlocProvider<DrawerCubit>(create: (_) => DrawerCubit()),
+                    BlocProvider.value(value: BlocProvider.of<MainAppCubit>(context))
+                  ] ,
                   child: const TumbleAppDrawer(),
                 ),
                 appBar: PreferredSize(
@@ -58,7 +61,7 @@ class _MainAppNavigationRootPageState extends State<MainAppNavigationRootPage> {
                 ),
                 body: FutureBuilder(
                     future: BlocProvider.of<MainAppCubit>(context)
-                        .initMainAppCubit(),
+                        .init(),
                     builder: (_, snapshot) {
                       switch (navState.navbarItem) {
                         case NavbarItem.SEARCH:

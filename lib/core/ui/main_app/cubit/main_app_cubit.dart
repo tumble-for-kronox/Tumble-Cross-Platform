@@ -40,6 +40,13 @@ class MainAppCubit extends Cubit<MainAppState> {
   ScrollController get controller => _listViewScrollController;
   SharedPreferences get sharedPrefs => _sharedPrefs;
 
+
+
+  Future<void> init() async {
+    await tryCached();
+    _listViewScrollController.addListener((setScrollController));
+  }
+
   Future<void> toggleFavorite(BuildContext context) async {
     final currentFavorites =
         _sharedPrefs.getStringList(PreferenceTypes.favorites);
@@ -78,7 +85,7 @@ class MainAppCubit extends Cubit<MainAppState> {
     _sharedPrefs.setStringList(PreferenceTypes.favorites, currentFavorites);
   }
 
-  Future<void> initCached() async {
+  Future<void> tryCached() async {
     /// Prevents app from loading default schedule when state is changed.
     /// For example if the user has a default schedule on boot, but has
     /// loaded a different one from search.
@@ -91,8 +98,7 @@ class MainAppCubit extends Cubit<MainAppState> {
     switch (_apiResponse.status) {
       case ApiStatus.CACHED:
         ScheduleModel currentScheduleModel = _apiResponse.data!;
-        if (currentScheduleModel.days
-            .any((element) => element.events.isNotEmpty)) {
+        if (currentScheduleModel.isNotPhonySchedule()) {
           emit(state.copyWith(
               status: MainAppStatus.SCHEDULE_SELECTED,
               currentScheduleId: currentScheduleModel.id,
@@ -116,7 +122,8 @@ class MainAppCubit extends Cubit<MainAppState> {
   Future<void> fetchNewSchedule(String id) async {
     final _apiResponse = await _cacheAndInteractionService.getSchedule(id);
     switch (_apiResponse.status) {
-      case api.ApiStatus.REQUESTED:
+      case api.ApiStatus.UPDATE:
+      case api.ApiStatus.FETCHED:
         ScheduleModel currentScheduleModel = _apiResponse.data!;
         if (currentScheduleModel.isNotPhonySchedule()) {
           List<CourseUiModel?> courseUiModels =
@@ -168,9 +175,20 @@ class MainAppCubit extends Cubit<MainAppState> {
     }
   }
 
-  Future<void> initMainAppCubit() async {
-    await initCached();
-    _listViewScrollController.addListener((setScrollController));
+  Future<void> swapScheduleDefaultView(String id) async {
+    ScheduleModel? newDefaultSchedule = await _databaseService.getOneSchedule(id);
+    if(newDefaultSchedule != null) {
+      emit(MainAppState(status: MainAppStatus.SCHEDULE_SELECTED, scheduleModelAndCourses: ScheduleModelAndCourses(
+          scheduleModel: newDefaultSchedule,
+          courses: await _databaseService.getCachedCoursesFromId(id)),
+          currentScheduleId: id,
+          listOfDays: newDefaultSchedule.days,
+          listOfWeeks: newDefaultSchedule.splitToWeek(),
+          toggledFavorite: true,
+          listViewToTopButtonVisible: false,
+          message: null));
+    }
+    emit(state.copyWith(message: RuntimeErrorType.scheduleFetchError));
   }
 
   setScrollController() {

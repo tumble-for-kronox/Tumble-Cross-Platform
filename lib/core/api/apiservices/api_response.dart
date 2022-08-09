@@ -5,7 +5,7 @@ class ApiResponse<T> {
   T? data;
   String? message;
 
-  ApiResponse.completed(this.data) : status = ApiStatus.REQUESTED;
+  ApiResponse.completed(this.data) : status = ApiStatus.FETCHED;
 
   ApiResponse.cached(this.data) : status = ApiStatus.CACHED;
 
@@ -13,10 +13,12 @@ class ApiResponse<T> {
 
   ApiResponse.unauthorized(this.message) : status = ApiStatus.UNAUTHORIZED;
 
+  ApiResponse.update(this.data) : status = ApiStatus.UPDATE;
+
   @override
   String toString() {
     return "Status : $status \n Message : $message \n Data : $data";
   }
 }
 
-enum ApiStatus { INITIAL, LOADING, REQUESTED, ERROR, CACHED, UNAUTHORIZED }
+enum ApiStatus { UPDATE, FETCHED, ERROR, CACHED, UNAUTHORIZED }

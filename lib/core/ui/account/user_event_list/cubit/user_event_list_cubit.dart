@@ -19,7 +19,7 @@ class UserEventListCubit extends Cubit<UserEventListState> {
         await _userRepository.getUserEvents(sessionToken);
 
     switch (userEventResponse.status) {
-      case ApiStatus.REQUESTED:
+      case ApiStatus.FETCHED:
         emit(state.copyWith(
             status: UserEventListStatus.LOADED,
             userEvents: userEventResponse.data!,

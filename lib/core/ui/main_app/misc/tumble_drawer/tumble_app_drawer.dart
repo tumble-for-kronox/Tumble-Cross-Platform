@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tumble/core/navigation/app_navigator.dart';
 import 'package:tumble/core/navigation/navigation_route_labels.dart';
+import 'package:tumble/core/ui/main_app/cubit/main_app_cubit.dart';
 import 'package:tumble/core/ui/main_app/data/event_types.dart';
 import 'package:tumble/core/ui/main_app/data/schools.dart';
+import 'package:tumble/core/ui/main_app/main_app.dart';
 import 'package:tumble/core/ui/main_app/misc/tumble_app_drawer_tile.dart';
 import 'package:tumble/core/ui/main_app/misc/tumble_drawer/cubit/drawer_state.dart';
 import 'package:tumble/core/ui/main_app/misc/tumble_drawer/drawer_generic/app_default_schedule_picker.dart';
@@ -81,7 +83,10 @@ class TumbleAppDrawer extends StatelessWidget {
                     TumbleAppDrawerTile(
                       drawerTileTitle: "Change schools",
                       subtitle:
-                          "Current school: ${(Schools.schools.firstWhere((school) => school.schoolName == context.read<DrawerCubit>().state.school)).schoolId.name.toUpperCase()}",
+                          "Current school: ${(Schools.schools
+                                .firstWhere((school) =>
+                                  school.schoolName == context.read<DrawerCubit>()
+                                      .state.school)).schoolId.name.toUpperCase()}",
                       prefixIcon: CupertinoIcons.arrow_right_arrow_left,
                       eventType: EventType.CHANGE_SCHOOL,
                       drawerEvent: (eventType) => handleDrawerEvent(
@@ -145,14 +150,6 @@ class TumbleAppDrawer extends StatelessWidget {
   void handleDrawerEvent(
       Enum eventType, BuildContext context, AppNavigator navigator) {
     switch (eventType) {
-      case EventType.CANCEL_ALL_NOTIFICATIONS:
-
-        /// Cancel all notifications
-        break;
-      case EventType.CANCEL_NOTIFICATIONS_FOR_PROGRAM:
-
-        /// Cancel all notifications tied to this schedule id
-        break;
       case EventType.CHANGE_SCHOOL:
         navigator.push(NavigationRouteLabels.schoolSelectionPage);
         break;
@@ -168,17 +165,17 @@ class TumbleAppDrawer extends StatelessWidget {
 
         /// Direct user to support page
         break;
-      case EventType.EDIT_NOTIFICATION_TIME:
-        break;
       case EventType.SET_DEFAULT_SCHEDULE:
         if (context.read<DrawerCubit>().state.bookmarks!.isNotEmpty) {
           showModalBottomSheet(
               context: context,
               builder: (_) => AppDefaultSchedulePicker(
                   scheduleIds: context.read<DrawerCubit>().state.bookmarks!,
-                  setDefaultSchedule: (newId) {
+                  setDefaultSchedule: (newId) async {
                     context.read<DrawerCubit>().setSchedule(newId);
-                    Navigator.of(context).pop();
+                    BlocProvider.of<MainAppCubit>(context).setLoading();
+                    await BlocProvider.of<MainAppCubit>(context).swapScheduleDefaultView(newId);
+                    navigator.pop();
                   }));
         }
         break;

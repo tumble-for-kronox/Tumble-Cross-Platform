@@ -31,7 +31,7 @@ class SearchPageCubit extends Cubit<SearchPageState> {
 
     if (state.focused) {
       switch (apiResponse.status) {
-        case ApiStatus.REQUESTED:
+        case ApiStatus.FETCHED:
           ProgramModel program = apiResponse.data as ProgramModel;
           emit(state.copyWith(
               status: SearchPageStatus.FOUND, programList: program.items));

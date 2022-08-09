@@ -34,7 +34,7 @@ class AuthCubit extends Cubit<AuthState> {
     ApiResponse userEventResponse = await _userRepo.getUserEvents(sessionToken);
 
     switch (userEventResponse.status) {
-      case ApiStatus.REQUESTED:
+      case ApiStatus.FETCHED:
         emit(state.copyWith(
             userEventListStatus: UserEventListStatus.LOADED,
             userEvents: userEventResponse.data!,
@@ -66,7 +66,7 @@ class AuthCubit extends Cubit<AuthState> {
     state.usernameController.clear();
     state.passwordController.clear();
     switch (userRes.status) {
-      case ApiStatus.REQUESTED:
+      case ApiStatus.FETCHED:
         storeUserCreds((userRes.data! as KronoxUserModel).refreshToken);
         getIt<SharedPreferences>().setString(
           PreferenceTypes.school,
@@ -115,7 +115,7 @@ class AuthCubit extends Cubit<AuthState> {
       ApiResponse loggedInUser =
           await userRepository.getRefreshSession(refreshToken);
       switch (loggedInUser.status) {
-        case ApiStatus.REQUESTED:
+        case ApiStatus.FETCHED:
           emit(state.copyWith(
               authStatus: AuthStatus.AUTHENTICATED,
               userSession: loggedInUser.data!));
