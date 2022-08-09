@@ -81,12 +81,13 @@ class CacheAndInteractionRepository implements ICacheAndInteractionService {
 
   Future<ScheduleModel> _getCachedSchedule(String? scheduleId) async {
     return (await _databaseService.getOneSchedule(scheduleId ??
-      _preferenceService.getString(PreferenceTypes.schedule)!))!;
+        _preferenceService.getString(PreferenceTypes.schedule)!))!;
   }
 
   @override
   Future<ApiResponse> refreshDefaultSchedule() async {
-    String defaultScheduleId = _preferenceService.getString(PreferenceTypes.schedule)!;
+    String defaultScheduleId =
+        _preferenceService.getString(PreferenceTypes.schedule)!;
     return await getSchedulesRequest(defaultScheduleId);
   }
 }

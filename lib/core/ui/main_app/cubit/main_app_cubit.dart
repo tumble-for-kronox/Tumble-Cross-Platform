@@ -7,7 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tumble/core/api/apiservices/api_response.dart';
 import 'package:tumble/core/api/apiservices/fetch_response.dart';
-import 'package:tumble/core/api/repository/icache_and_interaction_repository.dart';
+import 'package:tumble/core/api/repository/cache_and_interaction_repository.dart';
 import 'package:tumble/core/database/repository/database_repository.dart';
 import 'package:tumble/core/extensions/extensions.dart';
 import 'package:tumble/core/models/api_models/schedule_model.dart';
