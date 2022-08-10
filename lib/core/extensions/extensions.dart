@@ -14,6 +14,7 @@ import 'package:tumble/core/models/ui_models/course_ui_model.dart';
 import 'package:tumble/core/models/ui_models/school_model.dart';
 import 'package:tumble/core/models/ui_models/week_model.dart';
 import 'package:tumble/core/ui/main_app/data/schools.dart';
+import 'package:uuid/uuid.dart';
 
 extension ResponseParsing on Response {
   ApiResponse parseSchedule() {
@@ -148,6 +149,14 @@ extension StringParse on String {
       stringFragments[i] = stringFragments[i].capitalize();
     }
     return stringFragments.join(' ');
+  }
+
+  int encodeUniqueIdentifier() {
+    List<int> byteArray = Uuid.parse(this);
+    for (var i = 0; i < byteArray.length; i++) {
+      byteArray[i] = byteArray[i] >> 6;
+    }
+    return int.parse(byteArray.sublist(0, 8).join(''));
   }
 }
 

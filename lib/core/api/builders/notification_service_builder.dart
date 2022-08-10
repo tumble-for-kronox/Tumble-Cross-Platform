@@ -6,7 +6,7 @@ import 'package:tumble/core/theme/data/colors.dart';
 
 class NotificationServiceBuilder {
   final Color defaultColor = CustomColors.orangePrimary;
-  final String defaultIcon = 'assets/images/tumbleAppLogo.png';
+  final String defaultIcon = "resource://drawable/res_tumble_app_logo";
   final _awesomeNotifications = getIt<AwesomeNotifications>();
 
   /// Build notification channel dynamically

@@ -23,16 +23,17 @@ class NotificationRepository implements INotificationService {
     final ScheduleModel? defaultUserSchedule =
         await _databaseService.getOneSchedule(defaultUserScheduleId!);
     if (defaultUserSchedule != null && currentNotifications.isNotEmpty) {
-      final List<Event> eventsThatNeedReassign = defaultUserSchedule.days
-          .expand((Day day) => day.events)
-          .toList()
-          .where((Event event) => currentNotifications
-              .map(
-                (NotificationModel notificationModel) =>
-                    notificationModel.content!.channelKey,
-              )
-              .contains(event.id))
+      List<String?> notificationChannelKeys = currentNotifications
+          .map((NotificationModel notificationModel) =>
+              notificationModel.content!.channelKey)
           .toList();
+
+      final List<Event> eventsThatNeedReassign = defaultUserSchedule.days
+          .expand((Day day) => day.events) // Flatten nested list
+          .toList()
+          .where((Event event) => notificationChannelKeys.contains(event.id))
+          .toList();
+
       for (Event event in eventsThatNeedReassign) {
         _notificationServiceBuilder.buildNotification(
             id: Random().nextInt(900000) + 100000,
@@ -60,10 +61,10 @@ class NotificationRepository implements INotificationService {
     Set<Event> oldEvents =
         oldScheduleModel.days.expand((Day day) => day.events).toSet();
 
-    /// Get all differing events by performing set intersection on
+    /// Get all differing events by performing set subtraction on
     /// [oldEvents] and [newEvents], then filter to only get the
     /// events that have notifications created for them
-    List<Event> difference = newEvents
+    List<Event> eventsThatNeedReassign = newEvents
         .difference(oldEvents)
         .where((Event event) => currentNotifications
             .map(
@@ -73,7 +74,7 @@ class NotificationRepository implements INotificationService {
             .contains(event.id))
         .toList();
 
-    for (Event event in difference) {
+    for (Event event in eventsThatNeedReassign) {
       _notificationServiceBuilder.buildNotification(
           id: Random().nextInt(900000) + 100000,
           channelKey: event.id,

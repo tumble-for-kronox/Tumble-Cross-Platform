@@ -29,7 +29,7 @@ class TumbleListView extends StatelessWidget {
                       .read<MainAppNavigationCubit>()
                       .getNavBarItem(NavbarItem.SEARCH),
                   navigator),
-              errorType: state.message!,
+              errorType: RuntimeErrorType.noCachedSchedule,
             );
           case MainAppStatus.LOADING:
             return SpinKitThreeBounce(

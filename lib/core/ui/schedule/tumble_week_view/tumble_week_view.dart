@@ -26,7 +26,7 @@ class _TumbleWeekViewState extends State<TumbleWeekView> {
         switch (state.status) {
           case MainAppStatus.INITIAL:
             return NoScheduleAvailable(
-              errorType: state.message!,
+              errorType: RuntimeErrorType.noCachedSchedule,
               cupertinoAlertDialog: CustomCupertinoAlerts.noBookMarkedSchedules(
                   context,
                   () => context

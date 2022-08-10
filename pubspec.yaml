@@ -12,6 +12,7 @@ dependencies:
   flutter:
     sdk: flutter
   http: ^0.13.1
+  uuid: ^3.0.6
   equatable: ^2.0.3
   freezed: any
   cupertino_icons: ^1.0.5

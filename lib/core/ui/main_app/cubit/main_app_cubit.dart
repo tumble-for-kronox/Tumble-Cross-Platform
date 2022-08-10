@@ -1,12 +1,15 @@
 // ignore_for_file: no_leading_underscores_for_local_identifiers
 
-import 'dart:developer';
+import 'dart:developer' as dev;
+import 'dart:math';
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tumble/core/api/apiservices/api_response.dart';
 import 'package:tumble/core/api/apiservices/fetch_response.dart';
+import 'package:tumble/core/api/builders/notification_service_builder.dart';
 import 'package:tumble/core/api/repository/cache_and_interaction_repository.dart';
 import 'package:tumble/core/database/repository/database_repository.dart';
 import 'package:tumble/core/extensions/extensions.dart';
@@ -34,12 +37,15 @@ class MainAppCubit extends Cubit<MainAppState> {
 
   final _sharedPrefs = getIt<SharedPreferences>();
   final _cacheAndInteractionService = getIt<CacheAndInteractionRepository>();
+  final _notificationBuilder = NotificationServiceBuilder();
+  final _awesomeNotifications = getIt<AwesomeNotifications>();
   final _databaseService = getIt<DatabaseRepository>();
   final ScrollController _listViewScrollController = ScrollController();
 
   ScrollController get controller => _listViewScrollController;
   SharedPreferences get sharedPrefs => _sharedPrefs;
   int get viewType => getIt<SharedPreferences>().getInt(PreferenceTypes.view)!;
+  bool get isBookmarked => state.toggledFavorite;
 
   Future<void> init() async {
     await tryCached();
@@ -65,10 +71,27 @@ class MainAppCubit extends Cubit<MainAppState> {
 
   void _toggleRemove(List<String> currentFavorites) async {
     currentFavorites.remove(state.currentScheduleId);
+
+    /// Try to remove channel, in case it was default
+    final bool wasRemoved =
+        await _awesomeNotifications.removeChannel(state.currentScheduleId!);
+
     (currentFavorites.isEmpty)
         ? _sharedPrefs.remove(PreferenceTypes.schedule)
         : _sharedPrefs.setString(
             PreferenceTypes.schedule, currentFavorites.first);
+
+    /// If a notification channel was sucessfully removed that
+    /// means the one we removed was a default one, now we
+    /// need to set the new default one to an open notification channel
+    if (wasRemoved && currentFavorites.isNotEmpty) {
+      _notificationBuilder.buildNotificationChannel(
+          channelGroupKey: _sharedPrefs.getString(PreferenceTypes.school)!,
+          channelKey: currentFavorites.first,
+          channelName: 'Notifications for schedule',
+          channelDescription: 'Notifications for schedule');
+    }
+
     await _databaseService.removeSchedule(state.currentScheduleId!);
     emit(state.copyWith(toggledFavorite: false));
     _sharedPrefs.setStringList(PreferenceTypes.favorites, currentFavorites);
@@ -79,6 +102,20 @@ class MainAppCubit extends Cubit<MainAppState> {
     _sharedPrefs.setString(PreferenceTypes.schedule, state.currentScheduleId!);
     await _databaseService
         .addSchedule(state.scheduleModelAndCourses!.scheduleModel);
+
+    /// Make sure we only ever have one notification channel
+    /// open at a time
+    if (currentFavorites.length > 1) {
+      await _awesomeNotifications
+          .removeChannel(currentFavorites[currentFavorites.length - 2]);
+    }
+
+    /// Build new notification channel
+    _notificationBuilder.buildNotificationChannel(
+        channelGroupKey: _sharedPrefs.getString(PreferenceTypes.school)!,
+        channelKey: state.currentScheduleId!,
+        channelName: 'Notifications for schedule',
+        channelDescription: 'Notifications for schedule');
     emit(state.copyWith(toggledFavorite: true));
 
     _sharedPrefs.setStringList(PreferenceTypes.favorites, currentFavorites);
@@ -223,5 +260,68 @@ class MainAppCubit extends Cubit<MainAppState> {
         .firstWhere((CourseUiModel? courseUiModel) =>
             courseUiModel!.courseId == event.course.id)!
         .color);
+  }
+
+  Future<bool> createNotificationForEvent(
+      Event event, BuildContext context) async {
+    return _awesomeNotifications.isNotificationAllowed().then((isAllowed) {
+      dev.log(event.id.encodeUniqueIdentifier().toString());
+      if (isAllowed) {
+        _notificationBuilder.buildNotification(
+            id: event.id.encodeUniqueIdentifier(),
+            channelKey: _sharedPrefs.getString(PreferenceTypes.schedule)!,
+            groupkey: event.course.id,
+            title: event.title,
+            body: event.course.englishName,
+            date: event.timeStart.subtract(Duration(
+                seconds:
+                    _sharedPrefs.getInt(PreferenceTypes.notificationTime)!)));
+        dev.log('Created notification for event "${event.title}"');
+        showScaffoldMessage(context, 'Created notification for event');
+        return true;
+      }
+      dev.log('No new notifications created. Not allowed');
+      return false;
+    });
+  }
+
+  Future<bool> createNotificationForCourse(Event event) async {
+    return _awesomeNotifications.isNotificationAllowed().then((isAllowed) {
+      if (isAllowed) {
+        List<Event> events = state.scheduleModelAndCourses!.scheduleModel.days
+            .expand((Day day) => day.events) // Flatten nested list
+            .toList()
+            .where((Event eventInDefaultSchedule) =>
+                event.course.id == eventInDefaultSchedule.course.id)
+            .toList();
+        event.id.encodeUniqueIdentifier();
+        for (Event event in events) {
+          _notificationBuilder.buildNotification(
+              id: event.id.encodeUniqueIdentifier(),
+              channelKey: _sharedPrefs.getString(PreferenceTypes.schedule)!,
+              groupkey: event.course.id,
+              title: event.title,
+              body: event.course.englishName,
+              date: event.timeStart.subtract(Duration(
+                  seconds:
+                      _sharedPrefs.getInt(PreferenceTypes.notificationTime)!)));
+        }
+        dev.log('Created new notifications for ${event.course}');
+        return true;
+      }
+      dev.log('No new notifications created. Not allowed');
+      return false;
+    });
+  }
+
+  permissionRequest() async {
+    await _awesomeNotifications.requestPermissionToSendNotifications();
+  }
+
+  bool isDefault(String id) {
+    final String userDefaultSchedule =
+        _sharedPrefs.getString(PreferenceTypes.schedule)!;
+    return state.scheduleModelAndCourses!.scheduleModel.id ==
+        userDefaultSchedule;
   }
 }
