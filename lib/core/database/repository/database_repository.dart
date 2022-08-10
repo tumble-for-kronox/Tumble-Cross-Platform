@@ -3,12 +3,12 @@ import 'dart:ui';
 
 import 'package:sembast/sembast.dart';
 import 'package:tumble/core/database/database.dart';
-import 'package:tumble/core/database/interface/iaccess_stores.dart';
+import 'package:tumble/core/database/data/access_stores.dart';
 import 'package:tumble/core/database/interface/idatabase_service.dart';
 import 'package:tumble/core/models/api_models/kronox_user_model.dart';
 import 'package:tumble/core/models/api_models/schedule_model.dart';
 import 'package:tumble/core/models/ui_models/course_ui_model.dart';
-import 'package:tumble/core/startup/get_it_instances.dart';
+import 'package:tumble/core/dependency_injection/get_it_instances.dart';
 
 class DatabaseRepository implements IDatabaseScheduleService {
   final _scheduleStore = intMapStoreFactory.store(AccessStores.SCHEDULE_STORE);
@@ -19,30 +19,38 @@ class DatabaseRepository implements IDatabaseScheduleService {
   Future<Database> get _db async => await getIt<AppDatabase>().database;
 
   @override
-  Future addSchedule(ScheduleModel scheduleModel) async {
+  Future<void> add(dynamic scheduleModel) async {
     await _scheduleStore.add(await _db, scheduleModelToJson(scheduleModel));
   }
 
   @override
-  Future removeSchedule(String id) async {
+  Future<void> remove(dynamic id) async {
     final finder = Finder(filter: Filter.equals('id', id));
     await _scheduleStore.delete(await _db, finder: finder);
   }
 
   @override
-  Future updateSchedule(ScheduleModel scheduleModel) async {
+  Future<void> update(dynamic scheduleModel) async {
     final finder = Finder(filter: Filter.byKey(scheduleModel.id));
     await _scheduleStore.update(await _db, scheduleModel.toJson(),
         finder: finder);
   }
 
   @override
-  Future<List<ScheduleModel>> getAllSchedules() async {
+  Future removeAll() async {
+    await _scheduleStore.delete(await _db);
+    log('Removed all cached schedules');
+  }
+
+  @override
+  Future<List<ScheduleModel>> getAll() async {
     final recordSnapshots = await _scheduleStore.find(await _db);
     return recordSnapshots
         .map((snapshot) => ScheduleModel.fromJson(snapshot.value))
         .toList();
   }
+
+  /* ------------------- Repository specific methods ---------------------- */
 
   @override
   Future<ScheduleModel?> getOneSchedule(String id) async {
@@ -61,12 +69,6 @@ class DatabaseRepository implements IDatabaseScheduleService {
     return recordSnapshots
         .map((snapshot) => ScheduleModel.fromJson(snapshot.value).id)
         .toList();
-  }
-
-  @override
-  Future removeAllSchedules() async {
-    await _scheduleStore.delete(await _db);
-    log('Removed all cached schedules');
   }
 
   @override

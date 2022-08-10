@@ -4,11 +4,11 @@ import 'package:tumble/core/api/repository/notification_repository.dart';
 import 'package:tumble/core/api/work_manager/background_task.dart';
 import 'package:tumble/core/app.dart';
 import 'package:tumble/core/shared/setup.dart';
-import 'package:tumble/core/startup/get_it_instances.dart';
+import 'package:tumble/core/dependency_injection/get_it_instances.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await initSingletons();
+  await DependencyInjection.initSingletons();
   setupRequiredSharedPreferences();
   await BackgroundTask.callbackDispatcher();
   runApp(const App());

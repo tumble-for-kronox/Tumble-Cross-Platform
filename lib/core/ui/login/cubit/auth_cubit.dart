@@ -11,7 +11,7 @@ import 'package:tumble/core/models/api_models/kronox_user_model.dart';
 import 'package:tumble/core/models/api_models/user_event_collection_model.dart';
 import 'package:tumble/core/models/ui_models/school_model.dart';
 import 'package:tumble/core/shared/preference_types.dart';
-import 'package:tumble/core/startup/get_it_instances.dart';
+import 'package:tumble/core/dependency_injection/get_it_instances.dart';
 import 'package:tumble/core/ui/account/user_event_list/cubit/user_event_list_cubit.dart';
 
 part 'auth_state.dart';

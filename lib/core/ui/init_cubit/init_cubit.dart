@@ -11,7 +11,7 @@ import 'package:tumble/core/database/repository/database_repository.dart';
 import 'package:tumble/core/models/ui_models/school_model.dart';
 import 'package:tumble/core/shared/preference_types.dart';
 import 'package:tumble/core/shared/setup.dart';
-import 'package:tumble/core/startup/get_it_instances.dart';
+import 'package:tumble/core/dependency_injection/get_it_instances.dart';
 
 part 'init_state.dart';
 
@@ -42,7 +42,7 @@ class InitCubit extends Cubit<InitState> {
     _sharedPrefs.clear();
     setupRequiredSharedPreferences();
     _sharedPrefs.setString(PreferenceTypes.school, schoolName);
-    _databaseService.removeAllSchedules();
+    _databaseService.removeAll();
     _databaseService.removeAllCachedCourseColors();
     emit(InitState(defaultSchool: schoolName, status: InitStatus.HAS_SCHOOL));
   }

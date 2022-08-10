@@ -5,7 +5,7 @@ import 'package:tumble/core/api/repository/notification_repository.dart';
 import 'package:tumble/core/database/repository/database_repository.dart';
 import 'package:tumble/core/models/api_models/schedule_model.dart';
 import 'package:tumble/core/shared/preference_types.dart';
-import 'package:tumble/core/startup/get_it_instances.dart';
+import 'package:tumble/core/dependency_injection/get_it_instances.dart';
 
 class BackgroundTask {
   static Future<void> callbackDispatcher() async {
@@ -32,7 +32,7 @@ class BackgroundTask {
         ScheduleModel newScheduleModel = apiResponseOfNewScheduleModel.data!;
         if ((newScheduleModel != storedScheduleModel) &&
             storedScheduleModel != null) {
-          databaseService.updateSchedule(newScheduleModel);
+          databaseService.update(newScheduleModel);
           notificationService.updateDispatcher(
               newScheduleModel, storedScheduleModel);
         }

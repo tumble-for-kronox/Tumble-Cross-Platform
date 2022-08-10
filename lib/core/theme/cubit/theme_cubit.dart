@@ -7,7 +7,7 @@ import 'package:tumble/core/extensions/extensions.dart';
 import 'package:tumble/core/theme/cubit/theme_state.dart';
 import 'package:tumble/core/theme/repository/theme_repository.dart';
 import '../../shared/preference_types.dart';
-import '../../startup/get_it_instances.dart';
+import '../../dependency_injection/get_it_instances.dart';
 
 class ThemeCubit extends Cubit<ThemeState> {
   ThemeCubit()

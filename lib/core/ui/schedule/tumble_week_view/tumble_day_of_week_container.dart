@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:tumble/core/models/api_models/schedule_model.dart';
 import 'package:tumble/core/ui/main_app/cubit/main_app_cubit.dart';
+import 'package:tumble/core/ui/scaffold_message.dart';
+import 'package:tumble/core/ui/schedule/tumble_list_view/tumble_list_view_day_container.dart';
 import 'package:tumble/core/ui/schedule/tumble_week_view/tumble_day_of_week_divider.dart';
 import 'package:tumble/core/ui/schedule/tumble_week_view/tumble_empty_week_event_tile.dart';
 import 'package:tumble/core/ui/schedule/tumble_week_view/tumble_week_event_tile.dart';
@@ -24,7 +26,16 @@ class TumbleDayOfWeekContainer extends StatelessWidget {
         : Column(
             children: <Widget>[DayOfWeekDivider(day: day)] +
                 day.events
-                    .map((e) => TumbleWeekEventTile(event: e, cubit: cubit))
+                    .map((Event event) => GestureDetector(
+                        onLongPress: () {
+                          if (cubit.isDefault(event.id)) {
+                            showConfirmationModal(context, event, cubit);
+                          } else {
+                            showScaffoldMessage(context,
+                                'Schedule must be default to be able to set notifications');
+                          }
+                        },
+                        child: TumbleWeekEventTile(event: event, cubit: cubit)))
                     .toList(),
           );
   }

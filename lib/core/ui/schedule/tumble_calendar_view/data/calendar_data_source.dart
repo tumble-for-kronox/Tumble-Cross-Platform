@@ -1,4 +1,3 @@
-
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:tumble/core/models/api_models/schedule_model.dart';
 import 'package:tumble/core/ui/main_app/cubit/main_app_cubit.dart';
@@ -12,10 +11,7 @@ Future<AppointmentDataSource> getCalendarDataSource(
         startTime: event.timeStart,
         endTime: event.timeEnd,
         subject: event.title,
-        color: cubit.getColorForCourse(event)
-            .withOpacity(0.35),
-        startTimeZone: '',
-        endTimeZone: '',
+        color: cubit.getColorForCourse(event).withOpacity(0.35),
       ));
     }
   }

@@ -18,7 +18,7 @@ import 'package:tumble/core/models/ui_models/course_ui_model.dart';
 import 'package:tumble/core/models/ui_models/schedule_model_and_courses.dart';
 import 'package:tumble/core/models/ui_models/week_model.dart';
 import 'package:tumble/core/shared/preference_types.dart';
-import 'package:tumble/core/startup/get_it_instances.dart';
+import 'package:tumble/core/dependency_injection/get_it_instances.dart';
 import 'package:tumble/core/api/apiservices/api_response.dart' as api;
 import 'package:tumble/core/ui/data/scaffold_message_types.dart';
 import 'package:tumble/core/ui/scaffold_message.dart';
@@ -95,7 +95,7 @@ class MainAppCubit extends Cubit<MainAppState> {
           channelDescription: 'Notifications for schedule');
     }
 
-    await _databaseService.removeSchedule(state.currentScheduleId!);
+    await _databaseService.remove(state.currentScheduleId!);
     emit(state.copyWith(toggledFavorite: false));
     _sharedPrefs.setStringList(PreferenceTypes.favorites, currentFavorites);
   }
@@ -103,8 +103,7 @@ class MainAppCubit extends Cubit<MainAppState> {
   void _toggleSave(List<String> currentFavorites) async {
     currentFavorites.add(state.currentScheduleId!);
     _sharedPrefs.setString(PreferenceTypes.schedule, state.currentScheduleId!);
-    await _databaseService
-        .addSchedule(state.scheduleModelAndCourses!.scheduleModel);
+    await _databaseService.add(state.scheduleModelAndCourses!.scheduleModel);
 
     /// Make sure we only ever have one notification channel
     /// open at a time
@@ -268,7 +267,6 @@ class MainAppCubit extends Cubit<MainAppState> {
   Future<bool> createNotificationForEvent(
       Event event, BuildContext context) async {
     return _awesomeNotifications.isNotificationAllowed().then((isAllowed) {
-      dev.log(event.id.encodeUniqueIdentifier().toString());
       if (isAllowed) {
         _notificationBuilder.buildNotification(
             id: event.id.encodeUniqueIdentifier(),
@@ -301,11 +299,6 @@ class MainAppCubit extends Cubit<MainAppState> {
             .toList();
         event.id.encodeUniqueIdentifier();
         for (Event event in events) {
-          dev.log(event.timeStart
-              .subtract(Duration(
-                  minutes:
-                      _sharedPrefs.getInt(PreferenceTypes.notificationTime)!))
-              .toString());
           _notificationBuilder.buildNotification(
               id: event.id.encodeUniqueIdentifier(),
               channelKey: _sharedPrefs.getString(PreferenceTypes.schedule)!,
@@ -316,11 +309,12 @@ class MainAppCubit extends Cubit<MainAppState> {
                   minutes:
                       _sharedPrefs.getInt(PreferenceTypes.notificationTime)!)));
         }
-        dev.log('Created new notifications for ${event.course}');
+        dev.log(
+            'Created ${events.length} new notifications for ${event.course}');
         showScaffoldMessage(
             context,
-            ScaffoldMessageType.createdNotificationForEvent(
-                event.course.englishName));
+            ScaffoldMessageType.createdNotificationForCourse(
+                event.course.englishName, events.length));
         return true;
       }
       dev.log('No new notifications created. Not allowed');

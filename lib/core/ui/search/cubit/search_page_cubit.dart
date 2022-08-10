@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:tumble/core/api/apiservices/api_response.dart';
 import 'package:tumble/core/api/repository/cache_and_interaction_repository.dart';
 import 'package:tumble/core/models/api_models/program_model.dart';
-import 'package:tumble/core/startup/get_it_instances.dart';
+import 'package:tumble/core/dependency_injection/get_it_instances.dart';
 
 part 'search_page_state.dart';
 

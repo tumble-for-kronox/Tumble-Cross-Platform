@@ -15,11 +15,14 @@ abstract class IBackendService {
   Future<dynamic> getRefreshSession(String refreshToken, String defaultSchool);
 
   /// [HttpPost]
-  Future<dynamic> postUserLogin(String username, String password, String defaultSchool);
+  Future<dynamic> postUserLogin(
+      String username, String password, String defaultSchool);
 
   /// [HttpPost]
-  Future<dynamic> putRegisterUserEvent(String eventId, String sessionToken, String defaultSchool);
+  Future<dynamic> putRegisterUserEvent(
+      String eventId, String sessionToken, String defaultSchool);
 
   /// [HttpPost]
-  Future<dynamic> putUnregisterUserEvent(String eventId, String sessionToken, String defaultSchool);
+  Future<dynamic> putUnregisterUserEvent(
+      String eventId, String sessionToken, String defaultSchool);
 }

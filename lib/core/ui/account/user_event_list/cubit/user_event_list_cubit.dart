@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tumble/core/api/apiservices/api_response.dart';
 import 'package:tumble/core/api/repository/user_repository.dart';
 import 'package:tumble/core/models/api_models/user_event_collection_model.dart';
-import 'package:tumble/core/startup/get_it_instances.dart';
+import 'package:tumble/core/dependency_injection/get_it_instances.dart';
 
 part 'user_event_list_state.dart';
 

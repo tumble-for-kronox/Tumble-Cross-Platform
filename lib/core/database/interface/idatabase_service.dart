@@ -1,22 +1,14 @@
 import 'package:flutter/cupertino.dart';
+import 'package:tumble/core/api/interface/iservice_manager.dart';
 import 'package:tumble/core/models/api_models/kronox_user_model.dart';
 import 'package:tumble/core/models/api_models/schedule_model.dart';
 import 'package:tumble/core/models/ui_models/course_ui_model.dart';
 
-abstract class IDatabaseScheduleService {
-  Future addSchedule(ScheduleModel scheduleModel);
-
-  Future updateSchedule(ScheduleModel scheduleModel);
-
-  Future removeSchedule(String id);
-
-  Future<List<ScheduleModel>> getAllSchedules();
-
+@immutable
+abstract class IDatabaseScheduleService implements IServiceManager {
   Future<List<String>> getAllScheduleIds();
 
   Future<ScheduleModel?> getOneSchedule(String id);
-
-  Future removeAllSchedules();
 
   Future setUserSession(KronoxUserModel kronoxUser);
 

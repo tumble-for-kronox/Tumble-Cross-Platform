@@ -5,7 +5,7 @@ import 'package:tumble/core/api/apiservices/api_response.dart';
 import 'package:tumble/core/api/interface/iuser_service.dart';
 import 'package:tumble/core/api/repository/backend_repository.dart';
 import 'package:tumble/core/shared/preference_types.dart';
-import 'package:tumble/core/startup/get_it_instances.dart';
+import 'package:tumble/core/dependency_injection/get_it_instances.dart';
 
 class UserRepository implements IUserService {
   final _backendRepository = getIt<BackendRepository>();

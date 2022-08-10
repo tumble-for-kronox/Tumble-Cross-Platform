@@ -1,9 +1,9 @@
 import 'package:intl/intl.dart';
 
 class ScaffoldMessageType {
-  static String createdNotificationForCourse(String course) =>
-      Intl.message('Sucessfully created notification for $course',
-          args: [course]);
+  static String createdNotificationForCourse(String course, int eventCount) =>
+      Intl.message('Sucessfully created $eventCount notifications for $course',
+          args: [course, eventCount]);
 
   static String createdNotificationForEvent(String event) =>
       Intl.message('Sucessfully created notification for $event',
