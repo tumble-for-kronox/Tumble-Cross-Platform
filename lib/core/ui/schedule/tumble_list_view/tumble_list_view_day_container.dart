@@ -130,8 +130,8 @@ showConfirmationModal(BuildContext context, Event event, MainAppCubit cubit) {
                             child: Text('Set notifications for course')),
                         onTap: () async {
                           Navigator.of(context).pop();
-                          bool sucessfullyCreatedNotifications =
-                              await cubit.createNotificationForCourse(event);
+                          bool sucessfullyCreatedNotifications = await cubit
+                              .createNotificationForCourse(event, context);
                           if (!sucessfullyCreatedNotifications) {
                             await showDialog(
                                 useRootNavigator: false,

@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:http/http.dart';
 import "package:collection/collection.dart";
 import 'package:tumble/core/api/apiservices/api_response.dart';
-import 'package:tumble/core/api/apiservices/fetch_response.dart';
+import 'package:tumble/core/api/apiservices/runtime_error_type.dart';
 import 'package:tumble/core/helpers/color_picker.dart';
 import 'package:tumble/core/models/api_models/kronox_user_model.dart';
 import 'package:tumble/core/models/api_models/program_model.dart';

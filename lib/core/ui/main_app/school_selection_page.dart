@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tumble/core/database/responses/change_response.dart';
 import 'package:tumble/core/navigation/app_navigator.dart';
 import 'package:tumble/core/navigation/navigation_route_labels.dart';
+import 'package:tumble/core/ui/data/scaffold_message_types.dart';
 import 'package:tumble/core/ui/init_cubit/init_cubit.dart';
 import 'package:tumble/core/ui/login/cubit/auth_cubit.dart';
 import 'package:tumble/core/ui/main_app/data/schools.dart';
@@ -56,8 +57,12 @@ class _SchoolSelectionPageState extends State<SchoolSelectionPage> {
                               BlocProvider.of<InitCubit>(context)
                                   .changeSchool(school.schoolName);
                               BlocProvider.of<AuthCubit>(context).logout();
-                              showScaffoldMessage(context,
-                                  '${ChangeResponse.changeSchool} ${BlocProvider.of<InitCubit>(context).state.defaultSchool}');
+                              showScaffoldMessage(
+                                  context,
+                                  ScaffoldMessageType.changedSchool(
+                                      BlocProvider.of<InitCubit>(context)
+                                          .state
+                                          .defaultSchool!));
                               navigator.pushAndRemoveAll(NavigationRouteLabels
                                   .mainAppNavigationRootPage);
                             }

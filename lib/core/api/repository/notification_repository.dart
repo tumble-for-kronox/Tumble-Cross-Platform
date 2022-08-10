@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tumble/core/api/builders/notification_service_builder.dart';
 import 'package:tumble/core/api/interface/inotification_service.dart';
 import 'package:tumble/core/database/repository/database_repository.dart';
+import 'package:tumble/core/extensions/extensions.dart';
 import 'package:tumble/core/models/api_models/schedule_model.dart';
 import 'package:tumble/core/shared/preference_types.dart';
 import 'package:tumble/core/startup/get_it_instances.dart';
@@ -15,7 +16,8 @@ class NotificationRepository implements INotificationService {
   final _awesomeNotifications = getIt<AwesomeNotifications>();
 
   @override
-  void assignWithNewDuration(Duration newDuration) async {
+  void assignWithNewDuration(
+      Duration newDuration, ScheduleModel currentScheduleModel) async {
     List<NotificationModel> currentNotifications =
         await _awesomeNotifications.listScheduledNotifications();
     final defaultUserScheduleId =
@@ -36,8 +38,8 @@ class NotificationRepository implements INotificationService {
 
       for (Event event in eventsThatNeedReassign) {
         _notificationServiceBuilder.buildNotification(
-            id: Random().nextInt(900000) + 100000,
-            channelKey: event.id,
+            id: event.id.encodeUniqueIdentifier(),
+            channelKey: currentScheduleModel.id,
             groupkey: event.course.id,
             title: event.title,
             body: event.course.englishName,
@@ -52,7 +54,7 @@ class NotificationRepository implements INotificationService {
     final int notificationTime =
         _preferenceService.getInt(PreferenceTypes.notificationTime)!;
 
-    final Duration defaultUserDuration = Duration(seconds: notificationTime);
+    final Duration defaultUserDuration = Duration(minutes: notificationTime);
 
     List<NotificationModel> currentNotifications =
         await _awesomeNotifications.listScheduledNotifications();
@@ -76,8 +78,8 @@ class NotificationRepository implements INotificationService {
 
     for (Event event in eventsThatNeedReassign) {
       _notificationServiceBuilder.buildNotification(
-          id: Random().nextInt(900000) + 100000,
-          channelKey: event.id,
+          id: event.id.encodeUniqueIdentifier(),
+          channelKey: newScheduleModel.id,
           groupkey: event.course.id,
           title: event.title,
           body: event.course.englishName,

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tumble/core/api/apiservices/fetch_response.dart';
+import 'package:tumble/core/api/apiservices/runtime_error_type.dart';
 import 'package:tumble/core/models/api_models/schedule_model.dart';
 
 class ModalInfoRow extends StatelessWidget {

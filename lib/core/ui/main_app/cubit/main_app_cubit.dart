@@ -8,7 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tumble/core/api/apiservices/api_response.dart';
-import 'package:tumble/core/api/apiservices/fetch_response.dart';
+import 'package:tumble/core/api/apiservices/runtime_error_type.dart';
 import 'package:tumble/core/api/builders/notification_service_builder.dart';
 import 'package:tumble/core/api/repository/cache_and_interaction_repository.dart';
 import 'package:tumble/core/database/repository/database_repository.dart';
@@ -20,6 +20,7 @@ import 'package:tumble/core/models/ui_models/week_model.dart';
 import 'package:tumble/core/shared/preference_types.dart';
 import 'package:tumble/core/startup/get_it_instances.dart';
 import 'package:tumble/core/api/apiservices/api_response.dart' as api;
+import 'package:tumble/core/ui/data/scaffold_message_types.dart';
 import 'package:tumble/core/ui/scaffold_message.dart';
 part 'main_app_state.dart';
 
@@ -59,13 +60,15 @@ class MainAppCubit extends Cubit<MainAppState> {
     /// If the schedule IS saved in preferences
     if (currentFavorites!.contains(state.currentScheduleId)) {
       _toggleRemove(currentFavorites);
-      showScaffoldMessage(context, "Removed schedule from bookmarks");
+      showScaffoldMessage(context,
+          ScaffoldMessageType.removedBookmark(state.currentScheduleId!));
     }
 
     /// If the schedule IS NOT saved in preferences
     else {
       _toggleSave(currentFavorites);
-      showScaffoldMessage(context, "Saved schedule to bookmarks");
+      showScaffoldMessage(
+          context, ScaffoldMessageType.addedBookmark(state.currentScheduleId!));
     }
   }
 
@@ -274,10 +277,11 @@ class MainAppCubit extends Cubit<MainAppState> {
             title: event.title,
             body: event.course.englishName,
             date: event.timeStart.subtract(Duration(
-                seconds:
+                minutes:
                     _sharedPrefs.getInt(PreferenceTypes.notificationTime)!)));
         dev.log('Created notification for event "${event.title}"');
-        showScaffoldMessage(context, 'Created notification for event');
+        showScaffoldMessage(context,
+            ScaffoldMessageType.createdNotificationForEvent(event.title));
         return true;
       }
       dev.log('No new notifications created. Not allowed');
@@ -285,7 +289,8 @@ class MainAppCubit extends Cubit<MainAppState> {
     });
   }
 
-  Future<bool> createNotificationForCourse(Event event) async {
+  Future<bool> createNotificationForCourse(
+      Event event, BuildContext context) async {
     return _awesomeNotifications.isNotificationAllowed().then((isAllowed) {
       if (isAllowed) {
         List<Event> events = state.scheduleModelAndCourses!.scheduleModel.days
@@ -296,6 +301,11 @@ class MainAppCubit extends Cubit<MainAppState> {
             .toList();
         event.id.encodeUniqueIdentifier();
         for (Event event in events) {
+          dev.log(event.timeStart
+              .subtract(Duration(
+                  minutes:
+                      _sharedPrefs.getInt(PreferenceTypes.notificationTime)!))
+              .toString());
           _notificationBuilder.buildNotification(
               id: event.id.encodeUniqueIdentifier(),
               channelKey: _sharedPrefs.getString(PreferenceTypes.schedule)!,
@@ -303,10 +313,14 @@ class MainAppCubit extends Cubit<MainAppState> {
               title: event.title,
               body: event.course.englishName,
               date: event.timeStart.subtract(Duration(
-                  seconds:
+                  minutes:
                       _sharedPrefs.getInt(PreferenceTypes.notificationTime)!)));
         }
         dev.log('Created new notifications for ${event.course}');
+        showScaffoldMessage(
+            context,
+            ScaffoldMessageType.createdNotificationForEvent(
+                event.course.englishName));
         return true;
       }
       dev.log('No new notifications created. Not allowed');

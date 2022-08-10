@@ -8,9 +8,6 @@ import 'package:tumble/core/shared/preference_types.dart';
 import 'package:tumble/core/startup/get_it_instances.dart';
 
 class BackgroundTask {
-  static const name = 'updateSchedule';
-  static const identifier = 'background-fetch';
-
   static Future<void> callbackDispatcher() async {
     final backendService = getIt<BackendRepository>();
     final preferenceService = getIt<SharedPreferences>();

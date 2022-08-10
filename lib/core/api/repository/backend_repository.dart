@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart';
 import 'package:tumble/core/api/apiservices/api_endpoints.dart';
 import 'package:tumble/core/api/apiservices/api_response.dart';
-import 'package:tumble/core/api/apiservices/fetch_response.dart';
+import 'package:tumble/core/api/apiservices/runtime_error_type.dart';
 import 'package:tumble/core/api/cert_bypass.dart';
 import 'package:tumble/core/api/interface/ibackend_service.dart';
 import 'package:tumble/core/extensions/extensions.dart';

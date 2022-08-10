@@ -4,5 +4,6 @@ abstract class INotificationService {
   void updateDispatcher(
       ScheduleModel newScheduleModel, ScheduleModel oldScheduleModel);
 
-  void assignWithNewDuration(Duration newDuration);
+  void assignWithNewDuration(
+      Duration newDuration, ScheduleModel currentScheduleModel);
 }
