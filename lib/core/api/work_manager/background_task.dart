@@ -1,6 +1,7 @@
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tumble/core/api/apiservices/api_response.dart';
 import 'package:tumble/core/api/repository/backend_repository.dart';
+import 'package:tumble/core/api/repository/notification_repository.dart';
 import 'package:tumble/core/database/repository/database_repository.dart';
 import 'package:tumble/core/models/api_models/schedule_model.dart';
 import 'package:tumble/core/shared/preference_types.dart';
@@ -14,6 +15,7 @@ class BackgroundTask {
     final backendService = getIt<BackendRepository>();
     final preferenceService = getIt<SharedPreferences>();
     final databaseService = getIt<DatabaseRepository>();
+    final notificationService = getIt<NotificationRepository>();
 
     final defaultUserScheduleId =
         preferenceService.getString(PreferenceTypes.schedule);
@@ -24,12 +26,19 @@ class BackgroundTask {
       return;
     }
 
-    ApiResponse apiResponse = await backendService.getSchedule(
-        defaultUserScheduleId, defaultUserSchool);
-    switch (apiResponse.status) {
+    ApiResponse apiResponseOfNewScheduleModel = await backendService
+        .getSchedule(defaultUserScheduleId, defaultUserSchool);
+    ScheduleModel? storedScheduleModel =
+        await databaseService.getOneSchedule(defaultUserScheduleId);
+    switch (apiResponseOfNewScheduleModel.status) {
       case ApiStatus.FETCHED:
-        ScheduleModel scheduleModel = apiResponse.data!;
-        databaseService.updateSchedule(scheduleModel);
+        ScheduleModel newScheduleModel = apiResponseOfNewScheduleModel.data!;
+        if ((newScheduleModel != storedScheduleModel) &&
+            storedScheduleModel != null) {
+          databaseService.updateSchedule(newScheduleModel);
+          notificationService.updateDispatcher(
+              newScheduleModel, storedScheduleModel);
+        }
         break;
       default:
         break;

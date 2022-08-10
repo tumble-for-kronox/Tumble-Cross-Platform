@@ -5,7 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tumble/core/api/repository/icache_and_interaction_repository.dart';
+import 'package:tumble/core/api/repository/cache_and_interaction_repository.dart';
 import 'package:tumble/core/database/database_response.dart';
 import 'package:tumble/core/database/repository/database_repository.dart';
 import 'package:tumble/core/models/ui_models/school_model.dart';

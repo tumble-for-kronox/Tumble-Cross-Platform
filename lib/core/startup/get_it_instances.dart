@@ -1,8 +1,10 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tumble/core/api/repository/backend_repository.dart';
-import 'package:tumble/core/api/repository/icache_and_interaction_repository.dart';
+import 'package:tumble/core/api/repository/cache_and_interaction_repository.dart';
+import 'package:tumble/core/api/repository/notification_repository.dart';
 import 'package:tumble/core/api/repository/user_repository.dart';
 import 'package:tumble/core/database/database.dart';
 import 'package:tumble/core/database/repository/database_repository.dart';
@@ -22,4 +24,6 @@ Future<void> initSingletons() async {
   getIt.registerLazySingleton(() => ThemeRepository());
   getIt.registerLazySingleton(() => CacheAndInteractionRepository());
   getIt.registerLazySingleton(() => UserRepository());
+  getIt.registerLazySingleton(() => NotificationRepository());
+  getIt.registerLazySingleton(() => AwesomeNotifications());
 }

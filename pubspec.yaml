@@ -12,6 +12,7 @@ dependencies:
   flutter:
     sdk: flutter
   http: ^0.13.1
+  uuid: ^3.0.6
   equatable: ^2.0.3
   freezed: any
   cupertino_icons: ^1.0.5
@@ -30,6 +31,7 @@ dependencies:
   freezed_annotation: ^2.0.3
   json_annotation: ^4.5.0
   flutter_secure_storage: ^5.0.2
+  awesome_notifications: ^0.6.21
 
 dev_dependencies:
   flutter_test:

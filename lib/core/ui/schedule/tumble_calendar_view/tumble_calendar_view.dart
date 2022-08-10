@@ -28,7 +28,7 @@ class _TumbleCalendarViewState extends State<TumbleCalendarView> {
         switch (state.status) {
           case MainAppStatus.INITIAL:
             return NoScheduleAvailable(
-              errorType: state.message!,
+              errorType: RuntimeErrorType.noCachedSchedule,
               cupertinoAlertDialog: CustomCupertinoAlerts.noBookMarkedSchedules(
                   context,
                   () => context
@@ -110,4 +110,3 @@ class _TumbleCalendarViewState extends State<TumbleCalendarView> {
     );
   }
 }
-
