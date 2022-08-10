@@ -60,3 +60,5 @@ pubspec.lock
 event_struct.json
 pretend_struct.json
 log/log.txt
+.vscode/
+.vscode
