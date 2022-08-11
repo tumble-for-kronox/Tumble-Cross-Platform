@@ -62,3 +62,5 @@ pretend_struct.json
 log/log.txt
 .vscode/
 .vscode
+.metadata
+analysis_options.yaml
