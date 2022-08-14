@@ -68,7 +68,7 @@ class TumbleWeekEventTile extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.only(left: 5),
                   child: Text(
-                    "${DateFormat("HH:mm").format(event.timeStart)} - ${DateFormat("HH:mm").format(event.timeEnd)}",
+                    "${DateFormat("HH:mm").format(event.from)} - ${DateFormat("HH:mm").format(event.to)}",
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.onSurface,
                       fontSize: 16,

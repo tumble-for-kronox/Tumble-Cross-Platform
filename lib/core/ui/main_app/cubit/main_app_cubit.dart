@@ -54,21 +54,18 @@ class MainAppCubit extends Cubit<MainAppState> {
   }
 
   Future<void> toggleFavorite(BuildContext context) async {
-    final currentFavorites =
-        _sharedPrefs.getStringList(PreferenceTypes.favorites);
+    final currentFavorites = _sharedPrefs.getStringList(PreferenceTypes.favorites);
 
     /// If the schedule IS saved in preferences
     if (currentFavorites!.contains(state.currentScheduleId)) {
       _toggleRemove(currentFavorites);
-      showScaffoldMessage(context,
-          ScaffoldMessageType.removedBookmark(state.currentScheduleId!));
+      showScaffoldMessage(context, ScaffoldMessageType.removedBookmark(state.currentScheduleId!));
     }
 
     /// If the schedule IS NOT saved in preferences
     else {
       _toggleSave(currentFavorites);
-      showScaffoldMessage(
-          context, ScaffoldMessageType.addedBookmark(state.currentScheduleId!));
+      showScaffoldMessage(context, ScaffoldMessageType.addedBookmark(state.currentScheduleId!));
     }
   }
 
@@ -76,13 +73,11 @@ class MainAppCubit extends Cubit<MainAppState> {
     currentFavorites.remove(state.currentScheduleId);
 
     /// Try to remove channel, in case it was default
-    final bool wasRemoved =
-        await _awesomeNotifications.removeChannel(state.currentScheduleId!);
+    final bool wasRemoved = await _awesomeNotifications.removeChannel(state.currentScheduleId!);
 
     (currentFavorites.isEmpty)
         ? _sharedPrefs.remove(PreferenceTypes.schedule)
-        : _sharedPrefs.setString(
-            PreferenceTypes.schedule, currentFavorites.first);
+        : _sharedPrefs.setString(PreferenceTypes.schedule, currentFavorites.first);
 
     /// If a notification channel was sucessfully removed that
     /// means the one we removed was a default one, now we
@@ -108,8 +103,7 @@ class MainAppCubit extends Cubit<MainAppState> {
     /// Make sure we only ever have one notification channel
     /// open at a time
     if (currentFavorites.length > 1) {
-      await _awesomeNotifications
-          .removeChannel(currentFavorites[currentFavorites.length - 2]);
+      await _awesomeNotifications.removeChannel(currentFavorites[currentFavorites.length - 2]);
     }
 
     /// Build new notification channel
@@ -130,8 +124,7 @@ class MainAppCubit extends Cubit<MainAppState> {
     if (state.currentScheduleId != null) {
       return;
     }
-    final ApiResponse _apiResponse =
-        await _cacheAndInteractionService.getCachedBookmarkedSchedule();
+    final ApiResponse _apiResponse = await _cacheAndInteractionService.getCachedBookmarkedSchedule();
 
     switch (_apiResponse.status) {
       case ApiStatus.CACHED:
@@ -145,8 +138,7 @@ class MainAppCubit extends Cubit<MainAppState> {
               toggledFavorite: true,
               scheduleModelAndCourses: ScheduleModelAndCourses(
                   scheduleModel: currentScheduleModel,
-                  courses: await _databaseService
-                      .getCachedCoursesFromId(currentScheduleModel.id))));
+                  courses: await _databaseService.getCachedCoursesFromId(currentScheduleModel.id))));
         } else {
           emit(state.copyWith(status: MainAppStatus.EMPTY_SCHEDULE));
         }
@@ -164,8 +156,7 @@ class MainAppCubit extends Cubit<MainAppState> {
       case api.ApiStatus.FETCHED:
         ScheduleModel currentScheduleModel = _apiResponse.data!;
         if (currentScheduleModel.isNotPhonySchedule()) {
-          List<CourseUiModel?> courseUiModels =
-              currentScheduleModel.findNewCourses();
+          List<CourseUiModel?> courseUiModels = currentScheduleModel.findNewCourses();
           for (CourseUiModel? courseUiModel in courseUiModels) {
             if (courseUiModel != null) {
               _databaseService.addCourseInstance(courseUiModel);
@@ -177,8 +168,8 @@ class MainAppCubit extends Cubit<MainAppState> {
               listOfDays: currentScheduleModel.days,
               listOfWeeks: currentScheduleModel.splitToWeek(),
               toggledFavorite: false,
-              scheduleModelAndCourses: ScheduleModelAndCourses(
-                  scheduleModel: currentScheduleModel, courses: courseUiModels),
+              scheduleModelAndCourses:
+                  ScheduleModelAndCourses(scheduleModel: currentScheduleModel, courses: courseUiModels),
               listViewToTopButtonVisible: false,
               message: null));
         } else {
@@ -195,19 +186,15 @@ class MainAppCubit extends Cubit<MainAppState> {
               listOfWeeks: currentScheduleModel.splitToWeek(),
               toggledFavorite: true,
               scheduleModelAndCourses: ScheduleModelAndCourses(
-                  scheduleModel: currentScheduleModel,
-                  courses: await _databaseService.getCachedCoursesFromId(id)),
+                  scheduleModel: currentScheduleModel, courses: await _databaseService.getCachedCoursesFromId(id)),
               listViewToTopButtonVisible: false,
               message: null));
         } else {
-          emit(state.copyWith(
-              status: MainAppStatus.EMPTY_SCHEDULE,
-              message: RuntimeErrorType.noBookmarks));
+          emit(state.copyWith(status: MainAppStatus.EMPTY_SCHEDULE, message: RuntimeErrorType.noBookmarks));
         }
         break;
       case api.ApiStatus.ERROR:
-        emit(state.copyWith(
-            message: _apiResponse.message, status: MainAppStatus.FETCH_ERROR));
+        emit(state.copyWith(message: _apiResponse.message, status: MainAppStatus.FETCH_ERROR));
         break;
       default:
         emit(state);
@@ -216,14 +203,12 @@ class MainAppCubit extends Cubit<MainAppState> {
   }
 
   Future<void> swapScheduleDefaultView(String id) async {
-    ScheduleModel? newDefaultSchedule =
-        await _databaseService.getOneSchedule(id);
+    ScheduleModel? newDefaultSchedule = await _databaseService.getOneSchedule(id);
     if (newDefaultSchedule != null) {
       emit(MainAppState(
           status: MainAppStatus.SCHEDULE_SELECTED,
           scheduleModelAndCourses: ScheduleModelAndCourses(
-              scheduleModel: newDefaultSchedule,
-              courses: await _databaseService.getCachedCoursesFromId(id)),
+              scheduleModel: newDefaultSchedule, courses: await _databaseService.getCachedCoursesFromId(id)),
           currentScheduleId: id,
           listOfDays: newDefaultSchedule.days,
           listOfWeeks: newDefaultSchedule.splitToWeek(),
@@ -243,8 +228,7 @@ class MainAppCubit extends Cubit<MainAppState> {
   }
 
   void scrollToTop() {
-    _listViewScrollController.animateTo(0,
-        duration: const Duration(seconds: 1), curve: Curves.easeInOut);
+    _listViewScrollController.animateTo(0, duration: const Duration(seconds: 1), curve: Curves.easeInOut);
   }
 
   setLoading() {
@@ -259,13 +243,11 @@ class MainAppCubit extends Cubit<MainAppState> {
 
   Color getColorForCourse(Event event) {
     return Color(state.scheduleModelAndCourses!.courses
-        .firstWhere((CourseUiModel? courseUiModel) =>
-            courseUiModel!.courseId == event.course.id)!
+        .firstWhere((CourseUiModel? courseUiModel) => courseUiModel!.courseId == event.course.id)!
         .color);
   }
 
-  Future<bool> createNotificationForEvent(
-      Event event, BuildContext context) async {
+  Future<bool> createNotificationForEvent(Event event, BuildContext context) async {
     return _awesomeNotifications.isNotificationAllowed().then((isAllowed) {
       if (isAllowed) {
         _notificationBuilder.buildNotification(
@@ -274,12 +256,9 @@ class MainAppCubit extends Cubit<MainAppState> {
             groupkey: event.course.id,
             title: event.title,
             body: event.course.englishName,
-            date: event.timeStart.subtract(Duration(
-                minutes:
-                    _sharedPrefs.getInt(PreferenceTypes.notificationTime)!)));
+            date: event.from.subtract(Duration(minutes: _sharedPrefs.getInt(PreferenceTypes.notificationTime)!)));
         dev.log('Created notification for event "${event.title}"');
-        showScaffoldMessage(context,
-            ScaffoldMessageType.createdNotificationForEvent(event.title));
+        showScaffoldMessage(context, ScaffoldMessageType.createdNotificationForEvent(event.title));
         return true;
       }
       dev.log('No new notifications created. Not allowed');
@@ -287,15 +266,13 @@ class MainAppCubit extends Cubit<MainAppState> {
     });
   }
 
-  Future<bool> createNotificationForCourse(
-      Event event, BuildContext context) async {
+  Future<bool> createNotificationForCourse(Event event, BuildContext context) async {
     return _awesomeNotifications.isNotificationAllowed().then((isAllowed) {
       if (isAllowed) {
         List<Event> events = state.scheduleModelAndCourses!.scheduleModel.days
             .expand((Day day) => day.events) // Flatten nested list
             .toList()
-            .where((Event eventInDefaultSchedule) =>
-                event.course.id == eventInDefaultSchedule.course.id)
+            .where((Event eventInDefaultSchedule) => event.course.id == eventInDefaultSchedule.course.id)
             .toList();
         event.id.encodeUniqueIdentifier();
         for (Event event in events) {
@@ -305,16 +282,11 @@ class MainAppCubit extends Cubit<MainAppState> {
               groupkey: event.course.id,
               title: event.title,
               body: event.course.englishName,
-              date: event.timeStart.subtract(Duration(
-                  minutes:
-                      _sharedPrefs.getInt(PreferenceTypes.notificationTime)!)));
+              date: event.from.subtract(Duration(minutes: _sharedPrefs.getInt(PreferenceTypes.notificationTime)!)));
         }
-        dev.log(
-            'Created ${events.length} new notifications for ${event.course}');
+        dev.log('Created ${events.length} new notifications for ${event.course}');
         showScaffoldMessage(
-            context,
-            ScaffoldMessageType.createdNotificationForCourse(
-                event.course.englishName, events.length));
+            context, ScaffoldMessageType.createdNotificationForCourse(event.course.englishName, events.length));
         return true;
       }
       dev.log('No new notifications created. Not allowed');
@@ -327,9 +299,7 @@ class MainAppCubit extends Cubit<MainAppState> {
   }
 
   bool isDefault(String id) {
-    final String userDefaultSchedule =
-        _sharedPrefs.getString(PreferenceTypes.schedule)!;
-    return state.scheduleModelAndCourses!.scheduleModel.id ==
-        userDefaultSchedule;
+    final String userDefaultSchedule = _sharedPrefs.getString(PreferenceTypes.schedule)!;
+    return state.scheduleModelAndCourses!.scheduleModel.id == userDefaultSchedule;
   }
 }
