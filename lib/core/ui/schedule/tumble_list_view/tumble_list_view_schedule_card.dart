@@ -74,7 +74,7 @@ class ScheduleCard extends StatelessWidget {
                                             padding:
                                                 const EdgeInsets.only(top: 1),
                                             child: Text(
-                                              '${DateFormat('EEEE').format(event.timeStart)}, ${DateFormat.Hm().format(event.timeStart)} - ${DateFormat.Hm().format(event.timeEnd)}',
+                                              '${DateFormat('EEEE').format(event.from)}, ${DateFormat.Hm().format(event.from)} - ${DateFormat.Hm().format(event.to)}',
                                               style: TextStyle(
                                                   fontSize: 13,
                                                   fontWeight: FontWeight.w400,

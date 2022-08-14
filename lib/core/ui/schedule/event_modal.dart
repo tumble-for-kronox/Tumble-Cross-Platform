@@ -11,8 +11,7 @@ typedef SetDefaultSchedule = void Function(String id);
 class TumbleEventModal extends StatelessWidget {
   final Event event;
   final Color color;
-  const TumbleEventModal({Key? key, required this.event, required this.color})
-      : super(key: key);
+  const TumbleEventModal({Key? key, required this.event, required this.color}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,25 +26,20 @@ class TumbleEventModal extends StatelessWidget {
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.background,
-                borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    topRight: Radius.circular(20))),
+                borderRadius: const BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20))),
             child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    padding: const EdgeInsets.only(
-                        right: 0, left: 0, top: 5, bottom: 10),
+                    padding: const EdgeInsets.only(right: 0, left: 0, top: 5, bottom: 10),
                     child: Text(
                       event.title.length < 40
                           ? event.title.capitalize()
                           : '${event.title.substring(0, 40).capitalize()}..',
                       textAlign: TextAlign.start,
                       style: TextStyle(
-                          fontSize: 32,
-                          fontWeight: FontWeight.w500,
-                          color: Theme.of(context).colorScheme.onBackground),
+                          fontSize: 32, fontWeight: FontWeight.w500, color: Theme.of(context).colorScheme.onBackground),
                     ),
                   ),
                   const SizedBox(
@@ -58,14 +52,13 @@ class TumbleEventModal extends StatelessWidget {
                         title: 'Date',
                         icon: const Icon(CupertinoIcons.calendar),
                         subtitle:
-                            '${DateFormat.d().format(event.timeStart)} ${DateFormat('MMMM').format(event.timeStart)} ${DateFormat.y().format(event.timeStart)}',
+                            '${DateFormat.d().format(event.from)} ${DateFormat('MMMM').format(event.from)} ${DateFormat.y().format(event.from)}',
                       ),
                       const SizedBox(height: 25),
                       ModalInfoRow(
                         title: 'Time',
                         icon: const Icon(CupertinoIcons.clock),
-                        subtitle:
-                            '${DateFormat.Hm().format(event.timeStart)} - ${DateFormat.Hm().format(event.timeEnd)}',
+                        subtitle: '${DateFormat.Hm().format(event.to)} - ${DateFormat.Hm().format(event.to)}',
                       ),
                       const SizedBox(
                         height: 25,

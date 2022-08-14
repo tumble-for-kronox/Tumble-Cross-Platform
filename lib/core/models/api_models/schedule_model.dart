@@ -10,8 +10,7 @@ import 'dart:convert';
 part 'schedule_model.freezed.dart';
 part 'schedule_model.g.dart';
 
-ScheduleModel scheduleModelFromJson(String str) =>
-    ScheduleModel.fromJson(json.decode(str));
+ScheduleModel scheduleModelFromJson(String str) => ScheduleModel.fromJson(json.decode(str));
 
 Map<String, dynamic> scheduleModelToJson(ScheduleModel data) => data.toJson();
 
@@ -23,8 +22,7 @@ abstract class ScheduleModel with _$ScheduleModel {
     required List<Day> days,
   }) = _ScheduleModel;
 
-  factory ScheduleModel.fromJson(Map<String, dynamic> json) =>
-      _$ScheduleModelFromJson(json);
+  factory ScheduleModel.fromJson(Map<String, dynamic> json) => _$ScheduleModelFromJson(json);
 }
 
 @freezed
@@ -46,8 +44,8 @@ abstract class Event with _$Event {
     required String id,
     required String title,
     required Course course,
-    required DateTime timeStart,
-    required DateTime timeEnd,
+    required DateTime from,
+    required DateTime to,
     required List<Location> locations,
     required List<Teacher> teachers,
     required bool isSpecial,
@@ -78,8 +76,7 @@ abstract class Location with _$Location {
     required int maxSeats,
   }) = _Location;
 
-  factory Location.fromJson(Map<String, dynamic> json) =>
-      _$LocationFromJson(json);
+  factory Location.fromJson(Map<String, dynamic> json) => _$LocationFromJson(json);
 }
 
 @freezed
@@ -90,6 +87,5 @@ abstract class Teacher with _$Teacher {
     required String lastName,
   }) = _Teacher;
 
-  factory Teacher.fromJson(Map<String, dynamic> json) =>
-      _$TeacherFromJson(json);
+  factory Teacher.fromJson(Map<String, dynamic> json) => _$TeacherFromJson(json);
 }
