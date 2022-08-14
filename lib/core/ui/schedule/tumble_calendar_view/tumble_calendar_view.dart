@@ -14,7 +14,9 @@ import 'package:tumble/core/ui/schedule/tumble_calendar_view/data/calendar_data_
 import 'package:tumble/core/ui/schedule/tumble_list_view/data/cupertino_alerts.dart';
 
 import '../../../models/api_models/schedule_model.dart';
+import '../../scaffold_message.dart';
 import '../event_modal.dart';
+import '../tumble_list_view/tumble_list_view_day_container.dart';
 
 class TumbleCalendarView extends StatefulWidget {
   const TumbleCalendarView({Key? key}) : super(key: key);
@@ -67,6 +69,17 @@ class _TumbleCalendarViewState extends State<TumbleCalendarView> {
                             leadingDatesBackgroundColor: Theme.of(context).colorScheme.background,
                             textStyle: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.onBackground),
                           )),
+                      onLongPress: (calendarLongPressDetails) {
+                        if (calendarLongPressDetails.targetElement != CalendarElement.appointment) {
+                          return;
+                        }
+                        Event event = calendarLongPressDetails.appointments![0];
+                        if (BlocProvider.of<MainAppCubit>(context).isDefault(event.id)) {
+                          showConfirmationModal(context, event, BlocProvider.of<MainAppCubit>(context));
+                        } else {
+                          showScaffoldMessage(context, 'Schedule must be default to be able to set notifications');
+                        }
+                      },
                       onTap: (calendarTapDetails) {
                         if (calendarTapDetails.targetElement != CalendarElement.appointment) {
                           return;
@@ -76,9 +89,8 @@ class _TumbleCalendarViewState extends State<TumbleCalendarView> {
                         showModalBottomSheet(
                             isScrollControlled: true,
                             context: context,
-                            builder: (context) => TumbleEventModal(
-                                event: calendarTapDetails.appointments![0],
-                                color: event.isSpecial ? Colors.redAccent : eventColor));
+                            builder: (context) =>
+                                TumbleEventModal(event: event, color: event.isSpecial ? Colors.redAccent : eventColor));
                       },
                     );
                   }

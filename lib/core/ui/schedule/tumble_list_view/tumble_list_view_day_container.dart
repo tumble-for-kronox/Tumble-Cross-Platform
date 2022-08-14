@@ -14,9 +14,7 @@ import 'package:tumble/core/ui/schedule/tumble_list_view/tumble_list_view_schedu
 class TumbleListViewDayContainer extends StatelessWidget {
   final Day day;
   final MainAppCubit mainAppCubit;
-  const TumbleListViewDayContainer(
-      {Key? key, required this.day, required this.mainAppCubit})
-      : super(key: key);
+  const TumbleListViewDayContainer({Key? key, required this.day, required this.mainAppCubit}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -29,9 +27,7 @@ class TumbleListViewDayContainer extends StatelessWidget {
             children: [
               Text("${day.name} ${day.date}",
                   style: TextStyle(
-                      color: Theme.of(context).colorScheme.onBackground,
-                      fontSize: 17,
-                      fontWeight: FontWeight.w400)),
+                      color: Theme.of(context).colorScheme.onBackground, fontSize: 17, fontWeight: FontWeight.w400)),
               Expanded(
                   child: Divider(
                 color: Theme.of(context).colorScheme.onBackground,
@@ -49,25 +45,20 @@ class TumbleListViewDayContainer extends StatelessWidget {
                           if (mainAppCubit.isDefault(event.id)) {
                             showConfirmationModal(context, event, mainAppCubit);
                           } else {
-                            showScaffoldMessage(context,
-                                'Schedule must be default to be able to set notifications');
+                            showScaffoldMessage(context, 'Schedule must be default to be able to set notifications');
                           }
                         },
                         child: ScheduleCard(
                             event: event,
-                            color: event.isSpecial
-                                ? Colors.redAccent
-                                : mainAppCubit.getColorForCourse(event),
+                            color: event.isSpecial ? Colors.redAccent : mainAppCubit.getColorForCourse(event),
                             onTap: () {
                               showModalBottomSheet(
                                   isScrollControlled: true,
                                   context: context,
                                   builder: (context) => TumbleEventModal(
                                       event: event,
-                                      color: event.isSpecial
-                                          ? Colors.redAccent
-                                          : mainAppCubit
-                                              .getColorForCourse(event)));
+                                      color:
+                                          event.isSpecial ? Colors.redAccent : mainAppCubit.getColorForCourse(event)));
                             }),
                       ))
                   .toList(),
@@ -97,20 +88,17 @@ showConfirmationModal(BuildContext context, Event event, MainAppCubit cubit) {
                 child: Card(
               elevation: 0,
               color: Theme.of(context).colorScheme.surface,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0)),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
               child: SingleChildScrollView(
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     mainAxisSize: MainAxisSize.max,
                     children: [
                       ListTile(
-                        title: const Center(
-                            child: Text('Set notification for event')),
+                        title: const Center(child: Text('Set notification for event')),
                         onTap: () async {
                           Navigator.of(context).pop();
-                          bool sucessfullyCreatedNotifications = await cubit
-                              .createNotificationForEvent(event, context);
+                          bool sucessfullyCreatedNotifications = await cubit.createNotificationForEvent(event, context);
 
                           if (!sucessfullyCreatedNotifications) {
                             await showDialog(
@@ -126,12 +114,11 @@ showConfirmationModal(BuildContext context, Event event, MainAppCubit cubit) {
                         height: 10,
                       ),
                       ListTile(
-                        title: const Center(
-                            child: Text('Set notifications for course')),
+                        title: const Center(child: Text('Set notifications for course')),
                         onTap: () async {
                           Navigator.of(context).pop();
-                          bool sucessfullyCreatedNotifications = await cubit
-                              .createNotificationForCourse(event, context);
+                          bool sucessfullyCreatedNotifications =
+                              await cubit.createNotificationForCourse(event, context);
                           if (!sucessfullyCreatedNotifications) {
                             await showDialog(
                                 useRootNavigator: false,

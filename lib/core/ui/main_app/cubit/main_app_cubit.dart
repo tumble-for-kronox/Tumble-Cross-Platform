@@ -299,6 +299,10 @@ class MainAppCubit extends Cubit<MainAppState> {
   }
 
   bool isDefault(String id) {
+    if (_sharedPrefs.getString(PreferenceTypes.schedule) == null) {
+      return false;
+    }
+
     final String userDefaultSchedule = _sharedPrefs.getString(PreferenceTypes.schedule)!;
     return state.scheduleModelAndCourses!.scheduleModel.id == userDefaultSchedule;
   }
