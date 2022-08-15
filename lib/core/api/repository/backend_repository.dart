@@ -9,18 +9,20 @@ import 'package:tumble/core/api/apiservices/runtime_error_type.dart';
 import 'package:tumble/core/api/cert_bypass.dart';
 import 'package:tumble/core/api/interface/ibackend_service.dart';
 import 'package:tumble/core/extensions/extensions.dart';
+import 'package:tumble/core/models/api_models/upcoming_user_event_model.dart';
+import 'package:tumble/core/models/api_models/user_event_collection_model.dart';
 import 'package:tumble/core/ui/main_app/data/schools.dart';
+
+import '../../models/api_models/available_user_event_model.dart';
 
 class BackendRepository implements IBackendService {
   /// [HttpGet]
   @override
-  Future<ApiResponse> getSchedule(
-      String scheduleId, String defaultSchool) async {
+  Future<ApiResponse> getSchedule(String scheduleId, String defaultSchool) async {
     final school = Schools().fromString(defaultSchool).schoolId.index;
 
     if (kDebugMode) {
-      var uri = Uri.https(ApiEndPoints.debugBaseUrl,
-          '${ApiEndPoints.getOneSchedule}$scheduleId', {
+      var uri = Uri.https(ApiEndPoints.debugBaseUrl, '${ApiEndPoints.getOneSchedule}$scheduleId', {
         ApiEndPoints.school: school.toString(),
       });
       final response = await HttpService.sendGetRequestToServer(uri);
@@ -29,8 +31,7 @@ class BackendRepository implements IBackendService {
       }
       return response.parseSchedule();
     } else {
-      var uri = Uri.https(
-          ApiEndPoints.baseUrl, '${ApiEndPoints.getOneSchedule}$scheduleId', {
+      var uri = Uri.https(ApiEndPoints.baseUrl, '${ApiEndPoints.getOneSchedule}$scheduleId', {
         ApiEndPoints.school: school,
       });
       final response = await compute(http.get, uri);
@@ -40,26 +41,20 @@ class BackendRepository implements IBackendService {
 
   /// [HttpGet]
   @override
-  Future<ApiResponse> getPrograms(
-      String searchQuery, String defaultSchool) async {
+  Future<ApiResponse> getPrograms(String searchQuery, String defaultSchool) async {
     final school = Schools().fromString(defaultSchool).schoolId.index;
 
     if (kDebugMode) {
-      var uri = Uri.https(
-          ApiEndPoints.debugBaseUrl, ApiEndPoints.getSchedules, {
-        ApiEndPoints.search: searchQuery,
-        ApiEndPoints.school: school.toString()
-      });
+      var uri = Uri.https(ApiEndPoints.debugBaseUrl, ApiEndPoints.getSchedules,
+          {ApiEndPoints.search: searchQuery, ApiEndPoints.school: school.toString()});
       final response = await HttpService.sendGetRequestToServer(uri);
       if (response == null) {
         return ApiResponse.error(RuntimeErrorType.timeoutError);
       }
       return await response.parsePrograms();
     } else {
-      var uri = Uri.https(ApiEndPoints.baseUrl, ApiEndPoints.getSchedules, {
-        ApiEndPoints.search: searchQuery,
-        ApiEndPoints.school: school.toString()
-      });
+      var uri = Uri.https(ApiEndPoints.baseUrl, ApiEndPoints.getSchedules,
+          {ApiEndPoints.search: searchQuery, ApiEndPoints.school: school.toString()});
       final response = await compute(http.get, uri);
       return response.parsePrograms();
     }
@@ -69,28 +64,166 @@ class BackendRepository implements IBackendService {
   /// [HttpGet]
   @override
   Future getUserEvents(String sessionToken, String defaultSchool) async {
-    final school = Schools().fromString(defaultSchool).schoolId.index;
+    List<AvailableUserEventModel> only_registered_events = [
+      AvailableUserEventModel(
+        id: "id",
+        title: "Registered Exam 1",
+        type: "exam",
+        eventStart: DateTime.now(),
+        eventEnd: DateTime.now().add(const Duration(hours: 4)),
+        lastSignupDate: DateTime.now().add(const Duration(days: 3)),
+        participatorId: null,
+        supportId: null,
+        anonymousCode: "",
+        isRegistered: true,
+        supportAvailable: false,
+        requiresChoosingLocation: false,
+      ),
+      AvailableUserEventModel(
+        id: "id",
+        title: "Registered Exam 2",
+        type: "exam",
+        eventStart: DateTime.now(),
+        eventEnd: DateTime.now().add(const Duration(hours: 4)),
+        lastSignupDate: DateTime.now().add(const Duration(days: 3)),
+        participatorId: null,
+        supportId: null,
+        anonymousCode: "",
+        isRegistered: true,
+        supportAvailable: false,
+        requiresChoosingLocation: false,
+      ),
+    ];
+    List<AvailableUserEventModel> onlyPassedEvents = [
+      AvailableUserEventModel(
+        id: "",
+        title: "Passed Exam 1",
+        type: "exam",
+        eventStart: DateTime.now(),
+        eventEnd: DateTime.now().add(const Duration(hours: 4)),
+        lastSignupDate: DateTime.now().subtract(const Duration(days: 3)),
+        participatorId: null,
+        supportId: null,
+        anonymousCode: "",
+        isRegistered: true,
+        supportAvailable: false,
+        requiresChoosingLocation: false,
+      ),
+      AvailableUserEventModel(
+        id: "",
+        title: "Passed Exam 1",
+        type: "exam",
+        eventStart: DateTime.now(),
+        eventEnd: DateTime.now().add(const Duration(hours: 4)),
+        lastSignupDate: DateTime.now().subtract(const Duration(days: 3)),
+        participatorId: null,
+        supportId: null,
+        anonymousCode: "",
+        isRegistered: true,
+        supportAvailable: false,
+        requiresChoosingLocation: false,
+      )
+    ];
+    List<AvailableUserEventModel> mixedPassedRegisteredEvents = [
+      AvailableUserEventModel(
+        id: "id",
+        title: "Passed Exam 1",
+        type: "exam",
+        eventStart: DateTime.now(),
+        eventEnd: DateTime.now().add(const Duration(hours: 4)),
+        lastSignupDate: DateTime.now().subtract(const Duration(days: 3)),
+        participatorId: null,
+        supportId: null,
+        anonymousCode: "",
+        isRegistered: true,
+        supportAvailable: false,
+        requiresChoosingLocation: false,
+      ),
+      AvailableUserEventModel(
+        id: "id",
+        title: "Registered Exam 1",
+        type: "exam",
+        eventStart: DateTime.now(),
+        eventEnd: DateTime.now().add(const Duration(hours: 4)),
+        lastSignupDate: DateTime.now().add(const Duration(days: 3)),
+        participatorId: null,
+        supportId: null,
+        anonymousCode: "",
+        isRegistered: true,
+        supportAvailable: false,
+        requiresChoosingLocation: false,
+      )
+    ];
+    List<AvailableUserEventModel> onlyUnregisteredEvents = [
+      AvailableUserEventModel(
+        id: "id",
+        title: "Unregistered Exam 1",
+        type: "exam",
+        eventStart: DateTime.now(),
+        eventEnd: DateTime.now().add(const Duration(hours: 4)),
+        lastSignupDate: DateTime.now().add(const Duration(days: 3)),
+        participatorId: null,
+        supportId: null,
+        anonymousCode: "",
+        isRegistered: false,
+        supportAvailable: false,
+        requiresChoosingLocation: false,
+      ),
+      AvailableUserEventModel(
+        id: "id",
+        title: "Unregistered Exam 2",
+        type: "exam",
+        eventStart: DateTime.now(),
+        eventEnd: DateTime.now().add(const Duration(hours: 4)),
+        lastSignupDate: DateTime.now().add(const Duration(days: 3)),
+        participatorId: null,
+        supportId: null,
+        anonymousCode: "",
+        isRegistered: false,
+        supportAvailable: false,
+        requiresChoosingLocation: false,
+      )
+    ];
+    List<UpcomingUserEventModel> upcomingEvents = [
+      UpcomingUserEventModel(
+        title: "Upcoming Exam 1",
+        type: "exam",
+        eventStart: DateTime.now(),
+        eventEnd: DateTime.now().add(const Duration(hours: 4)),
+        firstSignupDate: DateTime.now().add(const Duration(days: 3)),
+      ),
+      UpcomingUserEventModel(
+        title: "Upcoming Exam 2",
+        type: "exam",
+        eventStart: DateTime.now(),
+        eventEnd: DateTime.now().add(const Duration(hours: 4)),
+        firstSignupDate: DateTime.now().add(const Duration(days: 3)),
+      )
+    ];
 
-    if (kDebugMode) {
-      var uri = Uri.https(
-          ApiEndPoints.debugBaseUrl, ApiEndPoints.getUserEvents, {
-        ApiEndPoints.sessionToken: sessionToken,
-        ApiEndPoints.school: school.toString()
-      });
-      final response = await HttpService.sendGetRequestToServer(uri);
-      if (response == null) {
-        return ApiResponse.error(RuntimeErrorType.timeoutError);
-      }
+    return ApiResponse.completed(UserEventCollectionModel(
+      upcomingEvents: upcomingEvents,
+      registeredEvents: mixedPassedRegisteredEvents,
+      unregisteredEvents: onlyUnregisteredEvents,
+    ));
 
-      return await response.parseUserEvents();
-    } else {
-      var uri = Uri.https(ApiEndPoints.baseUrl, ApiEndPoints.getSchedules, {
-        ApiEndPoints.sessionToken: sessionToken,
-        ApiEndPoints.school: school.toString()
-      });
-      final response = await compute(http.get, uri);
-      return response.parseUserEvents();
-    }
+    // final school = Schools().fromString(defaultSchool).schoolId.index;
+
+    // if (kDebugMode) {
+    //   var uri = Uri.https(ApiEndPoints.debugBaseUrl, ApiEndPoints.getUserEvents,
+    //       {ApiEndPoints.sessionToken: sessionToken, ApiEndPoints.school: school.toString()});
+    //   final response = await HttpService.sendGetRequestToServer(uri);
+    //   if (response == null) {
+    //     return ApiResponse.error(RuntimeErrorType.timeoutError);
+    //   }
+
+    //   return await response.parseUserEvents();
+    // } else {
+    //   var uri = Uri.https(ApiEndPoints.baseUrl, ApiEndPoints.getSchedules,
+    //       {ApiEndPoints.sessionToken: sessionToken, ApiEndPoints.school: school.toString()});
+    //   final response = await compute(http.get, uri);
+    //   return response.parseUserEvents();
+    // }
   }
 
   /// [HttpGet]
@@ -106,8 +239,7 @@ class BackendRepository implements IBackendService {
         {ApiEndPoints.school: school.toString()},
       );
 
-      final response =
-          await HttpService.sendGetRequestToServer(uri, headers: headers);
+      final response = await HttpService.sendGetRequestToServer(uri, headers: headers);
       if (response == null) {
         return ApiResponse.error(RuntimeErrorType.timeoutError);
       }
@@ -126,13 +258,12 @@ class BackendRepository implements IBackendService {
 
   /// [HttpPut]
   @override
-  Future putRegisterUserEvent(
-      String eventId, String sessionToken, String defaultSchool) async {
+  Future putRegisterUserEvent(String eventId, String sessionToken, String defaultSchool) async {
     final school = Schools().fromString(defaultSchool).schoolId.index;
 
     if (kDebugMode) {
-      var uri = Uri.https(ApiEndPoints.debugBaseUrl, ApiEndPoints.postUserLogin,
-          {ApiEndPoints.school: school.toString()});
+      var uri =
+          Uri.https(ApiEndPoints.debugBaseUrl, ApiEndPoints.postUserLogin, {ApiEndPoints.school: school.toString()});
 
       final response = await HttpService.sendPutRequestToServer(uri);
       if (response == null) {
@@ -140,8 +271,7 @@ class BackendRepository implements IBackendService {
       }
       return response.parseRegisterOrUnregister();
     } else {
-      var uri = Uri.https(ApiEndPoints.baseUrl, ApiEndPoints.getSchedules,
-          {ApiEndPoints.school: school.toString()});
+      var uri = Uri.https(ApiEndPoints.baseUrl, ApiEndPoints.getSchedules, {ApiEndPoints.school: school.toString()});
       final response = await http.put(uri);
       return response.parseRegisterOrUnregister();
     }
@@ -149,13 +279,12 @@ class BackendRepository implements IBackendService {
 
   /// [HttpPut]
   @override
-  Future putUnregisterUserEvent(
-      String eventId, String sessionToken, String defaultSchool) async {
+  Future putUnregisterUserEvent(String eventId, String sessionToken, String defaultSchool) async {
     final school = Schools().fromString(defaultSchool).schoolId.index;
 
     if (kDebugMode) {
-      var uri = Uri.https(ApiEndPoints.debugBaseUrl, ApiEndPoints.postUserLogin,
-          {ApiEndPoints.school: school.toString()});
+      var uri =
+          Uri.https(ApiEndPoints.debugBaseUrl, ApiEndPoints.postUserLogin, {ApiEndPoints.school: school.toString()});
 
       final response = await HttpService.sendPutRequestToServer(uri);
       if (response == null) {
@@ -163,8 +292,7 @@ class BackendRepository implements IBackendService {
       }
       return response.parseRegisterOrUnregister();
     } else {
-      var uri = Uri.https(ApiEndPoints.baseUrl, ApiEndPoints.getSchedules,
-          {ApiEndPoints.school: school.toString()});
+      var uri = Uri.https(ApiEndPoints.baseUrl, ApiEndPoints.getSchedules, {ApiEndPoints.school: school.toString()});
       final response = await http.put(uri);
       return response.parseRegisterOrUnregister();
     }
@@ -172,26 +300,20 @@ class BackendRepository implements IBackendService {
 
   /// [HttpPost]
   @override
-  Future postUserLogin(
-      String username, String password, String defaultSchool) async {
+  Future postUserLogin(String username, String password, String defaultSchool) async {
     final school = Schools().fromString(defaultSchool).schoolId.index;
-    final Map<String, String> body = {
-      ApiEndPoints.username: username,
-      ApiEndPoints.password: password
-    };
+    final Map<String, String> body = {ApiEndPoints.username: username, ApiEndPoints.password: password};
     if (kDebugMode) {
-      var uri = Uri.https(ApiEndPoints.debugBaseUrl, ApiEndPoints.postUserLogin,
-          {ApiEndPoints.school: school.toString()});
+      var uri =
+          Uri.https(ApiEndPoints.debugBaseUrl, ApiEndPoints.postUserLogin, {ApiEndPoints.school: school.toString()});
 
-      final response =
-          await HttpService.sendPostRequestToServer(uri, jsonEncode(body));
+      final response = await HttpService.sendPostRequestToServer(uri, jsonEncode(body));
       if (response == null) {
         return ApiResponse.error(RuntimeErrorType.timeoutError);
       }
       return await response.parseUser();
     } else {
-      var uri = Uri.https(ApiEndPoints.baseUrl, ApiEndPoints.getSchedules,
-          {ApiEndPoints.school: school.toString()});
+      var uri = Uri.https(ApiEndPoints.baseUrl, ApiEndPoints.getSchedules, {ApiEndPoints.school: school.toString()});
       final response = await http.post(uri, body: body);
       return response.parseUser();
     }

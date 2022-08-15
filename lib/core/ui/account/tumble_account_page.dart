@@ -17,19 +17,31 @@ class TumbleAccountPage extends StatefulWidget {
 class _TumbleAccountPageState extends State<TumbleAccountPage> {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AuthCubit, AuthState>(builder: (context, state) {
-      switch (state.authStatus) {
-        case AuthStatus.AUTHENTICATED:
-          return BlocProvider.value(
-            value: BlocProvider.of<AuthCubit>(context),
-            child: const AuthenticatedPage(),
-          );
-        case AuthStatus.UNAUTHENTICATED:
-          return const UnauthenticatedPage();
-        default:
-          return SpinKitThreeBounce(
-              color: Theme.of(context).colorScheme.primary);
-      }
-    });
+    return BlocConsumer<AuthCubit, AuthState>(
+      listenWhen: ((_, current) =>
+          current.userEventListStatus == UserEventListStatus.LOADING && current.refreshSession),
+      listener: (context, state) {
+        BlocProvider.of<AuthCubit>(context).login();
+        BlocProvider.of<AuthCubit>(context)
+            .getUserEvents(BlocProvider.of<AuthCubit>(context).state.userSession!.sessionToken);
+      },
+      bloc: BlocProvider.of<AuthCubit>(context)
+        ..getUserEvents(
+          BlocProvider.of<AuthCubit>(context).state.userSession!.sessionToken,
+        ),
+      builder: (context, state) {
+        switch (state.authStatus) {
+          case AuthStatus.AUTHENTICATED:
+            return BlocProvider.value(
+              value: BlocProvider.of<AuthCubit>(context),
+              child: const AuthenticatedPage(),
+            );
+          case AuthStatus.UNAUTHENTICATED:
+            return const UnauthenticatedPage();
+          default:
+            return SpinKitThreeBounce(color: Theme.of(context).colorScheme.primary);
+        }
+      },
+    );
   }
 }
