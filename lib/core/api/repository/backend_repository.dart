@@ -180,8 +180,8 @@ class BackendRepository implements IBackendService {
         supportId: null,
         anonymousCode: "",
         isRegistered: false,
-        supportAvailable: false,
-        requiresChoosingLocation: false,
+        supportAvailable: true,
+        requiresChoosingLocation: true,
       )
     ];
     List<UpcomingUserEventModel> upcomingEvents = [

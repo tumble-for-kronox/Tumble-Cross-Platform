@@ -19,21 +19,24 @@ class _UserEventListState extends State<UserEventList> {
       builder: (context, state) {
         return Container(
           width: double.infinity,
-          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-          child: Builder(
-            builder: (context) {
-              switch (state.userEventListStatus) {
-                case UserEventListStatus.LOADING:
-                  return SpinKitThreeBounce(color: Theme.of(context).colorScheme.primary);
-                case UserEventListStatus.LOADED:
-                  return _loaded(context, state);
-                case UserEventListStatus.ERROR:
-                  return Text(
-                    "We couldn't get your exams, try again in a bit.",
-                    style: TextStyle(color: Theme.of(context).colorScheme.onBackground),
-                  );
-              }
-            },
+          height: double.infinity,
+          padding: const EdgeInsets.symmetric(horizontal: 15),
+          child: SingleChildScrollView(
+            child: Builder(
+              builder: (context) {
+                switch (state.userEventListStatus) {
+                  case UserEventListStatus.LOADING:
+                    return SpinKitThreeBounce(color: Theme.of(context).colorScheme.primary);
+                  case UserEventListStatus.LOADED:
+                    return _loaded(context, state);
+                  case UserEventListStatus.ERROR:
+                    return Text(
+                      "We couldn't get your exams, try again in a bit.",
+                      style: TextStyle(color: Theme.of(context).colorScheme.onBackground),
+                    );
+                }
+              },
+            ),
           ),
         );
       },
@@ -42,30 +45,43 @@ class _UserEventListState extends State<UserEventList> {
 }
 
 Widget _loaded(BuildContext context, AuthState state) {
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.center,
-    children: [
-      state.userEvents!.unregisteredEvents.isEmpty
-          ? Container()
-          : UserEventSection(
-              sectionTitle: "Need to sign up?",
-              availableEvents: state.userEvents!.unregisteredEvents,
-              upcomingEvents: null,
+  return state.userEvents!.registeredEvents.isEmpty &&
+          state.userEvents!.unregisteredEvents.isEmpty &&
+          state.userEvents!.upcomingEvents.isEmpty
+      ? Align(
+          alignment: Alignment.center,
+          child: Text(
+            "You have no exams!",
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onBackground,
+              letterSpacing: 0.5,
             ),
-      state.userEvents!.registeredEvents.isEmpty
-          ? Container()
-          : UserEventSection(
-              sectionTitle: "Already signed up",
-              availableEvents: state.userEvents!.registeredEvents,
-              upcomingEvents: null,
-            ),
-      state.userEvents!.upcomingEvents.isEmpty
-          ? Container()
-          : UserEventSection(
-              sectionTitle: "Upcoming",
-              availableEvents: null,
-              upcomingEvents: state.userEvents!.upcomingEvents,
-            )
-    ],
-  );
+          ),
+        )
+      : Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            state.userEvents!.unregisteredEvents.isEmpty
+                ? Container()
+                : UserEventSection(
+                    sectionTitle: "Need to sign up?",
+                    availableEvents: state.userEvents!.unregisteredEvents,
+                    upcomingEvents: null,
+                  ),
+            state.userEvents!.registeredEvents.isEmpty
+                ? Container()
+                : UserEventSection(
+                    sectionTitle: "Already signed up",
+                    availableEvents: state.userEvents!.registeredEvents,
+                    upcomingEvents: null,
+                  ),
+            state.userEvents!.upcomingEvents.isEmpty
+                ? Container()
+                : UserEventSection(
+                    sectionTitle: "Upcoming",
+                    availableEvents: null,
+                    upcomingEvents: state.userEvents!.upcomingEvents,
+                  )
+          ],
+        );
 }

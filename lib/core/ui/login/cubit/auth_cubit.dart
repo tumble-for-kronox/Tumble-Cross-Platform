@@ -29,9 +29,9 @@ class AuthCubit extends Cubit<AuthState> {
   final _userRepo = getIt<UserRepository>();
   final _secureStorage = getIt<SecureStorageRepository>();
 
-  Future<void> getUserEvents(String sessionToken) async {
+  Future<void> getUserEvents() async {
     emit(state.copyWith(userEventListStatus: UserEventListStatus.LOADING));
-    ApiResponse userEventResponse = await _userRepo.getUserEvents(sessionToken);
+    ApiResponse userEventResponse = await _userRepo.getUserEvents(state.userSession!.sessionToken);
 
     switch (userEventResponse.status) {
       case ApiStatus.FETCHED:
@@ -45,6 +45,54 @@ class AuthCubit extends Cubit<AuthState> {
         break;
       default:
         emit(state.copyWith(userEventListStatus: UserEventListStatus.ERROR, refreshSession: false));
+    }
+  }
+
+  Future<void> registerUserEvent(String id) async {
+    emit(state.copyWith(userEventListStatus: UserEventListStatus.LOADING));
+    ApiResponse registerResponse = await _userRepo.putRegisterUserEvent(id, state.userSession!.sessionToken);
+
+    switch (registerResponse.status) {
+      case ApiStatus.FETCHED:
+        getUserEvents();
+        break;
+      case ApiStatus.UNAUTHORIZED:
+        emit(state.copyWith(
+            userEventListStatus: UserEventListStatus.ERROR, errorMessage: "Couldn't validate your login."));
+        break;
+      case ApiStatus.ERROR:
+        emit(state.copyWith(
+            userEventListStatus: UserEventListStatus.ERROR,
+            errorMessage: "Couldn't sign up, try again later or go to kronox."));
+        break;
+      default:
+        emit(state.copyWith(
+            userEventListStatus: UserEventListStatus.ERROR,
+            errorMessage: "Couldn't sign up, try again later or go to kronox."));
+    }
+  }
+
+  Future<void> unregisterUserEvent(String id) async {
+    emit(state.copyWith(userEventListStatus: UserEventListStatus.LOADING));
+    ApiResponse unregisterResponse = await _userRepo.putUnregisterUserEvent(id, state.userSession!.sessionToken);
+
+    switch (unregisterResponse.status) {
+      case ApiStatus.FETCHED:
+        getUserEvents();
+        break;
+      case ApiStatus.UNAUTHORIZED:
+        emit(state.copyWith(
+            userEventListStatus: UserEventListStatus.ERROR, errorMessage: "Couldn't validate your login."));
+        break;
+      case ApiStatus.ERROR:
+        emit(state.copyWith(
+            userEventListStatus: UserEventListStatus.ERROR,
+            errorMessage: "Couldn't sign up, try again later or go to kronox."));
+        break;
+      default:
+        emit(state.copyWith(
+            userEventListStatus: UserEventListStatus.ERROR,
+            errorMessage: "Couldn't sign up, try again later or go to kronox."));
     }
   }
 

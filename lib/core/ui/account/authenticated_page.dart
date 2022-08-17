@@ -16,7 +16,7 @@ class AuthenticatedPage extends StatefulWidget {
 class _AuthenticatedPage extends State<AuthenticatedPage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
-    TabController tabController = TabController(length: 2, vsync: this);
+    TabController tabController = TabController(initialIndex: 1, length: 2, vsync: this);
     return Column(
       children: [
         TabBar(
@@ -38,17 +38,18 @@ class _AuthenticatedPage extends State<AuthenticatedPage> with TickerProviderSta
                 ),
               )
             ]),
-        Container(
-          padding: const EdgeInsets.only(bottom: 5),
-          height: MediaQuery.of(context).size.height - 245,
-          width: double.maxFinite,
-          child: TabBarView(controller: tabController, children: [
-            BlocProvider.value(
-              value: BlocProvider.of<AuthCubit>(context),
-              child: const UserAccountInfo(),
-            ),
-            const UserEventList(),
-          ]),
+        Expanded(
+          child: Container(
+            padding: const EdgeInsets.only(bottom: 5),
+            width: double.maxFinite,
+            child: TabBarView(controller: tabController, children: [
+              BlocProvider.value(
+                value: BlocProvider.of<AuthCubit>(context),
+                child: const UserAccountInfo(),
+              ),
+              const UserEventList(),
+            ]),
+          ),
         )
       ],
     );

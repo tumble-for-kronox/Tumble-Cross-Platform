@@ -26,13 +26,9 @@ class _TumbleAccountPageState extends State<TumbleAccountPage> {
                 return current.userEventListStatus == UserEventListStatus.LOADING;
               },
               listener: (context, state) {
-                BlocProvider.of<AuthCubit>(context)
-                    .getUserEvents(BlocProvider.of<AuthCubit>(context).state.userSession!.sessionToken);
+                BlocProvider.of<AuthCubit>(context).getUserEvents();
               },
-              bloc: BlocProvider.of<AuthCubit>(context)
-                ..getUserEvents(
-                  BlocProvider.of<AuthCubit>(context).state.userSession!.sessionToken,
-                ),
+              bloc: BlocProvider.of<AuthCubit>(context)..getUserEvents(),
               builder: (context, state) => const AuthenticatedPage(),
             );
           case AuthStatus.UNAUTHENTICATED:

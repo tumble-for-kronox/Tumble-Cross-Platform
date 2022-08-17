@@ -1,0 +1,114 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/src/foundation/key.dart';
+import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
+import 'package:tumble/core/extensions/extensions.dart';
+import 'package:tumble/core/models/api_models/available_user_event_model.dart';
+import 'package:tumble/core/ui/account/user_event_list/user_event_register_button.dart';
+
+import '../../../login/cubit/auth_cubit.dart';
+
+class RegisteredPassedUserEventCard extends StatelessWidget {
+  final AvailableUserEventModel userEvent;
+  final Null Function() onTap;
+
+  const RegisteredPassedUserEventCard({Key? key, required this.userEvent, required this.onTap}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        margin: const EdgeInsets.only(top: 5),
+        child: Stack(
+          children: [
+            Container(
+              height: userEvent.supportAvailable ? 140 : 80,
+              width: double.infinity,
+              margin: const EdgeInsets.only(top: 9, left: 10, right: 10),
+              alignment: Alignment.topLeft,
+              decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.surface,
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 2, offset: Offset(1, 1))]),
+              child: MaterialButton(
+                padding: const EdgeInsets.all(0),
+                onPressed: onTap,
+                child: Container(
+                  padding: const EdgeInsets.only(left: 24, top: 15),
+                  width: double.infinity,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.only(left: 2),
+                            child: Row(
+                              children: [
+                                Container(
+                                  width: 5,
+                                  height: 5,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Theme.of(context).colorScheme.primary,
+                                  ),
+                                ),
+                                const SizedBox(width: 6),
+                                Container(
+                                  padding: const EdgeInsets.only(top: 1),
+                                  child: Text(
+                                    '${DateFormat('dd/MM/yy').format(userEvent.eventStart)}, ${DateFormat.Hm().format(userEvent.eventStart)} - ${DateFormat.Hm().format(userEvent.eventEnd)}',
+                                    style: TextStyle(
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w400,
+                                        color: Theme.of(context).colorScheme.onSecondary,
+                                        letterSpacing: .5),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 7.5,
+                          ),
+                          Text(userEvent.title.capitalize(),
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.onBackground,
+                                fontSize: 19,
+                                letterSpacing: .5,
+                                fontWeight: FontWeight.w400,
+                              )),
+                        ],
+                      ),
+                      userEvent.supportAvailable
+                          ? Container(
+                              padding: const EdgeInsets.only(right: 10),
+                              alignment: Alignment.centerRight,
+                              child: const UserEventRegisterButton(linkToKronox: true),
+                            )
+                          : Container(),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            Container(
+                margin: const EdgeInsets.only(top: 9, left: 10, right: 10),
+                alignment: Alignment.topLeft,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.primary,
+                    borderRadius:
+                        const BorderRadius.only(topLeft: Radius.circular(10), bottomLeft: Radius.circular(10)),
+                  ),
+                  width: 8,
+                  height: userEvent.supportAvailable ? 140 : 80,
+                )),
+          ],
+        ));
+  }
+}

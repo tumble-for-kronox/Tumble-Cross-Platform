@@ -13,8 +13,8 @@ class ModalInfoRow extends StatelessWidget {
     this.locations,
     this.subtitle,
     this.teachers,
-    required this.icon,
     required this.title,
+    required this.icon,
   }) : super(key: key);
 
   @override
@@ -45,19 +45,12 @@ class ModalInfoRow extends StatelessWidget {
                 }
                 if (teachers != null) {
                   return teachers!.isNotEmpty
-                      ? teachers!
-                          .map((teacher) =>
-                              '${teacher.firstName} ${teacher.lastName}')
-                          .join(', ')
+                      ? teachers!.map((teacher) => '${teacher.firstName} ${teacher.lastName}').join(', ')
                       : RuntimeErrorType.missingLocations;
                 }
-                return subtitle!.length < 38
-                    ? subtitle!
-                    : '${subtitle!.substring(0, 38)}..';
+                return subtitle!.length < 38 ? subtitle! : '${subtitle!.substring(0, 38)}..';
               })(),
-              style: TextStyle(
-                  color: Theme.of(context).colorScheme.onBackground,
-                  fontSize: 16),
+              style: TextStyle(color: Theme.of(context).colorScheme.onBackground, fontSize: 16),
             ),
           ],
         )
