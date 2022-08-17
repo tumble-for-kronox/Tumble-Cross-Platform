@@ -15,8 +15,7 @@ part 'user_event_collection_model.g.dart';
 UserEventCollectionModel userEventCollectionModelFromJson(String str) =>
     UserEventCollectionModel.fromJson(json.decode(str));
 
-String userEventCollectionModelToJson(UserEventCollectionModel data) =>
-    json.encode(data.toJson());
+String userEventCollectionModelToJson(UserEventCollectionModel data) => json.encode(data.toJson());
 
 @freezed
 abstract class UserEventCollectionModel with _$UserEventCollectionModel {
@@ -26,6 +25,5 @@ abstract class UserEventCollectionModel with _$UserEventCollectionModel {
     required List<AvailableUserEventModel> unregisteredEvents,
   }) = _UserEventCollectionModel;
 
-  factory UserEventCollectionModel.fromJson(Map<String, dynamic> json) =>
-      _$UserEventCollectionModelFromJson(json);
+  factory UserEventCollectionModel.fromJson(Map<String, dynamic> json) => _$UserEventCollectionModelFromJson(json);
 }

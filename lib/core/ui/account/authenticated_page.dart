@@ -32,7 +32,10 @@ class _AuthenticatedPage extends State<AuthenticatedPage> with TickerProviderSta
                 ),
               ),
               Tab(
-                icon: Icon(CupertinoIcons.pencil_ellipsis_rectangle, size: 25),
+                icon: Icon(
+                  CupertinoIcons.news,
+                  size: 25,
+                ),
               )
             ]),
         Container(

@@ -1,10 +1,7 @@
-import 'dart:developer';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:tumble/core/ui/account/user_event_list/available_event_card.dart';
 import 'package:tumble/core/ui/account/user_event_list/user_event_section.dart';
 import 'package:tumble/core/ui/login/cubit/auth_cubit.dart';
 
@@ -47,10 +44,28 @@ class _UserEventListState extends State<UserEventList> {
 Widget _loaded(BuildContext context, AuthState state) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.center,
-    children: const [
-      UserEventSection(
-        sectionTitle: "Need to sign up?",
-      ),
+    children: [
+      state.userEvents!.unregisteredEvents.isEmpty
+          ? Container()
+          : UserEventSection(
+              sectionTitle: "Need to sign up?",
+              availableEvents: state.userEvents!.unregisteredEvents,
+              upcomingEvents: null,
+            ),
+      state.userEvents!.registeredEvents.isEmpty
+          ? Container()
+          : UserEventSection(
+              sectionTitle: "Already signed up",
+              availableEvents: state.userEvents!.registeredEvents,
+              upcomingEvents: null,
+            ),
+      state.userEvents!.upcomingEvents.isEmpty
+          ? Container()
+          : UserEventSection(
+              sectionTitle: "Upcoming",
+              availableEvents: null,
+              upcomingEvents: state.userEvents!.upcomingEvents,
+            )
     ],
   );
 }

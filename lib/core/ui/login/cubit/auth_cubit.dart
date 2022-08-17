@@ -21,6 +21,7 @@ class AuthCubit extends Cubit<AuthState> {
             authStatus: AuthStatus.INITIAL,
             userEventListStatus: UserEventListStatus.LOADING,
             usernameController: TextEditingController(),
+            refreshSession: true,
             passwordController: TextEditingController(),
             passwordHidden: true)) {
     login();
