@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tumble/core/api/repository/notification_repository.dart';
+import 'package:tumble/core/dependency_injection/get_it_instances.dart';
 import 'package:tumble/core/navigation/app_navigator.dart';
 import 'package:tumble/core/navigation/navigation_route_labels.dart';
 import 'package:tumble/core/ui/main_app/cubit/main_app_cubit.dart';
@@ -13,6 +15,7 @@ import 'package:tumble/core/ui/main_app/misc/tumble_drawer/drawer_generic/app_de
 import 'package:tumble/core/ui/main_app/misc/tumble_drawer/drawer_generic/app_default_view_picker.dart';
 import 'package:tumble/core/ui/main_app/misc/tumble_drawer/drawer_generic/app_theme_picker.dart';
 import 'package:tumble/core/ui/main_app/misc/tumble_settings_section.dart';
+import 'package:tumble/core/ui/scaffold_message.dart';
 
 typedef HandleDrawerEvent = void Function(
   Enum eventType,
@@ -29,9 +32,7 @@ class TumbleAppDrawer extends StatelessWidget {
     return BlocBuilder<DrawerCubit, DrawerState>(
       builder: (context, state) {
         return ClipRRect(
-          borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(20.0),
-              bottomLeft: Radius.circular(20.0)),
+          borderRadius: const BorderRadius.only(topLeft: Radius.circular(20.0), bottomLeft: Radius.circular(20.0)),
           child: SizedBox(
             height: double.infinity,
             child: Drawer(
@@ -45,15 +46,11 @@ class TumbleAppDrawer extends StatelessWidget {
                       margin: EdgeInsets.all(0.0),
                       padding: EdgeInsets.all(0.0),
                       child: Padding(
-                          padding: EdgeInsets.symmetric(
-                              vertical: 13, horizontal: 20),
+                          padding: EdgeInsets.symmetric(vertical: 13, horizontal: 20),
                           child: Align(
                             alignment: Alignment.centerRight,
                             child: Text('SETTINGS',
-                                style: TextStyle(
-                                    letterSpacing: 2,
-                                    fontSize: 26,
-                                    fontWeight: FontWeight.w500)),
+                                style: TextStyle(letterSpacing: 2, fontSize: 26, fontWeight: FontWeight.w500)),
                           )),
                     ),
                   ),
@@ -94,8 +91,7 @@ class TumbleAppDrawer extends StatelessWidget {
                     ),
                     TumbleAppDrawerTile(
                       drawerTileTitle: "Change theme",
-                      subtitle:
-                          "Current theme:  ${context.read<DrawerCubit>().state.theme}",
+                      subtitle: "Current theme:  ${context.read<DrawerCubit>().state.theme}",
                       prefixIcon: CupertinoIcons.device_phone_portrait,
                       eventType: EventType.CHANGE_THEME,
                       drawerEvent: (eventType) => handleDrawerEvent(
@@ -126,15 +122,27 @@ class TumbleAppDrawer extends StatelessWidget {
                             )),
                     TumbleAppDrawerTile(
                         drawerTileTitle: "Set default schedule",
-                        subtitle:
-                            context.watch<DrawerCubit>().state.schedule != null
-                                ? "Default schedule: \n${state.schedule}"
-                                : "No default schedule set",
+                        subtitle: context.watch<DrawerCubit>().state.schedule != null
+                            ? "Default schedule: \n${state.schedule}"
+                            : "No default schedule set",
                         prefixIcon: CupertinoIcons.calendar,
                         eventType: EventType.SET_DEFAULT_SCHEDULE,
-                        drawerEvent: (eventType) =>
-                            handleDrawerEvent(eventType, context, navigator)),
+                        drawerEvent: (eventType) => handleDrawerEvent(eventType, context, navigator)),
                   ], title: "Schedule"),
+                  Divider(
+                    height: 50.0,
+                    color: Theme.of(context).colorScheme.onBackground,
+                    indent: 20,
+                    endIndent: 30,
+                  ),
+                  TumbleSettingsSection(tiles: [
+                    TumbleAppDrawerTile(
+                        prefixIcon: CupertinoIcons.bell_slash,
+                        drawerTileTitle: "Clear all",
+                        subtitle: "Removes all notifications",
+                        eventType: EventType.CANCEL_ALL_NOTIFICATIONS,
+                        drawerEvent: (eventType) => handleDrawerEvent(eventType, context, navigator)),
+                  ], title: "Notifications")
                 ],
               ),
             ),
@@ -144,8 +152,7 @@ class TumbleAppDrawer extends StatelessWidget {
     );
   }
 
-  void handleDrawerEvent(
-      Enum eventType, BuildContext context, AppNavigator navigator) {
+  void handleDrawerEvent(Enum eventType, BuildContext context, AppNavigator navigator) {
     switch (eventType) {
       case EventType.CHANGE_SCHOOL:
         navigator.push(NavigationRouteLabels.schoolSelectionPage);
@@ -172,8 +179,7 @@ class TumbleAppDrawer extends StatelessWidget {
                     context.read<DrawerCubit>().setSchedule(newId);
                     BlocProvider.of<MainAppCubit>(context).setLoading();
                     Navigator.of(context).pop();
-                    await BlocProvider.of<MainAppCubit>(context)
-                        .swapScheduleDefaultView(newId);
+                    await BlocProvider.of<MainAppCubit>(context).swapScheduleDefaultView(newId);
                   }));
         }
         break;
@@ -187,6 +193,9 @@ class TumbleAppDrawer extends StatelessWidget {
                   },
                 ));
         break;
+      case EventType.CANCEL_ALL_NOTIFICATIONS:
+        getIt<NotificationRepository>().clearAllNotifications();
+        showScaffoldMessage(context, "Cancelled all notfications, from all schedules and courses.");
     }
   }
 }

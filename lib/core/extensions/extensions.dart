@@ -62,24 +62,21 @@ extension ResponseParsing on Response {
 extension HttpClientResponseParsing on HttpClientResponse {
   Future<ApiResponse> parsePrograms() async {
     if (statusCode == 200) {
-      return ApiResponse.completed(
-          programModelFromJson(await transform(utf8.decoder).join()));
+      return ApiResponse.completed(programModelFromJson(await transform(utf8.decoder).join()));
     }
     return ApiResponse.error(RuntimeErrorType.programFetchError);
   }
 
   Future<ApiResponse> parseSchedule() async {
     if (statusCode == 200) {
-      return ApiResponse.completed(
-          scheduleModelFromJson(await transform(utf8.decoder).join()));
+      return ApiResponse.completed(scheduleModelFromJson(await transform(utf8.decoder).join()));
     }
     return ApiResponse.error(RuntimeErrorType.scheduleFetchError);
   }
 
   Future<ApiResponse> parseUser() async {
     if (statusCode == 200) {
-      return ApiResponse.completed(
-          kronoxUserModelFromJson(await transform(utf8.decoder).join()));
+      return ApiResponse.completed(kronoxUserModelFromJson(await transform(utf8.decoder).join()));
     } else if (statusCode == 401) {
       return ApiResponse.error(RuntimeErrorType.loginError);
     }
@@ -88,8 +85,7 @@ extension HttpClientResponseParsing on HttpClientResponse {
 
   Future<ApiResponse> parseUserEvents() async {
     if (statusCode == 200) {
-      return ApiResponse.completed(userEventCollectionModelFromJson(
-          await transform(utf8.decoder).join()));
+      return ApiResponse.completed(userEventCollectionModelFromJson(await transform(utf8.decoder).join()));
     } else if (statusCode == 401) {
       return ApiResponse.unauthorized(RuntimeErrorType.authenticationError);
     }
@@ -110,28 +106,22 @@ extension ScheduleParsing on ScheduleModel {
   List<Week> splitToWeek() {
     return groupBy(days, (Day day) => day.weekNumber)
         .entries
-        .map((weekNumberToDayList) => Week(
-            weekNumber: weekNumberToDayList.key,
-            days: weekNumberToDayList.value))
+        .map((weekNumberToDayList) => Week(weekNumber: weekNumberToDayList.key, days: weekNumberToDayList.value))
         .toList();
   }
 
   List<CourseUiModel?> findNewCourses() {
     List<String> seen = [];
-    List<CourseUiModel?> courseUiModels =
-        (days.expand((element) => element.events).toList())
-            .map((event) {
-              final courseId = event.course.id;
-              if (!seen.contains(courseId)) {
-                seen.add(courseId);
-                return CourseUiModel(
-                    scheduleId: id,
-                    courseId: courseId,
-                    color: ColorPicker().getRandomHexColor());
-              }
-            })
-            .whereType<CourseUiModel>()
-            .toList();
+    List<CourseUiModel?> courseUiModels = (days.expand((element) => element.events).toList())
+        .map((event) {
+          final courseId = event.course.id;
+          if (!seen.contains(courseId)) {
+            seen.add(courseId);
+            return CourseUiModel(scheduleId: id, courseId: courseId, color: ColorPicker().getRandomHexColor());
+          }
+        })
+        .whereType<CourseUiModel>()
+        .toList();
     return courseUiModels;
   }
 
@@ -152,15 +142,11 @@ extension StringParse on String {
   }
 
   int encodeUniqueIdentifier() {
-    List<int> byteArray = Uuid.parse(this);
-    for (var i = 0; i < byteArray.length; i++) {
-      byteArray[i] = byteArray[i] >> 6;
-    }
+    List<int> byteArray = utf8.encode(this);
     return int.parse(byteArray.sublist(0, 8).join(''));
   }
 }
 
 extension GetSchoolFromString on Schools {
-  School fromString(String s) =>
-      Schools.schools.where((school) => school.schoolName == s).single;
+  School fromString(String s) => Schools.schools.where((school) => school.schoolName == s).single;
 }

@@ -75,4 +75,9 @@ class NotificationRepository implements INotificationService {
           date: event.from.subtract(defaultUserDuration));
     }
   }
+
+  @override
+  void clearAllNotifications() {
+    _awesomeNotifications.cancelAll();
+  }
 }
