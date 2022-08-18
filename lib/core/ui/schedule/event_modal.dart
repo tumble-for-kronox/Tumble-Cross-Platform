@@ -58,7 +58,7 @@ class TumbleEventModal extends StatelessWidget {
                       ModalInfoRow(
                         title: 'Time',
                         icon: const Icon(CupertinoIcons.clock),
-                        subtitle: '${DateFormat.Hm().format(event.to)} - ${DateFormat.Hm().format(event.to)}',
+                        subtitle: '${DateFormat.Hm().format(event.from)} - ${DateFormat.Hm().format(event.to)}',
                       ),
                       const SizedBox(
                         height: 25,
