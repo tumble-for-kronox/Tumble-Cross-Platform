@@ -1,8 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:tumble/core/extensions/extensions.dart';
 import 'package:tumble/core/models/api_models/schedule_model.dart';
+import 'package:tumble/core/ui/main_app/cubit/main_app_cubit.dart';
+import 'package:tumble/core/ui/schedule/event_options.dart';
 import 'package:tumble/core/ui/schedule/modal_info_row.dart';
 import 'package:tumble/core/ui/schedule/tumble_list_view/tumble_list_view_schedule_card_ribbon.dart';
 
@@ -11,19 +14,34 @@ typedef SetDefaultSchedule = void Function(String id);
 class TumbleEventModal extends StatelessWidget {
   final Event event;
   final Color color;
-  const TumbleEventModal({Key? key, required this.event, required this.color}) : super(key: key);
+  final MainAppCubit mainAppCubit;
+  const TumbleEventModal({Key? key, required this.event, required this.color, required this.mainAppCubit})
+      : super(key: key);
+
+  static void showEventModal(BuildContext context, Event event, Color color, MainAppCubit mainAppCubit) {
+    showModalBottomSheet(
+        isScrollControlled: true,
+        enableDrag: true,
+        isDismissible: true,
+        context: context,
+        builder: (context) => TumbleEventModal(
+              event: event,
+              color: event.isSpecial ? Colors.redAccent : color,
+              mainAppCubit: mainAppCubit,
+            ));
+  }
 
   @override
   Widget build(BuildContext context) {
     final locations = event.locations;
     return SizedBox(
-      height: MediaQuery.of(context).size.height - 280,
+      height: MediaQuery.of(context).size.height - 260,
       child: Stack(
         alignment: Alignment.bottomCenter,
         children: [
           Container(
-            height: MediaQuery.of(context).size.height - 280,
-            padding: const EdgeInsets.all(20),
+            height: MediaQuery.of(context).size.height - 260,
+            padding: const EdgeInsets.only(left: 20, right: 20, top: 50),
             decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.background,
                 borderRadius: const BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20))),
@@ -31,15 +49,24 @@ class TumbleEventModal extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  const SizedBox(
+                    height: 10,
+                  ),
                   Container(
                     padding: const EdgeInsets.only(right: 0, left: 0, top: 5, bottom: 10),
-                    child: Text(
-                      event.title.length < 40
-                          ? event.title.capitalize()
-                          : '${event.title.substring(0, 40).capitalize()}..',
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                          fontSize: 32, fontWeight: FontWeight.w500, color: Theme.of(context).colorScheme.onBackground),
+                    child: FractionallySizedBox(
+                      widthFactor: 0.9,
+                      child: Text(
+                        event.title,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                          fontSize: 28,
+                          fontWeight: FontWeight.w500,
+                          color: Theme.of(context).colorScheme.onBackground,
+                        ),
+                      ),
                     ),
                   ),
                   const SizedBox(
@@ -77,7 +104,7 @@ class TumbleEventModal extends StatelessWidget {
                         subtitle: event.course.englishName,
                       ),
                       const SizedBox(
-                        height: 35,
+                        height: 25,
                       ),
                       ModalInfoRow(
                         title: 'Teachers',
@@ -90,7 +117,41 @@ class TumbleEventModal extends StatelessWidget {
               ),
             ),
           ),
-          ScheduleCardRibbon(color: color)
+          Align(
+            alignment: Alignment.topCenter,
+            child: Container(
+              alignment: Alignment.center,
+              width: double.maxFinite,
+              height: 50,
+              decoration: BoxDecoration(
+                color: color,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(20),
+                  topRight: Radius.circular(20),
+                ),
+              ),
+              child: Text(
+                "DETAILS",
+                style: TextStyle(
+                  fontSize: 16,
+                  color: color.contrastColor(),
+                  letterSpacing: 1.5,
+                ),
+              ),
+            ),
+          ),
+          Align(
+            alignment: Alignment.topRight,
+            child: Material(
+              color: Colors.transparent,
+              child: IconButton(
+                splashRadius: 20,
+                color: color.contrastColor(),
+                onPressed: () => EventOptions.showEventOptions(context, event, mainAppCubit),
+                icon: const Icon(CupertinoIcons.ellipsis),
+              ),
+            ),
+          ),
         ],
       ),
     );

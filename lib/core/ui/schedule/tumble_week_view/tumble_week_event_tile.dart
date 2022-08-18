@@ -6,17 +6,16 @@ import 'package:tumble/core/models/ui_models/course_ui_model.dart';
 import 'package:tumble/core/theme/data/colors.dart';
 import 'package:tumble/core/ui/main_app/cubit/main_app_cubit.dart';
 import 'package:tumble/core/ui/schedule/event_modal.dart';
+import 'package:tumble/main.dart';
 
 class TumbleWeekEventTile extends StatelessWidget {
   final Event event;
-  final MainAppCubit cubit;
-  const TumbleWeekEventTile(
-      {Key? key, required this.event, required this.cubit})
-      : super(key: key);
+  final MainAppCubit mainAppCubit;
+  const TumbleWeekEventTile({Key? key, required this.event, required this.mainAppCubit}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final courseColor = cubit.getColorForCourse(event);
+    final courseColor = mainAppCubit.getColorForCourse(event);
     return Container(
       height: 23,
       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
@@ -32,38 +31,23 @@ class TumbleWeekEventTile extends StatelessWidget {
       ),
       child: MaterialButton(
         padding: const EdgeInsets.all(0),
-        onPressed: () {
-          showModalBottomSheet(
-              isScrollControlled: true,
-              context: context,
-              builder: (context) => TumbleEventModal(
-                  event: event,
-                  color: event.isSpecial
-                      ? Colors.redAccent
-                      : courseColor));
-        },
+        onPressed: () =>
+            TumbleEventModal.showEventModal(context, event, mainAppCubit.getColorForCourse(event), mainAppCubit),
         child: Row(
           mainAxisSize: MainAxisSize.max,
           children: [
             Container(
               width: 3,
               decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(2),
-                      bottomLeft: Radius.circular(2)),
-                  color: event.isSpecial
-                      ? Colors.redAccent
-                      : courseColor),
+                  borderRadius: const BorderRadius.only(topLeft: Radius.circular(2), bottomLeft: Radius.circular(2)),
+                  color: event.isSpecial ? Colors.redAccent : courseColor),
             ),
             Stack(
               alignment: Alignment.centerLeft,
               children: [
                 Container(
                   width: 100,
-                  color: event.isSpecial
-                      ? Colors.redAccent.withOpacity(0.35)
-                      : courseColor
-                          .withOpacity(0.35),
+                  color: event.isSpecial ? Colors.redAccent.withOpacity(0.35) : courseColor.withOpacity(0.35),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 5),

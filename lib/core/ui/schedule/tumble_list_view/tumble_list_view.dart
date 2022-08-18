@@ -24,35 +24,29 @@ class TumbleListView extends StatelessWidget {
           case MainAppStatus.INITIAL:
             return NoScheduleAvailable(
               cupertinoAlertDialog: CustomCupertinoAlerts.noBookMarkedSchedules(
-                  context,
-                  () => context
-                      .read<MainAppNavigationCubit>()
-                      .getNavBarItem(NavbarItem.SEARCH),
-                  navigator),
+                  context, () => context.read<MainAppNavigationCubit>().getNavBarItem(NavbarItem.SEARCH), navigator),
               errorType: RuntimeErrorType.noCachedSchedule,
             );
           case MainAppStatus.LOADING:
-            return SpinKitThreeBounce(
-                color: Theme.of(context).colorScheme.primary);
+            return SpinKitThreeBounce(color: Theme.of(context).colorScheme.primary);
           case MainAppStatus.SCHEDULE_SELECTED:
             return Stack(
               children: [
                 RefreshIndicator(
                   onRefresh: () async {
                     context.read<MainAppCubit>().setLoading();
-                    await context
-                        .read<MainAppCubit>()
-                        .fetchNewSchedule(state.currentScheduleId!);
+                    await context.read<MainAppCubit>().fetchNewSchedule(state.currentScheduleId!);
                   },
                   child: SingleChildScrollView(
                     controller: context.read<MainAppCubit>().controller,
                     child: Column(
                         children: state.listOfDays!
-                            .where((day) => day.events.isNotEmpty)
+                            .where((day) =>
+                                day.events.isNotEmpty &&
+                                day.isoString.isAfter(DateTime.now().subtract(const Duration(days: 1))))
                             .map((day) => TumbleListViewDayContainer(
                                   day: day,
-                                  mainAppCubit:
-                                      BlocProvider.of<MainAppCubit>(context),
+                                  mainAppCubit: BlocProvider.of<MainAppCubit>(context),
                                 ))
                             .toList()),
                   ),
@@ -61,9 +55,7 @@ class TumbleListView extends StatelessWidget {
                   bottom: 30,
                   right: state.listViewToTopButtonVisible ? 35 : -60,
                   duration: const Duration(milliseconds: 200),
-                  child: ToTopButton(
-                      scrollToTop: () =>
-                          context.read<MainAppCubit>().scrollToTop()),
+                  child: ToTopButton(scrollToTop: () => context.read<MainAppCubit>().scrollToTop()),
                 ),
               ],
             );
@@ -71,23 +63,14 @@ class TumbleListView extends StatelessWidget {
             return NoScheduleAvailable(
               errorType: state.message!,
               cupertinoAlertDialog: CustomCupertinoAlerts.fetchError(
-                  context,
-                  () => context
-                      .read<MainAppNavigationCubit>()
-                      .getNavBarItem(NavbarItem.SEARCH),
-                  navigator),
+                  context, () => context.read<MainAppNavigationCubit>().getNavBarItem(NavbarItem.SEARCH), navigator),
             );
 
           case MainAppStatus.EMPTY_SCHEDULE:
             return NoScheduleAvailable(
               errorType: RuntimeErrorType.emptyScheduleError,
-              cupertinoAlertDialog:
-                  CustomCupertinoAlerts.scheduleContainsNoViews(
-                      context,
-                      () => context
-                          .read<MainAppNavigationCubit>()
-                          .getNavBarItem(NavbarItem.SEARCH),
-                      navigator),
+              cupertinoAlertDialog: CustomCupertinoAlerts.scheduleContainsNoViews(
+                  context, () => context.read<MainAppNavigationCubit>().getNavBarItem(NavbarItem.SEARCH), navigator),
             );
         }
       },

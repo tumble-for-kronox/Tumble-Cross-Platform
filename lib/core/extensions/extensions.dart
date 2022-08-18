@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import "package:collection/collection.dart";
 import 'package:tumble/core/api/apiservices/api_response.dart';
@@ -149,4 +151,14 @@ extension StringParse on String {
 
 extension GetSchoolFromString on Schools {
   School fromString(String s) => Schools.schools.where((school) => school.schoolName == s).single;
+}
+
+extension GetContrastColor on Color {
+  Color contrastColor() {
+    // Calculate the perceptive luminance (aka luma) - human eye favors green color...
+    double luma = ((0.299 * red) + (0.587 * green) + (0.114 * blue)) / 255;
+
+    // Return black for bright colors, white for dark colors
+    return luma > 0.75 ? Colors.black : Colors.white;
+  }
 }

@@ -2,13 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tumble/core/ui/data/scaffold_message_types.dart';
+import 'package:tumble/core/ui/scaffold_message.dart';
 import 'package:url_launcher/url_launcher_string.dart';
-
-import '../../../dependency_injection/get_it_instances.dart';
-import '../../../shared/preference_types.dart';
-import '../../main_app/data/schools.dart';
-import '../../scaffold_message.dart';
 
 class UserAccountExternalLink extends StatelessWidget {
   final String title;
@@ -35,7 +31,7 @@ class UserAccountExternalLink extends StatelessWidget {
         if (await canLaunchUrlString(link)) {
           await launchUrlString(link);
         } else {
-          showScaffoldMessage(context, "Can't open kronox, please try again later.");
+          showScaffoldMessage(context, ScaffoldMessageType.openExternalUrlFailed('Kronox'));
         }
       },
       child: Row(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tumble/core/ui/data/scaffold_message_types.dart';
 import 'package:tumble/core/ui/main_app/misc/tumble_drawer/drawer_generic/data/default_views_map.dart';
 import 'package:tumble/core/ui/scaffold_message.dart';
 
@@ -24,22 +25,18 @@ class AppThemePicker extends StatelessWidget {
             child: Card(
                 elevation: 0,
                 color: Theme.of(context).colorScheme.surface,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0)),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
                 child: Column(
                     children: (IconAndTitleSet.themes.keys)
                         .map((key) => ListTile(
                             leading: IconAndTitleSet.themes[key],
                             title: Text(
                               key,
-                              style: TextStyle(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onBackground),
+                              style: TextStyle(color: Theme.of(context).colorScheme.onBackground),
                             ),
                             onTap: () {
-                              showScaffoldMessage(context,
-                                  'Theme sucessfully changed to ${key.split(' ').first.toLowerCase()}');
+                              showScaffoldMessage(
+                                  context, ScaffoldMessageType.changeTheme(key.split(' ').first.toLowerCase()));
                               setTheme(key.split(' ').first.toLowerCase());
                             }))
                         .toList()))),
