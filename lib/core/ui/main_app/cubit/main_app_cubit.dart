@@ -294,6 +294,12 @@ class MainAppCubit extends Cubit<MainAppState> {
     });
   }
 
+  void changeCourseColor(BuildContext context, Course course, Color color) {
+    _databaseService.updateCourseInstance(
+        CourseUiModel(scheduleId: state.currentScheduleId!, courseId: course.id, color: color.value));
+    showScaffoldMessage(context, ScaffoldMessageType.updatedCourseColor(course.englishName));
+  }
+
   permissionRequest() async {
     await _awesomeNotifications.requestPermissionToSendNotifications();
   }

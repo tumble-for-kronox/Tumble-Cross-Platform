@@ -36,4 +36,7 @@ class ScaffoldMessageType {
       Intl.message('Removed $scheduleId from bookmarks', args: [scheduleId]);
 
   static String openExternalUrlFailed(String name) => Intl.message('Could not open $name', args: [name]);
+
+  static String updatedCourseColor(String courseName) =>
+      Intl.message('Updated course color for $courseName', args: [courseName]);
 }

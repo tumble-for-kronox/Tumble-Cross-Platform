@@ -145,6 +145,9 @@ extension StringParse on String {
 
   int encodeUniqueIdentifier() {
     List<int> byteArray = utf8.encode(this);
+    for (var i = 0; i < byteArray.length; i++) {
+      byteArray[i] = byteArray[i] >> 6;
+    }
     return int.parse(byteArray.sublist(0, 8).join(''));
   }
 }
