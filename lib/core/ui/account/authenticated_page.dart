@@ -16,7 +16,7 @@ class AuthenticatedPage extends StatefulWidget {
 class _AuthenticatedPage extends State<AuthenticatedPage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
-    TabController tabController = TabController(initialIndex: 1, length: 2, vsync: this);
+    TabController tabController = TabController(length: 2, vsync: this);
     return Column(
       children: [
         TabBar(

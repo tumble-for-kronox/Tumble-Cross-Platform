@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tumble/core/navigation/app_navigator.dart';
 import 'package:tumble/core/navigation/app_navigator_provider.dart';
@@ -36,14 +37,12 @@ class _AppState extends State<App> {
               debugShowCheckedModeBanner: false,
               title: 'Tumble',
               theme: ThemeData(
-                bottomSheetTheme: const BottomSheetThemeData(
-                    backgroundColor: Colors.transparent),
+                bottomSheetTheme: const BottomSheetThemeData(backgroundColor: Colors.transparent),
                 colorScheme: CustomColors.lightColors,
                 fontFamily: 'Roboto',
               ),
               darkTheme: ThemeData(
-                bottomSheetTheme: const BottomSheetThemeData(
-                    backgroundColor: Colors.transparent),
+                bottomSheetTheme: const BottomSheetThemeData(backgroundColor: Colors.transparent),
                 colorScheme: CustomColors.darkColors,
                 bottomNavigationBarTheme: BottomNavigationBarThemeData(
                   selectedItemColor: CustomColors.darkColors.primary,
@@ -53,14 +52,10 @@ class _AppState extends State<App> {
               themeMode: state.themeMode,
               home: MultiBlocProvider(
                 providers: [
-                  BlocProvider.value(
-                      value: BlocProvider.of<AppNavigator>(context)),
-                  BlocProvider.value(
-                      value: BlocProvider.of<InitCubit>(context)),
-                  BlocProvider.value(
-                      value: BlocProvider.of<AuthCubit>(context)),
-                  BlocProvider.value(
-                      value: BlocProvider.of<ThemeCubit>(context)),
+                  BlocProvider.value(value: BlocProvider.of<AppNavigator>(context)),
+                  BlocProvider.value(value: BlocProvider.of<InitCubit>(context)),
+                  BlocProvider.value(value: BlocProvider.of<AuthCubit>(context)),
+                  BlocProvider.value(value: BlocProvider.of<ThemeCubit>(context)),
                 ],
                 child: const AppNavigatorProvider(initialPages: [
                   NavigationRouteLabels.mainAppPage,
