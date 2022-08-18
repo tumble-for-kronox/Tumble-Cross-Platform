@@ -5,6 +5,7 @@ import 'package:tumble/core/api/repository/notification_repository.dart';
 import 'package:tumble/core/dependency_injection/get_it_instances.dart';
 import 'package:tumble/core/navigation/app_navigator.dart';
 import 'package:tumble/core/navigation/navigation_route_labels.dart';
+import 'package:tumble/core/ui/data/scaffold_message_types.dart';
 import 'package:tumble/core/ui/main_app/cubit/main_app_cubit.dart';
 import 'package:tumble/core/ui/main_app/data/event_types.dart';
 import 'package:tumble/core/ui/main_app/data/schools.dart';
@@ -195,7 +196,7 @@ class TumbleAppDrawer extends StatelessWidget {
         break;
       case EventType.CANCEL_ALL_NOTIFICATIONS:
         getIt<NotificationRepository>().clearAllNotifications();
-        showScaffoldMessage(context, "Cancelled all notfications, from all schedules and courses.");
+        showScaffoldMessage(context, ScaffoldMessageType.cancelledAllSetNotifications());
     }
   }
 }

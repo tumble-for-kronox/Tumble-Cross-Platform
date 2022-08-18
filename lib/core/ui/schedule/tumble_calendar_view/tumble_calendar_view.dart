@@ -8,6 +8,7 @@ import 'package:tumble/core/navigation/navigation_route_labels.dart';
 import 'package:tumble/core/theme/data/colors.dart';
 import 'package:tumble/core/ui/bottom_nav_bar/cubit/bottom_nav_cubit.dart';
 import 'package:tumble/core/ui/bottom_nav_bar/data/nav_bar_items.dart';
+import 'package:tumble/core/ui/data/scaffold_message_types.dart';
 import 'package:tumble/core/ui/main_app/cubit/main_app_cubit.dart';
 import 'package:tumble/core/ui/schedule/no_schedule.dart';
 import 'package:tumble/core/ui/schedule/tumble_calendar_view/data/calendar_data_source.dart';
@@ -16,6 +17,7 @@ import 'package:tumble/core/ui/schedule/tumble_list_view/data/cupertino_alerts.d
 import '../../../models/api_models/schedule_model.dart';
 import '../../scaffold_message.dart';
 import '../event_modal.dart';
+import '../event_options.dart';
 import '../tumble_list_view/tumble_list_view_day_container.dart';
 
 class TumbleCalendarView extends StatefulWidget {
@@ -74,23 +76,18 @@ class _TumbleCalendarViewState extends State<TumbleCalendarView> {
                           return;
                         }
                         Event event = calendarLongPressDetails.appointments![0];
-                        if (BlocProvider.of<MainAppCubit>(context).isDefault(event.id)) {
-                          showConfirmationModal(context, event, BlocProvider.of<MainAppCubit>(context));
-                        } else {
-                          showScaffoldMessage(context, 'Schedule must be default to be able to set notifications');
-                        }
+                        EventOptions.showEventOptions(context, event, BlocProvider.of<MainAppCubit>(context));
                       },
                       onTap: (calendarTapDetails) {
                         if (calendarTapDetails.targetElement != CalendarElement.appointment) {
                           return;
                         }
                         Event event = calendarTapDetails.appointments![0];
-                        Color eventColor = BlocProvider.of<MainAppCubit>(context).getColorForCourse(event);
-                        showModalBottomSheet(
-                            isScrollControlled: true,
-                            context: context,
-                            builder: (context) =>
-                                TumbleEventModal(event: event, color: event.isSpecial ? Colors.redAccent : eventColor));
+                        TumbleEventModal.showEventModal(
+                            context,
+                            event,
+                            BlocProvider.of<MainAppCubit>(context).getColorForCourse(event),
+                            BlocProvider.of<MainAppCubit>(context));
                       },
                     );
                   }

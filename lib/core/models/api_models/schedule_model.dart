@@ -35,7 +35,13 @@ abstract class Day with _$Day {
     required List<Event> events,
   }) = _Day;
 
-  factory Day.fromJson(Map<String, dynamic> json) => _$DayFromJson(json);
+  factory Day.fromJson(Map<String, dynamic> json) => _$_Day(
+        name: json['name'] as String,
+        date: json['date'] as String,
+        isoString: DateTime.parse(json['isoString'] as String).toLocal(),
+        weekNumber: json['weekNumber'] as int,
+        events: (json['events'] as List<dynamic>).map((e) => Event.fromJson(e as Map<String, dynamic>)).toList(),
+      );
 }
 
 @freezed
@@ -52,7 +58,18 @@ abstract class Event with _$Event {
     required DateTime lastModified,
   }) = _Event;
 
-  factory Event.fromJson(Map<String, dynamic> json) => _$EventFromJson(json);
+  factory Event.fromJson(Map<String, dynamic> json) => _$_Event(
+        id: json['id'] as String,
+        title: json['title'] as String,
+        course: Course.fromJson(json['course'] as Map<String, dynamic>),
+        from: DateTime.parse(json['from'] as String).toLocal(),
+        to: DateTime.parse(json['to'] as String).toLocal(),
+        locations:
+            (json['locations'] as List<dynamic>).map((e) => Location.fromJson(e as Map<String, dynamic>)).toList(),
+        teachers: (json['teachers'] as List<dynamic>).map((e) => Teacher.fromJson(e as Map<String, dynamic>)).toList(),
+        isSpecial: json['isSpecial'] as bool,
+        lastModified: DateTime.parse(json['lastModified'] as String),
+      );
 }
 
 @freezed
