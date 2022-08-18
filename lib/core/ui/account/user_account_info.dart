@@ -5,8 +5,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tumble/core/shared/preference_types.dart';
 import 'package:tumble/core/dependency_injection/get_it_instances.dart';
 import 'package:tumble/core/theme/data/colors.dart';
+import 'package:tumble/core/ui/account/misc/login_logout_button.dart';
+import 'package:tumble/core/ui/account/misc/user_account_info_external_link.dart';
 import 'package:tumble/core/ui/login/cubit/auth_cubit.dart';
 import 'package:tumble/core/ui/main_app/data/schools.dart';
+import 'package:tumble/core/ui/scaffold_message.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class UserAccountInfo extends StatefulWidget {
   const UserAccountInfo({Key? key}) : super(key: key);
@@ -17,7 +21,9 @@ class UserAccountInfo extends StatefulWidget {
 
 class _UserAccountInfo extends State<UserAccountInfo> {
   @override
-  Widget build(BuildContext context) => Stack(
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Stack(
         alignment: Alignment.topCenter,
         children: [
           Padding(
@@ -103,98 +109,50 @@ class _UserAccountInfo extends State<UserAccountInfo> {
                     ],
                   ),
                 ),
-                Container(
-                  padding: const EdgeInsets.only(top: 40),
-                  width: double.maxFinite,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Container(
-                        width: 320,
-                        height: 140,
-                        decoration: BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                                color: Theme.of(context).colorScheme.onBackground.withOpacity(.3),
-                                offset: const Offset(1.0, 1.0),
-                                blurRadius: 2),
-                          ],
-                          color: const Color(0xFF717EC3),
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                                padding: const EdgeInsets.all(12),
-                                child: Row(
-                                  children: [
-                                    Icon(
-                                      CupertinoIcons.pen,
-                                      size: 16,
-                                      color: CustomColors.lightColors.background,
-                                    ),
-                                    Container(
-                                      padding: const EdgeInsets.only(left: 2),
-                                      child: Text(
-                                        'Upcoming exams',
-                                        style: TextStyle(fontSize: 15, color: CustomColors.lightColors.background),
-                                      ),
-                                    ),
-                                  ],
-                                ))
-                          ],
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      Container(
-                        width: 320,
-                        height: 140,
-                        decoration: BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                                color: Theme.of(context).colorScheme.onBackground.withOpacity(.3),
-                                offset: const Offset(1.0, 1.0),
-                                blurRadius: 2),
-                          ],
-                          color: const Color(0xFF7CAE7A),
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                                padding: const EdgeInsets.all(12),
-                                child: Row(
-                                  children: [
-                                    Icon(
-                                      CupertinoIcons.pen,
-                                      size: 16,
-                                      color: CustomColors.lightColors.background,
-                                    ),
-                                    Container(
-                                      padding: const EdgeInsets.only(left: 5),
-                                      child: Text('Courses',
-                                          style: TextStyle(
-                                            fontSize: 15,
-                                            color: CustomColors.lightColors.background,
-                                          )),
-                                    ),
-                                  ],
-                                ))
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
+                const SizedBox(
+                  height: 20,
+                ),
+                UserAccountExternalLink(
+                  title: "Your Canvas",
+                  color: const Color(0xFFe23e29),
+                  link:
+                      "https://${Schools.schools.firstWhere((school) => school.schoolName == getIt<SharedPreferences>().getString(PreferenceTypes.school)).schoolId.name}.instructure.com",
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                const UserAccountExternalLink(
+                  title: "Your Ladok",
+                  color: Color(0xFF3c9a00),
+                  link: "https://www.student.ladok.se/student/app/studentwebb/",
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                UserAccountExternalLink(
+                  title:
+                      "Kronox for ${Schools.schools.firstWhere((school) => school.schoolName == getIt<SharedPreferences>().getString(PreferenceTypes.school)).schoolName}",
+                  color: const Color(0xFF0089da),
+                  link:
+                      "https://${Schools.schools.firstWhere((school) => school.schoolName == getIt<SharedPreferences>().getString(PreferenceTypes.school)).schoolUrl}",
+                ),
+                const SizedBox(
+                  height: 50,
+                ),
+                FractionallySizedBox(
+                  widthFactor: 0.6,
+                  child: LoginLogoutButton(
+                      onPressed: () {
+                        BlocProvider.of<AuthCubit>(context).logout();
+                      },
+                      icon: CupertinoIcons.arrow_left_square,
+                      text: "Sign out"),
                 )
               ],
             ),
           ),
         ],
-      );
+      ),
+    );
+  }
 }

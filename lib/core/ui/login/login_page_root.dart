@@ -34,11 +34,9 @@ class _LoginPageRootState extends State<LoginPageRoot> {
             }
             break;
           case AuthStatus.AUTHENTICATED:
-            BlocProvider.of<AuthCubit>(context)
-                .setUserSession(state.userSession!);
+            BlocProvider.of<AuthCubit>(context).setUserSession(state.userSession!);
             showScaffoldMessage(context, RuntimeErrorType.loginSuccess);
-            BlocProvider.of<InitCubit>(context)
-                .changeSchool(widget.schoolName!);
+            BlocProvider.of<InitCubit>(context).changeSchool(widget.schoolName!);
             navigator.pushAndRemoveAll(NavigationRouteLabels.mainAppPage);
             break;
           default:
@@ -70,16 +68,13 @@ Widget _initialState(AuthState state, BuildContext context, String school) {
                 children: [
                   CircleAvatar(
                     backgroundColor: CustomColors.lightColors.background,
-                    child: const Image(
-                        image: AssetImage('assets/images/tumbleAppLogo.png')),
+                    child: const Image(image: AssetImage('assets/images/tumbleAppLogo.png')),
                   ),
                   const SizedBox(
                     width: 15,
                   ),
                   Text(
-                    state.authStatus == AuthStatus.AUTHENTICATED
-                        ? "Signed in to Kronox!"
-                        : "Sign in to Kronox",
+                    state.authStatus == AuthStatus.AUTHENTICATED ? "Signed in to Kronox!" : "Sign in to Kronox",
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.onPrimary,
                       fontWeight: FontWeight.w500,
@@ -132,11 +127,8 @@ Widget _initialState(AuthState state, BuildContext context, String school) {
                         height: double.infinity,
                         child: Padding(
                           padding: const EdgeInsets.all(60.0),
-                          child: Lottie.asset(
-                              'assets/animations/lottie_success_burst.json',
-                              width: 50,
-                              height: 50,
-                              repeat: false),
+                          child: Lottie.asset('assets/animations/lottie_success_burst.json',
+                              width: 50, height: 50, repeat: false),
                         ),
                       );
                     }
@@ -148,11 +140,8 @@ Widget _initialState(AuthState state, BuildContext context, String school) {
                       case AuthStatus.AUTHENTICATED:
                         return SizedBox(
                           height: double.infinity,
-                          child: Lottie.asset(
-                              'assets/animations/lottie_success_burst.json',
-                              width: 50,
-                              height: 50,
-                              repeat: false),
+                          child: Lottie.asset('assets/animations/lottie_success_burst.json',
+                              width: 50, height: 50, repeat: false),
                         );
                       default:
                         return _form(state, context, school);
@@ -166,8 +155,7 @@ Widget _initialState(AuthState state, BuildContext context, String school) {
   );
 }
 
-PreferredSizeWidget _appBar(
-    AuthState state, BuildContext context, AppNavigator navigator) {
+PreferredSizeWidget _appBar(AuthState state, BuildContext context, AppNavigator navigator) {
   return AppBar(
       backgroundColor: Theme.of(context).colorScheme.background,
       leading: IconButton(
@@ -222,10 +210,8 @@ Widget _formSubmitButton(AuthState state, BuildContext context, String school) {
         BlocProvider.of<AuthCubit>(context).submitLogin(context, school);
       },
       style: ButtonStyle(
-        backgroundColor:
-            MaterialStateProperty.all<Color>(CustomColors.orangePrimary),
-        shape: MaterialStateProperty.all(
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0))),
+        backgroundColor: MaterialStateProperty.all<Color>(CustomColors.orangePrimary),
+        shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0))),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -247,8 +233,7 @@ Widget _formSubmitButton(AuthState state, BuildContext context, String school) {
   );
 }
 
-Widget _formUsernameField(
-    AuthState state, BuildContext context, String school) {
+Widget _formUsernameField(AuthState state, BuildContext context, String school) {
   return Container(
     padding: const EdgeInsets.only(right: 15),
     width: 340,
@@ -263,30 +248,23 @@ Widget _formUsernameField(
           ),
           labelText: 'Username/Email',
           enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-                width: 1, color: CustomColors.orangePrimary.withOpacity(.5)),
+            borderSide: BorderSide(width: 1, color: CustomColors.orangePrimary.withOpacity(.5)),
             borderRadius: BorderRadius.circular(20),
           ),
           focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-                width: 1, color: CustomColors.orangePrimary.withOpacity(.5)),
+            borderSide: BorderSide(width: 1, color: CustomColors.orangePrimary.withOpacity(.5)),
             borderRadius: BorderRadius.circular(20),
           ),
           errorBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-                width: 1,
-                color: const Color.fromARGB(255, 235, 36, 5).withOpacity(.5)),
+            borderSide: BorderSide(width: 1, color: const Color.fromARGB(255, 235, 36, 5).withOpacity(.5)),
             borderRadius: BorderRadius.circular(20),
           ),
           focusedErrorBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                  width: 1,
-                  color: const Color.fromARGB(255, 235, 36, 5).withOpacity(.5)),
+              borderSide: BorderSide(width: 1, color: const Color.fromARGB(255, 235, 36, 5).withOpacity(.5)),
               borderRadius: BorderRadius.circular(20))),
       keyboardType: TextInputType.emailAddress,
       textInputAction: TextInputAction.done,
-      onFieldSubmitted: (String s) =>
-          BlocProvider.of<AuthCubit>(context).submitLogin(context, school),
+      onFieldSubmitted: (String s) => BlocProvider.of<AuthCubit>(context).submitLogin(context, school),
       autovalidateMode: AutovalidateMode.onUserInteraction,
       validator: (String? text) {
         return text == "" ? "Username/Email cannot be empty." : null;
@@ -295,8 +273,7 @@ Widget _formUsernameField(
   );
 }
 
-Widget _formPasswordField(
-    AuthState state, BuildContext context, String school) {
+Widget _formPasswordField(AuthState state, BuildContext context, String school) {
   return Container(
     padding: const EdgeInsets.only(right: 15),
     width: 340,
@@ -307,38 +284,27 @@ Widget _formPasswordField(
       obscureText: state.passwordHidden,
       decoration: InputDecoration(
           suffixIcon: IconButton(
-              onPressed: () => BlocProvider.of<AuthCubit>(context)
-                  .togglePasswordVisibility(),
-              icon: !state.passwordHidden
-                  ? const Icon(CupertinoIcons.eye)
-                  : const Icon(CupertinoIcons.eye_slash)),
-          icon: Icon(CupertinoIcons.lock,
-              color: Theme.of(context).colorScheme.onBackground),
+              onPressed: () => BlocProvider.of<AuthCubit>(context).togglePasswordVisibility(),
+              icon: !state.passwordHidden ? const Icon(CupertinoIcons.eye) : const Icon(CupertinoIcons.eye_slash)),
+          icon: Icon(CupertinoIcons.lock, color: Theme.of(context).colorScheme.onBackground),
           labelText: 'Password',
           enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-                width: 1, color: CustomColors.orangePrimary.withOpacity(.5)),
+            borderSide: BorderSide(width: 1, color: CustomColors.orangePrimary.withOpacity(.5)),
             borderRadius: BorderRadius.circular(20),
           ),
           focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-                width: 1, color: CustomColors.orangePrimary.withOpacity(.5)),
+            borderSide: BorderSide(width: 1, color: CustomColors.orangePrimary.withOpacity(.5)),
             borderRadius: BorderRadius.circular(20),
           ),
           errorBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-                width: 1,
-                color: const Color.fromARGB(255, 235, 36, 5).withOpacity(.5)),
+            borderSide: BorderSide(width: 1, color: const Color.fromARGB(255, 235, 36, 5).withOpacity(.5)),
             borderRadius: BorderRadius.circular(20),
           ),
           focusedErrorBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                  width: 1,
-                  color: const Color.fromARGB(255, 235, 36, 5).withOpacity(.5)),
+              borderSide: BorderSide(width: 1, color: const Color.fromARGB(255, 235, 36, 5).withOpacity(.5)),
               borderRadius: BorderRadius.circular(20))),
       textInputAction: TextInputAction.done,
-      onFieldSubmitted: (String s) =>
-          BlocProvider.of<AuthCubit>(context).submitLogin(
+      onFieldSubmitted: (String s) => BlocProvider.of<AuthCubit>(context).submitLogin(
         context,
         school,
       ),

@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tumble/core/shared/preference_types.dart';
 import 'package:tumble/core/dependency_injection/get_it_instances.dart';
 import 'package:tumble/core/theme/data/colors.dart';
+import 'package:tumble/core/ui/account/misc/login_logout_button.dart';
 import 'package:tumble/core/ui/main_app/data/schools.dart';
 
 class UserInfo extends StatelessWidget {
@@ -31,24 +32,21 @@ class UserInfo extends StatelessWidget {
             height: 25,
           ),
           Text(
-            loggedIn ? "Welcome ${name!.split(" ")[0]}" : "Connect your Kronox account by logging in.",
+            "Connect your Kronox account by logging in",
             textAlign: TextAlign.center,
             style:
                 TextStyle(fontSize: 16, fontWeight: FontWeight.w400, color: Theme.of(context).colorScheme.onBackground),
           ),
-          Padding(
-            padding: const EdgeInsets.only(top: 10, left: 70, right: 70),
-            child: OutlinedButton(
+          FractionallySizedBox(
+            widthFactor: 0.6,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 50),
+              child: LoginLogoutButton(
                 onPressed: onPressed,
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all<Color>(CustomColors.orangePrimary),
-                  shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0))),
-                ),
-                child: Text(loggedIn ? "Sign out" : "Sign in",
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Theme.of(context).colorScheme.onPrimary,
-                    ))),
+                icon: CupertinoIcons.person_circle,
+                text: "Sign in",
+              ),
+            ),
           ),
         ],
       ),
