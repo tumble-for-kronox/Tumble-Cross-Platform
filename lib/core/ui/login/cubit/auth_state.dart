@@ -2,6 +2,8 @@ part of 'auth_cubit.dart';
 
 enum AuthStatus { AUTHENTICATED, UNAUTHENTICATED, INITIAL, LOADING }
 
+enum UserEventListStatus { LOADING, LOADED, ERROR }
+
 class AuthState extends Equatable {
   final AuthStatus authStatus;
   final UserEventListStatus userEventListStatus;

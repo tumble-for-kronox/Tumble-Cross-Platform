@@ -12,7 +12,6 @@ import 'package:tumble/core/models/api_models/user_event_collection_model.dart';
 import 'package:tumble/core/models/ui_models/school_model.dart';
 import 'package:tumble/core/shared/preference_types.dart';
 import 'package:tumble/core/dependency_injection/get_it_instances.dart';
-import 'package:tumble/core/ui/account/user_event_list/cubit/user_event_list_cubit.dart';
 
 part 'auth_state.dart';
 
@@ -22,6 +21,7 @@ class AuthCubit extends Cubit<AuthState> {
             authStatus: AuthStatus.INITIAL,
             userEventListStatus: UserEventListStatus.LOADING,
             usernameController: TextEditingController(),
+            refreshSession: true,
             passwordController: TextEditingController(),
             passwordHidden: true)) {
     login();
@@ -29,9 +29,9 @@ class AuthCubit extends Cubit<AuthState> {
   final _userRepo = getIt<UserRepository>();
   final _secureStorage = getIt<SecureStorageRepository>();
 
-  Future<void> getUserEvents(String sessionToken) async {
+  Future<void> getUserEvents() async {
     emit(state.copyWith(userEventListStatus: UserEventListStatus.LOADING));
-    ApiResponse userEventResponse = await _userRepo.getUserEvents(sessionToken);
+    ApiResponse userEventResponse = await _userRepo.getUserEvents(state.userSession!.sessionToken);
 
     switch (userEventResponse.status) {
       case ApiStatus.FETCHED:
@@ -44,9 +44,55 @@ class AuthCubit extends Cubit<AuthState> {
         emit(state);
         break;
       default:
+        emit(state.copyWith(userEventListStatus: UserEventListStatus.ERROR, refreshSession: false));
+    }
+  }
+
+  Future<void> registerUserEvent(String id) async {
+    emit(state.copyWith(userEventListStatus: UserEventListStatus.LOADING));
+    ApiResponse registerResponse = await _userRepo.putRegisterUserEvent(id, state.userSession!.sessionToken);
+
+    switch (registerResponse.status) {
+      case ApiStatus.FETCHED:
+        getUserEvents();
+        break;
+      case ApiStatus.UNAUTHORIZED:
+        emit(state.copyWith(
+            userEventListStatus: UserEventListStatus.ERROR, errorMessage: "Couldn't validate your login."));
+        break;
+      case ApiStatus.ERROR:
         emit(state.copyWith(
             userEventListStatus: UserEventListStatus.ERROR,
-            refreshSession: false));
+            errorMessage: "Couldn't sign up, try again later or go to kronox."));
+        break;
+      default:
+        emit(state.copyWith(
+            userEventListStatus: UserEventListStatus.ERROR,
+            errorMessage: "Couldn't sign up, try again later or go to kronox."));
+    }
+  }
+
+  Future<void> unregisterUserEvent(String id) async {
+    emit(state.copyWith(userEventListStatus: UserEventListStatus.LOADING));
+    ApiResponse unregisterResponse = await _userRepo.putUnregisterUserEvent(id, state.userSession!.sessionToken);
+
+    switch (unregisterResponse.status) {
+      case ApiStatus.FETCHED:
+        getUserEvents();
+        break;
+      case ApiStatus.UNAUTHORIZED:
+        emit(state.copyWith(
+            userEventListStatus: UserEventListStatus.ERROR, errorMessage: "Couldn't validate your login."));
+        break;
+      case ApiStatus.ERROR:
+        emit(state.copyWith(
+            userEventListStatus: UserEventListStatus.ERROR,
+            errorMessage: "Couldn't sign up, try again later or go to kronox."));
+        break;
+      default:
+        emit(state.copyWith(
+            userEventListStatus: UserEventListStatus.ERROR,
+            errorMessage: "Couldn't sign up, try again later or go to kronox."));
     }
   }
 
@@ -54,14 +100,11 @@ class AuthCubit extends Cubit<AuthState> {
     final username = state.usernameController.text;
     final password = state.passwordController.text;
     if (!formValidated()) {
-      emit(state.copyWith(
-          authStatus: AuthStatus.INITIAL,
-          errorMessage: "Username and password cannot be empty."));
+      emit(state.copyWith(authStatus: AuthStatus.INITIAL, errorMessage: "Username and password cannot be empty."));
       return;
     }
     emit(state.copyWith(authStatus: AuthStatus.LOADING));
-    ApiResponse userRes =
-        await _userRepo.postUserLogin(username, password, school);
+    ApiResponse userRes = await _userRepo.postUserLogin(username, password, school);
 
     state.usernameController.clear();
     state.passwordController.clear();
@@ -72,12 +115,10 @@ class AuthCubit extends Cubit<AuthState> {
           PreferenceTypes.school,
           school,
         );
-        emit(state.copyWith(
-            authStatus: AuthStatus.AUTHENTICATED, userSession: userRes.data!));
+        emit(state.copyWith(authStatus: AuthStatus.AUTHENTICATED, userSession: userRes.data!));
         break;
       case ApiStatus.ERROR:
-        emit(state.copyWith(
-            authStatus: AuthStatus.INITIAL, errorMessage: userRes.message));
+        emit(state.copyWith(authStatus: AuthStatus.INITIAL, errorMessage: userRes.message));
         break;
       default:
     }
@@ -112,13 +153,10 @@ class AuthCubit extends Cubit<AuthState> {
 
     final refreshToken = await secureStorage.getRefreshToken();
     if (refreshToken != null) {
-      ApiResponse loggedInUser =
-          await userRepository.getRefreshSession(refreshToken);
+      ApiResponse loggedInUser = await userRepository.getRefreshSession(refreshToken);
       switch (loggedInUser.status) {
         case ApiStatus.FETCHED:
-          emit(state.copyWith(
-              authStatus: AuthStatus.AUTHENTICATED,
-              userSession: loggedInUser.data!));
+          emit(state.copyWith(authStatus: AuthStatus.AUTHENTICATED, userSession: loggedInUser.data!));
           return;
         default:
           emit(state.copyWith(authStatus: AuthStatus.UNAUTHENTICATED));
@@ -129,14 +167,12 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   void setUserSession(KronoxUserModel user) {
-    emit(state.copyWith(
-        authStatus: AuthStatus.AUTHENTICATED, userSession: user));
+    emit(state.copyWith(authStatus: AuthStatus.AUTHENTICATED, userSession: user));
   }
 
   void logout() {
     getIt<SecureStorageRepository>().clear();
-    emit(state.copyWith(
-        authStatus: AuthStatus.UNAUTHENTICATED, userSession: null));
+    emit(state.copyWith(authStatus: AuthStatus.UNAUTHENTICATED, userSession: null));
   }
 
   bool get authenticated => state.authStatus == AuthStatus.AUTHENTICATED;
