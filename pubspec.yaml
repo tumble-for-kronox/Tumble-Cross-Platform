@@ -33,6 +33,7 @@ dependencies:
   flutter_secure_storage: ^5.0.2
   awesome_notifications: ^0.6.21
   url_launcher: ^6.1.5
+  flutter_colorpicker: ^1.0.3
 
 dev_dependencies:
   flutter_test:
