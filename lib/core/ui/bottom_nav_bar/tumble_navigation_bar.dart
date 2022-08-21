@@ -19,17 +19,16 @@ class TumbleNavigationBar extends StatelessWidget {
             borderRadius: const BorderRadius.all(Radius.circular(20)),
             boxShadow: [
               BoxShadow(
-                  color: Theme.of(context)
-                      .colorScheme
-                      .onBackground
-                      .withOpacity(.1),
-                  spreadRadius: 0,
-                  blurRadius: 5),
+                color: Theme.of(context).colorScheme.onBackground.withOpacity(.2),
+                spreadRadius: 0,
+                blurRadius: 5,
+              ),
             ],
           ),
           child: ClipRRect(
-            borderRadius: const BorderRadius.all(
-              Radius.circular(20.0),
+            borderRadius: const BorderRadius.only(
+              topRight: Radius.circular(20.0),
+              topLeft: Radius.circular(20.0),
             ),
             child: BottomNavigationBar(
               type: BottomNavigationBarType.fixed,
@@ -48,16 +47,10 @@ class TumbleNavigationBar extends StatelessWidget {
                       CupertinoIcons.search,
                     ),
                     label: Labels.search),
-                BottomNavigationBarItem(
-                    icon: Icon(CupertinoIcons.collections), label: Labels.list),
-                BottomNavigationBarItem(
-                    icon: Icon(CupertinoIcons.list_bullet_indent),
-                    label: Labels.week),
-                BottomNavigationBarItem(
-                    icon: Icon(CupertinoIcons.calendar_today),
-                    label: Labels.calendar),
-                BottomNavigationBarItem(
-                    icon: Icon(CupertinoIcons.person), label: Labels.account),
+                BottomNavigationBarItem(icon: Icon(CupertinoIcons.collections), label: Labels.list),
+                BottomNavigationBarItem(icon: Icon(CupertinoIcons.list_bullet_indent), label: Labels.week),
+                BottomNavigationBarItem(icon: Icon(CupertinoIcons.calendar_today), label: Labels.calendar),
+                BottomNavigationBarItem(icon: Icon(CupertinoIcons.person), label: Labels.account),
               ],
             ),
           ),

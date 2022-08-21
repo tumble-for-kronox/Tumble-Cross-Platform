@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -23,7 +24,7 @@ class EventOptions extends StatelessWidget {
       showModalBottomSheet(
           context: context, builder: (_) => EventOptions(cubit: cubit, event: event, context: context));
     } else {
-      showScaffoldMessage(context, ScaffoldMessageType.createdNotificationFailed());
+      showScaffoldMessage(context, ScaffoldMessageType.openEventOptionsFailed());
     }
   }
 
@@ -45,6 +46,7 @@ class EventOptions extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               ListTile(
+                leading: Icon(CupertinoIcons.bell, color: Theme.of(context).colorScheme.onSurface),
                 title: const Center(child: Text('Set notification for event')),
                 shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.only(
@@ -70,6 +72,7 @@ class EventOptions extends StatelessWidget {
                 height: 1,
               ),
               ListTile(
+                leading: Icon(CupertinoIcons.bell_circle, color: Theme.of(context).colorScheme.onSurface),
                 title: const Center(child: Text('Set notifications for course')),
                 onTap: () async {
                   Navigator.of(context).pop();
@@ -88,9 +91,8 @@ class EventOptions extends StatelessWidget {
                 height: 1,
               ),
               ListTile(
-                title: const Center(
-                  child: Text("Change course color"),
-                ),
+                leading: Icon(CupertinoIcons.color_filter, color: Theme.of(context).colorScheme.onSurface),
+                title: const Center(child: Text("Change course color")),
                 shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.only(
                     bottomLeft: Radius.circular(20),

@@ -99,6 +99,13 @@ class MainAppCubit extends Cubit<MainAppState> {
   void _toggleSave(List<String> currentFavorites) async {
     currentFavorites.add(state.currentScheduleId!);
     _sharedPrefs.setString(PreferenceTypes.schedule, state.currentScheduleId!);
+
+    for (CourseUiModel? courseUiModel in state.scheduleModelAndCourses!.courses) {
+      if (courseUiModel != null) {
+        _databaseService.addCourseInstance(courseUiModel);
+      }
+    }
+
     await _databaseService.add(state.scheduleModelAndCourses!.scheduleModel);
 
     /// Make sure we only ever have one notification channel
@@ -185,6 +192,10 @@ class MainAppCubit extends Cubit<MainAppState> {
         break;
       case api.ApiStatus.CACHED:
         ScheduleModel currentScheduleModel = _apiResponse.data!;
+        for (var element in await _databaseService.getCachedCoursesFromId(id)) {
+          dev.log(element.courseId);
+        }
+
         if (currentScheduleModel.isNotPhonySchedule()) {
           emit(MainAppState(
               status: MainAppStatus.SCHEDULE_SELECTED,

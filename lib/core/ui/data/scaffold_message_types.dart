@@ -7,7 +7,7 @@ class ScaffoldMessageType {
   static String createdNotificationForEvent(String event) =>
       Intl.message('Sucessfully created notification for $event', args: [event]);
 
-  static String createdNotificationFailed() => Intl.message('Schedule must be default to be able to set notifications');
+  static String openEventOptionsFailed() => Intl.message('Schedule must be default to access options');
 
   static String changeTheme(String themeType) => Intl.message('Changed theme to $themeType', args: [themeType]);
 
