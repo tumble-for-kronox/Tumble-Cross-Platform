@@ -149,8 +149,10 @@ class MainAppCubit extends Cubit<MainAppState> {
   }
 
   /// ON program change, refresh or initial select
-  Future<void> fetchNewSchedule(String id) async {
-    final _apiResponse = await _cacheAndInteractionService.getSchedule(id);
+  Future<void> fetchNewSchedule(String id, {bool forceRefetch = false}) async {
+    final _apiResponse = forceRefetch
+        ? await _cacheAndInteractionService.getSchedulesRequest(id)
+        : await _cacheAndInteractionService.getSchedule(id);
     switch (_apiResponse.status) {
       case api.ApiStatus.UPDATE:
       case api.ApiStatus.FETCHED:

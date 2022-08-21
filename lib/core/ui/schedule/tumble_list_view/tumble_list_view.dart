@@ -35,7 +35,7 @@ class TumbleListView extends StatelessWidget {
                 RefreshIndicator(
                   onRefresh: () async {
                     context.read<MainAppCubit>().setLoading();
-                    await context.read<MainAppCubit>().fetchNewSchedule(state.currentScheduleId!);
+                    await context.read<MainAppCubit>().fetchNewSchedule(state.currentScheduleId!, forceRefetch: true);
                   },
                   child: SingleChildScrollView(
                     controller: context.read<MainAppCubit>().controller,
