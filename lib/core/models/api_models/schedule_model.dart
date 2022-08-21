@@ -17,7 +17,7 @@ Map<String, dynamic> scheduleModelToJson(ScheduleModel data) => data.toJson();
 @freezed
 abstract class ScheduleModel with _$ScheduleModel {
   const factory ScheduleModel({
-    required String cachedAt,
+    required DateTime cachedAt,
     required String id,
     required List<Day> days,
   }) = _ScheduleModel;
