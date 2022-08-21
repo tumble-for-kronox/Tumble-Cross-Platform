@@ -99,6 +99,13 @@ class MainAppCubit extends Cubit<MainAppState> {
   void _toggleSave(List<String> currentFavorites) async {
     currentFavorites.add(state.currentScheduleId!);
     _sharedPrefs.setString(PreferenceTypes.schedule, state.currentScheduleId!);
+
+    for (CourseUiModel? courseUiModel in state.scheduleModelAndCourses!.courses) {
+      if (courseUiModel != null) {
+        _databaseService.addCourseInstance(courseUiModel);
+      }
+    }
+
     await _databaseService.add(state.scheduleModelAndCourses!.scheduleModel);
 
     /// Make sure we only ever have one notification channel
@@ -185,6 +192,10 @@ class MainAppCubit extends Cubit<MainAppState> {
         break;
       case api.ApiStatus.CACHED:
         ScheduleModel currentScheduleModel = _apiResponse.data!;
+        for (var element in await _databaseService.getCachedCoursesFromId(id)) {
+          dev.log(element.courseId);
+        }
+
         if (currentScheduleModel.isNotPhonySchedule()) {
           emit(MainAppState(
               status: MainAppStatus.SCHEDULE_SELECTED,
@@ -254,7 +265,7 @@ class MainAppCubit extends Cubit<MainAppState> {
         .color);
   }
 
-  Future<bool> createNotificationForEvent(Event event, BuildContext context) async {
+  Future<bool> createNotificationForEvent(Event event, BuildContext context) {
     return _awesomeNotifications.isNotificationAllowed().then((isAllowed) {
       if (isAllowed) {
         _notificationBuilder.buildNotification(
@@ -299,6 +310,27 @@ class MainAppCubit extends Cubit<MainAppState> {
       dev.log('No new notifications created. Not allowed');
       return false;
     });
+  }
+
+  Future<bool> isNotificationSetForEvent(Event event) async {
+    dev.log((await _awesomeNotifications.listScheduledNotifications()).toString());
+    return (await _awesomeNotifications.listScheduledNotifications())
+        .any((element) => element.content!.id == event.id.encodeUniqueIdentifier());
+  }
+
+  Future<bool> isNotificationSetForCourse(Event event) async {
+    return (await _awesomeNotifications.listScheduledNotifications())
+        .any((element) => element.content!.groupKey == event.course.id);
+  }
+
+  Future<bool> cancelEventNotification(Event event) async {
+    await _awesomeNotifications.cancel(event.id.encodeUniqueIdentifier());
+    return !await isNotificationSetForEvent(event);
+  }
+
+  Future<bool> cancelCourseNotifications(Event event) async {
+    await _awesomeNotifications.cancelNotificationsByGroupKey(event.course.id);
+    return !await isNotificationSetForCourse(event);
   }
 
   void changeCourseColor(BuildContext context, Course course, Color color) {
