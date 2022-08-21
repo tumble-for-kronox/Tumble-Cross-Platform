@@ -41,6 +41,7 @@ class MainAppCubit extends Cubit<MainAppState> {
   final _notificationBuilder = NotificationServiceBuilder();
   final _awesomeNotifications = getIt<AwesomeNotifications>();
   final _databaseService = getIt<DatabaseRepository>();
+  final _preferenceService = getIt<SharedPreferences>();
   final ScrollController _listViewScrollController = ScrollController();
 
   ScrollController get controller => _listViewScrollController;
@@ -158,20 +159,24 @@ class MainAppCubit extends Cubit<MainAppState> {
       case api.ApiStatus.FETCHED:
         ScheduleModel currentScheduleModel = _apiResponse.data!;
         if (currentScheduleModel.isNotPhonySchedule()) {
-          List<CourseUiModel?> courseUiModels = currentScheduleModel.findNewCourses();
-          for (CourseUiModel? courseUiModel in courseUiModels) {
-            if (courseUiModel != null) {
-              _databaseService.addCourseInstance(courseUiModel);
+          List<CourseUiModel?> courseUiModels = await currentScheduleModel.findNewCourses(id);
+          if (_preferenceService.getStringList(PreferenceTypes.favorites)!.contains(id)) {
+            for (CourseUiModel? courseUiModel in courseUiModels) {
+              if (courseUiModel != null) {
+                _databaseService.addCourseInstance(courseUiModel);
+              }
             }
           }
+          await _databaseService.update(currentScheduleModel);
           emit(MainAppState(
               status: MainAppStatus.SCHEDULE_SELECTED,
               currentScheduleId: currentScheduleModel.id,
               listOfDays: currentScheduleModel.days,
               listOfWeeks: currentScheduleModel.splitToWeek(),
               toggledFavorite: false,
-              scheduleModelAndCourses:
-                  ScheduleModelAndCourses(scheduleModel: currentScheduleModel, courses: courseUiModels),
+              scheduleModelAndCourses: ScheduleModelAndCourses(
+                  scheduleModel: currentScheduleModel,
+                  courses: forceRefetch ? await _databaseService.getCachedCoursesFromId(id) : courseUiModels),
               listViewToTopButtonVisible: false,
               message: null));
         } else {

@@ -18,10 +18,8 @@ class CacheAndInteractionRepository implements ICacheAndInteractionService {
 
   @override
   Future<ApiResponse> getProgramsRequest(String searchQuery) async {
-    String defaultSchool =
-        _preferenceService.getString(PreferenceTypes.school)!;
-    ApiResponse response =
-        await _backendService.getPrograms(searchQuery, defaultSchool);
+    String defaultSchool = _preferenceService.getString(PreferenceTypes.school)!;
+    ApiResponse response = await _backendService.getPrograms(searchQuery, defaultSchool);
     return response;
   }
 
@@ -29,22 +27,23 @@ class CacheAndInteractionRepository implements ICacheAndInteractionService {
   Future<ApiResponse> getSchedulesRequest(scheduleId) async {
     /// User cannot get this far in the app without having a default
     /// school stored, therefore null check operator is OK
-    String defaultSchool =
-        _preferenceService.getString(PreferenceTypes.school)!;
-    ApiResponse response =
-        await _backendService.getSchedule(scheduleId, defaultSchool);
+    String defaultSchool = _preferenceService.getString(PreferenceTypes.school)!;
+    ApiResponse response = await _backendService.getSchedule(scheduleId, defaultSchool);
     return response;
   }
 
   @override
   Future<ApiResponse> getSchedule(String scheduleId) async {
-    final bool favoritesContainsThisScheduleId = _preferenceService
-        .getStringList(PreferenceTypes.favorites)!
-        .contains(scheduleId);
+    final bool favoritesContainsThisScheduleId =
+        _preferenceService.getStringList(PreferenceTypes.favorites)!.contains(scheduleId);
 
     if (favoritesContainsThisScheduleId) {
-      final ScheduleModel userCachedSchedule =
-          await _getCachedSchedule(scheduleId);
+      final ScheduleModel userCachedSchedule = await _getCachedSchedule(scheduleId);
+
+      if (DateTime.now().subtract(const Duration(minutes: 30)).isAfter(userCachedSchedule.cachedAt.toLocal())) {
+        return await getSchedule(scheduleId);
+      }
+
       return ApiResponse.cached(userCachedSchedule);
     }
 
@@ -58,8 +57,7 @@ class CacheAndInteractionRepository implements ICacheAndInteractionService {
   /// and a default schedule)
   @override
   Future<DatabaseResponse> initSetup() async {
-    final String? defaultSchool =
-        _preferenceService.getString(PreferenceTypes.school);
+    final String? defaultSchool = _preferenceService.getString(PreferenceTypes.school);
 
     if (defaultSchool != null) {
       return DatabaseResponse.hasDefault(defaultSchool);
@@ -70,8 +68,7 @@ class CacheAndInteractionRepository implements ICacheAndInteractionService {
 
   @override
   Future<ApiResponse> getCachedBookmarkedSchedule() async {
-    final bool userHasCachedSchedule =
-        _preferenceService.getString(PreferenceTypes.schedule) != null;
+    final bool userHasCachedSchedule = _preferenceService.getString(PreferenceTypes.schedule) != null;
     if (userHasCachedSchedule) {
       ScheduleModel userCachedSchedule = await _getCachedSchedule(null);
       return ApiResponse.cached(userCachedSchedule);
@@ -80,14 +77,13 @@ class CacheAndInteractionRepository implements ICacheAndInteractionService {
   }
 
   Future<ScheduleModel> _getCachedSchedule(String? scheduleId) async {
-    return (await _databaseService.getOneSchedule(scheduleId ??
-        _preferenceService.getString(PreferenceTypes.schedule)!))!;
+    return (await _databaseService
+        .getOneSchedule(scheduleId ?? _preferenceService.getString(PreferenceTypes.schedule)!))!;
   }
 
   @override
   Future<ApiResponse> refreshDefaultSchedule() async {
-    String defaultScheduleId =
-        _preferenceService.getString(PreferenceTypes.schedule)!;
+    String defaultScheduleId = _preferenceService.getString(PreferenceTypes.schedule)!;
     return await getSchedulesRequest(defaultScheduleId);
   }
 }

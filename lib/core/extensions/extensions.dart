@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
@@ -7,6 +8,7 @@ import 'package:http/http.dart';
 import "package:collection/collection.dart";
 import 'package:tumble/core/api/apiservices/api_response.dart';
 import 'package:tumble/core/api/apiservices/runtime_error_type.dart';
+import 'package:tumble/core/api/repository/backend_repository.dart';
 import 'package:tumble/core/helpers/color_picker.dart';
 import 'package:tumble/core/models/api_models/kronox_user_model.dart';
 import 'package:tumble/core/models/api_models/program_model.dart';
@@ -17,6 +19,9 @@ import 'package:tumble/core/models/ui_models/school_model.dart';
 import 'package:tumble/core/models/ui_models/week_model.dart';
 import 'package:tumble/core/ui/main_app/data/schools.dart';
 import 'package:uuid/uuid.dart';
+
+import '../database/repository/database_repository.dart';
+import '../dependency_injection/get_it_instances.dart';
 
 extension ResponseParsing on Response {
   ApiResponse parseSchedule() {
@@ -112,8 +117,11 @@ extension ScheduleParsing on ScheduleModel {
         .toList();
   }
 
-  List<CourseUiModel?> findNewCourses() {
+  Future<List<CourseUiModel?>> findNewCourses(String scheduleId) async {
+    DatabaseRepository databaseService = getIt<DatabaseRepository>();
+
     List<String> seen = [];
+    seen.addAll((await databaseService.getCachedCoursesFromId(scheduleId)).map((e) => e.courseId));
     List<CourseUiModel?> courseUiModels = (days.expand((element) => element.events).toList())
         .map((event) {
           final courseId = event.course.id;
