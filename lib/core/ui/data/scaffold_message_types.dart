@@ -7,6 +7,17 @@ class ScaffoldMessageType {
   static String createdNotificationForEvent(String event) =>
       Intl.message('Sucessfully created notification for $event', args: [event]);
 
+  static String cancelledAllSetNotifications() => Intl.message('Cancelled all notifications');
+
+  static String cancelledEventNotification(String event) =>
+      Intl.message('Cancelled notification for $event', args: [event]);
+
+  static String cancelledCourseNotifications(String course) =>
+      Intl.message('Cancelled notifications for $course', args: [course]);
+
+  static String cancelNotificationsFailed(String objectName) =>
+      Intl.message('Failed to cancel notifications for $objectName', args: [objectName]);
+
   static String openEventOptionsFailed() => Intl.message('Schedule must be default to access options');
 
   static String changeTheme(String themeType) => Intl.message('Changed theme to $themeType', args: [themeType]);
@@ -27,8 +38,6 @@ class ScaffoldMessageType {
 
   static String cancelledSetNotificationsForEvent(String event) =>
       Intl.message('Cancelled notification for $event', args: [event]);
-
-  static String cancelledAllSetNotifications() => Intl.message('Cancelled all notifications');
 
   static String addedBookmark(String scheduleId) => Intl.message('Saved $scheduleId to bookmarks', args: [scheduleId]);
 
