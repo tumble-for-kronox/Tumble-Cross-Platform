@@ -111,7 +111,7 @@ class EventOptions extends StatelessWidget {
                         Navigator.of(context).pop();
 
                         if (courseNotification) {
-                          cubit.cancelEventNotification(event).then((notificationCancelled) => notificationCancelled
+                          cubit.cancelCourseNotifications(event).then((notificationCancelled) => notificationCancelled
                               ? showScaffoldMessage(
                                   context, ScaffoldMessageType.cancelledCourseNotifications(event.course.englishName))
                               : showScaffoldMessage(
@@ -182,7 +182,9 @@ class EventOptions extends StatelessWidget {
                   ],
                 );
               }
-              return const SpinKitThreeBounce(color: CustomColors.orangePrimary);
+              return const SizedBox(
+                height: 200,
+              );
             },
           ),
         ),

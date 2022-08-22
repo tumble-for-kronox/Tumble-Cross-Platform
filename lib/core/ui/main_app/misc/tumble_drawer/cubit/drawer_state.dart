@@ -1,8 +1,10 @@
 import 'dart:developer';
 
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tumble/core/api/builders/notification_service_builder.dart';
 import 'package:tumble/core/shared/preference_types.dart';
 import 'package:tumble/core/shared/view_types.dart';
 import 'package:tumble/core/extensions/extensions.dart';
@@ -17,26 +19,30 @@ class DrawerState extends Equatable {
   final String? theme;
   final String? schedule;
   final List<String>? bookmarks;
+  final int? notificationTime;
   const DrawerState(
       {required this.viewType,
       required this.schedule,
       required this.school,
       required this.theme,
-      required this.bookmarks});
+      required this.bookmarks,
+      required this.notificationTime});
 
   DrawerState copyWith(
           {String? viewType,
           String? school,
           String? theme,
           String? schedule,
-          List<String>? bookmarks}) =>
+          List<String>? bookmarks,
+          int? notificationTime}) =>
       DrawerState(
           viewType: viewType ?? this.viewType,
           school: school ?? this.school,
           theme: theme ?? this.theme,
           schedule: schedule ?? this.schedule,
-          bookmarks: bookmarks ?? this.bookmarks);
+          bookmarks: bookmarks ?? this.bookmarks,
+          notificationTime: notificationTime ?? this.notificationTime);
 
   @override
-  List<Object?> get props => [viewType, schedule, school, theme, bookmarks];
+  List<Object?> get props => [viewType, schedule, school, theme, bookmarks, notificationTime];
 }

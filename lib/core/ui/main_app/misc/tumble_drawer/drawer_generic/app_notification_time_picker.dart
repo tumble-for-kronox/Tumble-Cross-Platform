@@ -4,15 +4,9 @@ import 'package:flutter/material.dart';
 typedef SetNotificationTime = void Function(int time);
 
 class AppNotificationTimePicker extends StatelessWidget {
-  final Map<String, int> parameterMap = {
-    "15 minutes": 15,
-    "30 minutes": 30,
-    "1 hour": 60,
-    "3 hours": 180
-  };
+  final Map<String, int> parameterMap = {"15 minutes": 15, "30 minutes": 30, "1 hour": 60, "3 hours": 180};
   final SetNotificationTime setNotificationTime;
-  AppNotificationTimePicker({Key? key, required this.setNotificationTime})
-      : super(key: key);
+  AppNotificationTimePicker({Key? key, required this.setNotificationTime}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -29,15 +23,14 @@ class AppNotificationTimePicker extends StatelessWidget {
             child: Card(
           elevation: 0,
           color: Theme.of(context).colorScheme.surface,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
           child: Column(
               children: (parameterMap.keys)
                   .map((key) => ListTile(
+                      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
                       title: Text(
                         key,
-                        style: TextStyle(
-                            color: Theme.of(context).colorScheme.primary),
+                        style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
                       ),
                       onTap: () => setNotificationTime(parameterMap[key]!)))
                   .toList()),

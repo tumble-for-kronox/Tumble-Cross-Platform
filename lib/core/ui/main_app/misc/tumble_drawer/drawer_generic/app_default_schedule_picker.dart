@@ -7,8 +7,7 @@ typedef SetDefaultSchedule = void Function(String id);
 class AppDefaultSchedulePicker extends StatelessWidget {
   final List<String> scheduleIds;
   final SetDefaultSchedule setDefaultSchedule;
-  const AppDefaultSchedulePicker(
-      {Key? key, required this.scheduleIds, required this.setDefaultSchedule})
+  const AppDefaultSchedulePicker({Key? key, required this.scheduleIds, required this.setDefaultSchedule})
       : super(key: key);
 
   @override
@@ -26,24 +25,21 @@ class AppDefaultSchedulePicker extends StatelessWidget {
             child: Card(
           elevation: 0,
           color: Theme.of(context).colorScheme.surface,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
           child: SingleChildScrollView(
             child: Column(
-                children: (scheduleIds)
-                    .map((id) => ListTile(
-                        title: Text(
-                          id,
-                          style: TextStyle(
-                              color:
-                                  Theme.of(context).colorScheme.onBackground),
-                        ),
-                        onTap: () {
-                          setDefaultSchedule(id);
-                          showScaffoldMessage(
-                              context, "Default schedule is now set to $id");
-                        }))
-                    .toList()),
+                children: (scheduleIds).map((id) {
+              return ListTile(
+                  shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
+                  title: Text(
+                    id,
+                    style: TextStyle(color: Theme.of(context).colorScheme.onBackground),
+                  ),
+                  onTap: () {
+                    setDefaultSchedule(id);
+                    showScaffoldMessage(context, "Default schedule is now set to $id");
+                  });
+            }).toList()),
           ),
         )),
       ),

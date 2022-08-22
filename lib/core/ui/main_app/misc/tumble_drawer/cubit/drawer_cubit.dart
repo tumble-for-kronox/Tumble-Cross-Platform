@@ -3,17 +3,13 @@ part of 'drawer_state.dart';
 class DrawerCubit extends Cubit<DrawerState> {
   DrawerCubit()
       : super(DrawerState(
-            theme: getIt<SharedPreferences>()
-                .getString(PreferenceTypes.theme)!
-                .capitalize(),
-            viewType: ScheduleViewTypes.viewTypesMap[
-                getIt<SharedPreferences>().getInt(PreferenceTypes.view)],
-            schedule: getIt<SharedPreferences>()
-                .getString(PreferenceTypes.schedule),
-            school:
-                getIt<SharedPreferences>().getString(PreferenceTypes.school),
-            bookmarks: getIt<SharedPreferences>()
-                .getStringList(PreferenceTypes.favorites)));
+          theme: getIt<SharedPreferences>().getString(PreferenceTypes.theme)!.capitalize(),
+          viewType: ScheduleViewTypes.viewTypesMap[getIt<SharedPreferences>().getInt(PreferenceTypes.view)],
+          schedule: getIt<SharedPreferences>().getString(PreferenceTypes.schedule),
+          school: getIt<SharedPreferences>().getString(PreferenceTypes.school),
+          bookmarks: getIt<SharedPreferences>().getStringList(PreferenceTypes.favorites),
+          notificationTime: getIt<SharedPreferences>().getInt(PreferenceTypes.notificationTime),
+        ));
 
   final _themeRepository = getIt<ThemeRepository>();
 
@@ -37,16 +33,12 @@ class DrawerCubit extends Cubit<DrawerState> {
 
   void setupForNextSchool(String schoolName) {
     emit(DrawerState(
-        theme: getIt<SharedPreferences>()
-            .getString(PreferenceTypes.theme)!
-            .capitalize(),
-        viewType: ScheduleViewTypes.viewTypesMap[
-            getIt<SharedPreferences>().getInt(PreferenceTypes.view)],
-        schedule:
-            getIt<SharedPreferences>().getString(PreferenceTypes.schedule),
+        theme: getIt<SharedPreferences>().getString(PreferenceTypes.theme)!.capitalize(),
+        viewType: ScheduleViewTypes.viewTypesMap[getIt<SharedPreferences>().getInt(PreferenceTypes.view)],
+        schedule: getIt<SharedPreferences>().getString(PreferenceTypes.schedule),
         school: getIt<SharedPreferences>().getString(PreferenceTypes.school),
-        bookmarks: getIt<SharedPreferences>()
-            .getStringList(PreferenceTypes.favorites)));
+        bookmarks: getIt<SharedPreferences>().getStringList(PreferenceTypes.favorites),
+        notificationTime: getIt<SharedPreferences>().getInt(PreferenceTypes.notificationTime)));
   }
 
   void setSchedule(String newId) {
@@ -57,6 +49,26 @@ class DrawerCubit extends Cubit<DrawerState> {
   void setView(int viewType) {
     getIt<SharedPreferences>().setInt(PreferenceTypes.view, viewType);
     emit(state.copyWith(viewType: ScheduleViewTypes.viewTypesMap[viewType]));
+  }
+
+  void setNotificationTime(int time) async {
+    final int oldTimeOffset = getIt<SharedPreferences>().getInt(PreferenceTypes.notificationTime)!;
+    getIt<SharedPreferences>().setInt(PreferenceTypes.notificationTime, time);
+
+    List<NotificationModel> currentNotifications = await getIt<AwesomeNotifications>().listScheduledNotifications();
+    for (NotificationModel notification in currentNotifications) {
+      final Map<String, dynamic> scheduleMap = notification.schedule!.toMap();
+      NotificationServiceBuilder().buildNotification(
+          id: notification.content!.id!,
+          channelKey: notification.content!.channelKey!,
+          groupkey: notification.content!.groupKey!,
+          title: notification.content!.title!,
+          body: notification.content!.body!,
+          date: DateTime(scheduleMap["year"], scheduleMap["month"], scheduleMap["day"], scheduleMap["hour"],
+                  scheduleMap["minute"])
+              .add(Duration(minutes: oldTimeOffset)));
+    }
+    emit(state.copyWith(notificationTime: getIt<SharedPreferences>().getInt(PreferenceTypes.notificationTime)));
   }
 
   void updateSchool(String schoolName) {
