@@ -1,14 +1,17 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tumble/core/api/interface/inotification_service_builder.dart';
 import 'package:tumble/core/dependency_injection/get_it_instances.dart';
+import 'package:tumble/core/shared/preference_types.dart';
 import 'package:tumble/core/theme/data/colors.dart';
 
 class NotificationServiceBuilder implements INotificationServiceBuilder {
   final Color defaultColor = CustomColors.orangePrimary;
   final String defaultIcon = "resource://drawable/res_tumble_app_logo";
   final _awesomeNotifications = getIt<AwesomeNotifications>();
+  final _sharedPreferences = getIt<SharedPreferences>();
 
   /// Build notification channel dynamically
   @override
@@ -57,5 +60,7 @@ class NotificationServiceBuilder implements INotificationServiceBuilder {
             NotificationActionButton(key: 'VIEW', label: 'View'),
           ],
           schedule: NotificationCalendar.fromDate(
-              date: date, allowWhileIdle: true, preciseAlarm: true));
+              date: date.subtract(Duration(minutes: _sharedPreferences.getInt(PreferenceTypes.notificationTime)!)),
+              allowWhileIdle: true,
+              preciseAlarm: true));
 }

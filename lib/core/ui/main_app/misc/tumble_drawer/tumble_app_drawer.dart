@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tumble/core/api/repository/notification_repository.dart';
 import 'package:tumble/core/dependency_injection/get_it_instances.dart';
 import 'package:tumble/core/navigation/app_navigator.dart';
@@ -14,9 +16,12 @@ import 'package:tumble/core/ui/main_app/misc/tumble_app_drawer_tile.dart';
 import 'package:tumble/core/ui/main_app/misc/tumble_drawer/cubit/drawer_state.dart';
 import 'package:tumble/core/ui/main_app/misc/tumble_drawer/drawer_generic/app_default_schedule_picker.dart';
 import 'package:tumble/core/ui/main_app/misc/tumble_drawer/drawer_generic/app_default_view_picker.dart';
+import 'package:tumble/core/ui/main_app/misc/tumble_drawer/drawer_generic/app_notification_time_picker.dart';
 import 'package:tumble/core/ui/main_app/misc/tumble_drawer/drawer_generic/app_theme_picker.dart';
 import 'package:tumble/core/ui/main_app/misc/tumble_settings_section.dart';
 import 'package:tumble/core/ui/scaffold_message.dart';
+
+import '../../../../shared/preference_types.dart';
 
 typedef HandleDrawerEvent = void Function(
   Enum eventType,
@@ -39,7 +44,7 @@ class TumbleAppDrawer extends StatelessWidget {
             child: Drawer(
               backgroundColor: Theme.of(context).colorScheme.surface,
               child: ListView(
-                padding: EdgeInsets.zero,
+                padding: const EdgeInsets.only(bottom: 10),
                 children: [
                   const SizedBox(
                     height: 107.0,
@@ -143,6 +148,14 @@ class TumbleAppDrawer extends StatelessWidget {
                         subtitle: "Removes all notifications",
                         eventType: EventType.CANCEL_ALL_NOTIFICATIONS,
                         drawerEvent: (eventType) => handleDrawerEvent(eventType, context, navigator)),
+                    TumbleAppDrawerTile(
+                      prefixIcon: CupertinoIcons.clock,
+                      drawerTileTitle: "Notification offset",
+                      subtitle:
+                          "Current offset: ${getIt<SharedPreferences>().getInt(PreferenceTypes.notificationTime)} minutes",
+                      eventType: EventType.EDIT_NOTIFICATION_TIME,
+                      drawerEvent: (eventType) => handleDrawerEvent(eventType, context, navigator),
+                    )
                   ], title: "Notifications")
                 ],
               ),
@@ -197,6 +210,15 @@ class TumbleAppDrawer extends StatelessWidget {
       case EventType.CANCEL_ALL_NOTIFICATIONS:
         getIt<NotificationRepository>().clearAllNotifications();
         showScaffoldMessage(context, ScaffoldMessageType.cancelledAllSetNotifications());
+        break;
+      case EventType.EDIT_NOTIFICATION_TIME:
+        showModalBottomSheet(
+            context: context,
+            builder: (_) => AppNotificationTimePicker(setNotificationTime: (time) {
+                  context.read<DrawerCubit>().setNotificationTime(time);
+                  Navigator.of(context).pop();
+                }));
+        break;
     }
   }
 }

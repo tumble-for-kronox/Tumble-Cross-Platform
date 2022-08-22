@@ -24,8 +24,9 @@ class TumbleAppDrawerTile extends StatelessWidget {
       width: double.infinity,
       height: 70,
       child: MaterialButton(
-        padding: const EdgeInsets.all(0),
+        padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
         onPressed: () => drawerEvent(eventType),
+        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [

@@ -29,6 +29,7 @@ class AppThemePicker extends StatelessWidget {
                 child: Column(
                     children: (IconAndTitleSet.themes.keys)
                         .map((key) => ListTile(
+                            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
                             leading: IconAndTitleSet.themes[key],
                             title: Text(
                               key,

@@ -192,10 +192,6 @@ class MainAppCubit extends Cubit<MainAppState> {
         break;
       case api.ApiStatus.CACHED:
         ScheduleModel currentScheduleModel = _apiResponse.data!;
-        for (var element in await _databaseService.getCachedCoursesFromId(id)) {
-          dev.log(element.courseId);
-        }
-
         if (currentScheduleModel.isNotPhonySchedule()) {
           emit(MainAppState(
               status: MainAppStatus.SCHEDULE_SELECTED,
@@ -313,7 +309,6 @@ class MainAppCubit extends Cubit<MainAppState> {
   }
 
   Future<bool> isNotificationSetForEvent(Event event) async {
-    dev.log((await _awesomeNotifications.listScheduledNotifications()).toString());
     return (await _awesomeNotifications.listScheduledNotifications())
         .any((element) => element.content!.id == event.id.encodeUniqueIdentifier());
   }

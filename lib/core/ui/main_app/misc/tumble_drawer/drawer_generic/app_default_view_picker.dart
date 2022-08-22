@@ -5,8 +5,7 @@ typedef SetDefaultView = void Function(int viewType);
 
 class AppDefaultViewPicker extends StatelessWidget {
   final SetDefaultView setDefaultView;
-  const AppDefaultViewPicker({Key? key, required this.setDefaultView})
-      : super(key: key);
+  const AppDefaultViewPicker({Key? key, required this.setDefaultView}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,20 +22,18 @@ class AppDefaultViewPicker extends StatelessWidget {
             child: Card(
           elevation: 0,
           color: Theme.of(context).colorScheme.surface,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
           child: Column(
               children: (IconAndTitleSet.views)
                   .keys
                   .map((keyType) => ListTile(
+                      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
                       leading: IconAndTitleSet.views[keyType]!.values.first,
                       title: Text(
                         keyType,
-                        style: TextStyle(
-                            color: Theme.of(context).colorScheme.onBackground),
+                        style: TextStyle(color: Theme.of(context).colorScheme.onBackground),
                       ),
-                      onTap: () => setDefaultView(
-                          IconAndTitleSet.views[keyType]!.keys.first)))
+                      onTap: () => setDefaultView(IconAndTitleSet.views[keyType]!.keys.first)))
                   .toList()),
         )),
       ),

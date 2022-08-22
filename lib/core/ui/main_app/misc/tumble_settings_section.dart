@@ -4,24 +4,25 @@ class TumbleSettingsSection extends StatelessWidget {
   final List<Widget> tiles;
   final String title;
 
-  const TumbleSettingsSection(
-      {Key? key, required this.tiles, required this.title})
-      : super(key: key);
+  const TumbleSettingsSection({Key? key, required this.tiles, required this.title}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+      padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            title,
-            textAlign: TextAlign.left,
-            style: TextStyle(
-              color: Theme.of(context).colorScheme.onBackground,
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+            child: Text(
+              title,
+              textAlign: TextAlign.left,
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onBackground,
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+              ),
             ),
           ),
           Container(
