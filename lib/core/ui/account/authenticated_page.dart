@@ -40,7 +40,6 @@ class _AuthenticatedPage extends State<AuthenticatedPage> with TickerProviderSta
             ]),
         Expanded(
           child: Container(
-            padding: const EdgeInsets.only(bottom: 5),
             width: double.maxFinite,
             child: TabBarView(controller: tabController, children: [
               BlocProvider.value(

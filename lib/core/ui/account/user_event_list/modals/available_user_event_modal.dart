@@ -22,12 +22,12 @@ class AvailableUserEventModal extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: MediaQuery.of(context).size.height - 280,
+      height: MediaQuery.of(context).size.height - 240,
       child: Stack(
         alignment: Alignment.bottomCenter,
         children: [
           Container(
-            height: MediaQuery.of(context).size.height - 280,
+            height: MediaQuery.of(context).size.height - 240,
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.background,
@@ -37,7 +37,7 @@ class AvailableUserEventModal extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    padding: const EdgeInsets.only(right: 0, left: 0, top: 5, bottom: 10),
+                    padding: const EdgeInsets.only(right: 0, left: 0, top: 55, bottom: 10),
                     child: Text(
                       userEvent.title.length < 40
                           ? userEvent.title.capitalize()
@@ -82,6 +82,15 @@ class AvailableUserEventModal extends StatelessWidget {
                         icon: const Icon(CupertinoIcons.square_grid_2x2),
                         subtitle: userEvent.type,
                       ),
+                      const SizedBox(
+                        height: 25,
+                      ),
+                      ModalInfoRow(
+                        title: "Support",
+                        icon: const Icon(CupertinoIcons.question_circle),
+                        subtitle:
+                            userEvent.supportAvailable ? "Support available, enable on Kronox" : "No support available",
+                      ),
                       () {
                         return userEvent.anonymousCode.isEmpty
                             ? Container()
@@ -98,15 +107,6 @@ class AvailableUserEventModal extends StatelessWidget {
                                 subtitle: userEvent.anonymousCode,
                               );
                       }(),
-                      const SizedBox(
-                        height: 25,
-                      ),
-                      ModalInfoRow(
-                        title: "Support",
-                        icon: const Icon(CupertinoIcons.question_circle),
-                        subtitle:
-                            userEvent.supportAvailable ? "Support available, enable on Kronox" : "No support available",
-                      ),
                     ],
                   )
                 ],
@@ -130,7 +130,29 @@ class AvailableUserEventModal extends StatelessWidget {
                             Navigator.pop(context);
                           }),
           ),
-          ScheduleCardRibbon(color: Theme.of(context).colorScheme.primary),
+          Align(
+            alignment: Alignment.topCenter,
+            child: Container(
+              alignment: Alignment.center,
+              width: double.maxFinite,
+              height: 50,
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.primary,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(20),
+                  topRight: Radius.circular(20),
+                ),
+              ),
+              child: const Text(
+                "DETAILS",
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.white,
+                  letterSpacing: 1.5,
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );

@@ -26,10 +26,8 @@ class ProgramCard extends StatelessWidget {
           child: TextButton(
             onPressed: onTap,
             style: ButtonStyle(
-              overlayColor:
-                  MaterialStateProperty.all<Color>(Colors.grey.shade200),
-              foregroundColor: MaterialStateProperty.all<Color>(
-                  Theme.of(context).colorScheme.onBackground),
+              overlayColor: MaterialStateProperty.all<Color>(Colors.grey.shade200),
+              foregroundColor: MaterialStateProperty.all<Color>(Theme.of(context).colorScheme.onBackground),
             ),
             child: Container(
               width: double.infinity,
@@ -39,17 +37,15 @@ class ProgramCard extends StatelessWidget {
                 children: [
                   Flexible(
                     child: Text(
-                      programSubtitle,
+                      programSubtitle.trim(),
                       textAlign: TextAlign.left,
-                      style: const TextStyle(
-                          fontSize: 19, fontWeight: FontWeight.w400),
+                      style: const TextStyle(fontSize: 19, fontWeight: FontWeight.w400),
                     ),
                   ),
                   const SizedBox(
                     height: 10,
                   ),
                   Container(
-                    padding: const EdgeInsets.only(left: 5),
                     child: Row(
                       children: [
                         Text(

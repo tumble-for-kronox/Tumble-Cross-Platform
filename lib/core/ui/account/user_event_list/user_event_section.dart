@@ -27,7 +27,7 @@ class UserEventSection extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 0),
         child: Column(
           children: <Widget>[
-                _eventsDivider(context, state, sectionTitle),
+                _eventsDivider(context, sectionTitle),
               ] +
               (availableEvents == null
                   ? upcomingEvents!
@@ -70,7 +70,7 @@ class UserEventSection extends StatelessWidget {
   }
 }
 
-Widget _eventsDivider(BuildContext context, AuthState state, String title) {
+Widget _eventsDivider(BuildContext context, String title) {
   return Row(
     children: [
       Padding(
@@ -88,7 +88,7 @@ Widget _eventsDivider(BuildContext context, AuthState state, String title) {
       Expanded(
         child: Divider(
           color: Theme.of(context).colorScheme.onBackground,
-          thickness: 1,
+          thickness: 0.1,
         ),
       ),
     ],

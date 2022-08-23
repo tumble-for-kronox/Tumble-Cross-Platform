@@ -2,7 +2,7 @@ part of 'auth_cubit.dart';
 
 enum AuthStatus { AUTHENTICATED, UNAUTHENTICATED, INITIAL, LOADING }
 
-enum UserEventListStatus { LOADING, LOADED, ERROR }
+enum UserEventListStatus { LOADING, LOADED, ERROR, INITIAL }
 
 class AuthState extends Equatable {
   final AuthStatus authStatus;
@@ -14,9 +14,11 @@ class AuthState extends Equatable {
   final TextEditingController passwordController;
   final bool passwordHidden;
   final bool refreshSession;
+  final bool autoSignup;
   final UserEventCollectionModel? userEvents;
 
   const AuthState({
+    required this.autoSignup,
     required this.authStatus,
     required this.userEventListStatus,
     required this.usernameController,
@@ -39,8 +41,10 @@ class AuthState extends Equatable {
       TextEditingController? usernameController,
       TextEditingController? passwordController,
       KronoxUserModel? userSession,
-      bool? passwordHidden}) {
+      bool? passwordHidden,
+      bool? autoSignup}) {
     return AuthState(
+      autoSignup: autoSignup ?? this.autoSignup,
       authStatus: authStatus ?? this.authStatus,
       userEventListStatus: userEventListStatus ?? this.userEventListStatus,
       usernameController: usernameController ?? this.usernameController,
@@ -63,6 +67,7 @@ class AuthState extends Equatable {
         usernameController,
         passwordController,
         passwordHidden,
-        userSession
+        userSession,
+        autoSignup,
       ];
 }

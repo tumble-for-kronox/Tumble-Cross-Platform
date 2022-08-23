@@ -164,6 +164,7 @@ class MainAppCubit extends Cubit<MainAppState> {
     switch (_apiResponse.status) {
       case api.ApiStatus.UPDATE:
       case api.ApiStatus.FETCHED:
+        bool scheduleFavorited = false;
         ScheduleModel currentScheduleModel = _apiResponse.data!;
         if (currentScheduleModel.isNotPhonySchedule()) {
           List<CourseUiModel?> courseUiModels = await currentScheduleModel.findNewCourses(id);
@@ -173,6 +174,7 @@ class MainAppCubit extends Cubit<MainAppState> {
                 _databaseService.addCourseInstance(courseUiModel);
               }
             }
+            scheduleFavorited = true;
           }
           await _databaseService.update(currentScheduleModel);
           emit(MainAppState(
@@ -180,10 +182,10 @@ class MainAppCubit extends Cubit<MainAppState> {
               currentScheduleId: currentScheduleModel.id,
               listOfDays: currentScheduleModel.days,
               listOfWeeks: currentScheduleModel.splitToWeek(),
-              toggledFavorite: false,
+              toggledFavorite: scheduleFavorited,
               scheduleModelAndCourses: ScheduleModelAndCourses(
                   scheduleModel: currentScheduleModel,
-                  courses: forceRefetch ? await _databaseService.getCachedCoursesFromId(id) : courseUiModels),
+                  courses: scheduleFavorited ? await _databaseService.getCachedCoursesFromId(id) : courseUiModels),
               listViewToTopButtonVisible: false,
               message: null));
         } else {
