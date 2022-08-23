@@ -51,23 +51,11 @@ class DrawerCubit extends Cubit<DrawerState> {
     emit(state.copyWith(viewType: ScheduleViewTypes.viewTypesMap[viewType]));
   }
 
-  void setNotificationTime(int time) async {
-    final int oldTimeOffset = getIt<SharedPreferences>().getInt(PreferenceTypes.notificationTime)!;
-    getIt<SharedPreferences>().setInt(PreferenceTypes.notificationTime, time);
+  void setNotificationTime(int time, ScheduleModel schedule) async {
+    SharedPreferences sharedPreferences = getIt<SharedPreferences>();
+    sharedPreferences.setInt(PreferenceTypes.notificationTime, time);
+    getIt<NotificationRepository>().assignWithNewDuration(Duration(minutes: time), schedule);
 
-    List<NotificationModel> currentNotifications = await getIt<AwesomeNotifications>().listScheduledNotifications();
-    for (NotificationModel notification in currentNotifications) {
-      final Map<String, dynamic> scheduleMap = notification.schedule!.toMap();
-      NotificationServiceBuilder().buildNotification(
-          id: notification.content!.id!,
-          channelKey: notification.content!.channelKey!,
-          groupkey: notification.content!.groupKey!,
-          title: notification.content!.title!,
-          body: notification.content!.body!,
-          date: DateTime(scheduleMap["year"], scheduleMap["month"], scheduleMap["day"], scheduleMap["hour"],
-                  scheduleMap["minute"])
-              .add(Duration(minutes: oldTimeOffset)));
-    }
     emit(state.copyWith(notificationTime: getIt<SharedPreferences>().getInt(PreferenceTypes.notificationTime)));
   }
 

@@ -40,9 +40,9 @@ class CacheAndInteractionRepository implements ICacheAndInteractionService {
     if (favoritesContainsThisScheduleId) {
       final ScheduleModel userCachedSchedule = await _getCachedSchedule(scheduleId);
 
-      if (DateTime.now().subtract(const Duration(minutes: 30)).isAfter(userCachedSchedule.cachedAt.toLocal())) {
-        return await getSchedule(scheduleId);
-      }
+      // if (DateTime.now().subtract(const Duration(minutes: 30)).isAfter(userCachedSchedule.cachedAt.toLocal())) {
+      //   return await getSchedule(scheduleId);
+      // }
 
       return ApiResponse.cached(userCachedSchedule);
     }

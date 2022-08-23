@@ -14,27 +14,27 @@ class BackgroundTask {
     final databaseService = getIt<DatabaseRepository>();
     final notificationService = getIt<NotificationRepository>();
 
-    final defaultUserScheduleId =
-        preferenceService.getString(PreferenceTypes.schedule);
-    final defaultUserSchool =
-        preferenceService.getString(PreferenceTypes.school);
+    final defaultUserScheduleId = preferenceService.getString(PreferenceTypes.schedule);
+    final defaultUserSchool = preferenceService.getString(PreferenceTypes.school);
 
     if (defaultUserScheduleId == null || defaultUserSchool == null) {
       return;
     }
+    ScheduleModel? storedScheduleModel = await databaseService.getOneSchedule(defaultUserScheduleId);
 
-    ApiResponse apiResponseOfNewScheduleModel = await backendService
-        .getSchedule(defaultUserScheduleId, defaultUserSchool);
-    ScheduleModel? storedScheduleModel =
-        await databaseService.getOneSchedule(defaultUserScheduleId);
+    // Don't update cache if the schedule was cached anytime within the past 30 minutes
+    if (storedScheduleModel!.cachedAt.isAfter(DateTime.now().subtract(const Duration(minutes: 30)))) {
+      return;
+    }
+
+    ApiResponse apiResponseOfNewScheduleModel =
+        await backendService.getSchedule(defaultUserScheduleId, defaultUserSchool);
     switch (apiResponseOfNewScheduleModel.status) {
       case ApiStatus.FETCHED:
         ScheduleModel newScheduleModel = apiResponseOfNewScheduleModel.data!;
-        if ((newScheduleModel != storedScheduleModel) &&
-            storedScheduleModel != null) {
+        if (newScheduleModel != storedScheduleModel && storedScheduleModel != null) {
           databaseService.update(newScheduleModel);
-          notificationService.updateDispatcher(
-              newScheduleModel, storedScheduleModel);
+          notificationService.updateDispatcher(newScheduleModel, storedScheduleModel);
         }
         break;
       default:
