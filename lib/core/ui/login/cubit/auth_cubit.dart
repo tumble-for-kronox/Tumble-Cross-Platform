@@ -27,7 +27,11 @@ class AuthCubit extends Cubit<AuthState> {
             refreshSession: true,
             passwordController: TextEditingController(),
             passwordHidden: true)) {
-    login();
+    login().then((value) {
+      if (state.authStatus == AuthStatus.AUTHENTICATED) {
+        getUserEvents();
+      }
+    });
   }
   final _userRepo = getIt<UserRepository>();
   final _secureStorage = getIt<SecureStorageRepository>();

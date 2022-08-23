@@ -116,16 +116,16 @@ class TumbleAppDrawer extends StatelessWidget {
 
                   /// Schedule
                   TumbleSettingsSection(tiles: [
-                    TumbleAppDrawerTile(
-                        drawerTileTitle: "Set default view type",
-                        subtitle: "Current view: ${state.viewType}",
-                        prefixIcon: CupertinoIcons.list_dash,
-                        eventType: EventType.SET_DEFAULT_VIEW,
-                        drawerEvent: (eventType) => handleDrawerEvent(
-                              eventType,
-                              context,
-                              navigator,
-                            )),
+                    // TumbleAppDrawerTile(
+                    //     drawerTileTitle: "Set default view type",
+                    //     subtitle: "Current view: ${state.viewType}",
+                    //     prefixIcon: CupertinoIcons.list_dash,
+                    //     eventType: EventType.SET_DEFAULT_VIEW,
+                    //     drawerEvent: (eventType) => handleDrawerEvent(
+                    //           eventType,
+                    //           context,
+                    //           navigator,
+                    //         )),
                     TumbleAppDrawerTile(
                         drawerTileTitle: "Set default schedule",
                         subtitle: context.watch<DrawerCubit>().state.schedule != null

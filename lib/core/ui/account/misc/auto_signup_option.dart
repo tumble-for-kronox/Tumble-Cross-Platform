@@ -24,9 +24,12 @@ class AutoSignupOption extends StatelessWidget {
               shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
               value: BlocProvider.of<AuthCubit>(context).state.autoSignup,
               onChanged: (value) {
-                showCupertinoDialog(
-                    context: context,
-                    builder: (context) => CustomCupertinoAlerts.automaticExamSignupWarning(context, value));
+                value
+                    ? showCupertinoDialog(
+                        context: context,
+                        builder: (context) => CustomCupertinoAlerts.automaticExamSignupWarning(context, value))
+                    : BlocProvider.of<AuthCubit>(context).autoSignupToggle(value);
+                ;
               }),
         );
       },

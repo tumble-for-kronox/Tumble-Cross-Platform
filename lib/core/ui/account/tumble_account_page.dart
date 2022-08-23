@@ -21,16 +21,7 @@ class _TumbleAccountPageState extends State<TumbleAccountPage> {
       builder: (context, state) {
         switch (state.authStatus) {
           case AuthStatus.AUTHENTICATED:
-            return BlocConsumer<AuthCubit, AuthState>(
-              listenWhen: (_, current) {
-                return current.userEventListStatus == UserEventListStatus.INITIAL;
-              },
-              listener: (context, state) {
-                BlocProvider.of<AuthCubit>(context).getUserEvents();
-              },
-              bloc: BlocProvider.of<AuthCubit>(context)..getUserEvents(),
-              builder: (context, state) => const AuthenticatedPage(),
-            );
+            return const AuthenticatedPage();
           case AuthStatus.UNAUTHENTICATED:
             return const UnauthenticatedPage();
           default:
