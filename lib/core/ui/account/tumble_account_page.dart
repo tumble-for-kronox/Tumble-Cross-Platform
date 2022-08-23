@@ -23,7 +23,7 @@ class _TumbleAccountPageState extends State<TumbleAccountPage> {
           case AuthStatus.AUTHENTICATED:
             return BlocConsumer<AuthCubit, AuthState>(
               listenWhen: (_, current) {
-                return current.userEventListStatus == UserEventListStatus.LOADING;
+                return current.userEventListStatus == UserEventListStatus.INITIAL;
               },
               listener: (context, state) {
                 BlocProvider.of<AuthCubit>(context).getUserEvents();

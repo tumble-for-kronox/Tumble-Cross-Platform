@@ -16,42 +16,58 @@ class UserAccountExternalLink extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialButton(
-      minWidth: double.maxFinite,
-      height: 55,
-      color: color.withOpacity(0.8),
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(
-          Radius.circular(10),
-        ),
-      ),
-      highlightElevation: 2,
+    return Padding(
       padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-      onPressed: () async {
-        if (await canLaunchUrlString(link)) {
-          await launchUrlString(link);
-        } else {
-          showScaffoldMessage(context, ScaffoldMessageType.openExternalUrlFailed('Kronox'));
-        }
-      },
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            title,
-            style: const TextStyle(
-              overflow: TextOverflow.ellipsis,
-              color: Colors.white,
-              fontWeight: FontWeight.w600,
+      child: MaterialButton(
+        minWidth: double.maxFinite,
+        height: 55,
+        color: Theme.of(context).colorScheme.surface,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+        ),
+        highlightElevation: 2,
+        padding: const EdgeInsets.only(right: 10),
+        onPressed: () async {
+          if (await canLaunchUrlString(link)) {
+            await launchUrlString(link);
+          } else {
+            showScaffoldMessage(context, ScaffoldMessageType.openExternalUrlFailed('Kronox'));
+          }
+        },
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+              width: 10,
+              height: 55,
+              decoration: BoxDecoration(
+                color: color.withOpacity(0.8),
+                borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), bottomLeft: Radius.circular(10)),
+              ),
             ),
-            maxLines: 1,
-          ),
-          const Icon(
-            CupertinoIcons.arrow_right_circle,
-            color: Colors.white,
-          ),
-        ],
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(left: 10),
+                child: Text(
+                  title,
+                  textAlign: TextAlign.start,
+                  style: TextStyle(
+                    overflow: TextOverflow.ellipsis,
+                    color: Theme.of(context).colorScheme.onSurface,
+                    fontSize: Theme.of(context).textTheme.titleMedium!.fontSize,
+                    fontWeight: Theme.of(context).textTheme.titleMedium!.fontWeight,
+                  ),
+                  maxLines: 1,
+                ),
+              ),
+            ),
+            Icon(
+              CupertinoIcons.arrow_right_circle,
+              color: Theme.of(context).colorScheme.onSurface,
+            ),
+          ],
+        ),
       ),
     );
   }

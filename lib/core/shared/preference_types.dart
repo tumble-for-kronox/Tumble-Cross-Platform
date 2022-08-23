@@ -5,4 +5,5 @@ class PreferenceTypes {
   static const theme = 'theme';
   static const notificationTime = 'notificationTime';
   static const favorites = 'favorites';
+  static const autoSignup = 'autoSignup';
 }

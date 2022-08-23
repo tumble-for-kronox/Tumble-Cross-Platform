@@ -5,10 +5,11 @@ import 'package:tumble/core/api/apiservices/api_response.dart';
 abstract class IUserService {
   Future<ApiResponse> getUserEvents(String sessionToken);
 
-  Future<ApiResponse> postUserLogin(
-      String username, String password, String school);
+  Future<ApiResponse> postUserLogin(String username, String password, String school);
 
   Future<ApiResponse> getRefreshSession(String refreshToken);
+
+  Future<ApiResponse> putRegisterAllAvailableUserEvents(String sessionToken);
 
   Future<dynamic> putRegisterUserEvent(String eventId, String sessionToken);
 

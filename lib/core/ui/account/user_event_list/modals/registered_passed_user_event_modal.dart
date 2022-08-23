@@ -35,7 +35,7 @@ class RegisteredPassedUserEventModal extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    padding: const EdgeInsets.only(right: 0, left: 0, top: 5, bottom: 10),
+                    padding: const EdgeInsets.only(right: 0, left: 0, top: 55, bottom: 10),
                     child: Text(
                       userEvent.title.length < 40
                           ? userEvent.title.capitalize()
@@ -110,7 +110,29 @@ class RegisteredPassedUserEventModal extends StatelessWidget {
                   child: const UserEventRegisterButton(linkToKronox: true),
                 )
               : Container(),
-          ScheduleCardRibbon(color: Theme.of(context).colorScheme.primary),
+          Align(
+            alignment: Alignment.topCenter,
+            child: Container(
+              alignment: Alignment.center,
+              width: double.maxFinite,
+              height: 50,
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.primary,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(20),
+                  topRight: Radius.circular(20),
+                ),
+              ),
+              child: const Text(
+                "DETAILS",
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.white,
+                  letterSpacing: 1.5,
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );

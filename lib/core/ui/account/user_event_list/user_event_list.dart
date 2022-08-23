@@ -34,6 +34,8 @@ class _UserEventListState extends State<UserEventList> {
                       "We couldn't get your exams, try again in a bit.",
                       style: TextStyle(color: Theme.of(context).colorScheme.onBackground),
                     );
+                  case UserEventListStatus.INITIAL:
+                    return Container();
                 }
               },
             ),

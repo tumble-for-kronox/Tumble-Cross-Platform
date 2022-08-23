@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tumble/core/api/apiservices/api_response.dart';
+import 'package:tumble/core/api/repository/backend_repository.dart';
 import 'package:tumble/core/api/repository/user_repository.dart';
 import 'package:tumble/core/database/repository/secure_storage_repository.dart';
 import 'package:tumble/core/models/api_models/kronox_user_model.dart';
@@ -12,14 +13,16 @@ import 'package:tumble/core/models/api_models/user_event_collection_model.dart';
 import 'package:tumble/core/models/ui_models/school_model.dart';
 import 'package:tumble/core/shared/preference_types.dart';
 import 'package:tumble/core/dependency_injection/get_it_instances.dart';
+import 'package:tumble/core/ui/scaffold_message.dart';
 
 part 'auth_state.dart';
 
 class AuthCubit extends Cubit<AuthState> {
   AuthCubit()
       : super(AuthState(
+            autoSignup: getIt<SharedPreferences>().getBool(PreferenceTypes.autoSignup)!,
             authStatus: AuthStatus.INITIAL,
-            userEventListStatus: UserEventListStatus.LOADING,
+            userEventListStatus: UserEventListStatus.INITIAL,
             usernameController: TextEditingController(),
             refreshSession: true,
             passwordController: TextEditingController(),
@@ -96,6 +99,15 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
+  Future<void> autoSignupToggle(bool value) async {
+    getIt<SharedPreferences>().setBool(PreferenceTypes.autoSignup, value);
+    emit(state.copyWith(autoSignup: value));
+  }
+
+  Future<void> runAutoSignup() async {
+    await _userRepo.putRegisterAllAvailableUserEvents(state.userSession!.sessionToken);
+  }
+
   void submitLogin(BuildContext context, String school) async {
     final username = state.usernameController.text;
     final password = state.passwordController.text;
@@ -157,6 +169,9 @@ class AuthCubit extends Cubit<AuthState> {
       switch (loggedInUser.status) {
         case ApiStatus.FETCHED:
           emit(state.copyWith(authStatus: AuthStatus.AUTHENTICATED, userSession: loggedInUser.data!));
+          if (state.autoSignup) {
+            runAutoSignup();
+          }
           return;
         default:
           emit(state.copyWith(authStatus: AuthStatus.UNAUTHENTICATED));
