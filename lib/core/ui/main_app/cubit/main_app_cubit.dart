@@ -22,6 +22,8 @@ import 'package:tumble/core/dependency_injection/get_it_instances.dart';
 import 'package:tumble/core/api/apiservices/api_response.dart' as api;
 import 'package:tumble/core/ui/data/scaffold_message_types.dart';
 import 'package:tumble/core/ui/scaffold_message.dart';
+
+import '../../../api/repository/notification_repository.dart';
 part 'main_app_state.dart';
 
 class MainAppCubit extends Cubit<MainAppState> {
@@ -42,6 +44,7 @@ class MainAppCubit extends Cubit<MainAppState> {
   final _awesomeNotifications = getIt<AwesomeNotifications>();
   final _databaseService = getIt<DatabaseRepository>();
   final _preferenceService = getIt<SharedPreferences>();
+  final _notificationService = getIt<NotificationRepository>();
   final ScrollController _listViewScrollController = ScrollController();
 
   ScrollController get controller => _listViewScrollController;
@@ -175,8 +178,17 @@ class MainAppCubit extends Cubit<MainAppState> {
               }
             }
             scheduleFavorited = true;
+            // dev.log(currentScheduleModel.toJson().toString());
+            // dev.log("=======================================================================================");
+            // dev.log((await _databaseService.getOneSchedule(id))!.toJson().toString());
           }
-          await _databaseService.update(currentScheduleModel);
+          if (forceRefetch) {
+            ScheduleModel storedScheduleModel = (await _databaseService.getOneSchedule(id))!;
+            if (currentScheduleModel != storedScheduleModel && storedScheduleModel != null) {
+              _databaseService.update(currentScheduleModel);
+              _notificationService.updateDispatcher(currentScheduleModel, storedScheduleModel);
+            }
+          }
           emit(MainAppState(
               status: MainAppStatus.SCHEDULE_SELECTED,
               currentScheduleId: currentScheduleModel.id,

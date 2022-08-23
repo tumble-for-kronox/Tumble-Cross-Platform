@@ -30,8 +30,8 @@ class DatabaseRepository implements IDatabaseScheduleService {
 
   @override
   Future<void> update(dynamic scheduleModel) async {
-    final finder = Finder(filter: Filter.byKey(scheduleModel.id));
-    await _scheduleStore.update(await _db, scheduleModel.toJson(), finder: finder);
+    final finder = Finder(filter: Filter.equals("id", scheduleModel.id));
+    log((await _scheduleStore.update(await _db, scheduleModel.toJson(), finder: finder)).toString());
   }
 
   @override

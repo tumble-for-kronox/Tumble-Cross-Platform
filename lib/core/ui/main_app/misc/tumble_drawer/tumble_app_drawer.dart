@@ -215,7 +215,8 @@ class TumbleAppDrawer extends StatelessWidget {
         showModalBottomSheet(
             context: context,
             builder: (_) => AppNotificationTimePicker(setNotificationTime: (time) {
-                  context.read<DrawerCubit>().setNotificationTime(time);
+                  context.read<DrawerCubit>().setNotificationTime(
+                      time, BlocProvider.of<MainAppCubit>(context).state.scheduleModelAndCourses!.scheduleModel);
                   Navigator.of(context).pop();
                 }));
         break;
