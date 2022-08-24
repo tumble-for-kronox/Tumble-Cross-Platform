@@ -11,8 +11,12 @@ class UserAccountExternalLink extends StatelessWidget {
   final String link;
   final Color color;
 
-  const UserAccountExternalLink({Key? key, required this.title, required this.color, required this.link})
-      : super(key: key);
+  const UserAccountExternalLink({
+    Key? key,
+    required this.title,
+    required this.color,
+    required this.link,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +35,8 @@ class UserAccountExternalLink extends StatelessWidget {
           if (await canLaunchUrlString(link)) {
             await launchUrlString(link);
           } else {
-            showScaffoldMessage(context, ScaffoldMessageType.openExternalUrlFailed('Kronox'));
+            showScaffoldMessage(
+                context, ScaffoldMessageType.openExternalUrlFailed('Kronox'));
           }
         },
         child: Row(
@@ -43,7 +48,9 @@ class UserAccountExternalLink extends StatelessWidget {
               height: 55,
               decoration: BoxDecoration(
                 color: color.withOpacity(0.8),
-                borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), bottomLeft: Radius.circular(10)),
+                borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(10),
+                    bottomLeft: Radius.circular(10)),
               ),
             ),
             Expanded(
@@ -56,7 +63,8 @@ class UserAccountExternalLink extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     color: Theme.of(context).colorScheme.onSurface,
                     fontSize: Theme.of(context).textTheme.titleMedium!.fontSize,
-                    fontWeight: Theme.of(context).textTheme.titleMedium!.fontWeight,
+                    fontWeight:
+                        Theme.of(context).textTheme.titleMedium!.fontWeight,
                   ),
                   maxLines: 1,
                 ),

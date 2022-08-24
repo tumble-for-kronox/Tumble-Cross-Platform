@@ -5,8 +5,12 @@ class LoginLogoutButton extends StatelessWidget {
   final IconData icon;
   final String text;
 
-  const LoginLogoutButton({Key? key, required this.onPressed, required this.icon, required this.text})
-      : super(key: key);
+  const LoginLogoutButton({
+    Key? key,
+    required this.onPressed,
+    required this.icon,
+    required this.text,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
