@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tumble/core/ui/data/scaffold_message_types.dart';
-import 'package:tumble/core/ui/login/cubit/auth_cubit.dart';
+import 'package:tumble/core/ui/data/string_constants.dart';
 import 'package:tumble/core/ui/scaffold_message.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
@@ -23,7 +22,7 @@ class UserEventRegisterButton extends StatelessWidget {
               if (await canLaunchUrlString(urlString)) {
                 await launchUrlString(urlString, mode: LaunchMode.externalApplication);
               } else {
-                showScaffoldMessage(context, ScaffoldMessageType.openExternalUrlFailed('Kronox'));
+                showScaffoldMessage(context, S.scaffoldMessages.openExternalUrlFailed('Kronox'));
               }
             },
             icon: const Icon(CupertinoIcons.person_crop_circle_badge_checkmark),

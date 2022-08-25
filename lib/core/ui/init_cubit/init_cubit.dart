@@ -12,28 +12,25 @@ import 'package:tumble/core/models/ui_models/school_model.dart';
 import 'package:tumble/core/shared/preference_types.dart';
 import 'package:tumble/core/shared/setup.dart';
 import 'package:tumble/core/dependency_injection/get_it_instances.dart';
+import 'package:tumble/core/ui/data/string_constants.dart';
 
 part 'init_state.dart';
 
 class InitCubit extends Cubit<InitState> {
-  InitCubit()
-      : super(const InitState(defaultSchool: null, status: InitStatus.INITIAL));
+  InitCubit() : super(const InitState(defaultSchool: null, status: InitStatus.INITIAL));
 
   final _cacheAndInteractionService = getIt<CacheAndInteractionRepository>();
   final _databaseService = getIt<DatabaseRepository>();
   final _sharedPrefs = getIt<SharedPreferences>();
 
   Future<void> init() async {
-    DatabaseResponse databaseResponse =
-        await _cacheAndInteractionService.initSetup();
+    DatabaseResponse databaseResponse = await _cacheAndInteractionService.initSetup();
     switch (databaseResponse.status) {
       case Status.NO_SCHOOL:
         emit(const InitState(defaultSchool: null, status: InitStatus.INITIAL));
         break;
       case Status.HAS_SCHOOL:
-        emit(InitState(
-            defaultSchool: databaseResponse.data,
-            status: InitStatus.HAS_SCHOOL));
+        emit(InitState(defaultSchool: databaseResponse.data, status: InitStatus.HAS_SCHOOL));
         break;
     }
   }

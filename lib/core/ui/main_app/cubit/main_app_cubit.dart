@@ -20,7 +20,8 @@ import 'package:tumble/core/models/ui_models/week_model.dart';
 import 'package:tumble/core/shared/preference_types.dart';
 import 'package:tumble/core/dependency_injection/get_it_instances.dart';
 import 'package:tumble/core/api/apiservices/api_response.dart' as api;
-import 'package:tumble/core/ui/data/scaffold_message_types.dart';
+import 'package:tumble/core/ui/data/groups/scaffold_message_types.dart';
+import 'package:tumble/core/ui/data/string_constants.dart';
 import 'package:tumble/core/ui/scaffold_message.dart';
 
 import '../../../api/repository/notification_repository.dart';
@@ -63,13 +64,13 @@ class MainAppCubit extends Cubit<MainAppState> {
     /// If the schedule IS saved in preferences
     if (currentFavorites!.contains(state.currentScheduleId)) {
       _toggleRemove(currentFavorites);
-      showScaffoldMessage(context, ScaffoldMessageType.removedBookmark(state.currentScheduleId!));
+      showScaffoldMessage(context, S.scaffoldMessages.removedBookmark(state.currentScheduleId!));
     }
 
     /// If the schedule IS NOT saved in preferences
     else {
       _toggleSave(currentFavorites);
-      showScaffoldMessage(context, ScaffoldMessageType.addedBookmark(state.currentScheduleId!));
+      showScaffoldMessage(context, S.scaffoldMessages.addedBookmark(state.currentScheduleId!));
     }
   }
 
@@ -218,7 +219,7 @@ class MainAppCubit extends Cubit<MainAppState> {
               listViewToTopButtonVisible: false,
               message: null));
         } else {
-          emit(state.copyWith(status: MainAppStatus.EMPTY_SCHEDULE, message: RuntimeErrorType.noBookmarks));
+          emit(state.copyWith(status: MainAppStatus.EMPTY_SCHEDULE, message: RuntimeErrorType.noBookmarks()));
         }
         break;
       case api.ApiStatus.ERROR:
@@ -244,7 +245,7 @@ class MainAppCubit extends Cubit<MainAppState> {
           listViewToTopButtonVisible: false,
           message: null));
     }
-    emit(state.copyWith(message: RuntimeErrorType.scheduleFetchError));
+    emit(state.copyWith(message: RuntimeErrorType.scheduleFetchError()));
   }
 
   setScrollController() {
@@ -286,7 +287,7 @@ class MainAppCubit extends Cubit<MainAppState> {
             body: event.course.englishName,
             date: event.from.subtract(Duration(minutes: _sharedPrefs.getInt(PreferenceTypes.notificationTime)!)));
         dev.log('Created notification for event "${event.title}"');
-        showScaffoldMessage(context, ScaffoldMessageType.createdNotificationForEvent(event.title));
+        showScaffoldMessage(context, S.scaffoldMessages.createdNotificationForEvent(event.title));
         return true;
       }
       dev.log('No new notifications created. Not allowed');
@@ -314,7 +315,7 @@ class MainAppCubit extends Cubit<MainAppState> {
         }
         dev.log('Created ${events.length} new notifications for ${event.course}');
         showScaffoldMessage(
-            context, ScaffoldMessageType.createdNotificationForCourse(event.course.englishName, events.length));
+            context, S.scaffoldMessages.createdNotificationForCourse(event.course.englishName, events.length));
         return true;
       }
       dev.log('No new notifications created. Not allowed');
@@ -345,7 +346,7 @@ class MainAppCubit extends Cubit<MainAppState> {
   void changeCourseColor(BuildContext context, Course course, Color color) {
     _databaseService.updateCourseInstance(
         CourseUiModel(scheduleId: state.currentScheduleId!, courseId: course.id, color: color.value));
-    showScaffoldMessage(context, ScaffoldMessageType.updatedCourseColor(course.englishName));
+    showScaffoldMessage(context, S.scaffoldMessages.updatedCourseColor(course.englishName));
   }
 
   permissionRequest() async {

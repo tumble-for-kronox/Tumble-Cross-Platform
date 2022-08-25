@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tumble/core/ui/data/scaffold_message_types.dart';
+import 'package:tumble/core/ui/data/string_constants.dart';
 import 'package:tumble/core/ui/main_app/misc/tumble_drawer/drawer_generic/data/default_views_map.dart';
 import 'package:tumble/core/ui/scaffold_message.dart';
 
@@ -37,7 +37,7 @@ class AppThemePicker extends StatelessWidget {
                             ),
                             onTap: () {
                               showScaffoldMessage(
-                                  context, ScaffoldMessageType.changeTheme(key.split(' ').first.toLowerCase()));
+                                  context, S.scaffoldMessages.changeTheme(key.split(' ').first.toLowerCase()));
                               setTheme(key.split(' ').first.toLowerCase());
                             }))
                         .toList()))),

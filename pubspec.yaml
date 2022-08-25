@@ -11,8 +11,11 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
   http: ^0.13.1
   uuid: ^3.0.6
+  syncfusion_localizations: ^20.2.45
   equatable: ^2.0.3
   freezed: any
   cupertino_icons: ^1.0.5
@@ -50,7 +53,7 @@ flutter_native_splash:
   color: "f7f7f7"
 
 flutter:
-
+  generate: true
   assets:
     - assets/animations/lottie_success_burst.json
     - assets/images/cardBanner.png

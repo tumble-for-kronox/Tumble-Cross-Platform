@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:tumble/core/ui/account/user_event_list/user_event_section.dart';
+import 'package:tumble/core/ui/data/string_constants.dart';
 import 'package:tumble/core/ui/login/cubit/auth_cubit.dart';
 
 class UserEventList extends StatefulWidget {
@@ -66,21 +67,21 @@ Widget _loaded(BuildContext context, AuthState state) {
             state.userEvents!.unregisteredEvents.isEmpty
                 ? Container()
                 : UserEventSection(
-                    sectionTitle: "Need to sign up?",
+                    sectionTitle: S.userEvents.needToSignup(),
                     availableEvents: state.userEvents!.unregisteredEvents,
                     upcomingEvents: null,
                   ),
             state.userEvents!.registeredEvents.isEmpty
                 ? Container()
                 : UserEventSection(
-                    sectionTitle: "Already signed up",
+                    sectionTitle: S.userEvents.alreadySignedUp(),
                     availableEvents: state.userEvents!.registeredEvents,
                     upcomingEvents: null,
                   ),
             state.userEvents!.upcomingEvents.isEmpty
                 ? Container()
                 : UserEventSection(
-                    sectionTitle: "Upcoming",
+                    sectionTitle: S.userEvents.upcoming(),
                     availableEvents: null,
                     upcomingEvents: state.userEvents!.upcomingEvents,
                   )

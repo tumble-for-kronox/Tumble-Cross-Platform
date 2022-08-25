@@ -2,7 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:tumble/core/ui/data/scaffold_message_types.dart';
+import 'package:tumble/core/ui/data/groups/scaffold_message_types.dart';
+import 'package:tumble/core/ui/data/string_constants.dart';
 import 'package:tumble/core/ui/scaffold_message.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
@@ -35,8 +36,7 @@ class UserAccountExternalLink extends StatelessWidget {
           if (await canLaunchUrlString(link)) {
             await launchUrlString(link);
           } else {
-            showScaffoldMessage(
-                context, ScaffoldMessageType.openExternalUrlFailed('Kronox'));
+            showScaffoldMessage(context, S.scaffoldMessages.openExternalUrlFailed('Kronox'));
           }
         },
         child: Row(
@@ -48,9 +48,7 @@ class UserAccountExternalLink extends StatelessWidget {
               height: 55,
               decoration: BoxDecoration(
                 color: color.withOpacity(0.8),
-                borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(10),
-                    bottomLeft: Radius.circular(10)),
+                borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), bottomLeft: Radius.circular(10)),
               ),
             ),
             Expanded(
@@ -63,8 +61,7 @@ class UserAccountExternalLink extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     color: Theme.of(context).colorScheme.onSurface,
                     fontSize: Theme.of(context).textTheme.titleMedium!.fontSize,
-                    fontWeight:
-                        Theme.of(context).textTheme.titleMedium!.fontWeight,
+                    fontWeight: Theme.of(context).textTheme.titleMedium!.fontWeight,
                   ),
                   maxLines: 1,
                 ),

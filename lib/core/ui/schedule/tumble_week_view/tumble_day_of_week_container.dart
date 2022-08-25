@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:tumble/core/models/api_models/schedule_model.dart';
-import 'package:tumble/core/ui/data/scaffold_message_types.dart';
+import 'package:tumble/core/ui/data/groups/scaffold_message_types.dart';
 import 'package:tumble/core/ui/main_app/cubit/main_app_cubit.dart';
 import 'package:tumble/core/ui/scaffold_message.dart';
 import 'package:tumble/core/ui/schedule/tumble_list_view/tumble_list_view_day_container.dart';

@@ -7,6 +7,7 @@ import 'package:tumble/core/api/apiservices/runtime_error_type.dart';
 import 'package:tumble/core/navigation/app_navigator.dart';
 import 'package:tumble/core/navigation/navigation_route_labels.dart';
 import 'package:tumble/core/theme/data/colors.dart';
+import 'package:tumble/core/ui/data/string_constants.dart';
 import 'package:tumble/core/ui/init_cubit/init_cubit.dart';
 import 'package:tumble/core/ui/login/cubit/auth_cubit.dart';
 import 'package:tumble/core/ui/scaffold_message.dart';
@@ -35,7 +36,7 @@ class _LoginPageRootState extends State<LoginPageRoot> {
             break;
           case AuthStatus.AUTHENTICATED:
             BlocProvider.of<AuthCubit>(context).setUserSession(state.userSession!);
-            showScaffoldMessage(context, RuntimeErrorType.loginSuccess);
+            showScaffoldMessage(context, RuntimeErrorType.loginSuccess());
             // BlocProvider.of<InitCubit>(context).changeSchool(widget.schoolName!);
             navigator.pushAndRemoveAll(NavigationRouteLabels.mainAppPage);
             break;
@@ -74,7 +75,9 @@ Widget _initialState(AuthState state, BuildContext context, String school) {
                     width: 15,
                   ),
                   Text(
-                    state.authStatus == AuthStatus.AUTHENTICATED ? "Signed in to Kronox!" : "Sign in to Kronox",
+                    state.authStatus == AuthStatus.AUTHENTICATED
+                        ? S.loginPage.loginSuccessTitle()
+                        : S.loginPage.title(),
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.onPrimary,
                       fontWeight: FontWeight.w500,
@@ -88,8 +91,8 @@ Widget _initialState(AuthState state, BuildContext context, String school) {
               ),
               Text(
                 state.authStatus == AuthStatus.AUTHENTICATED
-                    ? "You've sucessfully signed into $school via Kronox"
-                    : "Sign in to Kronox with your student credentials\nfor $school for\nthe best user experience",
+                    ? S.loginPage.loginSuccessDescription(school)
+                    : S.loginPage.description(school),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.onPrimary,
@@ -222,7 +225,7 @@ Widget _formSubmitButton(AuthState state, BuildContext context, String school) {
           ),
           Padding(
               padding: const EdgeInsets.only(right: 65),
-              child: Text("Sign in",
+              child: Text(S.loginPage.signInButton(),
                   style: TextStyle(
                     fontSize: 18,
                     color: Theme.of(context).colorScheme.onPrimary,
@@ -246,7 +249,7 @@ Widget _formUsernameField(AuthState state, BuildContext context, String school) 
             CupertinoIcons.person,
             color: Theme.of(context).colorScheme.onBackground,
           ),
-          labelText: 'Username/Email',
+          labelText: S.loginPage.usernamePlaceholder(),
           enabledBorder: OutlineInputBorder(
             borderSide: BorderSide(width: 1, color: CustomColors.orangePrimary.withOpacity(.5)),
             borderRadius: BorderRadius.circular(20),
@@ -267,7 +270,7 @@ Widget _formUsernameField(AuthState state, BuildContext context, String school) 
       onFieldSubmitted: (String s) => BlocProvider.of<AuthCubit>(context).submitLogin(context, school),
       autovalidateMode: AutovalidateMode.onUserInteraction,
       validator: (String? text) {
-        return text == "" ? "Username/Email cannot be empty." : null;
+        return text == "" ? S.loginPage.emailValidationError() : null;
       },
     ),
   );
@@ -287,7 +290,7 @@ Widget _formPasswordField(AuthState state, BuildContext context, String school) 
               onPressed: () => BlocProvider.of<AuthCubit>(context).togglePasswordVisibility(),
               icon: !state.passwordHidden ? const Icon(CupertinoIcons.eye) : const Icon(CupertinoIcons.eye_slash)),
           icon: Icon(CupertinoIcons.lock, color: Theme.of(context).colorScheme.onBackground),
-          labelText: 'Password',
+          labelText: S.loginPage.passwordPlaceholder(),
           enabledBorder: OutlineInputBorder(
             borderSide: BorderSide(width: 1, color: CustomColors.orangePrimary.withOpacity(.5)),
             borderRadius: BorderRadius.circular(20),
@@ -310,7 +313,7 @@ Widget _formPasswordField(AuthState state, BuildContext context, String school) 
       ),
       autovalidateMode: AutovalidateMode.onUserInteraction,
       validator: (String? text) {
-        return text == "" ? "Password cannot be empty." : null;
+        return text == "" ? S.loginPage.passwordValidationError() : null;
       },
     ),
   );

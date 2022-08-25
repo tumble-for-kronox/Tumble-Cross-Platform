@@ -7,7 +7,8 @@ import 'package:tumble/core/api/repository/notification_repository.dart';
 import 'package:tumble/core/dependency_injection/get_it_instances.dart';
 import 'package:tumble/core/navigation/app_navigator.dart';
 import 'package:tumble/core/navigation/navigation_route_labels.dart';
-import 'package:tumble/core/ui/data/scaffold_message_types.dart';
+import 'package:tumble/core/ui/data/groups/scaffold_message_types.dart';
+import 'package:tumble/core/ui/data/string_constants.dart';
 import 'package:tumble/core/ui/main_app/cubit/main_app_cubit.dart';
 import 'package:tumble/core/ui/main_app/data/event_types.dart';
 import 'package:tumble/core/ui/main_app/data/schools.dart';
@@ -46,25 +47,25 @@ class TumbleAppDrawer extends StatelessWidget {
               child: ListView(
                 padding: const EdgeInsets.only(bottom: 10),
                 children: [
-                  const SizedBox(
+                  SizedBox(
                     height: 107.0,
                     child: DrawerHeader(
-                      margin: EdgeInsets.all(0.0),
-                      padding: EdgeInsets.all(0.0),
+                      margin: const EdgeInsets.all(0.0),
+                      padding: const EdgeInsets.all(0.0),
                       child: Padding(
-                          padding: EdgeInsets.symmetric(vertical: 13, horizontal: 20),
+                          padding: const EdgeInsets.symmetric(vertical: 13, horizontal: 20),
                           child: Align(
                             alignment: Alignment.centerRight,
-                            child: Text('SETTINGS',
-                                style: TextStyle(letterSpacing: 2, fontSize: 26, fontWeight: FontWeight.w500)),
+                            child: Text(S.settingsPage.title(),
+                                style: const TextStyle(letterSpacing: 2, fontSize: 26, fontWeight: FontWeight.w500)),
                           )),
                     ),
                   ),
                   const SizedBox(height: 25.0),
                   TumbleSettingsSection(tiles: [
                     TumbleAppDrawerTile(
-                      drawerTileTitle: "Contact",
-                      subtitle: "Get support",
+                      drawerTileTitle: S.settingsPage.contactTitle(),
+                      subtitle: S.settingsPage.contactSubtitle(),
                       prefixIcon: CupertinoIcons.bubble_left_bubble_right,
                       eventType: EventType.CONTACT,
                       drawerEvent: (eventType) => handleDrawerEvent(
@@ -73,7 +74,7 @@ class TumbleAppDrawer extends StatelessWidget {
                         navigator,
                       ),
                     ),
-                  ], title: "Support"),
+                  ], title: S.settingsPage.supportTitle()),
                   Divider(
                     height: 50.0,
                     color: Theme.of(context).colorScheme.onBackground,
@@ -84,9 +85,12 @@ class TumbleAppDrawer extends StatelessWidget {
                   /// Common
                   TumbleSettingsSection(tiles: [
                     TumbleAppDrawerTile(
-                      drawerTileTitle: "Change schools",
-                      subtitle:
-                          "Current school: ${(Schools.schools.firstWhere((school) => school.schoolName == context.read<DrawerCubit>().state.school)).schoolId.name.toUpperCase()}",
+                      drawerTileTitle: S.settingsPage.changeSchoolTitle(),
+                      subtitle: S.settingsPage.changeSchoolSubtitle((Schools.schools
+                              .firstWhere((school) => school.schoolName == context.read<DrawerCubit>().state.school))
+                          .schoolId
+                          .name
+                          .toUpperCase()),
                       prefixIcon: CupertinoIcons.arrow_right_arrow_left,
                       eventType: EventType.CHANGE_SCHOOL,
                       drawerEvent: (eventType) => handleDrawerEvent(
@@ -96,8 +100,8 @@ class TumbleAppDrawer extends StatelessWidget {
                       ),
                     ),
                     TumbleAppDrawerTile(
-                      drawerTileTitle: "Change theme",
-                      subtitle: "Current theme:  ${context.read<DrawerCubit>().state.theme}",
+                      drawerTileTitle: S.settingsPage.changeThemeTitle(),
+                      subtitle: S.settingsPage.changeThemeSubtitle(context.read<DrawerCubit>().state.theme!),
                       prefixIcon: CupertinoIcons.device_phone_portrait,
                       eventType: EventType.CHANGE_THEME,
                       drawerEvent: (eventType) => handleDrawerEvent(
@@ -106,7 +110,7 @@ class TumbleAppDrawer extends StatelessWidget {
                         navigator,
                       ),
                     ),
-                  ], title: "Common"),
+                  ], title: S.settingsPage.commonTitle()),
                   Divider(
                     height: 50.0,
                     color: Theme.of(context).colorScheme.onBackground,
@@ -127,14 +131,14 @@ class TumbleAppDrawer extends StatelessWidget {
                     //           navigator,
                     //         )),
                     TumbleAppDrawerTile(
-                        drawerTileTitle: "Set default schedule",
+                        drawerTileTitle: S.settingsPage.defaultScheduleTitle(),
                         subtitle: context.watch<DrawerCubit>().state.schedule != null
-                            ? "Default schedule: \n${state.schedule}"
-                            : "No default schedule set",
+                            ? S.settingsPage.defaultScheduleSubtitle(state.schedule!)
+                            : S.settingsPage.defaultScheduleEmptySubtitle(),
                         prefixIcon: CupertinoIcons.calendar,
                         eventType: EventType.SET_DEFAULT_SCHEDULE,
                         drawerEvent: (eventType) => handleDrawerEvent(eventType, context, navigator)),
-                  ], title: "Schedule"),
+                  ], title: S.settingsPage.scheduleTitle()),
                   Divider(
                     height: 50.0,
                     color: Theme.of(context).colorScheme.onBackground,
@@ -144,19 +148,19 @@ class TumbleAppDrawer extends StatelessWidget {
                   TumbleSettingsSection(tiles: [
                     TumbleAppDrawerTile(
                         prefixIcon: CupertinoIcons.bell_slash,
-                        drawerTileTitle: "Clear all",
-                        subtitle: "Removes all notifications",
+                        drawerTileTitle: S.settingsPage.clearAllTitle(),
+                        subtitle: S.settingsPage.clearAllSubtitle(),
                         eventType: EventType.CANCEL_ALL_NOTIFICATIONS,
                         drawerEvent: (eventType) => handleDrawerEvent(eventType, context, navigator)),
                     TumbleAppDrawerTile(
                       prefixIcon: CupertinoIcons.clock,
-                      drawerTileTitle: "Notification offset",
-                      subtitle:
-                          "Current offset: ${getIt<SharedPreferences>().getInt(PreferenceTypes.notificationTime)} minutes",
+                      drawerTileTitle: S.settingsPage.offsetTitle(),
+                      subtitle: S.settingsPage.offsetSubtitle(
+                          getIt<SharedPreferences>().getInt(PreferenceTypes.notificationTime).toString()),
                       eventType: EventType.EDIT_NOTIFICATION_TIME,
                       drawerEvent: (eventType) => handleDrawerEvent(eventType, context, navigator),
                     )
-                  ], title: "Notifications")
+                  ], title: S.settingsPage.notificationTitle())
                 ],
               ),
             ),
@@ -209,7 +213,7 @@ class TumbleAppDrawer extends StatelessWidget {
         break;
       case EventType.CANCEL_ALL_NOTIFICATIONS:
         getIt<NotificationRepository>().clearAllNotifications();
-        showScaffoldMessage(context, ScaffoldMessageType.cancelledAllSetNotifications());
+        showScaffoldMessage(context, S.scaffoldMessages.cancelledAllSetNotifications());
         break;
       case EventType.EDIT_NOTIFICATION_TIME:
         showModalBottomSheet(

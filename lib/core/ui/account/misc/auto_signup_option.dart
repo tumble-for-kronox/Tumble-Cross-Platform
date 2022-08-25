@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tumble/core/ui/data/string_constants.dart';
 import 'package:tumble/core/ui/login/cubit/auth_cubit.dart';
 import 'package:tumble/core/ui/schedule/tumble_list_view/data/cupertino_alerts.dart';
 
@@ -18,7 +19,7 @@ class AutoSignupOption extends StatelessWidget {
           height: 55,
           child: SwitchListTile(
               title: Text(
-                "Automatic exam signup",
+                S.authorizedPage.automaticExamSignup(),
                 style: TextStyle(color: Theme.of(context).colorScheme.onBackground),
               ),
               shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),

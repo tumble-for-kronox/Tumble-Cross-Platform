@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tumble/core/models/ui_models/week_model.dart';
+import 'package:tumble/core/ui/data/string_constants.dart';
 
 class WeekNumber extends StatelessWidget {
   final Week week;
@@ -11,11 +12,9 @@ class WeekNumber extends StatelessWidget {
         right: 20,
         top: 20,
         child: Text(
-          "w. ${week.weekNumber}",
-          style: TextStyle(
-              color: Theme.of(context).colorScheme.onBackground,
-              fontSize: 20,
-              fontWeight: FontWeight.w300),
+          S.weekViewPage.weekNumber(week.weekNumber.toString()),
+          style:
+              TextStyle(color: Theme.of(context).colorScheme.onBackground, fontSize: 20, fontWeight: FontWeight.w300),
         ));
   }
 }

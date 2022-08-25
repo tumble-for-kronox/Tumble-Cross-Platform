@@ -63,16 +63,13 @@ class ScheduleCard extends StatelessWidget {
                                             ),
                                           ),
                                           const SizedBox(width: 6),
-                                          Container(
-                                            padding: const EdgeInsets.only(top: 1),
-                                            child: Text(
-                                              '${DateFormat('EEEE').format(event.from)}, ${DateFormat.Hm().format(event.from)} - ${DateFormat.Hm().format(event.to)}',
-                                              style: TextStyle(
-                                                  fontSize: 13,
-                                                  fontWeight: FontWeight.w400,
-                                                  color: Theme.of(context).colorScheme.onSecondary,
-                                                  letterSpacing: .5),
-                                            ),
+                                          Text(
+                                            '${DateFormat.Hm().format(event.from)} - ${DateFormat.Hm().format(event.to)}',
+                                            style: TextStyle(
+                                                fontSize: 13,
+                                                fontWeight: FontWeight.w400,
+                                                color: Theme.of(context).colorScheme.onSecondary,
+                                                letterSpacing: .5),
                                           ),
                                         ],
                                       ),

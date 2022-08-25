@@ -73,7 +73,7 @@ class CacheAndInteractionRepository implements ICacheAndInteractionService {
       ScheduleModel userCachedSchedule = await _getCachedSchedule(null);
       return ApiResponse.cached(userCachedSchedule);
     }
-    return ApiResponse.error(RuntimeErrorType.noCachedSchedule);
+    return ApiResponse.error(RuntimeErrorType.noCachedSchedule());
   }
 
   Future<ScheduleModel> _getCachedSchedule(String? scheduleId) async {

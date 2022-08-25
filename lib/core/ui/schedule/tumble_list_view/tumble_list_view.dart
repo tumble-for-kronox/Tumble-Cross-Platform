@@ -25,7 +25,7 @@ class TumbleListView extends StatelessWidget {
             return NoScheduleAvailable(
               cupertinoAlertDialog: CustomCupertinoAlerts.noBookMarkedSchedules(
                   context, () => context.read<MainAppNavigationCubit>().getNavBarItem(NavbarItem.SEARCH), navigator),
-              errorType: RuntimeErrorType.noCachedSchedule,
+              errorType: RuntimeErrorType.noCachedSchedule(),
             );
           case MainAppStatus.LOADING:
             return SpinKitThreeBounce(color: Theme.of(context).colorScheme.primary);
@@ -68,7 +68,7 @@ class TumbleListView extends StatelessWidget {
 
           case MainAppStatus.EMPTY_SCHEDULE:
             return NoScheduleAvailable(
-              errorType: RuntimeErrorType.emptyScheduleError,
+              errorType: RuntimeErrorType.emptyScheduleError(),
               cupertinoAlertDialog: CustomCupertinoAlerts.scheduleContainsNoViews(
                   context, () => context.read<MainAppNavigationCubit>().getNavBarItem(NavbarItem.SEARCH), navigator),
             );

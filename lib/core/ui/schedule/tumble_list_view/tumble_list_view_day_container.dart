@@ -4,7 +4,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:tumble/core/models/api_models/schedule_model.dart';
 import 'package:tumble/core/models/ui_models/course_ui_model.dart';
 import 'package:tumble/core/theme/data/colors.dart';
-import 'package:tumble/core/ui/data/scaffold_message_types.dart';
+import 'package:tumble/core/ui/data/groups/scaffold_message_types.dart';
 import 'package:tumble/core/ui/main_app/cubit/main_app_cubit.dart';
 import 'package:tumble/core/ui/main_app/main_app.dart';
 import 'package:tumble/core/ui/permission_handler.dart';

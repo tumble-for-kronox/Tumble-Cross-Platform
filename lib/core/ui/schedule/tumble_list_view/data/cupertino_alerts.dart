@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tumble/core/navigation/app_navigator.dart';
+import 'package:tumble/core/ui/data/string_constants.dart';
 
 import '../../../login/cubit/auth_cubit.dart';
 
@@ -12,7 +13,7 @@ class CustomCupertinoAlerts {
       BuildContext context, NavigateToSearchFromView navigateToSearchFromView, AppNavigator navigator) {
     return CupertinoAlertDialog(
       content: Column(children: [
-        Text("Schedules can be bookmarked with this icon",
+        Text(S.popUps.scheduleHelpFirstLine(),
             style: TextStyle(
                 color: Theme.of(context).colorScheme.onBackground, fontSize: 15, fontWeight: FontWeight.w600)),
         const SizedBox(
@@ -25,13 +26,13 @@ class CustomCupertinoAlerts {
         const SizedBox(
           height: 15,
         ),
-        Text("It will appear in the top left corner once you've searched for and opened your schedule",
+        Text(S.popUps.scheduleHelpSecondLine(),
             style:
                 TextStyle(color: Theme.of(context).colorScheme.onBackground, fontSize: 15, fontWeight: FontWeight.w600))
       ]),
       actions: [
         CupertinoDialogAction(
-          child: Text("I understand",
+          child: Text(S.general.understood(),
               style:
                   TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 13, fontWeight: FontWeight.w600)),
           onPressed: () {
@@ -39,7 +40,7 @@ class CustomCupertinoAlerts {
           },
         ),
         CupertinoDialogAction(
-          child: Text("Take me to search",
+          child: Text(S.general.toSearch(),
               style:
                   TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 13, fontWeight: FontWeight.w600)),
           onPressed: () {
@@ -55,20 +56,19 @@ class CustomCupertinoAlerts {
       BuildContext context, NavigateToSearchFromView navigateToSearchFromView, AppNavigator navigator) {
     return CupertinoAlertDialog(
       content: Column(children: [
-        Text("This schedule appears to be empty but still in the Kronox database",
+        Text(S.popUps.scheduleIsEmptyTitle(),
             style: TextStyle(
                 color: Theme.of(context).colorScheme.onBackground, fontSize: 15, fontWeight: FontWeight.w600)),
         const SizedBox(
           height: 20,
         ),
-        Text(
-            "Kronox stores schedules even if they do not contain any data, so our searches might ocassionally find emtpy schedules",
+        Text(S.popUps.scheduleIsEmptyBody(),
             style:
                 TextStyle(color: Theme.of(context).colorScheme.onBackground, fontSize: 14, fontWeight: FontWeight.w600))
       ]),
       actions: [
         CupertinoDialogAction(
-          child: Text("Ok",
+          child: Text(S.general.ok(),
               style:
                   TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 13, fontWeight: FontWeight.w600)),
           onPressed: () {
@@ -76,7 +76,7 @@ class CustomCupertinoAlerts {
           },
         ),
         CupertinoDialogAction(
-          child: Text("Take me to search",
+          child: Text(S.general.toSearch(),
               style:
                   TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 13, fontWeight: FontWeight.w600)),
           onPressed: () {
@@ -92,19 +92,19 @@ class CustomCupertinoAlerts {
       BuildContext context, NavigateToSearchFromView navigateToSearchFromView, AppNavigator navigator) {
     return CupertinoAlertDialog(
       content: Column(children: [
-        Text("There was an error retrieveing this schedule",
+        Text(S.popUps.scheduleFetchError(),
             style: TextStyle(
                 color: Theme.of(context).colorScheme.onBackground, fontSize: 15, fontWeight: FontWeight.w600)),
         const SizedBox(
           height: 20,
         ),
-        Text("Please try again",
+        Text(S.general.tryAgain(),
             style:
                 TextStyle(color: Theme.of(context).colorScheme.onBackground, fontSize: 14, fontWeight: FontWeight.w600))
       ]),
       actions: [
         CupertinoDialogAction(
-          child: Text("Take me to search",
+          child: Text(S.general.toSearch(),
               style:
                   TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 13, fontWeight: FontWeight.w600)),
           onPressed: () {
@@ -119,21 +119,20 @@ class CustomCupertinoAlerts {
   static CupertinoAlertDialog automaticExamSignupWarning(BuildContext context, bool value) {
     return CupertinoAlertDialog(
       content: Column(children: [
-        Text("Automatic exam registration should be used with caution!",
+        Text(S.popUps.autoSignupTitle(),
             style: TextStyle(
                 color: Theme.of(context).colorScheme.onBackground, fontSize: 15, fontWeight: FontWeight.w600)),
         const SizedBox(
           height: 20,
         ),
-        Text(
-            "Things can go wrong and so it is still your own responsibility to make sure you are signed up for your exams. If an exam requires you to choose a location you cannot be automatically signed up, similarly you must manually enable support if you need it",
+        Text(S.popUps.autoSignupBody(),
             style:
                 TextStyle(color: Theme.of(context).colorScheme.onBackground, fontSize: 14, fontWeight: FontWeight.w600))
       ]),
       actions: [
         CupertinoDialogAction(
           child: Text(
-            "Cancel",
+            S.general.cancel(),
             style: TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 13, fontWeight: FontWeight.w600),
           ),
           onPressed: () {
@@ -141,7 +140,7 @@ class CustomCupertinoAlerts {
           },
         ),
         CupertinoDialogAction(
-          child: Text("Understood",
+          child: Text(S.general.understood(),
               style:
                   TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 13, fontWeight: FontWeight.w600)),
           onPressed: () {

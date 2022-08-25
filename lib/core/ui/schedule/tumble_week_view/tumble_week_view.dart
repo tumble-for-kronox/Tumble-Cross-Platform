@@ -26,17 +26,12 @@ class _TumbleWeekViewState extends State<TumbleWeekView> {
         switch (state.status) {
           case MainAppStatus.INITIAL:
             return NoScheduleAvailable(
-              errorType: RuntimeErrorType.noCachedSchedule,
+              errorType: RuntimeErrorType.noCachedSchedule(),
               cupertinoAlertDialog: CustomCupertinoAlerts.noBookMarkedSchedules(
-                  context,
-                  () => context
-                      .read<MainAppNavigationCubit>()
-                      .getNavBarItem(NavbarItem.SEARCH),
-                  navigator),
+                  context, () => context.read<MainAppNavigationCubit>().getNavBarItem(NavbarItem.SEARCH), navigator),
             );
           case MainAppStatus.LOADING:
-            return SpinKitThreeBounce(
-                color: Theme.of(context).colorScheme.primary);
+            return SpinKitThreeBounce(color: Theme.of(context).colorScheme.primary);
           case MainAppStatus.SCHEDULE_SELECTED:
             return Stack(children: [
               SizedBox(
@@ -56,22 +51,13 @@ class _TumbleWeekViewState extends State<TumbleWeekView> {
             return NoScheduleAvailable(
               errorType: state.message!,
               cupertinoAlertDialog: CustomCupertinoAlerts.fetchError(
-                  context,
-                  () => context
-                      .read<MainAppNavigationCubit>()
-                      .getNavBarItem(NavbarItem.SEARCH),
-                  navigator),
+                  context, () => context.read<MainAppNavigationCubit>().getNavBarItem(NavbarItem.SEARCH), navigator),
             );
           case MainAppStatus.EMPTY_SCHEDULE:
             return NoScheduleAvailable(
-              errorType: RuntimeErrorType.emptyScheduleError,
-              cupertinoAlertDialog:
-                  CustomCupertinoAlerts.scheduleContainsNoViews(
-                      context,
-                      () => context
-                          .read<MainAppNavigationCubit>()
-                          .getNavBarItem(NavbarItem.SEARCH),
-                      navigator),
+              errorType: RuntimeErrorType.emptyScheduleError(),
+              cupertinoAlertDialog: CustomCupertinoAlerts.scheduleContainsNoViews(
+                  context, () => context.read<MainAppNavigationCubit>().getNavBarItem(NavbarItem.SEARCH), navigator),
             );
         }
       },
