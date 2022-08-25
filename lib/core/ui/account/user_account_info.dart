@@ -9,6 +9,7 @@ import 'package:tumble/core/ui/account/misc/auto_signup_option.dart';
 import 'package:tumble/core/ui/account/misc/login_logout_button.dart';
 import 'package:tumble/core/ui/account/misc/user_account_info_external_link.dart';
 import 'package:tumble/core/ui/account/user_event_list/user_event_section.dart';
+import 'package:tumble/core/ui/data/string_constants.dart';
 import 'package:tumble/core/ui/login/cubit/auth_cubit.dart';
 import 'package:tumble/core/ui/main_app/data/schools.dart';
 import 'package:tumble/core/ui/scaffold_message.dart';
@@ -58,7 +59,7 @@ class _UserAccountInfo extends State<UserAccountInfo> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    'Hello!',
+                                    S.authorizedPage.hello(),
                                     style: TextStyle(fontSize: 16, color: Theme.of(context).colorScheme.onSecondary),
                                   ),
                                   const SizedBox(height: 5),
@@ -117,7 +118,7 @@ class _UserAccountInfo extends State<UserAccountInfo> {
                     const SizedBox(
                       height: 20,
                     ),
-                    _sectionDivider(context, "User options"),
+                    _sectionDivider(context, S.authorizedPage.userOptionsTitle()),
                     const SizedBox(
                       height: 10,
                     ),
@@ -128,12 +129,12 @@ class _UserAccountInfo extends State<UserAccountInfo> {
                     const SizedBox(
                       height: 20,
                     ),
-                    _sectionDivider(context, "External links"),
+                    _sectionDivider(context, S.authorizedPage.externalLinksTitle()),
                     const SizedBox(
                       height: 10,
                     ),
                     UserAccountExternalLink(
-                      title: "Your Canvas",
+                      title: S.authorizedPage.personalExternalLink("Canvas"),
                       color: const Color(0xFFe23e29),
                       link:
                           "https://${Schools.schools.firstWhere((school) => school.schoolName == getIt<SharedPreferences>().getString(PreferenceTypes.school)).schoolId.name}.instructure.com",
@@ -141,17 +142,19 @@ class _UserAccountInfo extends State<UserAccountInfo> {
                     const SizedBox(
                       height: 20,
                     ),
-                    const UserAccountExternalLink(
-                      title: "Your Ladok",
-                      color: Color(0xFF3c9a00),
+                    UserAccountExternalLink(
+                      title: S.authorizedPage.personalExternalLink("Ladok"),
+                      color: const Color(0xFF3c9a00),
                       link: "https://www.student.ladok.se/student/app/studentwebb/",
                     ),
                     const SizedBox(
                       height: 20,
                     ),
                     UserAccountExternalLink(
-                      title:
-                          "Kronox for ${Schools.schools.firstWhere((school) => school.schoolName == getIt<SharedPreferences>().getString(PreferenceTypes.school)).schoolName}",
+                      title: S.authorizedPage.externalLinkKronox(Schools.schools
+                          .firstWhere((school) =>
+                              school.schoolName == getIt<SharedPreferences>().getString(PreferenceTypes.school))
+                          .schoolName),
                       color: const Color(0xFF0089da),
                       link:
                           "https://${Schools.schools.firstWhere((school) => school.schoolName == getIt<SharedPreferences>().getString(PreferenceTypes.school)).schoolUrl}",
@@ -166,7 +169,7 @@ class _UserAccountInfo extends State<UserAccountInfo> {
                             BlocProvider.of<AuthCubit>(context).logout();
                           },
                           icon: CupertinoIcons.arrow_left_square,
-                          text: "Sign out"),
+                          text: S.authorizedPage.signOut()),
                     ),
                     const SizedBox(
                       height: 20,

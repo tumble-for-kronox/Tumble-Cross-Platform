@@ -21,8 +21,7 @@ part 'auth_state.dart';
 class AuthCubit extends Cubit<AuthState> {
   AuthCubit()
       : super(AuthState(
-            autoSignup:
-                getIt<SharedPreferences>().getBool(PreferenceTypes.autoSignup)!,
+            autoSignup: getIt<SharedPreferences>().getBool(PreferenceTypes.autoSignup)!,
             authStatus: AuthStatus.INITIAL,
             userEventListStatus: UserEventListStatus.INITIAL,
             usernameController: TextEditingController(),
@@ -31,6 +30,7 @@ class AuthCubit extends Cubit<AuthState> {
             passwordHidden: true)) {
     login().then((value) {
       if (state.authStatus == AuthStatus.AUTHENTICATED) {
+        log("GETING USER EVENTS");
         getUserEvents();
       }
     });
@@ -40,8 +40,7 @@ class AuthCubit extends Cubit<AuthState> {
 
   Future<void> getUserEvents() async {
     emit(state.copyWith(userEventListStatus: UserEventListStatus.LOADING));
-    ApiResponse userEventResponse =
-        await _userRepo.getUserEvents(state.userSession!.sessionToken);
+    ApiResponse userEventResponse = await _userRepo.getUserEvents(state.userSession!.sessionToken);
 
     switch (userEventResponse.status) {
       case ApiStatus.FETCHED:
@@ -54,16 +53,13 @@ class AuthCubit extends Cubit<AuthState> {
         emit(state);
         break;
       default:
-        emit(state.copyWith(
-            userEventListStatus: UserEventListStatus.ERROR,
-            refreshSession: false));
+        emit(state.copyWith(userEventListStatus: UserEventListStatus.ERROR, refreshSession: false));
     }
   }
 
   Future<void> registerUserEvent(String id) async {
     emit(state.copyWith(userEventListStatus: UserEventListStatus.LOADING));
-    ApiResponse registerResponse = await _userRepo.putRegisterUserEvent(
-        id, state.userSession!.sessionToken);
+    ApiResponse registerResponse = await _userRepo.putRegisterUserEvent(id, state.userSession!.sessionToken);
 
     switch (registerResponse.status) {
       case ApiStatus.FETCHED:
@@ -71,25 +67,21 @@ class AuthCubit extends Cubit<AuthState> {
         break;
       case ApiStatus.UNAUTHORIZED:
         emit(state.copyWith(
-            userEventListStatus: UserEventListStatus.ERROR,
-            errorMessage: RuntimeErrorType.failedSignInValidation));
+            userEventListStatus: UserEventListStatus.ERROR, errorMessage: RuntimeErrorType.loginError()));
         break;
       case ApiStatus.ERROR:
         emit(state.copyWith(
-            userEventListStatus: UserEventListStatus.ERROR,
-            errorMessage: RuntimeErrorType.failedExamSignUp));
+            userEventListStatus: UserEventListStatus.ERROR, errorMessage: RuntimeErrorType.failedExamSignUp()));
         break;
       default:
         emit(state.copyWith(
-            userEventListStatus: UserEventListStatus.ERROR,
-            errorMessage: RuntimeErrorType.failedExamSignUp));
+            userEventListStatus: UserEventListStatus.ERROR, errorMessage: RuntimeErrorType.failedExamSignUp()));
     }
   }
 
   Future<void> unregisterUserEvent(String id) async {
     emit(state.copyWith(userEventListStatus: UserEventListStatus.LOADING));
-    ApiResponse unregisterResponse = await _userRepo.putUnregisterUserEvent(
-        id, state.userSession!.sessionToken);
+    ApiResponse unregisterResponse = await _userRepo.putUnregisterUserEvent(id, state.userSession!.sessionToken);
 
     switch (unregisterResponse.status) {
       case ApiStatus.FETCHED:
@@ -97,18 +89,15 @@ class AuthCubit extends Cubit<AuthState> {
         break;
       case ApiStatus.UNAUTHORIZED:
         emit(state.copyWith(
-            userEventListStatus: UserEventListStatus.ERROR,
-            errorMessage: RuntimeErrorType.failedSignInValidation));
+            userEventListStatus: UserEventListStatus.ERROR, errorMessage: RuntimeErrorType.loginError()));
         break;
       case ApiStatus.ERROR:
         emit(state.copyWith(
-            userEventListStatus: UserEventListStatus.ERROR,
-            errorMessage: RuntimeErrorType.failedExamSignUp));
+            userEventListStatus: UserEventListStatus.ERROR, errorMessage: RuntimeErrorType.failedExamSignUp()));
         break;
       default:
         emit(state.copyWith(
-            userEventListStatus: UserEventListStatus.ERROR,
-            errorMessage: RuntimeErrorType.failedExamSignUp));
+            userEventListStatus: UserEventListStatus.ERROR, errorMessage: RuntimeErrorType.failedExamSignUp()));
     }
   }
 
@@ -118,22 +107,18 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   Future<void> runAutoSignup() async {
-    await _userRepo
-        .putRegisterAllAvailableUserEvents(state.userSession!.sessionToken);
+    await _userRepo.putRegisterAllAvailableUserEvents(state.userSession!.sessionToken);
   }
 
   void submitLogin(BuildContext context, String school) async {
     final username = state.usernameController.text;
     final password = state.passwordController.text;
     if (!formValidated()) {
-      emit(state.copyWith(
-          authStatus: AuthStatus.INITIAL,
-          errorMessage: RuntimeErrorType.invalidInputFields));
+      emit(state.copyWith(authStatus: AuthStatus.INITIAL, errorMessage: RuntimeErrorType.invalidInputFields()));
       return;
     }
     emit(state.copyWith(authStatus: AuthStatus.LOADING));
-    ApiResponse userRes =
-        await _userRepo.postUserLogin(username, password, school);
+    ApiResponse userRes = await _userRepo.postUserLogin(username, password, school);
 
     state.usernameController.clear();
     state.passwordController.clear();
@@ -144,12 +129,11 @@ class AuthCubit extends Cubit<AuthState> {
           PreferenceTypes.school,
           school,
         );
-        emit(state.copyWith(
-            authStatus: AuthStatus.AUTHENTICATED, userSession: userRes.data!));
+        emit(state.copyWith(authStatus: AuthStatus.AUTHENTICATED, userSession: userRes.data!));
+        getUserEvents();
         break;
       case ApiStatus.ERROR:
-        emit(state.copyWith(
-            authStatus: AuthStatus.INITIAL, errorMessage: userRes.message));
+        emit(state.copyWith(authStatus: AuthStatus.INITIAL, errorMessage: userRes.message));
         break;
       default:
     }
@@ -184,13 +168,10 @@ class AuthCubit extends Cubit<AuthState> {
 
     final refreshToken = await secureStorage.getRefreshToken();
     if (refreshToken != null) {
-      ApiResponse loggedInUser =
-          await userRepository.getRefreshSession(refreshToken);
+      ApiResponse loggedInUser = await userRepository.getRefreshSession(refreshToken);
       switch (loggedInUser.status) {
         case ApiStatus.FETCHED:
-          emit(state.copyWith(
-              authStatus: AuthStatus.AUTHENTICATED,
-              userSession: loggedInUser.data!));
+          emit(state.copyWith(authStatus: AuthStatus.AUTHENTICATED, userSession: loggedInUser.data!));
           if (state.autoSignup) {
             runAutoSignup();
           }
@@ -204,14 +185,12 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   void setUserSession(KronoxUserModel user) {
-    emit(state.copyWith(
-        authStatus: AuthStatus.AUTHENTICATED, userSession: user));
+    emit(state.copyWith(authStatus: AuthStatus.AUTHENTICATED, userSession: user));
   }
 
   void logout() {
     getIt<SecureStorageRepository>().clear();
-    emit(state.copyWith(
-        authStatus: AuthStatus.UNAUTHENTICATED, userSession: null));
+    emit(state.copyWith(authStatus: AuthStatus.UNAUTHENTICATED, userSession: null));
   }
 
   bool get authenticated => state.authStatus == AuthStatus.AUTHENTICATED;

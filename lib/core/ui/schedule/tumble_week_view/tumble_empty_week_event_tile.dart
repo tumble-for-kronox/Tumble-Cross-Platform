@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tumble/core/ui/data/string_constants.dart';
 
 class TumbleEmptyWeekEventTile extends StatelessWidget {
   const TumbleEmptyWeekEventTile({Key? key}) : super(key: key);
@@ -24,15 +25,14 @@ class TumbleEmptyWeekEventTile extends StatelessWidget {
           Container(
             width: 3,
             decoration: BoxDecoration(
-              borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(2), bottomLeft: Radius.circular(2)),
+              borderRadius: const BorderRadius.only(topLeft: Radius.circular(2), bottomLeft: Radius.circular(2)),
               color: Colors.grey.shade400,
             ),
           ),
           Padding(
             padding: const EdgeInsets.only(left: 5),
             child: Text(
-              "No scheduled activities",
+              S.weekViewPage.noActivities(),
               style: TextStyle(
                 color: Theme.of(context).colorScheme.onSurface,
                 fontSize: 16,

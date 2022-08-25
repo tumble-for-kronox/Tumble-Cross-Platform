@@ -5,6 +5,7 @@ import 'package:tumble/core/shared/preference_types.dart';
 import 'package:tumble/core/dependency_injection/get_it_instances.dart';
 import 'package:tumble/core/theme/data/colors.dart';
 import 'package:tumble/core/ui/account/misc/login_logout_button.dart';
+import 'package:tumble/core/ui/data/string_constants.dart';
 import 'package:tumble/core/ui/main_app/data/schools.dart';
 
 class UserInfo extends StatelessWidget {
@@ -32,7 +33,7 @@ class UserInfo extends StatelessWidget {
             height: 25,
           ),
           Text(
-            "Connect your Kronox account by logging in",
+            S.unauthorizedPage.description(),
             textAlign: TextAlign.center,
             style:
                 TextStyle(fontSize: 16, fontWeight: FontWeight.w400, color: Theme.of(context).colorScheme.onBackground),
@@ -44,7 +45,7 @@ class UserInfo extends StatelessWidget {
               child: LoginLogoutButton(
                 onPressed: onPressed,
                 icon: CupertinoIcons.person_circle,
-                text: "Sign in",
+                text: S.loginPage.signInButton(),
               ),
             ),
           ),

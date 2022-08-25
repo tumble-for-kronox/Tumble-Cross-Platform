@@ -8,7 +8,7 @@ import 'package:tumble/core/navigation/navigation_route_labels.dart';
 import 'package:tumble/core/theme/data/colors.dart';
 import 'package:tumble/core/ui/bottom_nav_bar/cubit/bottom_nav_cubit.dart';
 import 'package:tumble/core/ui/bottom_nav_bar/data/nav_bar_items.dart';
-import 'package:tumble/core/ui/data/scaffold_message_types.dart';
+import 'package:tumble/core/ui/data/groups/scaffold_message_types.dart';
 import 'package:tumble/core/ui/main_app/cubit/main_app_cubit.dart';
 import 'package:tumble/core/ui/schedule/no_schedule.dart';
 import 'package:tumble/core/ui/schedule/tumble_calendar_view/data/calendar_data_source.dart';
@@ -36,7 +36,7 @@ class _TumbleCalendarViewState extends State<TumbleCalendarView> {
         switch (state.status) {
           case MainAppStatus.INITIAL:
             return NoScheduleAvailable(
-              errorType: RuntimeErrorType.noCachedSchedule,
+              errorType: RuntimeErrorType.noCachedSchedule(),
               cupertinoAlertDialog: CustomCupertinoAlerts.noBookMarkedSchedules(
                   context, () => context.read<MainAppNavigationCubit>().getNavBarItem(NavbarItem.SEARCH), navigator),
             );
@@ -103,7 +103,7 @@ class _TumbleCalendarViewState extends State<TumbleCalendarView> {
             );
           case MainAppStatus.EMPTY_SCHEDULE:
             return NoScheduleAvailable(
-              errorType: RuntimeErrorType.emptyScheduleError,
+              errorType: RuntimeErrorType.emptyScheduleError(),
               cupertinoAlertDialog: CustomCupertinoAlerts.scheduleContainsNoViews(
                   context, () => context.read<MainAppNavigationCubit>().getNavBarItem(NavbarItem.SEARCH), navigator),
             );

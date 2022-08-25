@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tumble/core/models/api_models/schedule_model.dart';
+import 'package:tumble/core/ui/data/string_constants.dart';
 
 class DayOfWeekDivider extends StatelessWidget {
   final Day day;
@@ -39,7 +40,7 @@ class DayOfWeekDivider extends StatelessWidget {
                         color: Theme.of(context).colorScheme.onBackground,
                       ),
                     ),
-                    const Text("Today")
+                    Text(S.weekViewPage.todayLabel())
                   ]),
                 )
               : Container(),

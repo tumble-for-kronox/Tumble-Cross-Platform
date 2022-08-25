@@ -2,7 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tumble/core/ui/bottom_nav_bar/cubit/bottom_nav_cubit.dart';
-import 'package:tumble/core/ui/main_app/data/labels.dart';
+
+import '../data/string_constants.dart';
 
 typedef ChangePageCallBack = void Function(int index);
 
@@ -41,16 +42,18 @@ class TumbleNavigationBar extends StatelessWidget {
               currentIndex: mainappstate.index,
               backgroundColor: Theme.of(context).colorScheme.background,
               elevation: 100,
-              items: const [
+              items: [
                 BottomNavigationBarItem(
-                    icon: Icon(
+                    icon: const Icon(
                       CupertinoIcons.search,
                     ),
-                    label: Labels.search),
-                BottomNavigationBarItem(icon: Icon(CupertinoIcons.collections), label: Labels.list),
-                BottomNavigationBarItem(icon: Icon(CupertinoIcons.list_bullet_indent), label: Labels.week),
-                BottomNavigationBarItem(icon: Icon(CupertinoIcons.calendar_today), label: Labels.calendar),
-                BottomNavigationBarItem(icon: Icon(CupertinoIcons.person), label: Labels.account),
+                    label: S.searchPage.title()),
+                BottomNavigationBarItem(icon: Icon(CupertinoIcons.collections), label: S.weekViewPage.title()),
+                BottomNavigationBarItem(
+                    icon: const Icon(CupertinoIcons.list_bullet_indent), label: S.listViewPage.title()),
+                BottomNavigationBarItem(
+                    icon: const Icon(CupertinoIcons.calendar_today), label: S.calendarViewPage.title()),
+                BottomNavigationBarItem(icon: Icon(CupertinoIcons.person), label: S.authorizedPage.title()),
               ],
             ),
           ),
