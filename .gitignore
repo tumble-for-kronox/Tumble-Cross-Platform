@@ -64,3 +64,4 @@ log/log.txt
 .vscode
 .metadata
 analysis_options.yaml
+.vs/
