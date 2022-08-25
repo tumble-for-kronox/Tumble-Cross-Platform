@@ -184,7 +184,7 @@ class MainAppCubit extends Cubit<MainAppState> {
             // dev.log((await _databaseService.getOneSchedule(id))!.toJson().toString());
           }
           if (forceRefetch) {
-            ScheduleModel storedScheduleModel = (await _databaseService.getOneSchedule(id))!;
+            ScheduleModel? storedScheduleModel = (await _databaseService.getOneSchedule(id));
             if (currentScheduleModel != storedScheduleModel && storedScheduleModel != null) {
               _databaseService.update(currentScheduleModel);
               _notificationService.updateDispatcher(currentScheduleModel, storedScheduleModel);
