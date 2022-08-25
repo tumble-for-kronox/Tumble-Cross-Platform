@@ -36,7 +36,7 @@ class _LoginPageRootState extends State<LoginPageRoot> {
           case AuthStatus.AUTHENTICATED:
             BlocProvider.of<AuthCubit>(context).setUserSession(state.userSession!);
             showScaffoldMessage(context, RuntimeErrorType.loginSuccess);
-            BlocProvider.of<InitCubit>(context).changeSchool(widget.schoolName!);
+            // BlocProvider.of<InitCubit>(context).changeSchool(widget.schoolName!);
             navigator.pushAndRemoveAll(NavigationRouteLabels.mainAppPage);
             break;
           default:
