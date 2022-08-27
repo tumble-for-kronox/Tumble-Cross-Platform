@@ -38,7 +38,9 @@ class TumbleAppDrawer extends StatelessWidget {
     return BlocBuilder<DrawerCubit, DrawerState>(
       builder: (context, state) {
         return ClipRRect(
-          borderRadius: const BorderRadius.only(topLeft: Radius.circular(20.0), bottomLeft: Radius.circular(20.0)),
+          borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(20.0),
+              bottomLeft: Radius.circular(20.0)),
           child: SizedBox(
             height: double.infinity,
             child: Drawer(
@@ -52,11 +54,15 @@ class TumbleAppDrawer extends StatelessWidget {
                       margin: EdgeInsets.all(0.0),
                       padding: EdgeInsets.all(0.0),
                       child: Padding(
-                          padding: EdgeInsets.symmetric(vertical: 13, horizontal: 20),
+                          padding: EdgeInsets.symmetric(
+                              vertical: 13, horizontal: 20),
                           child: Align(
                             alignment: Alignment.centerRight,
                             child: Text('SETTINGS',
-                                style: TextStyle(letterSpacing: 2, fontSize: 26, fontWeight: FontWeight.w500)),
+                                style: TextStyle(
+                                    letterSpacing: 2,
+                                    fontSize: 26,
+                                    fontWeight: FontWeight.w500)),
                           )),
                     ),
                   ),
@@ -97,7 +103,8 @@ class TumbleAppDrawer extends StatelessWidget {
                     ),
                     TumbleAppDrawerTile(
                       drawerTileTitle: "Change theme",
-                      subtitle: "Current theme:  ${context.read<DrawerCubit>().state.theme}",
+                      subtitle:
+                          "Current theme:  ${context.read<DrawerCubit>().state.theme}",
                       prefixIcon: CupertinoIcons.device_phone_portrait,
                       eventType: EventType.CHANGE_THEME,
                       drawerEvent: (eventType) => handleDrawerEvent(
@@ -127,13 +134,15 @@ class TumbleAppDrawer extends StatelessWidget {
                     //           navigator,
                     //         )),
                     TumbleAppDrawerTile(
-                        drawerTileTitle: "Set default schedule",
-                        subtitle: context.watch<DrawerCubit>().state.schedule != null
-                            ? "Default schedule: \n${state.schedule}"
-                            : "No default schedule set",
+                        drawerTileTitle: "Toggle visible schedules",
+                        subtitle:
+                            context.watch<DrawerCubit>().state.schedule != null
+                                ? "Default schedule: \n${state.schedule}"
+                                : "No default schedule set",
                         prefixIcon: CupertinoIcons.calendar,
                         eventType: EventType.SET_DEFAULT_SCHEDULE,
-                        drawerEvent: (eventType) => handleDrawerEvent(eventType, context, navigator)),
+                        drawerEvent: (eventType) =>
+                            handleDrawerEvent(eventType, context, navigator)),
                   ], title: "Schedule"),
                   Divider(
                     height: 50.0,
@@ -147,14 +156,16 @@ class TumbleAppDrawer extends StatelessWidget {
                         drawerTileTitle: "Clear all",
                         subtitle: "Removes all notifications",
                         eventType: EventType.CANCEL_ALL_NOTIFICATIONS,
-                        drawerEvent: (eventType) => handleDrawerEvent(eventType, context, navigator)),
+                        drawerEvent: (eventType) =>
+                            handleDrawerEvent(eventType, context, navigator)),
                     TumbleAppDrawerTile(
                       prefixIcon: CupertinoIcons.clock,
                       drawerTileTitle: "Notification offset",
                       subtitle:
                           "Current offset: ${getIt<SharedPreferences>().getInt(PreferenceTypes.notificationTime)} minutes",
                       eventType: EventType.EDIT_NOTIFICATION_TIME,
-                      drawerEvent: (eventType) => handleDrawerEvent(eventType, context, navigator),
+                      drawerEvent: (eventType) =>
+                          handleDrawerEvent(eventType, context, navigator),
                     )
                   ], title: "Notifications")
                 ],
@@ -166,7 +177,8 @@ class TumbleAppDrawer extends StatelessWidget {
     );
   }
 
-  void handleDrawerEvent(Enum eventType, BuildContext context, AppNavigator navigator) {
+  void handleDrawerEvent(
+      Enum eventType, BuildContext context, AppNavigator navigator) {
     switch (eventType) {
       case EventType.CHANGE_SCHOOL:
         navigator.push(NavigationRouteLabels.schoolSelectionPage);
@@ -187,13 +199,14 @@ class TumbleAppDrawer extends StatelessWidget {
         if (context.read<DrawerCubit>().state.bookmarks!.isNotEmpty) {
           showModalBottomSheet(
               context: context,
-              builder: (_) => AppDefaultSchedulePicker(
+              builder: (_) => AppFavoriteScheduleToggle(
                   scheduleIds: context.read<DrawerCubit>().state.bookmarks!,
-                  setDefaultSchedule: (newId) async {
-                    context.read<DrawerCubit>().setSchedule(newId);
+                  toggleSchedule: (newId, value) async {
+                    context.read<DrawerCubit>().toggleSchedule(newId, value);
                     BlocProvider.of<MainAppCubit>(context).setLoading();
                     Navigator.of(context).pop();
-                    await BlocProvider.of<MainAppCubit>(context).swapScheduleDefaultView(newId);
+                    await BlocProvider.of<MainAppCubit>(context)
+                        .swapScheduleDefaultView(newId);
                   }));
         }
         break;
@@ -209,14 +222,20 @@ class TumbleAppDrawer extends StatelessWidget {
         break;
       case EventType.CANCEL_ALL_NOTIFICATIONS:
         getIt<NotificationRepository>().clearAllNotifications();
-        showScaffoldMessage(context, ScaffoldMessageType.cancelledAllSetNotifications());
+        showScaffoldMessage(
+            context, ScaffoldMessageType.cancelledAllSetNotifications());
         break;
       case EventType.EDIT_NOTIFICATION_TIME:
         showModalBottomSheet(
             context: context,
-            builder: (_) => AppNotificationTimePicker(setNotificationTime: (time) {
+            builder: (_) =>
+                AppNotificationTimePicker(setNotificationTime: (time) {
                   context.read<DrawerCubit>().setNotificationTime(
-                      time, BlocProvider.of<MainAppCubit>(context).state.scheduleModelAndCourses!.scheduleModel);
+                      time,
+                      BlocProvider.of<MainAppCubit>(context)
+                          .state
+                          .scheduleModelAndCourses!
+                          .scheduleModel);
                   Navigator.of(context).pop();
                 }));
         break;

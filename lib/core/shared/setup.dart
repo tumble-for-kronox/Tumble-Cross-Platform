@@ -8,17 +8,22 @@ void setupRequiredSharedPreferences() {
 
   final possibleTheme = sharedPrefs.getString(PreferenceTypes.theme);
   final possibleView = sharedPrefs.getInt(PreferenceTypes.view);
-  final possibleNotification = sharedPrefs.getInt(PreferenceTypes.notificationTime);
+  final possibleNotification =
+      sharedPrefs.getInt(PreferenceTypes.notificationTime);
   final possibleSchool = sharedPrefs.getString(PreferenceTypes.school);
   final possibleAutoSignup = sharedPrefs.getBool(PreferenceTypes.autoSignup);
 
   /// Check if previously attempted fetches are null, assign accordingly
   sharedPrefs.setString(PreferenceTypes.theme, possibleTheme ?? 'system');
-  sharedPrefs.setInt(PreferenceTypes.view, possibleView ?? ScheduleViewTypes.list);
-  sharedPrefs.setInt(PreferenceTypes.notificationTime, possibleNotification ?? 60);
+  sharedPrefs.setInt(
+      PreferenceTypes.view, possibleView ?? ScheduleViewTypes.list);
+  sharedPrefs.setInt(
+      PreferenceTypes.notificationTime, possibleNotification ?? 60);
   sharedPrefs.setBool(PreferenceTypes.autoSignup, possibleAutoSignup ?? false);
-  possibleSchool == null ? null : sharedPrefs.setString(PreferenceTypes.school, possibleSchool);
-  sharedPrefs.getStringList(PreferenceTypes.favorites) == null
-      ? sharedPrefs.setStringList(PreferenceTypes.favorites, <String>[])
+  possibleSchool == null
+      ? null
+      : sharedPrefs.setString(PreferenceTypes.school, possibleSchool);
+  sharedPrefs.getStringList(PreferenceTypes.bookmarks) == null
+      ? sharedPrefs.setStringList(PreferenceTypes.bookmarks, <String>[])
       : null;
 }

@@ -20,12 +20,10 @@ class DrawerState extends Equatable {
   final String? viewType;
   final String? school;
   final String? theme;
-  final String? schedule;
   final List<String>? bookmarks;
   final int? notificationTime;
   const DrawerState(
       {required this.viewType,
-      required this.schedule,
       required this.school,
       required this.theme,
       required this.bookmarks,
@@ -35,17 +33,16 @@ class DrawerState extends Equatable {
           {String? viewType,
           String? school,
           String? theme,
-          String? schedule,
           List<String>? bookmarks,
           int? notificationTime}) =>
       DrawerState(
           viewType: viewType ?? this.viewType,
           school: school ?? this.school,
           theme: theme ?? this.theme,
-          schedule: schedule ?? this.schedule,
           bookmarks: bookmarks ?? this.bookmarks,
           notificationTime: notificationTime ?? this.notificationTime);
 
   @override
-  List<Object?> get props => [viewType, schedule, school, theme, bookmarks, notificationTime];
+  List<Object?> get props =>
+      [viewType, school, theme, bookmarks, notificationTime];
 }
