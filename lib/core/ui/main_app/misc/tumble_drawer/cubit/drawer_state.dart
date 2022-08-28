@@ -22,29 +22,39 @@ class DrawerState extends Equatable {
   final String? viewType;
   final String? school;
   final String? theme;
-  final List<String>? bookmarks;
+  final Map<String, bool>? mapOfIdToggles;
+  final List<BookmarkedScheduleModel>? bookmarks;
   final int? notificationTime;
   const DrawerState(
       {required this.viewType,
       required this.school,
       required this.theme,
       required this.bookmarks,
-      required this.notificationTime});
+      required this.notificationTime,
+      required this.mapOfIdToggles});
 
   DrawerState copyWith(
           {String? viewType,
           String? school,
           String? theme,
-          List<String>? bookmarks,
-          int? notificationTime}) =>
+          List<BookmarkedScheduleModel>? bookmarks,
+          int? notificationTime,
+          Map<String, bool>? mapOfIdToggles}) =>
       DrawerState(
           viewType: viewType ?? this.viewType,
           school: school ?? this.school,
           theme: theme ?? this.theme,
           bookmarks: bookmarks ?? this.bookmarks,
-          notificationTime: notificationTime ?? this.notificationTime);
+          notificationTime: notificationTime ?? this.notificationTime,
+          mapOfIdToggles: mapOfIdToggles ?? this.mapOfIdToggles);
 
   @override
-  List<Object?> get props =>
-      [viewType, school, theme, bookmarks, notificationTime];
+  List<Object?> get props => [
+        viewType,
+        school,
+        theme,
+        bookmarks,
+        notificationTime,
+        mapOfIdToggles,
+      ];
 }

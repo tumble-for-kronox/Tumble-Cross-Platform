@@ -79,6 +79,18 @@ class TumbleListView extends StatelessWidget {
                   navigator),
             );
 
+          case MainAppStatus.EMPTY_SCHEDULE:
+            return NoScheduleAvailable(
+              errorType: RuntimeErrorType.emptyScheduleError,
+              cupertinoAlertDialog:
+                  CustomCupertinoAlerts.previewContainsNoViews(
+                      context,
+                      () => context
+                          .read<MainAppNavigationCubit>()
+                          .getNavBarItem(NavbarItem.SEARCH),
+                      navigator),
+            );
+
           case MainAppStatus.NO_VIEW:
             return NoScheduleAvailable(
               errorType: RuntimeErrorType.emptyScheduleError,

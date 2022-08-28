@@ -186,14 +186,21 @@ class TumbleAppDrawer extends StatelessWidget {
         if (context.read<DrawerCubit>().state.bookmarks!.isNotEmpty) {
           showModalBottomSheet(
               context: context,
-              builder: (_) => AppFavoriteScheduleToggle(
-                    scheduleIds: context.read<DrawerCubit>().state.bookmarks!,
-                    toggleSchedule: (newId, value) async {
-                      context.read<DrawerCubit>().toggleSchedule(newId, value);
-                      BlocProvider.of<MainAppCubit>(context).setLoading();
-                      await BlocProvider.of<MainAppCubit>(context).updateView();
-                    },
-                    cubit: context.read<DrawerCubit>(),
+              builder: (_) => MultiBlocProvider(
+                    providers: [
+                      BlocProvider<DrawerCubit>.value(
+                          value: BlocProvider.of<DrawerCubit>(context)),
+                      BlocProvider<MainAppCubit>.value(
+                          value: BlocProvider.of<MainAppCubit>(context)),
+                    ],
+                    child: AppFavoriteScheduleToggle(
+                      scheduleIds: context
+                          .read<DrawerCubit>()
+                          .state
+                          .bookmarks!
+                          .map((bookmark) => bookmark.scheduleId)
+                          .toList(),
+                    ),
                   ));
         }
         break;

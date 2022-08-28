@@ -39,7 +39,7 @@ class _MainAppNavigationRootPageState extends State<MainAppNavigationRootPage> {
                 endDrawer: MultiBlocProvider(
                   providers: [
                     BlocProvider<DrawerCubit>(create: (_) => DrawerCubit()),
-                    BlocProvider.value(
+                    BlocProvider<MainAppCubit>.value(
                         value: BlocProvider.of<MainAppCubit>(context))
                   ],
                   child: const TumbleAppDrawer(),
@@ -54,11 +54,10 @@ class _MainAppNavigationRootPageState extends State<MainAppNavigationRootPage> {
                             value: BlocProvider.of<MainAppNavigationCubit>(
                                 context))
                       ],
-                      child: TumbleAppBar(
-                        toggleFavorite: () async => context
-                            .read<SearchPageCubit>()
-                            .toggleFavorite(context),
-                      )),
+                      child: TumbleAppBar(toggleFavorite: () async {
+                        context.read<SearchPageCubit>().toggleFavorite(context);
+                        context.read<MainAppCubit>().tryCached();
+                      })),
                 ),
                 body: FutureBuilder(
                     future: BlocProvider.of<MainAppCubit>(context).init(),

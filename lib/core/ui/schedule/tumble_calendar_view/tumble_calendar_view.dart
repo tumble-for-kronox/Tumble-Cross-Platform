@@ -124,7 +124,7 @@ class _TumbleCalendarViewState extends State<TumbleCalendarView> {
                       .getNavBarItem(NavbarItem.SEARCH),
                   navigator),
             );
-          case MainAppStatus.NO_VIEW:
+          case MainAppStatus.EMPTY_SCHEDULE:
             return NoScheduleAvailable(
               errorType: RuntimeErrorType.emptyScheduleError,
               cupertinoAlertDialog:
@@ -134,6 +134,12 @@ class _TumbleCalendarViewState extends State<TumbleCalendarView> {
                           .read<MainAppNavigationCubit>()
                           .getNavBarItem(NavbarItem.SEARCH),
                       navigator),
+            );
+          case MainAppStatus.NO_VIEW:
+            return NoScheduleAvailable(
+              errorType: state.message!,
+              cupertinoAlertDialog: CustomCupertinoAlerts.fetchError(
+                  context, () => null, navigator),
             );
         }
       },

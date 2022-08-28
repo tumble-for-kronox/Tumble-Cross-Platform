@@ -30,7 +30,6 @@ class SearchPageState extends Equatable {
   final bool? previewToTopButtonVisible;
   final ScheduleModelAndCourses? previewScheduleModelAndCourses;
   final List<Day>? previewListOfDays;
-  final List<Week>? previewListOfWeeks;
   final bool? previewToggledFavorite;
   final String? previewCurrentScheduleId;
 
@@ -44,7 +43,6 @@ class SearchPageState extends Equatable {
       required this.previewToTopButtonVisible,
       required this.previewScheduleModelAndCourses,
       required this.previewListOfDays,
-      required this.previewListOfWeeks,
       required this.previewToggledFavorite,
       required this.previewCurrentScheduleId});
 
@@ -73,7 +71,6 @@ class SearchPageState extends Equatable {
           previewScheduleModelAndCourses: previewScheduleModelAndCourses ??
               this.previewScheduleModelAndCourses,
           previewListOfDays: previewListOfDays ?? this.previewListOfDays,
-          previewListOfWeeks: previewListOfWeeks ?? this.previewListOfWeeks,
           previewToggledFavorite:
               previewToggledFavorite ?? this.previewToggledFavorite,
           previewCurrentScheduleId:
@@ -90,7 +87,6 @@ class SearchPageState extends Equatable {
         previewToTopButtonVisible,
         previewScheduleModelAndCourses,
         previewListOfDays,
-        previewListOfWeeks,
         previewToggledFavorite,
         previewCurrentScheduleId
       ];

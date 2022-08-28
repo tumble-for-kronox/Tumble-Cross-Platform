@@ -67,7 +67,6 @@ class MainAppCubit extends Cubit<MainAppState> {
   Future<void> tryCached() async {
     List<ScheduleModelAndCourses> listOfScheduleModelAndCourses = [];
     List<List<Day>> matrixListOfDays = [];
-    List<List<Week>> matrixListOfWeeks = [];
     if (state.currentScheduleIds != null) {
       for (String? scheduleId in state.currentScheduleIds!) {
         // Check if bookmarked schedule is toggled to be visible
@@ -78,20 +77,21 @@ class MainAppCubit extends Cubit<MainAppState> {
               .map((json) => bookmarkedScheduleModelFromJson(json))
               .firstWhere((bookmark) => bookmark.scheduleId == scheduleId)
               .toggledValue) {
-            final ApiResponse _apiResponse = await _cacheAndInteractionService
-                .getCachedBookmarkedSchedule(scheduleId);
+            final ApiResponse _apiResponse =
+                await _cacheAndInteractionService.getSchedule(scheduleId);
 
             switch (_apiResponse.status) {
+              case ApiStatus.FETCHED:
               case ApiStatus.CACHED:
                 ScheduleModel currentScheduleModel = _apiResponse.data!;
                 if (currentScheduleModel.isNotPhonySchedule()) {
                   matrixListOfDays.add(currentScheduleModel.days);
-                  matrixListOfWeeks.add(currentScheduleModel.splitToWeek());
                   listOfScheduleModelAndCourses.add(ScheduleModelAndCourses(
                       scheduleModel: currentScheduleModel,
                       courses: await _databaseService
                           .getCachedCoursesFromId(currentScheduleModel.id)));
                 }
+
                 break;
               default:
                 break;
@@ -114,13 +114,15 @@ class MainAppCubit extends Cubit<MainAppState> {
                 events:
                     dayGrouper.value.expand((Day day) => day.events).toList()))
             .toList();
+
         emit(state.copyWith(
           status: MainAppStatus.POPULATED_VIEW,
           scheduleModelAndCourses: listOfScheduleModelAndCourses,
           listOfDays: listOfDays,
-          listOfWeeks:
-              matrixListOfWeeks.expand((listOfWeeks) => listOfWeeks).toList(),
+          listOfWeeks: listOfDays.splitToWeek(),
         ));
+      } else {
+        emit(state.copyWith(status: MainAppStatus.NO_VIEW));
       }
     }
   }
@@ -240,24 +242,46 @@ class MainAppCubit extends Cubit<MainAppState> {
   }
 
   void changeCourseColor(BuildContext context, Course course, Color color) {
-    _databaseService.updateCourseInstance(CourseUiModel(
-        scheduleId: state.scheduleModelAndCourses!
-            .firstWhere((scheduleModelAndCourses) => scheduleModelAndCourses!
-                .courses
-                .any((courseUiModel) => courseUiModel!.courseId == course.id))!
-            .scheduleModel
-            .id,
-        courseId: course.id,
-        color: color.value));
-    showScaffoldMessage(
-        context, ScaffoldMessageType.updatedCourseColor(course.englishName));
+    _databaseService
+        .updateCourseInstance(CourseUiModel(
+            scheduleId: state.scheduleModelAndCourses!
+                .firstWhere((scheduleModelAndCourses) =>
+                    scheduleModelAndCourses!.courses.any((courseUiModel) =>
+                        courseUiModel!.courseId == course.id))!
+                .scheduleModel
+                .id,
+            courseId: course.id,
+            color: color.value))
+        .then((value) {
+      showScaffoldMessage(
+          context, ScaffoldMessageType.updatedCourseColor(course.englishName));
+      tryCached();
+    });
   }
 
   permissionRequest() async {
     await _awesomeNotifications.requestPermissionToSendNotifications();
   }
 
-  updateView() {}
+  forceRefreshAll() async {
+    final bookmarks = _sharedPrefs
+        .getStringList(PreferenceTypes.bookmarks)!
+        .map((e) => bookmarkedScheduleModelFromJson(e))
+        .where((bookmark) => bookmark.toggledValue)
+        .toList();
 
-  forceRefreshAll() {}
+    for (var bookmark in bookmarks) {
+      final ApiResponse _apiResponse = await _cacheAndInteractionService
+          .getSchedulesRequest(bookmark.scheduleId);
+
+      switch (_apiResponse.status) {
+        case ApiStatus.FETCHED:
+          await _databaseService.update(_apiResponse.data as ScheduleModel);
+          break;
+        default:
+          break;
+      }
+    }
+    await tryCached();
+  }
 }

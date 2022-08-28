@@ -1,21 +1,19 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tumble/core/models/api_models/bookmarked_schedule_model.dart';
+import 'package:tumble/core/ui/main_app/cubit/main_app_cubit.dart';
 import 'package:tumble/core/ui/main_app/misc/tumble_drawer/cubit/drawer_state.dart';
 import 'package:tumble/core/ui/scaffold_message.dart';
 
-typedef ToggleSchedule = void Function(String id, bool toggleValue);
-
 class AppFavoriteScheduleToggle extends StatefulWidget {
   final List<String> scheduleIds;
-  final DrawerCubit cubit;
-  final ToggleSchedule toggleSchedule;
-  const AppFavoriteScheduleToggle(
-      {Key? key,
-      required this.scheduleIds,
-      required this.toggleSchedule,
-      required this.cubit})
-      : super(key: key);
+  const AppFavoriteScheduleToggle({
+    Key? key,
+    required this.scheduleIds,
+  }) : super(key: key);
 
   @override
   State<AppFavoriteScheduleToggle> createState() =>
@@ -43,22 +41,38 @@ class _AppFavoriteScheduleToggleState extends State<AppFavoriteScheduleToggle> {
           child: SingleChildScrollView(
             child: Column(
                 children: (widget.scheduleIds).map((id) {
-              return SwitchListTile(
-                secondary: IconButton(
-                  icon: Icon(CupertinoIcons.add_circled_solid),
-                  onPressed: null,
-                ),
-                shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(20))),
-                title: Text(
-                  bookmarkedScheduleModelFromJson(id).scheduleId,
-                  style: TextStyle(
-                      color: Theme.of(context).colorScheme.onBackground),
-                ),
-                onChanged: (bool value) {
-                  widget.toggleSchedule(id, value);
+              return BlocBuilder<DrawerCubit, DrawerState>(
+                builder: (context, state) {
+                  return SwitchListTile(
+                    activeColor: Theme.of(context).colorScheme.primary,
+                    secondary: IconButton(
+                        visualDensity: VisualDensity.compact,
+                        padding: EdgeInsets.zero,
+                        icon: Icon(
+                          CupertinoIcons.clear_circled,
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
+                        onPressed: () async {
+                          BlocProvider.of<MainAppCubit>(context).setLoading();
+                          context.read<DrawerCubit>().removeBookmark(id).then(
+                              (_) => context.read<MainAppCubit>().tryCached());
+                        }),
+                    shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(20))),
+                    title: Text(
+                      id,
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.onBackground),
+                    ),
+                    onChanged: (bool value) async {
+                      BlocProvider.of<DrawerCubit>(context)
+                          .toggleSchedule(id, value);
+                      BlocProvider.of<MainAppCubit>(context).setLoading();
+                      await BlocProvider.of<MainAppCubit>(context).tryCached();
+                    },
+                    value: state.mapOfIdToggles![id]!,
+                  );
                 },
-                value: widget.cubit.getScheduleToggleValue(id),
               );
             }).toList()),
           ),

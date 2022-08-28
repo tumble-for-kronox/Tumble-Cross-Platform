@@ -11,6 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tumble/core/api/apiservices/api_response.dart';
 import 'package:tumble/core/api/builders/notification_service_builder.dart';
 import 'package:tumble/core/api/repository/cache_and_interaction_repository.dart';
+import 'package:tumble/core/database/data/access_stores.dart';
 import 'package:tumble/core/database/repository/database_repository.dart';
 import 'package:tumble/core/extensions/extensions.dart';
 import 'package:tumble/core/models/api_models/bookmarked_schedule_model.dart';
@@ -38,7 +39,6 @@ class SearchPageCubit extends Cubit<SearchPageState> {
             previewToTopButtonVisible: false,
             previewScheduleModelAndCourses: null,
             previewListOfDays: null,
-            previewListOfWeeks: null,
             previewToggledFavorite: false,
             previewCurrentScheduleId: null));
 
@@ -78,17 +78,18 @@ class SearchPageCubit extends Cubit<SearchPageState> {
   }
 
   Future<void> fetchNewSchedule(String id) async {
-    final _apiResponse = await _cacheAndInteractionService.getSchedule(id);
-    switch (_apiResponse.status) {
+    final apiResponse = await _cacheAndInteractionService.getSchedule(id);
+    switch (apiResponse.status) {
       case api.ApiStatus.UPDATE:
       case api.ApiStatus.FETCHED:
         bool scheduleFavorited = false;
-        ScheduleModel currentScheduleModel = _apiResponse.data!;
+        ScheduleModel currentScheduleModel = apiResponse.data!;
         if (currentScheduleModel.isNotPhonySchedule()) {
           List<CourseUiModel?> courseUiModels =
               await currentScheduleModel.findNewCourses(id);
           if (_preferenceService
               .getStringList(PreferenceTypes.bookmarks)!
+              .map((json) => bookmarkedScheduleModelFromJson(json).scheduleId)
               .contains(id)) {
             for (CourseUiModel? courseUiModel in courseUiModels) {
               if (courseUiModel != null) {
@@ -96,16 +97,12 @@ class SearchPageCubit extends Cubit<SearchPageState> {
               }
             }
             scheduleFavorited = true;
-            // dev.log(currentScheduleModel.toJson().toString());
-            // dev.log("=======================================================================================");
-            // dev.log((await _databaseService.getOneSchedule(id))!.toJson().toString());
           }
 
           emit(state.copyWith(
             previewFetchStatus: PreviewFetchStatus.FETCHED_SCHEDULE,
             previewCurrentScheduleId: currentScheduleModel.id,
             previewListOfDays: currentScheduleModel.days,
-            previewListOfWeeks: currentScheduleModel.splitToWeek(),
             previewToggledFavorite: scheduleFavorited,
             previewScheduleModelAndCourses: ScheduleModelAndCourses(
                 scheduleModel: currentScheduleModel,
@@ -120,13 +117,12 @@ class SearchPageCubit extends Cubit<SearchPageState> {
         }
         break;
       case api.ApiStatus.CACHED:
-        ScheduleModel currentScheduleModel = _apiResponse.data!;
+        ScheduleModel currentScheduleModel = apiResponse.data!;
         if (currentScheduleModel.isNotPhonySchedule()) {
           emit(state.copyWith(
             previewFetchStatus: PreviewFetchStatus.CACHED_SCHEDULE,
             previewCurrentScheduleId: currentScheduleModel.id,
             previewListOfDays: currentScheduleModel.days,
-            previewListOfWeeks: currentScheduleModel.splitToWeek(),
             previewToggledFavorite: true,
             previewScheduleModelAndCourses: ScheduleModelAndCourses(
                 scheduleModel: currentScheduleModel,
@@ -220,8 +216,13 @@ class SearchPageCubit extends Cubit<SearchPageState> {
           channelDescription: 'Notifications for schedule');
     }
 
-    await _databaseService.remove(state.previewCurrentScheduleId!);
+    await _databaseService.remove(
+        state.previewCurrentScheduleId!, AccessStores.SCHEDULE_STORE);
+    await _databaseService.remove(
+        state.previewCurrentScheduleId!, AccessStores.COURSE_COLOR_STORE);
+
     emit(state.copyWith(previewToggledFavorite: false));
+
     _sharedPrefs.setStringList(PreferenceTypes.bookmarks,
         bookmarks.map((bookmark) => jsonEncode(bookmark)).toList());
   }
@@ -280,7 +281,6 @@ class SearchPageCubit extends Cubit<SearchPageState> {
           focused: false,
           previewFetchStatus: PreviewFetchStatus.INITIAL,
           previewCurrentScheduleId: null));
-      log('here');
     }
   }
 

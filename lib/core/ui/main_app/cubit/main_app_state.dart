@@ -2,7 +2,14 @@
 
 part of 'main_app_cubit.dart';
 
-enum MainAppStatus { INITIAL, LOADING, POPULATED_VIEW, FETCH_ERROR, NO_VIEW }
+enum MainAppStatus {
+  INITIAL,
+  LOADING,
+  POPULATED_VIEW,
+  FETCH_ERROR,
+  NO_VIEW,
+  EMPTY_SCHEDULE
+}
 
 class MainAppState extends Equatable {
   final MainAppStatus status;

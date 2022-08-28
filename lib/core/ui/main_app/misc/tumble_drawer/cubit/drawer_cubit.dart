@@ -3,19 +3,29 @@ part of 'drawer_state.dart';
 class DrawerCubit extends Cubit<DrawerState> {
   DrawerCubit()
       : super(DrawerState(
-          theme: getIt<SharedPreferences>()
-              .getString(PreferenceTypes.theme)!
-              .capitalize(),
-          viewType: ScheduleViewTypes.viewTypesMap[
-              getIt<SharedPreferences>().getInt(PreferenceTypes.view)],
-          school: getIt<SharedPreferences>().getString(PreferenceTypes.school),
-          bookmarks: getIt<SharedPreferences>()
-              .getStringList(PreferenceTypes.bookmarks),
-          notificationTime: getIt<SharedPreferences>()
-              .getInt(PreferenceTypes.notificationTime),
-        ));
+            theme: getIt<SharedPreferences>()
+                .getString(PreferenceTypes.theme)!
+                .capitalize(),
+            viewType: ScheduleViewTypes.viewTypesMap[
+                getIt<SharedPreferences>().getInt(PreferenceTypes.view)],
+            school:
+                getIt<SharedPreferences>().getString(PreferenceTypes.school),
+            bookmarks: getIt<SharedPreferences>()
+                .getStringList(PreferenceTypes.bookmarks)!
+                .map((e) => bookmarkedScheduleModelFromJson(e))
+                .toList(),
+            notificationTime: getIt<SharedPreferences>()
+                .getInt(PreferenceTypes.notificationTime),
+            mapOfIdToggles: {
+              for (var bookmark in getIt<SharedPreferences>()
+                  .getStringList(PreferenceTypes.bookmarks)!
+                  .map((json) => bookmarkedScheduleModelFromJson(json)))
+                bookmark.scheduleId: bookmark.toggledValue
+            }));
 
   final _themeRepository = getIt<ThemeRepository>();
+  final _sharedPrefs = getIt<SharedPreferences>();
+  final _databaseService = getIt<SharedPreferences>();
 
   void changeTheme(String themeString) {
     emit(state.copyWith(theme: themeString.capitalize()));
@@ -43,22 +53,27 @@ class DrawerCubit extends Cubit<DrawerState> {
         viewType: ScheduleViewTypes.viewTypesMap[
             getIt<SharedPreferences>().getInt(PreferenceTypes.view)],
         school: getIt<SharedPreferences>().getString(PreferenceTypes.school),
-        bookmarks:
-            getIt<SharedPreferences>().getStringList(PreferenceTypes.bookmarks),
-        notificationTime: getIt<SharedPreferences>()
-            .getInt(PreferenceTypes.notificationTime)));
+        bookmarks: getIt<SharedPreferences>()
+            .getStringList(PreferenceTypes.bookmarks)!
+            .map((e) => bookmarkedScheduleModelFromJson(e))
+            .toList(),
+        notificationTime:
+            getIt<SharedPreferences>().getInt(PreferenceTypes.notificationTime),
+        mapOfIdToggles: {
+          for (var bookmark in getIt<SharedPreferences>()
+              .getStringList(PreferenceTypes.bookmarks)!
+              .map((json) => bookmarkedScheduleModelFromJson(json)))
+            bookmark.scheduleId: bookmark.toggledValue
+        }));
   }
 
   /// Toggle visibility of certain schedule via settings tab
-  void toggleSchedule(String unEncodedJson, bool toggledValue) {
+  void toggleSchedule(String scheduleId, bool toggledValue) {
     List<BookmarkedScheduleModel> bookmarkedSchedules =
         getIt<SharedPreferences>()
             .getStringList(PreferenceTypes.bookmarks)!
             .map((json) => bookmarkedScheduleModelFromJson(json))
             .toList();
-
-    final scheduleId =
-        bookmarkedScheduleModelFromJson(unEncodedJson).scheduleId;
 
     bookmarkedSchedules
         .removeWhere((bookmark) => bookmark.scheduleId == scheduleId);
@@ -68,10 +83,30 @@ class DrawerCubit extends Cubit<DrawerState> {
 
     getIt<SharedPreferences>().setStringList(PreferenceTypes.bookmarks,
         bookmarkedSchedules.map((bookmark) => jsonEncode(bookmark)).toList());
-    emit(state.copyWith(
-        bookmarks: bookmarkedSchedules
-            .map((bookmark) => jsonEncode(bookmark))
-            .toList()));
+
+    emit(state.copyWith(bookmarks: bookmarkedSchedules, mapOfIdToggles: {
+      for (var bookmark in getIt<SharedPreferences>()
+          .getStringList(PreferenceTypes.bookmarks)!
+          .map((json) => bookmarkedScheduleModelFromJson(json)))
+        bookmark.scheduleId: bookmark.toggledValue
+    }));
+  }
+
+  Future<void> removeBookmark(String id) async {
+    final bookmarks = _sharedPrefs
+        .getStringList(PreferenceTypes.bookmarks)!
+        .map((e) => bookmarkedScheduleModelFromJson(e))
+        .toList();
+    bookmarks.removeWhere((bookmark) => bookmark.scheduleId == id);
+
+    await _databaseService.remove(id);
+
+    emit(state.copyWith(bookmarks: bookmarks, mapOfIdToggles: {
+      for (var bookmark in getIt<SharedPreferences>()
+          .getStringList(PreferenceTypes.bookmarks)!
+          .map((json) => bookmarkedScheduleModelFromJson(json)))
+        bookmark.scheduleId: bookmark.toggledValue
+    }));
   }
 
   void setView(int viewType) {
@@ -94,13 +129,10 @@ class DrawerCubit extends Cubit<DrawerState> {
     emit(state.copyWith(school: schoolName));
   }
 
-  bool getScheduleToggleValue(String undecodedJson) {
+  bool getScheduleToggleValue(String scheduleId) {
     log(state.bookmarks!.toString());
     return state.bookmarks!
-        .map((json) => bookmarkedScheduleModelFromJson(json))
-        .firstWhere((bookmark) =>
-            bookmark.scheduleId ==
-            bookmarkedScheduleModelFromJson(undecodedJson).scheduleId)
+        .firstWhere((bookmark) => bookmark.scheduleId == scheduleId)
         .toggledValue;
   }
 }

@@ -13,15 +13,6 @@ import '../database/repository/database_repository.dart';
 import '../dependency_injection/get_it_instances.dart';
 
 extension ScheduleParsing on ScheduleModel {
-  List<Week> splitToWeek() {
-    return groupBy(days, (Day day) => day.weekNumber)
-        .entries
-        .map((weekNumberToDayList) => Week(
-            weekNumber: weekNumberToDayList.key,
-            days: weekNumberToDayList.value))
-        .toList();
-  }
-
   Future<List<CourseUiModel?>> findNewCourses(String scheduleId) async {
     DatabaseRepository databaseService = getIt<DatabaseRepository>();
 
@@ -83,5 +74,16 @@ extension GetContrastColor on Color {
 
     // Return black for bright colors, white for dark colors
     return luma > 0.75 ? Colors.black : Colors.white;
+  }
+}
+
+extension SplitToWeek on List<Day> {
+  List<Week> splitToWeek() {
+    return groupBy(this, (Day day) => day.weekNumber)
+        .entries
+        .map((weekNumberToDayList) => Week(
+            weekNumber: weekNumberToDayList.key,
+            days: weekNumberToDayList.value))
+        .toList();
   }
 }

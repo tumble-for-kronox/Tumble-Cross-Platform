@@ -41,16 +41,19 @@ class CacheAndInteractionRepository implements ICacheAndInteractionService {
   Future<ApiResponse> getSchedule(String scheduleId) async {
     final bool favoritesContainsThisScheduleId = _preferenceService
         .getStringList(PreferenceTypes.bookmarks)!
+        .map((json) => bookmarkedScheduleModelFromJson(json).scheduleId)
         .contains(scheduleId);
 
     if (favoritesContainsThisScheduleId) {
       final ScheduleModel userCachedSchedule =
           await _getCachedSchedule(scheduleId);
 
-      // if (DateTime.now().subtract(const Duration(minutes: 30)).isAfter(userCachedSchedule.cachedAt.toLocal())) {
-      //   return await getSchedule(scheduleId);
-      // }
-
+      if (DateTime.now()
+          .subtract(const Duration(minutes: 30))
+          .isAfter(userCachedSchedule.cachedAt.toLocal())) {
+        return await getSchedule(scheduleId);
+      }
+      log('message');
       return ApiResponse.cached(userCachedSchedule);
     }
 
