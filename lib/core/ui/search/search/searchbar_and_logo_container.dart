@@ -24,7 +24,7 @@ class _SearchBarAndLogoContainerState extends State<SearchBarAndLogoContainer> {
           case ConnectionState.done:
             return Container(
               margin: EdgeInsets.only(
-                  top: MediaQuery.of(context).viewPadding.top + 20),
+                  top: MediaQuery.of(context).viewPadding.top + 5),
               alignment: Alignment.center,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,

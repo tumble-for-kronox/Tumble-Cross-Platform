@@ -6,14 +6,10 @@ import 'package:tumble/core/ui/schedule/tumble_week_view/week_number.dart';
 
 class TumbleWeekPageContainer extends StatelessWidget {
   final Week week;
-  final String scheduleId;
   final MainAppCubit cubit;
 
   const TumbleWeekPageContainer(
-      {Key? key,
-      required this.week,
-      required this.scheduleId,
-      required this.cubit})
+      {Key? key, required this.week, required this.cubit})
       : super(key: key);
 
   @override

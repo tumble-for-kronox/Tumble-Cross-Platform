@@ -50,16 +50,22 @@ class DrawerCubit extends Cubit<DrawerState> {
   }
 
   /// Toggle visibility of certain schedule via settings tab
-  void toggleSchedule(String scheduleId, bool toggledValue) {
+  void toggleSchedule(String unEncodedJson, bool toggledValue) {
     List<BookmarkedScheduleModel> bookmarkedSchedules =
         getIt<SharedPreferences>()
             .getStringList(PreferenceTypes.bookmarks)!
             .map((json) => bookmarkedScheduleModelFromJson(json))
             .toList();
+
+    final scheduleId =
+        bookmarkedScheduleModelFromJson(unEncodedJson).scheduleId;
+
     bookmarkedSchedules
         .removeWhere((bookmark) => bookmark.scheduleId == scheduleId);
+
     bookmarkedSchedules.add(BookmarkedScheduleModel(
         scheduleId: scheduleId, toggledValue: toggledValue));
+
     getIt<SharedPreferences>().setStringList(PreferenceTypes.bookmarks,
         bookmarkedSchedules.map((bookmark) => jsonEncode(bookmark)).toList());
     emit(state.copyWith(
@@ -73,11 +79,11 @@ class DrawerCubit extends Cubit<DrawerState> {
     emit(state.copyWith(viewType: ScheduleViewTypes.viewTypesMap[viewType]));
   }
 
-  void setNotificationTime(int time, ScheduleModel schedule) async {
+  void setNotificationTime(int time) async {
     SharedPreferences sharedPreferences = getIt<SharedPreferences>();
     sharedPreferences.setInt(PreferenceTypes.notificationTime, time);
     getIt<NotificationRepository>()
-        .assignWithNewDuration(Duration(minutes: time), schedule);
+        .assignWithNewDuration(Duration(minutes: time));
 
     emit(state.copyWith(
         notificationTime: getIt<SharedPreferences>()
@@ -88,5 +94,13 @@ class DrawerCubit extends Cubit<DrawerState> {
     emit(state.copyWith(school: schoolName));
   }
 
-  getScheduleToggleValue(String id) {}
+  bool getScheduleToggleValue(String undecodedJson) {
+    log(state.bookmarks!.toString());
+    return state.bookmarks!
+        .map((json) => bookmarkedScheduleModelFromJson(json))
+        .firstWhere((bookmark) =>
+            bookmark.scheduleId ==
+            bookmarkedScheduleModelFromJson(undecodedJson).scheduleId)
+        .toggledValue;
+  }
 }

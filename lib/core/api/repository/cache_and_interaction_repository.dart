@@ -7,6 +7,7 @@ import 'package:tumble/core/api/interface/icache_and_interaction_service.dart';
 import 'package:tumble/core/api/repository/backend_repository.dart';
 import 'package:tumble/core/database/database_response.dart';
 import 'package:tumble/core/database/repository/database_repository.dart';
+import 'package:tumble/core/models/api_models/bookmarked_schedule_model.dart';
 import 'package:tumble/core/models/api_models/schedule_model.dart';
 import 'package:tumble/core/shared/preference_types.dart';
 import 'package:tumble/core/dependency_injection/get_it_instances.dart';
@@ -74,25 +75,12 @@ class CacheAndInteractionRepository implements ICacheAndInteractionService {
   }
 
   @override
-  Future<ApiResponse> getCachedBookmarkedSchedule() async {
-    final bool userHasCachedSchedule =
-        _preferenceService.getString(PreferenceTypes.schedule) != null;
-    if (userHasCachedSchedule) {
-      ScheduleModel userCachedSchedule = await _getCachedSchedule(null);
-      return ApiResponse.cached(userCachedSchedule);
-    }
-    return ApiResponse.error(RuntimeErrorType.noCachedSchedule);
+  Future<ApiResponse> getCachedBookmarkedSchedule(String scheduleId) async {
+    ScheduleModel userCachedSchedule = await _getCachedSchedule(scheduleId);
+    return ApiResponse.cached(userCachedSchedule);
   }
 
-  Future<ScheduleModel> _getCachedSchedule(String? scheduleId) async {
-    return (await _databaseService.getOneSchedule(scheduleId ??
-        _preferenceService.getString(PreferenceTypes.schedule)!))!;
-  }
-
-  @override
-  Future<ApiResponse> refreshDefaultSchedule() async {
-    String defaultScheduleId =
-        _preferenceService.getString(PreferenceTypes.schedule)!;
-    return await getSchedulesRequest(defaultScheduleId);
+  Future<ScheduleModel> _getCachedSchedule(String scheduleId) async {
+    return (await _databaseService.getOneSchedule(scheduleId))!;
   }
 }

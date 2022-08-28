@@ -11,7 +11,9 @@ import 'package:tumble/main.dart';
 class TumbleWeekEventTile extends StatelessWidget {
   final Event event;
   final MainAppCubit mainAppCubit;
-  const TumbleWeekEventTile({Key? key, required this.event, required this.mainAppCubit}) : super(key: key);
+  const TumbleWeekEventTile(
+      {Key? key, required this.event, required this.mainAppCubit})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -31,15 +33,17 @@ class TumbleWeekEventTile extends StatelessWidget {
       ),
       child: MaterialButton(
         padding: const EdgeInsets.all(0),
-        onPressed: () =>
-            TumbleEventModal.showEventModal(context, event, mainAppCubit.getColorForCourse(event), mainAppCubit),
+        onPressed: () => TumbleEventModal.showBookmarkEventModal(context, event,
+            mainAppCubit.getColorForCourse(event), mainAppCubit),
         child: Row(
           mainAxisSize: MainAxisSize.max,
           children: [
             Container(
               width: 3,
               decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.only(topLeft: Radius.circular(2), bottomLeft: Radius.circular(2)),
+                  borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(2),
+                      bottomLeft: Radius.circular(2)),
                   color: event.isSpecial ? Colors.redAccent : courseColor),
             ),
             Stack(
@@ -47,7 +51,9 @@ class TumbleWeekEventTile extends StatelessWidget {
               children: [
                 Container(
                   width: 100,
-                  color: event.isSpecial ? Colors.redAccent.withOpacity(0.35) : courseColor.withOpacity(0.35),
+                  color: event.isSpecial
+                      ? Colors.redAccent.withOpacity(0.35)
+                      : courseColor.withOpacity(0.35),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 5),

@@ -123,24 +123,11 @@ class TumbleAppDrawer extends StatelessWidget {
 
                   /// Schedule
                   TumbleSettingsSection(tiles: [
-                    // TumbleAppDrawerTile(
-                    //     drawerTileTitle: "Set default view type",
-                    //     subtitle: "Current view: ${state.viewType}",
-                    //     prefixIcon: CupertinoIcons.list_dash,
-                    //     eventType: EventType.SET_DEFAULT_VIEW,
-                    //     drawerEvent: (eventType) => handleDrawerEvent(
-                    //           eventType,
-                    //           context,
-                    //           navigator,
-                    //         )),
                     TumbleAppDrawerTile(
                         drawerTileTitle: "Toggle visible schedules",
-                        subtitle:
-                            context.watch<DrawerCubit>().state.schedule != null
-                                ? "Default schedule: \n${state.schedule}"
-                                : "No default schedule set",
+                        subtitle: "Select from your list of bookmarks",
                         prefixIcon: CupertinoIcons.calendar,
-                        eventType: EventType.SET_DEFAULT_SCHEDULE,
+                        eventType: EventType.TOGGLE_BOOKMARKED_SCHEDULES,
                         drawerEvent: (eventType) =>
                             handleDrawerEvent(eventType, context, navigator)),
                   ], title: "Schedule"),
@@ -195,19 +182,19 @@ class TumbleAppDrawer extends StatelessWidget {
 
         /// Direct user to support page
         break;
-      case EventType.SET_DEFAULT_SCHEDULE:
+      case EventType.TOGGLE_BOOKMARKED_SCHEDULES:
         if (context.read<DrawerCubit>().state.bookmarks!.isNotEmpty) {
           showModalBottomSheet(
               context: context,
               builder: (_) => AppFavoriteScheduleToggle(
-                  scheduleIds: context.read<DrawerCubit>().state.bookmarks!,
-                  toggleSchedule: (newId, value) async {
-                    context.read<DrawerCubit>().toggleSchedule(newId, value);
-                    BlocProvider.of<MainAppCubit>(context).setLoading();
-                    Navigator.of(context).pop();
-                    await BlocProvider.of<MainAppCubit>(context)
-                        .swapScheduleDefaultView(newId);
-                  }));
+                    scheduleIds: context.read<DrawerCubit>().state.bookmarks!,
+                    toggleSchedule: (newId, value) async {
+                      context.read<DrawerCubit>().toggleSchedule(newId, value);
+                      BlocProvider.of<MainAppCubit>(context).setLoading();
+                      await BlocProvider.of<MainAppCubit>(context).updateView();
+                    },
+                    cubit: context.read<DrawerCubit>(),
+                  ));
         }
         break;
       case EventType.SET_DEFAULT_VIEW:
@@ -231,11 +218,8 @@ class TumbleAppDrawer extends StatelessWidget {
             builder: (_) =>
                 AppNotificationTimePicker(setNotificationTime: (time) {
                   context.read<DrawerCubit>().setNotificationTime(
-                      time,
-                      BlocProvider.of<MainAppCubit>(context)
-                          .state
-                          .scheduleModelAndCourses!
-                          .scheduleModel);
+                        time,
+                      );
                   Navigator.of(context).pop();
                 }));
         break;

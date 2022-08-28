@@ -9,6 +9,7 @@ import 'package:tumble/core/theme/cubit/theme_state.dart';
 import 'package:tumble/core/theme/data/colors.dart';
 import 'package:tumble/core/ui/init_cubit/init_cubit.dart';
 import 'package:tumble/core/ui/login/cubit/auth_cubit.dart';
+import 'package:tumble/core/ui/search/cubit/search_page_cubit.dart';
 
 class App extends StatefulWidget {
   const App({Key? key}) : super(key: key);
@@ -30,19 +31,23 @@ class _AppState extends State<App> {
         BlocProvider<AppNavigator>(create: (_) => AppNavigator()),
         BlocProvider<InitCubit>(create: (_) => InitCubit()),
         BlocProvider<AuthCubit>(create: (_) => AuthCubit()),
-        BlocProvider<ThemeCubit>(create: (_) => ThemeCubit()..getCurrentTheme())
+        BlocProvider<ThemeCubit>(
+            create: (_) => ThemeCubit()..getCurrentTheme()),
+        BlocProvider<SearchPageCubit>(create: (context) => SearchPageCubit())
       ],
       child: BlocBuilder<ThemeCubit, ThemeState>(
           builder: ((context, state) => MaterialApp(
               debugShowCheckedModeBanner: false,
               title: 'Tumble',
               theme: ThemeData(
-                bottomSheetTheme: const BottomSheetThemeData(backgroundColor: Colors.transparent),
+                bottomSheetTheme: const BottomSheetThemeData(
+                    backgroundColor: Colors.transparent),
                 colorScheme: CustomColors.lightColors,
                 fontFamily: 'Roboto',
               ),
               darkTheme: ThemeData(
-                bottomSheetTheme: const BottomSheetThemeData(backgroundColor: Colors.transparent),
+                bottomSheetTheme: const BottomSheetThemeData(
+                    backgroundColor: Colors.transparent),
                 colorScheme: CustomColors.darkColors,
                 bottomNavigationBarTheme: BottomNavigationBarThemeData(
                   selectedItemColor: CustomColors.darkColors.primary,
@@ -52,10 +57,14 @@ class _AppState extends State<App> {
               themeMode: state.themeMode,
               home: MultiBlocProvider(
                 providers: [
-                  BlocProvider.value(value: BlocProvider.of<AppNavigator>(context)),
-                  BlocProvider.value(value: BlocProvider.of<InitCubit>(context)),
-                  BlocProvider.value(value: BlocProvider.of<AuthCubit>(context)),
-                  BlocProvider.value(value: BlocProvider.of<ThemeCubit>(context)),
+                  BlocProvider.value(
+                      value: BlocProvider.of<AppNavigator>(context)),
+                  BlocProvider.value(
+                      value: BlocProvider.of<InitCubit>(context)),
+                  BlocProvider.value(
+                      value: BlocProvider.of<AuthCubit>(context)),
+                  BlocProvider.value(
+                      value: BlocProvider.of<ThemeCubit>(context)),
                 ],
                 child: const AppNavigatorProvider(initialPages: [
                   NavigationRouteLabels.mainAppPage,

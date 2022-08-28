@@ -37,7 +37,7 @@ class _TumbleWeekViewState extends State<TumbleWeekView> {
           case MainAppStatus.LOADING:
             return SpinKitThreeBounce(
                 color: Theme.of(context).colorScheme.primary);
-          case MainAppStatus.SCHEDULE_SELECTED:
+          case MainAppStatus.POPULATED_VIEW:
             return Stack(children: [
               SizedBox(
                   child: PageView.builder(
@@ -45,7 +45,6 @@ class _TumbleWeekViewState extends State<TumbleWeekView> {
                       itemBuilder: (context, index) {
                         return state.listOfWeeks!
                             .map((e) => TumbleWeekPageContainer(
-                                  scheduleId: state.currentScheduleId!,
                                   week: e,
                                   cubit: BlocProvider.of<MainAppCubit>(context),
                                 ))
@@ -62,11 +61,11 @@ class _TumbleWeekViewState extends State<TumbleWeekView> {
                       .getNavBarItem(NavbarItem.SEARCH),
                   navigator),
             );
-          case MainAppStatus.EMPTY_SCHEDULE:
+          case MainAppStatus.NO_VIEW:
             return NoScheduleAvailable(
               errorType: RuntimeErrorType.emptyScheduleError,
               cupertinoAlertDialog:
-                  CustomCupertinoAlerts.scheduleContainsNoViews(
+                  CustomCupertinoAlerts.previewContainsNoViews(
                       context,
                       () => context
                           .read<MainAppNavigationCubit>()

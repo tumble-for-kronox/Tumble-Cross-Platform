@@ -1,11 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:tumble/core/models/api_models/bookmarked_schedule_model.dart';
 import 'package:tumble/core/ui/main_app/misc/tumble_drawer/cubit/drawer_state.dart';
 import 'package:tumble/core/ui/scaffold_message.dart';
 
 typedef ToggleSchedule = void Function(String id, bool toggleValue);
 
-class AppFavoriteScheduleToggle extends StatelessWidget {
+class AppFavoriteScheduleToggle extends StatefulWidget {
   final List<String> scheduleIds;
   final DrawerCubit cubit;
   final ToggleSchedule toggleSchedule;
@@ -16,6 +17,12 @@ class AppFavoriteScheduleToggle extends StatelessWidget {
       required this.cubit})
       : super(key: key);
 
+  @override
+  State<AppFavoriteScheduleToggle> createState() =>
+      _AppFavoriteScheduleToggleState();
+}
+
+class _AppFavoriteScheduleToggleState extends State<AppFavoriteScheduleToggle> {
   @override
   Widget build(BuildContext context) {
     return Align(
@@ -35,19 +42,23 @@ class AppFavoriteScheduleToggle extends StatelessWidget {
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
           child: SingleChildScrollView(
             child: Column(
-                children: (scheduleIds).map((id) {
+                children: (widget.scheduleIds).map((id) {
               return SwitchListTile(
+                secondary: IconButton(
+                  icon: Icon(CupertinoIcons.add_circled_solid),
+                  onPressed: null,
+                ),
                 shape: const RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(20))),
                 title: Text(
-                  id,
+                  bookmarkedScheduleModelFromJson(id).scheduleId,
                   style: TextStyle(
                       color: Theme.of(context).colorScheme.onBackground),
                 ),
                 onChanged: (bool value) {
-                  toggleSchedule(id, value);
+                  widget.toggleSchedule(id, value);
                 },
-                value: cubit.getScheduleToggleValue(id),
+                value: widget.cubit.getScheduleToggleValue(id),
               );
             }).toList()),
           ),

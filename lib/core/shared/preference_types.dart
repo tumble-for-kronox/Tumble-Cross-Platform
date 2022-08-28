@@ -1,5 +1,4 @@
 class PreferenceTypes {
-  static const schedule = 'schedule';
   static const school = 'school';
   static const view = 'view';
   static const theme = 'theme';

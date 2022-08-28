@@ -5,14 +5,17 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tumble/core/extensions/extensions.dart';
 import 'package:tumble/core/theme/cubit/theme_cubit.dart';
+import 'package:tumble/core/theme/data/colors.dart';
 import 'package:tumble/core/ui/bottom_nav_bar/cubit/bottom_nav_cubit.dart';
 import 'package:tumble/core/ui/main_app/cubit/main_app_cubit.dart';
+import 'package:tumble/core/ui/search/cubit/search_page_cubit.dart';
 
 class TumbleAppBar extends StatefulWidget {
   final AsyncCallback? toggleFavorite;
-  final bool? visibleBookmark;
-  const TumbleAppBar({Key? key, this.toggleFavorite, this.visibleBookmark})
-      : super(key: key);
+  const TumbleAppBar({
+    Key? key,
+    this.toggleFavorite,
+  }) : super(key: key);
 
   @override
   State<TumbleAppBar> createState() => _TumbleAppBarState();
@@ -58,45 +61,57 @@ class _TumbleAppBarState extends State<TumbleAppBar> {
             children: [
               Row(
                 children: [
-                  if (widget.visibleBookmark!)
-                    BlocBuilder<MainAppCubit, MainAppState>(
-                      builder: (context, state) {
-                        switch (state.status) {
-                          case MainAppStatus.SCHEDULE_SELECTED:
-                            return Padding(
-                              padding: const EdgeInsets.only(left: 5, top: 5),
+                  Padding(
+                      padding: const EdgeInsets.only(left: 5, top: 5),
+                      child: BlocBuilder<SearchPageCubit, SearchPageState>(
+                          builder: (context, state) {
+                        switch (state.previewFetchStatus) {
+                          case PreviewFetchStatus.EMPTY_SCHEDULE:
+                          case PreviewFetchStatus.FETCH_ERROR:
+                          case PreviewFetchStatus.LOADING:
+                          case PreviewFetchStatus.INITIAL:
+                            return const Padding(
+                              padding: EdgeInsets.only(top: 5, right: 5),
                               child: IconButton(
                                   iconSize: 30,
-                                  onPressed: widget.toggleFavorite,
+                                  onPressed: null,
+                                  icon: Icon(CupertinoIcons.bookmark,
+                                      color: Colors.transparent)),
+                            );
+
+                          case PreviewFetchStatus.CACHED_SCHEDULE:
+                            return Padding(
+                              padding: const EdgeInsets.only(top: 5, right: 5),
+                              child: IconButton(
+                                  iconSize: 30,
+                                  onPressed: () => context
+                                      .read<SearchPageCubit>()
+                                      .toggleFavorite(context),
+                                  icon: Icon(CupertinoIcons.bookmark,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onBackground)),
+                            );
+                          case PreviewFetchStatus.FETCHED_SCHEDULE:
+                            return Padding(
+                              padding: const EdgeInsets.only(top: 5, right: 5),
+                              child: IconButton(
+                                  iconSize: 30,
+                                  onPressed: () => context
+                                      .read<SearchPageCubit>()
+                                      .toggleFavorite(context),
                                   icon: Icon(
-                                      state.toggledFavorite
+                                      context
+                                              .read<SearchPageCubit>()
+                                              .scheduleInBookmarks()
                                           ? CupertinoIcons.bookmark_fill
                                           : CupertinoIcons.bookmark,
                                       color: Theme.of(context)
                                           .colorScheme
                                           .onBackground)),
                             );
-                          default:
-                            return Padding(
-                              padding: const EdgeInsets.only(top: 5, right: 5),
-                              child: IconButton(
-                                  iconSize: 30,
-                                  onPressed: widget.toggleFavorite,
-                                  icon: const Icon(CupertinoIcons.bookmark,
-                                      color: Colors.transparent)),
-                            );
                         }
-                      },
-                    )
-                  else
-                    const Padding(
-                      padding: EdgeInsets.only(top: 5, right: 5),
-                      child: IconButton(
-                          iconSize: 30,
-                          onPressed: null,
-                          icon: Icon(CupertinoIcons.bookmark,
-                              color: Colors.transparent)),
-                    ),
+                      }))
                 ],
               ),
               Container(

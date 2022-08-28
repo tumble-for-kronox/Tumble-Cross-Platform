@@ -2,32 +2,96 @@
 
 part of 'search_page_cubit.dart';
 
-enum SearchPageStatus { INITIAL, LOADING, FOUND, NO_SCHEDULES, ERROR }
+enum SearchPageStatus {
+  INITIAL,
+  LOADING,
+  FOUND,
+  NO_SCHEDULES,
+  ERROR,
+  DISPLAY_PREVIEW
+}
+
+enum PreviewFetchStatus {
+  INITIAL,
+  LOADING,
+  CACHED_SCHEDULE,
+  FETCHED_SCHEDULE,
+  FETCH_ERROR,
+  EMPTY_SCHEDULE
+}
 
 class SearchPageState extends Equatable {
-  final SearchPageStatus status;
+  final SearchPageStatus searchPageStatus;
+  final PreviewFetchStatus previewFetchStatus;
   final bool focused;
   final bool clearButtonVisible;
   final String? errorMessage;
   final List<Item>? programList;
+  final bool? previewToTopButtonVisible;
+  final ScheduleModelAndCourses? previewScheduleModelAndCourses;
+  final List<Day>? previewListOfDays;
+  final List<Week>? previewListOfWeeks;
+  final bool? previewToggledFavorite;
+  final String? previewCurrentScheduleId;
 
-  const SearchPageState(this.focused, this.status, this.clearButtonVisible,
-      this.errorMessage, this.programList);
+  const SearchPageState(
+      {required this.focused,
+      required this.searchPageStatus,
+      required this.previewFetchStatus,
+      required this.clearButtonVisible,
+      required this.errorMessage,
+      required this.programList,
+      required this.previewToTopButtonVisible,
+      required this.previewScheduleModelAndCourses,
+      required this.previewListOfDays,
+      required this.previewListOfWeeks,
+      required this.previewToggledFavorite,
+      required this.previewCurrentScheduleId});
 
   SearchPageState copyWith(
           {bool? focused,
-          SearchPageStatus? status,
+          SearchPageStatus? searchPageStatus,
+          PreviewFetchStatus? previewFetchStatus,
           bool? clearButtonVisible,
           String? errorMessage,
-          List<Item>? programList}) =>
+          List<Item>? programList,
+          bool? previewToTopButtonVisible,
+          ScheduleModelAndCourses? previewScheduleModelAndCourses,
+          List<Day>? previewListOfDays,
+          List<Week>? previewListOfWeeks,
+          bool? previewToggledFavorite,
+          String? previewCurrentScheduleId}) =>
       SearchPageState(
-          focused ?? this.focused,
-          status ?? this.status,
-          clearButtonVisible ?? this.clearButtonVisible,
-          errorMessage ?? this.errorMessage,
-          programList ?? this.programList);
+          focused: focused ?? this.focused,
+          searchPageStatus: searchPageStatus ?? this.searchPageStatus,
+          previewFetchStatus: previewFetchStatus ?? this.previewFetchStatus,
+          clearButtonVisible: clearButtonVisible ?? this.clearButtonVisible,
+          errorMessage: errorMessage ?? this.errorMessage,
+          programList: programList ?? this.programList,
+          previewToTopButtonVisible:
+              previewToTopButtonVisible ?? this.previewToTopButtonVisible,
+          previewScheduleModelAndCourses: previewScheduleModelAndCourses ??
+              this.previewScheduleModelAndCourses,
+          previewListOfDays: previewListOfDays ?? this.previewListOfDays,
+          previewListOfWeeks: previewListOfWeeks ?? this.previewListOfWeeks,
+          previewToggledFavorite:
+              previewToggledFavorite ?? this.previewToggledFavorite,
+          previewCurrentScheduleId:
+              previewCurrentScheduleId ?? this.previewCurrentScheduleId);
 
   @override
-  List<Object?> get props =>
-      [clearButtonVisible, errorMessage, programList, focused, status];
+  List<Object?> get props => [
+        clearButtonVisible,
+        errorMessage,
+        programList,
+        focused,
+        searchPageStatus,
+        previewFetchStatus,
+        previewToTopButtonVisible,
+        previewScheduleModelAndCourses,
+        previewListOfDays,
+        previewListOfWeeks,
+        previewToggledFavorite,
+        previewCurrentScheduleId
+      ];
 }

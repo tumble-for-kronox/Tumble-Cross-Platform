@@ -38,14 +38,20 @@ class _TumbleCalendarViewState extends State<TumbleCalendarView> {
             return NoScheduleAvailable(
               errorType: RuntimeErrorType.noCachedSchedule,
               cupertinoAlertDialog: CustomCupertinoAlerts.noBookMarkedSchedules(
-                  context, () => context.read<MainAppNavigationCubit>().getNavBarItem(NavbarItem.SEARCH), navigator),
+                  context,
+                  () => context
+                      .read<MainAppNavigationCubit>()
+                      .getNavBarItem(NavbarItem.SEARCH),
+                  navigator),
             );
           case MainAppStatus.LOADING:
-            return SpinKitThreeBounce(color: Theme.of(context).colorScheme.primary);
+            return SpinKitThreeBounce(
+                color: Theme.of(context).colorScheme.primary);
 
-          case MainAppStatus.SCHEDULE_SELECTED:
+          case MainAppStatus.POPULATED_VIEW:
             return FutureBuilder(
-                future: getCalendarDataSource(state.listOfDays!, BlocProvider.of<MainAppCubit>(context)),
+                future: getCalendarDataSource(
+                    state.listOfDays!, BlocProvider.of<MainAppCubit>(context)),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     return SfCalendar(
@@ -53,7 +59,8 @@ class _TumbleCalendarViewState extends State<TumbleCalendarView> {
                       dataSource: snapshot.data as EventsDataSource,
                       headerStyle: CalendarHeaderStyle(
                           textAlign: TextAlign.center,
-                          backgroundColor: Theme.of(context).colorScheme.primary,
+                          backgroundColor:
+                              Theme.of(context).colorScheme.primary,
                           textStyle: TextStyle(
                               fontSize: 20,
                               fontStyle: FontStyle.normal,
@@ -62,31 +69,43 @@ class _TumbleCalendarViewState extends State<TumbleCalendarView> {
                               fontWeight: FontWeight.w500)),
                       monthViewSettings: MonthViewSettings(
                           showAgenda: true,
-                          navigationDirection: MonthNavigationDirection.vertical,
+                          navigationDirection:
+                              MonthNavigationDirection.vertical,
                           agendaViewHeight: 200,
-                          appointmentDisplayMode: MonthAppointmentDisplayMode.indicator,
+                          appointmentDisplayMode:
+                              MonthAppointmentDisplayMode.indicator,
                           monthCellStyle: MonthCellStyle(
-                            backgroundColor: Theme.of(context).colorScheme.background,
-                            trailingDatesBackgroundColor: Theme.of(context).colorScheme.background,
-                            leadingDatesBackgroundColor: Theme.of(context).colorScheme.background,
-                            textStyle: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.onBackground),
+                            backgroundColor:
+                                Theme.of(context).colorScheme.background,
+                            trailingDatesBackgroundColor:
+                                Theme.of(context).colorScheme.background,
+                            leadingDatesBackgroundColor:
+                                Theme.of(context).colorScheme.background,
+                            textStyle: TextStyle(
+                                fontSize: 12,
+                                color:
+                                    Theme.of(context).colorScheme.onBackground),
                           )),
                       onLongPress: (calendarLongPressDetails) {
-                        if (calendarLongPressDetails.targetElement != CalendarElement.appointment) {
+                        if (calendarLongPressDetails.targetElement !=
+                            CalendarElement.appointment) {
                           return;
                         }
                         Event event = calendarLongPressDetails.appointments![0];
-                        EventOptions.showEventOptions(context, event, BlocProvider.of<MainAppCubit>(context));
+                        EventOptions.showEventOptions(context, event,
+                            BlocProvider.of<MainAppCubit>(context));
                       },
                       onTap: (calendarTapDetails) {
-                        if (calendarTapDetails.targetElement != CalendarElement.appointment) {
+                        if (calendarTapDetails.targetElement !=
+                            CalendarElement.appointment) {
                           return;
                         }
                         Event event = calendarTapDetails.appointments![0];
-                        TumbleEventModal.showEventModal(
+                        TumbleEventModal.showBookmarkEventModal(
                             context,
                             event,
-                            BlocProvider.of<MainAppCubit>(context).getColorForCourse(event),
+                            BlocProvider.of<MainAppCubit>(context)
+                                .getColorForCourse(event),
                             BlocProvider.of<MainAppCubit>(context));
                       },
                     );
@@ -99,13 +118,22 @@ class _TumbleCalendarViewState extends State<TumbleCalendarView> {
             return NoScheduleAvailable(
               errorType: state.message!,
               cupertinoAlertDialog: CustomCupertinoAlerts.fetchError(
-                  context, () => context.read<MainAppNavigationCubit>().getNavBarItem(NavbarItem.SEARCH), navigator),
+                  context,
+                  () => context
+                      .read<MainAppNavigationCubit>()
+                      .getNavBarItem(NavbarItem.SEARCH),
+                  navigator),
             );
-          case MainAppStatus.EMPTY_SCHEDULE:
+          case MainAppStatus.NO_VIEW:
             return NoScheduleAvailable(
               errorType: RuntimeErrorType.emptyScheduleError,
-              cupertinoAlertDialog: CustomCupertinoAlerts.scheduleContainsNoViews(
-                  context, () => context.read<MainAppNavigationCubit>().getNavBarItem(NavbarItem.SEARCH), navigator),
+              cupertinoAlertDialog:
+                  CustomCupertinoAlerts.previewContainsNoViews(
+                      context,
+                      () => context
+                          .read<MainAppNavigationCubit>()
+                          .getNavBarItem(NavbarItem.SEARCH),
+                      navigator),
             );
         }
       },
