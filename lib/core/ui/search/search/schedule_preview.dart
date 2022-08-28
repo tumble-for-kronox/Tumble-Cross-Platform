@@ -29,13 +29,7 @@ class _SchedulePreviewState extends State<SchedulePreview> {
   @override
   Widget build(BuildContext context) {
     final AppNavigator navigator = BlocProvider.of<AppNavigator>(context);
-    return BlocConsumer<SearchPageCubit, SearchPageState>(
-      listener: (context, state) {
-        if (state.previewFetchStatus == PreviewFetchStatus.FETCHED_SCHEDULE ||
-            state.previewFetchStatus == PreviewFetchStatus.CACHED_SCHEDULE) {
-          widget.toggleBookmark;
-        }
-      },
+    return BlocBuilder<SearchPageCubit, SearchPageState>(
       builder: (context, state) {
         switch (state.previewFetchStatus) {
           case PreviewFetchStatus.LOADING:
@@ -75,7 +69,7 @@ class _SchedulePreviewState extends State<SchedulePreview> {
             );
           case PreviewFetchStatus.FETCH_ERROR:
             return NoScheduleAvailable(
-              errorType: 'Schedule is missing',
+              errorType: RuntimeErrorType.scheduleFetchError,
               cupertinoAlertDialog: CustomCupertinoAlerts.fetchError(
                   context, () => null, navigator),
             );

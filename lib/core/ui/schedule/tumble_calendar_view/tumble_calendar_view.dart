@@ -137,8 +137,8 @@ class _TumbleCalendarViewState extends State<TumbleCalendarView> {
             );
           case MainAppStatus.NO_VIEW:
             return NoScheduleAvailable(
-              errorType: state.message!,
-              cupertinoAlertDialog: CustomCupertinoAlerts.fetchError(
+              errorType: RuntimeErrorType.noBookmarks,
+              cupertinoAlertDialog: CustomCupertinoAlerts.noBookMarkedSchedules(
                   context, () => null, navigator),
             );
         }

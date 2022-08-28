@@ -67,11 +67,11 @@ class TumbleAppDrawer extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 25.0),
-                  TumbleSettingsSection(tiles: [
+                  /* TumbleSettingsSection(tiles: [
                     TumbleAppDrawerTile(
                       drawerTileTitle: "Contact",
                       subtitle: "Get support",
-                      prefixIcon: CupertinoIcons.bubble_left_bubble_right,
+                      suffixIcon: CupertinoIcons.bubble_left_bubble_right,
                       eventType: EventType.CONTACT,
                       drawerEvent: (eventType) => handleDrawerEvent(
                         eventType,
@@ -85,7 +85,7 @@ class TumbleAppDrawer extends StatelessWidget {
                     color: Theme.of(context).colorScheme.onBackground,
                     indent: 20,
                     endIndent: 30,
-                  ),
+                  ), */
 
                   /// Common
                   TumbleSettingsSection(tiles: [
@@ -93,7 +93,7 @@ class TumbleAppDrawer extends StatelessWidget {
                       drawerTileTitle: "Change schools",
                       subtitle:
                           "Current school: ${(Schools.schools.firstWhere((school) => school.schoolName == context.read<DrawerCubit>().state.school)).schoolId.name.toUpperCase()}",
-                      prefixIcon: CupertinoIcons.arrow_right_arrow_left,
+                      suffixIcon: CupertinoIcons.arrow_right_arrow_left,
                       eventType: EventType.CHANGE_SCHOOL,
                       drawerEvent: (eventType) => handleDrawerEvent(
                         eventType,
@@ -105,7 +105,7 @@ class TumbleAppDrawer extends StatelessWidget {
                       drawerTileTitle: "Change theme",
                       subtitle:
                           "Current theme:  ${context.read<DrawerCubit>().state.theme}",
-                      prefixIcon: CupertinoIcons.device_phone_portrait,
+                      suffixIcon: CupertinoIcons.device_phone_portrait,
                       eventType: EventType.CHANGE_THEME,
                       drawerEvent: (eventType) => handleDrawerEvent(
                         eventType,
@@ -124,9 +124,9 @@ class TumbleAppDrawer extends StatelessWidget {
                   /// Schedule
                   TumbleSettingsSection(tiles: [
                     TumbleAppDrawerTile(
-                        drawerTileTitle: "Toggle visible schedules",
+                        drawerTileTitle: "Toggle schedules",
                         subtitle: "Select from your list of bookmarks",
-                        prefixIcon: CupertinoIcons.calendar,
+                        suffixIcon: CupertinoIcons.bookmark,
                         eventType: EventType.TOGGLE_BOOKMARKED_SCHEDULES,
                         drawerEvent: (eventType) =>
                             handleDrawerEvent(eventType, context, navigator)),
@@ -139,14 +139,14 @@ class TumbleAppDrawer extends StatelessWidget {
                   ),
                   TumbleSettingsSection(tiles: [
                     TumbleAppDrawerTile(
-                        prefixIcon: CupertinoIcons.bell_slash,
+                        suffixIcon: CupertinoIcons.bell_slash,
                         drawerTileTitle: "Clear all",
                         subtitle: "Removes all notifications",
                         eventType: EventType.CANCEL_ALL_NOTIFICATIONS,
                         drawerEvent: (eventType) =>
                             handleDrawerEvent(eventType, context, navigator)),
                     TumbleAppDrawerTile(
-                      prefixIcon: CupertinoIcons.clock,
+                      suffixIcon: CupertinoIcons.clock,
                       drawerTileTitle: "Notification offset",
                       subtitle:
                           "Current offset: ${getIt<SharedPreferences>().getInt(PreferenceTypes.notificationTime)} minutes",
@@ -193,14 +193,7 @@ class TumbleAppDrawer extends StatelessWidget {
                       BlocProvider<MainAppCubit>.value(
                           value: BlocProvider.of<MainAppCubit>(context)),
                     ],
-                    child: AppFavoriteScheduleToggle(
-                      scheduleIds: context
-                          .read<DrawerCubit>()
-                          .state
-                          .bookmarks!
-                          .map((bookmark) => bookmark.scheduleId)
-                          .toList(),
-                    ),
+                    child: const AppFavoriteScheduleToggle(),
                   ));
         }
         break;

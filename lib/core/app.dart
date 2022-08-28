@@ -65,6 +65,8 @@ class _AppState extends State<App> {
                       value: BlocProvider.of<AuthCubit>(context)),
                   BlocProvider.value(
                       value: BlocProvider.of<ThemeCubit>(context)),
+                  BlocProvider.value(
+                      value: BlocProvider.of<SearchPageCubit>(context))
                 ],
                 child: const AppNavigatorProvider(initialPages: [
                   NavigationRouteLabels.mainAppPage,

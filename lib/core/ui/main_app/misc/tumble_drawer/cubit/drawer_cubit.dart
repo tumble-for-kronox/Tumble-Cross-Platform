@@ -25,7 +25,7 @@ class DrawerCubit extends Cubit<DrawerState> {
 
   final _themeRepository = getIt<ThemeRepository>();
   final _sharedPrefs = getIt<SharedPreferences>();
-  final _databaseService = getIt<SharedPreferences>();
+  final _databaseService = getIt<DatabaseRepository>();
 
   void changeTheme(String themeString) {
     emit(state.copyWith(theme: themeString.capitalize()));
@@ -93,13 +93,19 @@ class DrawerCubit extends Cubit<DrawerState> {
   }
 
   Future<void> removeBookmark(String id) async {
+    log(id);
     final bookmarks = _sharedPrefs
         .getStringList(PreferenceTypes.bookmarks)!
         .map((e) => bookmarkedScheduleModelFromJson(e))
         .toList();
     bookmarks.removeWhere((bookmark) => bookmark.scheduleId == id);
+    log(bookmarks.toString());
 
-    await _databaseService.remove(id);
+    getIt<SharedPreferences>().setStringList(PreferenceTypes.bookmarks,
+        bookmarks.map((bookmark) => jsonEncode(bookmark)).toList());
+
+    await _databaseService.remove(id, AccessStores.SCHEDULE_STORE);
+    await _databaseService.remove(id, AccessStores.COURSE_COLOR_STORE);
 
     emit(state.copyWith(bookmarks: bookmarks, mapOfIdToggles: {
       for (var bookmark in getIt<SharedPreferences>()
@@ -130,7 +136,6 @@ class DrawerCubit extends Cubit<DrawerState> {
   }
 
   bool getScheduleToggleValue(String scheduleId) {
-    log(state.bookmarks!.toString());
     return state.bookmarks!
         .firstWhere((bookmark) => bookmark.scheduleId == scheduleId)
         .toggledValue;

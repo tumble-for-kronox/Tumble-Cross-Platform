@@ -6,6 +6,8 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tumble/core/api/builders/notification_service_builder.dart';
+import 'package:tumble/core/database/data/access_stores.dart';
+import 'package:tumble/core/database/repository/database_repository.dart';
 import 'package:tumble/core/models/api_models/bookmarked_schedule_model.dart';
 import 'package:tumble/core/shared/preference_types.dart';
 import 'package:tumble/core/shared/view_types.dart';

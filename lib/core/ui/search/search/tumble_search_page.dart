@@ -80,11 +80,6 @@ class _TumbleSearchPageState extends State<TumbleSearchPage> {
                                 errorType: state.errorMessage!,
                                 cupertinoAlertDialog: null);
                           case SearchPageStatus.DISPLAY_PREVIEW:
-                            log(context
-                                .read<SearchPageCubit>()
-                                .state
-                                .previewFetchStatus
-                                .name);
                             return SchedulePreview(
                               toggleBookmark: (value) =>
                                   BlocProvider.of<MainAppNavigationCubit>(

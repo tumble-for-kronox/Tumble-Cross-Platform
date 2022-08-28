@@ -21,21 +21,15 @@ import 'package:tumble/core/models/ui_models/schedule_model_and_courses.dart';
 import 'package:tumble/core/models/ui_models/week_model.dart';
 import 'package:tumble/core/shared/preference_types.dart';
 import 'package:tumble/core/dependency_injection/get_it_instances.dart';
-import 'package:tumble/core/api/apiservices/api_response.dart' as api;
 import 'package:tumble/core/ui/data/scaffold_message_types.dart';
 import 'package:tumble/core/ui/scaffold_message.dart';
 
-import '../../../api/repository/notification_repository.dart';
 part 'main_app_state.dart';
 
 class MainAppCubit extends Cubit<MainAppState> {
   MainAppCubit()
-      : super(MainAppState(
+      : super(const MainAppState(
             status: MainAppStatus.INITIAL,
-            currentScheduleIds: getIt<SharedPreferences>()
-                .getStringList(PreferenceTypes.bookmarks)!
-                .map((json) => bookmarkedScheduleModelFromJson(json).scheduleId)
-                .toList(),
             listOfDays: null,
             listOfWeeks: null,
             listViewToTopButtonVisible: false,
@@ -54,6 +48,7 @@ class MainAppCubit extends Cubit<MainAppState> {
   int get viewType => getIt<SharedPreferences>().getInt(PreferenceTypes.view)!;
 
   Future<void> init() async {
+    dev.log('IN INIT FUNCTION: MAINAPPCUBIT');
     await tryCached();
     _listViewScrollController.addListener((setScrollController));
   }
@@ -65,65 +60,80 @@ class MainAppCubit extends Cubit<MainAppState> {
   }
 
   Future<void> tryCached() async {
+    final currentScheduleIds = _sharedPrefs
+        .getStringList(PreferenceTypes.bookmarks)!
+        .map((json) => bookmarkedScheduleModelFromJson(json).scheduleId)
+        .toList();
+    dev.log('In TRYCACHED: ${currentScheduleIds.toString()}');
     List<ScheduleModelAndCourses> listOfScheduleModelAndCourses = [];
     List<List<Day>> matrixListOfDays = [];
-    if (state.currentScheduleIds != null) {
-      for (String? scheduleId in state.currentScheduleIds!) {
-        // Check if bookmarked schedule is toggled to be visible
-        // before trying to fetch it
-        if (scheduleId != null) {
-          if (_sharedPrefs
-              .getStringList(PreferenceTypes.bookmarks)!
-              .map((json) => bookmarkedScheduleModelFromJson(json))
-              .firstWhere((bookmark) => bookmark.scheduleId == scheduleId)
-              .toggledValue) {
-            final ApiResponse _apiResponse =
-                await _cacheAndInteractionService.getSchedule(scheduleId);
 
-            switch (_apiResponse.status) {
-              case ApiStatus.FETCHED:
-              case ApiStatus.CACHED:
-                ScheduleModel currentScheduleModel = _apiResponse.data!;
-                if (currentScheduleModel.isNotPhonySchedule()) {
-                  matrixListOfDays.add(currentScheduleModel.days);
-                  listOfScheduleModelAndCourses.add(ScheduleModelAndCourses(
-                      scheduleModel: currentScheduleModel,
-                      courses: await _databaseService
-                          .getCachedCoursesFromId(currentScheduleModel.id)));
-                }
+    for (String? scheduleId in currentScheduleIds) {
+      // Check if bookmarked schedule is toggled to be visible
+      // before trying to fetch it
 
-                break;
-              default:
-                break;
-            }
+      final bool userHasBookmarks = _sharedPrefs
+          .getStringList(PreferenceTypes.bookmarks)!
+          .map((json) => bookmarkedScheduleModelFromJson(json).scheduleId)
+          .toList()
+          .isNotEmpty;
+
+      final bool currentScheduleIsToggledToBeVisible = _sharedPrefs
+          .getStringList(PreferenceTypes.bookmarks)!
+          .map((json) => bookmarkedScheduleModelFromJson(json))
+          .firstWhere((bookmark) => bookmark.scheduleId == scheduleId)
+          .toggledValue;
+
+      if (scheduleId != null && userHasBookmarks) {
+        if (currentScheduleIsToggledToBeVisible) {
+          final ApiResponse _apiResponse =
+              await _cacheAndInteractionService.getSchedule(scheduleId);
+
+          switch (_apiResponse.status) {
+            case ApiStatus.FETCHED:
+            case ApiStatus.CACHED:
+              ScheduleModel currentScheduleModel = _apiResponse.data!;
+              if (currentScheduleModel.isNotPhonySchedule()) {
+                matrixListOfDays.add(currentScheduleModel.days);
+                listOfScheduleModelAndCourses.add(ScheduleModelAndCourses(
+                    scheduleModel: currentScheduleModel,
+                    courses: await _databaseService
+                        .getCachedCoursesFromId(currentScheduleModel.id)));
+              }
+
+              break;
+            default:
+              break;
           }
         }
-      }
-      if (listOfScheduleModelAndCourses.isNotEmpty) {
-        final flattened =
-            matrixListOfDays.expand((listOfDays) => listOfDays).toList();
-        flattened.sort((prevDay, nextDay) =>
-            prevDay.isoString.compareTo(nextDay.isoString));
-        final listOfDays = groupBy(flattened, (Day day) => day.date)
-            .entries
-            .map((dayGrouper) => Day(
-                name: dayGrouper.value[0].name,
-                date: dayGrouper.value[0].date,
-                isoString: dayGrouper.value[0].isoString,
-                weekNumber: dayGrouper.value[0].weekNumber,
-                events:
-                    dayGrouper.value.expand((Day day) => day.events).toList()))
-            .toList();
-
-        emit(state.copyWith(
-          status: MainAppStatus.POPULATED_VIEW,
-          scheduleModelAndCourses: listOfScheduleModelAndCourses,
-          listOfDays: listOfDays,
-          listOfWeeks: listOfDays.splitToWeek(),
-        ));
       } else {
         emit(state.copyWith(status: MainAppStatus.NO_VIEW));
       }
+    }
+    if (listOfScheduleModelAndCourses.isNotEmpty) {
+      final flattened =
+          matrixListOfDays.expand((listOfDays) => listOfDays).toList();
+      flattened.sort(
+          (prevDay, nextDay) => prevDay.isoString.compareTo(nextDay.isoString));
+      final listOfDays = groupBy(flattened, (Day day) => day.date)
+          .entries
+          .map((dayGrouper) => Day(
+              name: dayGrouper.value[0].name,
+              date: dayGrouper.value[0].date,
+              isoString: dayGrouper.value[0].isoString,
+              weekNumber: dayGrouper.value[0].weekNumber,
+              events:
+                  dayGrouper.value.expand((Day day) => day.events).toList()))
+          .toList();
+
+      emit(state.copyWith(
+        status: MainAppStatus.POPULATED_VIEW,
+        scheduleModelAndCourses: listOfScheduleModelAndCourses,
+        listOfDays: listOfDays,
+        listOfWeeks: listOfDays.splitToWeek(),
+      ));
+    } else {
+      emit(state.copyWith(status: MainAppStatus.NO_VIEW));
     }
   }
 
@@ -169,7 +179,6 @@ class MainAppCubit extends Cubit<MainAppState> {
             date: event.from.subtract(Duration(
                 minutes:
                     _sharedPrefs.getInt(PreferenceTypes.notificationTime)!)));
-        dev.log('Created notification for event "${event.title}"');
         showScaffoldMessage(context,
             ScaffoldMessageType.createdNotificationForEvent(event.title));
         return true;
@@ -221,24 +230,36 @@ class MainAppCubit extends Cubit<MainAppState> {
     });
   }
 
-  Future<bool> isNotificationSetForEvent(Event event) async {
-    return (await _awesomeNotifications.listScheduledNotifications()).any(
-        (element) => element.content!.id == event.id.encodeUniqueIdentifier());
+  Future<bool> checkIfNotificationIsSetForEvent(Event event) async {
+    return (((await _awesomeNotifications.listScheduledNotifications())
+            .singleWhereOrNull(
+          (notificationModel) =>
+              notificationModel.content!.id ==
+              event.id.encodeUniqueIdentifier(),
+        )) !=
+        null);
   }
 
-  Future<bool> isNotificationSetForCourse(Event event) async {
-    return (await _awesomeNotifications.listScheduledNotifications())
-        .any((element) => element.content!.groupKey == event.course.id);
+  /// Returns true if course id is found in current list of notifications
+  Future<bool> checkifNotificationIsSetForCourse(Event event) async {
+    return (((await _awesomeNotifications.listScheduledNotifications())
+            .firstWhereOrNull(
+          (notificationModel) =>
+              notificationModel.content!.groupKey == event.course.id,
+        )) !=
+        null);
   }
 
   Future<bool> cancelEventNotification(Event event) async {
-    await _awesomeNotifications.cancel(event.id.encodeUniqueIdentifier());
-    return !await isNotificationSetForEvent(event);
+    await _awesomeNotifications
+        .cancelSchedule(event.id.encodeUniqueIdentifier());
+    return !await checkIfNotificationIsSetForEvent(event);
   }
 
+  /// Returns true if notification is still set for course
   Future<bool> cancelCourseNotifications(Event event) async {
-    await _awesomeNotifications.cancelNotificationsByGroupKey(event.course.id);
-    return !await isNotificationSetForCourse(event);
+    await _awesomeNotifications.cancelSchedulesByGroupKey(event.course.id);
+    return await checkifNotificationIsSetForCourse(event);
   }
 
   void changeCourseColor(BuildContext context, Course course, Color color) {

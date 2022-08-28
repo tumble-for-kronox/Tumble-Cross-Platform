@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tumble/core/navigation/app_navigator.dart';
 import 'package:tumble/core/ui/account/tumble_account_page.dart';
 import 'package:tumble/core/ui/bottom_nav_bar/cubit/bottom_nav_cubit.dart';
 import 'package:tumble/core/ui/bottom_nav_bar/data/nav_bar_items.dart';
@@ -46,20 +47,19 @@ class _MainAppNavigationRootPageState extends State<MainAppNavigationRootPage> {
                 ),
                 appBar: PreferredSize(
                   preferredSize: const Size.fromHeight(60),
-                  child: MultiBlocProvider(
-                      providers: [
-                        BlocProvider.value(
-                            value: BlocProvider.of<MainAppCubit>(context)),
-                        BlocProvider.value(
-                            value: BlocProvider.of<MainAppNavigationCubit>(
-                                context))
-                      ],
-                      child: TumbleAppBar(toggleFavorite: () async {
-                        context.read<SearchPageCubit>().toggleFavorite(context);
-                        context.read<MainAppCubit>().tryCached();
-                      })),
+                  child: MultiBlocProvider(providers: [
+                    BlocProvider.value(
+                        value: BlocProvider.of<MainAppCubit>(context)),
+                    BlocProvider.value(
+                        value:
+                            BlocProvider.of<MainAppNavigationCubit>(context)),
+                    BlocProvider.value(
+                        value: BlocProvider.of<AppNavigator>(context))
+                  ], child: TumbleAppBar(pageIndex: navState.index)),
                 ),
                 body: FutureBuilder(
+
+                    /// THIS FUTURE BUILDER NEEDS TO BE MOVED
                     future: BlocProvider.of<MainAppCubit>(context).init(),
                     builder: (_, snapshot) {
                       switch (navState.navbarItem) {

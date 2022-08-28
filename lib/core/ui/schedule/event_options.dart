@@ -54,25 +54,27 @@ class EventOptions extends StatelessWidget {
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
           child: FutureBuilder(
             future: Future.wait([
-              cubit.isNotificationSetForEvent(event),
-              cubit.isNotificationSetForCourse(event),
+              cubit.checkIfNotificationIsSetForEvent(event),
+              cubit.checkifNotificationIsSetForCourse(event),
             ]),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
-                bool eventNotification = (snapshot.data! as List<bool>)[0];
-                bool courseNotification = (snapshot.data! as List<bool>)[1];
+                bool notificationIsSetForEvent =
+                    (snapshot.data! as List<bool>)[0];
+                bool notificationIsSetForCourse =
+                    (snapshot.data! as List<bool>)[1];
                 return Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     ListTile(
                       leading: Icon(
-                          eventNotification
+                          notificationIsSetForEvent
                               ? CupertinoIcons.bell_slash
                               : CupertinoIcons.bell,
                           color: Theme.of(context).colorScheme.onSurface),
                       title: Center(
                           child: Text(
-                        eventNotification
+                        notificationIsSetForEvent
                             ? 'Remove notification for event'
                             : 'Set notification for event',
                         style: TextStyle(
@@ -87,19 +89,20 @@ class EventOptions extends StatelessWidget {
                       onTap: () async {
                         Navigator.of(context).pop();
 
-                        if (eventNotification) {
+                        if (notificationIsSetForEvent) {
                           cubit.cancelEventNotification(event).then(
-                              (notificationCancelled) => notificationCancelled
-                                  ? showScaffoldMessage(
-                                      context,
-                                      ScaffoldMessageType
-                                          .cancelledEventNotification(
-                                              event.title))
-                                  : showScaffoldMessage(
-                                      context,
-                                      ScaffoldMessageType
-                                          .cancelNotificationsFailed(
-                                              event.title)));
+                              (notificationSuccessfullyCancelled) =>
+                                  notificationSuccessfullyCancelled
+                                      ? showScaffoldMessage(
+                                          context,
+                                          ScaffoldMessageType
+                                              .cancelledEventNotification(
+                                                  event.title))
+                                      : showScaffoldMessage(
+                                          context,
+                                          ScaffoldMessageType
+                                              .cancelNotificationsFailed(
+                                                  event.title)));
                         } else {
                           bool sucessfullyCreatedNotifications = await cubit
                               .createNotificationForEvent(event, context);
@@ -119,13 +122,13 @@ class EventOptions extends StatelessWidget {
                     ),
                     ListTile(
                       leading: Icon(
-                          courseNotification
+                          notificationIsSetForCourse
                               ? CupertinoIcons.slash_circle
                               : CupertinoIcons.bell_circle,
                           color: Theme.of(context).colorScheme.onSurface),
                       title: Center(
                           child: Text(
-                        courseNotification
+                        notificationIsSetForCourse
                             ? 'Remove all nofitications for course'
                             : 'Set notifications for course',
                         style: TextStyle(
@@ -134,19 +137,20 @@ class EventOptions extends StatelessWidget {
                       onTap: () async {
                         Navigator.of(context).pop();
 
-                        if (courseNotification) {
+                        if (notificationIsSetForCourse) {
                           cubit.cancelCourseNotifications(event).then(
-                              (notificationCancelled) => notificationCancelled
-                                  ? showScaffoldMessage(
-                                      context,
-                                      ScaffoldMessageType
-                                          .cancelledCourseNotifications(
-                                              event.course.englishName))
-                                  : showScaffoldMessage(
-                                      context,
-                                      ScaffoldMessageType
-                                          .cancelNotificationsFailed(
-                                              event.title)));
+                              (notificationSuccessfullyCancelled) =>
+                                  notificationSuccessfullyCancelled
+                                      ? showScaffoldMessage(
+                                          context,
+                                          ScaffoldMessageType
+                                              .cancelledCourseNotifications(
+                                                  event.course.englishName))
+                                      : showScaffoldMessage(
+                                          context,
+                                          ScaffoldMessageType
+                                              .cancelNotificationsFailed(
+                                                  event.course.englishName)));
                         } else {
                           bool sucessfullyCreatedNotifications = await cubit
                               .createNotificationForCourse(event, context);

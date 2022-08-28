@@ -16,4 +16,5 @@ class RuntimeErrorType {
       "Couldn't sign up, try again later or go to kronox.";
   static const failedSignInValidation = "Couldn't validate your sign in.";
   static const invalidInputFields = "Username and password cannot be empty.";
+  static const bookmarkSchedulesError = "Error with schedule bookmarks";
 }

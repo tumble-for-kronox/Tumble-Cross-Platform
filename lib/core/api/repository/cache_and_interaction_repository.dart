@@ -45,15 +45,18 @@ class CacheAndInteractionRepository implements ICacheAndInteractionService {
         .contains(scheduleId);
 
     if (favoritesContainsThisScheduleId) {
-      final ScheduleModel userCachedSchedule =
+      final ScheduleModel? userCachedSchedule =
           await _getCachedSchedule(scheduleId);
 
-      if (DateTime.now()
-          .subtract(const Duration(minutes: 30))
-          .isAfter(userCachedSchedule.cachedAt.toLocal())) {
-        return await getSchedule(scheduleId);
+      /// If the schedule for some reason is not found in the database (maybe it was just bookmarked),
+      /// or if the schedule is more than 30 minutes old
+      if (userCachedSchedule == null ||
+          DateTime.now()
+              .subtract(const Duration(minutes: 30))
+              .isAfter(userCachedSchedule.cachedAt.toLocal())) {
+        return await getSchedulesRequest(scheduleId);
       }
-      log('message');
+
       return ApiResponse.cached(userCachedSchedule);
     }
 
@@ -77,13 +80,7 @@ class CacheAndInteractionRepository implements ICacheAndInteractionService {
     }
   }
 
-  @override
-  Future<ApiResponse> getCachedBookmarkedSchedule(String scheduleId) async {
-    ScheduleModel userCachedSchedule = await _getCachedSchedule(scheduleId);
-    return ApiResponse.cached(userCachedSchedule);
-  }
-
-  Future<ScheduleModel> _getCachedSchedule(String scheduleId) async {
-    return (await _databaseService.getOneSchedule(scheduleId))!;
+  Future<ScheduleModel?> _getCachedSchedule(String scheduleId) async {
+    return (await _databaseService.getOneSchedule(scheduleId));
   }
 }

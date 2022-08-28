@@ -1,20 +1,27 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tumble/core/dependency_injection/get_it_instances.dart';
 import 'package:tumble/core/extensions/extensions.dart';
+import 'package:tumble/core/navigation/app_navigator.dart';
+import 'package:tumble/core/shared/preference_types.dart';
 import 'package:tumble/core/theme/cubit/theme_cubit.dart';
 import 'package:tumble/core/theme/data/colors.dart';
 import 'package:tumble/core/ui/bottom_nav_bar/cubit/bottom_nav_cubit.dart';
+import 'package:tumble/core/ui/bottom_nav_bar/data/nav_bar_items.dart';
 import 'package:tumble/core/ui/main_app/cubit/main_app_cubit.dart';
 import 'package:tumble/core/ui/search/cubit/search_page_cubit.dart';
 
 class TumbleAppBar extends StatefulWidget {
-  final AsyncCallback? toggleFavorite;
+  final int? pageIndex;
   const TumbleAppBar({
+    this.pageIndex,
     Key? key,
-    this.toggleFavorite,
   }) : super(key: key);
 
   @override
@@ -45,7 +52,10 @@ class _TumbleAppBarState extends State<TumbleAppBar> {
             case ThemeMode.light:
               return Brightness.dark;
             case ThemeMode.system:
-              return MediaQuery.of(context).platformBrightness == Brightness.light ? Brightness.dark : Brightness.light;
+              return MediaQuery.of(context).platformBrightness ==
+                      Brightness.light
+                  ? Brightness.dark
+                  : Brightness.light;
           }
         }(),
         statusBarColor: Colors.transparent,
@@ -56,57 +66,77 @@ class _TumbleAppBarState extends State<TumbleAppBar> {
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                children: [
-                  Padding(
-                      padding: const EdgeInsets.only(left: 5, top: 5),
-                      child: BlocBuilder<SearchPageCubit, SearchPageState>(builder: (context, state) {
-                        switch (state.previewFetchStatus) {
-                          case PreviewFetchStatus.EMPTY_SCHEDULE:
-                          case PreviewFetchStatus.FETCH_ERROR:
-                          case PreviewFetchStatus.LOADING:
-                          case PreviewFetchStatus.INITIAL:
-                            return const Padding(
-                              padding: EdgeInsets.only(top: 5, right: 5),
-                              child: IconButton(
-                                  iconSize: 30,
-                                  onPressed: null,
-                                  icon: Icon(CupertinoIcons.bookmark, color: Colors.transparent)),
-                            );
+              BlocBuilder<SearchPageCubit, SearchPageState>(
+                  builder: (context, state) {
+                switch (state.previewFetchStatus) {
+                  case PreviewFetchStatus.EMPTY_SCHEDULE:
+                  case PreviewFetchStatus.FETCH_ERROR:
+                  case PreviewFetchStatus.LOADING:
+                  case PreviewFetchStatus.INITIAL:
+                    return const Padding(
+                      padding: EdgeInsets.only(top: 10, left: 10),
+                      child: IconButton(
+                          iconSize: 30,
+                          onPressed: null,
+                          icon: Icon(CupertinoIcons.bookmark,
+                              color: Colors.transparent)),
+                    );
 
-                          case PreviewFetchStatus.CACHED_SCHEDULE:
-                            return Padding(
-                              padding: const EdgeInsets.only(top: 5, right: 5),
-                              child: IconButton(
-                                  iconSize: 30,
-                                  onPressed: () => context.read<SearchPageCubit>().toggleFavorite(context),
-                                  icon:
-                                      Icon(CupertinoIcons.bookmark, color: Theme.of(context).colorScheme.onBackground)),
-                            );
-                          case PreviewFetchStatus.FETCHED_SCHEDULE:
-                            return Padding(
-                              padding: const EdgeInsets.only(top: 5, right: 5),
-                              child: IconButton(
-                                  iconSize: 30,
-                                  onPressed: () => context.read<SearchPageCubit>().toggleFavorite(context),
-                                  icon: Icon(
-                                      BlocProvider.of<SearchPageCubit>(context).state.previewToggledFavorite!
-                                          ? CupertinoIcons.bookmark_fill
-                                          : CupertinoIcons.bookmark,
-                                      color: Theme.of(context).colorScheme.onBackground)),
-                            );
-                        }
-                      }))
-                ],
-              ),
+                  case PreviewFetchStatus.CACHED_SCHEDULE:
+                  case PreviewFetchStatus.FETCHED_SCHEDULE:
+                    if (![1, 2, 3, 4].contains(widget.pageIndex)) {
+                      return Padding(
+                        padding: const EdgeInsets.only(top: 5, right: 5),
+                        child: IconButton(
+                            iconSize: 30,
+                            onPressed: () async {
+                              await context
+                                  .read<SearchPageCubit>()
+                                  .toggleFavorite(context)
+                                  .then((_) {
+                                context.read<MainAppCubit>().setLoading();
+                                context
+                                    .read<MainAppNavigationCubit>()
+                                    .getNavBarItem(NavbarItem.values[
+                                        getIt<SharedPreferences>()
+                                            .getInt(PreferenceTypes.view)!]);
+                              });
+                            },
+                            icon: Icon(
+                                BlocProvider.of<SearchPageCubit>(context)
+                                        .state
+                                        .previewToggledFavorite!
+                                    ? CupertinoIcons.bookmark_fill
+                                    : CupertinoIcons.bookmark,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onBackground)),
+                      );
+                    } else {
+                      return const Padding(
+                        padding: EdgeInsets.only(top: 10, left: 10),
+                        child: IconButton(
+                            iconSize: 30,
+                            onPressed: null,
+                            icon: Icon(CupertinoIcons.bookmark,
+                                color: Colors.transparent)),
+                      );
+                    }
+                }
+              }),
               Container(
                 padding: const EdgeInsets.only(top: 15),
-                child: BlocBuilder<MainAppNavigationCubit, MainAppNavigationState>(
-                    builder: ((context, state) => Text(
-                          state.navbarItem.name.humanize().toUpperCase(),
-                          style: TextStyle(
-                              fontSize: 15, letterSpacing: 2, color: Theme.of(context).colorScheme.onBackground),
-                        ))),
+                child:
+                    BlocBuilder<MainAppNavigationCubit, MainAppNavigationState>(
+                        builder: ((context, state) => Text(
+                              state.navbarItem.name.humanize().toUpperCase(),
+                              style: TextStyle(
+                                  fontSize: 15,
+                                  letterSpacing: 2,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onBackground),
+                            ))),
               ),
               Row(
                 children: [
@@ -114,7 +144,8 @@ class _TumbleAppBarState extends State<TumbleAppBar> {
                     padding: const EdgeInsets.only(top: 5, right: 5),
                     child: IconButton(
                       iconSize: 30,
-                      icon: Icon(CupertinoIcons.gear, color: Theme.of(context).colorScheme.onBackground),
+                      icon: Icon(CupertinoIcons.gear,
+                          color: Theme.of(context).colorScheme.onBackground),
                       onPressed: () => Scaffold.of(context).openEndDrawer(),
                     ),
                   ),

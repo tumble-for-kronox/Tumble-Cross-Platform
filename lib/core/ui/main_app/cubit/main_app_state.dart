@@ -14,7 +14,6 @@ enum MainAppStatus {
 class MainAppState extends Equatable {
   final MainAppStatus status;
   final bool listViewToTopButtonVisible;
-  final List<String?>? currentScheduleIds;
   final List<Day>? listOfDays;
   final List<Week>? listOfWeeks;
   final String? message;
@@ -22,7 +21,6 @@ class MainAppState extends Equatable {
   const MainAppState(
       {required this.status,
       required this.scheduleModelAndCourses,
-      required this.currentScheduleIds,
       required this.listOfDays,
       required this.listOfWeeks,
       required this.listViewToTopButtonVisible,
@@ -32,7 +30,6 @@ class MainAppState extends Equatable {
           {MainAppStatus? status,
           bool? toggledFavorite,
           bool? listViewToTopButtonVisible,
-          List<String?>? currentScheduleIds,
           List<Day>? listOfDays,
           List<Week>? listOfWeeks,
           String? message,
@@ -41,7 +38,6 @@ class MainAppState extends Equatable {
           status: status ?? this.status,
           listViewToTopButtonVisible:
               listViewToTopButtonVisible ?? this.listViewToTopButtonVisible,
-          currentScheduleIds: currentScheduleIds ?? this.currentScheduleIds,
           listOfDays: listOfDays ?? this.listOfDays,
           listOfWeeks: listOfWeeks ?? this.listOfWeeks,
           message: message ?? this.message,
@@ -51,7 +47,6 @@ class MainAppState extends Equatable {
   @override
   List<Object?> get props => [
         status,
-        currentScheduleIds,
         listOfDays,
         listOfWeeks,
         listViewToTopButtonVisible,

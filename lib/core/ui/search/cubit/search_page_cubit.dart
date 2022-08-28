@@ -85,11 +85,17 @@ class SearchPageCubit extends Cubit<SearchPageState> {
         bool scheduleFavorited = false;
         ScheduleModel currentScheduleModel = apiResponse.data!;
         if (currentScheduleModel.isNotPhonySchedule()) {
-          List<CourseUiModel?> courseUiModels = await currentScheduleModel.findNewCourses(id);
+          List<CourseUiModel?> courseUiModels =
+              await currentScheduleModel.findNewCourses(id);
           if (_preferenceService
               .getStringList(PreferenceTypes.bookmarks)!
               .map((json) => bookmarkedScheduleModelFromJson(json).scheduleId)
               .contains(id)) {
+            for (CourseUiModel? courseUiModel in courseUiModels) {
+              if (courseUiModel != null) {
+                _databaseService.addCourseInstance(courseUiModel);
+              }
+            }
             scheduleFavorited = true;
           }
 
@@ -100,11 +106,14 @@ class SearchPageCubit extends Cubit<SearchPageState> {
             previewToggledFavorite: scheduleFavorited,
             previewScheduleModelAndCourses: ScheduleModelAndCourses(
                 scheduleModel: currentScheduleModel,
-                courses: scheduleFavorited ? await _databaseService.getCachedCoursesFromId(id) : courseUiModels),
+                courses: scheduleFavorited
+                    ? await _databaseService.getCachedCoursesFromId(id)
+                    : courseUiModels),
             previewToTopButtonVisible: false,
           ));
         } else {
-          emit(state.copyWith(previewFetchStatus: PreviewFetchStatus.EMPTY_SCHEDULE));
+          emit(state.copyWith(
+              previewFetchStatus: PreviewFetchStatus.EMPTY_SCHEDULE));
         }
         break;
       case api.ApiStatus.CACHED:
@@ -116,7 +125,8 @@ class SearchPageCubit extends Cubit<SearchPageState> {
             previewListOfDays: currentScheduleModel.days,
             previewToggledFavorite: true,
             previewScheduleModelAndCourses: ScheduleModelAndCourses(
-                scheduleModel: currentScheduleModel, courses: await _databaseService.getCachedCoursesFromId(id)),
+                scheduleModel: currentScheduleModel,
+                courses: await _databaseService.getCachedCoursesFromId(id)),
             previewToTopButtonVisible: false,
           ));
         } else {
@@ -126,7 +136,8 @@ class SearchPageCubit extends Cubit<SearchPageState> {
         }
         break;
       case api.ApiStatus.ERROR:
-        emit(state.copyWith(previewFetchStatus: PreviewFetchStatus.FETCH_ERROR));
+        emit(
+            state.copyWith(previewFetchStatus: PreviewFetchStatus.FETCH_ERROR));
         break;
       default:
         emit(state);
@@ -137,16 +148,21 @@ class SearchPageCubit extends Cubit<SearchPageState> {
   Future<void> search() async {
     emit(state.copyWith(searchPageStatus: SearchPageStatus.LOADING));
     String query = textEditingController.text;
-    ApiResponse apiResponse = await _cacheAndInteractionService.getProgramsRequest(query);
+    ApiResponse apiResponse =
+        await _cacheAndInteractionService.getProgramsRequest(query);
 
     if (state.focused) {
       switch (apiResponse.status) {
         case ApiStatus.FETCHED:
           ProgramModel program = apiResponse.data as ProgramModel;
-          emit(state.copyWith(searchPageStatus: SearchPageStatus.FOUND, programList: program.items));
+          emit(state.copyWith(
+              searchPageStatus: SearchPageStatus.FOUND,
+              programList: program.items));
           break;
         case ApiStatus.ERROR:
-          emit(state.copyWith(searchPageStatus: SearchPageStatus.ERROR, errorMessage: apiResponse.message));
+          emit(state.copyWith(
+              searchPageStatus: SearchPageStatus.ERROR,
+              errorMessage: apiResponse.message));
           break;
         default:
           break;
@@ -159,74 +175,79 @@ class SearchPageCubit extends Cubit<SearchPageState> {
     emit(state.copyWith(previewFetchStatus: PreviewFetchStatus.LOADING));
   }
 
-  void toggleFavorite(BuildContext context) {
+  Future<void> toggleFavorite(BuildContext context) async {
     final List<BookmarkedScheduleModel> bookmarks = _sharedPrefs
         .getStringList(PreferenceTypes.bookmarks)!
         .map((json) => bookmarkedScheduleModelFromJson(json))
         .toList();
 
     /// If the schedule IS saved in preferences
-    if (bookmarks.any((bookmark) => bookmark.scheduleId == state.previewCurrentScheduleId)) {
-      _toggleRemove(bookmarks);
-      showScaffoldMessage(context, ScaffoldMessageType.removedBookmark(state.previewCurrentScheduleId!));
+    if (bookmarks.any(
+        (bookmark) => bookmark.scheduleId == state.previewCurrentScheduleId)) {
+      _toggleRemove().then((value) => showScaffoldMessage(
+          context,
+          ScaffoldMessageType.removedBookmark(
+              state.previewCurrentScheduleId!)));
     }
 
     /// If the schedule IS NOT saved in preferences
     else {
-      _toggleSave();
-      showScaffoldMessage(context, ScaffoldMessageType.addedBookmark(state.previewCurrentScheduleId!));
+      _toggleSave().then((value) => showScaffoldMessage(context,
+          ScaffoldMessageType.addedBookmark(state.previewCurrentScheduleId!)));
     }
   }
 
-  void _toggleRemove(List<BookmarkedScheduleModel> bookmarks) async {
-    bookmarks.removeWhere((bookmark) => bookmark.scheduleId == state.previewCurrentScheduleId);
-
-    /// Try to remove channel, in case it was default
-    final bool wasRemoved = await _awesomeNotifications.removeChannel(state.previewCurrentScheduleId!);
-
-    /// If a notification channel was sucessfully removed that
-    /// means the one we removed was a default one, now we
-    /// need to set the new default one to an open notification channel
-    if (wasRemoved && bookmarks.isNotEmpty) {
-      _notificationBuilder.buildNotificationChannel(
-          channelGroupKey: _sharedPrefs.getString(PreferenceTypes.school)!,
-          channelKey: bookmarks.first.scheduleId,
-          channelName: 'Notifications for schedule',
-          channelDescription: 'Notifications for schedule');
-    }
-
-    await _databaseService.remove(state.previewCurrentScheduleId!, AccessStores.SCHEDULE_STORE);
-    await _databaseService.remove(state.previewCurrentScheduleId!, AccessStores.COURSE_COLOR_STORE);
-
-    emit(state.copyWith(previewToggledFavorite: false));
-
-    _sharedPrefs.setStringList(PreferenceTypes.bookmarks, bookmarks.map((bookmark) => jsonEncode(bookmark)).toList());
-  }
-
-  void _toggleSave() async {
-    List<BookmarkedScheduleModel> bookMarkedSchedules = _sharedPrefs
+  Future<void> _toggleRemove() async {
+    final List<BookmarkedScheduleModel> bookmarks = _sharedPrefs
         .getStringList(PreferenceTypes.bookmarks)!
         .map((json) => bookmarkedScheduleModelFromJson(json))
         .toList();
-    bookMarkedSchedules.add(BookmarkedScheduleModel(scheduleId: state.previewCurrentScheduleId!, toggledValue: true));
-    for (CourseUiModel? courseUiModel in state.previewScheduleModelAndCourses!.courses) {
+
+    bookmarks.removeWhere(
+        (bookmark) => bookmark.scheduleId == state.previewCurrentScheduleId);
+
+    await _databaseService.remove(
+        state.previewCurrentScheduleId!, AccessStores.SCHEDULE_STORE);
+    await _databaseService.remove(
+        state.previewCurrentScheduleId!, AccessStores.COURSE_COLOR_STORE);
+
+    await _sharedPrefs.setStringList(PreferenceTypes.bookmarks,
+        bookmarks.map((bookmark) => jsonEncode(bookmark)).toList());
+
+    log('BOOKMARKS: ${_sharedPrefs.getStringList(PreferenceTypes.bookmarks)!.map((bookmark) => bookmarkedScheduleModelFromJson(bookmark)).toList()}\n\n');
+
+    emit(state.copyWith(previewToggledFavorite: false));
+  }
+
+  Future<void> _toggleSave() async {
+    List<BookmarkedScheduleModel> bookmarks = _sharedPrefs
+        .getStringList(PreferenceTypes.bookmarks)!
+        .map((json) => bookmarkedScheduleModelFromJson(json))
+        .toList();
+    bookmarks.add(BookmarkedScheduleModel(
+        scheduleId: state.previewCurrentScheduleId!, toggledValue: true));
+    await _sharedPrefs.setStringList(PreferenceTypes.bookmarks,
+        bookmarks.map((bookmark) => jsonEncode(bookmark)).toList());
+
+    log('BOOKMARKS: ${_sharedPrefs.getStringList(PreferenceTypes.bookmarks)!.map((json) => bookmarkedScheduleModelFromJson(json)).toList()}\n\n');
+
+    for (CourseUiModel? courseUiModel
+        in state.previewScheduleModelAndCourses!.courses) {
       if (courseUiModel != null) {
-        _databaseService.addCourseInstance(courseUiModel);
+        await _databaseService.addCourseInstance(courseUiModel);
       }
     }
 
-    await _databaseService.add(state.previewScheduleModelAndCourses!.scheduleModel);
+    await _databaseService
+        .add(state.previewScheduleModelAndCourses!.scheduleModel);
 
     /// Build new notification channel
-    _notificationBuilder.buildNotificationChannel(
+    await _notificationBuilder.buildNotificationChannel(
         channelGroupKey: _sharedPrefs.getString(PreferenceTypes.school)!,
         channelKey: state.previewCurrentScheduleId!,
         channelName: 'Notifications for schedule',
         channelDescription: 'Notifications for schedule');
     emit(state.copyWith(previewToggledFavorite: true));
-
-    _sharedPrefs.setStringList(
-        PreferenceTypes.bookmarks, bookMarkedSchedules.map((bookmark) => jsonEncode(bookmark)).toList());
   }
 
   void resetCubit() {
@@ -247,7 +268,8 @@ class SearchPageCubit extends Cubit<SearchPageState> {
   setSearchBarFocused() {
     if (_focusNode.hasFocus) {
       emit(state.copyWith(clearButtonVisible: true, focused: true));
-    } else if (!_focusNode.hasFocus && _textEditingController.text.trim().isEmpty) {
+    } else if (!_focusNode.hasFocus &&
+        _textEditingController.text.trim().isEmpty) {
       emit(state.copyWith(
           clearButtonVisible: false,
           focused: false,
@@ -258,12 +280,14 @@ class SearchPageCubit extends Cubit<SearchPageState> {
 
   Color getColorForCourse(Event event) {
     return Color(state.previewScheduleModelAndCourses!.courses
-        .firstWhere((CourseUiModel? courseUiModel) => courseUiModel!.courseId == event.course.id)!
+        .firstWhere((CourseUiModel? courseUiModel) =>
+            courseUiModel!.courseId == event.course.id)!
         .color);
   }
 
   void scrollToTop() {
-    _listViewScrollController.animateTo(0, duration: const Duration(seconds: 1), curve: Curves.easeInOut);
+    _listViewScrollController.animateTo(0,
+        duration: const Duration(seconds: 1), curve: Curves.easeInOut);
   }
 
   void displayPreview() {

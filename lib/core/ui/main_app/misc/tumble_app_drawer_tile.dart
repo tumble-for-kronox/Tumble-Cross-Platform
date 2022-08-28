@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 typedef ToggleDrawerEvent = void Function(Enum eventType);
 
 class TumbleAppDrawerTile extends StatelessWidget {
-  final IconData prefixIcon;
+  final IconData suffixIcon;
   final String drawerTileTitle;
   final String subtitle;
   final Enum eventType;
@@ -11,7 +11,7 @@ class TumbleAppDrawerTile extends StatelessWidget {
 
   const TumbleAppDrawerTile(
       {Key? key,
-      required this.prefixIcon,
+      required this.suffixIcon,
       required this.drawerTileTitle,
       required this.subtitle,
       required this.eventType,
@@ -26,7 +26,8 @@ class TumbleAppDrawerTile extends StatelessWidget {
       child: MaterialButton(
         padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
         onPressed: () => drawerEvent(eventType),
-        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10))),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -64,7 +65,7 @@ class TumbleAppDrawerTile extends StatelessWidget {
               child: SizedBox(
                 width: 35,
                 child: Icon(
-                  prefixIcon,
+                  suffixIcon,
                   color: Theme.of(context).colorScheme.onBackground,
                 ),
               ),
