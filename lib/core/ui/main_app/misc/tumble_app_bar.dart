@@ -45,10 +45,7 @@ class _TumbleAppBarState extends State<TumbleAppBar> {
             case ThemeMode.light:
               return Brightness.dark;
             case ThemeMode.system:
-              return MediaQuery.of(context).platformBrightness ==
-                      Brightness.light
-                  ? Brightness.dark
-                  : Brightness.light;
+              return MediaQuery.of(context).platformBrightness == Brightness.light ? Brightness.dark : Brightness.light;
           }
         }(),
         statusBarColor: Colors.transparent,
@@ -63,8 +60,7 @@ class _TumbleAppBarState extends State<TumbleAppBar> {
                 children: [
                   Padding(
                       padding: const EdgeInsets.only(left: 5, top: 5),
-                      child: BlocBuilder<SearchPageCubit, SearchPageState>(
-                          builder: (context, state) {
+                      child: BlocBuilder<SearchPageCubit, SearchPageState>(builder: (context, state) {
                         switch (state.previewFetchStatus) {
                           case PreviewFetchStatus.EMPTY_SCHEDULE:
                           case PreviewFetchStatus.FETCH_ERROR:
@@ -75,8 +71,7 @@ class _TumbleAppBarState extends State<TumbleAppBar> {
                               child: IconButton(
                                   iconSize: 30,
                                   onPressed: null,
-                                  icon: Icon(CupertinoIcons.bookmark,
-                                      color: Colors.transparent)),
+                                  icon: Icon(CupertinoIcons.bookmark, color: Colors.transparent)),
                             );
 
                           case PreviewFetchStatus.CACHED_SCHEDULE:
@@ -84,31 +79,21 @@ class _TumbleAppBarState extends State<TumbleAppBar> {
                               padding: const EdgeInsets.only(top: 5, right: 5),
                               child: IconButton(
                                   iconSize: 30,
-                                  onPressed: () => context
-                                      .read<SearchPageCubit>()
-                                      .toggleFavorite(context),
-                                  icon: Icon(CupertinoIcons.bookmark,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onBackground)),
+                                  onPressed: () => context.read<SearchPageCubit>().toggleFavorite(context),
+                                  icon:
+                                      Icon(CupertinoIcons.bookmark, color: Theme.of(context).colorScheme.onBackground)),
                             );
                           case PreviewFetchStatus.FETCHED_SCHEDULE:
                             return Padding(
                               padding: const EdgeInsets.only(top: 5, right: 5),
                               child: IconButton(
                                   iconSize: 30,
-                                  onPressed: () => context
-                                      .read<SearchPageCubit>()
-                                      .toggleFavorite(context),
+                                  onPressed: () => context.read<SearchPageCubit>().toggleFavorite(context),
                                   icon: Icon(
-                                      context
-                                              .read<SearchPageCubit>()
-                                              .scheduleInBookmarks()
+                                      BlocProvider.of<SearchPageCubit>(context).state.previewToggledFavorite!
                                           ? CupertinoIcons.bookmark_fill
                                           : CupertinoIcons.bookmark,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onBackground)),
+                                      color: Theme.of(context).colorScheme.onBackground)),
                             );
                         }
                       }))
@@ -116,17 +101,12 @@ class _TumbleAppBarState extends State<TumbleAppBar> {
               ),
               Container(
                 padding: const EdgeInsets.only(top: 15),
-                child:
-                    BlocBuilder<MainAppNavigationCubit, MainAppNavigationState>(
-                        builder: ((context, state) => Text(
-                              state.navbarItem.name.humanize().toUpperCase(),
-                              style: TextStyle(
-                                  fontSize: 15,
-                                  letterSpacing: 2,
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onBackground),
-                            ))),
+                child: BlocBuilder<MainAppNavigationCubit, MainAppNavigationState>(
+                    builder: ((context, state) => Text(
+                          state.navbarItem.name.humanize().toUpperCase(),
+                          style: TextStyle(
+                              fontSize: 15, letterSpacing: 2, color: Theme.of(context).colorScheme.onBackground),
+                        ))),
               ),
               Row(
                 children: [
@@ -134,8 +114,7 @@ class _TumbleAppBarState extends State<TumbleAppBar> {
                     padding: const EdgeInsets.only(top: 5, right: 5),
                     child: IconButton(
                       iconSize: 30,
-                      icon: Icon(CupertinoIcons.gear,
-                          color: Theme.of(context).colorScheme.onBackground),
+                      icon: Icon(CupertinoIcons.gear, color: Theme.of(context).colorScheme.onBackground),
                       onPressed: () => Scaffold.of(context).openEndDrawer(),
                     ),
                   ),
