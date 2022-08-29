@@ -69,22 +69,6 @@ class TumbleAppDrawer extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 25.0),
-                  TumbleSettingsSection(tiles: [
-                    TumbleAppDrawerTile(
-                      drawerTileTitle: S.settingsPage.contactTitle(),
-                      subtitle: S.settingsPage.contactSubtitle(),
-                      suffixIcon: CupertinoIcons.bubble_left_bubble_right,
-                      eventType: EventType.SUPPORT,
-                      drawerEvent: (eventType) => handleDrawerEvent(
-                          eventType, context, navigator, null),
-                    ),
-                  ], title: S.settingsPage.supportTitle()),
-                  Divider(
-                    height: 50.0,
-                    color: Theme.of(context).colorScheme.onBackground,
-                    indent: 20,
-                    endIndent: 30,
-                  ),
 
                   /// Common
                   TumbleSettingsSection(tiles: [
@@ -154,7 +138,34 @@ class TumbleAppDrawer extends StatelessWidget {
                       drawerEvent: (eventType) => handleDrawerEvent(
                           eventType, context, navigator, null),
                     )
-                  ], title: S.settingsPage.notificationTitle())
+                  ], title: S.settingsPage.notificationTitle()),
+                  Divider(
+                    height: 50.0,
+                    color: Theme.of(context).colorScheme.onBackground,
+                    indent: 20,
+                    endIndent: 30,
+                  ),
+
+                  /// Support
+                  TumbleSettingsSection(tiles: [
+                    TumbleAppDrawerTile(
+                      drawerTileTitle: "Report a bug",
+                      subtitle: "Send us a bug report of an issue",
+                      suffixIcon: CupertinoIcons.ant,
+                      eventType: EventType.SUPPORT,
+                      drawerEvent: (eventType) => handleDrawerEvent(eventType,
+                          context, navigator, context.read<DrawerCubit>()),
+                    ),
+                    TumbleAppDrawerTile(
+                      drawerTileTitle: "Rate our app",
+                      subtitle:
+                          "Rate our app on ${Platform.isIOS ? 'App Store' : 'Google Play'}",
+                      suffixIcon: CupertinoIcons.star,
+                      eventType: EventType.OPEN_REVIEW,
+                      drawerEvent: (eventType) => handleDrawerEvent(eventType,
+                          context, navigator, context.read<DrawerCubit>()),
+                    ),
+                  ], title: "Miscellaneous"),
                 ],
               ),
             ),
