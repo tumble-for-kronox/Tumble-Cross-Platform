@@ -28,8 +28,6 @@ class CacheAndInteractionRepository implements ICacheAndInteractionService {
 
   @override
   Future<ApiResponse> getSchedulesRequest(scheduleId) async {
-    /// User cannot get this far in the app without having a default
-    /// school stored, therefore null check operator is OK
     String defaultSchool =
         _preferenceService.getString(PreferenceTypes.school)!;
     ApiResponse response =
@@ -54,7 +52,13 @@ class CacheAndInteractionRepository implements ICacheAndInteractionService {
           DateTime.now()
               .subtract(const Duration(minutes: 30))
               .isAfter(userCachedSchedule.cachedAt.toLocal())) {
-        return await getSchedulesRequest(scheduleId);
+        /// Make sure that only if the user has an internet connection and the
+        /// schedule is 'outdated', the app will display the new schedule.
+        /// Otherwise it returns [ApiResponse.cached(userCachedSchedule)]
+        ApiResponse apiResponse = await getSchedulesRequest(scheduleId);
+        if (apiResponse.data != null) {
+          return apiResponse;
+        }
       }
 
       return ApiResponse.cached(userCachedSchedule);
