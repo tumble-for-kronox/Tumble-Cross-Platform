@@ -25,4 +25,9 @@ abstract class IBackendService {
   /// [HttpPost]
   Future<dynamic> putUnregisterUserEvent(
       String eventId, String sessionToken, String defaultSchool);
+
+  Future putRegisterAllAvailableUserEvents(
+      String sessionToken, String defaultSchool);
+
+  Future<dynamic> postSubmitIssue(String issueSubject, String issueBody);
 }

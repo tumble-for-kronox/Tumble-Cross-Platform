@@ -7,6 +7,7 @@ class SupportModalCubit extends Cubit<SupportModalState> {
             isBodyValid: false,
             formSubmittedSuccessfully: false));
 
+  final _backendService = getIt<BackendRepository>();
   final _textEditingControllerSubject = TextEditingController();
   final _textEditingControllerBody = TextEditingController();
 
@@ -18,7 +19,13 @@ class SupportModalCubit extends Cubit<SupportModalState> {
     _textEditingControllerBody.addListener(bodyListener);
   }
 
-  void sendBugReport() async {}
+  void sendBugReport() async {
+    final String subject = _textEditingControllerSubject.text;
+    final String body = _textEditingControllerBody.text;
+    final ApiResponse response =
+        await _backendService.postSubmitIssue(subject, body);
+    // Do something with response ...
+  }
 
   void subjectListener() {
     if (_textEditingControllerSubject.text.length > 5) {

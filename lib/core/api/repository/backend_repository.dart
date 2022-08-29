@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart';
 import 'package:tumble/core/api/apiservices/api_endpoints.dart';
@@ -69,149 +70,6 @@ class BackendRepository implements IBackendService {
   /// [HttpGet]
   @override
   Future getUserEvents(String sessionToken, String defaultSchool) async {
-    // List<AvailableUserEventModel> only_registered_events = [
-    //   AvailableUserEventModel(
-    //     id: "id",
-    //     title: "Registered Exam 1",
-    //     type: "exam",
-    //     eventStart: DateTime(2022, 8, 30, 12),
-    //     eventEnd: DateTime(2022, 8, 30, 16),
-    //     lastSignupDate: DateTime(2022, 8, 28),
-    //     participatorId: null,
-    //     supportId: null,
-    //     anonymousCode: "",
-    //     isRegistered: true,
-    //     supportAvailable: false,
-    //     requiresChoosingLocation: false,
-    //   ),
-    //   AvailableUserEventModel(
-    //     id: "id",
-    //     title: "Registered Exam 2",
-    //     type: "exam",
-    //     eventStart: DateTime(2022, 8, 30, 12),
-    //     eventEnd: DateTime(2022, 8, 30, 16),
-    //     lastSignupDate: DateTime(2022, 8, 28),
-    //     participatorId: null,
-    //     supportId: null,
-    //     anonymousCode: "",
-    //     isRegistered: true,
-    //     supportAvailable: false,
-    //     requiresChoosingLocation: false,
-    //   ),
-    // ];
-    // List<AvailableUserEventModel> onlyPassedEvents = [
-    //   AvailableUserEventModel(
-    //     id: "",
-    //     title: "Passed Exam 1",
-    //     type: "exam",
-    //     eventStart: DateTime(2022, 8, 30, 12),
-    //     eventEnd: DateTime(2022, 8, 30, 16),
-    //     lastSignupDate: DateTime(2022, 8, 10),
-    //     participatorId: null,
-    //     supportId: null,
-    //     anonymousCode: "",
-    //     isRegistered: true,
-    //     supportAvailable: false,
-    //     requiresChoosingLocation: false,
-    //   ),
-    //   AvailableUserEventModel(
-    //     id: "",
-    //     title: "Passed Exam 1",
-    //     type: "exam",
-    //     eventStart: DateTime(2022, 8, 30, 12),
-    //     eventEnd: DateTime(2022, 8, 30, 16),
-    //     lastSignupDate: DateTime(2022, 8, 10),
-    //     participatorId: null,
-    //     supportId: null,
-    //     anonymousCode: "",
-    //     isRegistered: true,
-    //     supportAvailable: false,
-    //     requiresChoosingLocation: false,
-    //   )
-    // ];
-    // List<AvailableUserEventModel> mixedPassedRegisteredEvents = [
-    //   AvailableUserEventModel(
-    //     id: "id",
-    //     title: "Passed Exam 1",
-    //     type: "exam",
-    //     eventStart: DateTime(2022, 8, 30, 12),
-    //     eventEnd: DateTime(2022, 8, 30, 16),
-    //     lastSignupDate: DateTime(2022, 8, 10),
-    //     participatorId: null,
-    //     supportId: null,
-    //     anonymousCode: "",
-    //     isRegistered: true,
-    //     supportAvailable: false,
-    //     requiresChoosingLocation: false,
-    //   ),
-    //   AvailableUserEventModel(
-    //     id: "id",
-    //     title: "Registered Exam 1",
-    //     type: "exam",
-    //     eventStart: DateTime(2022, 8, 30, 12),
-    //     eventEnd: DateTime(2022, 8, 30, 16),
-    //     lastSignupDate: DateTime(2022, 8, 28),
-    //     participatorId: null,
-    //     supportId: null,
-    //     anonymousCode: "",
-    //     isRegistered: true,
-    //     supportAvailable: false,
-    //     requiresChoosingLocation: false,
-    //   )
-    // ];
-    // List<AvailableUserEventModel> onlyUnregisteredEvents = [
-    //   AvailableUserEventModel(
-    //     id: "id",
-    //     title: "Unregistered Exam 1",
-    //     type: "exam",
-    //     eventStart: DateTime(2022, 8, 30, 12),
-    //     eventEnd: DateTime(2022, 8, 30, 16),
-    //     lastSignupDate: DateTime(2022, 8, 28),
-    //     participatorId: null,
-    //     supportId: null,
-    //     anonymousCode: "",
-    //     isRegistered: false,
-    //     supportAvailable: false,
-    //     requiresChoosingLocation: false,
-    //   ),
-    //   AvailableUserEventModel(
-    //     id: "id",
-    //     title: "Unregistered Exam 2",
-    //     type: "exam",
-    //     eventStart: DateTime(2022, 8, 30, 12),
-    //     eventEnd: DateTime(2022, 8, 30, 16),
-    //     lastSignupDate: DateTime(2022, 8, 28),
-    //     participatorId: null,
-    //     supportId: null,
-    //     anonymousCode: "",
-    //     isRegistered: false,
-    //     supportAvailable: true,
-    //     requiresChoosingLocation: true,
-    //   )
-    // ];
-    // List<UpcomingUserEventModel> upcomingEvents = [
-    //   UpcomingUserEventModel(
-    //     title: "Upcoming Exam 1",
-    //     type: "exam",
-    //     eventStart: DateTime(2022, 8, 30, 12),
-    //     eventEnd: DateTime(2022, 8, 30, 16),
-    //     firstSignupDate: DateTime(2022, 8, 28),
-    //   ),
-    //   UpcomingUserEventModel(
-    //     title: "Upcoming Exam 2",
-    //     type: "exam",
-    //     eventStart: DateTime(2022, 8, 30, 12),
-    //     eventEnd: DateTime(2022, 8, 30, 16),
-    //     firstSignupDate: DateTime(2022, 8, 28),
-    //   )
-    // ];
-
-    // return ApiResponse.completed(UserEventCollectionModel(
-    //   upcomingEvents: upcomingEvents,
-    //   registeredEvents: mixedPassedRegisteredEvents,
-    //   unregisteredEvents: onlyUnregisteredEvents,
-    // ));
-
     final school = Schools().fromString(defaultSchool).schoolId.index;
 
     if (kDebugMode) {
@@ -376,6 +234,35 @@ class BackendRepository implements IBackendService {
           {ApiEndPoints.school: school.toString()});
       final response = await http.post(uri, body: body);
       return response.parseUser();
+    }
+  }
+
+  /// [HttpPost]
+  @override
+  Future<dynamic> postSubmitIssue(String issueSubject, String issueBody) async {
+    final Map<String, String> requestBody = {
+      ApiEndPoints.issueSubject: issueSubject,
+      ApiEndPoints.issueBody: issueBody
+    };
+    if (kDebugMode) {
+      var uri = Uri.https(
+        ApiEndPoints.debugBaseUrl,
+        ApiEndPoints.postSubmitIssue,
+      );
+      final response = await HttpService.sendPostRequestToServer(
+          uri, jsonEncode(requestBody));
+
+      if (response == null) {
+        return ApiResponse.error(RuntimeErrorType.timeoutError());
+      }
+      return await response.parseIssue();
+    } else {
+      var uri = Uri.https(
+        ApiEndPoints.baseUrl,
+        ApiEndPoints.postSubmitIssue,
+      );
+      final response = await http.post(uri, body: requestBody);
+      return response.parseIssue();
     }
   }
 }
