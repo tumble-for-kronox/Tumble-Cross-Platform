@@ -1,20 +1,12 @@
 // ignore_for_file: constant_identifier_names
 
 enum EventType {
-  CONTACT,
   CHANGE_SCHOOL,
   CHANGE_THEME,
-  SET_DEFAULT_VIEW,
-  SET_DEFAULT_SCHEDULE,
+  TOGGLE_BOOKMARKED_SCHEDULES,
   CANCEL_ALL_NOTIFICATIONS,
   CANCEL_NOTIFICATIONS_FOR_PROGRAM,
-  EDIT_NOTIFICATION_TIME
+  EDIT_NOTIFICATION_TIME,
+  SUPPORT,
+  OPEN_REVIEW
 }
-
-/* class DrawerEvent {
-  final EventType type;
-  final dynamic payload;
-
-  DrawerEvent({required this.type, this.payload});
-}
- */

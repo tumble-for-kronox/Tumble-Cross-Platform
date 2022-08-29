@@ -8,7 +8,7 @@ abstract class IServiceManager<T> {
 
   Future<void> update(T data);
 
-  Future<void> remove(T data);
+  Future<void> remove(String id, String accessStores);
 
   Future<void> removeAll();
 

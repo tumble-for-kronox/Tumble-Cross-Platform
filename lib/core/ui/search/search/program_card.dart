@@ -26,8 +26,10 @@ class ProgramCard extends StatelessWidget {
           child: TextButton(
             onPressed: onTap,
             style: ButtonStyle(
-              overlayColor: MaterialStateProperty.all<Color>(Colors.grey.shade200),
-              foregroundColor: MaterialStateProperty.all<Color>(Theme.of(context).colorScheme.onBackground),
+              overlayColor:
+                  MaterialStateProperty.all<Color>(Colors.grey.shade200),
+              foregroundColor: MaterialStateProperty.all<Color>(
+                  Theme.of(context).colorScheme.onBackground),
             ),
             child: Container(
               width: double.infinity,
@@ -39,28 +41,27 @@ class ProgramCard extends StatelessWidget {
                     child: Text(
                       programSubtitle.trim(),
                       textAlign: TextAlign.left,
-                      style: const TextStyle(fontSize: 19, fontWeight: FontWeight.w400),
+                      style: const TextStyle(
+                          fontSize: 19, fontWeight: FontWeight.w400),
                     ),
                   ),
                   const SizedBox(
                     height: 10,
                   ),
-                  Container(
-                    child: Row(
-                      children: [
-                        Text(
-                          programName.split(RegExp(r'\s-')).first,
-                          textAlign: TextAlign.left,
-                          maxLines: 3,
-                          overflow: TextOverflow.ellipsis,
-                          softWrap: true,
-                          style: const TextStyle(
-                            fontSize: 17,
-                            fontWeight: FontWeight.w200,
-                          ),
+                  Row(
+                    children: [
+                      Text(
+                        programName.split(RegExp(r'\s-')).first,
+                        textAlign: TextAlign.left,
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
+                        softWrap: true,
+                        style: const TextStyle(
+                          fontSize: 17,
+                          fontWeight: FontWeight.w200,
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                   const SizedBox(
                     height: 15,

@@ -6,6 +6,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:tumble/core/theme/cubit/theme_cubit.dart';
 import 'package:tumble/core/theme/cubit/theme_state.dart';
 import 'package:tumble/core/theme/data/colors.dart';
+import 'package:tumble/core/ui/bottom_nav_bar/cubit/bottom_nav_cubit.dart';
 import 'package:tumble/core/ui/init_cubit/init_cubit.dart';
 import 'package:tumble/core/ui/login/cubit/auth_cubit.dart';
 import 'package:tumble/core/ui/main_app/main_app_navigation_root.dart';
@@ -57,10 +58,12 @@ class _MainAppState extends State<MainApp> {
                               child: const SchoolSelectionPage(),
                             );
                           case InitStatus.HAS_SCHOOL:
-                            return BlocProvider.value(
-                              value: BlocProvider.of<AuthCubit>(context),
-                              child: const MainAppNavigationRootPage(),
-                            );
+                            return MultiBlocProvider(providers: [
+                              BlocProvider.value(
+                                  value: BlocProvider.of<AuthCubit>(context)),
+                              BlocProvider<MainAppNavigationCubit>(
+                                  create: (_) => MainAppNavigationCubit())
+                            ], child: const MainAppNavigationRootPage());
                         }
                       },
                     );

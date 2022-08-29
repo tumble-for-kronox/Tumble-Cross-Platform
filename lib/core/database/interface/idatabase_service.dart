@@ -24,5 +24,7 @@ abstract class IDatabaseScheduleService implements IServiceManager {
 
   Future<List<CourseUiModel>> getCachedCoursesFromId(String scheduleId);
 
+  Future updateCourseInstance(CourseUiModel courseUiModel);
+
   Future removeAllCachedCourseColors();
 }

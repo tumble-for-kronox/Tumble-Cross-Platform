@@ -4,7 +4,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:tumble/core/models/api_models/schedule_model.dart';
 import 'package:tumble/core/models/ui_models/course_ui_model.dart';
 import 'package:tumble/core/theme/data/colors.dart';
-import 'package:tumble/core/ui/data/groups/scaffold_message_types.dart';
+import 'package:tumble/core/ui/data/scaffold_message_types.dart';
 import 'package:tumble/core/ui/main_app/cubit/main_app_cubit.dart';
 import 'package:tumble/core/ui/main_app/main_app.dart';
 import 'package:tumble/core/ui/permission_handler.dart';
@@ -12,12 +12,13 @@ import 'package:tumble/core/ui/scaffold_message.dart';
 import 'package:tumble/core/ui/schedule/event_modal.dart';
 import 'package:tumble/core/ui/schedule/event_options.dart';
 import 'package:tumble/core/ui/schedule/tumble_list_view/tumble_list_view_schedule_card.dart';
+import 'package:tumble/core/ui/search/cubit/search_page_cubit.dart';
 
-class TumbleListViewDayContainer extends StatelessWidget {
+class PreviewListViewDayContainer extends StatelessWidget {
   final Day day;
-  final MainAppCubit mainAppCubit;
-  const TumbleListViewDayContainer(
-      {Key? key, required this.day, required this.mainAppCubit})
+  final SearchPageCubit searchPageCubit;
+  const PreviewListViewDayContainer(
+      {Key? key, required this.day, required this.searchPageCubit})
       : super(key: key);
 
   @override
@@ -46,21 +47,16 @@ class TumbleListViewDayContainer extends StatelessWidget {
             padding: const EdgeInsets.only(bottom: 10, top: 2),
             child: Column(
               children: day.events
-                  .map((event) => GestureDetector(
-                        onLongPress: () => EventOptions.showEventOptions(
-                            context, event, mainAppCubit),
-                        child: ScheduleCard(
-                            event: event,
-                            color: event.isSpecial
-                                ? Colors.redAccent
-                                : mainAppCubit.getColorForCourse(event),
-                            onTap: () =>
-                                TumbleEventModal.showBookmarkEventModal(
-                                    context,
-                                    event,
-                                    mainAppCubit.getColorForCourse(event),
-                                    mainAppCubit)),
-                      ))
+                  .map((event) => ScheduleCard(
+                      event: event,
+                      color: event.isSpecial
+                          ? Colors.redAccent
+                          : searchPageCubit.getColorForCourse(event),
+                      onTap: () => PreviewEventModal.showPreviewEventModal(
+                          context,
+                          event,
+                          searchPageCubit.getColorForCourse(event),
+                          searchPageCubit)))
                   .toList(),
             ),
           )

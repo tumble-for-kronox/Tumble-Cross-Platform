@@ -6,19 +6,23 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tumble/core/extensions/extensions.dart';
 import 'package:tumble/core/theme/cubit/theme_cubit.dart';
 import 'package:tumble/core/ui/bottom_nav_bar/cubit/bottom_nav_cubit.dart';
-import 'package:tumble/core/ui/main_app/cubit/main_app_cubit.dart';
+import 'package:tumble/core/ui/search/cubit/search_page_cubit.dart';
 
 class TumbleAppBar extends StatefulWidget {
-  final AsyncCallback? toggleFavorite;
-  final bool? visibleBookmark;
-  const TumbleAppBar({Key? key, this.toggleFavorite, this.visibleBookmark})
-      : super(key: key);
+  final int? pageIndex;
+  final AsyncCallback? toggleBookmark;
+  const TumbleAppBar({
+    this.pageIndex,
+    this.toggleBookmark,
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<TumbleAppBar> createState() => _TumbleAppBarState();
 }
 
 class _TumbleAppBarState extends State<TumbleAppBar> {
+  final navBarIndicies = [1, 2, 3, 4];
   @override
   Widget build(BuildContext context) {
     return AppBar(
@@ -56,49 +60,52 @@ class _TumbleAppBarState extends State<TumbleAppBar> {
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                children: [
-                  if (widget.visibleBookmark!)
-                    BlocBuilder<MainAppCubit, MainAppState>(
-                      builder: (context, state) {
-                        switch (state.status) {
-                          case MainAppStatus.SCHEDULE_SELECTED:
-                            return Padding(
-                              padding: const EdgeInsets.only(left: 5, top: 5),
-                              child: IconButton(
-                                  iconSize: 30,
-                                  onPressed: widget.toggleFavorite,
-                                  icon: Icon(
-                                      state.toggledFavorite
-                                          ? CupertinoIcons.bookmark_fill
-                                          : CupertinoIcons.bookmark,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onBackground)),
-                            );
-                          default:
-                            return Padding(
-                              padding: const EdgeInsets.only(top: 5, right: 5),
-                              child: IconButton(
-                                  iconSize: 30,
-                                  onPressed: widget.toggleFavorite,
-                                  icon: const Icon(CupertinoIcons.bookmark,
-                                      color: Colors.transparent)),
-                            );
-                        }
-                      },
-                    )
-                  else
-                    const Padding(
-                      padding: EdgeInsets.only(top: 5, right: 5),
+              BlocBuilder<SearchPageCubit, SearchPageState>(
+                  builder: (context, state) {
+                switch (state.previewFetchStatus) {
+                  case PreviewFetchStatus.EMPTY_SCHEDULE:
+                  case PreviewFetchStatus.FETCH_ERROR:
+                  case PreviewFetchStatus.LOADING:
+                  case PreviewFetchStatus.INITIAL:
+                    return const Padding(
+                      padding: EdgeInsets.only(top: 10, left: 10),
                       child: IconButton(
                           iconSize: 30,
                           onPressed: null,
                           icon: Icon(CupertinoIcons.bookmark,
                               color: Colors.transparent)),
-                    ),
-                ],
-              ),
+                    );
+
+                  case PreviewFetchStatus.CACHED_SCHEDULE:
+                  case PreviewFetchStatus.FETCHED_SCHEDULE:
+                    if (!navBarIndicies.contains(widget.pageIndex)) {
+                      return Padding(
+                        padding: const EdgeInsets.only(top: 5, right: 5),
+                        child: IconButton(
+                            iconSize: 30,
+                            onPressed: widget.toggleBookmark,
+                            icon: Icon(
+                                BlocProvider.of<SearchPageCubit>(context)
+                                        .state
+                                        .previewToggledFavorite!
+                                    ? CupertinoIcons.bookmark_fill
+                                    : CupertinoIcons.bookmark,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onBackground)),
+                      );
+                    } else {
+                      return const Padding(
+                        padding: EdgeInsets.only(top: 10, left: 10),
+                        child: IconButton(
+                            iconSize: 30,
+                            onPressed: null,
+                            icon: Icon(CupertinoIcons.bookmark,
+                                color: Colors.transparent)),
+                      );
+                    }
+                }
+              }),
               Container(
                 padding: const EdgeInsets.only(top: 15),
                 child:

@@ -1,12 +1,10 @@
-import 'dart:developer';
-
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tumble/core/api/apiservices/api_response.dart';
-import 'package:tumble/core/api/apiservices/runtime_error_type.dart';
 import 'package:tumble/core/api/interface/icache_and_interaction_service.dart';
 import 'package:tumble/core/api/repository/backend_repository.dart';
 import 'package:tumble/core/database/database_response.dart';
 import 'package:tumble/core/database/repository/database_repository.dart';
+import 'package:tumble/core/models/api_models/bookmarked_schedule_model.dart';
 import 'package:tumble/core/models/api_models/schedule_model.dart';
 import 'package:tumble/core/shared/preference_types.dart';
 import 'package:tumble/core/dependency_injection/get_it_instances.dart';
@@ -18,31 +16,47 @@ class CacheAndInteractionRepository implements ICacheAndInteractionService {
 
   @override
   Future<ApiResponse> getProgramsRequest(String searchQuery) async {
-    String defaultSchool = _preferenceService.getString(PreferenceTypes.school)!;
-    ApiResponse response = await _backendService.getPrograms(searchQuery, defaultSchool);
+    String defaultSchool =
+        _preferenceService.getString(PreferenceTypes.school)!;
+    ApiResponse response =
+        await _backendService.getPrograms(searchQuery, defaultSchool);
     return response;
   }
 
   @override
   Future<ApiResponse> getSchedulesRequest(scheduleId) async {
-    /// User cannot get this far in the app without having a default
-    /// school stored, therefore null check operator is OK
-    String defaultSchool = _preferenceService.getString(PreferenceTypes.school)!;
-    ApiResponse response = await _backendService.getSchedule(scheduleId, defaultSchool);
+    String defaultSchool =
+        _preferenceService.getString(PreferenceTypes.school)!;
+    ApiResponse response =
+        await _backendService.getSchedule(scheduleId, defaultSchool);
     return response;
   }
 
   @override
   Future<ApiResponse> getSchedule(String scheduleId) async {
-    final bool favoritesContainsThisScheduleId =
-        _preferenceService.getStringList(PreferenceTypes.favorites)!.contains(scheduleId);
+    final bool favoritesContainsThisScheduleId = _preferenceService
+        .getStringList(PreferenceTypes.bookmarks)!
+        .map((json) => bookmarkedScheduleModelFromJson(json).scheduleId)
+        .contains(scheduleId);
 
     if (favoritesContainsThisScheduleId) {
-      final ScheduleModel userCachedSchedule = await _getCachedSchedule(scheduleId);
+      final ScheduleModel? userCachedSchedule =
+          await _getCachedSchedule(scheduleId);
 
-      // if (DateTime.now().subtract(const Duration(minutes: 30)).isAfter(userCachedSchedule.cachedAt.toLocal())) {
-      //   return await getSchedule(scheduleId);
-      // }
+      /// If the schedule for some reason is not found in the database (maybe it was just bookmarked),
+      /// or if the schedule is more than 30 minutes old
+      if (userCachedSchedule == null ||
+          DateTime.now()
+              .subtract(const Duration(minutes: 30))
+              .isAfter(userCachedSchedule.cachedAt.toLocal())) {
+        /// Make sure that only if the user has an internet connection and the
+        /// schedule is 'outdated', the app will display the new schedule.
+        /// Otherwise it returns [ApiResponse.cached(userCachedSchedule)]
+        ApiResponse apiResponse = await getSchedulesRequest(scheduleId);
+        if (apiResponse.data != null) {
+          return apiResponse;
+        }
+      }
 
       return ApiResponse.cached(userCachedSchedule);
     }
@@ -57,7 +71,8 @@ class CacheAndInteractionRepository implements ICacheAndInteractionService {
   /// and a default schedule)
   @override
   Future<DatabaseResponse> initSetup() async {
-    final String? defaultSchool = _preferenceService.getString(PreferenceTypes.school);
+    final String? defaultSchool =
+        _preferenceService.getString(PreferenceTypes.school);
 
     if (defaultSchool != null) {
       return DatabaseResponse.hasDefault(defaultSchool);
@@ -66,24 +81,7 @@ class CacheAndInteractionRepository implements ICacheAndInteractionService {
     }
   }
 
-  @override
-  Future<ApiResponse> getCachedBookmarkedSchedule() async {
-    final bool userHasCachedSchedule = _preferenceService.getString(PreferenceTypes.schedule) != null;
-    if (userHasCachedSchedule) {
-      ScheduleModel userCachedSchedule = await _getCachedSchedule(null);
-      return ApiResponse.cached(userCachedSchedule);
-    }
-    return ApiResponse.error(RuntimeErrorType.noCachedSchedule());
-  }
-
-  Future<ScheduleModel> _getCachedSchedule(String? scheduleId) async {
-    return (await _databaseService
-        .getOneSchedule(scheduleId ?? _preferenceService.getString(PreferenceTypes.schedule)!))!;
-  }
-
-  @override
-  Future<ApiResponse> refreshDefaultSchedule() async {
-    String defaultScheduleId = _preferenceService.getString(PreferenceTypes.schedule)!;
-    return await getSchedulesRequest(defaultScheduleId);
+  Future<ScheduleModel?> _getCachedSchedule(String scheduleId) async {
+    return (await _databaseService.getOneSchedule(scheduleId));
   }
 }

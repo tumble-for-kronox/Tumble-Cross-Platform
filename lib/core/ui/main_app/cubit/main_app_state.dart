@@ -5,27 +5,24 @@ part of 'main_app_cubit.dart';
 enum MainAppStatus {
   INITIAL,
   LOADING,
-  SCHEDULE_SELECTED,
+  POPULATED_VIEW,
   FETCH_ERROR,
+  NO_VIEW,
   EMPTY_SCHEDULE
 }
 
 class MainAppState extends Equatable {
   final MainAppStatus status;
-  final bool toggledFavorite;
   final bool listViewToTopButtonVisible;
-  final String? currentScheduleId;
   final List<Day>? listOfDays;
   final List<Week>? listOfWeeks;
   final String? message;
-  final ScheduleModelAndCourses? scheduleModelAndCourses;
+  final List<ScheduleModelAndCourses?>? scheduleModelAndCourses;
   const MainAppState(
       {required this.status,
       required this.scheduleModelAndCourses,
-      required this.currentScheduleId,
       required this.listOfDays,
       required this.listOfWeeks,
-      required this.toggledFavorite,
       required this.listViewToTopButtonVisible,
       required this.message});
 
@@ -33,17 +30,14 @@ class MainAppState extends Equatable {
           {MainAppStatus? status,
           bool? toggledFavorite,
           bool? listViewToTopButtonVisible,
-          String? currentScheduleId,
           List<Day>? listOfDays,
           List<Week>? listOfWeeks,
           String? message,
-          ScheduleModelAndCourses? scheduleModelAndCourses}) =>
+          List<ScheduleModelAndCourses?>? scheduleModelAndCourses}) =>
       MainAppState(
           status: status ?? this.status,
-          toggledFavorite: toggledFavorite ?? this.toggledFavorite,
           listViewToTopButtonVisible:
               listViewToTopButtonVisible ?? this.listViewToTopButtonVisible,
-          currentScheduleId: currentScheduleId ?? this.currentScheduleId,
           listOfDays: listOfDays ?? this.listOfDays,
           listOfWeeks: listOfWeeks ?? this.listOfWeeks,
           message: message ?? this.message,
@@ -53,10 +47,8 @@ class MainAppState extends Equatable {
   @override
   List<Object?> get props => [
         status,
-        currentScheduleId,
         listOfDays,
         listOfWeeks,
-        toggledFavorite,
         listViewToTopButtonVisible,
         message,
         scheduleModelAndCourses
