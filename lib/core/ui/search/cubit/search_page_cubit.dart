@@ -205,16 +205,14 @@ class SearchPageCubit extends Cubit<SearchPageState> {
 
     bookmarks.removeWhere(
         (bookmark) => bookmark.scheduleId == state.previewCurrentScheduleId);
-
-    await _databaseService.remove(
-        state.previewCurrentScheduleId!, AccessStores.SCHEDULE_STORE);
-    await _databaseService.remove(
-        state.previewCurrentScheduleId!, AccessStores.COURSE_COLOR_STORE);
-
     await _sharedPrefs.setStringList(PreferenceTypes.bookmarks,
         bookmarks.map((bookmark) => jsonEncode(bookmark)).toList());
+    await _databaseService.remove(
+        state.previewCurrentScheduleId!, AccessStores.COURSE_COLOR_STORE);
+    await _databaseService.remove(
+        state.previewCurrentScheduleId!, AccessStores.SCHEDULE_STORE);
 
-    log('BOOKMARKS: ${_sharedPrefs.getStringList(PreferenceTypes.bookmarks)!.map((bookmark) => bookmarkedScheduleModelFromJson(bookmark)).toList()}\n\n');
+    await _awesomeNotifications.removeChannel(state.previewCurrentScheduleId!);
 
     emit(state.copyWith(previewToggledFavorite: false));
   }
@@ -228,8 +226,6 @@ class SearchPageCubit extends Cubit<SearchPageState> {
         scheduleId: state.previewCurrentScheduleId!, toggledValue: true));
     await _sharedPrefs.setStringList(PreferenceTypes.bookmarks,
         bookmarks.map((bookmark) => jsonEncode(bookmark)).toList());
-
-    log('BOOKMARKS: ${_sharedPrefs.getStringList(PreferenceTypes.bookmarks)!.map((json) => bookmarkedScheduleModelFromJson(json)).toList()}\n\n');
 
     for (CourseUiModel? courseUiModel
         in state.previewScheduleModelAndCourses!.courses) {
@@ -247,7 +243,11 @@ class SearchPageCubit extends Cubit<SearchPageState> {
         channelKey: state.previewCurrentScheduleId!,
         channelName: 'Notifications for schedule',
         channelDescription: 'Notifications for schedule');
-    emit(state.copyWith(previewToggledFavorite: true));
+    _textEditingController.clear();
+    emit(state.copyWith(
+        searchPageStatus: SearchPageStatus.INITIAL,
+        focused: false,
+        previewFetchStatus: PreviewFetchStatus.INITIAL));
   }
 
   void resetCubit() {

@@ -67,25 +67,6 @@ class TumbleAppDrawer extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 25.0),
-                  /* TumbleSettingsSection(tiles: [
-                    TumbleAppDrawerTile(
-                      drawerTileTitle: "Contact",
-                      subtitle: "Get support",
-                      suffixIcon: CupertinoIcons.bubble_left_bubble_right,
-                      eventType: EventType.CONTACT,
-                      drawerEvent: (eventType) => handleDrawerEvent(
-                        eventType,
-                        context,
-                        navigator,
-                      ),
-                    ),
-                  ], title: "Support"),
-                  Divider(
-                    height: 50.0,
-                    color: Theme.of(context).colorScheme.onBackground,
-                    indent: 20,
-                    endIndent: 30,
-                  ), */
 
                   /// Common
                   TumbleSettingsSection(tiles: [

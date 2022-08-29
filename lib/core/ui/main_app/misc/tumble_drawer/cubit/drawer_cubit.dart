@@ -93,7 +93,6 @@ class DrawerCubit extends Cubit<DrawerState> {
   }
 
   Future<void> removeBookmark(String id) async {
-    log(id);
     final bookmarks = _sharedPrefs
         .getStringList(PreferenceTypes.bookmarks)!
         .map((e) => bookmarkedScheduleModelFromJson(e))

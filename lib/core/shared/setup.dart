@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tumble/core/shared/preference_types.dart';
 import 'package:tumble/core/shared/view_types.dart';
@@ -15,6 +17,8 @@ void setupRequiredSharedPreferences() {
 
   /// Check if previously attempted fetches are null, assign accordingly
   sharedPrefs.setString(PreferenceTypes.theme, possibleTheme ?? 'system');
+  log(getIt<SharedPreferences>().getString(PreferenceTypes.theme)!);
+
   sharedPrefs.setInt(
       PreferenceTypes.view, possibleView ?? ScheduleViewTypes.list);
   sharedPrefs.setInt(

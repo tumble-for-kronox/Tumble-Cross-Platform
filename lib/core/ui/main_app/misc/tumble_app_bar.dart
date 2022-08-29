@@ -1,26 +1,19 @@
-import 'dart:developer';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tumble/core/dependency_injection/get_it_instances.dart';
 import 'package:tumble/core/extensions/extensions.dart';
-import 'package:tumble/core/navigation/app_navigator.dart';
-import 'package:tumble/core/shared/preference_types.dart';
 import 'package:tumble/core/theme/cubit/theme_cubit.dart';
-import 'package:tumble/core/theme/data/colors.dart';
 import 'package:tumble/core/ui/bottom_nav_bar/cubit/bottom_nav_cubit.dart';
-import 'package:tumble/core/ui/bottom_nav_bar/data/nav_bar_items.dart';
-import 'package:tumble/core/ui/main_app/cubit/main_app_cubit.dart';
 import 'package:tumble/core/ui/search/cubit/search_page_cubit.dart';
 
 class TumbleAppBar extends StatefulWidget {
   final int? pageIndex;
+  final AsyncCallback? toggleBookmark;
   const TumbleAppBar({
     this.pageIndex,
+    this.toggleBookmark,
     Key? key,
   }) : super(key: key);
 
@@ -29,6 +22,7 @@ class TumbleAppBar extends StatefulWidget {
 }
 
 class _TumbleAppBarState extends State<TumbleAppBar> {
+  final navBarIndicies = [1, 2, 3, 4];
   @override
   Widget build(BuildContext context) {
     return AppBar(
@@ -84,24 +78,12 @@ class _TumbleAppBarState extends State<TumbleAppBar> {
 
                   case PreviewFetchStatus.CACHED_SCHEDULE:
                   case PreviewFetchStatus.FETCHED_SCHEDULE:
-                    if (![1, 2, 3, 4].contains(widget.pageIndex)) {
+                    if (!navBarIndicies.contains(widget.pageIndex)) {
                       return Padding(
                         padding: const EdgeInsets.only(top: 5, right: 5),
                         child: IconButton(
                             iconSize: 30,
-                            onPressed: () async {
-                              await context
-                                  .read<SearchPageCubit>()
-                                  .toggleFavorite(context)
-                                  .then((_) {
-                                context.read<MainAppCubit>().setLoading();
-                                context
-                                    .read<MainAppNavigationCubit>()
-                                    .getNavBarItem(NavbarItem.values[
-                                        getIt<SharedPreferences>()
-                                            .getInt(PreferenceTypes.view)!]);
-                              });
-                            },
+                            onPressed: widget.toggleBookmark,
                             icon: Icon(
                                 BlocProvider.of<SearchPageCubit>(context)
                                         .state

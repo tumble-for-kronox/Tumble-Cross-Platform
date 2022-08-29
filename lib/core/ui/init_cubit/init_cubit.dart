@@ -39,9 +39,11 @@ class InitCubit extends Cubit<InitState> {
   }
 
   void changeSchool(String schoolName) {
+    final theme = getIt<SharedPreferences>().getString(PreferenceTypes.theme);
     _sharedPrefs.clear();
     setupRequiredSharedPreferences();
     _sharedPrefs.setString(PreferenceTypes.school, schoolName);
+    _sharedPrefs.setString(PreferenceTypes.theme, theme!);
     _databaseService.removeAll();
     _databaseService.removeAllCachedCourseColors();
     emit(InitState(defaultSchool: schoolName, status: InitStatus.HAS_SCHOOL));

@@ -45,16 +45,25 @@ class ModalInfoRow extends StatelessWidget {
                     if (locations != null) {
                       return locations!.isNotEmpty
                           ? locations!.map((location) => location.id).join(', ')
-                          : RuntimeErrorType.missingTeachers;
-                    }
-                    if (teachers != null) {
-                      return teachers!.isNotEmpty
-                          ? teachers!.map((teacher) => '${teacher.firstName} ${teacher.lastName}').join(', ')
                           : RuntimeErrorType.missingLocations;
                     }
-                    return subtitle!.length < 38 ? subtitle! : '${subtitle!.substring(0, 38)}..';
+                    if (teachers != null) {
+                      return teachers!.isNotEmpty ||
+                              teachers!
+                                  .every((teacher) => teacher.firstName.isEmpty)
+                          ? teachers!
+                              .map((teacher) =>
+                                  '${teacher.firstName} ${teacher.lastName}')
+                              .join(', ')
+                          : RuntimeErrorType.missingTeachers;
+                    }
+                    return subtitle!.length < 38
+                        ? subtitle!
+                        : '${subtitle!.substring(0, 38)}..';
                   })(),
-                  style: TextStyle(color: Theme.of(context).colorScheme.onBackground, fontSize: 16),
+                  style: TextStyle(
+                      color: Theme.of(context).colorScheme.onBackground,
+                      fontSize: 16),
                 ),
               ),
             ],

@@ -63,8 +63,8 @@ class _SchoolSelectionPageState extends State<SchoolSelectionPage> {
                                       BlocProvider.of<InitCubit>(context)
                                           .state
                                           .defaultSchool!));
-                              navigator.pushAndRemoveAll(NavigationRouteLabels
-                                  .mainAppNavigationRootPage);
+                              navigator.pushAndRemoveAll(
+                                  NavigationRouteLabels.mainAppPage);
                             }
                           }))
                       .toList(),

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -20,6 +22,7 @@ class TumbleListView extends StatelessWidget {
     final AppNavigator navigator = BlocProvider.of<AppNavigator>(context);
     return BlocBuilder<MainAppCubit, MainAppState>(
       builder: (context, state) {
+        log('rebuilt');
         switch (state.status) {
           case MainAppStatus.INITIAL:
             return NoScheduleAvailable(
@@ -60,7 +63,9 @@ class TumbleListView extends StatelessWidget {
                 ),
                 AnimatedPositioned(
                   bottom: 30,
-                  right: state.listViewToTopButtonVisible ? 35 : -60,
+                  right: context.read<MainAppCubit>().toTopButtonVisible()
+                      ? 35
+                      : -60,
                   duration: const Duration(milliseconds: 200),
                   child: ToTopButton(
                       scrollToTop: () =>

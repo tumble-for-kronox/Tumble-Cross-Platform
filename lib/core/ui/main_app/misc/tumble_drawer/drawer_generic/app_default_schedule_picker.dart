@@ -18,45 +18,35 @@ class AppFavoriteScheduleToggle extends StatefulWidget {
 }
 
 class _AppFavoriteScheduleToggleState extends State<AppFavoriteScheduleToggle> {
-  Map<String, bool>? mapOfIdToggles;
-
-  @override
-  void initState() {
-    if (context.read<DrawerCubit>().state.mapOfIdToggles != null) {
-      mapOfIdToggles = context.read<DrawerCubit>().state.mapOfIdToggles!;
-    }
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
-    if (mapOfIdToggles != null) {
-      return Align(
-        alignment: Alignment.bottomCenter,
-        child: Container(
-          height: 240,
-          margin: const EdgeInsets.only(bottom: 25, left: 12, right: 12),
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.surface,
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: SizedBox.expand(
-              child: Card(
-            elevation: 0,
-            color: Theme.of(context).colorScheme.surface,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0)),
-            child: SingleChildScrollView(
-              child: Column(
-                  children: (context
-                          .read<DrawerCubit>()
-                          .state
-                          .bookmarks!
-                          .map((bookmark) => bookmark.scheduleId)
-                          .toList())
-                      .map((id) {
-                return BlocBuilder<DrawerCubit, DrawerState>(
-                  builder: (context, state) {
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: Container(
+        height: 240,
+        margin: const EdgeInsets.only(bottom: 25, left: 12, right: 12),
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.surface,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: SizedBox.expand(
+            child: Card(
+          elevation: 0,
+          color: Theme.of(context).colorScheme.surface,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+          child: SingleChildScrollView(
+            child: Column(
+                children: (context
+                        .read<DrawerCubit>()
+                        .state
+                        .bookmarks!
+                        .map((bookmark) => bookmark.scheduleId)
+                        .toList())
+                    .map((id) {
+              return BlocBuilder<DrawerCubit, DrawerState>(
+                builder: (context, state) {
+                  if (state.mapOfIdToggles?[id] != null) {
                     return SwitchListTile(
                       activeColor: Theme.of(context).colorScheme.primary,
                       secondary: IconButton(
@@ -91,32 +81,41 @@ class _AppFavoriteScheduleToggleState extends State<AppFavoriteScheduleToggle> {
                           }
                         });
                       },
-                      value: mapOfIdToggles![id]!,
+                      value: state.mapOfIdToggles![id]!,
                     );
-                  },
-                );
-              }).toList()),
-            ),
-          )),
-        ),
-      );
-    }
-    return Align(
-      alignment: Alignment.bottomCenter,
-      child: Container(
-        height: 240,
-        margin: const EdgeInsets.only(bottom: 25, left: 12, right: 12),
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surface,
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: SizedBox.expand(
-            child: Card(
-                elevation: 0,
-                color: Theme.of(context).colorScheme.surface,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0)),
-                child: const Text('No bookmarks yet'))),
+                  }
+                  return Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Container(
+                      height: 240,
+                      margin: const EdgeInsets.only(
+                          bottom: 25, left: 12, right: 12),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.surface,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: SizedBox.expand(
+                          child: Card(
+                              elevation: 0,
+                              color: Theme.of(context).colorScheme.surface,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10.0)),
+                              child: Center(
+                                  child: Text(
+                                'No bookmarks yet',
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurface),
+                              )))),
+                    ),
+                  );
+                },
+              );
+            }).toList()),
+          ),
+        )),
       ),
     );
   }

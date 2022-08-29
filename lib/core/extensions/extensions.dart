@@ -42,7 +42,12 @@ extension ScheduleParsing on ScheduleModel {
 }
 
 extension StringParse on String {
-  String capitalize() => this[0].toUpperCase() + substring(1).toLowerCase();
+  String capitalize() {
+    if (length > 0) {
+      return this[0].toUpperCase() + substring(1).toLowerCase();
+    }
+    return "(Titlte is missing)";
+  }
 
   String humanize() {
     List<String> stringFragments = split('_');

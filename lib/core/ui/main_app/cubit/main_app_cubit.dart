@@ -1,7 +1,6 @@
 // ignore_for_file: no_leading_underscores_for_local_identifiers
 
 import 'dart:developer' as dev;
-import 'dart:math';
 import 'package:collection/collection.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:equatable/equatable.dart';
@@ -9,7 +8,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tumble/core/api/apiservices/api_response.dart';
-import 'package:tumble/core/api/apiservices/runtime_error_type.dart';
 import 'package:tumble/core/api/builders/notification_service_builder.dart';
 import 'package:tumble/core/api/repository/cache_and_interaction_repository.dart';
 import 'package:tumble/core/database/repository/database_repository.dart';
@@ -47,8 +45,15 @@ class MainAppCubit extends Cubit<MainAppState> {
   SharedPreferences get sharedPrefs => _sharedPrefs;
   int get viewType => getIt<SharedPreferences>().getInt(PreferenceTypes.view)!;
 
+  bool toTopButtonVisible() {
+    if (_listViewScrollController.hasClients) {
+      return _listViewScrollController.offset >= 1000;
+    } else {
+      return false;
+    }
+  }
+
   Future<void> init() async {
-    dev.log('IN INIT FUNCTION: MAINAPPCUBIT');
     await tryCached();
     _listViewScrollController.addListener((setScrollController));
   }
@@ -60,11 +65,12 @@ class MainAppCubit extends Cubit<MainAppState> {
   }
 
   Future<void> tryCached() async {
-    final currentScheduleIds = _sharedPrefs
+    dev.log(
+        'TRYCACHED SCHEDULES: ${getIt<SharedPreferences>().getStringList(PreferenceTypes.bookmarks)!}');
+    final currentScheduleIds = getIt<SharedPreferences>()
         .getStringList(PreferenceTypes.bookmarks)!
         .map((json) => bookmarkedScheduleModelFromJson(json).scheduleId)
         .toList();
-    dev.log('In TRYCACHED: ${currentScheduleIds.toString()}');
     List<ScheduleModelAndCourses> listOfScheduleModelAndCourses = [];
     List<List<Day>> matrixListOfDays = [];
 
@@ -72,17 +78,18 @@ class MainAppCubit extends Cubit<MainAppState> {
       // Check if bookmarked schedule is toggled to be visible
       // before trying to fetch it
 
-      final bool userHasBookmarks = _sharedPrefs
+      final bool userHasBookmarks = getIt<SharedPreferences>()
           .getStringList(PreferenceTypes.bookmarks)!
           .map((json) => bookmarkedScheduleModelFromJson(json).scheduleId)
           .toList()
           .isNotEmpty;
 
-      final bool currentScheduleIsToggledToBeVisible = _sharedPrefs
-          .getStringList(PreferenceTypes.bookmarks)!
-          .map((json) => bookmarkedScheduleModelFromJson(json))
-          .firstWhere((bookmark) => bookmark.scheduleId == scheduleId)
-          .toggledValue;
+      final bool currentScheduleIsToggledToBeVisible =
+          getIt<SharedPreferences>()
+              .getStringList(PreferenceTypes.bookmarks)!
+              .map((json) => bookmarkedScheduleModelFromJson(json))
+              .firstWhere((bookmark) => bookmark.scheduleId == scheduleId)
+              .toggledValue;
 
       if (scheduleId != null && userHasBookmarks) {
         if (currentScheduleIsToggledToBeVisible) {
@@ -115,6 +122,9 @@ class MainAppCubit extends Cubit<MainAppState> {
           matrixListOfDays.expand((listOfDays) => listOfDays).toList();
       flattened.sort(
           (prevDay, nextDay) => prevDay.isoString.compareTo(nextDay.isoString));
+
+      var seen = <String>{};
+
       final listOfDays = groupBy(flattened, (Day day) => day.date)
           .entries
           .map((dayGrouper) => Day(
@@ -122,8 +132,10 @@ class MainAppCubit extends Cubit<MainAppState> {
               date: dayGrouper.value[0].date,
               isoString: dayGrouper.value[0].isoString,
               weekNumber: dayGrouper.value[0].weekNumber,
-              events:
-                  dayGrouper.value.expand((Day day) => day.events).toList()))
+              events: dayGrouper.value
+                  .expand((day) => day.events)
+                  .where((event) => seen.add(event.id))
+                  .toList()))
           .toList();
 
       emit(state.copyWith(
