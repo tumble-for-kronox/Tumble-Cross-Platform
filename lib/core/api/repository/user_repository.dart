@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tumble/core/api/apiservices/api_response.dart';
 import 'package:tumble/core/api/interface/iuser_service.dart';
@@ -19,7 +17,8 @@ class UserRepository implements IUserService {
   }
 
   @override
-  Future<ApiResponse> postUserLogin(String username, String password, String school) async {
+  Future<ApiResponse> postUserLogin(
+      String username, String password, String school) async {
     return await _backendRepository.postUserLogin(username, password, school);
   }
 
@@ -27,20 +26,24 @@ class UserRepository implements IUserService {
   Future putRegisterUserEvent(String eventId, String sessionToken) async {
     final school = _sharedPrefs.getString(PreferenceTypes.school)!;
 
-    return await _backendRepository.putRegisterUserEvent(eventId, sessionToken, school);
+    return await _backendRepository.putRegisterUserEvent(
+        eventId, sessionToken, school);
   }
 
   @override
   Future putUnregisterUserEvent(String eventId, String sessionToken) async {
     final school = _sharedPrefs.getString(PreferenceTypes.school)!;
 
-    return await _backendRepository.putUnregisterUserEvent(eventId, sessionToken, school);
+    return await _backendRepository.putUnregisterUserEvent(
+        eventId, sessionToken, school);
   }
 
   @override
-  Future<ApiResponse> putRegisterAllAvailableUserEvents(String sessionToken) async {
+  Future<ApiResponse> putRegisterAllAvailableUserEvents(
+      String sessionToken) async {
     final school = _sharedPrefs.getString(PreferenceTypes.school)!;
-    return await _backendRepository.putRegisterAllAvailableUserEvents(sessionToken, school);
+    return await _backendRepository.putRegisterAllAvailableUserEvents(
+        sessionToken, school);
   }
 
   @override
