@@ -83,34 +83,36 @@ class _AppFavoriteScheduleToggleState extends State<AppFavoriteScheduleToggle> {
                       },
                       value: state.mapOfIdToggles![id]!,
                     );
-                  }
-                  return Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Container(
-                      height: 240,
-                      margin: const EdgeInsets.only(
-                          bottom: 25, left: 12, right: 12),
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.surface,
-                        borderRadius: BorderRadius.circular(20),
+                  } else if (state.bookmarks!.isEmpty) {
+                    return Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Container(
+                        height: 240,
+                        margin: const EdgeInsets.only(
+                            bottom: 25, left: 12, right: 12),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.surface,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: SizedBox.expand(
+                            child: Card(
+                                elevation: 0,
+                                color: Theme.of(context).colorScheme.surface,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10.0)),
+                                child: Center(
+                                    child: Text(
+                                  'No bookmarks yet',
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onSurface),
+                                )))),
                       ),
-                      child: SizedBox.expand(
-                          child: Card(
-                              elevation: 0,
-                              color: Theme.of(context).colorScheme.surface,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10.0)),
-                              child: Center(
-                                  child: Text(
-                                'No bookmarks yet',
-                                style: TextStyle(
-                                    fontSize: 20,
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onSurface),
-                              )))),
-                    ),
-                  );
+                    );
+                  }
+                  return Container();
                 },
               );
             }).toList()),

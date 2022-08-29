@@ -246,6 +246,7 @@ class SearchPageCubit extends Cubit<SearchPageState> {
     emit(state.copyWith(
         searchPageStatus: SearchPageStatus.INITIAL,
         focused: false,
+        clearButtonVisible: false,
         previewFetchStatus: PreviewFetchStatus.INITIAL));
   }
 

@@ -18,16 +18,7 @@ class SupportModalCubit extends Cubit<SupportModalState> {
     _textEditingControllerBody.addListener(bodyListener);
   }
 
-  void sendBugReport() async {
-    final Email email = Email(
-      body: _textEditingControllerBody.text,
-      subject: _textEditingControllerSubject.text,
-      recipients: [TumbleContact.email],
-      isHTML: false,
-    );
-
-    await FlutterEmailSender.send(email);
-  }
+  void sendBugReport() async {}
 
   void subjectListener() {
     if (_textEditingControllerSubject.text.length > 5) {

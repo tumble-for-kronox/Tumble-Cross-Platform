@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,15 +11,16 @@ import 'package:tumble/core/ui/data/scaffold_message_types.dart';
 import 'package:tumble/core/ui/main_app/cubit/main_app_cubit.dart';
 import 'package:tumble/core/ui/main_app/data/event_types.dart';
 import 'package:tumble/core/ui/main_app/data/schools.dart';
+import 'package:tumble/core/ui/main_app/misc/tumble_drawer/data/review_strings.dart';
 import 'package:tumble/core/ui/main_app/misc/tumble_drawer/support_modal/support_modal.dart';
 import 'package:tumble/core/ui/main_app/misc/tumble_app_drawer_tile.dart';
 import 'package:tumble/core/ui/main_app/misc/tumble_drawer/cubit/drawer_state.dart';
 import 'package:tumble/core/ui/main_app/misc/tumble_drawer/drawer_generic/app_default_schedule_picker.dart';
-import 'package:tumble/core/ui/main_app/misc/tumble_drawer/drawer_generic/app_default_view_picker.dart';
 import 'package:tumble/core/ui/main_app/misc/tumble_drawer/drawer_generic/app_notification_time_picker.dart';
 import 'package:tumble/core/ui/main_app/misc/tumble_drawer/drawer_generic/app_theme_picker.dart';
 import 'package:tumble/core/ui/main_app/misc/tumble_settings_section.dart';
 import 'package:tumble/core/ui/scaffold_message.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../../../shared/preference_types.dart';
 
@@ -64,25 +66,6 @@ class TumbleAppDrawer extends StatelessWidget {
                                     fontWeight: FontWeight.w500)),
                           )),
                     ),
-                  ),
-                  const SizedBox(height: 25.0),
-
-                  /// Support
-                  TumbleSettingsSection(tiles: [
-                    TumbleAppDrawerTile(
-                      drawerTileTitle: "Report a bug",
-                      subtitle: "Send us a bug report of an issue",
-                      suffixIcon: CupertinoIcons.ant,
-                      eventType: EventType.SUPPORT,
-                      drawerEvent: (eventType) => handleDrawerEvent(eventType,
-                          context, navigator, context.read<DrawerCubit>()),
-                    ),
-                  ], title: "Support"),
-                  Divider(
-                    height: 50.0,
-                    color: Theme.of(context).colorScheme.onBackground,
-                    indent: 20,
-                    endIndent: 30,
                   ),
 
                   /// Common
@@ -146,7 +129,34 @@ class TumbleAppDrawer extends StatelessWidget {
                       drawerEvent: (eventType) => handleDrawerEvent(
                           eventType, context, navigator, null),
                     )
-                  ], title: "Notifications")
+                  ], title: "Notifications"),
+                  Divider(
+                    height: 50.0,
+                    color: Theme.of(context).colorScheme.onBackground,
+                    indent: 20,
+                    endIndent: 30,
+                  ),
+
+                  /// Support
+                  TumbleSettingsSection(tiles: [
+                    TumbleAppDrawerTile(
+                      drawerTileTitle: "Report a bug",
+                      subtitle: "Send us a bug report of an issue",
+                      suffixIcon: CupertinoIcons.ant,
+                      eventType: EventType.SUPPORT,
+                      drawerEvent: (eventType) => handleDrawerEvent(eventType,
+                          context, navigator, context.read<DrawerCubit>()),
+                    ),
+                    TumbleAppDrawerTile(
+                      drawerTileTitle: "Rate our app",
+                      subtitle:
+                          "Rate our app on ${Platform.isIOS ? 'App Store' : 'Google Play'}",
+                      suffixIcon: CupertinoIcons.star,
+                      eventType: EventType.OPEN_REVIEW,
+                      drawerEvent: (eventType) => handleDrawerEvent(eventType,
+                          context, navigator, context.read<DrawerCubit>()),
+                    ),
+                  ], title: "Miscellaneous"),
                 ],
               ),
             ),
@@ -157,7 +167,7 @@ class TumbleAppDrawer extends StatelessWidget {
   }
 
   void handleDrawerEvent(Enum eventType, BuildContext context,
-      AppNavigator navigator, DrawerCubit? cubit) {
+      AppNavigator navigator, DrawerCubit? cubit) async {
     switch (eventType) {
       case EventType.CHANGE_SCHOOL:
         navigator.push(NavigationRouteLabels.schoolSelectionPage);
@@ -169,10 +179,6 @@ class TumbleAppDrawer extends StatelessWidget {
                   context.read<DrawerCubit>().changeTheme(themeType);
                   Navigator.of(context).pop();
                 }));
-        break;
-      case EventType.CONTACT:
-
-        /// Direct user to support page
         break;
       case EventType.TOGGLE_BOOKMARKED_SCHEDULES:
         if (context.read<DrawerCubit>().state.bookmarks!.isNotEmpty) {
@@ -188,16 +194,6 @@ class TumbleAppDrawer extends StatelessWidget {
                     child: const AppFavoriteScheduleToggle(),
                   ));
         }
-        break;
-      case EventType.SET_DEFAULT_VIEW:
-        showModalBottomSheet(
-            context: context,
-            builder: (_) => AppDefaultViewPicker(
-                  setDefaultView: (viewType) {
-                    context.read<DrawerCubit>().setView(viewType);
-                    Navigator.of(context).pop();
-                  },
-                ));
         break;
       case EventType.CANCEL_ALL_NOTIFICATIONS:
         getIt<NotificationRepository>().clearAllNotifications();
@@ -218,6 +214,16 @@ class TumbleAppDrawer extends StatelessWidget {
       case EventType.SUPPORT:
         SupportModal.showBookmarkEventModal(context, cubit!);
         break;
+      case EventType.OPEN_REVIEW:
+        final uri =
+            Platform.isIOS ? StoreUriString.ios : StoreUriString.android;
+        final storeType = Platform.isIOS ? 'App Store' : 'Google Play';
+        if (await canLaunchUrlString(uri)) {
+          launchUrlString(uri);
+        } else {
+          showScaffoldMessage(
+              context, ScaffoldMessageType.failedToOpenStorePage(storeType));
+        }
     }
   }
 }
