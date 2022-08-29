@@ -7,11 +7,11 @@ import 'package:tumble/core/dependency_injection/get_it_instances.dart';
 
 class UserRepository implements IUserService {
   final _backendRepository = getIt<BackendRepository>();
-  final _sharedPrefs = getIt<SharedPreferences>();
 
   @override
   Future<ApiResponse> getUserEvents(String sessionToken) async {
-    final school = _sharedPrefs.getString(PreferenceTypes.school)!;
+    final school =
+        getIt<SharedPreferences>().getString(PreferenceTypes.school)!;
 
     return await _backendRepository.getUserEvents(sessionToken, school);
   }
@@ -24,7 +24,8 @@ class UserRepository implements IUserService {
 
   @override
   Future putRegisterUserEvent(String eventId, String sessionToken) async {
-    final school = _sharedPrefs.getString(PreferenceTypes.school)!;
+    final school =
+        getIt<SharedPreferences>().getString(PreferenceTypes.school)!;
 
     return await _backendRepository.putRegisterUserEvent(
         eventId, sessionToken, school);
@@ -32,7 +33,8 @@ class UserRepository implements IUserService {
 
   @override
   Future putUnregisterUserEvent(String eventId, String sessionToken) async {
-    final school = _sharedPrefs.getString(PreferenceTypes.school)!;
+    final school =
+        getIt<SharedPreferences>().getString(PreferenceTypes.school)!;
 
     return await _backendRepository.putUnregisterUserEvent(
         eventId, sessionToken, school);
@@ -41,14 +43,16 @@ class UserRepository implements IUserService {
   @override
   Future<ApiResponse> putRegisterAllAvailableUserEvents(
       String sessionToken) async {
-    final school = _sharedPrefs.getString(PreferenceTypes.school)!;
+    final school =
+        getIt<SharedPreferences>().getString(PreferenceTypes.school)!;
     return await _backendRepository.putRegisterAllAvailableUserEvents(
         sessionToken, school);
   }
 
   @override
   Future<ApiResponse> getRefreshSession(String refreshToken) async {
-    String? school = _sharedPrefs.getString(PreferenceTypes.school);
+    String? school =
+        getIt<SharedPreferences>().getString(PreferenceTypes.school);
     if (school != null) {
       return await _backendRepository.getRefreshSession(refreshToken, school);
     }

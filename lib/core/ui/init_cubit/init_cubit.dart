@@ -21,7 +21,6 @@ class InitCubit extends Cubit<InitState> {
 
   final _cacheAndInteractionService = getIt<CacheAndInteractionRepository>();
   final _databaseService = getIt<DatabaseRepository>();
-  final _sharedPrefs = getIt<SharedPreferences>();
 
   Future<void> init() async {
     DatabaseResponse databaseResponse =
@@ -40,10 +39,10 @@ class InitCubit extends Cubit<InitState> {
 
   void changeSchool(String schoolName) {
     final theme = getIt<SharedPreferences>().getString(PreferenceTypes.theme);
-    _sharedPrefs.clear();
+    getIt<SharedPreferences>().clear();
     setupRequiredSharedPreferences();
-    _sharedPrefs.setString(PreferenceTypes.school, schoolName);
-    _sharedPrefs.setString(PreferenceTypes.theme, theme!);
+    getIt<SharedPreferences>().setString(PreferenceTypes.school, schoolName);
+    getIt<SharedPreferences>().setString(PreferenceTypes.theme, theme!);
     _databaseService.removeAll();
     _databaseService.removeAllCachedCourseColors();
     emit(InitState(defaultSchool: schoolName, status: InitStatus.HAS_SCHOOL));

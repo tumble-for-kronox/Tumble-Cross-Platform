@@ -1,11 +1,10 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tumble/core/api/builders/notification_service_builder.dart';
 import 'package:tumble/core/database/data/access_stores.dart';
 import 'package:tumble/core/database/repository/database_repository.dart';
 import 'package:tumble/core/models/api_models/bookmarked_schedule_model.dart';
@@ -16,7 +15,6 @@ import 'package:tumble/core/dependency_injection/get_it_instances.dart';
 import 'package:tumble/core/theme/repository/theme_repository.dart';
 
 import '../../../../../api/repository/notification_repository.dart';
-import '../../../../../models/api_models/schedule_model.dart';
 
 part 'drawer_cubit.dart';
 

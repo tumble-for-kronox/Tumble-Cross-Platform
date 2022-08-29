@@ -23,8 +23,9 @@ class DrawerCubit extends Cubit<DrawerState> {
                 bookmark.scheduleId: bookmark.toggledValue
             }));
 
+  final textEditingControllerTitle = TextEditingController();
+  final textEditingControllerBody = TextEditingController();
   final _themeRepository = getIt<ThemeRepository>();
-  final _sharedPrefs = getIt<SharedPreferences>();
   final _databaseService = getIt<DatabaseRepository>();
 
   void changeTheme(String themeString) {
@@ -93,7 +94,7 @@ class DrawerCubit extends Cubit<DrawerState> {
   }
 
   Future<void> removeBookmark(String id) async {
-    final bookmarks = _sharedPrefs
+    final bookmarks = getIt<SharedPreferences>()
         .getStringList(PreferenceTypes.bookmarks)!
         .map((e) => bookmarkedScheduleModelFromJson(e))
         .toList();

@@ -34,7 +34,6 @@ class MainAppCubit extends Cubit<MainAppState> {
             message: null,
             scheduleModelAndCourses: null));
 
-  final _sharedPrefs = getIt<SharedPreferences>();
   final _cacheAndInteractionService = getIt<CacheAndInteractionRepository>();
   final _notificationBuilder = NotificationServiceBuilder();
   final _awesomeNotifications = getIt<AwesomeNotifications>();
@@ -42,7 +41,7 @@ class MainAppCubit extends Cubit<MainAppState> {
   final ScrollController _listViewScrollController = ScrollController();
 
   ScrollController get controller => _listViewScrollController;
-  SharedPreferences get sharedPrefs => _sharedPrefs;
+  SharedPreferences get sharedPrefs => getIt<SharedPreferences>();
   int get viewType => getIt<SharedPreferences>().getInt(PreferenceTypes.view)!;
 
   bool toTopButtonVisible() {
@@ -189,8 +188,8 @@ class MainAppCubit extends Cubit<MainAppState> {
             title: event.title,
             body: event.course.englishName,
             date: event.from.subtract(Duration(
-                minutes:
-                    _sharedPrefs.getInt(PreferenceTypes.notificationTime)!)));
+                minutes: getIt<SharedPreferences>()
+                    .getInt(PreferenceTypes.notificationTime)!)));
         showScaffoldMessage(context,
             ScaffoldMessageType.createdNotificationForEvent(event.title));
         return true;
@@ -226,8 +225,8 @@ class MainAppCubit extends Cubit<MainAppState> {
               title: event.title,
               body: event.course.englishName,
               date: event.from.subtract(Duration(
-                  minutes:
-                      _sharedPrefs.getInt(PreferenceTypes.notificationTime)!)));
+                  minutes: getIt<SharedPreferences>()
+                      .getInt(PreferenceTypes.notificationTime)!)));
         }
         dev.log(
             'Created ${events.length} new notifications for ${event.course}');
@@ -297,7 +296,7 @@ class MainAppCubit extends Cubit<MainAppState> {
   }
 
   forceRefreshAll() async {
-    final bookmarks = _sharedPrefs
+    final bookmarks = getIt<SharedPreferences>()
         .getStringList(PreferenceTypes.bookmarks)!
         .map((e) => bookmarkedScheduleModelFromJson(e))
         .where((bookmark) => bookmark.toggledValue)

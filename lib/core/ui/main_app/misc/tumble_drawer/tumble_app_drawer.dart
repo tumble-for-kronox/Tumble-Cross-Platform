@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tumble/core/api/repository/notification_repository.dart';
 import 'package:tumble/core/dependency_injection/get_it_instances.dart';
@@ -11,7 +10,7 @@ import 'package:tumble/core/ui/data/scaffold_message_types.dart';
 import 'package:tumble/core/ui/main_app/cubit/main_app_cubit.dart';
 import 'package:tumble/core/ui/main_app/data/event_types.dart';
 import 'package:tumble/core/ui/main_app/data/schools.dart';
-import 'package:tumble/core/ui/main_app/main_app.dart';
+import 'package:tumble/core/ui/main_app/misc/tumble_drawer/support_modal/support_modal.dart';
 import 'package:tumble/core/ui/main_app/misc/tumble_app_drawer_tile.dart';
 import 'package:tumble/core/ui/main_app/misc/tumble_drawer/cubit/drawer_state.dart';
 import 'package:tumble/core/ui/main_app/misc/tumble_drawer/drawer_generic/app_default_schedule_picker.dart';
@@ -68,6 +67,24 @@ class TumbleAppDrawer extends StatelessWidget {
                   ),
                   const SizedBox(height: 25.0),
 
+                  /// Support
+                  TumbleSettingsSection(tiles: [
+                    TumbleAppDrawerTile(
+                      drawerTileTitle: "Report a bug",
+                      subtitle: "Send us a bug report of an issue",
+                      suffixIcon: CupertinoIcons.ant,
+                      eventType: EventType.SUPPORT,
+                      drawerEvent: (eventType) => handleDrawerEvent(eventType,
+                          context, navigator, context.read<DrawerCubit>()),
+                    ),
+                  ], title: "Support"),
+                  Divider(
+                    height: 50.0,
+                    color: Theme.of(context).colorScheme.onBackground,
+                    indent: 20,
+                    endIndent: 30,
+                  ),
+
                   /// Common
                   TumbleSettingsSection(tiles: [
                     TumbleAppDrawerTile(
@@ -77,10 +94,7 @@ class TumbleAppDrawer extends StatelessWidget {
                       suffixIcon: CupertinoIcons.arrow_right_arrow_left,
                       eventType: EventType.CHANGE_SCHOOL,
                       drawerEvent: (eventType) => handleDrawerEvent(
-                        eventType,
-                        context,
-                        navigator,
-                      ),
+                          eventType, context, navigator, null),
                     ),
                     TumbleAppDrawerTile(
                       drawerTileTitle: "Change theme",
@@ -89,10 +103,7 @@ class TumbleAppDrawer extends StatelessWidget {
                       suffixIcon: CupertinoIcons.device_phone_portrait,
                       eventType: EventType.CHANGE_THEME,
                       drawerEvent: (eventType) => handleDrawerEvent(
-                        eventType,
-                        context,
-                        navigator,
-                      ),
+                          eventType, context, navigator, null),
                     ),
                   ], title: "Common"),
                   Divider(
@@ -109,8 +120,8 @@ class TumbleAppDrawer extends StatelessWidget {
                         subtitle: "Select from your list of bookmarks",
                         suffixIcon: CupertinoIcons.bookmark,
                         eventType: EventType.TOGGLE_BOOKMARKED_SCHEDULES,
-                        drawerEvent: (eventType) =>
-                            handleDrawerEvent(eventType, context, navigator)),
+                        drawerEvent: (eventType) => handleDrawerEvent(
+                            eventType, context, navigator, null)),
                   ], title: "Schedule"),
                   Divider(
                     height: 50.0,
@@ -124,16 +135,16 @@ class TumbleAppDrawer extends StatelessWidget {
                         drawerTileTitle: "Clear all",
                         subtitle: "Removes all notifications",
                         eventType: EventType.CANCEL_ALL_NOTIFICATIONS,
-                        drawerEvent: (eventType) =>
-                            handleDrawerEvent(eventType, context, navigator)),
+                        drawerEvent: (eventType) => handleDrawerEvent(
+                            eventType, context, navigator, null)),
                     TumbleAppDrawerTile(
                       suffixIcon: CupertinoIcons.clock,
                       drawerTileTitle: "Notification offset",
                       subtitle:
                           "Current offset: ${getIt<SharedPreferences>().getInt(PreferenceTypes.notificationTime)} minutes",
                       eventType: EventType.EDIT_NOTIFICATION_TIME,
-                      drawerEvent: (eventType) =>
-                          handleDrawerEvent(eventType, context, navigator),
+                      drawerEvent: (eventType) => handleDrawerEvent(
+                          eventType, context, navigator, null),
                     )
                   ], title: "Notifications")
                 ],
@@ -145,8 +156,8 @@ class TumbleAppDrawer extends StatelessWidget {
     );
   }
 
-  void handleDrawerEvent(
-      Enum eventType, BuildContext context, AppNavigator navigator) {
+  void handleDrawerEvent(Enum eventType, BuildContext context,
+      AppNavigator navigator, DrawerCubit? cubit) {
     switch (eventType) {
       case EventType.CHANGE_SCHOOL:
         navigator.push(NavigationRouteLabels.schoolSelectionPage);
@@ -203,6 +214,9 @@ class TumbleAppDrawer extends StatelessWidget {
                       );
                   Navigator.of(context).pop();
                 }));
+        break;
+      case EventType.SUPPORT:
+        SupportModal.showBookmarkEventModal(context, cubit!);
         break;
     }
   }

@@ -13,10 +13,10 @@ import 'package:tumble/core/api/builders/notification_service_builder.dart';
 import 'package:tumble/core/api/repository/cache_and_interaction_repository.dart';
 import 'package:tumble/core/database/data/access_stores.dart';
 import 'package:tumble/core/database/repository/database_repository.dart';
+import 'package:tumble/core/dependency_injection/get_it_instances.dart';
 import 'package:tumble/core/extensions/extensions.dart';
 import 'package:tumble/core/models/api_models/bookmarked_schedule_model.dart';
 import 'package:tumble/core/models/api_models/program_model.dart';
-import 'package:tumble/core/dependency_injection/get_it_instances.dart';
 import 'package:tumble/core/models/api_models/schedule_model.dart';
 import 'package:tumble/core/models/ui_models/course_ui_model.dart';
 import 'package:tumble/core/models/ui_models/schedule_model_and_courses.dart';
@@ -46,11 +46,9 @@ class SearchPageCubit extends Cubit<SearchPageState> {
   final FocusNode _focusNode = FocusNode();
   final _cacheAndInteractionService = getIt<CacheAndInteractionRepository>();
   final ScrollController _listViewScrollController = ScrollController();
-  final _sharedPrefs = getIt<SharedPreferences>();
   final _notificationBuilder = NotificationServiceBuilder();
   final _awesomeNotifications = getIt<AwesomeNotifications>();
   final _databaseService = getIt<DatabaseRepository>();
-  final _preferenceService = getIt<SharedPreferences>();
 
   ScrollController get controller => _listViewScrollController;
   TextEditingController get textEditingController => _textEditingController;
@@ -87,7 +85,7 @@ class SearchPageCubit extends Cubit<SearchPageState> {
         if (currentScheduleModel.isNotPhonySchedule()) {
           List<CourseUiModel?> courseUiModels =
               await currentScheduleModel.findNewCourses(id);
-          if (_preferenceService
+          if (getIt<SharedPreferences>()
               .getStringList(PreferenceTypes.bookmarks)!
               .map((json) => bookmarkedScheduleModelFromJson(json).scheduleId)
               .contains(id)) {
@@ -176,7 +174,7 @@ class SearchPageCubit extends Cubit<SearchPageState> {
   }
 
   Future<void> toggleFavorite(BuildContext context) async {
-    final List<BookmarkedScheduleModel> bookmarks = _sharedPrefs
+    final List<BookmarkedScheduleModel> bookmarks = getIt<SharedPreferences>()
         .getStringList(PreferenceTypes.bookmarks)!
         .map((json) => bookmarkedScheduleModelFromJson(json))
         .toList();
@@ -198,14 +196,14 @@ class SearchPageCubit extends Cubit<SearchPageState> {
   }
 
   Future<void> _toggleRemove() async {
-    final List<BookmarkedScheduleModel> bookmarks = _sharedPrefs
+    final List<BookmarkedScheduleModel> bookmarks = getIt<SharedPreferences>()
         .getStringList(PreferenceTypes.bookmarks)!
         .map((json) => bookmarkedScheduleModelFromJson(json))
         .toList();
 
     bookmarks.removeWhere(
         (bookmark) => bookmark.scheduleId == state.previewCurrentScheduleId);
-    await _sharedPrefs.setStringList(PreferenceTypes.bookmarks,
+    await getIt<SharedPreferences>().setStringList(PreferenceTypes.bookmarks,
         bookmarks.map((bookmark) => jsonEncode(bookmark)).toList());
     await _databaseService.remove(
         state.previewCurrentScheduleId!, AccessStores.COURSE_COLOR_STORE);
@@ -218,13 +216,13 @@ class SearchPageCubit extends Cubit<SearchPageState> {
   }
 
   Future<void> _toggleSave() async {
-    List<BookmarkedScheduleModel> bookmarks = _sharedPrefs
+    List<BookmarkedScheduleModel> bookmarks = getIt<SharedPreferences>()
         .getStringList(PreferenceTypes.bookmarks)!
         .map((json) => bookmarkedScheduleModelFromJson(json))
         .toList();
     bookmarks.add(BookmarkedScheduleModel(
         scheduleId: state.previewCurrentScheduleId!, toggledValue: true));
-    await _sharedPrefs.setStringList(PreferenceTypes.bookmarks,
+    await getIt<SharedPreferences>().setStringList(PreferenceTypes.bookmarks,
         bookmarks.map((bookmark) => jsonEncode(bookmark)).toList());
 
     for (CourseUiModel? courseUiModel
@@ -239,7 +237,8 @@ class SearchPageCubit extends Cubit<SearchPageState> {
 
     /// Build new notification channel
     await _notificationBuilder.buildNotificationChannel(
-        channelGroupKey: _sharedPrefs.getString(PreferenceTypes.school)!,
+        channelGroupKey:
+            getIt<SharedPreferences>().getString(PreferenceTypes.school)!,
         channelKey: state.previewCurrentScheduleId!,
         channelName: 'Notifications for schedule',
         channelDescription: 'Notifications for schedule');
@@ -295,7 +294,7 @@ class SearchPageCubit extends Cubit<SearchPageState> {
   }
 
   bool scheduleInBookmarks() {
-    return _sharedPrefs
+    return getIt<SharedPreferences>()
         .getStringList(PreferenceTypes.bookmarks)!
         .map((json) => bookmarkedScheduleModelFromJson(json).scheduleId)
         .contains(state.previewCurrentScheduleId);

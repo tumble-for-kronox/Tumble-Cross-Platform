@@ -5,6 +5,5 @@ import 'package:flutter/foundation.dart';
 class AccessStores {
   static const SCHEDULE_STORE = 'schedules';
   static const USER_STORE = 'user';
-  static const PREFERENCE_STORE = 'preferences';
   static const COURSE_COLOR_STORE = 'course_colors';
 }

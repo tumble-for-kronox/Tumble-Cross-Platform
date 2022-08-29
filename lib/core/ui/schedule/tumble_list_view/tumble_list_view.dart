@@ -22,7 +22,6 @@ class TumbleListView extends StatelessWidget {
     final AppNavigator navigator = BlocProvider.of<AppNavigator>(context);
     return BlocBuilder<MainAppCubit, MainAppState>(
       builder: (context, state) {
-        log('rebuilt');
         switch (state.status) {
           case MainAppStatus.INITIAL:
             return NoScheduleAvailable(

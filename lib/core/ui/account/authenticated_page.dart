@@ -13,7 +13,8 @@ class AuthenticatedPage extends StatefulWidget {
   State<StatefulWidget> createState() => _AuthenticatedPage();
 }
 
-class _AuthenticatedPage extends State<AuthenticatedPage> with TickerProviderStateMixin {
+class _AuthenticatedPage extends State<AuthenticatedPage>
+    with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     TabController tabController = TabController(length: 2, vsync: this);
@@ -39,7 +40,7 @@ class _AuthenticatedPage extends State<AuthenticatedPage> with TickerProviderSta
               )
             ]),
         Expanded(
-          child: Container(
+          child: SizedBox(
             width: double.maxFinite,
             child: TabBarView(controller: tabController, children: [
               BlocProvider.value(

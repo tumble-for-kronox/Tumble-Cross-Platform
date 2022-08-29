@@ -27,6 +27,7 @@ dependencies:
   path_provider: ^2.0.9
   syncfusion_flutter_calendar: ^20.2.40
   dart_extensions: ^2.2.0
+  flutter_email_sender: ^5.1.0
   shared_preferences: ^2.0.15
   freezed_annotation: ^2.0.3
   json_annotation: ^4.5.0
