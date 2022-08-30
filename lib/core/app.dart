@@ -21,11 +21,6 @@ class App extends StatefulWidget {
 
 class _AppState extends State<App> {
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [

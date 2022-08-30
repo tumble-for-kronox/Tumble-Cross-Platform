@@ -26,7 +26,8 @@ class BackendRepository implements IBackendService {
       });
       final response = await HttpService.sendGetRequestToServer(uri);
       if (response == null) {
-        return ApiResponse.error(RuntimeErrorType.timeoutError());
+        return ApiResponse.error(
+            'Timeout error' /* Should be -> RuntimeErrorType.timeoutError() */);
       }
       return response.parseSchedule();
     } else {

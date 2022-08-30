@@ -14,6 +14,13 @@ class SupportModalCubit extends Cubit<SupportModalState> {
   TextEditingController get subjectController => _textEditingControllerSubject;
   TextEditingController get bodyController => _textEditingControllerBody;
 
+  @override
+  Future<void> close() async {
+    _textEditingControllerBody.dispose();
+    _textEditingControllerSubject.dispose();
+    return super.close();
+  }
+
   Future<void> init() async {
     _textEditingControllerSubject.addListener(subjectListener);
     _textEditingControllerBody.addListener(bodyListener);
