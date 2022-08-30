@@ -33,11 +33,7 @@ class UserAccountExternalLink extends StatelessWidget {
         highlightElevation: 2,
         padding: const EdgeInsets.only(right: 10),
         onPressed: () async {
-          if (await canLaunchUrlString(link)) {
-            await launchUrlString(link);
-          } else {
-            showScaffoldMessage(context, S.scaffoldMessages.openExternalUrlFailed('Kronox'));
-          }
+          await launchUrlString(link);
         },
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -48,7 +44,9 @@ class UserAccountExternalLink extends StatelessWidget {
               height: 55,
               decoration: BoxDecoration(
                 color: color.withOpacity(0.8),
-                borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), bottomLeft: Radius.circular(10)),
+                borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(10),
+                    bottomLeft: Radius.circular(10)),
               ),
             ),
             Expanded(
@@ -61,7 +59,8 @@ class UserAccountExternalLink extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     color: Theme.of(context).colorScheme.onSurface,
                     fontSize: Theme.of(context).textTheme.titleMedium!.fontSize,
-                    fontWeight: Theme.of(context).textTheme.titleMedium!.fontWeight,
+                    fontWeight:
+                        Theme.of(context).textTheme.titleMedium!.fontWeight,
                   ),
                   maxLines: 1,
                 ),

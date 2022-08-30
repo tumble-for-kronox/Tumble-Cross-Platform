@@ -24,13 +24,7 @@ class UserEventRegisterButton extends StatelessWidget {
             onPressed: () async {
               String urlString =
                   "https://kronox.${getIt<SharedPreferences>().getString(PreferenceTypes.school)!.toLowerCase()}.se/aktivitetsanmalan.jsp?";
-              if (await canLaunchUrlString(urlString)) {
-                await launchUrlString(urlString,
-                    mode: LaunchMode.externalApplication);
-              } else {
-                showScaffoldMessage(context,
-                    S.scaffoldMessages.openExternalUrlFailed('Kronox'));
-              }
+              await launchUrlString(urlString);
             },
             icon: const Icon(CupertinoIcons.person_crop_circle_badge_checkmark),
             label: const Text("Open Kronox"),

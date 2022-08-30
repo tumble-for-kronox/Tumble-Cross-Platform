@@ -226,12 +226,7 @@ class TumbleAppDrawer extends StatelessWidget {
       case EventType.OPEN_REVIEW:
         final uri =
             Platform.isIOS ? StoreUriString.ios : StoreUriString.android;
-        final storeType = Platform.isIOS ? 'App Store' : 'Google Play';
-        if (await canLaunchUrlString(uri)) {
-          launchUrlString(uri);
-        } else {
-          showScaffoldMessage(context, 'Failed to open $storeType');
-        }
+        await launchUrlString(uri);
     }
   }
 }
