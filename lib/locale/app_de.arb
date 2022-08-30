@@ -82,8 +82,7 @@
     "popUpNotificationPermissionTitle": "Benarichtigun erlauben",
     "popUpNotificationPermissionDescription": "Diese App möchte Ihnen Benarichtigungen senden",
     "popUpExamAutoSignupTitle": "Automatische Examenregistrierung mit Vorsicht benutzen!",
-    Fehler könenn vorkommen. Sie bleiben zustännig um sich zu versichern dass sie für Ihr Examen angemeldet sind. Falls ein Examen eine Lokation benötigt oder pedagogischer Support benötigt ist, bitte nutzen sie die Kronox Website.
-    "popUpExamAutoSignupBody": "Fehler könenn vorkommen. Sie bleiben zustännig um sich zu versichern dass sie für Ihr Examen angemeldet sind. Falls ein Examen eine Lokation benötigt oder pedagogischer Support benötigt ist, bitte nutzen sie die Kronox Website",
+    "popUpExamAutoSignupBody": "Fehler können vorkommen. Sie bleiben zustännig um sich zu versichern dass sie für Ihr Examen angemeldet sind. Falls ein Examen eine Lokation benötigt oder pedagogischer Support benötigt ist, bitte nutzen sie die Kronox Website",
     "popUpScheduleHelpFirstLine": "Zeitplan kann mit diesem Icon gespeichert werden",
     "popUpScheduleHelpSecondLine": "Es wird oben links auf Ihrem Bild erscheinen",
     "popUpScheduleIsEmptyTitle": "Dieser Zeitplan ist leer, wurde allerdings in der Kronox Datenbank gefunden",
