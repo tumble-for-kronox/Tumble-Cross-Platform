@@ -7,6 +7,8 @@ import 'package:tumble/core/models/api_models/schedule_model.dart';
 import 'package:tumble/core/models/ui_models/course_ui_model.dart';
 import 'package:tumble/core/models/ui_models/school_model.dart';
 import 'package:tumble/core/models/ui_models/week_model.dart';
+import 'package:tumble/core/ui/bottom_nav_bar/data/nav_bar_items.dart';
+import 'package:tumble/core/ui/data/string_constants.dart';
 import 'package:tumble/core/ui/main_app/data/schools.dart';
 
 import '../database/repository/database_repository.dart';
@@ -90,5 +92,22 @@ extension SplitToWeek on List<Day> {
             weekNumber: weekNumberToDayList.key,
             days: weekNumberToDayList.value))
         .toList();
+  }
+}
+
+extension StringParsing on NavbarItem {
+  String toStringTitle() {
+    switch (this) {
+      case NavbarItem.SEARCH:
+        return S.searchPage.title();
+      case NavbarItem.LIST:
+        return S.listViewPage.title();
+      case NavbarItem.WEEK:
+        return S.weekViewPage.title();
+      case NavbarItem.CALENDAR:
+        return S.calendarViewPage.title();
+      case NavbarItem.ACCOUNT:
+        return S.authorizedPage.title();
+    }
   }
 }

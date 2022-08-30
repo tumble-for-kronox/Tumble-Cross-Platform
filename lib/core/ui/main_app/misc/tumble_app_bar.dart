@@ -111,7 +111,7 @@ class _TumbleAppBarState extends State<TumbleAppBar> {
                 child:
                     BlocBuilder<MainAppNavigationCubit, MainAppNavigationState>(
                         builder: ((context, state) => Text(
-                              state.navbarItem.name.humanize().toUpperCase(),
+                              state.navbarItem.toStringTitle(),
                               style: TextStyle(
                                   fontSize: 15,
                                   letterSpacing: 2,
