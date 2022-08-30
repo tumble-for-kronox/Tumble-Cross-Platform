@@ -97,7 +97,7 @@ class TumbleAppDrawer extends StatelessWidget {
                     ),
                   ], title: S.settingsPage.commonTitle()),
                   Divider(
-                    height: 50.0,
+                    height: 40.0,
                     color: Theme.of(context).colorScheme.onBackground,
                     indent: 20,
                     endIndent: 30,
@@ -114,7 +114,7 @@ class TumbleAppDrawer extends StatelessWidget {
                             eventType, context, navigator, null)),
                   ], title: S.settingsPage.scheduleTitle()),
                   Divider(
-                    height: 50.0,
+                    height: 40.0,
                     color: Theme.of(context).colorScheme.onBackground,
                     indent: 20,
                     endIndent: 30,
@@ -140,7 +140,7 @@ class TumbleAppDrawer extends StatelessWidget {
                     )
                   ], title: S.settingsPage.notificationTitle()),
                   Divider(
-                    height: 50.0,
+                    height: 40.0,
                     color: Theme.of(context).colorScheme.onBackground,
                     indent: 20,
                     endIndent: 30,
@@ -156,7 +156,7 @@ class TumbleAppDrawer extends StatelessWidget {
                       drawerEvent: (eventType) => handleDrawerEvent(eventType,
                           context, navigator, context.read<DrawerCubit>()),
                     ),
-                    TumbleAppDrawerTile(
+                    /* TumbleAppDrawerTile(
                       drawerTileTitle: "Rate our app",
                       subtitle:
                           "Rate our app on ${Platform.isIOS ? 'App Store' : 'Google Play'}",
@@ -164,7 +164,7 @@ class TumbleAppDrawer extends StatelessWidget {
                       eventType: EventType.OPEN_REVIEW,
                       drawerEvent: (eventType) => handleDrawerEvent(eventType,
                           context, navigator, context.read<DrawerCubit>()),
-                    ),
+                    ), */
                   ], title: "Miscellaneous"),
                 ],
               ),
@@ -221,7 +221,7 @@ class TumbleAppDrawer extends StatelessWidget {
                 }));
         break;
       case EventType.SUPPORT:
-        SupportModal.showBookmarkEventModal(context, cubit!);
+        SupportModal.showSupportModal(context, cubit!);
         break;
       case EventType.OPEN_REVIEW:
         final uri =

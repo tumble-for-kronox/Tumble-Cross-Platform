@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
-class LoginLogoutButton extends StatelessWidget {
+class TumbleButton extends StatelessWidget {
   final void Function() onPressed;
-  final IconData icon;
+  final IconData prefixIcon;
   final String text;
 
-  const LoginLogoutButton({
+  const TumbleButton({
     Key? key,
     required this.onPressed,
-    required this.icon,
+    required this.prefixIcon,
     required this.text,
   }) : super(key: key);
 
@@ -24,7 +24,7 @@ class LoginLogoutButton extends StatelessWidget {
         child: Row(
           children: [
             Icon(
-              icon,
+              prefixIcon,
               color: Theme.of(context).colorScheme.onPrimary,
             ),
             Expanded(

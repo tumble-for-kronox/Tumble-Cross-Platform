@@ -7,6 +7,7 @@ import 'package:tumble/core/extensions/extensions.dart';
 import 'package:tumble/core/theme/data/colors.dart';
 import 'package:tumble/core/ui/main_app/misc/tumble_drawer/cubit/drawer_state.dart';
 import 'package:tumble/core/ui/main_app/misc/tumble_drawer/support_modal/cubit/support_modal_state.dart';
+import 'package:tumble/core/ui/tumble_button.dart';
 
 class SupportModal extends StatefulWidget {
   const SupportModal({Key? key}) : super(key: key);
@@ -14,7 +15,7 @@ class SupportModal extends StatefulWidget {
   @override
   State<SupportModal> createState() => _SupportModalState();
 
-  static void showBookmarkEventModal(BuildContext context, DrawerCubit cubit) {
+  static void showSupportModal(BuildContext context, DrawerCubit cubit) {
     showModalBottomSheet(
         isScrollControlled: true,
         enableDrag: true,
@@ -121,26 +122,14 @@ class _SupportModalState extends State<SupportModal> {
                             height: 50,
                           ),
                           Center(
-                            child: MaterialButton(
-                              onPressed: () async {
-                                if (state.isBodyValid! &&
-                                    state.isSubjectValid!) {
-                                  log('here');
-                                  context
-                                      .read<SupportModalCubit>()
-                                      .sendBugReport();
-                                }
-                              },
-                              highlightElevation: 2,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10)),
-                              child: const Icon(
-                                CupertinoIcons.paperplane,
-                                size: 35,
-                                color: CustomColors.orangePrimary,
-                              ),
+                              child: FractionallySizedBox(
+                            widthFactor: .6,
+                            child: TumbleButton(
+                              onPressed: () {},
+                              prefixIcon: CupertinoIcons.paperplane,
+                              text: 'Send',
                             ),
-                          ),
+                          )),
                         ],
                       ),
                     ),

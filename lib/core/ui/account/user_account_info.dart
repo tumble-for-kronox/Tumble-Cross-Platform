@@ -5,11 +5,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tumble/core/shared/preference_types.dart';
 import 'package:tumble/core/dependency_injection/get_it_instances.dart';
 import 'package:tumble/core/ui/account/misc/auto_signup_option.dart';
-import 'package:tumble/core/ui/account/misc/login_logout_button.dart';
 import 'package:tumble/core/ui/account/misc/user_account_info_external_link.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
 import 'package:tumble/core/ui/login/cubit/auth_cubit.dart';
 import 'package:tumble/core/ui/main_app/data/schools.dart';
+import 'package:tumble/core/ui/tumble_button.dart';
 
 class UserAccountInfo extends StatefulWidget {
   const UserAccountInfo({Key? key}) : super(key: key);
@@ -188,11 +188,11 @@ class _UserAccountInfo extends State<UserAccountInfo> {
                     ),
                     FractionallySizedBox(
                       widthFactor: 0.6,
-                      child: LoginLogoutButton(
+                      child: TumbleButton(
                           onPressed: () {
                             BlocProvider.of<AuthCubit>(context).logout();
                           },
-                          icon: CupertinoIcons.arrow_left_square,
+                          prefixIcon: CupertinoIcons.arrow_left_square,
                           text: S.authorizedPage.signOut()),
                     ),
                     const SizedBox(

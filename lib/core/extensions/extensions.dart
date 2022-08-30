@@ -99,15 +99,15 @@ extension StringParsing on NavbarItem {
   String toStringTitle() {
     switch (this) {
       case NavbarItem.SEARCH:
-        return S.searchPage.title();
+        return S.searchPage.title().toUpperCase();
       case NavbarItem.LIST:
-        return S.listViewPage.title();
+        return S.listViewPage.title().toUpperCase();
       case NavbarItem.WEEK:
-        return S.weekViewPage.title();
+        return S.weekViewPage.title().toUpperCase();
       case NavbarItem.CALENDAR:
-        return S.calendarViewPage.title();
+        return S.calendarViewPage.title().toUpperCase();
       case NavbarItem.ACCOUNT:
-        return S.authorizedPage.title();
+        return S.authorizedPage.title().toUpperCase();
     }
   }
 }

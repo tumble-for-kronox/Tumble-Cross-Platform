@@ -3,13 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tumble/core/shared/preference_types.dart';
 import 'package:tumble/core/dependency_injection/get_it_instances.dart';
-import 'package:tumble/core/theme/data/colors.dart';
-import 'package:tumble/core/ui/account/misc/login_logout_button.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
 import 'package:tumble/core/ui/main_app/data/schools.dart';
+import 'package:tumble/core/ui/tumble_button.dart';
 
 class UserInfo extends StatelessWidget {
-  const UserInfo({Key? key, this.name, required this.loggedIn, required this.onPressed}) : super(key: key);
+  const UserInfo(
+      {Key? key, this.name, required this.loggedIn, required this.onPressed})
+      : super(key: key);
 
   final String? name;
   final bool loggedIn;
@@ -26,7 +27,10 @@ class UserInfo extends StatelessWidget {
               radius: 50.0,
               backgroundColor: Theme.of(context).colorScheme.onSecondary,
               child: Image.asset(Schools.schools
-                  .where((school) => school.schoolName == getIt<SharedPreferences>().getString(PreferenceTypes.school))
+                  .where((school) =>
+                      school.schoolName ==
+                      getIt<SharedPreferences>()
+                          .getString(PreferenceTypes.school))
                   .first
                   .schoolLogo)),
           const SizedBox(
@@ -35,16 +39,18 @@ class UserInfo extends StatelessWidget {
           Text(
             S.unauthorizedPage.description(),
             textAlign: TextAlign.center,
-            style:
-                TextStyle(fontSize: 16, fontWeight: FontWeight.w400, color: Theme.of(context).colorScheme.onBackground),
+            style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w400,
+                color: Theme.of(context).colorScheme.onBackground),
           ),
           FractionallySizedBox(
             widthFactor: 0.6,
             child: Padding(
               padding: const EdgeInsets.only(top: 50),
-              child: LoginLogoutButton(
+              child: TumbleButton(
                 onPressed: onPressed,
-                icon: CupertinoIcons.person_circle,
+                prefixIcon: CupertinoIcons.person_circle,
                 text: S.loginPage.signInButton(),
               ),
             ),
