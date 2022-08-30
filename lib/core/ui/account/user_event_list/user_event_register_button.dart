@@ -2,13 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tumble/core/dependency_injection/get_it_instances.dart';
 import 'package:tumble/core/shared/preference_types.dart';
-import 'package:tumble/core/ui/data/scaffold_message_types.dart';
-import 'package:tumble/core/ui/login/cubit/auth_cubit.dart';
 import 'package:tumble/core/ui/scaffold_message.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
@@ -26,7 +23,7 @@ class UserEventRegisterButton extends StatelessWidget {
         ? TextButton.icon(
             onPressed: () async {
               String urlString =
-                  "https://kronox.${getIt<SharedPreferences>().getString(PreferenceTypes.school)!}.se/aktivitetsanmalan.jsp?";
+                  "https://kronox.${getIt<SharedPreferences>().getString(PreferenceTypes.school)!.toLowerCase()}.se/aktivitetsanmalan.jsp?";
               if (await canLaunchUrlString(urlString)) {
                 await launchUrlString(urlString,
                     mode: LaunchMode.externalApplication);

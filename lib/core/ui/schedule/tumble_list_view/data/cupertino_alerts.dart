@@ -17,31 +17,31 @@ class CustomCupertinoAlerts {
         Text(S.popUps.scheduleHelpFirstLine(),
             style: TextStyle(
                 color: Theme.of(context).colorScheme.onBackground,
-                fontSize: 15,
-                fontWeight: FontWeight.w600)),
+                fontSize: 16,
+                fontWeight: FontWeight.w500)),
         const SizedBox(
-          height: 15,
+          height: 20,
         ),
         const Icon(
           CupertinoIcons.bookmark,
           size: 20,
         ),
         const SizedBox(
-          height: 15,
+          height: 20,
         ),
         Text(S.popUps.scheduleHelpSecondLine(),
             style: TextStyle(
                 color: Theme.of(context).colorScheme.onBackground,
-                fontSize: 15,
-                fontWeight: FontWeight.w600))
+                fontSize: 16,
+                fontWeight: FontWeight.w400))
       ]),
       actions: [
         CupertinoDialogAction(
           child: Text(S.general.understood(),
               style: TextStyle(
                   color: Theme.of(context).colorScheme.primary,
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600)),
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400)),
           onPressed: () {
             Navigator.of(context, rootNavigator: true).pop();
           },
@@ -50,8 +50,8 @@ class CustomCupertinoAlerts {
           child: Text(S.general.toSearch(),
               style: TextStyle(
                   color: Theme.of(context).colorScheme.primary,
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600)),
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400)),
           onPressed: () {
             Navigator.of(context, rootNavigator: true).pop();
             navigateToSearchFromView();
@@ -70,39 +70,39 @@ class CustomCupertinoAlerts {
         Text(S.popUps.scheduleIsEmptyTitle(),
             style: TextStyle(
                 color: Theme.of(context).colorScheme.onBackground,
-                fontSize: 15,
-                fontWeight: FontWeight.w600)),
+                fontSize: 16,
+                fontWeight: FontWeight.w400)),
         const SizedBox(
-          height: 20,
+          height: 30,
         ),
         Text(S.popUps.scheduleIsEmptyBody(),
             style: TextStyle(
                 color: Theme.of(context).colorScheme.onBackground,
-                fontSize: 14,
-                fontWeight: FontWeight.w600))
+                fontSize: 16,
+                fontWeight: FontWeight.w400))
       ]),
       actions: [
         CupertinoDialogAction(
           child: Text(S.general.ok(),
               style: TextStyle(
                   color: Theme.of(context).colorScheme.primary,
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600)),
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400)),
           onPressed: () {
             Navigator.of(context, rootNavigator: true).pop();
           },
         ),
-        CupertinoDialogAction(
+        /* CupertinoDialogAction(
           child: Text(S.general.toSearch(),
               style: TextStyle(
                   color: Theme.of(context).colorScheme.primary,
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600)),
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400)),
           onPressed: () {
             Navigator.of(context, rootNavigator: true).pop();
             navigateToSearchFromView();
           },
-        )
+        ) */
       ],
     );
   }
@@ -116,8 +116,8 @@ class CustomCupertinoAlerts {
         Text(S.popUps.scheduleFetchError(),
             style: TextStyle(
                 color: Theme.of(context).colorScheme.onBackground,
-                fontSize: 15,
-                fontWeight: FontWeight.w600)),
+                fontSize: 16,
+                fontWeight: FontWeight.w400)),
         const SizedBox(
           height: 20,
         ),
@@ -125,15 +125,15 @@ class CustomCupertinoAlerts {
             style: TextStyle(
                 color: Theme.of(context).colorScheme.onBackground,
                 fontSize: 14,
-                fontWeight: FontWeight.w600))
+                fontWeight: FontWeight.w400))
       ]),
       actions: [
         CupertinoDialogAction(
           child: Text(S.general.toSearch(),
               style: TextStyle(
                   color: Theme.of(context).colorScheme.primary,
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600)),
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400)),
           onPressed: () {
             Navigator.of(context, rootNavigator: true).pop();
             navigateToSearchFromView();
@@ -150,16 +150,16 @@ class CustomCupertinoAlerts {
         Text(S.popUps.autoSignupTitle(),
             style: TextStyle(
                 color: Theme.of(context).colorScheme.onBackground,
-                fontSize: 15,
-                fontWeight: FontWeight.w600)),
+                fontSize: 16,
+                fontWeight: FontWeight.w400)),
         const SizedBox(
           height: 20,
         ),
         Text(S.popUps.autoSignupBody(),
             style: TextStyle(
                 color: Theme.of(context).colorScheme.onBackground,
-                fontSize: 14,
-                fontWeight: FontWeight.w600))
+                fontSize: 16,
+                fontWeight: FontWeight.w400))
       ]),
       actions: [
         CupertinoDialogAction(
@@ -167,8 +167,8 @@ class CustomCupertinoAlerts {
             S.general.cancel(),
             style: TextStyle(
                 color: Theme.of(context).colorScheme.primary,
-                fontSize: 13,
-                fontWeight: FontWeight.w600),
+                fontSize: 14,
+                fontWeight: FontWeight.w400),
           ),
           onPressed: () {
             Navigator.of(context).pop();
@@ -178,8 +178,8 @@ class CustomCupertinoAlerts {
           child: Text(S.general.understood(),
               style: TextStyle(
                   color: Theme.of(context).colorScheme.primary,
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600)),
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400)),
           onPressed: () {
             BlocProvider.of<AuthCubit>(context).autoSignupToggle(value);
             Navigator.of(context).pop();
