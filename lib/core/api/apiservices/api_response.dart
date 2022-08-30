@@ -13,12 +13,10 @@ class ApiResponse<T> {
 
   ApiResponse.unauthorized(this.message) : status = ApiStatus.UNAUTHORIZED;
 
-  ApiResponse.update(this.data) : status = ApiStatus.UPDATE;
-
   @override
   String toString() {
     return "Status : $status \n Message : $message \n Data : $data";
   }
 }
 
-enum ApiStatus { UPDATE, FETCHED, ERROR, CACHED, UNAUTHORIZED }
+enum ApiStatus { FETCHED, ERROR, CACHED, UNAUTHORIZED }

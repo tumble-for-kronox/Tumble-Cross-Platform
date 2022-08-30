@@ -1,9 +1,9 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/foundation.dart';
 
 @immutable
 abstract class INotificationServiceBuilder {
-  Future<bool> buildNotificationChannel({
-    required String channelGroupKey,
+  NotificationChannel buildNotificationChannel({
     required String channelKey,
     required String channelName,
     required String channelDescription,
@@ -15,4 +15,5 @@ abstract class INotificationServiceBuilder {
       required String title,
       required String body,
       required DateTime date});
+  Future<bool> initializeAllNotificationChannels();
 }

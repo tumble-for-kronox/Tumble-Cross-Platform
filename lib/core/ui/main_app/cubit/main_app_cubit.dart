@@ -56,7 +56,7 @@ class MainAppCubit extends Cubit<MainAppState> {
   }
 
   Future<void> init() async {
-    await tryCached();
+    await attemptCachedFetch();
     _listViewScrollController.addListener((setScrollController));
   }
 
@@ -66,7 +66,7 @@ class MainAppCubit extends Cubit<MainAppState> {
     return super.close();
   }
 
-  Future<void> tryCached() async {
+  Future<void> attemptCachedFetch() async {
     dev.log(
         'TRYCACHED SCHEDULES: ${getIt<SharedPreferences>().getStringList(PreferenceTypes.bookmarks)!}');
     final currentScheduleIds = getIt<SharedPreferences>()
@@ -95,8 +95,8 @@ class MainAppCubit extends Cubit<MainAppState> {
 
       if (scheduleId != null && userHasBookmarks) {
         if (currentScheduleIsToggledToBeVisible) {
-          final ApiResponse _apiResponse =
-              await _cacheAndInteractionService.getSchedule(scheduleId);
+          final ApiResponse _apiResponse = await _cacheAndInteractionService
+              .getCachedOrNewSchedule(scheduleId);
 
           switch (_apiResponse.status) {
             case ApiStatus.FETCHED:
@@ -176,6 +176,7 @@ class MainAppCubit extends Cubit<MainAppState> {
   }
 
   Future<bool> createNotificationForEvent(Event event, BuildContext context) {
+    dev.log("createNotificationForEvent: ${event.from.toString()}");
     return _awesomeNotifications.isNotificationAllowed().then((isAllowed) {
       if (isAllowed) {
         _notificationBuilder.buildNotification(
@@ -189,10 +190,10 @@ class MainAppCubit extends Cubit<MainAppState> {
             groupkey: event.course.id,
             title: event.title,
             body: event.course.englishName,
-            date: event.from.subtract(Duration(
-                minutes: getIt<SharedPreferences>()
-                    .getInt(PreferenceTypes.notificationTime)!)));
+            date: event.from);
+
         dev.log('Created notification for event "${event.title}"');
+
         showScaffoldMessage(context,
             S.scaffoldMessages.createdNotificationForEvent(event.title));
 
@@ -228,9 +229,7 @@ class MainAppCubit extends Cubit<MainAppState> {
               groupkey: event.course.id,
               title: event.title,
               body: event.course.englishName,
-              date: event.from.subtract(Duration(
-                  minutes: getIt<SharedPreferences>()
-                      .getInt(PreferenceTypes.notificationTime)!)));
+              date: event.from);
         }
         dev.log(
             'Created ${events.length} new notifications for ${event.course}');
@@ -292,7 +291,7 @@ class MainAppCubit extends Cubit<MainAppState> {
         .then((value) {
       showScaffoldMessage(
           context, S.scaffoldMessages.updatedCourseColor(course.englishName));
-      tryCached();
+      attemptCachedFetch();
     });
   }
 
@@ -309,7 +308,7 @@ class MainAppCubit extends Cubit<MainAppState> {
 
     for (var bookmark in bookmarks) {
       final ApiResponse _apiResponse = await _cacheAndInteractionService
-          .getSchedulesRequest(bookmark.scheduleId);
+          .scheduleFetchDispatcher(bookmark.scheduleId);
 
       switch (_apiResponse.status) {
         case ApiStatus.FETCHED:
@@ -319,6 +318,6 @@ class MainAppCubit extends Cubit<MainAppState> {
           break;
       }
     }
-    await tryCached();
+    await attemptCachedFetch();
   }
 }

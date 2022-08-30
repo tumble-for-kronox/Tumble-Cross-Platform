@@ -15,7 +15,7 @@ import 'package:tumble/core/ui/main_app/data/schools.dart';
 class BackendRepository implements IBackendService {
   /// [HttpGet]
   @override
-  Future<ApiResponse> getSchedule(
+  Future<ApiResponse> getRequestSchedule(
       String scheduleId, String defaultSchool) async {
     final school = Schools().fromString(defaultSchool).schoolId.index;
 

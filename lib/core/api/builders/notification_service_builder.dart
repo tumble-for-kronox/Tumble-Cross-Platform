@@ -11,28 +11,20 @@ class NotificationServiceBuilder implements INotificationServiceBuilder {
   final Color defaultColor = CustomColors.orangePrimary;
   final String defaultIcon = "resource://drawable/res_tumble_app_logo";
   final _awesomeNotifications = getIt<AwesomeNotifications>();
-  final _sharedPreferences = getIt<SharedPreferences>();
 
   /// Build notification channel dynamically
   @override
-  Future<bool> buildNotificationChannel({
-    required String channelGroupKey, // Specific schedule course
+  NotificationChannel buildNotificationChannel({
     required String channelKey, // Schedule ID
     required String channelName, // name of schedule in readable text
     required String channelDescription, // short description passed to navigator
   }) =>
-      _awesomeNotifications.initialize(
-          defaultIcon,
-          [
-            NotificationChannel(
-              channelGroupKey: channelGroupKey,
-              channelKey: channelKey,
-              channelName: channelName,
-              channelDescription: channelDescription,
-              defaultColor: defaultColor,
-            )
-          ],
-          debug: kDebugMode);
+      NotificationChannel(
+        channelKey: channelKey,
+        channelName: channelName,
+        channelDescription: channelDescription,
+        defaultColor: defaultColor,
+      );
 
   /// Build notification with required params according
   /// to app context dynamically
@@ -60,7 +52,47 @@ class NotificationServiceBuilder implements INotificationServiceBuilder {
             NotificationActionButton(key: 'VIEW', label: 'View'),
           ],
           schedule: NotificationCalendar.fromDate(
-              date: date.subtract(Duration(minutes: _sharedPreferences.getInt(PreferenceTypes.notificationTime)!)),
+              date: date
+                  .subtract(Duration(
+                      minutes: getIt<SharedPreferences>()
+                          .getInt(PreferenceTypes.notificationTime)!))
+                  .toUtc(),
               allowWhileIdle: true,
               preciseAlarm: true));
+
+  @override
+  Future<bool> initializeAllNotificationChannels() {
+    // TODO: implement initializeAllNotificationChannels
+    throw UnimplementedError();
+  }
+
+  /* void updateNotificationChannelKeys() {
+  List<NotificationChannel> notificationChannels = [];
+  ScheduleRepository.getAllDatabaseScheduleNames().then((rowNames) {
+    if (rowNames != null) {
+      for (var rowName in rowNames) {
+        notificationChannels.add(NotificationChannel(
+          channelKey: rowName.scheduleId,
+          channelName: '${rowName.scheduleId} notifications',
+          channelDescription: 'Channel for ${rowName.scheduleId} notifications',
+          defaultColor: CustomColors.lightColors.secondary,
+          importance: NotificationImportance.High,
+        ));
+        AwesomeNotifications().initialize(
+            "resource://drawable/res_tumble_app_logo", notificationChannels);
+        log('Updated notification channels to ${notificationChannels.toString()}');
+      }
+
+      /// This extra addition should be commented out in production build.
+      /* notificationChannels.add(NotificationChannel(
+        channelKey: 'testing',
+        channelName: 'channel for testing',
+        channelDescription: 'Notification channel meant to be used for testing',
+        defaultColor: CustomColors.lightColors.secondary,
+        importance: NotificationImportance.High,
+      )); */
+
+    }
+  });
+} */
 }

@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 @immutable
 abstract class IBackendService {
   /// [HttpGet]
-  Future<dynamic> getSchedule(String scheduleId, String defaultSchool);
+  Future<dynamic> getRequestSchedule(String scheduleId, String defaultSchool);
 
   /// [HttpGet]
   Future<dynamic> getPrograms(String searchQuery, String defaultSchool);
@@ -18,16 +18,18 @@ abstract class IBackendService {
   Future<dynamic> postUserLogin(
       String username, String password, String defaultSchool);
 
-  /// [HttpPost]
+  /// [HttpPut]
   Future<dynamic> putRegisterUserEvent(
       String eventId, String sessionToken, String defaultSchool);
 
-  /// [HttpPost]
+  /// [HttpPut]
   Future<dynamic> putUnregisterUserEvent(
       String eventId, String sessionToken, String defaultSchool);
 
+  /// [HttpPut]
   Future putRegisterAllAvailableUserEvents(
       String sessionToken, String defaultSchool);
 
+  /// [HttpPost]
   Future<dynamic> postSubmitIssue(String issueSubject, String issueBody);
 }

@@ -15,7 +15,7 @@ class CacheAndInteractionRepository implements ICacheAndInteractionService {
   final _databaseService = getIt<DatabaseRepository>();
 
   @override
-  Future<ApiResponse> getProgramsRequest(String searchQuery) async {
+  Future<ApiResponse> programSearchDispatcher(String searchQuery) async {
     String defaultSchool =
         _preferenceService.getString(PreferenceTypes.school)!;
     ApiResponse response =
@@ -24,16 +24,16 @@ class CacheAndInteractionRepository implements ICacheAndInteractionService {
   }
 
   @override
-  Future<ApiResponse> getSchedulesRequest(scheduleId) async {
+  Future<ApiResponse> scheduleFetchDispatcher(scheduleId) async {
     String defaultSchool =
         _preferenceService.getString(PreferenceTypes.school)!;
     ApiResponse response =
-        await _backendService.getSchedule(scheduleId, defaultSchool);
+        await _backendService.getRequestSchedule(scheduleId, defaultSchool);
     return response;
   }
 
   @override
-  Future<ApiResponse> getSchedule(String scheduleId) async {
+  Future<ApiResponse> getCachedOrNewSchedule(String scheduleId) async {
     final bool favoritesContainsThisScheduleId = _preferenceService
         .getStringList(PreferenceTypes.bookmarks)!
         .map((json) => bookmarkedScheduleModelFromJson(json).scheduleId)
@@ -52,7 +52,7 @@ class CacheAndInteractionRepository implements ICacheAndInteractionService {
         /// Make sure that only if the user has an internet connection and the
         /// schedule is 'outdated', the app will display the new schedule.
         /// Otherwise it returns [ApiResponse.cached(userCachedSchedule)]
-        ApiResponse apiResponse = await getSchedulesRequest(scheduleId);
+        ApiResponse apiResponse = await scheduleFetchDispatcher(scheduleId);
         if (apiResponse.data != null) {
           return apiResponse;
         }
@@ -62,7 +62,7 @@ class CacheAndInteractionRepository implements ICacheAndInteractionService {
     }
 
     /// fetch from backend
-    return await getSchedulesRequest(scheduleId);
+    return await scheduleFetchDispatcher(scheduleId);
   }
 
   /// Returns appropriate response based on the users
@@ -70,7 +70,7 @@ class CacheAndInteractionRepository implements ICacheAndInteractionService {
   /// have at least a default school or even a default school
   /// and a default schedule)
   @override
-  Future<DatabaseResponse> initSetup() async {
+  Future<DatabaseResponse> verifyDefaultSchoolSet() async {
     final String? defaultSchool =
         _preferenceService.getString(PreferenceTypes.school);
 

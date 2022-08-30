@@ -121,10 +121,9 @@ class DrawerCubit extends Cubit<DrawerState> {
   }
 
   void setNotificationTime(int time) async {
-    SharedPreferences sharedPreferences = getIt<SharedPreferences>();
-    sharedPreferences.setInt(PreferenceTypes.notificationTime, time);
+    getIt<SharedPreferences>().setInt(PreferenceTypes.notificationTime, time);
     getIt<NotificationRepository>()
-        .assignWithNewDuration(Duration(minutes: time));
+        .assignAllNotificationsWithNewDuration(Duration(minutes: time));
 
     emit(state.copyWith(
         notificationTime: getIt<SharedPreferences>()

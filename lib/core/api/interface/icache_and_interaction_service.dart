@@ -4,11 +4,11 @@ import 'package:tumble/core/database/database_response.dart';
 
 @immutable
 abstract class ICacheAndInteractionService {
-  Future<dynamic> getProgramsRequest(String searchQuery);
+  Future<dynamic> programSearchDispatcher(String searchQuery);
 
-  Future<ApiResponse> getSchedulesRequest(scheduleId);
+  Future<ApiResponse> scheduleFetchDispatcher(String scheduleId);
 
-  Future<ApiResponse> getSchedule(String scheduleId);
+  Future<ApiResponse> getCachedOrNewSchedule(String scheduleId);
 
-  Future<DatabaseResponse> initSetup();
+  Future<DatabaseResponse> verifyDefaultSchoolSet();
 }

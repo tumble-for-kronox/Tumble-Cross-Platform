@@ -67,103 +67,9 @@ class EventOptions extends StatelessWidget {
                 return Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    ListTile(
-                      leading: Icon(
-                          notificationIsSetForEvent
-                              ? CupertinoIcons.bell_slash
-                              : CupertinoIcons.bell,
-                          color: Theme.of(context).colorScheme.onSurface),
-                      title: Center(
-                          child: Text(
-                        notificationIsSetForEvent
-                            ? S.eventOptions.removeEventNotification()
-                            : S.eventOptions.addEventNotification(),
-                        style: TextStyle(
-                            color: Theme.of(context).colorScheme.onSurface),
-                      )),
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(20),
-                          topRight: Radius.circular(20),
-                        ),
-                      ),
-                      onTap: () async {
-                        Navigator.of(context).pop();
-
-                        if (notificationIsSetForEvent) {
-                          cubit.cancelEventNotification(event).then(
-                              (notificationCancelled) => notificationCancelled
-                                  ? showScaffoldMessage(
-                                      context,
-                                      S.scaffoldMessages
-                                          .cancelledEventNotification(
-                                              event.title))
-                                  : showScaffoldMessage(
-                                      context,
-                                      S.scaffoldMessages
-                                          .cancelNotificationsFailed(
-                                              event.title)));
-                        } else {
-                          bool sucessfullyCreatedNotifications = await cubit
-                              .createNotificationForEvent(event, context);
-                          if (!sucessfullyCreatedNotifications) {
-                            await showDialog(
-                                useRootNavigator: false,
-                                context: context,
-                                builder: (_) => PermissionHandler(
-                                      cubit: cubit,
-                                    ));
-                          }
-                        }
-                      },
-                    ),
-                    const Divider(
-                      height: 1,
-                    ),
-                    ListTile(
-                      leading: Icon(
-                          notificationIsSetForCourse
-                              ? CupertinoIcons.slash_circle
-                              : CupertinoIcons.bell_circle,
-                          color: Theme.of(context).colorScheme.onSurface),
-                      title: Center(
-                          child: Text(
-                        notificationIsSetForCourse
-                            ? S.eventOptions.removeCourseNotifications()
-                            : S.eventOptions.addCourseNotifications(),
-                        style: TextStyle(
-                            color: Theme.of(context).colorScheme.onSurface),
-                      )),
-                      onTap: () async {
-                        Navigator.of(context).pop();
-
-                        if (notificationIsSetForCourse) {
-                          cubit.cancelCourseNotifications(event).then(
-                              (notificationCancelled) => notificationCancelled
-                                  ? showScaffoldMessage(
-                                      context,
-                                      S.scaffoldMessages
-                                          .cancelledCourseNotifications(
-                                              event.course.englishName))
-                                  : showScaffoldMessage(
-                                      context,
-                                      S.scaffoldMessages
-                                          .cancelNotificationsFailed(
-                                              event.title)));
-                        } else {
-                          bool sucessfullyCreatedNotifications = await cubit
-                              .createNotificationForCourse(event, context);
-                          if (!sucessfullyCreatedNotifications) {
-                            await showDialog(
-                                useRootNavigator: false,
-                                context: context,
-                                builder: (_) => PermissionHandler(
-                                      cubit: cubit,
-                                    ));
-                          }
-                        }
-                      },
-                    ),
+                    if (event.from.isAfter(DateTime.now()))
+                      _buildNotificationTiles(notificationIsSetForEvent,
+                          notificationIsSetForCourse),
                     const Divider(
                       height: 1,
                     ),
@@ -227,5 +133,102 @@ class EventOptions extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Column _buildNotificationTiles(
+      bool notificationIsSetForEvent, notificationIsSetForCourse) {
+    return Column(children: [
+      ListTile(
+        leading: Icon(
+            notificationIsSetForEvent
+                ? CupertinoIcons.bell_slash
+                : CupertinoIcons.bell,
+            color: Theme.of(context).colorScheme.onSurface),
+        title: Center(
+            child: Text(
+          notificationIsSetForEvent
+              ? S.eventOptions.removeEventNotification()
+              : S.eventOptions.addEventNotification(),
+          style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+        )),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20),
+            topRight: Radius.circular(20),
+          ),
+        ),
+        onTap: () async {
+          Navigator.of(context).pop();
+
+          if (notificationIsSetForEvent) {
+            cubit.cancelEventNotification(event).then((notificationCancelled) =>
+                notificationCancelled
+                    ? showScaffoldMessage(
+                        context,
+                        S.scaffoldMessages
+                            .cancelledEventNotification(event.title))
+                    : showScaffoldMessage(
+                        context,
+                        S.scaffoldMessages
+                            .cancelNotificationsFailed(event.title)));
+          } else {
+            bool sucessfullyCreatedNotifications =
+                await cubit.createNotificationForEvent(event, context);
+            if (!sucessfullyCreatedNotifications) {
+              await showDialog(
+                  useRootNavigator: false,
+                  context: context,
+                  builder: (_) => PermissionHandler(
+                        cubit: cubit,
+                      ));
+            }
+          }
+        },
+      ),
+      const Divider(
+        height: 1,
+      ),
+      ListTile(
+        leading: Icon(
+            notificationIsSetForCourse
+                ? CupertinoIcons.slash_circle
+                : CupertinoIcons.bell_circle,
+            color: Theme.of(context).colorScheme.onSurface),
+        title: Center(
+            child: Text(
+          notificationIsSetForCourse
+              ? S.eventOptions.removeCourseNotifications()
+              : S.eventOptions.addCourseNotifications(),
+          style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+        )),
+        onTap: () async {
+          Navigator.of(context).pop();
+
+          if (notificationIsSetForCourse) {
+            cubit.cancelCourseNotifications(event).then(
+                (notificationCancelled) => notificationCancelled
+                    ? showScaffoldMessage(
+                        context,
+                        S.scaffoldMessages.cancelledCourseNotifications(
+                            event.course.englishName))
+                    : showScaffoldMessage(
+                        context,
+                        S.scaffoldMessages
+                            .cancelNotificationsFailed(event.title)));
+          } else {
+            bool sucessfullyCreatedNotifications =
+                await cubit.createNotificationForCourse(event, context);
+            if (!sucessfullyCreatedNotifications) {
+              await showDialog(
+                  useRootNavigator: false,
+                  context: context,
+                  builder: (_) => PermissionHandler(
+                        cubit: cubit,
+                      ));
+            }
+          }
+        },
+      )
+    ]);
   }
 }

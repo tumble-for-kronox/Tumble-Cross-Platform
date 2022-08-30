@@ -6,7 +6,9 @@ abstract class INotificationService {
   void updateDispatcher(
       ScheduleModel newScheduleModel, ScheduleModel oldScheduleModel);
 
-  void assignWithNewDuration(Duration newDuration);
+  void assignAllNotificationsWithNewDuration(Duration newDuration);
 
-  void clearAllNotifications();
+  void cancelAllNotifications();
+
+  Future<bool> initialize();
 }

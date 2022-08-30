@@ -205,7 +205,7 @@ class TumbleAppDrawer extends StatelessWidget {
         }
         break;
       case EventType.CANCEL_ALL_NOTIFICATIONS:
-        getIt<NotificationRepository>().clearAllNotifications();
+        getIt<NotificationRepository>().cancelAllNotifications();
         showScaffoldMessage(
             context, S.scaffoldMessages.cancelledAllSetNotifications());
         break;

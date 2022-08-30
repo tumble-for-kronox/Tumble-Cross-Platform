@@ -44,7 +44,7 @@ class BackgroundTask {
 
         // Update schedule
         ApiResponse apiResponseOfNewScheduleModel = await backendService
-            .getSchedule(storedScheduleModel.id, defaultUserSchool);
+            .getRequestSchedule(storedScheduleModel.id, defaultUserSchool);
         switch (apiResponseOfNewScheduleModel.status) {
           case ApiStatus.FETCHED:
             ScheduleModel newScheduleModel =

@@ -67,7 +67,8 @@ class _MainAppNavigationRootPageState extends State<MainAppNavigationRootPage> {
                               .toggleFavorite(context)
                               .then((_) {
                             BlocProvider.of<MainAppCubit>(context).setLoading();
-                            BlocProvider.of<MainAppCubit>(context).tryCached();
+                            BlocProvider.of<MainAppCubit>(context)
+                                .attemptCachedFetch();
                             BlocProvider.of<MainAppNavigationCubit>(context)
                                 .getNavBarItem(NavbarItem.LIST);
                           });

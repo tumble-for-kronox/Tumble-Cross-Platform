@@ -11,6 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tumble/core/api/apiservices/api_response.dart';
 import 'package:tumble/core/api/builders/notification_service_builder.dart';
 import 'package:tumble/core/api/repository/cache_and_interaction_repository.dart';
+import 'package:tumble/core/api/repository/notification_repository.dart';
 import 'package:tumble/core/database/data/access_stores.dart';
 import 'package:tumble/core/database/repository/database_repository.dart';
 import 'package:tumble/core/dependency_injection/get_it_instances.dart';
@@ -21,6 +22,7 @@ import 'package:tumble/core/models/api_models/schedule_model.dart';
 import 'package:tumble/core/models/ui_models/course_ui_model.dart';
 import 'package:tumble/core/models/ui_models/schedule_model_and_courses.dart';
 import 'package:tumble/core/models/ui_models/week_model.dart';
+import 'package:tumble/core/shared/app_dependencies.dart';
 import 'package:tumble/core/shared/preference_types.dart';
 import 'package:tumble/core/ui/data/scaffold_message_types.dart';
 import 'package:tumble/core/ui/scaffold_message.dart';
@@ -42,16 +44,17 @@ class SearchPageCubit extends Cubit<SearchPageState> {
             previewToggledFavorite: false,
             previewCurrentScheduleId: null));
 
-  final _textEditingController = TextEditingController();
+  final _textEditingControllerSearch = TextEditingController();
   final FocusNode _focusNode = FocusNode();
   final _cacheAndInteractionService = getIt<CacheAndInteractionRepository>();
   final ScrollController _listViewScrollController = ScrollController();
-  final _notificationBuilder = NotificationServiceBuilder();
+  final _notificationRepository = getIt<NotificationRepository>();
   final _awesomeNotifications = getIt<AwesomeNotifications>();
   final _databaseService = getIt<DatabaseRepository>();
 
   ScrollController get controller => _listViewScrollController;
-  TextEditingController get textEditingController => _textEditingController;
+  TextEditingController get textEditingControllerSearch =>
+      _textEditingControllerSearch;
   FocusNode get focusNode => _focusNode;
 
   Future<void> init() async {
@@ -70,15 +73,15 @@ class SearchPageCubit extends Cubit<SearchPageState> {
   @override
   Future<void> close() async {
     _focusNode.dispose();
-    _textEditingController.dispose();
+    _textEditingControllerSearch.dispose();
     _listViewScrollController.dispose();
     return super.close();
   }
 
   Future<void> fetchNewSchedule(String id) async {
-    final apiResponse = await _cacheAndInteractionService.getSchedule(id);
+    final apiResponse =
+        await _cacheAndInteractionService.getCachedOrNewSchedule(id);
     switch (apiResponse.status) {
-      case api.ApiStatus.UPDATE:
       case api.ApiStatus.FETCHED:
         bool scheduleFavorited = false;
         ScheduleModel currentScheduleModel = apiResponse.data!;
@@ -144,10 +147,9 @@ class SearchPageCubit extends Cubit<SearchPageState> {
   }
 
   Future<void> search() async {
-    emit(state.copyWith(searchPageStatus: SearchPageStatus.LOADING));
-    String query = textEditingController.text;
+    String query = textEditingControllerSearch.text;
     ApiResponse apiResponse =
-        await _cacheAndInteractionService.getProgramsRequest(query);
+        await _cacheAndInteractionService.programSearchDispatcher(query);
 
     if (state.focused) {
       switch (apiResponse.status) {
@@ -235,14 +237,10 @@ class SearchPageCubit extends Cubit<SearchPageState> {
     await _databaseService
         .add(state.previewScheduleModelAndCourses!.scheduleModel);
 
-    /// Build new notification channel
-    await _notificationBuilder.buildNotificationChannel(
-        channelGroupKey:
-            getIt<SharedPreferences>().getString(PreferenceTypes.school)!,
-        channelKey: state.previewCurrentScheduleId!,
-        channelName: 'Notifications for schedule',
-        channelDescription: 'Notifications for schedule');
-    _textEditingController.clear();
+    /// Rebuild notification channels
+    _notificationRepository.initialize();
+
+    _textEditingControllerSearch.clear();
     emit(state.copyWith(
         searchPageStatus: SearchPageStatus.INITIAL,
         focused: false,
@@ -251,8 +249,8 @@ class SearchPageCubit extends Cubit<SearchPageState> {
   }
 
   void resetCubit() {
-    if (textEditingController.text.isNotEmpty) {
-      _textEditingController.clear();
+    if (textEditingControllerSearch.text.isNotEmpty) {
+      _textEditingControllerSearch.clear();
     } else {
       _focusNode.unfocus();
       emit(state.copyWith(
@@ -269,7 +267,7 @@ class SearchPageCubit extends Cubit<SearchPageState> {
     if (_focusNode.hasFocus) {
       emit(state.copyWith(clearButtonVisible: true, focused: true));
     } else if (!_focusNode.hasFocus &&
-        _textEditingController.text.trim().isEmpty) {
+        _textEditingControllerSearch.text.trim().isEmpty) {
       emit(state.copyWith(
           clearButtonVisible: false,
           focused: false,

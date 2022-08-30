@@ -59,8 +59,9 @@ class _AppFavoriteScheduleToggleState extends State<AppFavoriteScheduleToggle> {
                           onPressed: () async {
                             BlocProvider.of<MainAppCubit>(context).setLoading();
                             context.read<DrawerCubit>().removeBookmark(id).then(
-                                (_) =>
-                                    context.read<MainAppCubit>().tryCached());
+                                (_) => context
+                                    .read<MainAppCubit>()
+                                    .attemptCachedFetch());
                           }),
                       shape: const RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(Radius.circular(20))),
@@ -74,7 +75,7 @@ class _AppFavoriteScheduleToggleState extends State<AppFavoriteScheduleToggle> {
                             .toggleSchedule(id, value);
                         BlocProvider.of<MainAppCubit>(context).setLoading();
                         BlocProvider.of<MainAppCubit>(context)
-                            .tryCached()
+                            .attemptCachedFetch()
                             .then((value) {
                           if (state.bookmarks!.isEmpty) {
                             Navigator.of(context).pop();

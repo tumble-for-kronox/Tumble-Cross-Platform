@@ -43,8 +43,9 @@ class _ScheduleSearchBarState extends State<ScheduleSearchBar> {
                     autocorrect: false,
                     focusNode:
                         BlocProvider.of<SearchPageCubit>(context).focusNode,
-                    controller:
-                        context.read<SearchPageCubit>().textEditingController,
+                    controller: context
+                        .read<SearchPageCubit>()
+                        .textEditingControllerSearch,
                     textInputAction: TextInputAction.search,
                     textAlignVertical: TextAlignVertical.center,
                     decoration: InputDecoration(
@@ -59,7 +60,7 @@ class _ScheduleSearchBarState extends State<ScheduleSearchBar> {
                         ),
                         onPressed: () async {
                           if (BlocProvider.of<SearchPageCubit>(context)
-                              .textEditingController
+                              .textEditingControllerSearch
                               .text
                               .trim()
                               .isNotEmpty) {
