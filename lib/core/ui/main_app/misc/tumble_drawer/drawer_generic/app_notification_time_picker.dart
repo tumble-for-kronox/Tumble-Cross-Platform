@@ -1,10 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:tumble/core/ui/data/string_constants.dart';
 
 typedef SetNotificationTime = void Function(int time);
 
 class AppNotificationTimePicker extends StatelessWidget {
-  final Map<String, int> parameterMap = {"15 minutes": 15, "30 minutes": 30, "1 hour": 60, "3 hours": 180};
+  final Map<String, int> parameterMap = {
+    S.settingsPage.offsetTime(15): 15,
+    S.settingsPage.offsetTime(30): 30,
+    S.settingsPage.offsetTime(60): 60,
+    S.settingsPage.offsetTime(180): 180
+  };
   final SetNotificationTime setNotificationTime;
   AppNotificationTimePicker({Key? key, required this.setNotificationTime}) : super(key: key);
 

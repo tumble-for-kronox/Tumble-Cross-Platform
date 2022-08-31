@@ -9,4 +9,9 @@ class UserEventStrings extends StringConstantGroup {
   String upcoming() => localizedStrings.userEventsUpcomingTitle;
   String registerButton() => localizedStrings.userEventsRegisterButton;
   String openKronoxButton() => localizedStrings.userEventsOpenKronoxButton;
+  String failedToLoad() => localizedStrings.userEventsFailedToLoadExams;
+  String empty() => localizedStrings.userEventsEmpty;
+  String unregisterButton() => localizedStrings.userEventsUnregisterButton;
+  String unregisterUntil() => localizedStrings.userEventsUnregisterUntil;
+  String registerBefore() => localizedStrings.userEventsRegisterBefore;
 }

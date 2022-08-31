@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:tumble/core/extensions/extensions.dart';
 import 'package:tumble/core/models/api_models/available_user_event_model.dart';
 import 'package:tumble/core/ui/account/user_event_list/user_event_register_button.dart';
+import 'package:tumble/core/ui/data/string_constants.dart';
 import 'package:tumble/core/ui/login/cubit/auth_cubit.dart';
 
 import '../user_event_unregister_button.dart';
@@ -95,7 +96,9 @@ class AvailableUserEventCard extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  userEvent.isRegistered ? "Unregister until" : "Register before",
+                                  userEvent.isRegistered
+                                      ? S.userEvents.unregisterUntil()
+                                      : S.userEvents.registerBefore(),
                                   style: TextStyle(
                                       color: Theme.of(context).colorScheme.onSurface,
                                       fontWeight: FontWeight.w400,

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tumble/core/extensions/extensions.dart';
 import 'package:tumble/core/theme/data/colors.dart';
+import 'package:tumble/core/ui/data/string_constants.dart';
 import 'package:tumble/core/ui/main_app/misc/tumble_drawer/cubit/drawer_state.dart';
 import 'package:tumble/core/ui/main_app/misc/tumble_drawer/support_modal/cubit/support_modal_state.dart';
 import 'package:tumble/core/ui/tumble_button.dart';
@@ -42,13 +43,11 @@ class _SupportModalState extends State<SupportModal> {
                   Container(
                     height: MediaQuery.of(context).size.height - 260,
                     width: double.infinity,
-                    padding:
-                        const EdgeInsets.only(left: 20, right: 20, top: 50),
+                    padding: const EdgeInsets.only(left: 20, right: 20, top: 50),
                     decoration: BoxDecoration(
                         color: Theme.of(context).colorScheme.background,
-                        borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(20),
-                            topRight: Radius.circular(20))),
+                        borderRadius:
+                            const BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20))),
                     child: SingleChildScrollView(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -57,33 +56,26 @@ class _SupportModalState extends State<SupportModal> {
                             height: 20,
                           ),
                           TextFormField(
-                            autovalidateMode:
-                                AutovalidateMode.onUserInteraction,
+                            autovalidateMode: AutovalidateMode.onUserInteraction,
                             autocorrect: true,
                             validator: (_) {
-                              return state.isBodyValid!
-                                  ? null
-                                  : 'Subject must be greater than 5 characters';
+                              return state.isBodyValid! ? null : S.supportModal.subjectTooShort();
                             },
-                            controller: context
-                                .read<SupportModalCubit>()
-                                .subjectController,
+                            controller: context.read<SupportModalCubit>().subjectController,
                             maxLength: 25,
-                            decoration: const InputDecoration(
-                              labelText: 'Type of issue',
-                              labelStyle: TextStyle(
+                            decoration: InputDecoration(
+                              labelText: S.supportModal.subjectLabel(),
+                              labelStyle: const TextStyle(
                                 fontSize: 14,
                                 color: CustomColors.orangePrimary,
                               ),
-                              helperText:
-                                  'Summarize your issue in a short title',
-                              suffixIcon: Icon(
+                              helperText: S.supportModal.subjectHelper(),
+                              suffixIcon: const Icon(
                                 CupertinoIcons.ant,
                                 size: 17,
                               ),
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                    color: CustomColors.orangePrimary),
+                              enabledBorder: const UnderlineInputBorder(
+                                borderSide: BorderSide(color: CustomColors.orangePrimary),
                               ),
                             ),
                           ),
@@ -91,30 +83,23 @@ class _SupportModalState extends State<SupportModal> {
                             height: 30,
                           ),
                           TextFormField(
-                            autovalidateMode:
-                                AutovalidateMode.onUserInteraction,
+                            autovalidateMode: AutovalidateMode.onUserInteraction,
                             autocorrect: true,
                             validator: (_) {
-                              return state.isSubjectValid!
-                                  ? null
-                                  : 'Body must be greater than 5 characters';
+                              return state.isSubjectValid! ? null : S.supportModal.bodyTooShort();
                             },
-                            controller: context
-                                .read<SupportModalCubit>()
-                                .bodyController,
+                            controller: context.read<SupportModalCubit>().bodyController,
                             maxLength: 200,
-                            decoration: const InputDecoration(
-                              labelText: 'Explain your issue',
-                              labelStyle: TextStyle(
+                            decoration: InputDecoration(
+                              labelText: S.supportModal.bodyLabel(),
+                              labelStyle: const TextStyle(
                                 fontSize: 14,
                                 color: CustomColors.orangePrimary,
                               ),
-                              helperText:
-                                  'Explain your issue in a bit more detail for us',
-                              suffixIcon: Icon(CupertinoIcons.wrench, size: 17),
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                    color: CustomColors.orangePrimary),
+                              helperText: S.supportModal.bodyHelper(),
+                              suffixIcon: const Icon(CupertinoIcons.wrench, size: 17),
+                              enabledBorder: const UnderlineInputBorder(
+                                borderSide: BorderSide(color: CustomColors.orangePrimary),
                               ),
                             ),
                           ),
@@ -127,7 +112,7 @@ class _SupportModalState extends State<SupportModal> {
                             child: TumbleButton(
                               onPressed: () {},
                               prefixIcon: CupertinoIcons.paperplane,
-                              text: 'Send',
+                              text: S.general.send(),
                             ),
                           )),
                         ],
@@ -148,7 +133,7 @@ class _SupportModalState extends State<SupportModal> {
                         ),
                       ),
                       child: Text(
-                        "SUPPORT",
+                        S.supportModal.title(),
                         style: TextStyle(
                           fontSize: 16,
                           color: CustomColors.orangePrimary.contrastColor(),

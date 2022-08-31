@@ -5,6 +5,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:intl/intl.dart';
 import 'package:tumble/core/extensions/extensions.dart';
 import 'package:tumble/core/models/api_models/upcoming_user_event_model.dart';
+import 'package:tumble/core/ui/data/string_constants.dart';
 
 import '../../../schedule/modal_info_row.dart';
 import '../../../schedule/tumble_list_view/tumble_list_view_schedule_card_ribbon.dart';
@@ -49,14 +50,14 @@ class UpcomingUserEventModal extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       ModalInfoRow(
-                        title: 'Date',
+                        title: S.detailsModal.date(),
                         icon: const Icon(CupertinoIcons.calendar),
                         subtitle:
                             '${DateFormat.d().format(userEvent.eventStart)} ${DateFormat('MMMM').format(userEvent.eventStart)} ${DateFormat.y().format(userEvent.eventStart)}',
                       ),
                       const SizedBox(height: 25),
                       ModalInfoRow(
-                        title: 'Time',
+                        title: S.detailsModal.time(),
                         icon: const Icon(CupertinoIcons.clock),
                         subtitle:
                             '${DateFormat.Hm().format(userEvent.eventStart)} - ${DateFormat.Hm().format(userEvent.eventEnd)}',
@@ -65,7 +66,7 @@ class UpcomingUserEventModal extends StatelessWidget {
                         height: 25,
                       ),
                       ModalInfoRow(
-                        title: "Registration opens",
+                        title: S.detailsModal.registrationOpens(),
                         icon: const Icon(CupertinoIcons.person_crop_circle_badge_checkmark),
                         subtitle: DateFormat("dd MMMM yyyy").format(userEvent.firstSignupDate),
                       ),
@@ -73,7 +74,7 @@ class UpcomingUserEventModal extends StatelessWidget {
                         height: 25,
                       ),
                       ModalInfoRow(
-                        title: "Type",
+                        title: S.detailsModal.type(),
                         icon: const Icon(CupertinoIcons.square_grid_2x2),
                         subtitle: userEvent.type,
                       ),
@@ -96,9 +97,9 @@ class UpcomingUserEventModal extends StatelessWidget {
                   topRight: Radius.circular(20),
                 ),
               ),
-              child: const Text(
-                "DETAILS",
-                style: TextStyle(
+              child: Text(
+                S.detailsModal.title(),
+                style: const TextStyle(
                   fontSize: 16,
                   color: Colors.white,
                   letterSpacing: 1.5,

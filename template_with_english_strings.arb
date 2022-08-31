@@ -8,43 +8,16 @@
     "calendarViewTitle": "Calendar",
     "accountPageTitle": "Account",
     "weekViewNumber": "w. {weekNumber}",
-    "@weekViewNumber": {
-        "description": "Week number shown in week view.",
-        "placeholders": {
-            "weekNumber": {
-                "type": "String",
-                "example": "32"
-            }
-        }
-    },
     "weekViewTodayLabel": "Today",
     "weekViewNoActivities": "No scheduled activities",
     "signInButtonTitle": "Sign in",
     "signOutButtonTitle": "Sign out",
     "loginPageTitle": "Sign in to Kronox",
     "loginPageDescription": "Sign in to Kronox with your student credentials for {universityName} for\nthe best user experience",
-    "@loginPageDescription": {
-        "description": "Message prompting user to login to their kronox account.",
-        "placeholders": {
-            "universityName": {
-                "type": "String",
-                "example": "Kristianstad University"
-            }
-        }
-    },
     "loginPageUsernamePlaceholder": "Username/Email",
     "loginPagePasswordPlaceholder": "Password",
     "loginPageSuccessTitle": "Signed in to Kronox!",
     "loginPageSuccessDescription": "You've sucessfully signed into {universityName} via Kronox",
-    "@loginPageSuccessDescription": {
-        "description": "Message telling user they successfully logged into their kronox account.",
-        "placeholders": {
-            "universityName": {
-                "type": "String",
-                "example": "Kristianstad University"
-            }
-        }
-    },
     "loginEmailValidationError": "Username/Email cannot be empty",
     "loginPasswordValidationError": "Password cannot be empty",
     "unauthorizedPageDescription": "Connect your Kronox account by logging in",
@@ -53,25 +26,7 @@
     "authorizedPageAutomaticExamSignup": "Automatic exam signup",
     "authorizedPageExternalLinksTitle": "External links",
     "authorizedPagePersonalExternalLink": "Your {webpageName}",
-    "@authorizedPagePersonalExternalLink": {
-        "description": "Default title on a link to something that is user connected.",
-        "placeholders": {
-            "webpageName": {
-                "type": "String",
-                "example": "Canvas"
-            }
-        }
-    },
     "authorizedPageExternalLinksKronox": "Kronox for {universityName}",
-    "@authorizedPageExternalLinksKronox": {
-        "description": "Title for link to kronox for the user's default school.",
-        "placeholders": {
-            "universityName": {
-                "type": "String",
-                "example": "Kristianstad University"
-            }
-        }
-    },
     "userEventsNeedToSignupTitle": "Need to sign up?",
     "userEventsAlreadySignedUpTitle": "Already signed up",
     "userEventsUpcomingTitle": "Upcoming",
@@ -86,27 +41,9 @@
     "settingsCommonTitle": "Common",
     "settingsCommonChangeSchoolsTitle": "Change schools",
     "settingsCommonChangeSchoolsSubtitle": "Current school {schoolAbbreviation}",
-    "@settingsCommonChangeSchoolsSubtitle": {
-        "description": "Subtitle of the change schools settings item.",
-        "placeholders": {
-            "schoolAbbreviation": {
-                "type": "String",
-                "example": "HKR"
-            }
-        }
-    },
     "settingsChooseUniversity": "Choose your university",
     "settingsCommonChangeThemeTitle": "Change theme",
     "settingsCommonChangeThemeSubtitle": "Current theme: {themeName}",
-    "@settingsCommonChangeThemeSubtitle": {
-        "description": "Subtitle of the change theme settings item.",
-        "placeholders": {
-            "themeName": {
-                "type": "String",
-                "example": "System"
-            }
-        }
-    },
     "settingsScheduleTitle": "Schedule",
     "settingsScheduleDefaultScheduleTitle": "Set default schedule",
     "settingsScheduleDefaultScheduleSubtitle": "Select from your list of bookmarks",
@@ -117,185 +54,28 @@
     "settingsNotificationOffsetTitle": "Notification offset",
     "settingNotificationOffsetSubtitle": "Current offset: ",
     "settingsNotificationOffsetMinutes": "{minutes} minutes",
-    "@settingsNotificationOffsetMinutes": {
-        "description": "Convert minutes into hour label automatically",
-        "placeholders": {
-            "minutes": {
-                "type": "int",
-                "example": "30"
-            }
-        }
-    },
     "settingsNotificationOffsetHours": "{hours,plural, =1{{hours} hour} other{{hours} hours}}",
-    "@settingsNotificationOffsetHours": {
-        "description": "Convert minutes into hour label automatically",
-        "placeholders": {
-            "hours": {
-                "type": "int",
-                "example": "1"
-            }
-        }
-    },
     "settingsMiscTitle": "Miscellaneous",
     "settingsMiscBugTitle": "Report a bug",
     "settingsMiscBugSubtitle": "Send us a bug report of an issue",
     "settingsMiscRateTitle": "Rate our app",
     "settingsMiscRateSubtitle": "Rate our app on {storeName}",
-    "@settingsMiscRateSubtitle": {
-        "description": "String pointing to either App Store or Google Play",
-        "placeholders": {
-            "storeName": {
-                "type": "String",
-                "example": "Google Play"
-            }
-        }
-    },
     "scaffoldMessageCreatedNotificationForCourse": "Successfully created {eventCount} notifications for {courseName}",
-    "@scaffoldMessageCreatedNotificationForCourse": {
-        "description": "Message including the number of notifications created and the name of a course.",
-        "placeholders": {
-            "eventCount": {
-                "type": "int",
-                "example": "2"
-            },
-            "courseName": {
-                "type": "String",
-                "example": "Math"
-            }
-        }
-    },
     "scaffoldMessageCreatedNotificationForEvent": "Sucessfully created notification for {eventName}",
-    "@scaffoldMessageCreatedNotificationForEvent": {
-        "description": "Message showing that notification was set for a given event name.",
-        "placeholders": {
-            "eventName": {
-                "type": "String",
-                "example": "Lecture 2"
-            }
-        }
-    },
     "scaffoldMessageCancelledAllSetNotifications": "Cancelled all notifications",
     "scaffoldMessageCancelledEventNotification": "Cancelled notification for {eventName}",
-    "@scaffoldMessageCancelledEventNotification": {
-        "description": "Message showing that notification was removed from a given event name.",
-        "placeholders": {
-            "eventName": {
-                "type": "String",
-                "example": "Lecture 2"
-            }
-        }
-    },
     "scaffoldMessageCancelledCourseNotifications": "Cancelled notifications for {courseName}",
-    "@scaffoldMessageCancelledCourseNotifications": {
-        "description": "Message showing that notifications were removed from a given course name.",
-        "placeholders": {
-            "courseName": {
-                "type": "String",
-                "example": "Math"
-            }
-        }
-    },
     "scaffoldMessageCancelNotificationsFailed": "Failed to cancel notifications for {courseOrEventName}",
-    "@scaffoldMessageCancelNotificationsFailed": {
-        "description": "Message to show that cancelling notifications of events or course failed.",
-        "placeholders": {
-            "courseOrEventName": {
-                "type": "String",
-                "example": "Math or Lecture 1"
-            }
-        }
-    },
     "scaffoldMessageOpenEventOptionsFailed": "Schedule must be default to access options",
     "scaffoldMessageChangeTheme": "Changed theme to {themeTypeName}",
-    "@scaffoldMessageChangeTheme": {
-        "description": "Message to show that the default theme was changed.",
-        "placeholders": {
-            "themeTypeName": {
-                "type": "String",
-                "example": "Dark Theme"
-            }
-        }
-    },
     "scaffoldMessageChangedSchool": "Changed school to {schoolName}",
-    "@scaffoldMessageChangedSchool": {
-        "description": "Message to show that the default school has been changed.",
-        "placeholders": {
-            "schoolName": {
-                "type": "String",
-                "example": "Kristianstad University"
-            }
-        }
-    },
     "scaffoldMessageChangedDefaultView": "Changed default view to {viewType}",
-    "@scaffoldMessageChangedDefaultView": {
-        "description": "Message to show that the default view type has been changed.",
-        "placeholders": {
-            "viewType": {
-                "type": "String",
-                "example": "Calendar"
-            }
-        }
-    },
     "scaffoldMessageChangedDefaultSchedule": "Changed default schedule to {scheduleId}",
-    "@scaffoldMessageChangedDefaultSchedule": {
-        "description": "Message to show that the default schedule has been changed.",
-        "placeholders": {
-            "scheduleId": {
-                "type": "String",
-                "example": "p.TBSE2+2020+36+100+NML+en"
-            }
-        }
-    },
     "scaffoldMessageChangedDefaultNotificationOffset": "Changed default notification offset to {notificationOffset} before start time",
-    "@scaffoldMessageChangedDefaultNotificationOffset": {
-        "description": "Message to show that the default notification offset has been changed.",
-        "placeholders": {
-            "notificationOffset": {
-                "type": "String",
-                "example": "60"
-            }
-        }
-    },
     "scaffoldMessageAddedBookmark": "Saved {scheduleId} to bookmarks",
-    "@scaffoldMessageAddedBookmark": {
-        "description": "Message to show that a schedule has been favourited.",
-        "placeholders": {
-            "scheduleId": {
-                "type": "String",
-                "example": "p.TBSE2+2020+36+100+NML+en"
-            }
-        }
-    },
     "scaffoldMessageRemovedBookmark": "Removed {scheduleId} from bookmarks",
-    "@scaffoldMessageRemovedBookmark": {
-        "description": "Message to show that a schedule has been unfavourited.",
-        "placeholders": {
-            "scheduleId": {
-                "type": "String",
-                "example": "p.TBSE2+2020+36+100+NML+en"
-            }
-        }
-    },
     "scaffoldMessageOpenExternalUrlFailed": "Could not open {webpageName}",
-    "@scaffoldMessageOpenExternalUrlFailed": {
-        "description": "Message to show that opening an external webpage failed",
-        "placeholders": {
-            "webpageName": {
-                "type": "String",
-                "example": "Kronox"
-            }
-        }
-    },
     "scaffoldMessageUpdatedCourseColor": "Updated course color for {courseName}",
-    "@scaffoldMessageUpdatedCourseColor": {
-        "description": "Message to show that a course color has been changed.",
-        "placeholders": {
-            "courseName": {
-                "type": "String",
-                "example": "Math"
-            }
-        }
-    },
     "runtimeErrorProgramFetch": "No program found",
     "runtimeErrorScheduleFetch": "No schedule found",
     "runtimeErrorTimeout": "Search timed out",

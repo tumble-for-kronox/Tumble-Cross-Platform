@@ -32,18 +32,10 @@ class TumbleNavigationBar extends StatelessWidget {
                   CupertinoIcons.search,
                 ),
                 label: S.searchPage.title()),
-            BottomNavigationBarItem(
-                icon: const Icon(CupertinoIcons.collections),
-                label: S.weekViewPage.title()),
-            BottomNavigationBarItem(
-                icon: const Icon(CupertinoIcons.list_bullet_indent),
-                label: S.listViewPage.title()),
-            BottomNavigationBarItem(
-                icon: const Icon(CupertinoIcons.calendar_today),
-                label: S.calendarViewPage.title()),
-            BottomNavigationBarItem(
-                icon: const Icon(CupertinoIcons.person),
-                label: S.authorizedPage.title()),
+            BottomNavigationBarItem(icon: const Icon(CupertinoIcons.collections), label: S.listViewPage.title()),
+            BottomNavigationBarItem(icon: const Icon(CupertinoIcons.list_bullet_indent), label: S.weekViewPage.title()),
+            BottomNavigationBarItem(icon: const Icon(CupertinoIcons.calendar_today), label: S.calendarViewPage.title()),
+            BottomNavigationBarItem(icon: const Icon(CupertinoIcons.person), label: S.authorizedPage.title()),
           ],
         );
       },
