@@ -19,14 +19,14 @@ part 'auth_state.dart';
 class AuthCubit extends Cubit<AuthState> {
   AuthCubit()
       : super(AuthState(
-            autoSignup:
-                getIt<SharedPreferences>().getBool(PreferenceTypes.autoSignup)!,
-            authStatus: AuthStatus.INITIAL,
-            userEventListStatus: UserEventListStatus.INITIAL,
-            usernameController: TextEditingController(),
-            refreshSession: true,
-            passwordController: TextEditingController(),
-            passwordHidden: true)) {
+          autoSignup: getIt<SharedPreferences>().getBool(PreferenceTypes.autoSignup)!,
+          authStatus: AuthStatus.INITIAL,
+          userEventListStatus: UserEventListStatus.INITIAL,
+          usernameController: TextEditingController(),
+          passwordController: TextEditingController(),
+          passwordHidden: true,
+          loginSuccess: false,
+        )) {
     login().then((value) {
       if (state.authStatus == AuthStatus.AUTHENTICATED) {
         log("GETING USER EVENTS");
@@ -143,8 +143,10 @@ class AuthCubit extends Cubit<AuthState> {
           PreferenceTypes.school,
           school,
         );
-        emit(state.copyWith(
-            authStatus: AuthStatus.AUTHENTICATED, userSession: userRes.data!));
+        emit(state.copyWith(loginSuccess: true));
+        await Future.delayed(const Duration(seconds: 2));
+        emit(state.copyWith(authStatus: AuthStatus.AUTHENTICATED, userSession: userRes.data!));
+
         getUserEvents();
         break;
       case ApiUserResponseStatus.ERROR:
@@ -210,8 +212,8 @@ class AuthCubit extends Cubit<AuthState> {
 
   void logout() {
     getIt<SecureStorageRepository>().clear();
-    emit(state.copyWith(
-        authStatus: AuthStatus.UNAUTHENTICATED, userSession: null));
+    emit(state.copyWith(authStatus: AuthStatus.UNAUTHENTICATED, userSession: null, loginSuccess: false));
+
   }
 
   bool get authenticated => state.authStatus == AuthStatus.AUTHENTICATED;
