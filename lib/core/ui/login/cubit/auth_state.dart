@@ -13,8 +13,8 @@ class AuthState extends Equatable {
   final TextEditingController usernameController;
   final TextEditingController passwordController;
   final bool passwordHidden;
-  final bool refreshSession;
   final bool autoSignup;
+  final bool loginSuccess;
   final UserEventCollectionModel? userEvents;
 
   const AuthState({
@@ -24,11 +24,11 @@ class AuthState extends Equatable {
     required this.usernameController,
     required this.passwordController,
     required this.passwordHidden,
+    required this.loginSuccess,
     this.userSession,
     this.errorMessage,
     this.school,
     this.userEvents,
-    this.refreshSession = false,
   });
 
   AuthState copyWith(
@@ -42,7 +42,8 @@ class AuthState extends Equatable {
       TextEditingController? passwordController,
       KronoxUserModel? userSession,
       bool? passwordHidden,
-      bool? autoSignup}) {
+      bool? autoSignup,
+      bool? loginSuccess}) {
     return AuthState(
       autoSignup: autoSignup ?? this.autoSignup,
       authStatus: authStatus ?? this.authStatus,
@@ -54,7 +55,7 @@ class AuthState extends Equatable {
       userSession: userSession ?? this.userSession,
       passwordHidden: passwordHidden ?? this.passwordHidden,
       userEvents: userEvents ?? this.userEvents,
-      refreshSession: refreshSession ?? this.refreshSession,
+      loginSuccess: loginSuccess ?? this.loginSuccess,
     );
   }
 
@@ -62,12 +63,12 @@ class AuthState extends Equatable {
   List<Object?> get props => [
         userEventListStatus,
         userEvents,
-        refreshSession,
         authStatus,
         usernameController,
         passwordController,
         passwordHidden,
         userSession,
         autoSignup,
+        loginSuccess,
       ];
 }
