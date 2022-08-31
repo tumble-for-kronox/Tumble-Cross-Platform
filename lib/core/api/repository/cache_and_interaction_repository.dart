@@ -1,5 +1,5 @@
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tumble/core/api/apiservices/api_response.dart';
+import 'package:tumble/core/api/apiservices/api_schedule_or_programme_response.dart';
 import 'package:tumble/core/api/interface/icache_and_interaction_service.dart';
 import 'package:tumble/core/api/repository/backend_repository.dart';
 import 'package:tumble/core/database/database_response.dart';
@@ -15,25 +15,28 @@ class CacheAndInteractionRepository implements ICacheAndInteractionService {
   final _databaseService = getIt<DatabaseRepository>();
 
   @override
-  Future<ApiResponse> programSearchDispatcher(String searchQuery) async {
+  Future<ApiScheduleOrProgrammeResponse> programSearchDispatcher(
+      String searchQuery) async {
     String defaultSchool =
         _preferenceService.getString(PreferenceTypes.school)!;
-    ApiResponse response =
+    ApiScheduleOrProgrammeResponse response =
         await _backendService.getPrograms(searchQuery, defaultSchool);
     return response;
   }
 
   @override
-  Future<ApiResponse> scheduleFetchDispatcher(scheduleId) async {
+  Future<ApiScheduleOrProgrammeResponse> scheduleFetchDispatcher(
+      scheduleId) async {
     String defaultSchool =
         _preferenceService.getString(PreferenceTypes.school)!;
-    ApiResponse response =
+    ApiScheduleOrProgrammeResponse response =
         await _backendService.getRequestSchedule(scheduleId, defaultSchool);
     return response;
   }
 
   @override
-  Future<ApiResponse> getCachedOrNewSchedule(String scheduleId) async {
+  Future<ApiScheduleOrProgrammeResponse> getCachedOrNewSchedule(
+      String scheduleId) async {
     final bool favoritesContainsThisScheduleId = _preferenceService
         .getStringList(PreferenceTypes.bookmarks)!
         .map((json) => bookmarkedScheduleModelFromJson(json).scheduleId)
@@ -52,13 +55,14 @@ class CacheAndInteractionRepository implements ICacheAndInteractionService {
         /// Make sure that only if the user has an internet connection and the
         /// schedule is 'outdated', the app will display the new schedule.
         /// Otherwise it returns [ApiResponse.cached(userCachedSchedule)]
-        ApiResponse apiResponse = await scheduleFetchDispatcher(scheduleId);
+        ApiScheduleOrProgrammeResponse apiResponse =
+            await scheduleFetchDispatcher(scheduleId);
         if (apiResponse.data != null) {
           return apiResponse;
         }
       }
 
-      return ApiResponse.cached(userCachedSchedule);
+      return ApiScheduleOrProgrammeResponse.cached(userCachedSchedule);
     }
 
     /// fetch from backend

@@ -27,7 +27,7 @@ class _TumbleWeekViewState extends State<TumbleWeekView> {
           case MainAppStatus.INITIAL:
             return NoScheduleAvailable(
               errorType: RuntimeErrorType.noCachedSchedule(),
-              cupertinoAlertDialog: CustomCupertinoAlerts.noBookMarkedSchedules(
+              cupertinoAlertDialog: CustomAlertDialog.noBookMarkedSchedules(
                   context,
                   () => context
                       .read<MainAppNavigationCubit>()
@@ -54,7 +54,7 @@ class _TumbleWeekViewState extends State<TumbleWeekView> {
           case MainAppStatus.FETCH_ERROR:
             return NoScheduleAvailable(
               errorType: state.message!,
-              cupertinoAlertDialog: CustomCupertinoAlerts.fetchError(
+              cupertinoAlertDialog: CustomAlertDialog.fetchError(
                   context,
                   () => context
                       .read<MainAppNavigationCubit>()
@@ -64,18 +64,17 @@ class _TumbleWeekViewState extends State<TumbleWeekView> {
           case MainAppStatus.EMPTY_SCHEDULE:
             return NoScheduleAvailable(
               errorType: RuntimeErrorType.emptyScheduleError(),
-              cupertinoAlertDialog:
-                  CustomCupertinoAlerts.previewContainsNoViews(
-                      context,
-                      () => context
-                          .read<MainAppNavigationCubit>()
-                          .getNavBarItem(NavbarItem.SEARCH),
-                      navigator),
+              cupertinoAlertDialog: CustomAlertDialog.previewContainsNoViews(
+                  context,
+                  () => context
+                      .read<MainAppNavigationCubit>()
+                      .getNavBarItem(NavbarItem.SEARCH),
+                  navigator),
             );
           case MainAppStatus.NO_VIEW:
             return NoScheduleAvailable(
               errorType: RuntimeErrorType.noBookmarks(),
-              cupertinoAlertDialog: CustomCupertinoAlerts.noBookMarkedSchedules(
+              cupertinoAlertDialog: CustomAlertDialog.noBookMarkedSchedules(
                   context,
                   () => context
                       .read<MainAppNavigationCubit>()

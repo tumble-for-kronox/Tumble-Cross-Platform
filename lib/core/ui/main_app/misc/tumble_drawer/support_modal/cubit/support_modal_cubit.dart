@@ -5,7 +5,7 @@ class SupportModalCubit extends Cubit<SupportModalState> {
       : super(const SupportModalState(
             isSubjectValid: false,
             isBodyValid: false,
-            formSubmittedSuccessfully: false));
+            status: SupportModalStatus.INITIAL));
 
   final _backendService = getIt<BackendRepository>();
   final _textEditingControllerSubject = TextEditingController();
@@ -26,12 +26,16 @@ class SupportModalCubit extends Cubit<SupportModalState> {
     _textEditingControllerBody.addListener(bodyListener);
   }
 
-  void sendBugReport() async {
+  Future<void> sendBugReport() async {
     final String subject = _textEditingControllerSubject.text;
     final String body = _textEditingControllerBody.text;
-    final ApiResponse response =
+    final ApiBugReportResponse response =
         await _backendService.postSubmitIssue(subject, body);
-    // Do something with response ...
+    if (response.status == ApiBugReportResponseStatus.SUCCESS) {
+      emit(state.copyWith(status: SupportModalStatus.SENT));
+    } else {
+      emit(state.copyWith(status: SupportModalStatus.ERROR));
+    }
   }
 
   void subjectListener() {
@@ -48,5 +52,9 @@ class SupportModalCubit extends Cubit<SupportModalState> {
     } else {
       emit(state.copyWith(isBodyValid: false));
     }
+  }
+
+  void setLoading() {
+    emit(state.copyWith(status: SupportModalStatus.LOADING));
   }
 }

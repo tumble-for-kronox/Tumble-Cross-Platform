@@ -68,7 +68,7 @@ class _MainAppNavigationRootPageState extends State<MainAppNavigationRootPage> {
                               .then((_) {
                             BlocProvider.of<MainAppCubit>(context).setLoading();
                             BlocProvider.of<MainAppCubit>(context)
-                                .attemptCachedFetch();
+                                .attemptToFetchCachedSchedules();
                             BlocProvider.of<MainAppNavigationCubit>(context)
                                 .getNavBarItem(NavbarItem.LIST);
                           });

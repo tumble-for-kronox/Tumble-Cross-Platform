@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 class NoScheduleAvailable extends StatelessWidget {
   final String errorType;
-  final CupertinoAlertDialog? cupertinoAlertDialog;
+  final AlertDialog? cupertinoAlertDialog;
   const NoScheduleAvailable(
       {Key? key, required this.errorType, required this.cupertinoAlertDialog})
       : super(key: key);

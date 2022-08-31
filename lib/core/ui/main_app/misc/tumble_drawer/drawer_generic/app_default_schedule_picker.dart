@@ -14,7 +14,8 @@ class AppFavoriteScheduleToggle extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<AppFavoriteScheduleToggle> createState() => _AppFavoriteScheduleToggleState();
+  State<AppFavoriteScheduleToggle> createState() =>
+      _AppFavoriteScheduleToggleState();
 }
 
 class _AppFavoriteScheduleToggleState extends State<AppFavoriteScheduleToggle> {
@@ -33,10 +34,16 @@ class _AppFavoriteScheduleToggleState extends State<AppFavoriteScheduleToggle> {
             child: Card(
           elevation: 0,
           color: Theme.of(context).colorScheme.surface,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
           child: SingleChildScrollView(
             child: Column(
-                children: (context.read<DrawerCubit>().state.bookmarks!.map((bookmark) => bookmark.scheduleId).toList())
+                children: (context
+                        .read<DrawerCubit>()
+                        .state
+                        .bookmarks!
+                        .map((bookmark) => bookmark.scheduleId)
+                        .toList())
                     .map((id) {
               return BlocBuilder<DrawerCubit, DrawerState>(
                 builder: (context, state) {
@@ -52,20 +59,25 @@ class _AppFavoriteScheduleToggleState extends State<AppFavoriteScheduleToggle> {
                           ),
                           onPressed: () async {
                             BlocProvider.of<MainAppCubit>(context).setLoading();
-                            context
-                                .read<DrawerCubit>()
-                                .removeBookmark(id)
-                                .then((_) => context.read<MainAppCubit>().attemptCachedFetch());
+                            context.read<DrawerCubit>().removeBookmark(id).then(
+                                (_) => context
+                                    .read<MainAppCubit>()
+                                    .attemptToFetchCachedSchedules());
                           }),
-                      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
+                      shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(20))),
                       title: Text(
                         id,
-                        style: TextStyle(color: Theme.of(context).colorScheme.onBackground),
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.onBackground),
                       ),
                       onChanged: (bool value) {
-                        BlocProvider.of<DrawerCubit>(context).toggleSchedule(id, value);
+                        BlocProvider.of<DrawerCubit>(context)
+                            .toggleSchedule(id, value);
                         BlocProvider.of<MainAppCubit>(context).setLoading();
-                        BlocProvider.of<MainAppCubit>(context).attemptCachedFetch().then((value) {
+                        BlocProvider.of<MainAppCubit>(context)
+                            .attemptToFetchCachedSchedules()
+                            .then((value) {
                           if (state.bookmarks!.isEmpty) {
                             Navigator.of(context).pop();
                           }
@@ -78,7 +90,8 @@ class _AppFavoriteScheduleToggleState extends State<AppFavoriteScheduleToggle> {
                       alignment: Alignment.bottomCenter,
                       child: Container(
                         height: 240,
-                        margin: const EdgeInsets.only(bottom: 25, left: 12, right: 12),
+                        margin: const EdgeInsets.only(
+                            bottom: 25, left: 12, right: 12),
                         decoration: BoxDecoration(
                           color: Theme.of(context).colorScheme.surface,
                           borderRadius: BorderRadius.circular(20),
@@ -87,11 +100,16 @@ class _AppFavoriteScheduleToggleState extends State<AppFavoriteScheduleToggle> {
                             child: Card(
                                 elevation: 0,
                                 color: Theme.of(context).colorScheme.surface,
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10.0)),
                                 child: Center(
                                     child: Text(
                                   S.settingsPage.bookmarksEmpty(),
-                                  style: TextStyle(fontSize: 20, color: Theme.of(context).colorScheme.onSurface),
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onSurface),
                                 )))),
                       ),
                     );

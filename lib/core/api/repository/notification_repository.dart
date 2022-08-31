@@ -113,18 +113,24 @@ class NotificationRepository implements INotificationService {
 
   @override
   Future<bool> initialize() async {
-    final bookmarkedScheduleIds = getIt<SharedPreferences>()
-        .getStringList(PreferenceTypes.bookmarks)!
-        .map((e) => bookmarkedScheduleModelFromJson(e).scheduleId);
-    return await getIt<AwesomeNotifications>().initialize(
-        _defaultIcon,
-        bookmarkedScheduleIds
-            .map((scheduleId) =>
-                _notificationServiceBuilder.buildNotificationChannel(
-                    channelKey: scheduleId,
-                    channelName: 'Channel for $scheduleId',
-                    channelDescription:
-                        'A notification channel for the schedule under id -> $scheduleId'))
-            .toList());
+    if (getIt<SharedPreferences>().getStringList(PreferenceTypes.bookmarks) !=
+        null) {
+      final List<String> bookmarkedScheduleIds = getIt<SharedPreferences>()
+          .getStringList(PreferenceTypes.bookmarks)!
+          .map((e) => bookmarkedScheduleModelFromJson(e).scheduleId)
+          .toList();
+
+      return await getIt<AwesomeNotifications>().initialize(
+          _defaultIcon,
+          bookmarkedScheduleIds
+              .map((scheduleId) =>
+                  _notificationServiceBuilder.buildNotificationChannel(
+                      channelKey: scheduleId,
+                      channelName: 'Channel for $scheduleId',
+                      channelDescription:
+                          'A notification channel for the schedule under id -> $scheduleId'))
+              .toList());
+    }
+    return false;
   }
 }

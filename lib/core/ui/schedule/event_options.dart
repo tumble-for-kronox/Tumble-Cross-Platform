@@ -70,9 +70,6 @@ class EventOptions extends StatelessWidget {
                     if (event.from.isAfter(DateTime.now()))
                       _buildNotificationTiles(notificationIsSetForEvent,
                           notificationIsSetForCourse),
-                    const Divider(
-                      height: 1,
-                    ),
                     ListTile(
                       leading: Icon(CupertinoIcons.color_filter,
                           color: Theme.of(context).colorScheme.onSurface),
@@ -228,7 +225,10 @@ class EventOptions extends StatelessWidget {
             }
           }
         },
-      )
+      ),
+      const Divider(
+        height: 1,
+      ),
     ]);
   }
 }
