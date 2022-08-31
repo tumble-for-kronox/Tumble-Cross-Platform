@@ -1,5 +1,5 @@
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tumble/core/api/apiservices/api_response.dart';
+import 'package:tumble/core/api/apiservices/api_schedule_or_programme_response.dart';
 import 'package:tumble/core/api/repository/backend_repository.dart';
 import 'package:tumble/core/api/repository/notification_repository.dart';
 import 'package:tumble/core/database/repository/database_repository.dart';
@@ -43,11 +43,12 @@ class BackgroundTask {
         }
 
         // Update schedule forcefully
-        ApiResponse apiResponseOfNewScheduleModel = await backendService
-            .getRequestSchedule(cachedScheduleModel.id, defaultUserSchool);
+        ApiScheduleOrProgrammeResponse apiResponseOfNewScheduleModel =
+            await backendService.getRequestSchedule(
+                cachedScheduleModel.id, defaultUserSchool);
 
         switch (apiResponseOfNewScheduleModel.status) {
-          case ApiStatus.FETCHED:
+          case ApiScheduleOrProgrammeStatus.FETCHED:
             ScheduleModel newScheduleModel =
                 apiResponseOfNewScheduleModel.data!;
 

@@ -1,35 +1,43 @@
 import 'package:flutter/foundation.dart';
+import 'package:tumble/core/api/apiservices/api_bug_report_response.dart';
+import 'package:tumble/core/api/apiservices/api_schedule_or_programme_response.dart';
+import 'package:tumble/core/api/apiservices/api_user_response.dart';
 
 @immutable
 abstract class IBackendService {
   /// [HttpGet]
-  Future<dynamic> getRequestSchedule(String scheduleId, String defaultSchool);
+  Future<ApiScheduleOrProgrammeResponse> getRequestSchedule(
+      String scheduleId, String defaultSchool);
 
   /// [HttpGet]
-  Future<dynamic> getPrograms(String searchQuery, String defaultSchool);
+  Future<ApiScheduleOrProgrammeResponse> getPrograms(
+      String searchQuery, String defaultSchool);
 
   /// [HttpGet]
-  Future<dynamic> getUserEvents(String sessionToken, String defaultSchool);
+  Future<ApiUserResponse> getUserEvents(
+      String sessionToken, String defaultSchool);
 
   /// [HttpGet]
-  Future<dynamic> getRefreshSession(String refreshToken, String defaultSchool);
+  Future<ApiUserResponse> getRefreshSession(
+      String refreshToken, String defaultSchool);
 
   /// [HttpPost]
-  Future<dynamic> postUserLogin(
+  Future<ApiUserResponse> postUserLogin(
       String username, String password, String defaultSchool);
 
   /// [HttpPut]
-  Future<dynamic> putRegisterUserEvent(
+  Future<ApiUserResponse> putRegisterUserEvent(
       String eventId, String sessionToken, String defaultSchool);
 
   /// [HttpPut]
-  Future<dynamic> putUnregisterUserEvent(
+  Future<ApiUserResponse> putUnregisterUserEvent(
       String eventId, String sessionToken, String defaultSchool);
 
   /// [HttpPut]
-  Future putRegisterAllAvailableUserEvents(
+  Future<ApiUserResponse> putRegisterAllAvailableUserEvents(
       String sessionToken, String defaultSchool);
 
   /// [HttpPost]
-  Future<dynamic> postSubmitIssue(String issueSubject, String issueBody);
+  Future<ApiBugReportResponse> postSubmitIssue(
+      String issueSubject, String issueBody);
 }

@@ -7,7 +7,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tumble/core/api/apiservices/api_response.dart';
+import 'package:tumble/core/api/apiservices/api_schedule_or_programme_response.dart';
 import 'package:tumble/core/api/builders/notification_service_builder.dart';
 import 'package:tumble/core/api/repository/cache_and_interaction_repository.dart';
 import 'package:tumble/core/database/repository/database_repository.dart';
@@ -19,7 +19,8 @@ import 'package:tumble/core/models/ui_models/schedule_model_and_courses.dart';
 import 'package:tumble/core/models/ui_models/week_model.dart';
 import 'package:tumble/core/shared/preference_types.dart';
 import 'package:tumble/core/dependency_injection/get_it_instances.dart';
-import 'package:tumble/core/api/apiservices/api_response.dart' as api;
+import 'package:tumble/core/api/apiservices/api_schedule_or_programme_response.dart'
+    as api;
 import 'package:tumble/core/ui/data/groups/scaffold_message_types.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
 import 'package:tumble/core/ui/data/scaffold_message_types.dart';
@@ -30,7 +31,7 @@ part 'main_app_state.dart';
 class MainAppCubit extends Cubit<MainAppState> {
   MainAppCubit()
       : super(const MainAppState(
-            status: MainAppStatus.INITIAL,
+            status: MainAppStatus.LOADING,
             listOfDays: null,
             listOfWeeks: null,
             listViewToTopButtonVisible: false,
@@ -56,7 +57,7 @@ class MainAppCubit extends Cubit<MainAppState> {
   }
 
   Future<void> init() async {
-    await attemptCachedFetch();
+    await attemptToFetchCachedSchedules();
     _listViewScrollController.addListener((setScrollController));
   }
 
@@ -66,9 +67,7 @@ class MainAppCubit extends Cubit<MainAppState> {
     return super.close();
   }
 
-  Future<void> attemptCachedFetch() async {
-    dev.log(
-        'TRYCACHED SCHEDULES: ${getIt<SharedPreferences>().getStringList(PreferenceTypes.bookmarks)!}');
+  Future<void> attemptToFetchCachedSchedules() async {
     final currentScheduleIds = getIt<SharedPreferences>()
         .getStringList(PreferenceTypes.bookmarks)!
         .map((json) => bookmarkedScheduleModelFromJson(json).scheduleId)
@@ -95,12 +94,13 @@ class MainAppCubit extends Cubit<MainAppState> {
 
       if (scheduleId != null && userHasBookmarks) {
         if (currentScheduleIsToggledToBeVisible) {
-          final ApiResponse _apiResponse = await _cacheAndInteractionService
-              .getCachedOrNewSchedule(scheduleId);
+          final ApiScheduleOrProgrammeResponse _apiResponse =
+              await _cacheAndInteractionService
+                  .getCachedOrNewSchedule(scheduleId);
 
           switch (_apiResponse.status) {
-            case ApiStatus.FETCHED:
-            case ApiStatus.CACHED:
+            case ApiScheduleOrProgrammeStatus.FETCHED:
+            case ApiScheduleOrProgrammeStatus.CACHED:
               ScheduleModel currentScheduleModel = _apiResponse.data!;
               if (currentScheduleModel.isNotPhonySchedule()) {
                 matrixListOfDays.add(currentScheduleModel.days);
@@ -291,7 +291,7 @@ class MainAppCubit extends Cubit<MainAppState> {
         .then((value) {
       showScaffoldMessage(
           context, S.scaffoldMessages.updatedCourseColor(course.englishName));
-      attemptCachedFetch();
+      attemptToFetchCachedSchedules();
     });
   }
 
@@ -307,17 +307,18 @@ class MainAppCubit extends Cubit<MainAppState> {
         .toList();
 
     for (var bookmark in bookmarks) {
-      final ApiResponse _apiResponse = await _cacheAndInteractionService
-          .scheduleFetchDispatcher(bookmark.scheduleId);
+      final ApiScheduleOrProgrammeResponse _apiResponse =
+          await _cacheAndInteractionService
+              .scheduleFetchDispatcher(bookmark.scheduleId);
 
       switch (_apiResponse.status) {
-        case ApiStatus.FETCHED:
+        case ApiScheduleOrProgrammeStatus.FETCHED:
           await _databaseService.update(_apiResponse.data as ScheduleModel);
           break;
         default:
           break;
       }
     }
-    await attemptCachedFetch();
+    await attemptToFetchCachedSchedules();
   }
 }
