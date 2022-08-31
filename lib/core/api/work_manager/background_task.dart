@@ -15,7 +15,7 @@ class BackgroundTask {
     final databaseService = getIt<DatabaseRepository>();
     final notificationService = getIt<NotificationRepository>();
 
-    final bookmarkedSchedulesVisible = preferenceService
+    final bookmarkedSchedulesToggledToBeVisible = preferenceService
         .getStringList(PreferenceTypes.bookmarks)!
         .map((json) => bookmarkedScheduleModelFromJson(json))
         .where((bookmark) => bookmark.toggledValue == true);
@@ -23,36 +23,39 @@ class BackgroundTask {
     final defaultUserSchool =
         preferenceService.getString(PreferenceTypes.school);
 
-    if (bookmarkedSchedulesVisible.isEmpty || defaultUserSchool == null) {
+    if (bookmarkedSchedulesToggledToBeVisible.isEmpty ||
+        defaultUserSchool == null) {
       return;
     }
 
-    List<ScheduleModel?> storedScheduleModels = [];
-    for (BookmarkedScheduleModel bookmarkedScheduleModel
-        in bookmarkedSchedulesVisible) {
-      storedScheduleModels.add(await databaseService
-          .getOneSchedule(bookmarkedScheduleModel.scheduleId));
-    }
+    List<ScheduleModel?> cachedScheduleModels = await Future.wait(
+        bookmarkedSchedulesToggledToBeVisible
+            .map((bookmarkedScheduleModel) async => (await databaseService
+                .getOneSchedule(bookmarkedScheduleModel.scheduleId)))
+            .toList());
 
-    for (ScheduleModel? storedScheduleModel in storedScheduleModels) {
-      if (storedScheduleModel != null) {
+    for (ScheduleModel? cachedScheduleModel in cachedScheduleModels) {
+      if (cachedScheduleModel != null) {
         // Don't update cache if the schedule was cached anytime within the past 30 minutes
-        if (storedScheduleModel.cachedAt
+        if (cachedScheduleModel.cachedAt
             .isAfter(DateTime.now().subtract(const Duration(minutes: 30)))) {
           return;
         }
 
-        // Update schedule
+        // Update schedule forcefully
         ApiResponse apiResponseOfNewScheduleModel = await backendService
-            .getRequestSchedule(storedScheduleModel.id, defaultUserSchool);
+            .getRequestSchedule(cachedScheduleModel.id, defaultUserSchool);
+
         switch (apiResponseOfNewScheduleModel.status) {
           case ApiStatus.FETCHED:
             ScheduleModel newScheduleModel =
                 apiResponseOfNewScheduleModel.data!;
-            if (newScheduleModel != storedScheduleModel) {
+
+            if (newScheduleModel != cachedScheduleModel) {
               databaseService.update(newScheduleModel);
+
               notificationService.updateDispatcher(
-                  newScheduleModel, storedScheduleModel);
+                  newScheduleModel, cachedScheduleModel);
             }
             break;
           default:

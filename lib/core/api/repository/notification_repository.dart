@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:darq/darq.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tumble/core/api/builders/notification_service_builder.dart';
 import 'package:tumble/core/api/interface/inotification_service.dart';
@@ -74,10 +75,14 @@ class NotificationRepository implements INotificationService {
             notificationModel.content!.id.toString())
         .toList();
 
-    final Set<Event> newEvents =
-        newScheduleModel.days.expand((Day day) => day.events).toSet();
-    final Set<Event> oldEvents =
-        oldScheduleModel.days.expand((Day day) => day.events).toSet();
+    final Set<Event> newEvents = newScheduleModel.days
+        .expand((Day day) => day.events)
+        .distinct((e) => e.id)
+        .toSet();
+    final Set<Event> oldEvents = oldScheduleModel.days
+        .expand((Day day) => day.events)
+        .distinct((e) => e.id)
+        .toSet();
 
     /// Get all differing events by performing set subtraction on
     /// [oldEvents] and [newEvents], then filter to only get the
@@ -87,6 +92,8 @@ class NotificationRepository implements INotificationService {
         .where((Event event) => notificationChannelKeys
             .contains(event.id.encodeUniqueIdentifier().toString()))
         .toList();
+
+    log(eventsThatNeedReassign.toString());
 
     for (Event event in eventsThatNeedReassign) {
       _notificationServiceBuilder.buildNotification(
