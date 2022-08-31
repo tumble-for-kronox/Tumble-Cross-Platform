@@ -112,7 +112,8 @@ class SupportModalShell extends StatelessWidget {
                     topLeft: Radius.circular(20),
                     topRight: Radius.circular(20))),
             child: Column(
-              crossAxisAlignment: status == SupportModalStatus.INITIAL
+              crossAxisAlignment: (status == SupportModalStatus.INITIAL ||
+                      status == SupportModalStatus.ERROR)
                   ? CrossAxisAlignment.start
                   : CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
@@ -121,7 +122,7 @@ class SupportModalShell extends StatelessWidget {
                   _buildTextFormFields(),
                 Center(
                     child: FractionallySizedBox(
-                  widthFactor: .6,
+                  widthFactor: (status == SupportModalStatus.INITIAL) ? .6 : .9,
                   child: () {
                     switch (status) {
                       case SupportModalStatus.INITIAL:
@@ -140,9 +141,20 @@ class SupportModalShell extends StatelessWidget {
                           text: 'Bug report sent!',
                         );
                       case SupportModalStatus.ERROR:
-                        const Text(
-                            'There was an error with your request. Please try again at a later time');
-                        break;
+                        return Container(
+                          padding: const EdgeInsets.all(15),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
+                            color: CustomColors.orangePrimary,
+                          ),
+                          child: Text(
+                            'There was an error with your request!\nPlease try again at a later time',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontSize: 16,
+                                color: Theme.of(context).colorScheme.onPrimary),
+                          ),
+                        );
                     }
                   }(),
                 )),
@@ -177,9 +189,6 @@ class SupportModalShell extends StatelessWidget {
 
   _buildTextFormFields() => Column(
         children: [
-          const SizedBox(
-            height: 20,
-          ),
           TextFormField(
             autovalidateMode: AutovalidateMode.onUserInteraction,
             autocorrect: true,
