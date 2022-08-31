@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:tumble/core/extensions/extensions.dart';
 import 'package:tumble/core/models/api_models/schedule_model.dart';
+import 'package:tumble/core/ui/data/string_constants.dart';
 import 'package:tumble/core/ui/main_app/cubit/main_app_cubit.dart';
 import 'package:tumble/core/ui/schedule/event_options.dart';
 import 'package:tumble/core/ui/schedule/modal_info_row.dart';
@@ -19,8 +20,7 @@ class PreviewEventModal extends StatelessWidget {
     required this.color,
   }) : super(key: key);
 
-  static void showPreviewEventModal(BuildContext context, Event event,
-      Color color, SearchPageCubit searchPageCubit) {
+  static void showPreviewEventModal(BuildContext context, Event event, Color color, SearchPageCubit searchPageCubit) {
     showModalBottomSheet(
         isScrollControlled: true,
         enableDrag: true,
@@ -46,9 +46,7 @@ class PreviewEventModal extends StatelessWidget {
             padding: const EdgeInsets.only(left: 20, right: 20, top: 50),
             decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.background,
-                borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    topRight: Radius.circular(20))),
+                borderRadius: const BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20))),
             child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -57,8 +55,7 @@ class PreviewEventModal extends StatelessWidget {
                     height: 10,
                   ),
                   Container(
-                    padding: const EdgeInsets.only(
-                        right: 0, left: 0, top: 5, bottom: 10),
+                    padding: const EdgeInsets.only(right: 0, left: 0, top: 5, bottom: 10),
                     child: FractionallySizedBox(
                       widthFactor: 0.9,
                       child: Text(
@@ -81,23 +78,22 @@ class PreviewEventModal extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       ModalInfoRow(
-                        title: 'Date',
+                        title: S.detailsModal.date(),
                         icon: const Icon(CupertinoIcons.calendar),
                         subtitle:
                             '${DateFormat.d().format(event.from)} ${DateFormat('MMMM').format(event.from)} ${DateFormat.y().format(event.from)}',
                       ),
                       const SizedBox(height: 25),
                       ModalInfoRow(
-                        title: 'Time',
+                        title: S.detailsModal.time(),
                         icon: const Icon(CupertinoIcons.clock),
-                        subtitle:
-                            '${DateFormat.Hm().format(event.from)} - ${DateFormat.Hm().format(event.to)}',
+                        subtitle: '${DateFormat.Hm().format(event.from)} - ${DateFormat.Hm().format(event.to)}',
                       ),
                       const SizedBox(
                         height: 25,
                       ),
                       ModalInfoRow(
-                        title: 'Location',
+                        title: S.detailsModal.location(),
                         icon: const Icon(CupertinoIcons.location),
                         locations: locations,
                       ),
@@ -105,7 +101,7 @@ class PreviewEventModal extends StatelessWidget {
                         height: 25,
                       ),
                       ModalInfoRow(
-                        title: 'Course',
+                        title: S.detailsModal.course(),
                         icon: const Icon(CupertinoIcons.book),
                         subtitle: event.course.englishName,
                       ),
@@ -113,7 +109,7 @@ class PreviewEventModal extends StatelessWidget {
                         height: 25,
                       ),
                       ModalInfoRow(
-                        title: 'Teachers',
+                        title: S.detailsModal.teachers(),
                         icon: const Icon(CupertinoIcons.person_2),
                         teachers: event.teachers,
                       ),
@@ -137,7 +133,7 @@ class PreviewEventModal extends StatelessWidget {
                 ),
               ),
               child: Text(
-                "DETAILS",
+                S.detailsModal.title(),
                 style: TextStyle(
                   fontSize: 16,
                   color: color.contrastColor(),
@@ -163,8 +159,7 @@ class TumbleEventModal extends StatelessWidget {
     required this.mainAppCubit,
   }) : super(key: key);
 
-  static void showBookmarkEventModal(BuildContext context, Event event,
-      Color color, MainAppCubit mainAppCubit) {
+  static void showBookmarkEventModal(BuildContext context, Event event, Color color, MainAppCubit mainAppCubit) {
     showModalBottomSheet(
         isScrollControlled: true,
         enableDrag: true,
@@ -190,9 +185,7 @@ class TumbleEventModal extends StatelessWidget {
             padding: const EdgeInsets.only(left: 20, right: 20, top: 50),
             decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.background,
-                borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    topRight: Radius.circular(20))),
+                borderRadius: const BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20))),
             child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -201,8 +194,7 @@ class TumbleEventModal extends StatelessWidget {
                     height: 10,
                   ),
                   Container(
-                    padding: const EdgeInsets.only(
-                        right: 0, left: 0, top: 5, bottom: 10),
+                    padding: const EdgeInsets.only(right: 0, left: 0, top: 5, bottom: 10),
                     child: FractionallySizedBox(
                       widthFactor: 0.9,
                       child: Text(
@@ -225,23 +217,22 @@ class TumbleEventModal extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       ModalInfoRow(
-                        title: 'Date',
+                        title: S.detailsModal.date(),
                         icon: const Icon(CupertinoIcons.calendar),
                         subtitle:
                             '${DateFormat.d().format(event.from)} ${DateFormat('MMMM').format(event.from)} ${DateFormat.y().format(event.from)}',
                       ),
                       const SizedBox(height: 25),
                       ModalInfoRow(
-                        title: 'Time',
+                        title: S.detailsModal.time(),
                         icon: const Icon(CupertinoIcons.clock),
-                        subtitle:
-                            '${DateFormat.Hm().format(event.from)} - ${DateFormat.Hm().format(event.to)}',
+                        subtitle: '${DateFormat.Hm().format(event.from)} - ${DateFormat.Hm().format(event.to)}',
                       ),
                       const SizedBox(
                         height: 25,
                       ),
                       ModalInfoRow(
-                        title: 'Location',
+                        title: S.detailsModal.location(),
                         icon: const Icon(CupertinoIcons.location),
                         locations: locations,
                       ),
@@ -249,7 +240,7 @@ class TumbleEventModal extends StatelessWidget {
                         height: 25,
                       ),
                       ModalInfoRow(
-                        title: 'Course',
+                        title: S.detailsModal.course(),
                         icon: const Icon(CupertinoIcons.book),
                         subtitle: event.course.englishName,
                       ),
@@ -257,7 +248,7 @@ class TumbleEventModal extends StatelessWidget {
                         height: 25,
                       ),
                       ModalInfoRow(
-                        title: 'Teachers',
+                        title: S.detailsModal.teachers(),
                         icon: const Icon(CupertinoIcons.person_2),
                         teachers: event.teachers,
                       ),
@@ -281,7 +272,7 @@ class TumbleEventModal extends StatelessWidget {
                 ),
               ),
               child: Text(
-                "DETAILS",
+                S.detailsModal.title(),
                 style: TextStyle(
                   fontSize: 16,
                   color: color.contrastColor(),
@@ -297,8 +288,7 @@ class TumbleEventModal extends StatelessWidget {
               child: IconButton(
                 splashRadius: 20,
                 color: color.contrastColor(),
-                onPressed: () =>
-                    EventOptions.showEventOptions(context, event, mainAppCubit),
+                onPressed: () => EventOptions.showEventOptions(context, event, mainAppCubit),
                 icon: const Icon(CupertinoIcons.ellipsis),
               ),
             ),

@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:tumble/core/extensions/extensions.dart';
 import 'package:tumble/core/models/api_models/available_user_event_model.dart';
 import 'package:tumble/core/ui/account/user_event_list/user_event_register_button.dart';
+import 'package:tumble/core/ui/data/string_constants.dart';
 
 import '../../../login/cubit/auth_cubit.dart';
 import '../../../schedule/modal_info_row.dart';
@@ -52,14 +53,14 @@ class RegisteredPassedUserEventModal extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       ModalInfoRow(
-                        title: 'Date',
+                        title: S.detailsModal.date(),
                         icon: const Icon(CupertinoIcons.calendar),
                         subtitle:
                             '${DateFormat.d().format(userEvent.eventStart)} ${DateFormat('MMMM').format(userEvent.eventStart)} ${DateFormat.y().format(userEvent.eventStart)}',
                       ),
                       const SizedBox(height: 25),
                       ModalInfoRow(
-                        title: 'Time',
+                        title: S.detailsModal.time(),
                         icon: const Icon(CupertinoIcons.clock),
                         subtitle:
                             '${DateFormat.Hm().format(userEvent.eventStart)} - ${DateFormat.Hm().format(userEvent.eventEnd)}',
@@ -68,7 +69,7 @@ class RegisteredPassedUserEventModal extends StatelessWidget {
                         height: 25,
                       ),
                       ModalInfoRow(
-                        title: "Type",
+                        title: S.detailsModal.type(),
                         icon: const Icon(CupertinoIcons.square_grid_2x2),
                         subtitle: userEvent.type,
                       ),
@@ -83,7 +84,7 @@ class RegisteredPassedUserEventModal extends StatelessWidget {
                         return userEvent.anonymousCode.isEmpty
                             ? Container()
                             : ModalInfoRow(
-                                title: "Anonymous Code",
+                                title: S.detailsModal.anonymousCode(),
                                 icon: const Icon(CupertinoIcons.lock),
                                 subtitle: userEvent.anonymousCode,
                               );
@@ -92,10 +93,11 @@ class RegisteredPassedUserEventModal extends StatelessWidget {
                         height: 25,
                       ),
                       ModalInfoRow(
-                        title: "Support",
+                        title: S.detailsModal.support(),
                         icon: const Icon(CupertinoIcons.question_circle),
-                        subtitle:
-                            userEvent.supportAvailable ? "Support available, enable on Kronox" : "No support available",
+                        subtitle: userEvent.supportAvailable
+                            ? S.detailsModal.supportAvailable()
+                            : S.detailsModal.supportUnavailable(),
                       ),
                     ],
                   )
@@ -123,9 +125,9 @@ class RegisteredPassedUserEventModal extends StatelessWidget {
                   topRight: Radius.circular(20),
                 ),
               ),
-              child: const Text(
-                "DETAILS",
-                style: TextStyle(
+              child: Text(
+                S.detailsModal.title(),
+                style: const TextStyle(
                   fontSize: 16,
                   color: Colors.white,
                   letterSpacing: 1.5,

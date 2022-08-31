@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:tumble/core/ui/data/string_constants.dart';
 
 class ToTopButton extends StatelessWidget {
   final VoidCallback scrollToTop;
@@ -14,9 +15,7 @@ class ToTopButton extends StatelessWidget {
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.background,
         borderRadius: BorderRadius.circular(5),
-        boxShadow: const <BoxShadow>[
-          BoxShadow(color: Colors.black26, blurRadius: 3, offset: Offset(0, 2))
-        ],
+        boxShadow: const <BoxShadow>[BoxShadow(color: Colors.black26, blurRadius: 3, offset: Offset(0, 2))],
       ),
       child: MaterialButton(
           onPressed: scrollToTop,
@@ -29,9 +28,8 @@ class ToTopButton extends StatelessWidget {
                 color: Theme.of(context).colorScheme.onSurface,
               ),
               Text(
-                'TOP',
-                style:
-                    TextStyle(color: Theme.of(context).colorScheme.onSurface),
+                S.listViewPage.toTopButton(),
+                style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
               )
             ],
           )),

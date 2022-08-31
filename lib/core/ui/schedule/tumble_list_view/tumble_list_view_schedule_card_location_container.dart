@@ -1,13 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tumble/core/models/api_models/schedule_model.dart';
+import 'package:tumble/core/ui/data/string_constants.dart';
 
 class ScheduleCardLocationContainer extends StatelessWidget {
   final List<Location> locations;
   final Color textColor;
-  const ScheduleCardLocationContainer(
-      {Key? key, required this.locations, required this.textColor})
-      : super(key: key);
+  const ScheduleCardLocationContainer({Key? key, required this.locations, required this.textColor}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +22,7 @@ class ScheduleCardLocationContainer extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                locations.isEmpty ? "Unknown" : locations.first.id,
+                locations.isEmpty ? S.general.unknown() : locations.first.id,
                 softWrap: true,
                 style: TextStyle(
                   color: textColor,

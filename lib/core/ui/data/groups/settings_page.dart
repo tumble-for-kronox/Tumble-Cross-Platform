@@ -5,24 +5,37 @@ class SettingsPageStrings extends StringConstantGroup {
   SettingsPageStrings(AppLocalizations localizedStrings) : super(localizedStrings);
 
   String title() => localizedStrings.settingsTitle;
-  String supportTitle() => localizedStrings.settingsSupportTitle;
-  String contactTitle() => localizedStrings.settingsSupportContactTitle;
-  String contactSubtitle() => localizedStrings.settingsSupportContactSubtitle;
+
   String commonTitle() => localizedStrings.settingsCommonTitle;
   String changeSchoolTitle() => localizedStrings.settingsCommonChangeSchoolsTitle;
   String changeSchoolSubtitle(String schoolAbbreviation) =>
       localizedStrings.settingsCommonChangeSchoolsSubtitle(schoolAbbreviation);
+  String chooseUniversity() => localizedStrings.settingsChooseUniversity;
   String changeThemeTitle() => localizedStrings.settingsCommonChangeThemeTitle;
   String changeThemeSubtitle(String themeName) => localizedStrings.settingsCommonChangeThemeSubtitle(themeName);
+
   String scheduleTitle() => localizedStrings.settingsScheduleTitle;
   String defaultScheduleTitle() => localizedStrings.settingsScheduleDefaultScheduleTitle;
-  String defaultScheduleEmptySubtitle() => localizedStrings.settingsScheduleDefaultScheduleSubtitleNoneSelected;
-  String defaultScheduleSubtitle(String scheduleId) =>
-      localizedStrings.settingsScheduleDefaultScheduleSubtitle(scheduleId);
+  String defaultScheduleSubtitle() => localizedStrings.settingsScheduleDefaultScheduleSubtitle;
+  String bookmarksEmpty() => localizedStrings.settingsScheduleNoBookmarks;
+
   String notificationTitle() => localizedStrings.settingsNotificationTitle;
   String clearAllTitle() => localizedStrings.settingsNotificationClearAllTitle;
   String clearAllSubtitle() => localizedStrings.settingsNotificationClearAllSubtitle;
   String offsetTitle() => localizedStrings.settingsNotificationOffsetTitle;
-  String offsetSubtitle(String notificationOffset) =>
-      localizedStrings.settingNotificationOffsetSubtitle(notificationOffset);
+  String offsetSubtitle(int notificationOffset) =>
+      localizedStrings.settingNotificationOffsetSubtitle + offsetTime(notificationOffset);
+  String offsetTime(int minutes) {
+    if (minutes < 60) {
+      return localizedStrings.settingsNotificationOffsetMinutes(minutes);
+    }
+
+    return localizedStrings.settingsNotificationOffsetHours(minutes ~/ 60);
+  }
+
+  String miscTitle() => localizedStrings.settingsMiscTitle;
+  String reportBugTitle() => localizedStrings.settingsMiscBugTitle;
+  String reportBugSubtitle() => localizedStrings.settingsMiscBugSubtitle;
+  String rateTitle() => localizedStrings.settingsMiscRateTitle;
+  String rateSubtitle(String storeName) => localizedStrings.settingsMiscRateSubtitle(storeName);
 }

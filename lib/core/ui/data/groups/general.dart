@@ -12,4 +12,6 @@ class GeneralStrings extends StringConstantGroup {
   String ok() => localizedStrings.ok;
   String toSearch() => localizedStrings.toSearch;
   String tryAgain() => localizedStrings.tryAgain;
+  String send() => localizedStrings.send;
+  String unknown() => localizedStrings.unknown;
 }

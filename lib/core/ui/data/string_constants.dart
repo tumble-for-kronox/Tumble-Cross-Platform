@@ -1,11 +1,13 @@
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:tumble/core/ui/data/groups/general.dart';
+import 'groups/details_modal.dart';
 import 'groups/event_options.dart';
 import 'groups/pop_up.dart';
 import 'groups/scaffold_message_types.dart';
 import 'groups/search_page.dart';
 import 'groups/list_view_page.dart';
+import 'groups/support_modal.dart';
 import 'groups/user_events.dart';
 import 'groups/week_view_page.dart';
 import 'groups/calendar_view_page.dart';
@@ -36,33 +38,25 @@ class S {
   static GeneralStrings? _general;
   static PopUpStrings? _popUps;
   static EventOptionsStrings? _eventOptions;
+  static DetailsModalStrings? _detailsModalStrings;
+  static SupportModalStrings? _supportModalStrings;
 
-  static ScaffoldMessageType get scaffoldMessages =>
-      _scaffoldMessages ??= ScaffoldMessageType(_localizedStrings!);
-  static SearchPageStrings get searchPage =>
-      _searchPage ??= SearchPageStrings(_localizedStrings!);
-  static ListViewPageStrings get listViewPage =>
-      _listViewPage ??= ListViewPageStrings(_localizedStrings!);
-  static WeekViewPageStrings get weekViewPage =>
-      _weekViewPage ??= WeekViewPageStrings(_localizedStrings!);
+  static ScaffoldMessageType get scaffoldMessages => _scaffoldMessages ??= ScaffoldMessageType(_localizedStrings!);
+  static SearchPageStrings get searchPage => _searchPage ??= SearchPageStrings(_localizedStrings!);
+  static ListViewPageStrings get listViewPage => _listViewPage ??= ListViewPageStrings(_localizedStrings!);
+  static WeekViewPageStrings get weekViewPage => _weekViewPage ??= WeekViewPageStrings(_localizedStrings!);
   static CalendarViewPageStrings get calendarViewPage =>
       _calendarViewPage ??= CalendarViewPageStrings(_localizedStrings!);
   static UnauthorizedPageStrings get unauthorizedPage =>
       _unauthorizedPage ??= UnauthorizedPageStrings(_localizedStrings!);
-  static AuthorizedPageStrings get authorizedPage =>
-      _authorizedPage ??= AuthorizedPageStrings(_localizedStrings!);
-  static LoginPageStrings get loginPage =>
-      _loginPage ??= LoginPageStrings(_localizedStrings!);
-  static SettingsPageStrings get settingsPage =>
-      _settingsPage ??= SettingsPageStrings(_localizedStrings!);
-  static RuntimeErrorStrings get runtimeError =>
-      _runtimeError ??= RuntimeErrorStrings(_localizedStrings!);
-  static UserEventStrings get userEvents =>
-      _userEvents ??= UserEventStrings(_localizedStrings!);
-  static GeneralStrings get general =>
-      _general ??= GeneralStrings(_localizedStrings!);
-  static PopUpStrings get popUps =>
-      _popUps ??= PopUpStrings(_localizedStrings!);
-  static EventOptionsStrings get eventOptions =>
-      _eventOptions ??= EventOptionsStrings(_localizedStrings!);
+  static AuthorizedPageStrings get authorizedPage => _authorizedPage ??= AuthorizedPageStrings(_localizedStrings!);
+  static LoginPageStrings get loginPage => _loginPage ??= LoginPageStrings(_localizedStrings!);
+  static SettingsPageStrings get settingsPage => _settingsPage ??= SettingsPageStrings(_localizedStrings!);
+  static RuntimeErrorStrings get runtimeError => _runtimeError ??= RuntimeErrorStrings(_localizedStrings!);
+  static UserEventStrings get userEvents => _userEvents ??= UserEventStrings(_localizedStrings!);
+  static GeneralStrings get general => _general ??= GeneralStrings(_localizedStrings!);
+  static PopUpStrings get popUps => _popUps ??= PopUpStrings(_localizedStrings!);
+  static EventOptionsStrings get eventOptions => _eventOptions ??= EventOptionsStrings(_localizedStrings!);
+  static DetailsModalStrings get detailsModal => _detailsModalStrings ??= DetailsModalStrings(_localizedStrings!);
+  static SupportModalStrings get supportModal => _supportModalStrings ??= SupportModalStrings(_localizedStrings!);
 }

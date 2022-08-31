@@ -13,9 +13,7 @@ class UserEventRegisterButton extends StatelessWidget {
   final bool linkToKronox;
   final Null Function()? onPressed;
 
-  const UserEventRegisterButton(
-      {Key? key, required this.linkToKronox, this.onPressed})
-      : super(key: key);
+  const UserEventRegisterButton({Key? key, required this.linkToKronox, this.onPressed}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,12 +25,12 @@ class UserEventRegisterButton extends StatelessWidget {
               await launchUrlString(urlString);
             },
             icon: const Icon(CupertinoIcons.person_crop_circle_badge_checkmark),
-            label: const Text("Open Kronox"),
+            label: Text(S.userEvents.openKronoxButton()),
           )
         : TextButton.icon(
             onPressed: onPressed,
             icon: const Icon(CupertinoIcons.person_crop_circle_badge_checkmark),
-            label: const Text("Register"),
+            label: Text(S.userEvents.registerButton()),
           );
   }
 }

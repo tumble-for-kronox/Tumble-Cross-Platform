@@ -32,7 +32,7 @@ class _UserEventListState extends State<UserEventList> {
                     return _loaded(context, state);
                   case UserEventListStatus.ERROR:
                     return Text(
-                      "We couldn't get your exams, try again in a bit.",
+                      S.userEvents.failedToLoad(),
                       style: TextStyle(color: Theme.of(context).colorScheme.onBackground),
                     );
                   case UserEventListStatus.INITIAL:
@@ -54,7 +54,7 @@ Widget _loaded(BuildContext context, AuthState state) {
       ? Align(
           alignment: Alignment.center,
           child: Text(
-            "You have no exams!",
+            S.userEvents.empty(),
             style: TextStyle(
               color: Theme.of(context).colorScheme.onBackground,
               letterSpacing: 0.5,

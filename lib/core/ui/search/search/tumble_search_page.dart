@@ -28,8 +28,7 @@ class _TumbleSearchPageState extends State<TumbleSearchPage> {
     return Stack(
       children: [
         Container(
-          margin:
-              EdgeInsets.only(top: MediaQuery.of(context).viewPadding.top + 20),
+          margin: EdgeInsets.only(top: MediaQuery.of(context).viewPadding.top + 20),
           alignment: Alignment.center,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -49,26 +48,16 @@ class _TumbleSearchPageState extends State<TumbleSearchPage> {
                                   .map((program) => ProgramCard(
                                       programName: program.title,
                                       programSubtitle: program.subtitle,
-                                      schoolName:
-                                          BlocProvider.of<InitCubit>(context)
-                                              .state
-                                              .defaultSchool!,
+                                      schoolName: BlocProvider.of<InitCubit>(context).state.defaultSchool!,
                                       onTap: () async {
-                                        context
-                                            .read<SearchPageCubit>()
-                                            .setLoading();
-                                        context
-                                            .read<SearchPageCubit>()
-                                            .displayPreview();
-                                        await BlocProvider.of<SearchPageCubit>(
-                                                context)
-                                            .fetchNewSchedule(program.id);
+                                        context.read<SearchPageCubit>().setPreviewLoading();
+                                        context.read<SearchPageCubit>().displayPreview();
+                                        await BlocProvider.of<SearchPageCubit>(context).fetchNewSchedule(program.id);
                                       }))
                                   .toList(),
                             );
                           case SearchPageStatus.LOADING:
-                            return const SpinKitThreeBounce(
-                                color: CustomColors.orangePrimary);
+                            return const SpinKitThreeBounce(color: CustomColors.orangePrimary);
                           case SearchPageStatus.ERROR:
                             return SearchErrorMessage(
                               errorType: state.errorMessage!,
@@ -76,15 +65,11 @@ class _TumbleSearchPageState extends State<TumbleSearchPage> {
                           case SearchPageStatus.INITIAL:
                             return Container();
                           case SearchPageStatus.NO_SCHEDULES:
-                            return NoScheduleAvailable(
-                                errorType: state.errorMessage!,
-                                cupertinoAlertDialog: null);
+                            return NoScheduleAvailable(errorType: state.errorMessage!, cupertinoAlertDialog: null);
                           case SearchPageStatus.DISPLAY_PREVIEW:
                             return SchedulePreview(
                               toggleBookmark: (value) =>
-                                  BlocProvider.of<MainAppNavigationCubit>(
-                                          context)
-                                      .setPreviewToggle(),
+                                  BlocProvider.of<MainAppNavigationCubit>(context).setPreviewToggle(),
                             );
                         }
                       },

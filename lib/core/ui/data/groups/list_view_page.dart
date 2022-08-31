@@ -6,4 +6,5 @@ class ListViewPageStrings extends StringConstantGroup {
   ListViewPageStrings(AppLocalizations localizedStrings) : super(localizedStrings);
 
   String title() => localizedStrings.listViewTitle;
+  String toTopButton() => localizedStrings.listViewToTopButton;
 }
