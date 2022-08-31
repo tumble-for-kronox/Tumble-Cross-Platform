@@ -354,5 +354,7 @@
     "supportModalIssueSummaryHelper": "Summarize your issue in a short title",
     "supportModalBodyTooShort": "Body must be greater than 5 characters",
     "supportModalExplainIssueLabel": "Explain your issue",
-    "supportModalExplainIssueHelper": "Explain your issue in more detail, so we can help"
+    "supportModalExplainIssueHelper": "Explain your issue in more detail, so we can help",
+    "supportModalSendSuccess": "Bug report sent!",
+    "supportModalSendFail": "There was an error with your request!\nPlease try again at a later time"
 }

@@ -30,9 +30,7 @@ class SupportModal extends StatefulWidget {
 class _SupportModalState extends State<SupportModal> {
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-        create: (context) => SupportModalCubit(),
-        child: const SupportModalBuilder());
+    return BlocProvider(create: (context) => SupportModalCubit(), child: const SupportModalBuilder());
   }
 }
 
@@ -53,19 +51,13 @@ class _SupportModalBuilderState extends State<SupportModalBuilder> {
             builder: (context, state) {
               return SupportModalShell(
                   subjectValidator: (_) {
-                    return state.isSubjectValid!
-                        ? null
-                        : 'Subject must be greater than 5 characters';
+                    return state.isSubjectValid! ? null : S.supportModal.subjectTooShort();
                   },
                   bodyValidator: (_) {
-                    return state.isBodyValid!
-                        ? null
-                        : 'Body must be greater than 5 characters';
+                    return state.isBodyValid! ? null : S.supportModal.bodyTooShort();
                   },
-                  subjectController:
-                      context.read<SupportModalCubit>().subjectController,
-                  bodyController:
-                      context.read<SupportModalCubit>().bodyController,
+                  subjectController: context.read<SupportModalCubit>().subjectController,
+                  bodyController: context.read<SupportModalCubit>().bodyController,
                   onPressed: () async {
                     if (state.isBodyValid! && state.isSubjectValid!) {
                       context.read<SupportModalCubit>().setLoading();
@@ -108,18 +100,14 @@ class SupportModalShell extends StatelessWidget {
             padding: const EdgeInsets.only(left: 20, right: 20, top: 50),
             decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.background,
-                borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    topRight: Radius.circular(20))),
+                borderRadius: const BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20))),
             child: Column(
-              crossAxisAlignment: (status == SupportModalStatus.INITIAL ||
-                      status == SupportModalStatus.ERROR)
+              crossAxisAlignment: (status == SupportModalStatus.INITIAL || status == SupportModalStatus.ERROR)
                   ? CrossAxisAlignment.start
                   : CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                if (status == SupportModalStatus.INITIAL)
-                  _buildTextFormFields(),
+                if (status == SupportModalStatus.INITIAL) _buildTextFormFields(),
                 Center(
                     child: FractionallySizedBox(
                   widthFactor: (status == SupportModalStatus.INITIAL) ? .6 : .9,
@@ -132,13 +120,12 @@ class SupportModalShell extends StatelessWidget {
                           text: S.general.send(),
                         );
                       case SupportModalStatus.LOADING:
-                        return const SpinKitThreeBounce(
-                            color: CustomColors.orangePrimary);
+                        return const SpinKitThreeBounce(color: CustomColors.orangePrimary);
                       case SupportModalStatus.SENT:
                         return TumbleButton(
                           onPressed: () {},
                           prefixIcon: CupertinoIcons.check_mark_circled,
-                          text: 'Bug report sent!',
+                          text: S.supportModal.sendSucces(),
                         );
                       case SupportModalStatus.ERROR:
                         return Container(
@@ -148,11 +135,9 @@ class SupportModalShell extends StatelessWidget {
                             color: CustomColors.orangePrimary,
                           ),
                           child: Text(
-                            'There was an error with your request!\nPlease try again at a later time',
+                            S.supportModal.sendFail(),
                             textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontSize: 16,
-                                color: Theme.of(context).colorScheme.onPrimary),
+                            style: TextStyle(fontSize: 16, color: Theme.of(context).colorScheme.onPrimary),
                           ),
                         );
                     }

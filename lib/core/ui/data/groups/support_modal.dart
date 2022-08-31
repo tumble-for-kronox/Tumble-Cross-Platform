@@ -11,4 +11,6 @@ class SupportModalStrings extends StringConstantGroup {
   String bodyTooShort() => localizedStrings.supportModalBodyTooShort;
   String bodyLabel() => localizedStrings.supportModalExplainIssueLabel;
   String bodyHelper() => localizedStrings.supportModalExplainIssueHelper;
+  String sendSucces() => localizedStrings.supportModalSendSuccess;
+  String sendFail() => localizedStrings.supportModalSendFail;
 }
