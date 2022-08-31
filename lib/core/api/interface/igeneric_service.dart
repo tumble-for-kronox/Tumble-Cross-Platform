@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 /* Can be implemented by abstract
    classes to enfore common methods found in repositories. */
 @immutable
-abstract class IServiceManager<T> {
+abstract class IGenericService<T> {
   Future<void> add(T data);
 
   Future<void> update(T data);

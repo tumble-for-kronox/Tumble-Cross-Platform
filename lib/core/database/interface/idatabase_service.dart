@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
-import 'package:tumble/core/api/interface/iservice_manager.dart';
+import 'package:tumble/core/api/interface/igeneric_service.dart';
 import 'package:tumble/core/models/api_models/kronox_user_model.dart';
 import 'package:tumble/core/models/api_models/schedule_model.dart';
 import 'package:tumble/core/models/ui_models/course_ui_model.dart';
 
 @immutable
-abstract class IDatabaseScheduleService implements IServiceManager {
+abstract class IDatabaseScheduleService implements IGenericService {
   Future<List<String>> getAllScheduleIds();
 
   Future<ScheduleModel?> getOneSchedule(String id);
