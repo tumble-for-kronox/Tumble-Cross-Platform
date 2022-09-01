@@ -8,17 +8,17 @@ import 'package:tumble/core/ui/data/string_constants.dart';
 import 'package:tumble/core/ui/main_app/cubit/main_app_cubit.dart';
 import 'package:tumble/core/ui/main_app/misc/tumble_drawer/cubit/drawer_state.dart';
 
-class AppFavoriteScheduleToggle extends StatefulWidget {
-  const AppFavoriteScheduleToggle({
+class AppBookmarkScheduleToggle extends StatefulWidget {
+  const AppBookmarkScheduleToggle({
     Key? key,
   }) : super(key: key);
 
   @override
-  State<AppFavoriteScheduleToggle> createState() =>
-      _AppFavoriteScheduleToggleState();
+  State<AppBookmarkScheduleToggle> createState() =>
+      _AppBookmarkScheduleToggleState();
 }
 
-class _AppFavoriteScheduleToggleState extends State<AppFavoriteScheduleToggle> {
+class _AppBookmarkScheduleToggleState extends State<AppBookmarkScheduleToggle> {
   @override
   Widget build(BuildContext context) {
     return Align(
@@ -58,11 +58,7 @@ class _AppFavoriteScheduleToggleState extends State<AppFavoriteScheduleToggle> {
                             color: Theme.of(context).colorScheme.onSurface,
                           ),
                           onPressed: () async {
-                            BlocProvider.of<MainAppCubit>(context).setLoading();
-                            context.read<DrawerCubit>().removeBookmark(id).then(
-                                (_) => context
-                                    .read<MainAppCubit>()
-                                    .attemptToFetchCachedSchedules());
+                            context.read<DrawerCubit>().removeBookmark(id);
                           }),
                       shape: const RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(Radius.circular(20))),
@@ -74,14 +70,9 @@ class _AppFavoriteScheduleToggleState extends State<AppFavoriteScheduleToggle> {
                       onChanged: (bool value) {
                         BlocProvider.of<DrawerCubit>(context)
                             .toggleSchedule(id, value);
-                        BlocProvider.of<MainAppCubit>(context).setLoading();
-                        BlocProvider.of<MainAppCubit>(context)
-                            .attemptToFetchCachedSchedules()
-                            .then((value) {
-                          if (state.bookmarks!.isEmpty) {
-                            Navigator.of(context).pop();
-                          }
-                        });
+                        if (state.bookmarks!.isEmpty) {
+                          Navigator.of(context).pop();
+                        }
                       },
                       value: state.mapOfIdToggles![id]!,
                     );

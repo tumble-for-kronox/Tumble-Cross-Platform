@@ -44,7 +44,7 @@ extension ResponseParsing on Response {
 
   Future<ApiBugReportResponse> parseIssue() async {
     if (statusCode == 200) {
-      return ApiBugReportResponse.completed('Success');
+      return ApiBugReportResponse.success('Success');
     }
     return ApiBugReportResponse.error(RuntimeErrorType.unknownError());
   }
@@ -102,7 +102,7 @@ extension HttpClientResponseParsing on HttpClientResponse {
 
   Future<ApiBugReportResponse> parseIssue() async {
     if (statusCode == 200) {
-      return ApiBugReportResponse.completed('Success');
+      return ApiBugReportResponse.success('Success');
     }
     return ApiBugReportResponse.error(RuntimeErrorType.unknownError());
   }

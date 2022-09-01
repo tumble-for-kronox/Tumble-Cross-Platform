@@ -7,7 +7,7 @@ import 'package:tumble/core/ui/bottom_nav_bar/cubit/bottom_nav_cubit.dart';
 import 'package:tumble/core/ui/bottom_nav_bar/data/nav_bar_items.dart';
 import 'package:tumble/core/ui/main_app/cubit/main_app_cubit.dart';
 import 'package:tumble/core/ui/schedule/no_schedule.dart';
-import 'package:tumble/core/ui/schedule/tumble_list_view/data/cupertino_alerts.dart';
+import 'package:tumble/core/ui/schedule/tumble_list_view/data/custom_alerts.dart';
 import 'package:tumble/core/ui/schedule/tumble_week_view/week_list_view.dart';
 
 class TumbleWeekView extends StatefulWidget {

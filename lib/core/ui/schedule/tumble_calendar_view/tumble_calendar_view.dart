@@ -10,7 +10,7 @@ import 'package:tumble/core/ui/bottom_nav_bar/data/nav_bar_items.dart';
 import 'package:tumble/core/ui/main_app/cubit/main_app_cubit.dart';
 import 'package:tumble/core/ui/schedule/no_schedule.dart';
 import 'package:tumble/core/ui/schedule/tumble_calendar_view/data/calendar_data_source.dart';
-import 'package:tumble/core/ui/schedule/tumble_list_view/data/cupertino_alerts.dart';
+import 'package:tumble/core/ui/schedule/tumble_list_view/data/custom_alerts.dart';
 
 import '../../../models/api_models/schedule_model.dart';
 import '../event_modal.dart';

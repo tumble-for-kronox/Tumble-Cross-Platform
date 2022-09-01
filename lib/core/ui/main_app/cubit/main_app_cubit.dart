@@ -78,22 +78,24 @@ class MainAppCubit extends Cubit<MainAppState> {
     for (String? scheduleId in currentScheduleIds) {
       // Check if bookmarked schedule is toggled to be visible
       // before trying to fetch it
-
       final bool userHasBookmarks = getIt<SharedPreferences>()
           .getStringList(PreferenceTypes.bookmarks)!
           .map((json) => bookmarkedScheduleModelFromJson(json).scheduleId)
           .toList()
           .isNotEmpty;
 
-      final bool currentScheduleIsToggledToBeVisible =
+      /// Schedule id might have been removed from preferences
+      /// during the running of this method
+      final bool? currentScheduleIsToggledToBeVisible =
           getIt<SharedPreferences>()
               .getStringList(PreferenceTypes.bookmarks)!
               .map((json) => bookmarkedScheduleModelFromJson(json))
-              .firstWhere((bookmark) => bookmark.scheduleId == scheduleId)
-              .toggledValue;
+              .firstWhereOrNull((bookmark) => bookmark.scheduleId == scheduleId)
+              ?.toggledValue;
 
       if (scheduleId != null && userHasBookmarks) {
-        if (currentScheduleIsToggledToBeVisible) {
+        if (currentScheduleIsToggledToBeVisible != null &&
+            currentScheduleIsToggledToBeVisible) {
           final ApiScheduleOrProgrammeResponse _apiResponse =
               await _cacheAndInteractionService
                   .getCachedOrNewSchedule(scheduleId);
@@ -188,14 +190,16 @@ class MainAppCubit extends Cubit<MainAppState> {
                 .scheduleModel
                 .id,
             groupkey: event.course.id,
-            title: event.title,
+            title: event.title.capitalize(),
             body: event.course.englishName,
             date: event.from);
 
-        dev.log('Created notification for event "${event.title}"');
+        dev.log('Created notification for event "${event.title.capitalize()}"');
 
-        showScaffoldMessage(context,
-            S.scaffoldMessages.createdNotificationForEvent(event.title));
+        showScaffoldMessage(
+            context,
+            S.scaffoldMessages
+                .createdNotificationForEvent(event.title.capitalize()));
 
         return true;
       }

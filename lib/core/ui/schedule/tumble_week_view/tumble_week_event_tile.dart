@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:tumble/core/extensions/extensions.dart';
 import 'package:tumble/core/models/api_models/schedule_model.dart';
 import 'package:tumble/core/models/ui_models/course_ui_model.dart';
 import 'package:tumble/core/theme/data/colors.dart';
@@ -76,7 +77,7 @@ class TumbleWeekEventTile extends StatelessWidget {
                   right: 5,
                 ),
                 child: Text(
-                  event.title,
+                  event.title.capitalize(),
                   textAlign: TextAlign.end,
                   style: TextStyle(
                     color: Theme.of(context).colorScheme.onSurface,

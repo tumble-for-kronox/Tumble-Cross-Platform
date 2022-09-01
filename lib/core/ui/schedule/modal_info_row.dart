@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tumble/core/api/apiservices/runtime_error_type.dart';
+import 'package:tumble/core/extensions/extensions.dart';
 import 'package:tumble/core/models/api_models/schedule_model.dart';
 import 'package:tumble/core/ui/main_app/main_app.dart';
 
@@ -26,7 +27,7 @@ class ModalInfoRow extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            title,
+            title.capitalize(),
             style: TextStyle(
               fontWeight: FontWeight.w400,
               color: Theme.of(context).colorScheme.onSecondary.withOpacity(.8),

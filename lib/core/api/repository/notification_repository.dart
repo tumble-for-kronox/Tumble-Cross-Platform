@@ -54,7 +54,7 @@ class NotificationRepository implements INotificationService {
                   id: event.id.encodeUniqueIdentifier(),
                   channelKey: bookmarkedSchedule.id,
                   groupkey: event.course.id,
-                  title: event.title,
+                  title: event.title.capitalize(),
                   body: event.course.englishName,
                   date: event.from);
             }
@@ -100,7 +100,7 @@ class NotificationRepository implements INotificationService {
           id: event.id.encodeUniqueIdentifier(),
           channelKey: newScheduleModel.id,
           groupkey: event.course.id,
-          title: event.title,
+          title: event.title.capitalize(),
           body: event.course.englishName,
           date: event.from);
     }

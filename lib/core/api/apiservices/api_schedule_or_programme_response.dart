@@ -26,5 +26,5 @@ class ApiScheduleOrProgrammeResponse<T> {
 enum ApiScheduleOrProgrammeStatus {
   FETCHED,
   ERROR,
-  CACHED, /* UNAUTHORIZED, SENT_BUG */
+  CACHED,
 }

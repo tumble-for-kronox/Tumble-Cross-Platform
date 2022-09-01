@@ -39,7 +39,7 @@ class EventOptions extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext _) {
+  Widget build(BuildContext context) {
     return Align(
       alignment: Alignment.bottomCenter,
       child: Container(
@@ -162,12 +162,12 @@ class EventOptions extends StatelessWidget {
                 notificationCancelled
                     ? showScaffoldMessage(
                         context,
-                        S.scaffoldMessages
-                            .cancelledEventNotification(event.title))
+                        S.scaffoldMessages.cancelledEventNotification(
+                            event.title.capitalize()))
                     : showScaffoldMessage(
                         context,
-                        S.scaffoldMessages
-                            .cancelNotificationsFailed(event.title)));
+                        S.scaffoldMessages.cancelNotificationsFailed(
+                            event.title.capitalize())));
           } else {
             bool sucessfullyCreatedNotifications =
                 await cubit.createNotificationForEvent(event, context);
@@ -203,15 +203,15 @@ class EventOptions extends StatelessWidget {
 
           if (notificationIsSetForCourse) {
             cubit.cancelCourseNotifications(event).then(
-                (notificationCancelled) => notificationCancelled
+                (notificationCancelled) => !notificationCancelled
                     ? showScaffoldMessage(
                         context,
                         S.scaffoldMessages.cancelledCourseNotifications(
                             event.course.englishName))
                     : showScaffoldMessage(
                         context,
-                        S.scaffoldMessages
-                            .cancelNotificationsFailed(event.title)));
+                        S.scaffoldMessages.cancelNotificationsFailed(
+                            event.title.capitalize())));
           } else {
             bool sucessfullyCreatedNotifications =
                 await cubit.createNotificationForCourse(event, context);

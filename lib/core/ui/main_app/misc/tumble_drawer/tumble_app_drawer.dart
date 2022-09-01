@@ -16,7 +16,7 @@ import 'package:tumble/core/ui/main_app/misc/tumble_drawer/data/review_strings.d
 import 'package:tumble/core/ui/main_app/misc/tumble_drawer/support_modal/support_modal.dart';
 import 'package:tumble/core/ui/main_app/misc/tumble_app_drawer_tile.dart';
 import 'package:tumble/core/ui/main_app/misc/tumble_drawer/cubit/drawer_state.dart';
-import 'package:tumble/core/ui/main_app/misc/tumble_drawer/drawer_generic/app_default_schedule_picker.dart';
+import 'package:tumble/core/ui/main_app/misc/tumble_drawer/drawer_generic/app_bookmark_schedule_toggle.dart';
 import 'package:tumble/core/ui/main_app/misc/tumble_drawer/drawer_generic/app_notification_time_picker.dart';
 import 'package:tumble/core/ui/main_app/misc/tumble_drawer/drawer_generic/app_theme_picker.dart';
 import 'package:tumble/core/ui/main_app/misc/tumble_settings_section.dart';
@@ -191,15 +191,14 @@ class TumbleAppDrawer extends StatelessWidget {
         if (context.read<DrawerCubit>().state.bookmarks!.isNotEmpty) {
           showModalBottomSheet(
               context: context,
-              builder: (_) => MultiBlocProvider(
-                    providers: [
-                      BlocProvider<DrawerCubit>.value(
-                          value: BlocProvider.of<DrawerCubit>(context)),
-                      BlocProvider<MainAppCubit>.value(
-                          value: BlocProvider.of<MainAppCubit>(context)),
-                    ],
-                    child: const AppFavoriteScheduleToggle(),
-                  ));
+              builder: (_) => BlocProvider.value(
+                    value: BlocProvider.of<DrawerCubit>(context),
+                    child: const AppBookmarkScheduleToggle(),
+                  )).whenComplete(() async {
+            BlocProvider.of<MainAppCubit>(context).setLoading();
+            await BlocProvider.of<MainAppCubit>(context)
+                .attemptToFetchCachedSchedules();
+          });
         }
         break;
       case EventType.CANCEL_ALL_NOTIFICATIONS:

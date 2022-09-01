@@ -5,7 +5,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
 import 'package:tumble/core/ui/login/cubit/auth_cubit.dart';
-import 'package:tumble/core/ui/schedule/tumble_list_view/data/cupertino_alerts.dart';
+import 'package:tumble/core/ui/schedule/tumble_list_view/data/custom_alerts.dart';
 
 class AutoSignupOption extends StatelessWidget {
   const AutoSignupOption({Key? key}) : super(key: key);

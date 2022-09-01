@@ -5,7 +5,7 @@ class ApiBugReportResponse<T> {
   T? data;
   String? message;
 
-  ApiBugReportResponse.completed(this.data)
+  ApiBugReportResponse.success(this.data)
       : status = ApiBugReportResponseStatus.SUCCESS;
 
   ApiBugReportResponse.error(this.message)
