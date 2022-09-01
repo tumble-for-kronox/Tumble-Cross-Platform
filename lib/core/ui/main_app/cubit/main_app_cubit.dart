@@ -178,7 +178,6 @@ class MainAppCubit extends Cubit<MainAppState> {
   }
 
   Future<bool> createNotificationForEvent(Event event, BuildContext context) {
-    dev.log("createNotificationForEvent: ${event.from.toString()}");
     return _awesomeNotifications.isNotificationAllowed().then((isAllowed) {
       if (isAllowed) {
         _notificationBuilder.buildNotification(
@@ -220,20 +219,24 @@ class MainAppCubit extends Cubit<MainAppState> {
             .where((Event eventInDefaultSchedule) =>
                 event.course.id == eventInDefaultSchedule.course.id)
             .toList();
+
         event.id.encodeUniqueIdentifier();
+
         for (Event event in events) {
-          _notificationBuilder.buildNotification(
-              id: event.id.encodeUniqueIdentifier(),
-              channelKey: state.scheduleModelAndCourses!
-                  .firstWhere((scheduleModelAndCourses) =>
-                      scheduleModelAndCourses!.courses.any((courseUiModel) =>
-                          courseUiModel!.courseId == event.course.id))!
-                  .scheduleModel
-                  .id,
-              groupkey: event.course.id,
-              title: event.title,
-              body: event.course.englishName,
-              date: event.from);
+          if (event.from.isAfter(DateTime.now())) {
+            _notificationBuilder.buildNotification(
+                id: event.id.encodeUniqueIdentifier(),
+                channelKey: state.scheduleModelAndCourses!
+                    .firstWhere((scheduleModelAndCourses) =>
+                        scheduleModelAndCourses!.courses.any((courseUiModel) =>
+                            courseUiModel!.courseId == event.course.id))!
+                    .scheduleModel
+                    .id,
+                groupkey: event.course.id,
+                title: event.title,
+                body: event.course.englishName,
+                date: event.from);
+          }
         }
         dev.log(
             'Created ${events.length} new notifications for ${event.course}');

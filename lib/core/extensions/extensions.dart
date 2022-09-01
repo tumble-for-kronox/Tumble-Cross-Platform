@@ -59,15 +59,12 @@ extension StringParse on String {
     return stringFragments.join(' ');
   }
 
+  /// Used to give notifications unique id's based on event id
   int encodeUniqueIdentifier() {
     List<int> byteArray = utf8.encode(this);
     return int.parse(
         byteArray.sublist(byteArray.length - 4, byteArray.length).join(''));
   }
-
-  /* int decodeUniqueIdentifier() {
-
-  } */
 }
 
 extension GetSchoolFromString on Schools {
