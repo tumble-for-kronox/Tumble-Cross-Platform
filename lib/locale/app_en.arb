@@ -108,7 +108,7 @@
         }
     },
     "settingsScheduleTitle": "Schedule",
-    "settingsScheduleDefaultScheduleTitle": "Set default schedule",
+    "settingsScheduleDefaultScheduleTitle": "Set shown schedules",
     "settingsScheduleDefaultScheduleSubtitle": "Select from your list of bookmarks",
     "settingsScheduleNoBookmarks": "No bookmarks yet",
     "settingsNotificationTitle": "Notifications",
