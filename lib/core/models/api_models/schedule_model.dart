@@ -59,19 +59,18 @@ abstract class Event with _$Event {
     required DateTime lastModified,
   }) = _Event;
 
-  factory Event.fromJson(Map<String, dynamic> json) {
-    return _$_Event(
-      id: json['id'] as String,
-      title: HtmlUnescape().convert(json['title']),
-      course: Course.fromJson(json['course'] as Map<String, dynamic>),
-      from: DateTime.parse(json['from'] as String).toLocal(),
-      to: DateTime.parse(json['to'] as String).toLocal(),
-      locations: (json['locations'] as List<dynamic>).map((e) => Location.fromJson(e as Map<String, dynamic>)).toList(),
-      teachers: (json['teachers'] as List<dynamic>).map((e) => Teacher.fromJson(e as Map<String, dynamic>)).toList(),
-      isSpecial: json['isSpecial'] as bool,
-      lastModified: DateTime.parse(json['lastModified'] as String),
-    );
-  }
+  factory Event.fromJson(Map<String, dynamic> json) => _$_Event(
+        id: json['id'] as String,
+        title: HtmlUnescape().convert(json['title']),
+        course: Course.fromJson(json['course'] as Map<String, dynamic>),
+        from: DateTime.parse(json['from'] as String).toLocal(),
+        to: DateTime.parse(json['to'] as String).toLocal(),
+        locations:
+            (json['locations'] as List<dynamic>).map((e) => Location.fromJson(e as Map<String, dynamic>)).toList(),
+        teachers: (json['teachers'] as List<dynamic>).map((e) => Teacher.fromJson(e as Map<String, dynamic>)).toList(),
+        isSpecial: json['isSpecial'] as bool,
+        lastModified: DateTime.parse(json['lastModified'] as String),
+      );
 }
 
 @freezed

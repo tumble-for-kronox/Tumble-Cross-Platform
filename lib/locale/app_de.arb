@@ -3,7 +3,7 @@
     "searchBarFocusedPlaceholder": "Code, Name, Lehrer",
     "searchPageTitle": "Suchen",
     "listViewTitle": "Liste",
-    "listViewToTopButton": "OBEN", 
+    "listViewToTopButton": "OBEN",
     "weekViewTitle": "Woche",
     "calendarViewTitle": "Kalender",
     "accountPageTitle": "Konto",
@@ -114,7 +114,7 @@
     "eventOptionsAddEventNotification": "Benachrichtigungen für Event aktivieren",
     "eventOptionsAddCourseNotifications": "Benachrichtigungen für Kurs aktivieren",
     "eventOptionsChangeCourseColor": "Kursfarben ändern",
-    "eventOptionsColorPickerTitle": "Farbe wählen"
+    "eventOptionsColorPickerTitle": "Farbe wählen",
     "detailsTitle": "DETAILS",
     "detailsDate": "Datum",
     "detailsTime": "Zeit",
