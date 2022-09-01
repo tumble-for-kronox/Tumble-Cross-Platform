@@ -119,7 +119,7 @@ class NotificationRepository implements INotificationService {
           .getStringList(PreferenceTypes.bookmarks)!
           .map((e) => bookmarkedScheduleModelFromJson(e).scheduleId)
           .toList();
-
+      log(bookmarkedScheduleIds.toString());
       return await getIt<AwesomeNotifications>().initialize(
           _defaultIcon,
           bookmarkedScheduleIds
