@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:tumble/core/api/apiservices/runtime_error_type.dart';
+import 'package:tumble/core/extensions/extensions.dart';
 import 'package:tumble/core/navigation/app_navigator.dart';
 import 'package:tumble/core/theme/data/colors.dart';
 import 'package:tumble/core/ui/bottom_nav_bar/cubit/bottom_nav_cubit.dart';
@@ -34,29 +36,75 @@ class _TumbleCalendarViewState extends State<TumbleCalendarView> {
             return NoScheduleAvailable(
               errorType: RuntimeErrorType.noCachedSchedule(),
               cupertinoAlertDialog: CustomAlertDialog.noBookMarkedSchedules(
-                  context,
-                  () => context
-                      .read<MainAppNavigationCubit>()
-                      .getNavBarItem(NavbarItem.SEARCH),
-                  navigator),
+                  context, () => context.read<MainAppNavigationCubit>().getNavBarItem(NavbarItem.SEARCH), navigator),
             );
           case MainAppStatus.LOADING:
-            return SpinKitThreeBounce(
-                color: Theme.of(context).colorScheme.primary);
+            return SpinKitThreeBounce(color: Theme.of(context).colorScheme.primary);
 
           case MainAppStatus.POPULATED_VIEW:
             return FutureBuilder(
-                future: getCalendarDataSource(
-                    state.listOfDays!, BlocProvider.of<MainAppCubit>(context)),
+                future: getCalendarDataSource(state.listOfDays!, BlocProvider.of<MainAppCubit>(context)),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     return SfCalendar(
                       view: CalendarView.month,
                       dataSource: snapshot.data as EventsDataSource,
+                      appointmentBuilder: (context, details) {
+                        final Event event = details.appointments.first;
+                        final Color eventColor = BlocProvider.of<MainAppCubit>(context).getColorForCourse(event);
+                        return Stack(
+                          children: [
+                            Container(
+                              width: double.maxFinite,
+                              decoration: BoxDecoration(
+                                  color: Theme.of(context).colorScheme.surface,
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(10),
+                                  ),
+                                  boxShadow: const [
+                                    BoxShadow(color: Colors.black26, blurRadius: 2, offset: Offset(1, 1))
+                                  ]),
+                              padding: const EdgeInsets.only(left: 18, top: 8, right: 8, bottom: 8),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    event.title,
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                      color: Theme.of(context).colorScheme.onSurface,
+                                    ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  Text(
+                                    "${DateFormat.Hm().format(event.from)} - ${DateFormat.Hm().format(event.to)}",
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                      color: Theme.of(context).colorScheme.onSurface,
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                            Container(
+                              width: 10,
+                              alignment: Alignment.centerLeft,
+                              decoration: BoxDecoration(
+                                color: eventColor,
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(10),
+                                  bottomLeft: Radius.circular(10),
+                                ),
+                              ),
+                            )
+                          ],
+                        );
+                      },
                       headerStyle: CalendarHeaderStyle(
                           textAlign: TextAlign.center,
-                          backgroundColor:
-                              Theme.of(context).colorScheme.primary,
+                          backgroundColor: Theme.of(context).colorScheme.primary,
                           textStyle: TextStyle(
                               fontSize: 20,
                               fontStyle: FontStyle.normal,
@@ -65,43 +113,31 @@ class _TumbleCalendarViewState extends State<TumbleCalendarView> {
                               fontWeight: FontWeight.w500)),
                       monthViewSettings: MonthViewSettings(
                           showAgenda: true,
-                          navigationDirection:
-                              MonthNavigationDirection.vertical,
+                          navigationDirection: MonthNavigationDirection.vertical,
                           agendaViewHeight: 200,
-                          appointmentDisplayMode:
-                              MonthAppointmentDisplayMode.indicator,
+                          appointmentDisplayMode: MonthAppointmentDisplayMode.indicator,
                           monthCellStyle: MonthCellStyle(
-                            backgroundColor:
-                                Theme.of(context).colorScheme.background,
-                            trailingDatesBackgroundColor:
-                                Theme.of(context).colorScheme.background,
-                            leadingDatesBackgroundColor:
-                                Theme.of(context).colorScheme.background,
-                            textStyle: TextStyle(
-                                fontSize: 12,
-                                color:
-                                    Theme.of(context).colorScheme.onBackground),
+                            backgroundColor: Theme.of(context).colorScheme.background,
+                            trailingDatesBackgroundColor: Theme.of(context).colorScheme.background,
+                            leadingDatesBackgroundColor: Theme.of(context).colorScheme.background,
+                            textStyle: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.onBackground),
                           )),
                       onLongPress: (calendarLongPressDetails) {
-                        if (calendarLongPressDetails.targetElement !=
-                            CalendarElement.appointment) {
+                        if (calendarLongPressDetails.targetElement != CalendarElement.appointment) {
                           return;
                         }
                         Event event = calendarLongPressDetails.appointments![0];
-                        EventOptions.showEventOptions(context, event,
-                            BlocProvider.of<MainAppCubit>(context));
+                        EventOptions.showEventOptions(context, event, BlocProvider.of<MainAppCubit>(context));
                       },
                       onTap: (calendarTapDetails) {
-                        if (calendarTapDetails.targetElement !=
-                            CalendarElement.appointment) {
+                        if (calendarTapDetails.targetElement != CalendarElement.appointment) {
                           return;
                         }
                         Event event = calendarTapDetails.appointments![0];
                         TumbleEventModal.showBookmarkEventModal(
                             context,
                             event,
-                            BlocProvider.of<MainAppCubit>(context)
-                                .getColorForCourse(event),
+                            BlocProvider.of<MainAppCubit>(context).getColorForCourse(event),
                             BlocProvider.of<MainAppCubit>(context));
                       },
                     );
@@ -114,27 +150,18 @@ class _TumbleCalendarViewState extends State<TumbleCalendarView> {
             return NoScheduleAvailable(
               errorType: state.message!,
               cupertinoAlertDialog: CustomAlertDialog.fetchError(
-                  context,
-                  () => context
-                      .read<MainAppNavigationCubit>()
-                      .getNavBarItem(NavbarItem.SEARCH),
-                  navigator),
+                  context, () => context.read<MainAppNavigationCubit>().getNavBarItem(NavbarItem.SEARCH), navigator),
             );
           case MainAppStatus.EMPTY_SCHEDULE:
             return NoScheduleAvailable(
               errorType: RuntimeErrorType.emptyScheduleError(),
               cupertinoAlertDialog: CustomAlertDialog.previewContainsNoViews(
-                  context,
-                  () => context
-                      .read<MainAppNavigationCubit>()
-                      .getNavBarItem(NavbarItem.SEARCH),
-                  navigator),
+                  context, () => context.read<MainAppNavigationCubit>().getNavBarItem(NavbarItem.SEARCH), navigator),
             );
           case MainAppStatus.NO_VIEW:
             return NoScheduleAvailable(
               errorType: RuntimeErrorType.noBookmarks(),
-              cupertinoAlertDialog: CustomAlertDialog.noBookMarkedSchedules(
-                  context, () => null, navigator),
+              cupertinoAlertDialog: CustomAlertDialog.noBookMarkedSchedules(context, () => null, navigator),
             );
         }
       },

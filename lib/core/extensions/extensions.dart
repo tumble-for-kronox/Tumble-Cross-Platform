@@ -19,22 +19,17 @@ extension ScheduleParsing on ScheduleModel {
     DatabaseRepository databaseService = getIt<DatabaseRepository>();
 
     List<String> seen = [];
-    seen.addAll((await databaseService.getCachedCoursesFromId(scheduleId))
-        .map((e) => e.courseId));
-    List<CourseUiModel?> courseUiModels =
-        (days.expand((element) => element.events).toList())
-            .map((event) {
-              final courseId = event.course.id;
-              if (!seen.contains(courseId)) {
-                seen.add(courseId);
-                return CourseUiModel(
-                    scheduleId: id,
-                    courseId: courseId,
-                    color: ColorPicker().getRandomHexColor());
-              }
-            })
-            .whereType<CourseUiModel>()
-            .toList();
+    seen.addAll((await databaseService.getCachedCoursesFromId(scheduleId)).map((e) => e.courseId));
+    List<CourseUiModel?> courseUiModels = (days.expand((element) => element.events).toList())
+        .map((event) {
+          final courseId = event.course.id;
+          if (!seen.contains(courseId)) {
+            seen.add(courseId);
+            return CourseUiModel(scheduleId: id, courseId: courseId, color: ColorPicker().getRandomHexColor());
+          }
+        })
+        .whereType<CourseUiModel>()
+        .toList();
     return courseUiModels;
   }
 
@@ -61,8 +56,7 @@ extension StringParse on String {
 
   int encodeUniqueIdentifier() {
     List<int> byteArray = utf8.encode(this);
-    return int.parse(
-        byteArray.sublist(byteArray.length - 4, byteArray.length).join(''));
+    return int.parse(byteArray.sublist(byteArray.length - 4, byteArray.length).join(''));
   }
 
   /* int decodeUniqueIdentifier() {
@@ -71,8 +65,7 @@ extension StringParse on String {
 }
 
 extension GetSchoolFromString on Schools {
-  School fromString(String s) =>
-      Schools.schools.where((school) => school.schoolName == s).single;
+  School fromString(String s) => Schools.schools.where((school) => school.schoolName == s).single;
 }
 
 extension GetContrastColor on Color {
@@ -81,7 +74,7 @@ extension GetContrastColor on Color {
     double luma = ((0.299 * red) + (0.587 * green) + (0.114 * blue)) / 255;
 
     // Return black for bright colors, white for dark colors
-    return luma > 0.75 ? Colors.black : Colors.white;
+    return luma > 0.65 ? Colors.black : Colors.white;
   }
 }
 
@@ -89,9 +82,7 @@ extension SplitToWeek on List<Day> {
   List<Week> splitToWeek() {
     return groupBy(this, (Day day) => day.weekNumber)
         .entries
-        .map((weekNumberToDayList) => Week(
-            weekNumber: weekNumberToDayList.key,
-            days: weekNumberToDayList.value))
+        .map((weekNumberToDayList) => Week(weekNumber: weekNumberToDayList.key, days: weekNumberToDayList.value))
         .toList();
   }
 }

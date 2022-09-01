@@ -3,6 +3,7 @@
 //     final scheduleModel = scheduleModelFromJson(jsonString);
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
+import 'package:html_unescape/html_unescape.dart';
 import 'package:meta/meta.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'dart:convert';
@@ -10,8 +11,7 @@ import 'dart:convert';
 part 'schedule_model.freezed.dart';
 part 'schedule_model.g.dart';
 
-ScheduleModel scheduleModelFromJson(String str) =>
-    ScheduleModel.fromJson(json.decode(str));
+ScheduleModel scheduleModelFromJson(String str) => ScheduleModel.fromJson(json.decode(str));
 
 Map<String, dynamic> scheduleModelToJson(ScheduleModel data) => data.toJson();
 
@@ -23,8 +23,7 @@ abstract class ScheduleModel with _$ScheduleModel {
     required List<Day> days,
   }) = _ScheduleModel;
 
-  factory ScheduleModel.fromJson(Map<String, dynamic> json) =>
-      _$ScheduleModelFromJson(json);
+  factory ScheduleModel.fromJson(Map<String, dynamic> json) => _$ScheduleModelFromJson(json);
 }
 
 @freezed
@@ -42,9 +41,7 @@ abstract class Day with _$Day {
         date: json['date'] as String,
         isoString: DateTime.parse(json['isoString'] as String).toLocal(),
         weekNumber: json['weekNumber'] as int,
-        events: (json['events'] as List<dynamic>)
-            .map((e) => Event.fromJson(e as Map<String, dynamic>))
-            .toList(),
+        events: (json['events'] as List<dynamic>).map((e) => Event.fromJson(e as Map<String, dynamic>)).toList(),
       );
 }
 
@@ -62,21 +59,19 @@ abstract class Event with _$Event {
     required DateTime lastModified,
   }) = _Event;
 
-  factory Event.fromJson(Map<String, dynamic> json) => _$_Event(
-        id: json['id'] as String,
-        title: json['title'] as String,
-        course: Course.fromJson(json['course'] as Map<String, dynamic>),
-        from: DateTime.parse(json['from'] as String).toLocal(),
-        to: DateTime.parse(json['to'] as String).toLocal(),
-        locations: (json['locations'] as List<dynamic>)
-            .map((e) => Location.fromJson(e as Map<String, dynamic>))
-            .toList(),
-        teachers: (json['teachers'] as List<dynamic>)
-            .map((e) => Teacher.fromJson(e as Map<String, dynamic>))
-            .toList(),
-        isSpecial: json['isSpecial'] as bool,
-        lastModified: DateTime.parse(json['lastModified'] as String),
-      );
+  factory Event.fromJson(Map<String, dynamic> json) {
+    return _$_Event(
+      id: json['id'] as String,
+      title: HtmlUnescape().convert(json['title']),
+      course: Course.fromJson(json['course'] as Map<String, dynamic>),
+      from: DateTime.parse(json['from'] as String).toLocal(),
+      to: DateTime.parse(json['to'] as String).toLocal(),
+      locations: (json['locations'] as List<dynamic>).map((e) => Location.fromJson(e as Map<String, dynamic>)).toList(),
+      teachers: (json['teachers'] as List<dynamic>).map((e) => Teacher.fromJson(e as Map<String, dynamic>)).toList(),
+      isSpecial: json['isSpecial'] as bool,
+      lastModified: DateTime.parse(json['lastModified'] as String),
+    );
+  }
 }
 
 @freezed
@@ -100,8 +95,7 @@ abstract class Location with _$Location {
     required int maxSeats,
   }) = _Location;
 
-  factory Location.fromJson(Map<String, dynamic> json) =>
-      _$LocationFromJson(json);
+  factory Location.fromJson(Map<String, dynamic> json) => _$LocationFromJson(json);
 }
 
 @freezed
@@ -112,6 +106,5 @@ abstract class Teacher with _$Teacher {
     required String lastName,
   }) = _Teacher;
 
-  factory Teacher.fromJson(Map<String, dynamic> json) =>
-      _$TeacherFromJson(json);
+  factory Teacher.fromJson(Map<String, dynamic> json) => _$TeacherFromJson(json);
 }
