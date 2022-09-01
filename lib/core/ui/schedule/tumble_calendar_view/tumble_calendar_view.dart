@@ -79,7 +79,7 @@ class _TumbleCalendarViewState extends State<TumbleCalendarView> {
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                   Text(
-                                    "${DateFormat.Hm().format(event.from)} - ${DateFormat.Hm().format(event.to)}",
+                                    "${DateFormat.Hm(Localizations.localeOf(context).languageCode).format(event.from)} - ${DateFormat.Hm(Localizations.localeOf(context).languageCode).format(event.to)}",
                                     style: TextStyle(
                                       fontSize: 13,
                                       color: Theme.of(context).colorScheme.onSurface,

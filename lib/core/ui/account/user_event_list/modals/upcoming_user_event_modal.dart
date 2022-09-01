@@ -53,14 +53,14 @@ class UpcomingUserEventModal extends StatelessWidget {
                         title: S.detailsModal.date(),
                         icon: const Icon(CupertinoIcons.calendar),
                         subtitle:
-                            '${DateFormat.d().format(userEvent.eventStart)} ${DateFormat('MMMM').format(userEvent.eventStart)} ${DateFormat.y().format(userEvent.eventStart)}',
+                            '${DateFormat.d(Localizations.localeOf(context).languageCode).format(userEvent.eventStart)} ${DateFormat('MMMM', Localizations.localeOf(context).languageCode).format(userEvent.eventStart)} ${DateFormat.y(Localizations.localeOf(context).languageCode).format(userEvent.eventStart)}',
                       ),
                       const SizedBox(height: 25),
                       ModalInfoRow(
                         title: S.detailsModal.time(),
                         icon: const Icon(CupertinoIcons.clock),
                         subtitle:
-                            '${DateFormat.Hm().format(userEvent.eventStart)} - ${DateFormat.Hm().format(userEvent.eventEnd)}',
+                            '${DateFormat.Hm(Localizations.localeOf(context).languageCode).format(userEvent.eventStart)} - ${DateFormat.Hm(Localizations.localeOf(context).languageCode).format(userEvent.eventEnd)}',
                       ),
                       const SizedBox(
                         height: 25,
@@ -68,7 +68,8 @@ class UpcomingUserEventModal extends StatelessWidget {
                       ModalInfoRow(
                         title: S.detailsModal.registrationOpens(),
                         icon: const Icon(CupertinoIcons.person_crop_circle_badge_checkmark),
-                        subtitle: DateFormat("dd MMMM yyyy").format(userEvent.firstSignupDate),
+                        subtitle: DateFormat("dd MMMM yyyy", Localizations.localeOf(context).languageCode)
+                            .format(userEvent.firstSignupDate),
                       ),
                       const SizedBox(
                         height: 25,

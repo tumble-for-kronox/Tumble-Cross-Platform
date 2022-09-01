@@ -62,7 +62,7 @@ class AvailableUserEventCard extends StatelessWidget {
                                 Container(
                                   padding: const EdgeInsets.only(top: 1),
                                   child: Text(
-                                    '${DateFormat('dd/MM/yy').format(userEvent.eventStart)}, ${DateFormat.Hm().format(userEvent.eventStart)} - ${DateFormat.Hm().format(userEvent.eventEnd)}',
+                                    '${DateFormat('dd/MM/yy', Localizations.localeOf(context).languageCode).format(userEvent.eventStart)}, ${DateFormat.Hm(Localizations.localeOf(context).languageCode).format(userEvent.eventStart)} - ${DateFormat.Hm(Localizations.localeOf(context).languageCode).format(userEvent.eventEnd)}',
                                     style: TextStyle(
                                         fontSize: 13,
                                         fontWeight: FontWeight.w400,
@@ -105,7 +105,8 @@ class AvailableUserEventCard extends StatelessWidget {
                                       letterSpacing: 0.5),
                                 ),
                                 Text(
-                                  DateFormat("dd-MM-yyyy").format(userEvent.lastSignupDate),
+                                  DateFormat("dd-MM-yyyy", Localizations.localeOf(context).languageCode)
+                                      .format(userEvent.lastSignupDate),
                                   style: TextStyle(
                                     color: Theme.of(context).colorScheme.onBackground,
                                     fontWeight: FontWeight.w400,
