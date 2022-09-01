@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:tumble/core/extensions/extensions.dart';
 import 'package:tumble/core/models/api_models/schedule_model.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
 
@@ -20,7 +22,7 @@ class DayOfWeekDivider extends StatelessWidget {
         mainAxisSize: MainAxisSize.max,
         children: [
           Text(
-            "${day.name} ${day.date}",
+            "${DateFormat.EEEE(Localizations.localeOf(context).languageCode).format(day.isoString).capitalize()} ${DateFormat("d/M", Localizations.localeOf(context).languageCode).format(day.isoString)}",
             style: TextStyle(
               color: Theme.of(context).colorScheme.onBackground,
               fontSize: 20,

@@ -102,6 +102,7 @@ class _TumbleCalendarViewState extends State<TumbleCalendarView> {
                           ],
                         );
                       },
+                      headerDateFormat: "MMMM yyyy",
                       headerStyle: CalendarHeaderStyle(
                           textAlign: TextAlign.center,
                           backgroundColor: Theme.of(context).colorScheme.primary,

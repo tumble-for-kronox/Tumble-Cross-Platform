@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:syncfusion_localizations/syncfusion_localizations.dart';
 import 'package:tumble/core/theme/cubit/theme_cubit.dart';
 import 'package:tumble/core/theme/cubit/theme_state.dart';
 import 'package:tumble/core/theme/data/colors.dart';
@@ -29,7 +30,7 @@ class _MainAppState extends State<MainApp> {
         builder: ((context, state) => MaterialApp(
               debugShowCheckedModeBanner: false,
               title: 'Tumble',
-              localizationsDelegates: AppLocalizations.localizationsDelegates,
+              localizationsDelegates: [GlobalMaterialLocalizations.delegate, GlobalWidgetsLocalizations.delegate,AppLocalizations.delegate, SfGlobalLocalizations.delegate],
               supportedLocales: AppLocalizations.supportedLocales,
               theme: ThemeData(
                 bottomSheetTheme: const BottomSheetThemeData(backgroundColor: Colors.transparent),
