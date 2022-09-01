@@ -54,7 +54,7 @@ class UpcomingUserEventCard extends StatelessWidget {
                                 Container(
                                   padding: const EdgeInsets.only(top: 1),
                                   child: Text(
-                                    '${DateFormat('dd/MM/yy').format(userEvent.eventStart)}, ${DateFormat.Hm().format(userEvent.eventStart)} - ${DateFormat.Hm().format(userEvent.eventEnd)}',
+                                    '${DateFormat('dd/MM/yy', Localizations.localeOf(context).languageCode).format(userEvent.eventStart)}, ${DateFormat.Hm(Localizations.localeOf(context).languageCode).format(userEvent.eventStart)} - ${DateFormat.Hm(Localizations.localeOf(context).languageCode).format(userEvent.eventEnd)}',
                                     style: TextStyle(
                                         fontSize: 13,
                                         fontWeight: FontWeight.w400,

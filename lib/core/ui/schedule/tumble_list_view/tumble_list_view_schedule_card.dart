@@ -31,12 +31,7 @@ class ScheduleCard extends StatelessWidget {
               decoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.surface,
                   borderRadius: BorderRadius.circular(10),
-                  boxShadow: const [
-                    BoxShadow(
-                        color: Colors.black26,
-                        blurRadius: 2,
-                        offset: Offset(1, 1))
-                  ]),
+                  boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 2, offset: Offset(1, 1))]),
               child: MaterialButton(
                   padding: const EdgeInsets.all(0),
                   onPressed: onTap,
@@ -55,8 +50,7 @@ class ScheduleCard extends StatelessWidget {
                                 Container(
                                   padding: const EdgeInsets.only(left: 2),
                                   child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       Row(
                                         children: [
@@ -70,28 +64,23 @@ class ScheduleCard extends StatelessWidget {
                                           ),
                                           const SizedBox(width: 6),
                                           Container(
-                                            padding:
-                                                const EdgeInsets.only(top: 1),
+                                            padding: const EdgeInsets.only(top: 1),
                                             child: Text(
-                                              '${DateFormat.Hm().format(event.from)} - ${DateFormat.Hm().format(event.to)}',
+                                              '${DateFormat.Hm(Localizations.localeOf(context).languageCode).format(event.from)} - ${DateFormat.Hm(Localizations.localeOf(context).languageCode).format(event.to)}',
                                               style: TextStyle(
                                                   fontSize: 13,
                                                   fontWeight: FontWeight.w400,
-                                                  color: Theme.of(context)
-                                                      .colorScheme
-                                                      .onSecondary,
+                                                  color: Theme.of(context).colorScheme.onSecondary,
                                                   letterSpacing: .5),
                                             ),
                                           ),
                                         ],
                                       ),
                                       Container(
-                                        padding:
-                                            const EdgeInsets.only(right: 12),
+                                        padding: const EdgeInsets.only(right: 12),
                                         child: event.isSpecial
                                             ? const Icon(
-                                                CupertinoIcons
-                                                    .exclamationmark_square,
+                                                CupertinoIcons.exclamationmark_square,
                                                 size: 20,
                                               )
                                             : null,
@@ -105,9 +94,7 @@ class ScheduleCard extends StatelessWidget {
                                 Text(event.title.capitalize(),
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onBackground,
+                                      color: Theme.of(context).colorScheme.onBackground,
                                       fontSize: 19,
                                       letterSpacing: .5,
                                       fontWeight: FontWeight.w400,
@@ -119,23 +106,17 @@ class ScheduleCard extends StatelessWidget {
                             child: Stack(
                               children: [
                                 Container(
-                                    padding: const EdgeInsets.only(
-                                        top: 10, right: 4),
+                                    padding: const EdgeInsets.only(top: 10, right: 4),
                                     child: Text(event.course.englishName,
                                         overflow: TextOverflow.ellipsis,
                                         style: TextStyle(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .onBackground,
+                                          color: Theme.of(context).colorScheme.onBackground,
                                           fontSize: 16,
                                           letterSpacing: .5,
                                           fontWeight: FontWeight.w300,
                                         ))),
                                 ScheduleCardLocationContainer(
-                                    textColor: Theme.of(context)
-                                        .colorScheme
-                                        .onSecondary,
-                                    locations: event.locations),
+                                    textColor: Theme.of(context).colorScheme.onSecondary, locations: event.locations),
                               ],
                             ),
                           ),
@@ -148,9 +129,8 @@ class ScheduleCard extends StatelessWidget {
                 child: Container(
                   decoration: BoxDecoration(
                       color: color,
-                      borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(10),
-                          bottomLeft: Radius.circular(10))),
+                      borderRadius:
+                          const BorderRadius.only(topLeft: Radius.circular(10), bottomLeft: Radius.circular(10))),
                   width: 8,
                   height: 140,
                 )),

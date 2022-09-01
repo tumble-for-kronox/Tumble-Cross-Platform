@@ -6,11 +6,7 @@ class ScheduleCardTimeStamp extends StatelessWidget {
   final DateTime timeStart;
   final Color textColor;
   final DateTime timeEnd;
-  const ScheduleCardTimeStamp(
-      {Key? key,
-      required this.timeEnd,
-      required this.timeStart,
-      required this.textColor})
+  const ScheduleCardTimeStamp({Key? key, required this.timeEnd, required this.timeStart, required this.textColor})
       : super(key: key);
 
   @override
@@ -19,7 +15,7 @@ class ScheduleCardTimeStamp extends StatelessWidget {
       alignment: Alignment.bottomLeft,
       padding: const EdgeInsets.only(bottom: 10),
       child: Text(
-        '${DateFormat.Hm().format(timeStart)} - ${DateFormat.Hm().format(timeEnd)}',
+        '${DateFormat.Hm(Localizations.localeOf(context).languageCode).format(timeStart)} - ${DateFormat.Hm(Localizations.localeOf(context).languageCode).format(timeEnd)}',
         style: TextStyle(
           color: textColor,
           fontSize: 21,
