@@ -17,9 +17,7 @@ import 'package:tumble/core/ui/search/cubit/search_page_cubit.dart';
 class PreviewListViewDayContainer extends StatelessWidget {
   final Day day;
   final SearchPageCubit searchPageCubit;
-  const PreviewListViewDayContainer(
-      {Key? key, required this.day, required this.searchPageCubit})
-      : super(key: key);
+  const PreviewListViewDayContainer({Key? key, required this.day, required this.searchPageCubit}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -32,9 +30,7 @@ class PreviewListViewDayContainer extends StatelessWidget {
             children: [
               Text("${day.name} ${day.date}",
                   style: TextStyle(
-                      color: Theme.of(context).colorScheme.onBackground,
-                      fontSize: 17,
-                      fontWeight: FontWeight.w400)),
+                      color: Theme.of(context).colorScheme.onBackground, fontSize: 17, fontWeight: FontWeight.w400)),
               Expanded(
                   child: Divider(
                 color: Theme.of(context).colorScheme.onBackground,
@@ -49,14 +45,9 @@ class PreviewListViewDayContainer extends StatelessWidget {
               children: day.events
                   .map((event) => ScheduleCard(
                       event: event,
-                      color: event.isSpecial
-                          ? Colors.redAccent
-                          : searchPageCubit.getColorForCourse(event),
-                      onTap: () => PreviewEventModal.showPreviewEventModal(
-                          context,
-                          event,
-                          searchPageCubit.getColorForCourse(event),
-                          searchPageCubit)))
+                      color: event.isSpecial ? Colors.redAccent : searchPageCubit.getColorForCourse(event),
+                      onTap: () => TumbleEventModal.showPreviewEventModal(
+                          context, event, searchPageCubit.getColorForCourse(event))))
                   .toList(),
             ),
           )

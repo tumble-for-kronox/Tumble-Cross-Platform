@@ -30,7 +30,13 @@ class _MainAppState extends State<MainApp> {
         builder: ((context, state) => MaterialApp(
               debugShowCheckedModeBanner: false,
               title: 'Tumble',
-              localizationsDelegates: [GlobalMaterialLocalizations.delegate, GlobalWidgetsLocalizations.delegate,AppLocalizations.delegate, SfGlobalLocalizations.delegate],
+              localizationsDelegates: const [
+                GlobalCupertinoLocalizations.delegate,
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                AppLocalizations.delegate,
+                SfGlobalLocalizations.delegate
+              ],
               supportedLocales: AppLocalizations.supportedLocales,
               theme: ThemeData(
                 bottomSheetTheme: const BottomSheetThemeData(backgroundColor: Colors.transparent),
@@ -60,10 +66,8 @@ class _MainAppState extends State<MainApp> {
                             );
                           case InitStatus.HAS_SCHOOL:
                             return MultiBlocProvider(providers: [
-                              BlocProvider.value(
-                                  value: BlocProvider.of<AuthCubit>(context)),
-                              BlocProvider<MainAppNavigationCubit>(
-                                  create: (_) => MainAppNavigationCubit())
+                              BlocProvider.value(value: BlocProvider.of<AuthCubit>(context)),
+                              BlocProvider<MainAppNavigationCubit>(create: (_) => MainAppNavigationCubit())
                             ], child: const MainAppNavigationRootPage());
                         }
                       },
