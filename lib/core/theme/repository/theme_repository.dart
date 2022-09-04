@@ -19,7 +19,7 @@ class ThemeRepository implements ThemePersistense {
 
   final SharedPreferences _sharedPreferences = getIt<SharedPreferences>();
 
-  final _controller = StreamController<CustomTheme>();
+  final _controller = StreamController<CustomTheme>.broadcast();
 
   void _init() {
     final themeString = _sharedPreferences.getString(PreferenceTypes.theme);

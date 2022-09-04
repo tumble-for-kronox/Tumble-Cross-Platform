@@ -8,4 +8,5 @@ class NavigationRouteLabels {
   static const tumbleListView = 'TumbleListView';
   static const tumbleWeekView = 'TumbleWeekView';
   static const tumbleCalendarView = 'TumbleCalendarView';
+  static const appTopRootBuilder = 'App';
 }
