@@ -8,6 +8,7 @@ import 'package:tumble/core/ui/schedule/tumble_list_view/data/custom_alerts.dart
 import 'package:tumble/core/ui/schedule/tumble_list_view/data/to_top_button.dart';
 import 'package:tumble/core/ui/search/cubit/search_page_cubit.dart';
 import 'package:tumble/core/ui/search/search/preview_list_view_day_container.dart';
+import 'package:tumble/core/ui/tumble_loading.dart';
 
 typedef ToggleBookmark = Function(bool value);
 
@@ -29,8 +30,7 @@ class _SchedulePreviewState extends State<SchedulePreview> {
       builder: (context, state) {
         switch (state.previewFetchStatus) {
           case PreviewFetchStatus.LOADING:
-            return SpinKitThreeBounce(
-                color: Theme.of(context).colorScheme.primary);
+            return const TumbleLoading();
           case PreviewFetchStatus.FETCHED_SCHEDULE:
           case PreviewFetchStatus.CACHED_SCHEDULE:
             return Stack(

@@ -13,6 +13,7 @@ import 'package:tumble/core/ui/main_app/cubit/main_app_cubit.dart';
 import 'package:tumble/core/ui/schedule/no_schedule.dart';
 import 'package:tumble/core/ui/schedule/tumble_calendar_view/data/calendar_data_source.dart';
 import 'package:tumble/core/ui/schedule/tumble_list_view/data/custom_alerts.dart';
+import 'package:tumble/core/ui/tumble_loading.dart';
 
 import '../../../models/api_models/schedule_model.dart';
 import '../event_modal.dart';
@@ -43,8 +44,7 @@ class _TumbleCalendarViewState extends State<TumbleCalendarView> {
                   navigator),
             );
           case MainAppStatus.LOADING:
-            return SpinKitThreeBounce(
-                color: Theme.of(context).colorScheme.primary);
+            return const TumbleLoading();
 
           case MainAppStatus.POPULATED_VIEW:
             return FutureBuilder(
@@ -175,9 +175,7 @@ class _TumbleCalendarViewState extends State<TumbleCalendarView> {
                       },
                     );
                   }
-                  return const SpinKitThreeBounce(
-                    color: CustomColors.orangePrimary,
-                  );
+                  return const TumbleLoading();
                 });
           case MainAppStatus.FETCH_ERROR:
             return NoScheduleAvailable(

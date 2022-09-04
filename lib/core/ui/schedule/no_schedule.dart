@@ -19,6 +19,7 @@ class NoScheduleAvailable extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(errorType,
+                textAlign: TextAlign.center,
                 style: TextStyle(
                     color: Theme.of(context).colorScheme.onBackground,
                     fontSize: 20,

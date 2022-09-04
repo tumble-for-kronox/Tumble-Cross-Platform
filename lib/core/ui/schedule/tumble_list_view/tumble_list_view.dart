@@ -12,6 +12,7 @@ import 'package:tumble/core/ui/main_app/main_app.dart';
 import 'package:tumble/core/ui/schedule/no_schedule.dart';
 import 'package:tumble/core/ui/schedule/tumble_list_view/data/custom_alerts.dart';
 import 'package:tumble/core/ui/schedule/tumble_list_view/data/to_top_button.dart';
+import 'package:tumble/core/ui/tumble_loading.dart';
 import 'tumble_list_view_day_container.dart';
 
 class TumbleListView extends StatelessWidget {
@@ -34,8 +35,7 @@ class TumbleListView extends StatelessWidget {
               errorType: RuntimeErrorType.noCachedSchedule(),
             );
           case MainAppStatus.LOADING:
-            return SpinKitThreeBounce(
-                color: Theme.of(context).colorScheme.primary);
+            return const TumbleLoading();
           case MainAppStatus.POPULATED_VIEW:
             return Stack(
               children: [

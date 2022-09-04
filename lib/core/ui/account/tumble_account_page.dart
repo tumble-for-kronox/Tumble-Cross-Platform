@@ -6,6 +6,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:tumble/core/ui/account/authenticated_page.dart';
 import 'package:tumble/core/ui/account/unauthenticated_page.dart';
 import 'package:tumble/core/ui/login/cubit/auth_cubit.dart';
+import 'package:tumble/core/ui/tumble_loading.dart';
 
 class TumbleAccountPage extends StatefulWidget {
   const TumbleAccountPage({Key? key}) : super(key: key);
@@ -26,8 +27,7 @@ class _TumbleAccountPageState extends State<TumbleAccountPage> {
           case AuthStatus.UNAUTHENTICATED:
             return const UnauthenticatedPage();
           default:
-            return SpinKitThreeBounce(
-                color: Theme.of(context).colorScheme.primary);
+            return const TumbleLoading();
         }
       },
     );

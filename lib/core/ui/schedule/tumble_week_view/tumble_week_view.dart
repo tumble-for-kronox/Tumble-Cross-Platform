@@ -9,6 +9,7 @@ import 'package:tumble/core/ui/main_app/cubit/main_app_cubit.dart';
 import 'package:tumble/core/ui/schedule/no_schedule.dart';
 import 'package:tumble/core/ui/schedule/tumble_list_view/data/custom_alerts.dart';
 import 'package:tumble/core/ui/schedule/tumble_week_view/week_list_view.dart';
+import 'package:tumble/core/ui/tumble_loading.dart';
 
 class TumbleWeekView extends StatefulWidget {
   const TumbleWeekView({Key? key}) : super(key: key);
@@ -35,8 +36,7 @@ class _TumbleWeekViewState extends State<TumbleWeekView> {
                   navigator),
             );
           case MainAppStatus.LOADING:
-            return SpinKitThreeBounce(
-                color: Theme.of(context).colorScheme.primary);
+            return const TumbleLoading();
           case MainAppStatus.POPULATED_VIEW:
             return Stack(children: [
               SizedBox(
