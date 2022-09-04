@@ -35,7 +35,7 @@ extension ResponseParsing on Response {
 
   ApiUserResponse parseUser() {
     if (statusCode == 200) {
-      return ApiUserResponse.completed(kronoxUserModelFromJson(body));
+      return ApiUserResponse.authorized(kronoxUserModelFromJson(body));
     } else if (statusCode == 401) {
       return ApiUserResponse.error(RuntimeErrorType.loginError());
     }
@@ -109,7 +109,7 @@ extension HttpClientResponseParsing on HttpClientResponse {
 
   Future<ApiUserResponse> parseUser() async {
     if (statusCode == 200) {
-      return ApiUserResponse.completed(
+      return ApiUserResponse.authorized(
           kronoxUserModelFromJson(await transform(utf8.decoder).join()));
     } else if (statusCode == 401) {
       return ApiUserResponse.error(RuntimeErrorType.loginError());

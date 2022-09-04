@@ -27,9 +27,12 @@ class ToTopButton extends StatelessWidget {
                 Icons.keyboard_arrow_up_sharp,
                 color: Theme.of(context).colorScheme.onSurface,
               ),
-              Text(
-                S.listViewPage.toTopButton(),
-                style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+              FittedBox(
+                fit: BoxFit.fitWidth,
+                child: Text(
+                  S.listViewPage.toTopButton(),
+                  style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+                ),
               )
             ],
           )),

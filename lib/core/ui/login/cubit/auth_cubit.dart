@@ -19,7 +19,8 @@ part 'auth_state.dart';
 class AuthCubit extends Cubit<AuthState> {
   AuthCubit()
       : super(AuthState(
-          autoSignup: getIt<SharedPreferences>().getBool(PreferenceTypes.autoSignup)!,
+          autoSignup:
+              getIt<SharedPreferences>().getBool(PreferenceTypes.autoSignup)!,
           authStatus: AuthStatus.INITIAL,
           userEventListStatus: UserEventListStatus.INITIAL,
           usernameController: TextEditingController(),
@@ -41,15 +42,15 @@ class AuthCubit extends Cubit<AuthState> {
     emit(state.copyWith(userEventListStatus: UserEventListStatus.LOADING));
     ApiUserResponse userEventResponse =
         await _userRepo.getUserEvents(state.userSession!.sessionToken);
-
+    log(userEventResponse.status.name);
     switch (userEventResponse.status) {
-      case ApiUserResponseStatus.AUTHORIZED:
+      case ApiUserResponseStatus.COMPLETED:
         emit(state.copyWith(
             userEventListStatus: UserEventListStatus.LOADED,
             userEvents: userEventResponse.data!,
             refreshSession: false));
         break;
-      case ApiUserResponseStatus.UNAUTHORIZED:
+      case ApiUserResponseStatus.ERROR:
         emit(state);
         break;
       default:
@@ -63,7 +64,7 @@ class AuthCubit extends Cubit<AuthState> {
     emit(state.copyWith(userEventListStatus: UserEventListStatus.LOADING));
     ApiUserResponse registerResponse = await _userRepo.putRegisterUserEvent(
         id, state.userSession!.sessionToken);
-
+    log(registerResponse.status.name);
     switch (registerResponse.status) {
       case ApiUserResponseStatus.AUTHORIZED:
         getUserEvents();
@@ -136,6 +137,7 @@ class AuthCubit extends Cubit<AuthState> {
 
     state.usernameController.clear();
     state.passwordController.clear();
+    log(userRes.status.toString());
     switch (userRes.status) {
       case ApiUserResponseStatus.AUTHORIZED:
         storeUserCreds((userRes.data! as KronoxUserModel).refreshToken);
@@ -145,7 +147,8 @@ class AuthCubit extends Cubit<AuthState> {
         );
         emit(state.copyWith(loginSuccess: true));
         await Future.delayed(const Duration(seconds: 2));
-        emit(state.copyWith(authStatus: AuthStatus.AUTHENTICATED, userSession: userRes.data!));
+        emit(state.copyWith(
+            authStatus: AuthStatus.AUTHENTICATED, userSession: userRes.data!));
 
         getUserEvents();
         break;
@@ -212,8 +215,10 @@ class AuthCubit extends Cubit<AuthState> {
 
   void logout() {
     getIt<SecureStorageRepository>().clear();
-    emit(state.copyWith(authStatus: AuthStatus.UNAUTHENTICATED, userSession: null, loginSuccess: false));
-
+    emit(state.copyWith(
+        authStatus: AuthStatus.UNAUTHENTICATED,
+        userSession: null,
+        loginSuccess: false));
   }
 
   bool get authenticated => state.authStatus == AuthStatus.AUTHENTICATED;
