@@ -11,10 +11,11 @@ class PermissionHandler extends StatelessWidget {
   Widget build(BuildContext context) {
     return AlertDialog(
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(22.0)),
+        borderRadius: BorderRadius.all(Radius.circular(10.0)),
       ),
       backgroundColor: Theme.of(context).colorScheme.surface,
-      contentPadding: const EdgeInsets.only(top: 19, bottom: 10, left: 17, right: 10),
+      contentPadding:
+          const EdgeInsets.only(top: 19, bottom: 10, left: 17, right: 10),
       content: Container(
         decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.surface,
