@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,12 +13,14 @@ import '../../dependency_injection/get_it_instances.dart';
 class ThemeCubit extends Cubit<ThemeState> {
   ThemeCubit()
       : super(ThemeState(
-            themeString: getIt<SharedPreferences>()
-                .getString(PreferenceTypes.theme)!
-                .capitalize()));
+            themeString: getIt<SharedPreferences>().getString(PreferenceTypes.theme)!.capitalize(),
+            locale: getIt<SharedPreferences>().getString(PreferenceTypes.locale) == null
+                ? null
+                : Locale(getIt<SharedPreferences>().getString(PreferenceTypes.locale)!)));
 
   final ThemePersistense themeRepository = getIt<ThemeRepository>();
   late StreamSubscription<CustomTheme> _themeSubscription;
+  late StreamSubscription<Locale?> _langSubscription;
 
   void getCurrentTheme() {
     _themeSubscription = themeRepository.getTheme().listen((customTheme) {
@@ -35,6 +38,14 @@ class ThemeCubit extends Cubit<ThemeState> {
           emit(state.copyWith(themeMode: ThemeMode.light));
           break;
       }
+    });
+  }
+
+  void getCurrentLang() {
+    _langSubscription = themeRepository.getLocale().listen((locale) {
+      log("CHANGING LOCALE!");
+      log((locale?.toLanguageTag()).toString());
+      emit(ThemeState(themeString: state.themeString, locale: locale));
     });
   }
 

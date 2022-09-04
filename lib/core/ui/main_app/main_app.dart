@@ -27,28 +27,44 @@ class _MainAppState extends State<MainApp> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ThemeCubit, ThemeState>(
-        builder: ((context, state) => FutureBuilder(
-            future: BlocProvider.of<InitCubit>(context).init(),
-            builder: (context, snapshot) {
-              S.init(context);
-              return BlocBuilder<InitCubit, InitState>(
-                builder: (context, state) {
-                  switch (state.status) {
-                    case InitStatus.INITIAL:
-                      return BlocProvider.value(
-                        value: BlocProvider.of<InitCubit>(context),
-                        child: const SchoolSelectionPage(),
-                      );
-                    case InitStatus.HAS_SCHOOL:
-                      return MultiBlocProvider(providers: [
-                        BlocProvider.value(
-                            value: BlocProvider.of<AuthCubit>(context)),
-                        BlocProvider<MainAppNavigationCubit>(
-                            create: (_) => MainAppNavigationCubit())
-                      ], child: const MainAppNavigationRootPage());
-                  }
-                },
-              );
-            })));
+        builder: ((context, state) => MaterialApp(
+              debugShowCheckedModeBanner: false,
+              title: 'Tumble',
+              theme: ThemeData(
+                bottomSheetTheme: const BottomSheetThemeData(backgroundColor: Colors.transparent),
+                colorScheme: CustomColors.lightColors,
+                fontFamily: 'Roboto',
+              ),
+              darkTheme: ThemeData(
+                bottomSheetTheme: const BottomSheetThemeData(backgroundColor: Colors.transparent),
+                colorScheme: CustomColors.darkColors,
+                bottomNavigationBarTheme: BottomNavigationBarThemeData(
+                  selectedItemColor: CustomColors.darkColors.primary,
+                ),
+                fontFamily: 'Roboto',
+              ),
+              themeMode: state.themeMode,
+              home: FutureBuilder(
+                  future: BlocProvider.of<InitCubit>(context).init(),
+                  builder: (context, snapshot) {
+                    return BlocBuilder<InitCubit, InitState>(
+                      builder: (context, state) {
+                        switch (state.status) {
+                          case InitStatus.INITIAL:
+                            return BlocProvider.value(
+                              value: BlocProvider.of<InitCubit>(context),
+                              child: const SchoolSelectionPage(),
+                            );
+                          case InitStatus.HAS_SCHOOL:
+                            return MultiBlocProvider(providers: [
+                              BlocProvider.value(value: BlocProvider.of<AuthCubit>(context)),
+                              BlocProvider<MainAppNavigationCubit>(create: (_) => MainAppNavigationCubit())
+                            ], child: const MainAppNavigationRootPage());
+                        }
+                      },
+                    );
+                  }),
+            )));
+
   }
 }

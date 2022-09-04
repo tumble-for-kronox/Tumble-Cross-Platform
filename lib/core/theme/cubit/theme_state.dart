@@ -6,16 +6,18 @@ import 'package:tumble/core/shared/preference_types.dart';
 import 'package:tumble/core/dependency_injection/get_it_instances.dart';
 
 class ThemeState extends Equatable {
-  const ThemeState({required this.themeString, this.themeMode = ThemeMode.system});
+  const ThemeState({required this.themeString, required this.locale, this.themeMode = ThemeMode.system});
 
   final ThemeMode themeMode;
   final String themeString;
+  final Locale? locale;
 
-  ThemeState copyWith({ThemeMode? themeMode}) => ThemeState(
+  ThemeState copyWith({ThemeMode? themeMode, Locale? locale}) => ThemeState(
+        locale: locale ?? this.locale,
         themeMode: themeMode ?? this.themeMode,
         themeString: getIt<SharedPreferences>().getString(PreferenceTypes.theme)!.capitalize(),
       );
 
   @override
-  List<Object?> get props => [themeMode, themeString];
+  List<Object?> get props => [themeMode, themeString, locale];
 }
