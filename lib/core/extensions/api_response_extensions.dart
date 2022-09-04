@@ -17,16 +17,20 @@ import '../models/api_models/user_event_collection_model.dart';
 extension ResponseParsing on Response {
   ApiScheduleOrProgrammeResponse parseSchedule() {
     if (statusCode == 200) {
-      return ApiScheduleOrProgrammeResponse.completed(scheduleModelFromJson(body));
+      return ApiScheduleOrProgrammeResponse.completed(
+          scheduleModelFromJson(body));
     }
-    return ApiScheduleOrProgrammeResponse.error(RuntimeErrorType.scheduleFetchError());
+    return ApiScheduleOrProgrammeResponse.error(
+        RuntimeErrorType.scheduleFetchError());
   }
 
   ApiScheduleOrProgrammeResponse parsePrograms() {
     if (statusCode == 200) {
-      return ApiScheduleOrProgrammeResponse.completed(programModelFromJson(body));
+      return ApiScheduleOrProgrammeResponse.completed(
+          programModelFromJson(body));
     }
-    return ApiScheduleOrProgrammeResponse.error(RuntimeErrorType.programFetchError());
+    return ApiScheduleOrProgrammeResponse.error(
+        RuntimeErrorType.programFetchError());
   }
 
   ApiUserResponse parseUser() {
@@ -49,7 +53,8 @@ extension ResponseParsing on Response {
     if (statusCode == 200) {
       return ApiUserResponse.completed(userEventCollectionModelFromJson(body));
     } else if (statusCode == 401) {
-      return ApiUserResponse.unauthorized(RuntimeErrorType.authenticationError());
+      return ApiUserResponse.unauthorized(
+          RuntimeErrorType.authenticationError());
     }
     return ApiUserResponse.error(RuntimeErrorType.unknownError());
   }
@@ -58,16 +63,19 @@ extension ResponseParsing on Response {
     if (statusCode == 200) {
       return ApiUserResponse.completed(true);
     } else if (statusCode == 401) {
-      return ApiUserResponse.unauthorized(RuntimeErrorType.authenticationError());
+      return ApiUserResponse.unauthorized(
+          RuntimeErrorType.authenticationError());
     }
     return ApiUserResponse.error(RuntimeErrorType.unknownError());
   }
 
   ApiUserResponse parseMultiRegistrationResult() {
     if (statusCode == 200) {
-      return ApiUserResponse.completed(multiRegistrationResultModelFromJson(body));
+      return ApiUserResponse.completed(
+          multiRegistrationResultModelFromJson(body));
     } else if (statusCode == 401) {
-      return ApiUserResponse.unauthorized(RuntimeErrorType.authenticationError());
+      return ApiUserResponse.unauthorized(
+          RuntimeErrorType.authenticationError());
     }
     return ApiUserResponse.error(RuntimeErrorType.unknownError());
   }
@@ -76,16 +84,20 @@ extension ResponseParsing on Response {
 extension HttpClientResponseParsing on HttpClientResponse {
   Future<ApiScheduleOrProgrammeResponse> parsePrograms() async {
     if (statusCode == 200) {
-      return ApiScheduleOrProgrammeResponse.completed(programModelFromJson(await transform(utf8.decoder).join()));
+      return ApiScheduleOrProgrammeResponse.completed(
+          programModelFromJson(await transform(utf8.decoder).join()));
     }
-    return ApiScheduleOrProgrammeResponse.error(RuntimeErrorType.programFetchError());
+    return ApiScheduleOrProgrammeResponse.error(
+        RuntimeErrorType.programFetchError());
   }
 
   Future<ApiScheduleOrProgrammeResponse> parseSchedule() async {
     if (statusCode == 200) {
-      return ApiScheduleOrProgrammeResponse.completed(scheduleModelFromJson(await transform(utf8.decoder).join()));
+      return ApiScheduleOrProgrammeResponse.completed(
+          scheduleModelFromJson(await transform(utf8.decoder).join()));
     }
-    return ApiScheduleOrProgrammeResponse.error(RuntimeErrorType.scheduleFetchError());
+    return ApiScheduleOrProgrammeResponse.error(
+        RuntimeErrorType.scheduleFetchError());
   }
 
   Future<ApiBugReportResponse> parseIssue() async {
@@ -97,7 +109,8 @@ extension HttpClientResponseParsing on HttpClientResponse {
 
   Future<ApiUserResponse> parseUser() async {
     if (statusCode == 200) {
-      return ApiUserResponse.authorized(kronoxUserModelFromJson(await transform(utf8.decoder).join()));
+      return ApiUserResponse.authorized(
+          kronoxUserModelFromJson(await transform(utf8.decoder).join()));
     } else if (statusCode == 401) {
       return ApiUserResponse.error(RuntimeErrorType.loginError());
     }
@@ -106,9 +119,11 @@ extension HttpClientResponseParsing on HttpClientResponse {
 
   Future<ApiUserResponse> parseUserEvents() async {
     if (statusCode == 200) {
-      return ApiUserResponse.completed(userEventCollectionModelFromJson(await transform(utf8.decoder).join()));
+      return ApiUserResponse.completed(userEventCollectionModelFromJson(
+          await transform(utf8.decoder).join()));
     } else if (statusCode == 401) {
-      return ApiUserResponse.unauthorized(RuntimeErrorType.authenticationError());
+      return ApiUserResponse.unauthorized(
+          RuntimeErrorType.authenticationError());
     }
     return ApiUserResponse.error(RuntimeErrorType.unknownError());
   }
@@ -117,14 +132,16 @@ extension HttpClientResponseParsing on HttpClientResponse {
     if (statusCode == 200) {
       return ApiUserResponse.completed(true);
     } else if (statusCode == 401) {
-      return ApiUserResponse.unauthorized(RuntimeErrorType.authenticationError());
+      return ApiUserResponse.unauthorized(
+          RuntimeErrorType.authenticationError());
     }
     return ApiUserResponse.error(RuntimeErrorType.unknownError());
   }
 
   Future<ApiUserResponse> parseMultiRegistrationResult() async {
     if (statusCode == 200) {
-      return ApiUserResponse.completed(multiRegistrationResultModelFromJson(await transform(utf8.decoder).join()));
+      return ApiUserResponse.completed(multiRegistrationResultModelFromJson(
+          await transform(utf8.decoder).join()));
     }
     return ApiUserResponse.error(RuntimeErrorType.programFetchError());
   }

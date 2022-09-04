@@ -34,14 +34,11 @@ class _UserAccountInfo extends State<UserAccountInfo> {
                     Container(
                       height: 150,
                       decoration: BoxDecoration(
-                        boxShadow: [
+                        boxShadow: const [
                           BoxShadow(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .onBackground
-                                  .withOpacity(.3),
-                              offset: const Offset(1.0, 1.0),
-                              blurRadius: 2),
+                              color: Colors.black26,
+                              blurRadius: 2,
+                              offset: Offset(1, 1))
                         ],
                         color: Theme.of(context).colorScheme.surface,
                         borderRadius: BorderRadius.circular(15),
