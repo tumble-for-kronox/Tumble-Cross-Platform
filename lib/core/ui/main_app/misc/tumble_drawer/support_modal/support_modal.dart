@@ -7,6 +7,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:tumble/core/extensions/extensions.dart';
 import 'package:tumble/core/theme/data/colors.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
+import 'package:tumble/core/ui/main_app/misc/tumble_drag_pill.dart';
 import 'package:tumble/core/ui/main_app/misc/tumble_drawer/cubit/drawer_state.dart';
 import 'package:tumble/core/ui/main_app/misc/tumble_drawer/support_modal/cubit/support_modal_state.dart';
 import 'package:tumble/core/ui/tumble_button.dart';
@@ -184,6 +185,7 @@ class SupportModalShell extends StatelessWidget {
               ),
             ),
           ),
+          TumbleDragPill(barColor: Theme.of(context).colorScheme.onPrimary),
         ],
       );
 

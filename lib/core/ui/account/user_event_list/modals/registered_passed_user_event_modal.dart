@@ -17,23 +17,26 @@ import '../../../schedule/tumble_list_view/tumble_list_view_schedule_card_ribbon
 class RegisteredPassedUserEventModal extends StatelessWidget {
   final AvailableUserEventModel userEvent;
 
-  const RegisteredPassedUserEventModal({Key? key, required this.userEvent}) : super(key: key);
+  const RegisteredPassedUserEventModal({Key? key, required this.userEvent})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return DetailsModal(
+    return TumbleDetailsModalBase(
       body: Container(
         height: MediaQuery.of(context).size.height - 280,
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.background,
-            borderRadius: const BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20))),
+            borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(20), topRight: Radius.circular(20))),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                padding: const EdgeInsets.only(right: 0, left: 0, top: 55, bottom: 10),
+                padding: const EdgeInsets.only(
+                    right: 0, left: 0, top: 55, bottom: 10),
                 child: FittedBox(
                   fit: BoxFit.fitWidth,
                   child: Text(
@@ -42,7 +45,9 @@ class RegisteredPassedUserEventModal extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.start,
                     style: TextStyle(
-                        fontSize: 32, fontWeight: FontWeight.w500, color: Theme.of(context).colorScheme.onBackground),
+                        fontSize: 32,
+                        fontWeight: FontWeight.w500,
+                        color: Theme.of(context).colorScheme.onBackground),
                   ),
                 ),
               ),

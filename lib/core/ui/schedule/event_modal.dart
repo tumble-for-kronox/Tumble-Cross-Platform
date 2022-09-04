@@ -58,7 +58,7 @@ class TumbleEventModal extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final locations = event.locations;
-    return DetailsModal(
+    return TumbleDetailsModalBase(
       body: Container(
         height: MediaQuery.of(context).size.height - 260,
         padding: const EdgeInsets.only(left: 20, right: 20, top: 50),
