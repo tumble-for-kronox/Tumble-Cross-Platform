@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:tumble/core/extensions/extensions.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
+import 'package:tumble/core/ui/main_app/misc/tumble_drag_pill.dart';
 import 'package:tumble/core/ui/main_app/misc/tumble_drawer/drawer_generic/data/default_views_map.dart';
 import 'package:tumble/core/ui/scaffold_message.dart';
 
@@ -21,26 +23,39 @@ class AppThemePicker extends StatelessWidget {
           color: Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(20),
         ),
-        child: SizedBox.expand(
-            child: Card(
-                elevation: 0,
-                color: Theme.of(context).colorScheme.surface,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-                child: Column(
-                    children: (IconAndTitleSet.themes.keys)
-                        .map((key) => ListTile(
-                            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
-                            leading: IconAndTitleSet.themes[key],
-                            title: Text(
-                              key,
-                              style: TextStyle(color: Theme.of(context).colorScheme.onBackground),
-                            ),
-                            onTap: () {
-                              showScaffoldMessage(
-                                  context, S.scaffoldMessages.changeTheme(key.split(' ').first.toLowerCase()));
-                              setTheme(key.split(' ').first.toLowerCase());
-                            }))
-                        .toList()))),
+        child: Stack(children: [
+          SizedBox.expand(
+              child: Card(
+                  elevation: 0,
+                  color: Theme.of(context).colorScheme.surface,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0)),
+                  child: Column(
+                      children: (IconAndTitleSet.themes.keys)
+                          .map((key) => ListTile(
+                              shape: const RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20))),
+                              leading: IconAndTitleSet.themes[key],
+                              title: Text(
+                                key,
+                                style: TextStyle(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onBackground),
+                              ),
+                              onTap: () {
+                                showScaffoldMessage(
+                                    context,
+                                    S.scaffoldMessages.changeTheme(
+                                        key.split(' ').first.toLowerCase()));
+                                setTheme(key.split(' ').first.toLowerCase());
+                              }))
+                          .toList()))),
+          TumbleDragPill(
+              barColor:
+                  Theme.of(context).colorScheme.background.contrastColor())
+        ]),
       ),
     );
   }

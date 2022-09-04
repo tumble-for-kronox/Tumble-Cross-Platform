@@ -20,17 +20,19 @@ import '../../../schedule/tumble_list_view/tumble_list_view_schedule_card_ribbon
 class AvailableUserEventModal extends StatelessWidget {
   final AvailableUserEventModel userEvent;
 
-  const AvailableUserEventModal({Key? key, required this.userEvent}) : super(key: key);
+  const AvailableUserEventModal({Key? key, required this.userEvent})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return DetailsModal(
+    return TumbleDetailsModalBase(
       body: Container(
         height: MediaQuery.of(context).size.height - 240,
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.background,
-            borderRadius: const BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20))),
+            borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(20), topRight: Radius.circular(20))),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -70,8 +72,10 @@ class AvailableUserEventModal extends StatelessWidget {
                   ),
                   ModalInfoRow(
                     title: S.detailsModal.registerBefore(),
-                    icon: const Icon(CupertinoIcons.person_crop_circle_badge_checkmark),
-                    subtitle: DateFormat("dd MMMM yyyy", Localizations.localeOf(context).languageCode)
+                    icon: const Icon(
+                        CupertinoIcons.person_crop_circle_badge_checkmark),
+                    subtitle: DateFormat("dd MMMM yyyy",
+                            Localizations.localeOf(context).languageCode)
                         .format(userEvent.lastSignupDate),
                   ),
                   const SizedBox(

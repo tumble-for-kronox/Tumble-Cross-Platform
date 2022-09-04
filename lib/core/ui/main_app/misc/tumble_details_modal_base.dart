@@ -3,16 +3,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:tumble/core/extensions/extensions.dart';
-import 'package:tumble/core/ui/schedule/event_options.dart';
+import 'package:tumble/core/ui/main_app/misc/tumble_drag_pill.dart';
 
-class DetailsModal extends StatelessWidget {
+class TumbleDetailsModalBase extends StatelessWidget {
   final Widget body;
   final Function()? onSettingsPressed;
   final String title;
   final Color barColor;
 
-  const DetailsModal(
-      {Key? key, required this.body, required this.title, required this.barColor, this.onSettingsPressed})
+  const TumbleDetailsModalBase(
+      {Key? key,
+      required this.body,
+      required this.title,
+      required this.barColor,
+      this.onSettingsPressed})
       : super(key: key);
 
   @override
@@ -49,17 +53,8 @@ class DetailsModal extends StatelessWidget {
               ),
             ),
           ),
-          Container(
-            alignment: Alignment.topCenter,
-            padding: const EdgeInsets.only(top: 5),
-            child: Container(
-              width: 40,
-              height: 4,
-              decoration: BoxDecoration(
-                color: barColor.contrastColor().withOpacity(0.5),
-                borderRadius: BorderRadius.circular(20),
-              ),
-            ),
+          TumbleDragPill(
+            barColor: barColor.contrastColor(),
           ),
           () {
             return onSettingsPressed == null
