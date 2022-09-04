@@ -22,8 +22,8 @@ class ThemeRepository implements ThemePersistense {
 
   final SharedPreferences _sharedPreferences = getIt<SharedPreferences>();
 
-  final _controller = StreamController<CustomTheme>.broadcast();
-  final _langController = StreamController<Locale?>();
+  final _themeController = StreamController<CustomTheme>.broadcast();
+  final _langController = StreamController<Locale?>.broadcast();
 
   void _init() {
     final themeString = _sharedPreferences.getString(PreferenceTypes.theme);
@@ -68,7 +68,8 @@ class ThemeRepository implements ThemePersistense {
     _langController.add(locale);
     return locale == null
         ? _sharedPreferences.remove(PreferenceTypes.locale)
-        : _sharedPreferences.setString(PreferenceTypes.locale, locale.languageCode);
+        : _sharedPreferences.setString(
+            PreferenceTypes.locale, locale.languageCode);
   }
 
   @override
