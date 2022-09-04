@@ -109,7 +109,9 @@ class _TumbleCalendarViewState extends State<TumbleCalendarView> {
                               width: 10,
                               alignment: Alignment.centerLeft,
                               decoration: BoxDecoration(
-                                color: eventColor,
+                                color: event.isSpecial
+                                    ? Colors.redAccent
+                                    : eventColor,
                                 borderRadius: const BorderRadius.only(
                                   topLeft: Radius.circular(10),
                                   bottomLeft: Radius.circular(10),
