@@ -39,7 +39,7 @@ class _MainAppNavigationRootPageState extends State<MainAppNavigationRootPage> {
                 backgroundColor: Theme.of(context).colorScheme.background,
                 endDrawer: MultiBlocProvider(
                   providers: [
-                    BlocProvider<DrawerCubit>(create: (_) => DrawerCubit()),
+                    BlocProvider<DrawerCubit>(create: (_) => DrawerCubit(Localizations.localeOf(context))),
                     BlocProvider<MainAppCubit>.value(value: BlocProvider.of<MainAppCubit>(context))
                   ],
                   child: const TumbleAppDrawer(),

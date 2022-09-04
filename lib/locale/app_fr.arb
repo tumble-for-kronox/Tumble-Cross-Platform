@@ -7,7 +7,7 @@
     "weekViewTitle": "Semaine",
     "calendarViewTitle": "Calendrier",
     "accountPageTitle": "Compte",
-    "weekViewNumber": "w. {weekNumber}",
+    "weekViewNumber": "s. {weekNumber}",
     "weekViewTodayLabel": "Aujourd'hui",
     "weekViewNoActivities": "Aucune activité planifiée",
     "signInButtonTitle": "Connecter",

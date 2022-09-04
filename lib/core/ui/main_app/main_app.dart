@@ -30,14 +30,6 @@ class _MainAppState extends State<MainApp> {
         builder: ((context, state) => MaterialApp(
               debugShowCheckedModeBanner: false,
               title: 'Tumble',
-              localizationsDelegates: const [
-                GlobalCupertinoLocalizations.delegate,
-                GlobalMaterialLocalizations.delegate,
-                GlobalWidgetsLocalizations.delegate,
-                AppLocalizations.delegate,
-                SfGlobalLocalizations.delegate
-              ],
-              supportedLocales: AppLocalizations.supportedLocales,
               theme: ThemeData(
                 bottomSheetTheme: const BottomSheetThemeData(backgroundColor: Colors.transparent),
                 colorScheme: CustomColors.lightColors,
@@ -55,7 +47,6 @@ class _MainAppState extends State<MainApp> {
               home: FutureBuilder(
                   future: BlocProvider.of<InitCubit>(context).init(),
                   builder: (context, snapshot) {
-                    S.init(context);
                     return BlocBuilder<InitCubit, InitState>(
                       builder: (context, state) {
                         switch (state.status) {

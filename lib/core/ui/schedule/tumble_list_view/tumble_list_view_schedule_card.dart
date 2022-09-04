@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:shimmer_animation/shimmer_animation.dart';
 import 'package:tumble/core/extensions/extensions.dart';
 import 'package:tumble/core/models/api_models/schedule_model.dart';
 import 'package:tumble/core/ui/schedule/tumble_list_view/tumble_list_view_schedule_card_location_container.dart';
@@ -29,99 +30,107 @@ class ScheduleCard extends StatelessWidget {
               margin: const EdgeInsets.only(top: 9, left: 10, right: 10),
               alignment: Alignment.topLeft,
               decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.surface,
                   borderRadius: BorderRadius.circular(10),
                   boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 2, offset: Offset(1, 1))]),
-              child: MaterialButton(
-                  padding: const EdgeInsets.all(0),
-                  onPressed: onTap,
-                  child: Container(
-                      padding: const EdgeInsets.only(left: 24, top: 15),
-                      width: double.infinity,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          FractionallySizedBox(
-                            widthFactor: 1,
-                            alignment: Alignment.topLeft,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                  padding: const EdgeInsets.only(left: 2),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          Container(
-                                            width: 5,
-                                            height: 5,
-                                            decoration: BoxDecoration(
-                                              shape: BoxShape.circle,
-                                              color: color,
+              child: Shimmer(
+                color: Colors.redAccent,
+                colorOpacity: 0.1,
+                enabled: event.isSpecial,
+                child: MaterialButton(
+                    padding: const EdgeInsets.all(0),
+                    onPressed: onTap,
+                    color: Theme.of(context).colorScheme.surface,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Container(
+                        padding: const EdgeInsets.only(left: 24, top: 15),
+                        width: double.infinity,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            FractionallySizedBox(
+                              widthFactor: 1,
+                              alignment: Alignment.topLeft,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    padding: const EdgeInsets.only(left: 2),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Container(
+                                              width: 5,
+                                              height: 5,
+                                              decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                color: color,
+                                              ),
                                             ),
-                                          ),
-                                          const SizedBox(width: 6),
-                                          Container(
-                                            padding: const EdgeInsets.only(top: 1),
-                                            child: Text(
-                                              '${DateFormat.Hm(Localizations.localeOf(context).languageCode).format(event.from)} - ${DateFormat.Hm(Localizations.localeOf(context).languageCode).format(event.to)}',
-                                              style: TextStyle(
-                                                  fontSize: 13,
-                                                  fontWeight: FontWeight.w400,
-                                                  color: Theme.of(context).colorScheme.onSecondary,
-                                                  letterSpacing: .5),
+                                            const SizedBox(width: 6),
+                                            Container(
+                                              padding: const EdgeInsets.only(top: 1),
+                                              child: Text(
+                                                '${DateFormat.Hm(Localizations.localeOf(context).languageCode).format(event.from)} - ${DateFormat.Hm(Localizations.localeOf(context).languageCode).format(event.to)}',
+                                                style: TextStyle(
+                                                    fontSize: 13,
+                                                    fontWeight: FontWeight.w400,
+                                                    color: Theme.of(context).colorScheme.onSecondary,
+                                                    letterSpacing: .5),
+                                              ),
                                             ),
-                                          ),
-                                        ],
-                                      ),
-                                      Container(
-                                        padding: const EdgeInsets.only(right: 12),
-                                        child: event.isSpecial
-                                            ? const Icon(
-                                                CupertinoIcons.exclamationmark_square,
-                                                size: 20,
-                                              )
-                                            : null,
-                                      )
-                                    ],
+                                          ],
+                                        ),
+                                        Container(
+                                          padding: const EdgeInsets.only(right: 12),
+                                          child: event.isSpecial
+                                              ? const Icon(
+                                                  CupertinoIcons.exclamationmark_square,
+                                                  size: 20,
+                                                )
+                                              : null,
+                                        )
+                                      ],
+                                    ),
                                   ),
-                                ),
-                                const SizedBox(
-                                  height: 7.5,
-                                ),
-                                Text(event.title.capitalize(),
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                      color: Theme.of(context).colorScheme.onBackground,
-                                      fontSize: 19,
-                                      letterSpacing: .5,
-                                      fontWeight: FontWeight.w400,
-                                    )),
-                              ],
+                                  const SizedBox(
+                                    height: 7.5,
+                                  ),
+                                  Text(event.title.capitalize(),
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        color: Theme.of(context).colorScheme.onBackground,
+                                        fontSize: 19,
+                                        letterSpacing: .5,
+                                        fontWeight: FontWeight.w400,
+                                      )),
+                                ],
+                              ),
                             ),
-                          ),
-                          Expanded(
-                            child: Stack(
-                              children: [
-                                Container(
-                                    padding: const EdgeInsets.only(top: 10, right: 4),
-                                    child: Text(event.course.englishName,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
-                                          color: Theme.of(context).colorScheme.onBackground,
-                                          fontSize: 16,
-                                          letterSpacing: .5,
-                                          fontWeight: FontWeight.w300,
-                                        ))),
-                                ScheduleCardLocationContainer(
-                                    textColor: Theme.of(context).colorScheme.onSecondary, locations: event.locations),
-                              ],
+                            Expanded(
+                              child: Stack(
+                                children: [
+                                  Container(
+                                      padding: const EdgeInsets.only(top: 10, right: 4),
+                                      child: Text(event.course.englishName,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                            color: Theme.of(context).colorScheme.onBackground,
+                                            fontSize: 16,
+                                            letterSpacing: .5,
+                                            fontWeight: FontWeight.w300,
+                                          ))),
+                                  ScheduleCardLocationContainer(
+                                      textColor: Theme.of(context).colorScheme.onSecondary, locations: event.locations),
+                                ],
+                              ),
                             ),
-                          ),
-                        ],
-                      ))),
+                          ],
+                        ))),
+              ),
             ),
             Container(
                 margin: const EdgeInsets.only(top: 9, left: 10, right: 10),

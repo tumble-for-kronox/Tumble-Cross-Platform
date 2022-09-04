@@ -5,4 +5,5 @@ class PreferenceTypes {
   static const notificationTime = 'notificationTime';
   static const bookmarks = 'favorites';
   static const autoSignup = 'autoSignup';
+  static const locale = 'language';
 }
