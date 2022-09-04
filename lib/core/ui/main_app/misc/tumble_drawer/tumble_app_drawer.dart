@@ -122,7 +122,8 @@ class TumbleAppDrawer extends StatelessWidget {
                       subtitle: S.settingsPage
                           .offsetSubtitle(getIt<SharedPreferences>().getInt(PreferenceTypes.notificationTime)!),
                       eventType: EventType.EDIT_NOTIFICATION_TIME,
-                      drawerEvent: (eventType) => handleDrawerEvent(eventType, context, navigator, null),
+                      drawerEvent: (eventType) =>
+                          handleDrawerEvent(eventType, context, navigator, context.read<DrawerCubit>()),
                     )
                   ], title: S.settingsPage.notificationTitle()),
                   Divider(
@@ -193,10 +194,13 @@ class TumbleAppDrawer extends StatelessWidget {
       case EventType.EDIT_NOTIFICATION_TIME:
         showModalBottomSheet(
             context: context,
-            builder: (_) => AppNotificationTimePicker(setNotificationTime: (time) {
-                  context.read<DrawerCubit>().setNotificationTime(time);
-                  Navigator.of(context).pop();
-                }));
+            builder: (_) => AppNotificationTimePicker(
+                  parameterMap: cubit!.getNotificationTimes(context),
+                  setNotificationTime: (time) {
+                    cubit.setNotificationTime(time);
+                    Navigator.of(context).pop();
+                  },
+                ));
         break;
       case EventType.SUPPORT:
         SupportModal.showSupportModal(context, cubit!);

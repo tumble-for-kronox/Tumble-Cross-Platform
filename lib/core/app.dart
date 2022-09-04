@@ -54,16 +54,15 @@ class _AppState extends State<App> {
               supportedLocales: AppLocalizations.supportedLocales,
               locale: state.locale,
               localeResolutionCallback: (locale, supportedLocales) {
-                log("LOCALE RESOLUTION UPDATING!");
                 if (locale == null) {
-                  return supportedLocales.firstWhere((element) => element.languageCode == 'en');
+                  return const Locale('en');
                 }
 
-                if (supportedLocales.any((element) => element.languageCode == locale.languageCode)) {
+                if (supportedLocales.contains(locale)) {
                   return locale;
                 }
 
-                return supportedLocales.firstWhere((element) => element.languageCode == 'en');
+                return const Locale('en');
               },
               theme: ThemeData(
                 bottomSheetTheme: const BottomSheetThemeData(backgroundColor: Colors.transparent),

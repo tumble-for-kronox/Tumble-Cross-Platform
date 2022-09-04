@@ -5,14 +5,10 @@ import 'package:tumble/core/ui/data/string_constants.dart';
 typedef SetNotificationTime = void Function(int time);
 
 class AppNotificationTimePicker extends StatelessWidget {
-  final Map<String, int> parameterMap = {
-    S.settingsPage.offsetTime(15): 15,
-    S.settingsPage.offsetTime(30): 30,
-    S.settingsPage.offsetTime(60): 60,
-    S.settingsPage.offsetTime(180): 180
-  };
+  final Map<String, int> parameterMap;
   final SetNotificationTime setNotificationTime;
-  AppNotificationTimePicker({Key? key, required this.setNotificationTime}) : super(key: key);
+  AppNotificationTimePicker({Key? key, required this.setNotificationTime, required this.parameterMap})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {

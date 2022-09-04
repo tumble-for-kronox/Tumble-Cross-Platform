@@ -40,10 +40,8 @@ class _MainAppState extends State<MainApp> {
                       );
                     case InitStatus.HAS_SCHOOL:
                       return MultiBlocProvider(providers: [
-                        BlocProvider.value(
-                            value: BlocProvider.of<AuthCubit>(context)),
-                        BlocProvider<MainAppNavigationCubit>(
-                            create: (_) => MainAppNavigationCubit())
+                        BlocProvider.value(value: BlocProvider.of<AuthCubit>(context)),
+                        BlocProvider<MainAppNavigationCubit>(create: (_) => MainAppNavigationCubit())
                       ], child: const MainAppNavigationRootPage());
                   }
                 },

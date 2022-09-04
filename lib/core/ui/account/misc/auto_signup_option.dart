@@ -20,21 +20,16 @@ class AutoSignupOption extends StatelessWidget {
           child: SwitchListTile(
               title: Text(
                 S.authorizedPage.automaticExamSignup(),
-                style: TextStyle(
-                    color: Theme.of(context).colorScheme.onBackground),
+                style: TextStyle(color: Theme.of(context).colorScheme.onBackground),
               ),
-              shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(10))),
+              shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
               value: BlocProvider.of<AuthCubit>(context).state.autoSignup,
               onChanged: (value) {
                 value
                     ? showCupertinoDialog(
                         context: context,
-                        builder: (context) =>
-                            CustomAlertDialog.automaticExamSignupWarning(
-                                context, value))
-                    : BlocProvider.of<AuthCubit>(context)
-                        .autoSignupToggle(value);
+                        builder: (context) => CustomAlertDialog.automaticExamSignupWarning(context, value))
+                    : BlocProvider.of<AuthCubit>(context).autoSignupToggle(value);
                 ;
               }),
         );

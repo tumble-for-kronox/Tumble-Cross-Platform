@@ -17,6 +17,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:tumble/core/ui/main_app/data/locale_names.dart';
 
 import '../../../../../api/repository/notification_repository.dart';
+import '../../../../data/string_constants.dart';
 
 part 'drawer_cubit.dart';
 
