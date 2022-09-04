@@ -22,10 +22,12 @@ class _TumbleAccountPageState extends State<TumbleAccountPage> {
         switch (state.authStatus) {
           case AuthStatus.AUTHENTICATED:
             return const AuthenticatedPage();
+          case AuthStatus.INITIAL:
           case AuthStatus.UNAUTHENTICATED:
             return const UnauthenticatedPage();
           default:
-            return SpinKitThreeBounce(color: Theme.of(context).colorScheme.primary);
+            return SpinKitThreeBounce(
+                color: Theme.of(context).colorScheme.primary);
         }
       },
     );
