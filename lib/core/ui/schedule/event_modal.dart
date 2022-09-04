@@ -8,7 +8,6 @@ import 'package:tumble/core/ui/main_app/cubit/main_app_cubit.dart';
 import 'package:tumble/core/ui/main_app/misc/tumble_details_modal_base.dart';
 import 'package:tumble/core/ui/schedule/event_options.dart';
 import 'package:tumble/core/ui/schedule/modal_info_row.dart';
-import 'package:tumble/core/ui/search/cubit/search_page_cubit.dart';
 
 class TumbleEventModal extends StatelessWidget {
   final Event event;

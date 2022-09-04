@@ -1,20 +1,11 @@
-import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:tumble/core/dependency_injection/get_it_instances.dart';
 import 'package:tumble/core/extensions/extensions.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
 import 'package:tumble/core/ui/main_app/cubit/main_app_cubit.dart';
 
 import '../../models/api_models/schedule_model.dart';
-import '../../navigation/app_navigator.dart';
-import '../../theme/data/colors.dart';
-import '../data/groups/scaffold_message_types.dart';
 import '../permission_handler.dart';
 import '../scaffold_message.dart';
 
@@ -75,14 +66,13 @@ class EventOptions extends StatelessWidget {
                               ? CupertinoIcons.slash_circle
                               : CupertinoIcons.bell_circle,
                           color: Theme.of(context).colorScheme.onSurface),
-                      title: Center(
-                          child: Text(
+                      title: Text(
                         notificationIsSetForCourse
                             ? S.eventOptions.removeCourseNotifications()
                             : S.eventOptions.addCourseNotifications(),
                         style: TextStyle(
                             color: Theme.of(context).colorScheme.onSurface),
-                      )),
+                      ),
                       onTap: () async {
                         Navigator.of(context).pop();
 
@@ -119,12 +109,11 @@ class EventOptions extends StatelessWidget {
                     ListTile(
                       leading: Icon(CupertinoIcons.color_filter,
                           color: Theme.of(context).colorScheme.onSurface),
-                      title: Center(
-                          child: Text(
+                      title: Text(
                         S.eventOptions.changeCourseColor(),
                         style: TextStyle(
                             color: Theme.of(context).colorScheme.onSurface),
-                      )),
+                      ),
                       shape: const RoundedRectangleBorder(
                         borderRadius: BorderRadius.only(
                           bottomLeft: Radius.circular(20),
@@ -186,13 +175,12 @@ class EventOptions extends StatelessWidget {
                 ? CupertinoIcons.bell_slash
                 : CupertinoIcons.bell,
             color: Theme.of(context).colorScheme.onSurface),
-        title: Center(
-            child: Text(
+        title: Text(
           notificationIsSetForEvent
               ? S.eventOptions.removeEventNotification()
               : S.eventOptions.addEventNotification(),
           style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
-        )),
+        ),
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(20),

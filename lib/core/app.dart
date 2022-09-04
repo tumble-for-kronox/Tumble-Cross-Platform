@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:syncfusion_localizations/syncfusion_localizations.dart';
 import 'package:tumble/core/navigation/app_navigator.dart';
 import 'package:tumble/core/navigation/app_navigator_provider.dart';
 import 'package:tumble/core/navigation/navigation_route_labels.dart';
@@ -11,6 +13,7 @@ import 'package:tumble/core/ui/init_cubit/init_cubit.dart';
 import 'package:tumble/core/ui/login/cubit/auth_cubit.dart';
 import 'package:tumble/core/ui/main_app/cubit/main_app_cubit.dart';
 import 'package:tumble/core/ui/search/cubit/search_page_cubit.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class App extends StatefulWidget {
   const App({Key? key}) : super(key: key);
@@ -36,6 +39,14 @@ class _AppState extends State<App> {
           builder: ((context, state) => MaterialApp(
               debugShowCheckedModeBanner: false,
               title: 'Tumble',
+              localizationsDelegates: const [
+                GlobalCupertinoLocalizations.delegate,
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                AppLocalizations.delegate,
+                SfGlobalLocalizations.delegate
+              ],
+              supportedLocales: AppLocalizations.supportedLocales,
               theme: ThemeData(
                 bottomSheetTheme: const BottomSheetThemeData(
                     backgroundColor: Colors.transparent),
