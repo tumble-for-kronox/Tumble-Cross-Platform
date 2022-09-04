@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:tumble/core/app.dart';
 import 'package:tumble/core/navigation/navigation_route_labels.dart';
 import 'package:tumble/core/ui/login/login_page_root.dart';
 import 'package:tumble/core/ui/main_app/main_app.dart';
@@ -21,6 +22,7 @@ class Routes {
     NavigationRouteLabels.tumbleListView,
     NavigationRouteLabels.tumbleWeekView,
     NavigationRouteLabels.tumbleCalendarView,
+    NavigationRouteLabels.appTopRootBuilder
   ];
 
   static Page getPage(String page, {dynamic arguments}) {
@@ -51,6 +53,9 @@ class Routes {
         break;
       case NavigationRouteLabels.tumbleCalendarView:
         pageClass = const TumbleCalendarView();
+        break;
+      case NavigationRouteLabels.appTopRootBuilder:
+        pageClass = const App();
         break;
       default:
         return CupertinoPage(

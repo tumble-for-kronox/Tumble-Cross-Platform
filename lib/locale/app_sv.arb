@@ -1,4 +1,360 @@
 {
     "searchBarUnfocusedPlaceholder": "Sök",
-    "searchBarFocusedPlaceholder": "Namn"
+    "searchBarFocusedPlaceholder": "Programkod, namn, lärare",
+    "searchPageTitle": "Sök",
+    "listViewTitle": "Lista",
+    "listViewToTopButton": "TOPP",
+    "weekViewTitle": "Vecka",
+    "calendarViewTitle": "Kalender",
+    "accountPageTitle": "Konto",
+    "weekViewNumber": "v. {weekNumber}",
+    "@weekViewNumber": {
+        "description": "Week number shown in week view.",
+        "placeholders": {
+            "weekNumber": {
+                "type": "String",
+                "example": "32"
+            }
+        }
+    },
+    "weekViewTodayLabel": "Idag",
+    "weekViewNoActivities": "Inga schemalagda aktiviteter",
+    "signInButtonTitle": "Logga in",
+    "signOutButtonTitle": "Logga ut",
+    "loginPageTitle": "Logga in på Kronox",
+    "loginPageDescription": "Logga in på Kronox med dina studentuppgifter för {universityName} för\nden bästa användarupplevelsen",
+    "@loginPageDescription": {
+        "description": "Message prompting user to login to their kronox account.",
+        "placeholders": {
+            "universityName": {
+                "type": "String",
+                "example": "Kristianstad University"
+            }
+        }
+    },
+    "loginPageUsernamePlaceholder": "Användarnamn/Email",
+    "loginPagePasswordPlaceholder": "Lösenord",
+    "loginPageSuccessTitle": "Inloggad på Kronox!",
+    "loginPageSuccessDescription": "Du är nu inloggad på {universityName} via Kronox",
+    "@loginPageSuccessDescription": {
+        "description": "Message telling user they successfully logged into their kronox account.",
+        "placeholders": {
+            "universityName": {
+                "type": "String",
+                "example": "Kristianstad University"
+            }
+        }
+    },
+    "loginEmailValidationError": "Användarnamn/Email kan inte vara tomt",
+    "loginPasswordValidationError": "Lösenord kan inte vara tomt",
+    "unauthorizedPageDescription": "Koppla ditt Kronox konto genom att logga in",
+    "authorizedPageHello": "Hej!",
+    "authorizedPageUserOptionsTitle": "Användaralternativ",
+    "authorizedPageAutomaticExamSignup": "Automatisk registrering för examinationstillfällen",
+    "authorizedPageExternalLinksTitle": "Externa linkar",
+    "authorizedPagePersonalExternalLink": "Din {webpageName}",
+    "@authorizedPagePersonalExternalLink": {
+        "description": "Default title on a link to something that is user connected.",
+        "placeholders": {
+            "webpageName": {
+                "type": "String",
+                "example": "Canvas"
+            }
+        }
+    },
+    "authorizedPageExternalLinksKronox": "Kronox för {universityName}",
+    "@authorizedPageExternalLinksKronox": {
+        "description": "Title for link to kronox for the user's default school.",
+        "placeholders": {
+            "universityName": {
+                "type": "String",
+                "example": "Kristianstad University"
+            }
+        }
+    },
+    "userEventsNeedToSignupTitle": "Behöver du logga in?",
+    "userEventsAlreadySignedUpTitle": "Redan inloggad",
+    "userEventsUpcomingTitle": "Kommande",
+    "userEventsRegisterButton": "Registrera",
+    "userEventsUnregisterButton": "Avregistrera",
+    "userEventsOpenKronoxButton": "Öppna Kronox",
+    "userEventsFailedToLoadExams": "Vi kunde inte hämta dina examinationstillfällen",
+    "userEventsEmpty": "Du har inga examinationstillfällen!",
+    "userEventsUnregisterUntil": "Avregistrera dig tills",
+    "userEventsRegisterBefore": "Registrera dig före",
+    "settingsTitle": "INSTÄLLNINGAR",
+    "settingsCommonTitle": "Allmänt",
+    "settingsCommonChangeSchoolsTitle": "Ändra skola",
+    "settingsCommonChangeSchoolsSubtitle": "Nuvarande skola: {schoolAbbreviation}",
+    "@settingsCommonChangeSchoolsSubtitle": {
+        "description": "Subtitle of the change schools settings item.",
+        "placeholders": {
+            "schoolAbbreviation": {
+                "type": "String",
+                "example": "HKR"
+            }
+        }
+    },
+    "settingsChooseUniversity": "Välj ditt universitet",
+    "settingsCommonChangeThemeTitle": "Ändra tema",
+    "settingsCommonChangeThemeSubtitle": "Nuvarande tema: {themeName}",
+    "@settingsCommonChangeThemeSubtitle": {
+        "description": "Subtitle of the change theme settings item.",
+        "placeholders": {
+            "themeName": {
+                "type": "String",
+                "example": "System"
+            }
+        }
+    },
+    "settingsScheduleTitle": "Schema",
+    "settingsScheduleDefaultScheduleTitle": "Välj bokmärken",
+    "settingsScheduleDefaultScheduleSubtitle": "Välj bland dina bokmärken",
+    "settingsScheduleNoBookmarks": "Inga bokmärken ännu",
+    "settingsNotificationTitle": "Notifikationer",
+    "settingsNotificationClearAllTitle": "Rensa alla",
+    "settingsNotificationClearAllSubtitle": "Avbryter alla notifikationer",
+    "settingsNotificationOffsetTitle": "Förskjutning av notifikationer",
+    "settingNotificationOffsetSubtitle": "Nuvarande förskjutning: ",
+    "settingsNotificationOffsetMinutes": "{minutes} minuter",
+    "@settingsNotificationOffsetMinutes": {
+        "description": "Convert minutes into hour label automatically",
+        "placeholders": {
+            "minutes": {
+                "type": "int",
+                "example": "30"
+            }
+        }
+    },
+    "settingsNotificationOffsetHours": "{hours,plural, =1{{hours} timme} other{{hours} timmar}}",
+    "@settingsNotificationOffsetHours": {
+        "description": "Convert minutes into hour label automatically",
+        "placeholders": {
+            "hours": {
+                "type": "int",
+                "example": "1"
+            }
+        }
+    },
+    "settingsMiscTitle": "Diverse",
+    "settingsMiscBugTitle": "Anmäl en bug",
+    "settingsMiscBugSubtitle": "Skicka en bug anmälan på ditt problem",
+    "settingsMiscRateTitle": "Betygsätt vår app",
+    "settingsMiscRateSubtitle": "Betygsätt vår app på {storeName}",
+    "@settingsMiscRateSubtitle": {
+        "description": "String pointing to either App Store or Google Play",
+        "placeholders": {
+            "storeName": {
+                "type": "String",
+                "example": "Google Play"
+            }
+        }
+    },
+    "scaffoldMessageCreatedNotificationForCourse": "Skapade {eventCount} notifikationer för {courseName}",
+    "@scaffoldMessageCreatedNotificationForCourse": {
+        "description": "Message including the number of notifications created and the name of a course.",
+        "placeholders": {
+            "eventCount": {
+                "type": "int",
+                "example": "2"
+            },
+            "courseName": {
+                "type": "String",
+                "example": "Math"
+            }
+        }
+    },
+    "scaffoldMessageCreatedNotificationForEvent": "Skapade notifikation för {eventName}",
+    "@scaffoldMessageCreatedNotificationForEvent": {
+        "description": "Message showing that notification was set for a given event name.",
+        "placeholders": {
+            "eventName": {
+                "type": "String",
+                "example": "Lecture 2"
+            }
+        }
+    },
+    "scaffoldMessageCancelledAllSetNotifications": "Avbröt alla notifikationer",
+    "scaffoldMessageCancelledEventNotification": "Avbröt notifikation för {eventName}",
+    "@scaffoldMessageCancelledEventNotification": {
+        "description": "Message showing that notification was removed from a given event name.",
+        "placeholders": {
+            "eventName": {
+                "type": "String",
+                "example": "Lecture 2"
+            }
+        }
+    },
+    "scaffoldMessageCancelledCourseNotifications": "Avbröt notifikation för {courseName}",
+    "@scaffoldMessageCancelledCourseNotifications": {
+        "description": "Message showing that notifications were removed from a given course name.",
+        "placeholders": {
+            "courseName": {
+                "type": "String",
+                "example": "Math"
+            }
+        }
+    },
+    "scaffoldMessageCancelNotificationsFailed": "Det gick inte att ta bort notifikationer för {courseOrEventName}",
+    "@scaffoldMessageCancelNotificationsFailed": {
+        "description": "Message to show that cancelling notifications of events or course failed.",
+        "placeholders": {
+            "courseOrEventName": {
+                "type": "String",
+                "example": "Math or Lecture 1"
+            }
+        }
+    },
+    "scaffoldMessageOpenEventOptionsFailed": "Schemat måste vara bokmärkt för att kunna visa alternativ",
+    "scaffoldMessageChangeTheme": "Bytte tema till {themeTypeName}",
+    "@scaffoldMessageChangeTheme": {
+        "description": "Message to show that the default theme was changed.",
+        "placeholders": {
+            "themeTypeName": {
+                "type": "String",
+                "example": "Dark Theme"
+            }
+        }
+    },
+    "scaffoldMessageChangedSchool": "Bytte skola till {schoolName}",
+    "@scaffoldMessageChangedSchool": {
+        "description": "Message to show that the default school has been changed.",
+        "placeholders": {
+            "schoolName": {
+                "type": "String",
+                "example": "Kristianstad University"
+            }
+        }
+    },
+    "scaffoldMessageChangedDefaultView": "Bytte standardvy till {viewType}",
+    "@scaffoldMessageChangedDefaultView": {
+        "description": "Message to show that the default view type has been changed.",
+        "placeholders": {
+            "viewType": {
+                "type": "String",
+                "example": "Calendar"
+            }
+        }
+    },
+    "scaffoldMessageChangedDefaultSchedule": "Bytte standardschema till {scheduleId}",
+    "@scaffoldMessageChangedDefaultSchedule": {
+        "description": "Message to show that the default schedule has been changed.",
+        "placeholders": {
+            "scheduleId": {
+                "type": "String",
+                "example": "p.TBSE2+2020+36+100+NML+en"
+            }
+        }
+    },
+    "scaffoldMessageChangedDefaultNotificationOffset": "Ändrade förskjutning för notifikationer till {notificationOffset} innan starttid",
+    "@scaffoldMessageChangedDefaultNotificationOffset": {
+        "description": "Message to show that the default notification offset has been changed.",
+        "placeholders": {
+            "notificationOffset": {
+                "type": "String",
+                "example": "60"
+            }
+        }
+    },
+    "scaffoldMessageAddedBookmark": "Sparade {scheduleId} i bokmärken",
+    "@scaffoldMessageAddedBookmark": {
+        "description": "Message to show that a schedule has been favourited.",
+        "placeholders": {
+            "scheduleId": {
+                "type": "String",
+                "example": "p.TBSE2+2020+36+100+NML+en"
+            }
+        }
+    },
+    "scaffoldMessageRemovedBookmark": "Tog bort {scheduleId} från bokmärken",
+    "@scaffoldMessageRemovedBookmark": {
+        "description": "Message to show that a schedule has been unfavourited.",
+        "placeholders": {
+            "scheduleId": {
+                "type": "String",
+                "example": "p.TBSE2+2020+36+100+NML+en"
+            }
+        }
+    },
+    "scaffoldMessageOpenExternalUrlFailed": "Kunde inte öppna {webpageName}",
+    "@scaffoldMessageOpenExternalUrlFailed": {
+        "description": "Message to show that opening an external webpage failed",
+        "placeholders": {
+            "webpageName": {
+                "type": "String",
+                "example": "Kronox"
+            }
+        }
+    },
+    "scaffoldMessageUpdatedCourseColor": "Uppdaterade kursfärg för {courseName}",
+    "@scaffoldMessageUpdatedCourseColor": {
+        "description": "Message to show that a course color has been changed.",
+        "placeholders": {
+            "courseName": {
+                "type": "String",
+                "example": "Math"
+            }
+        }
+    },
+    "runtimeErrorProgramFetch": "Inga program hittades",
+    "runtimeErrorScheduleFetch": "Inget schema hittades",
+    "runtimeErrorTimeout": "Sökningnstimeout",
+    "runtimeErrorEmptySchedule": "Schemat är tomt",
+    "runtimeErrorLogin": "Det gick inte att logga in",
+    "runtimeErrorUnknown": "Någonting gick fel, var god testa igen",
+    "runtimeErrorAuthentication": "Autentisering misslyckades, var god försök logga in igen.",
+    "runtimeErrorLoginSuccess": "Inloggad",
+    "runtimeErrorNoBookmarks": "Inga scheman i bokmärken",
+    "runtimeErrorMissingLocations": "Okänd plats",
+    "runtimeErrorMissingTeachers": "Okända lärare",
+    "runtimeErrorNoCachedSchedule": "Inga sparade scheman hittade",
+    "runtimeErrorFailedExamSignup": "Kunde inte logga in, var god försök igen senare eller gå till Kronox webbsida.",
+    "runtimeErrorInvalidInputFields": "Användarnamn och lösenord får inte vara tomma",
+    "popUpNotificationPermissionTitle": "Tillåt notifikationer",
+    "popUpNotificationPermissionDescription": "Denna appen skulle vilja skicka notifikationer",
+    "popUpExamAutoSignupTitle": "Automatisk registrering på examinationstillfällen bör användas med försiktighet!",
+    "popUpExamAutoSignupBody": "Saker kan gå fel så därför är det fortfarande ditt eget ansvar att se till att du är anmäld till dina examinationstillfällen. Om en examination kräver att du väljer en plats så kan du inte bli registrerad automatiskt, samma sak om du kräver extra stöd.",
+    "popUpScheduleHelpFirstLine": "Scheman kan sparas i dina bokmärken med denna ikonen",
+    "popUpScheduleHelpSecondLine": "Den visas i övre vänstra hörnet när du sökt efter och valt ett schema",
+    "popUpScheduleIsEmptyTitle": "Detta schemat verkar vara tomt men är fortfarande kvar i Kronox databas",
+    "popUpScheduleIsEmptyBody": "Kronox lagrar scheman även om de inte innehåller någon data, så våra sökningar kan tyvärr hitta tomma scheman ibland",
+    "popUpScheduleFetchError": "Något gick fel när detta schema skulle hämtas",
+    "no": "Nej",
+    "yes": "Ja",
+    "cancel": "Avbryt",
+    "understood": "Förstått",
+    "done": "Klar",
+    "ok": "Ok",
+    "toSearch": "Ta mig till sök",
+    "tryAgain": "Var god försök igen",
+    "send": "Skicka",
+    "unknown": "Okänd",
+    "eventOptionsRemoveEventNotification": "Ta bort notifikation för händelse",
+    "eventOptionsRemoveCourseNotifications": "Ta bort alla notifikationer för kurs",
+    "eventOptionsAddEventNotification": "Ställ in notifikation för händelse",
+    "eventOptionsAddCourseNotifications": "Ställ in notifikationer för kurs",
+    "eventOptionsChangeCourseColor": "Ändra kursfärgen",
+    "eventOptionsColorPickerTitle": "Välj en färg",
+    "detailsTitle": "DETALJER",
+    "detailsDate": "Datum",
+    "detailsTime": "Tid",
+    "detailsRegisterBefore": "Registrera dig före",
+    "detailsType": "Typ",
+    "detailsSupport": "Support",
+    "detailsSupportAvailable": "Support tillgänglig, aktivera på Kronox",
+    "detailsSupportUnavailable": "Ingen support tillgänglig",
+    "detailsAnonymousCode": "Anonym Kod",
+    "detailsRegistrationOpens": "Registrering öppnar",
+    "detailsLocation": "Plats",
+    "detailsCourse": "Kurs",
+    "detailsTeachers": "Lärare",
+    "supportModalTitle": "SUPPORT",
+    "supportModalSubjectTooShort": "Ämne måste vara längre än 5 karaktärer",
+    "supportModalIssueTypeLabel": "Typ av problem",
+    "supportModalIssueSummaryHelper": "Sammanfatta ditt problem i en kort titel",
+    "supportModalBodyTooShort": "Kroppen måste vara längre än 5 karaktärer",
+    "supportModalExplainIssueLabel": "Förklara ditt problem",
+    "supportModalExplainIssueHelper": "Förklara ditt problem i mer detalj, så vi kan hjälpa",
+    "supportModalSendSuccess": "Bug amäld!",
+    "supportModalSendFail": "Det uppstod ett fel med din begäran!\nFörsök igen vid ett senare tillfälle"
 }

@@ -48,25 +48,6 @@ class DrawerCubit extends Cubit<DrawerState> {
     emit(state.copyWith(locale: locale));
   }
 
-  void setupForNextSchool(String schoolName) {
-    emit(DrawerState(
-        locale: state.locale,
-        theme: getIt<SharedPreferences>().getString(PreferenceTypes.theme)!.capitalize(),
-        viewType: ScheduleViewTypes.viewTypesMap[getIt<SharedPreferences>().getInt(PreferenceTypes.view)],
-        school: getIt<SharedPreferences>().getString(PreferenceTypes.school),
-        bookmarks: getIt<SharedPreferences>()
-            .getStringList(PreferenceTypes.bookmarks)!
-            .map((e) => bookmarkedScheduleModelFromJson(e))
-            .toList(),
-        notificationTime: getIt<SharedPreferences>().getInt(PreferenceTypes.notificationTime),
-        mapOfIdToggles: {
-          for (var bookmark in getIt<SharedPreferences>()
-              .getStringList(PreferenceTypes.bookmarks)!
-              .map((json) => bookmarkedScheduleModelFromJson(json)))
-            bookmark.scheduleId: bookmark.toggledValue
-        }));
-  }
-
   /// Toggle visibility of certain schedule via settings tab
   void toggleSchedule(String scheduleId, bool toggledValue) {
     List<BookmarkedScheduleModel> bookmarkedSchedules = getIt<SharedPreferences>()

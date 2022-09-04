@@ -33,7 +33,8 @@ class _SchoolSelectionPageState extends State<SchoolSelectionPage> {
               child: Column(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(top: 50, right: 20, left: 20),
+                    padding:
+                        const EdgeInsets.only(top: 50, right: 20, left: 20),
                     child: Text(
                       S.settingsPage.chooseUniversity(),
                       style: TextStyle(
@@ -50,15 +51,16 @@ class _SchoolSelectionPageState extends State<SchoolSelectionPage> {
                             schoolLogo: school.schoolLogo,
                             selectSchool: () {
                               if (school.loginRequired) {
-                                navigator.push(NavigationRouteLabels.loginPageRoot, arguments: school.schoolName);
+                                navigator.push(
+                                    NavigationRouteLabels.loginPageRoot,
+                                    arguments: school.schoolName);
                               } else {
-                                BlocProvider.of<InitCubit>(context).changeSchool(school.schoolName);
+                                BlocProvider.of<InitCubit>(context)
+                                    .changeSchool(school.schoolName);
                                 BlocProvider.of<AuthCubit>(context).logout();
-                                showScaffoldMessage(
-                                    context,
-                                    S.scaffoldMessages
-                                        .changedSchool(BlocProvider.of<InitCubit>(context).state.defaultSchool!));
-                                navigator.pushAndRemoveAll(NavigationRouteLabels.mainAppNavigationRootPage);
+
+                                navigator.pushAndRemoveAll(
+                                    NavigationRouteLabels.appTopRootBuilder);
                               }
                             }))
                         .toList(),

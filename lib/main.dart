@@ -1,6 +1,3 @@
-import 'dart:developer';
-
-import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:tumble/core/api/work_manager/background_task.dart';
