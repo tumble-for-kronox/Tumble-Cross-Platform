@@ -7,6 +7,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:tumble/core/extensions/extensions.dart';
 import 'package:tumble/core/theme/data/colors.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
+import 'package:tumble/core/ui/main_app/misc/tumble_details_modal_base.dart';
 import 'package:tumble/core/ui/main_app/misc/tumble_drawer/cubit/drawer_state.dart';
 import 'package:tumble/core/ui/main_app/misc/tumble_drawer/support_modal/cubit/support_modal_state.dart';
 import 'package:tumble/core/ui/tumble_button.dart';
@@ -92,85 +93,61 @@ class SupportModalShell extends StatelessWidget {
       required this.status})
       : super(key: key);
   @override
-  Widget build(BuildContext context) => Stack(
-        alignment: Alignment.bottomCenter,
-        children: [
-          Container(
-            height: MediaQuery.of(context).size.height - 260,
-            width: double.infinity,
-            padding: const EdgeInsets.only(left: 20, right: 20, top: 50),
-            decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.background,
-                borderRadius: const BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20))),
-            child: Column(
-              crossAxisAlignment: (status == SupportModalStatus.INITIAL || status == SupportModalStatus.ERROR)
-                  ? CrossAxisAlignment.start
-                  : CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                if (status == SupportModalStatus.INITIAL) _buildTextFormFields(context),
-                Center(
-                    child: FractionallySizedBox(
-                  widthFactor: (status == SupportModalStatus.INITIAL) ? .6 : .9,
-                  child: () {
-                    switch (status) {
-                      case SupportModalStatus.INITIAL:
-                        return TumbleButton(
-                          onPressed: onPressed,
-                          prefixIcon: CupertinoIcons.paperplane,
-                          text: S.general.send(),
-                        );
-                      case SupportModalStatus.LOADING:
-                        return const TumbleLoading();
-                      case SupportModalStatus.SENT:
-                        return TumbleButton(
-                          onPressed: () {},
-                          prefixIcon: CupertinoIcons.check_mark_circled,
-                          text: S.supportModal.sendSucces(),
-                        );
-                      case SupportModalStatus.ERROR:
-                        return Container(
-                          padding: const EdgeInsets.all(15),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
-                            color: CustomColors.orangePrimary,
-                          ),
-                          child: Text(
-                            S.supportModal.sendFail(),
-                            textAlign: TextAlign.center,
-                            style: TextStyle(fontSize: 16, color: Theme.of(context).colorScheme.onPrimary),
-                          ),
-                        );
-                    }
-                  }(),
-                )),
-              ],
-            ),
+  Widget build(BuildContext context) => DetailsModal(
+        body: Container(
+          height: MediaQuery.of(context).size.height - 260,
+          width: double.infinity,
+          padding: const EdgeInsets.only(left: 20, right: 20, top: 50),
+          decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.background,
+              borderRadius: const BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20))),
+          child: Column(
+            crossAxisAlignment: (status == SupportModalStatus.INITIAL || status == SupportModalStatus.ERROR)
+                ? CrossAxisAlignment.start
+                : CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              if (status == SupportModalStatus.INITIAL) _buildTextFormFields(context),
+              Center(
+                  child: FractionallySizedBox(
+                widthFactor: (status == SupportModalStatus.INITIAL) ? .6 : .9,
+                child: () {
+                  switch (status) {
+                    case SupportModalStatus.INITIAL:
+                      return TumbleButton(
+                        onPressed: onPressed,
+                        prefixIcon: CupertinoIcons.paperplane,
+                        text: S.general.send(),
+                      );
+                    case SupportModalStatus.LOADING:
+                      return const TumbleLoading();
+                    case SupportModalStatus.SENT:
+                      return TumbleButton(
+                        onPressed: () {},
+                        prefixIcon: CupertinoIcons.check_mark_circled,
+                        text: S.supportModal.sendSucces(),
+                      );
+                    case SupportModalStatus.ERROR:
+                      return Container(
+                        padding: const EdgeInsets.all(15),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          color: CustomColors.orangePrimary,
+                        ),
+                        child: Text(
+                          S.supportModal.sendFail(),
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontSize: 16, color: Theme.of(context).colorScheme.onPrimary),
+                        ),
+                      );
+                  }
+                }(),
+              )),
+            ],
           ),
-          Align(
-            alignment: Alignment.topCenter,
-            child: Container(
-              alignment: Alignment.center,
-              width: double.infinity,
-              height: 50,
-              decoration: const BoxDecoration(
-                color: CustomColors.orangePrimary,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20),
-                  topRight: Radius.circular(20),
-                ),
-              ),
-              child: Text(
-                S.supportModal.title(),
-                style: TextStyle(
-                  fontSize: 16,
-                  color: CustomColors.orangePrimary.contrastColor(),
-                  letterSpacing: 1.5,
-                ),
-              ),
-            ),
-          ),
-        ],
+        ),
+        title: S.supportModal.title(),
+        barColor: Theme.of(context).colorScheme.primary,
       );
 
   _buildTextFormFields(BuildContext context) => Column(

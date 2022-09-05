@@ -7,7 +7,10 @@ typedef SetNotificationTime = void Function(int time);
 class AppNotificationTimePicker extends StatelessWidget {
   final Map<String, int> parameterMap;
   final SetNotificationTime setNotificationTime;
-  AppNotificationTimePicker({Key? key, required this.setNotificationTime, required this.parameterMap})
+  final int currentNotificationTime;
+
+  const AppNotificationTimePicker(
+      {Key? key, required this.setNotificationTime, required this.parameterMap, required this.currentNotificationTime})
       : super(key: key);
 
   @override
@@ -29,6 +32,8 @@ class AppNotificationTimePicker extends StatelessWidget {
           child: Column(
               children: (parameterMap.keys)
                   .map((key) => ListTile(
+                      leading:
+                          parameterMap[key] == currentNotificationTime ? const Icon(CupertinoIcons.check_mark) : null,
                       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
                       title: Text(
                         key,

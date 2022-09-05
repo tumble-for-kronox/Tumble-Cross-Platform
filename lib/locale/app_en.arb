@@ -150,6 +150,8 @@
             }
         }
     },
+    "settingsMiscChangeLanguageTitle": "Change language",
+    "settingsMiscChangeLanguageSubtitle": "Change language in the app",
     "scaffoldMessageCreatedNotificationForCourse": "Successfully created {eventCount} notifications for {courseName}",
     "@scaffoldMessageCreatedNotificationForCourse": {
         "description": "Message including the number of notifications created and the name of a course.",
@@ -356,5 +358,10 @@
     "supportModalExplainIssueLabel": "Explain your issue",
     "supportModalExplainIssueHelper": "Explain your issue in more detail, so we can help",
     "supportModalSendSuccess": "Bug report sent!",
-    "supportModalSendFail": "There was an error with your request!\nPlease try again at a later time"
+    "supportModalSendFail": "There was an error with your request!\nPlease try again at a later time",
+    "contributorsModalTitle": "CONTRIBUTORS",
+    "contributorsModalDevelopment": "Development",
+    "contributorsModalDesign": "Design",
+    "contributorsModalTranslation": "Translation",
+    "contributorsModalSpecialThanks": "Special thanks"
 }
