@@ -8,16 +8,14 @@ import 'package:tumble/core/ui/data/string_constants.dart';
 class UserEventUnregisterButton extends StatelessWidget {
   final Null Function() onPressed;
 
-  const UserEventUnregisterButton({Key? key, required this.onPressed})
-      : super(key: key);
+  const UserEventUnregisterButton({Key? key, required this.onPressed}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
       height: 40,
-      decoration: const BoxDecoration(
-          color: CustomColors.orangePrimary,
-          borderRadius: BorderRadius.all(Radius.circular(10))),
+      decoration:
+          const BoxDecoration(color: CustomColors.orangePrimary, borderRadius: BorderRadius.all(Radius.circular(10))),
       child: TextButton.icon(
         onPressed: onPressed,
         icon: Icon(

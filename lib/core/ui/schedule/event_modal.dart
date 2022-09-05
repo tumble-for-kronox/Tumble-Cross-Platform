@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -15,11 +16,7 @@ class TumbleEventModal extends StatelessWidget {
   final MainAppCubit? mainAppCubit;
   final bool showSettings;
   const TumbleEventModal(
-      {Key? key,
-      required this.event,
-      required this.color,
-      required this.showSettings,
-      this.mainAppCubit})
+      {Key? key, required this.event, required this.color, required this.showSettings, this.mainAppCubit})
       : super(key: key);
 
   static void showBookmarkEventModal(
@@ -41,8 +38,7 @@ class TumbleEventModal extends StatelessWidget {
             ));
   }
 
-  static void showPreviewEventModal(
-      BuildContext context, Event event, Color color) {
+  static void showPreviewEventModal(BuildContext context, Event event, Color color) {
     showModalBottomSheet(
         isScrollControlled: true,
         enableDrag: true,
@@ -64,8 +60,7 @@ class TumbleEventModal extends StatelessWidget {
         padding: const EdgeInsets.only(left: 20, right: 20, top: 50),
         decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.background,
-            borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(20), topRight: Radius.circular(20))),
+            borderRadius: const BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20))),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -74,20 +69,16 @@ class TumbleEventModal extends StatelessWidget {
                 height: 10,
               ),
               Container(
-                padding: const EdgeInsets.only(
-                    right: 0, left: 0, top: 5, bottom: 10),
-                child: FractionallySizedBox(
-                  widthFactor: 0.9,
-                  child: Text(
-                    event.title.capitalize(),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    textAlign: TextAlign.start,
-                    style: TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.w500,
-                      color: Theme.of(context).colorScheme.onBackground,
-                    ),
+                padding: const EdgeInsets.only(right: 0, left: 0, top: 5, bottom: 10),
+                child: AutoSizeText(
+                  event.title.capitalize(),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.start,
+                  style: TextStyle(
+                    fontSize: 28,
+                    fontWeight: FontWeight.w500,
+                    color: Theme.of(context).colorScheme.onBackground,
                   ),
                 ),
               ),
@@ -142,9 +133,7 @@ class TumbleEventModal extends StatelessWidget {
       ),
       title: S.detailsModal.title(),
       barColor: color,
-      onSettingsPressed: showSettings
-          ? () => EventOptions.showEventOptions(context, event, mainAppCubit!)
-          : null,
+      onSettingsPressed: showSettings ? () => EventOptions.showEventOptions(context, event, mainAppCubit!) : null,
     );
   }
 }

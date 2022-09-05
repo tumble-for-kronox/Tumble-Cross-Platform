@@ -34,8 +34,7 @@ class _UserEventListState extends State<UserEventList> {
                   case UserEventListStatus.ERROR:
                     return Text(
                       S.userEvents.failedToLoad(),
-                      style: TextStyle(
-                          color: Theme.of(context).colorScheme.onBackground),
+                      style: TextStyle(color: Theme.of(context).colorScheme.onBackground),
                     );
                   case UserEventListStatus.INITIAL:
                     return Container();

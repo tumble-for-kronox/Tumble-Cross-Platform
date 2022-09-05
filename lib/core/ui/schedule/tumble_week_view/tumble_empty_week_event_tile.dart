@@ -11,7 +11,7 @@ class TumbleEmptyWeekEventTile extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
-        borderRadius: BorderRadius.circular(2),
+        borderRadius: BorderRadius.circular(5),
         boxShadow: const <BoxShadow>[
           BoxShadow(
             color: Colors.black26,

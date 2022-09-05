@@ -34,12 +34,7 @@ class _UserAccountInfo extends State<UserAccountInfo> {
                     Container(
                       height: 150,
                       decoration: BoxDecoration(
-                        boxShadow: const [
-                          BoxShadow(
-                              color: Colors.black26,
-                              blurRadius: 2,
-                              offset: Offset(1, 1))
-                        ],
+                        boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 2, offset: Offset(1, 1))],
                         color: Theme.of(context).colorScheme.surface,
                         borderRadius: BorderRadius.circular(15),
                       ),
@@ -56,47 +51,30 @@ class _UserAccountInfo extends State<UserAccountInfo> {
                                 children: [
                                   Text(
                                     S.authorizedPage.hello(),
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .onSecondary),
+                                    style: TextStyle(fontSize: 16, color: Theme.of(context).colorScheme.onSecondary),
                                   ),
                                   const SizedBox(height: 5),
                                   Text(
                                     maxLines: 2,
                                     softWrap: true,
-                                    BlocProvider.of<AuthCubit>(context)
-                                        .state
-                                        .userSession!
-                                        .name,
-                                    style: TextStyle(
-                                        fontSize: 22,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .onBackground),
+                                    BlocProvider.of<AuthCubit>(context).state.userSession!.name,
+                                    style: TextStyle(fontSize: 22, color: Theme.of(context).colorScheme.onBackground),
                                   ),
                                   const SizedBox(height: 15),
                                   Row(
                                     children: [
                                       Icon(
                                         CupertinoIcons.book,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .onSecondary,
+                                        color: Theme.of(context).colorScheme.onSecondary,
                                         size: 18,
                                       ),
                                       const SizedBox(
                                         width: 10,
                                       ),
                                       Text(
-                                        getIt<SharedPreferences>()
-                                            .getString(PreferenceTypes.school)!,
-                                        style: TextStyle(
-                                            fontSize: 15,
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .onSecondary),
+                                        getIt<SharedPreferences>().getString(PreferenceTypes.school)!,
+                                        style:
+                                            TextStyle(fontSize: 15, color: Theme.of(context).colorScheme.onSecondary),
                                       ),
                                     ],
                                   ),
@@ -106,8 +84,7 @@ class _UserAccountInfo extends State<UserAccountInfo> {
                           ),
                           Expanded(
                             child: Padding(
-                              padding:
-                                  const EdgeInsets.only(top: 10, right: 10),
+                              padding: const EdgeInsets.only(top: 10, right: 10),
                               child: Align(
                                 alignment: Alignment.topRight,
                                 child: ClipRRect(
@@ -116,9 +93,7 @@ class _UserAccountInfo extends State<UserAccountInfo> {
                                     Schools.schools
                                         .where((school) =>
                                             school.schoolName ==
-                                            getIt<SharedPreferences>()
-                                                .getString(
-                                                    PreferenceTypes.school))
+                                            getIt<SharedPreferences>().getString(PreferenceTypes.school))
                                         .first
                                         .schoolLogo,
                                     height: 100,
@@ -134,8 +109,7 @@ class _UserAccountInfo extends State<UserAccountInfo> {
                     const SizedBox(
                       height: 20,
                     ),
-                    _sectionDivider(
-                        context, S.authorizedPage.userOptionsTitle()),
+                    _sectionDivider(context, S.authorizedPage.userOptionsTitle()),
                     const SizedBox(
                       height: 10,
                     ),
@@ -146,8 +120,7 @@ class _UserAccountInfo extends State<UserAccountInfo> {
                     const SizedBox(
                       height: 20,
                     ),
-                    _sectionDivider(
-                        context, S.authorizedPage.externalLinksTitle()),
+                    _sectionDivider(context, S.authorizedPage.externalLinksTitle()),
                     const SizedBox(
                       height: 10,
                     ),
@@ -163,8 +136,7 @@ class _UserAccountInfo extends State<UserAccountInfo> {
                     UserAccountExternalLink(
                       title: S.authorizedPage.personalExternalLink("Ladok"),
                       color: const Color(0xFF3c9a00),
-                      link:
-                          "https://www.student.ladok.se/student/app/studentwebb/",
+                      link: "https://www.student.ladok.se/student/app/studentwebb/",
                     ),
                     const SizedBox(
                       height: 20,
@@ -172,9 +144,7 @@ class _UserAccountInfo extends State<UserAccountInfo> {
                     UserAccountExternalLink(
                       title: S.authorizedPage.externalLinkKronox(Schools.schools
                           .firstWhere((school) =>
-                              school.schoolName ==
-                              getIt<SharedPreferences>()
-                                  .getString(PreferenceTypes.school))
+                              school.schoolName == getIt<SharedPreferences>().getString(PreferenceTypes.school))
                           .schoolName),
                       color: const Color(0xFF0089da),
                       link:

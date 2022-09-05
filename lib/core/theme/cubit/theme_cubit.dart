@@ -23,30 +23,34 @@ class ThemeCubit extends Cubit<ThemeState> {
   late StreamSubscription<Locale?> _langSubscription;
 
   void getCurrentTheme() {
-    _themeSubscription = themeRepository.getTheme().listen((customTheme) {
-      switch (customTheme) {
-        case CustomTheme.light:
-          emit(state.copyWith(themeMode: ThemeMode.light));
-          break;
-        case CustomTheme.dark:
-          emit(state.copyWith(themeMode: ThemeMode.dark));
-          break;
-        case CustomTheme.system:
-          emit(state.copyWith(themeMode: ThemeMode.system));
-          break;
-        default:
-          emit(state.copyWith(themeMode: ThemeMode.light));
-          break;
-      }
-    });
+    _themeSubscription = themeRepository.getTheme().listen(updateTheme);
   }
 
   void getCurrentLang() {
-    _langSubscription = themeRepository.getLocale().listen((locale) {
-      log("CHANGING LOCALE!");
-      log((locale?.toLanguageTag()).toString());
-      emit(ThemeState(themeString: state.themeString, locale: locale));
-    });
+    _langSubscription = themeRepository.getLocale().listen(updateLocale);
+  }
+
+  void updateTheme(CustomTheme theme) {
+    switch (theme) {
+      case CustomTheme.light:
+        emit(state.copyWith(themeMode: ThemeMode.light));
+        break;
+      case CustomTheme.dark:
+        emit(state.copyWith(themeMode: ThemeMode.dark));
+        break;
+      case CustomTheme.system:
+        emit(state.copyWith(themeMode: ThemeMode.system));
+        break;
+      default:
+        emit(state.copyWith(themeMode: ThemeMode.light));
+        break;
+    }
+  }
+
+  void updateLocale(Locale? locale) {
+    log("CHANGING LOCALE!");
+    log((locale?.toLanguageTag()).toString());
+    emit(ThemeState(themeString: state.themeString, locale: locale));
   }
 
   @override

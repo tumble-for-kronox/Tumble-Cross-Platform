@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:shimmer_animation/shimmer_animation.dart';
 import 'package:tumble/core/extensions/extensions.dart';
 import 'package:tumble/core/models/api_models/schedule_model.dart';
 import 'package:tumble/core/models/ui_models/course_ui_model.dart';
@@ -22,7 +23,7 @@ class TumbleWeekEventTile extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
-        borderRadius: BorderRadius.circular(2),
+        borderRadius: BorderRadius.circular(5),
         boxShadow: const <BoxShadow>[
           BoxShadow(
             color: Colors.black26,
@@ -30,59 +31,71 @@ class TumbleWeekEventTile extends StatelessWidget {
           )
         ],
       ),
-      child: MaterialButton(
-        padding: const EdgeInsets.all(0),
-        onPressed: () => TumbleEventModal.showBookmarkEventModal(
-            context, event, mainAppCubit.getColorForCourse(event), mainAppCubit),
-        child: Row(
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            Container(
-              width: 3,
-              decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.only(topLeft: Radius.circular(2), bottomLeft: Radius.circular(2)),
-                  color: event.isSpecial ? Colors.redAccent : courseColor),
-            ),
-            Stack(
-              alignment: Alignment.centerLeft,
+      child: ClipPath(
+        clipper: ShapeBorderClipper(
+            shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(5),
+        )),
+        child: Shimmer(
+          color: Colors.redAccent,
+          colorOpacity: 0.2,
+          enabled: event.isSpecial,
+          child: MaterialButton(
+            padding: const EdgeInsets.all(0),
+            onPressed: () => TumbleEventModal.showBookmarkEventModal(
+                context, event, mainAppCubit.getColorForCourse(event), mainAppCubit),
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
               children: [
                 Container(
-                  width: 100,
-                  color: event.isSpecial ? Colors.redAccent.withOpacity(0.35) : courseColor.withOpacity(0.35),
+                  width: 5,
+                  decoration: BoxDecoration(
+                      borderRadius:
+                          const BorderRadius.only(topLeft: Radius.circular(5), bottomLeft: Radius.circular(5)),
+                      color: event.isSpecial ? Colors.redAccent : courseColor),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 5),
-                  child: Text(
-                    "${DateFormat.Hm(Localizations.localeOf(context).languageCode).format(event.from)} - ${DateFormat.Hm(Localizations.localeOf(context).languageCode).format(event.to)}",
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.onSurface,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w300,
+                Stack(
+                  alignment: Alignment.centerLeft,
+                  children: [
+                    Container(
+                      width: 100,
+                      color: event.isSpecial ? Colors.redAccent.withOpacity(0.35) : courseColor.withOpacity(0.35),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 5),
+                      child: Text(
+                        "${DateFormat.Hm(Localizations.localeOf(context).languageCode).format(event.from)} - ${DateFormat.Hm(Localizations.localeOf(context).languageCode).format(event.to)}",
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.onSurface,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w300,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Expanded(
+                  child: Container(
+                    alignment: Alignment.centerRight,
+                    padding: const EdgeInsets.only(
+                      left: 5,
+                      right: 5,
+                    ),
+                    child: Text(
+                      event.title.capitalize(),
+                      textAlign: TextAlign.end,
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onSurface,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w300,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
                   ),
                 ),
               ],
             ),
-            Expanded(
-              child: Container(
-                alignment: Alignment.centerRight,
-                padding: const EdgeInsets.only(
-                  left: 5,
-                  right: 5,
-                ),
-                child: Text(
-                  event.title.capitalize(),
-                  textAlign: TextAlign.end,
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.onSurface,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w300,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );

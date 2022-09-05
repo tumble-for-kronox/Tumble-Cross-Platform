@@ -104,6 +104,15 @@ class DrawerCubit extends Cubit<DrawerState> {
     emit(state.copyWith(notificationTime: getIt<SharedPreferences>().getInt(PreferenceTypes.notificationTime)));
   }
 
+  Map<String, int> getNotificationTimes(BuildContext context) {
+    return {
+      S.settingsPage.offsetTime(15): 15,
+      S.settingsPage.offsetTime(30): 30,
+      S.settingsPage.offsetTime(60): 60,
+      S.settingsPage.offsetTime(180): 180
+    };
+  }
+
   void updateSchool(String schoolName) {
     emit(state.copyWith(school: schoolName));
   }

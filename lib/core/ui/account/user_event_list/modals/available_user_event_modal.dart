@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
@@ -37,20 +38,14 @@ class AvailableUserEventModal extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                padding: const EdgeInsets.only(
-                    right: 0, left: 0, top: 55, bottom: 10),
-                child: FittedBox(
-                  fit: BoxFit.fitWidth,
-                  child: Text(
-                    userEvent.title,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    textAlign: TextAlign.start,
-                    style: TextStyle(
-                        fontSize: 32,
-                        fontWeight: FontWeight.w500,
-                        color: Theme.of(context).colorScheme.onBackground),
-                  ),
+                padding: const EdgeInsets.only(right: 0, left: 0, top: 55, bottom: 10),
+                child: AutoSizeText(
+                  userEvent.title,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.start,
+                  style: TextStyle(
+                      fontSize: 32, fontWeight: FontWeight.w500, color: Theme.of(context).colorScheme.onBackground),
                 ),
               ),
               const SizedBox(
