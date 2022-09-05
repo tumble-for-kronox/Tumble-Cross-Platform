@@ -15,17 +15,19 @@ import '../../../schedule/tumble_list_view/tumble_list_view_schedule_card_ribbon
 class UpcomingUserEventModal extends StatelessWidget {
   final UpcomingUserEventModel userEvent;
 
-  const UpcomingUserEventModal({Key? key, required this.userEvent}) : super(key: key);
+  const UpcomingUserEventModal({Key? key, required this.userEvent})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return DetailsModal(
+    return TumbleDetailsModalBase(
       body: Container(
         height: MediaQuery.of(context).size.height - 280,
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.background,
-            borderRadius: const BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20))),
+            borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(20), topRight: Radius.circular(20))),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -65,8 +67,10 @@ class UpcomingUserEventModal extends StatelessWidget {
                   ),
                   ModalInfoRow(
                     title: S.detailsModal.registrationOpens(),
-                    icon: const Icon(CupertinoIcons.person_crop_circle_badge_checkmark),
-                    subtitle: DateFormat("dd MMMM yyyy", Localizations.localeOf(context).languageCode)
+                    icon: const Icon(
+                        CupertinoIcons.person_crop_circle_badge_checkmark),
+                    subtitle: DateFormat("dd MMMM yyyy",
+                            Localizations.localeOf(context).languageCode)
                         .format(userEvent.firstSignupDate),
                   ),
                   const SizedBox(
