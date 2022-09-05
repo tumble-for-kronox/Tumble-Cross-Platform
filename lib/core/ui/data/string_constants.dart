@@ -1,6 +1,7 @@
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:tumble/core/ui/data/groups/general.dart';
+import 'groups/contributors_modal.dart';
 import 'groups/details_modal.dart';
 import 'groups/event_options.dart';
 import 'groups/pop_up.dart';
@@ -40,4 +41,5 @@ class S {
   static EventOptionsStrings get eventOptions => EventOptionsStrings(_localizedStrings!);
   static DetailsModalStrings get detailsModal => DetailsModalStrings(_localizedStrings!);
   static SupportModalStrings get supportModal => SupportModalStrings(_localizedStrings!);
+  static ContributorsModalStrings get contributorsModal => ContributorsModalStrings(_localizedStrings!);
 }

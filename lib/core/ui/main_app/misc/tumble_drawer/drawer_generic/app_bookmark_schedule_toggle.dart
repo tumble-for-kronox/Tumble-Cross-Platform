@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tumble/core/extensions/extensions.dart';
 import 'package:tumble/core/models/api_models/bookmarked_schedule_model.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
 import 'package:tumble/core/ui/main_app/cubit/main_app_cubit.dart';
@@ -55,7 +56,7 @@ class _AppBookmarkScheduleToggleState extends State<AppBookmarkScheduleToggle> {
                           }),
                       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
                       title: Text(
-                        id,
+                        id.replaceAll("+", " ").replaceAll("p.", " "),
                         style: TextStyle(color: Theme.of(context).colorScheme.onBackground),
                       ),
                       onChanged: (bool value) {

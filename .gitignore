@@ -65,4 +65,4 @@ log/log.txt
 .metadata
 analysis_options.yaml
 .vs/
-lib/locale/template_with_english_strings.arb
+lib/locale/untranslated-message.json
