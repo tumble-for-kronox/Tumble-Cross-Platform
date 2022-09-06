@@ -103,7 +103,7 @@ class SupportModalShell extends StatelessWidget {
   @override
   Widget build(BuildContext context) => TumbleDetailsModalBase(
         body: Container(
-          height: MediaQuery.of(context).size.height - 260,
+          height: MediaQuery.of(context).size.height - 240,
           width: double.infinity,
           padding: const EdgeInsets.only(left: 20, right: 20, top: 50),
           decoration: BoxDecoration(
