@@ -10,14 +10,15 @@ class ContributorsModal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DetailsModal(
+    return TumbleDetailsModalBase(
       body: Container(
         height: MediaQuery.of(context).size.height - 260,
         width: double.maxFinite,
         padding: const EdgeInsets.only(left: 20, right: 20, top: 50),
         decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.background,
-            borderRadius: const BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20))),
+            borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(20), topRight: Radius.circular(20))),
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
           child: Column(
@@ -33,7 +34,11 @@ class ContributorsModal extends StatelessWidget {
               ),
               ContributorsSection(
                 sessionTitle: S.contributorsModal.design(),
-                contributors: const ["Adis Veletanlic", "Lasse Poulsen", "Kia Mian"],
+                contributors: const [
+                  "Adis Veletanlic",
+                  "Lasse Poulsen",
+                  "Kia Mian"
+                ],
               ),
               Divider(
                 height: 30,

@@ -5,7 +5,7 @@ class ApiScheduleOrProgrammeResponse<T> {
   T? data;
   String? message;
 
-  ApiScheduleOrProgrammeResponse.completed(this.data)
+  ApiScheduleOrProgrammeResponse.fetched(this.data)
       : status = ApiScheduleOrProgrammeStatus.FETCHED;
 
   ApiScheduleOrProgrammeResponse.cached(this.data)

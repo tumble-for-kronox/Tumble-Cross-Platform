@@ -17,7 +17,7 @@ import '../models/api_models/user_event_collection_model.dart';
 extension ResponseParsing on Response {
   ApiScheduleOrProgrammeResponse parseSchedule() {
     if (statusCode == 200) {
-      return ApiScheduleOrProgrammeResponse.completed(
+      return ApiScheduleOrProgrammeResponse.fetched(
           scheduleModelFromJson(body));
     }
     return ApiScheduleOrProgrammeResponse.error(
@@ -26,8 +26,7 @@ extension ResponseParsing on Response {
 
   ApiScheduleOrProgrammeResponse parsePrograms() {
     if (statusCode == 200) {
-      return ApiScheduleOrProgrammeResponse.completed(
-          programModelFromJson(body));
+      return ApiScheduleOrProgrammeResponse.fetched(programModelFromJson(body));
     }
     return ApiScheduleOrProgrammeResponse.error(
         RuntimeErrorType.programFetchError());
@@ -84,7 +83,7 @@ extension ResponseParsing on Response {
 extension HttpClientResponseParsing on HttpClientResponse {
   Future<ApiScheduleOrProgrammeResponse> parsePrograms() async {
     if (statusCode == 200) {
-      return ApiScheduleOrProgrammeResponse.completed(
+      return ApiScheduleOrProgrammeResponse.fetched(
           programModelFromJson(await transform(utf8.decoder).join()));
     }
     return ApiScheduleOrProgrammeResponse.error(
@@ -93,7 +92,7 @@ extension HttpClientResponseParsing on HttpClientResponse {
 
   Future<ApiScheduleOrProgrammeResponse> parseSchedule() async {
     if (statusCode == 200) {
-      return ApiScheduleOrProgrammeResponse.completed(
+      return ApiScheduleOrProgrammeResponse.fetched(
           scheduleModelFromJson(await transform(utf8.decoder).join()));
     }
     return ApiScheduleOrProgrammeResponse.error(
