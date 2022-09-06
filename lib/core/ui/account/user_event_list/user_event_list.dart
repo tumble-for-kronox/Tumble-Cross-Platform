@@ -21,26 +21,33 @@ class _UserEventListState extends State<UserEventList> {
       builder: (context, state) {
         return Container(
           width: double.infinity,
-          height: double.infinity,
+          height: double.maxFinite,
           padding: const EdgeInsets.symmetric(horizontal: 15),
-          child: SingleChildScrollView(
-            child: Builder(
-              builder: (context) {
-                switch (state.userEventListStatus) {
-                  case UserEventListStatus.LOADING:
-                    return const TumbleLoading();
-                  case UserEventListStatus.LOADED:
-                    return _loaded(context, state);
-                  case UserEventListStatus.ERROR:
-                    return Text(
+          child: Builder(
+            builder: (context) {
+              switch (state.userEventListStatus) {
+                case UserEventListStatus.LOADING:
+                  return const Center(child: TumbleLoading());
+                case UserEventListStatus.LOADED:
+                  return SingleChildScrollView(child: _loaded(context, state));
+                case UserEventListStatus.ERROR:
+                  return Center(
+                    child: Text(
                       S.userEvents.failedToLoad(),
-                      style: TextStyle(color: Theme.of(context).colorScheme.onBackground),
-                    );
-                  case UserEventListStatus.INITIAL:
-                    return Container();
-                }
-              },
-            ),
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(fontSize: 17),
+                    ),
+                  );
+                case UserEventListStatus.INITIAL:
+                  return const Center(
+                    child: Text(
+                      "We couldn't find any upcoming exams",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 17),
+                    ),
+                  );
+              }
+            },
           ),
         );
       },
@@ -49,9 +56,11 @@ class _UserEventListState extends State<UserEventList> {
 }
 
 Widget _loaded(BuildContext context, AuthState state) {
-  return state.userEvents!.registeredEvents.isEmpty &&
-          state.userEvents!.unregisteredEvents.isEmpty &&
-          state.userEvents!.upcomingEvents.isEmpty
+  final userHasNoEvents = state.userEvents!.registeredEvents.isEmpty &&
+      state.userEvents!.unregisteredEvents.isEmpty &&
+      state.userEvents!.upcomingEvents.isEmpty;
+
+  return userHasNoEvents
       ? Align(
           alignment: Alignment.center,
           child: Text(

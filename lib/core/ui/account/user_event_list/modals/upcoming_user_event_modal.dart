@@ -1,16 +1,12 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:intl/intl.dart';
-import 'package:tumble/core/extensions/extensions.dart';
 import 'package:tumble/core/models/api_models/upcoming_user_event_model.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
 import 'package:tumble/core/ui/main_app/misc/tumble_details_modal_base.dart';
 
 import '../../../schedule/modal_info_row.dart';
-import '../../../schedule/tumble_list_view/tumble_list_view_schedule_card_ribbon.dart';
 
 class UpcomingUserEventModal extends StatelessWidget {
   final UpcomingUserEventModel userEvent;
@@ -33,14 +29,17 @@ class UpcomingUserEventModal extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                padding: const EdgeInsets.only(right: 0, left: 0, top: 55, bottom: 10),
+                padding: const EdgeInsets.only(
+                    right: 0, left: 0, top: 55, bottom: 10),
                 child: AutoSizeText(
                   userEvent.title,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   textAlign: TextAlign.start,
                   style: TextStyle(
-                      fontSize: 32, fontWeight: FontWeight.w500, color: Theme.of(context).colorScheme.onBackground),
+                      fontSize: 32,
+                      fontWeight: FontWeight.w500,
+                      color: Theme.of(context).colorScheme.onBackground),
                 ),
               ),
               const SizedBox(

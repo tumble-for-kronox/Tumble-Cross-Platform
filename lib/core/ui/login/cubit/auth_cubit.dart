@@ -30,7 +30,6 @@ class AuthCubit extends Cubit<AuthState> {
         )) {
     login().then((value) {
       if (state.authStatus == AuthStatus.AUTHENTICATED) {
-        log("GETING USER EVENTS");
         getUserEvents();
       }
     });
@@ -66,6 +65,7 @@ class AuthCubit extends Cubit<AuthState> {
         id, state.userSession!.sessionToken);
     log(registerResponse.status.name);
     switch (registerResponse.status) {
+      case ApiUserResponseStatus.COMPLETED:
       case ApiUserResponseStatus.AUTHORIZED:
         getUserEvents();
         break;
@@ -92,6 +92,7 @@ class AuthCubit extends Cubit<AuthState> {
         id, state.userSession!.sessionToken);
 
     switch (unregisterResponse.status) {
+      case ApiUserResponseStatus.COMPLETED:
       case ApiUserResponseStatus.AUTHORIZED:
         getUserEvents();
         break;
@@ -154,7 +155,7 @@ class AuthCubit extends Cubit<AuthState> {
         break;
       case ApiUserResponseStatus.ERROR:
         emit(state.copyWith(
-            authStatus: AuthStatus.INITIAL, errorMessage: userRes.message));
+            authStatus: AuthStatus.ERROR, errorMessage: userRes.message));
         break;
       default:
     }

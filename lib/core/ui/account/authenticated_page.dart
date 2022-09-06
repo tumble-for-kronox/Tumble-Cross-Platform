@@ -47,7 +47,10 @@ class _AuthenticatedPage extends State<AuthenticatedPage>
                 value: BlocProvider.of<AuthCubit>(context),
                 child: const UserAccountInfo(),
               ),
-              const UserEventList(),
+              BlocProvider.value(
+                value: BlocProvider.of<AuthCubit>(context),
+                child: const UserEventList(),
+              ),
             ]),
           ),
         )

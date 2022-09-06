@@ -1,6 +1,8 @@
+// ignore_for_file: constant_identifier_names
+
 part of 'auth_cubit.dart';
 
-enum AuthStatus { AUTHENTICATED, UNAUTHENTICATED, INITIAL, LOADING }
+enum AuthStatus { AUTHENTICATED, UNAUTHENTICATED, INITIAL, LOADING, ERROR }
 
 enum UserEventListStatus { LOADING, LOADED, ERROR, INITIAL }
 
