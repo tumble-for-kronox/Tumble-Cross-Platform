@@ -1,11 +1,15 @@
-class DatabaseResponse<T> {
-  Status status;
+// ignore_for_file: constant_identifier_names
+
+class SharedPreferenceResponse<T> {
+  InitialStatus status;
   T? data;
   String? message;
 
-  DatabaseResponse.initial(this.message) : status = Status.NO_SCHOOL;
+  SharedPreferenceResponse.noSchool(this.message)
+      : status = InitialStatus.NO_SCHOOL;
 
-  DatabaseResponse.hasDefault(this.data) : status = Status.HAS_SCHOOL;
+  SharedPreferenceResponse.schoolAvailable(this.data)
+      : status = InitialStatus.SCHOOL_AVAILABLE;
 
   @override
   String toString() {
@@ -13,5 +17,4 @@ class DatabaseResponse<T> {
   }
 }
 
-// ignore: constant_identifier_names
-enum Status { NO_SCHOOL, HAS_SCHOOL }
+enum InitialStatus { NO_SCHOOL, SCHOOL_AVAILABLE }

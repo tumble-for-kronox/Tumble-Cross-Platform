@@ -12,22 +12,24 @@ part 'init_state.dart';
 
 class InitCubit extends Cubit<InitState> {
   InitCubit()
-      : super(const InitState(defaultSchool: null, status: InitStatus.INITIAL));
+      : super(
+            const InitState(defaultSchool: null, status: InitStatus.NO_SCHOOL));
 
   final _cacheAndInteractionService = getIt<CacheAndInteractionRepository>();
   final _databaseService = getIt<DatabaseRepository>();
 
   Future<void> init() async {
-    DatabaseResponse databaseResponse =
+    SharedPreferenceResponse sharedPreferenceResponse =
         await _cacheAndInteractionService.verifyDefaultSchoolSet();
-    switch (databaseResponse.status) {
-      case Status.NO_SCHOOL:
-        emit(const InitState(defaultSchool: null, status: InitStatus.INITIAL));
+    switch (sharedPreferenceResponse.status) {
+      case InitialStatus.NO_SCHOOL:
+        emit(
+            const InitState(defaultSchool: null, status: InitStatus.NO_SCHOOL));
         break;
-      case Status.HAS_SCHOOL:
+      case InitialStatus.SCHOOL_AVAILABLE:
+        String defaultSchool = sharedPreferenceResponse.data;
         emit(InitState(
-            defaultSchool: databaseResponse.data,
-            status: InitStatus.HAS_SCHOOL));
+            defaultSchool: defaultSchool, status: InitStatus.SCHOOL_AVAILABLE));
         break;
     }
   }
@@ -40,6 +42,7 @@ class InitCubit extends Cubit<InitState> {
     getIt<SharedPreferences>().setString(PreferenceTypes.theme, theme!);
     _databaseService.removeAll();
     _databaseService.removeAllCachedCourseColors();
-    emit(InitState(defaultSchool: schoolName, status: InitStatus.HAS_SCHOOL));
+    emit(InitState(
+        defaultSchool: schoolName, status: InitStatus.SCHOOL_AVAILABLE));
   }
 }

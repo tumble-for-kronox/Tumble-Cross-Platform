@@ -24,24 +24,36 @@ class _ScheduleSearchBarState extends State<ScheduleSearchBar> {
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.surface,
               borderRadius: BorderRadius.circular(10),
-              boxShadow: const <BoxShadow>[BoxShadow(color: Colors.black26, blurRadius: 3, offset: Offset(0, 2))],
+              boxShadow: const <BoxShadow>[
+                BoxShadow(
+                    color: Colors.black26, blurRadius: 3, offset: Offset(0, 2))
+              ],
             ),
             child: BlocBuilder<SearchPageCubit, SearchPageState>(
               builder: (context, state) {
                 return TextField(
                     onSubmitted: (value) async {
                       if (value.trim().isNotEmpty) {
-                        BlocProvider.of<SearchPageCubit>(context).setSearchLoading();
-                        await BlocProvider.of<SearchPageCubit>(context).search();
+                        BlocProvider.of<SearchPageCubit>(context)
+                            .setSearchLoading();
+                        await BlocProvider.of<SearchPageCubit>(context)
+                            .search();
                       }
                     },
                     autocorrect: false,
-                    focusNode: BlocProvider.of<SearchPageCubit>(context).focusNode,
-                    controller: context.read<SearchPageCubit>().textEditingControllerSearch,
+                    focusNode:
+                        BlocProvider.of<SearchPageCubit>(context).focusNode,
+                    controller: context
+                        .read<SearchPageCubit>()
+                        .textEditingControllerSearch,
                     textInputAction: TextInputAction.search,
                     textAlignVertical: TextAlignVertical.center,
                     decoration: InputDecoration(
-                      hintStyle: TextStyle(color: Theme.of(context).colorScheme.onSecondary.withOpacity(.5)),
+                      hintStyle: TextStyle(
+                          color: Theme.of(context)
+                              .colorScheme
+                              .onSecondary
+                              .withOpacity(.5)),
                       prefixIcon: IconButton(
                         icon: const Icon(
                           CupertinoIcons.search,
@@ -52,15 +64,19 @@ class _ScheduleSearchBarState extends State<ScheduleSearchBar> {
                               .text
                               .trim()
                               .isNotEmpty) {
-                            BlocProvider.of<SearchPageCubit>(context).setSearchLoading();
-                            await BlocProvider.of<SearchPageCubit>(context).search();
+                            BlocProvider.of<SearchPageCubit>(context)
+                                .setSearchLoading();
+                            await BlocProvider.of<SearchPageCubit>(context)
+                                .search();
                           }
                         },
                       ),
                       suffixIcon: () {
                         if (state.clearButtonVisible) {
                           return IconButton(
-                            onPressed: () => BlocProvider.of<SearchPageCubit>(context).resetCubit(),
+                            onPressed: () =>
+                                BlocProvider.of<SearchPageCubit>(context)
+                                    .resetCubit(),
                             icon: const Icon(CupertinoIcons.clear),
                           );
                         }
@@ -70,7 +86,8 @@ class _ScheduleSearchBarState extends State<ScheduleSearchBar> {
                           ? S.searchPage.searchBarFocusedPlaceholder()
                           : S.searchPage.searchBarUnfocusedPlaceholder(),
                       hintMaxLines: 1,
-                      contentPadding: const EdgeInsets.symmetric(vertical: 13.5, horizontal: 10),
+                      contentPadding: const EdgeInsets.symmetric(
+                          vertical: 13.5, horizontal: 10),
                     ));
               },
             ),

@@ -1,7 +1,7 @@
 part of 'init_cubit.dart';
 
 // ignore: constant_identifier_names
-enum InitStatus { INITIAL, HAS_SCHOOL }
+enum InitStatus { NO_SCHOOL, SCHOOL_AVAILABLE }
 
 class InitState extends Equatable {
   final InitStatus status;

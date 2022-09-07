@@ -13,5 +13,5 @@ abstract class ICacheAndInteractionService {
   Future<ApiScheduleOrProgrammeResponse> getCachedOrNewSchedule(
       String scheduleId);
 
-  Future<DatabaseResponse> verifyDefaultSchoolSet();
+  Future<SharedPreferenceResponse> verifyDefaultSchoolSet();
 }

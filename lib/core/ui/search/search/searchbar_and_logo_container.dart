@@ -1,5 +1,9 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tumble/core/ui/bottom_nav_bar/cubit/bottom_nav_cubit.dart';
+import 'package:tumble/core/ui/bottom_nav_bar/data/nav_bar_items.dart';
+import 'package:tumble/core/ui/main_app/cubit/main_app_cubit.dart';
 import 'package:tumble/core/ui/search/cubit/search_page_cubit.dart';
 import 'package:tumble/core/ui/search/search/schedule_search_bar.dart';
 import 'package:tumble/core/ui/search/search/search_page_slideable_logo.dart';
@@ -48,6 +52,49 @@ class _SearchBarAndLogoContainerState extends State<SearchBarAndLogoContainer> {
                       child: const ScheduleSearchBar(),
                     ),
                   ),
+                  if (context.read<MainAppCubit>().hasBookMarkedSchedules)
+                    Expanded(
+                      child: BlocBuilder<SearchPageCubit, SearchPageState>(
+                        builder: (context, state) {
+                          if (state.focused) {
+                            return Container();
+                          }
+                          return Container(
+                              padding: const EdgeInsets.only(top: 200),
+                              child: MaterialButton(
+                                onPressed: () => context
+                                    .read<MainAppNavigationCubit>()
+                                    .getNavBarItem(NavbarItem.LIST),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      'View your schedules',
+                                      style: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onBackground
+                                            .withOpacity(.8),
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
+                                    Icon(
+                                      CupertinoIcons.arrow_right,
+                                      size: 15,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onBackground
+                                          .withOpacity(.8),
+                                    )
+                                  ],
+                                ),
+                              ));
+                        },
+                      ),
+                    )
                 ],
               ),
             );

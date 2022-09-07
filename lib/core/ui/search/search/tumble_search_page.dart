@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:tumble/core/models/api_models/program_model.dart';
 import 'package:tumble/core/theme/data/colors.dart';
 import 'package:tumble/core/ui/bottom_nav_bar/cubit/bottom_nav_cubit.dart';
 import 'package:tumble/core/ui/init_cubit/init_cubit.dart';
@@ -46,26 +47,30 @@ class _TumbleSearchPageState extends State<TumbleSearchPage> {
                           case SearchPageStatus.FOUND:
                             return ListView(
                               padding: const EdgeInsets.only(top: 70),
-                              children: state.programList!
-                                  .map((program) => ProgramCard(
-                                      programName: program.title,
-                                      programSubtitle: program.subtitle,
-                                      schoolName:
-                                          BlocProvider.of<InitCubit>(context)
-                                              .state
-                                              .defaultSchool!,
-                                      onTap: () async {
-                                        context
-                                            .read<SearchPageCubit>()
-                                            .setPreviewLoading();
-                                        context
-                                            .read<SearchPageCubit>()
-                                            .displayPreview();
-                                        await BlocProvider.of<SearchPageCubit>(
-                                                context)
-                                            .fetchNewSchedule(program.id);
-                                      }))
-                                  .toList(),
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.only(
+                                      left: 25, bottom: 10),
+                                  child: Text(
+                                    '${state.programList!.length} results',
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onSurface
+                                            .withOpacity(.8)),
+                                  ),
+                                ),
+                                Divider(
+                                  indent: 10,
+                                  endIndent: 10,
+                                  height: 10,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onBackground,
+                                ),
+                                _buildProgramsList(state.programList!, context)
+                              ],
                             );
                           case SearchPageStatus.LOADING:
                             return const TumbleLoading();
@@ -101,3 +106,18 @@ class _TumbleSearchPageState extends State<TumbleSearchPage> {
     );
   }
 }
+
+_buildProgramsList(List<Item> programList, BuildContext context) => Column(
+    children: programList
+        .map((program) => ProgramCard(
+            programName: program.title,
+            programSubtitle: program.subtitle,
+            schoolName:
+                BlocProvider.of<InitCubit>(context).state.defaultSchool!,
+            onTap: () async {
+              context.read<SearchPageCubit>().setPreviewLoading();
+              context.read<SearchPageCubit>().displayPreview();
+              await BlocProvider.of<SearchPageCubit>(context)
+                  .fetchNewSchedule(program.id);
+            }))
+        .toList());

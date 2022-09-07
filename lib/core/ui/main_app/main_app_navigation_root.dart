@@ -23,7 +23,8 @@ class MainAppNavigationRootPage extends StatefulWidget {
   const MainAppNavigationRootPage({Key? key}) : super(key: key);
 
   @override
-  State<MainAppNavigationRootPage> createState() => _MainAppNavigationRootPageState();
+  State<MainAppNavigationRootPage> createState() =>
+      _MainAppNavigationRootPageState();
 }
 
 class _MainAppNavigationRootPageState extends State<MainAppNavigationRootPage> {
@@ -33,14 +34,18 @@ class _MainAppNavigationRootPageState extends State<MainAppNavigationRootPage> {
       create: (_) => MainAppNavigationCubit(),
       child: FutureBuilder(
         future: BlocProvider.of<MainAppCubit>(context).init(),
-        builder: (_, snapshot) => BlocBuilder<MainAppNavigationCubit, MainAppNavigationState>(
+        builder: (_, snapshot) =>
+            BlocBuilder<MainAppNavigationCubit, MainAppNavigationState>(
           builder: (context, navState) {
             return Scaffold(
                 backgroundColor: Theme.of(context).colorScheme.background,
                 endDrawer: MultiBlocProvider(
                   providers: [
-                    BlocProvider<DrawerCubit>(create: (_) => DrawerCubit(Localizations.localeOf(context))),
-                    BlocProvider<MainAppCubit>.value(value: BlocProvider.of<MainAppCubit>(context))
+                    BlocProvider<DrawerCubit>(
+                        create: (_) =>
+                            DrawerCubit(Localizations.localeOf(context))),
+                    BlocProvider<MainAppCubit>.value(
+                        value: BlocProvider.of<MainAppCubit>(context))
                   ],
                   child: const TumbleAppDrawer(),
                 ),
@@ -48,17 +53,26 @@ class _MainAppNavigationRootPageState extends State<MainAppNavigationRootPage> {
                   preferredSize: const Size.fromHeight(60),
                   child: MultiBlocProvider(
                     providers: [
-                      BlocProvider.value(value: BlocProvider.of<MainAppCubit>(context)),
-                      BlocProvider.value(value: BlocProvider.of<MainAppNavigationCubit>(context)),
-                      BlocProvider.value(value: BlocProvider.of<AppNavigator>(context))
+                      BlocProvider.value(
+                          value: BlocProvider.of<MainAppCubit>(context)),
+                      BlocProvider.value(
+                          value:
+                              BlocProvider.of<MainAppNavigationCubit>(context)),
+                      BlocProvider.value(
+                          value: BlocProvider.of<AppNavigator>(context))
                     ],
                     child: TumbleAppBar(
                       pageIndex: navState.index,
                       toggleBookmark: () async {
-                        await context.read<SearchPageCubit>().toggleFavorite(context).then((_) {
+                        await context
+                            .read<SearchPageCubit>()
+                            .toggleFavorite(context)
+                            .then((_) {
                           BlocProvider.of<MainAppCubit>(context).setLoading();
-                          BlocProvider.of<MainAppCubit>(context).attemptToFetchCachedSchedules();
-                          BlocProvider.of<MainAppNavigationCubit>(context).getNavBarItem(NavbarItem.LIST);
+                          BlocProvider.of<MainAppCubit>(context)
+                              .attemptToFetchCachedSchedules();
+                          BlocProvider.of<MainAppNavigationCubit>(context)
+                              .getNavBarItem(NavbarItem.LIST);
                         });
                       },
                     ),
@@ -68,13 +82,23 @@ class _MainAppNavigationRootPageState extends State<MainAppNavigationRootPage> {
                   return AnimatedSwitcher(
                     duration: const Duration(milliseconds: 100),
                     child: () {
-                      switch (context.read<MainAppNavigationCubit>().state.navbarItem) {
+                      switch (context
+                          .read<MainAppNavigationCubit>()
+                          .state
+                          .navbarItem) {
                         case NavbarItem.SEARCH:
                           return MultiBlocProvider(
                             providers: [
-                              BlocProvider.value(value: BlocProvider.of<MainAppCubit>(context)),
-                              BlocProvider.value(value: BlocProvider.of<MainAppNavigationCubit>(context)),
-                              BlocProvider.value(value: BlocProvider.of<SearchPageCubit>(context))
+                              BlocProvider.value(
+                                  value:
+                                      BlocProvider.of<MainAppCubit>(context)),
+                              BlocProvider.value(
+                                  value:
+                                      BlocProvider.of<MainAppNavigationCubit>(
+                                          context)),
+                              BlocProvider.value(
+                                  value:
+                                      BlocProvider.of<SearchPageCubit>(context))
                             ],
                             key: const ValueKey<int>(0),
                             child: const TumbleSearchPage(),
@@ -82,8 +106,13 @@ class _MainAppNavigationRootPageState extends State<MainAppNavigationRootPage> {
                         case NavbarItem.LIST:
                           return MultiBlocProvider(
                             providers: [
-                              BlocProvider.value(value: BlocProvider.of<MainAppCubit>(context)),
-                              BlocProvider.value(value: BlocProvider.of<MainAppNavigationCubit>(context)),
+                              BlocProvider.value(
+                                  value:
+                                      BlocProvider.of<MainAppCubit>(context)),
+                              BlocProvider.value(
+                                  value:
+                                      BlocProvider.of<MainAppNavigationCubit>(
+                                          context)),
                             ],
                             key: const ValueKey<int>(1),
                             child: const TumbleListView(),
@@ -91,8 +120,13 @@ class _MainAppNavigationRootPageState extends State<MainAppNavigationRootPage> {
                         case NavbarItem.WEEK:
                           return MultiBlocProvider(
                             providers: [
-                              BlocProvider.value(value: BlocProvider.of<MainAppCubit>(context)),
-                              BlocProvider.value(value: BlocProvider.of<MainAppNavigationCubit>(context)),
+                              BlocProvider.value(
+                                  value:
+                                      BlocProvider.of<MainAppCubit>(context)),
+                              BlocProvider.value(
+                                  value:
+                                      BlocProvider.of<MainAppNavigationCubit>(
+                                          context)),
                             ],
                             key: const ValueKey<int>(2),
                             child: const TumbleWeekView(),
@@ -100,8 +134,13 @@ class _MainAppNavigationRootPageState extends State<MainAppNavigationRootPage> {
                         case NavbarItem.CALENDAR:
                           return MultiBlocProvider(
                             providers: [
-                              BlocProvider.value(value: BlocProvider.of<MainAppCubit>(context)),
-                              BlocProvider.value(value: BlocProvider.of<MainAppNavigationCubit>(context)),
+                              BlocProvider.value(
+                                  value:
+                                      BlocProvider.of<MainAppCubit>(context)),
+                              BlocProvider.value(
+                                  value:
+                                      BlocProvider.of<MainAppNavigationCubit>(
+                                          context)),
                             ],
                             key: const ValueKey<int>(3),
                             child: const TumbleCalendarView(),
@@ -109,7 +148,8 @@ class _MainAppNavigationRootPageState extends State<MainAppNavigationRootPage> {
                         case NavbarItem.ACCOUNT:
                           return MultiBlocProvider(
                             providers: [
-                              BlocProvider.value(value: BlocProvider.of<AuthCubit>(context)),
+                              BlocProvider.value(
+                                  value: BlocProvider.of<AuthCubit>(context)),
                             ],
                             key: const ValueKey<int>(4),
                             child: const TumbleAccountPage(),
@@ -119,7 +159,8 @@ class _MainAppNavigationRootPageState extends State<MainAppNavigationRootPage> {
                   );
                 }(),
                 bottomNavigationBar: TumbleNavigationBar(onTap: (index) {
-                  BlocProvider.of<MainAppNavigationCubit>(context).getNavBarItem(NavbarItem.values[index]);
+                  BlocProvider.of<MainAppNavigationCubit>(context)
+                      .getNavBarItem(NavbarItem.values[index]);
                 }));
           },
         ),

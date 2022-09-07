@@ -25,7 +25,8 @@ class TumbleAppDrawerTile extends StatelessWidget {
       child: MaterialButton(
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
         onPressed: () => drawerEvent(eventType),
-        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10))),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -44,7 +45,7 @@ class TumbleAppDrawerTile extends StatelessWidget {
                         textAlign: TextAlign.left,
                         style: TextStyle(
                           color: Theme.of(context).colorScheme.onBackground,
-                          fontSize: 18,
+                          fontSize: 17,
                         ),
                       ),
                     ),
