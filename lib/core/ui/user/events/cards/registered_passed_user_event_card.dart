@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:tumble/core/extensions/extensions.dart';
 import 'package:tumble/core/models/api_models/available_user_event_model.dart';
-import 'package:tumble/core/ui/account/events/user_event_register_button.dart';
+import 'package:tumble/core/ui/user/events/user_event_register_button.dart';
 
 class RegisteredPassedUserEventCard extends StatelessWidget {
   final AvailableUserEventModel userEvent;

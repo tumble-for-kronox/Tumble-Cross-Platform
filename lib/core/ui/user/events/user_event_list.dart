@@ -1,11 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:tumble/core/ui/account/events/user_event_section.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
 import 'package:tumble/core/ui/login/cubit/auth_cubit.dart';
 import 'package:tumble/core/ui/tumble_loading.dart';
+import 'package:tumble/core/ui/user/cubit/user_event_cubit.dart';
+import 'package:tumble/core/ui/user/events/user_event_section.dart';
 
 class Events extends StatefulWidget {
   const Events({Key? key}) : super(key: key);
@@ -17,7 +16,7 @@ class Events extends StatefulWidget {
 class _EventsState extends State<Events> {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AuthCubit, AuthState>(
+    return BlocBuilder<UserEventCubit, UserEventState>(
       builder: (context, state) {
         return Container(
           width: double.infinity,
@@ -26,11 +25,11 @@ class _EventsState extends State<Events> {
           child: Builder(
             builder: (context) {
               switch (state.userEventListStatus) {
-                case UserEventListStatus.LOADING:
+                case UserOverviewStatus.LOADING:
                   return const Center(child: TumbleLoading());
-                case UserEventListStatus.LOADED:
+                case UserOverviewStatus.LOADED:
                   return SingleChildScrollView(child: _loaded(context, state));
-                case UserEventListStatus.ERROR:
+                case UserOverviewStatus.ERROR:
                   return Center(
                     child: Text(
                       S.userEvents.failedToLoad(),
@@ -38,7 +37,7 @@ class _EventsState extends State<Events> {
                       style: const TextStyle(fontSize: 17),
                     ),
                   );
-                case UserEventListStatus.INITIAL:
+                case UserOverviewStatus.INITIAL:
                   return const Center(
                     child: Text(
                       "We couldn't find any upcoming exams",
@@ -55,7 +54,7 @@ class _EventsState extends State<Events> {
   }
 }
 
-Widget _loaded(BuildContext context, AuthState state) {
+Widget _loaded(BuildContext context, UserEventState state) {
   final userHasNoEvents = state.userEvents!.registeredEvents.isEmpty &&
       state.userEvents!.unregisteredEvents.isEmpty &&
       state.userEvents!.upcomingEvents.isEmpty;

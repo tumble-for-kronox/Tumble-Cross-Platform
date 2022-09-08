@@ -9,7 +9,6 @@ import 'package:tumble/core/api/apiservices/runtime_error_type.dart';
 import 'package:tumble/core/api/repository/user_repository.dart';
 import 'package:tumble/core/database/repository/secure_storage_repository.dart';
 import 'package:tumble/core/models/api_models/kronox_user_model.dart';
-import 'package:tumble/core/models/api_models/user_event_collection_model.dart';
 import 'package:tumble/core/models/ui_models/school_model.dart';
 import 'package:tumble/core/shared/preference_types.dart';
 import 'package:tumble/core/dependency_injection/get_it_instances.dart';
@@ -21,118 +20,27 @@ class AuthCubit extends Cubit<AuthState> {
       : super(AuthState(
           autoSignup:
               getIt<SharedPreferences>().getBool(PreferenceTypes.autoSignup)!,
-          authStatus: AuthStatus.INITIAL,
-          userEventListStatus: UserEventListStatus.INITIAL,
+          status: AuthStatus.INITIAL,
           usernameController: TextEditingController(),
           passwordController: TextEditingController(),
           passwordHidden: true,
           loginSuccess: false,
         )) {
-    login().then((value) {
-      if (state.authStatus == AuthStatus.AUTHENTICATED) {
-        getUserEvents();
-      }
-    });
+    login();
   }
   final _userRepo = getIt<UserRepository>();
   final _secureStorage = getIt<SecureStorageRepository>();
-
-  Future<void> getUserEvents() async {
-    emit(state.copyWith(userEventListStatus: UserEventListStatus.LOADING));
-    ApiUserResponse userEventResponse =
-        await _userRepo.getUserEvents(state.userSession!.sessionToken);
-    log(userEventResponse.status.name);
-    switch (userEventResponse.status) {
-      case ApiUserResponseStatus.COMPLETED:
-        emit(state.copyWith(
-            userEventListStatus: UserEventListStatus.LOADED,
-            userEvents: userEventResponse.data!,
-            refreshSession: false));
-        break;
-      case ApiUserResponseStatus.ERROR:
-        emit(state);
-        break;
-      default:
-        emit(state.copyWith(
-            userEventListStatus: UserEventListStatus.ERROR,
-            refreshSession: false));
-    }
-  }
-
-  Future<void> registerUserEvent(String id) async {
-    emit(state.copyWith(userEventListStatus: UserEventListStatus.LOADING));
-    ApiUserResponse registerResponse = await _userRepo.putRegisterUserEvent(
-        id, state.userSession!.sessionToken);
-    log(registerResponse.status.name);
-    switch (registerResponse.status) {
-      case ApiUserResponseStatus.COMPLETED:
-      case ApiUserResponseStatus.AUTHORIZED:
-        getUserEvents();
-        break;
-      case ApiUserResponseStatus.UNAUTHORIZED:
-        emit(state.copyWith(
-            userEventListStatus: UserEventListStatus.ERROR,
-            errorMessage: RuntimeErrorType.loginError()));
-        break;
-      case ApiUserResponseStatus.ERROR:
-        emit(state.copyWith(
-            userEventListStatus: UserEventListStatus.ERROR,
-            errorMessage: RuntimeErrorType.failedExamSignUp()));
-        break;
-      default:
-        emit(state.copyWith(
-            userEventListStatus: UserEventListStatus.ERROR,
-            errorMessage: RuntimeErrorType.failedExamSignUp()));
-    }
-  }
-
-  Future<void> unregisterUserEvent(String id) async {
-    emit(state.copyWith(userEventListStatus: UserEventListStatus.LOADING));
-    ApiUserResponse unregisterResponse = await _userRepo.putUnregisterUserEvent(
-        id, state.userSession!.sessionToken);
-
-    switch (unregisterResponse.status) {
-      case ApiUserResponseStatus.COMPLETED:
-      case ApiUserResponseStatus.AUTHORIZED:
-        getUserEvents();
-        break;
-      case ApiUserResponseStatus.UNAUTHORIZED:
-        emit(state.copyWith(
-            userEventListStatus: UserEventListStatus.ERROR,
-            errorMessage: RuntimeErrorType.loginError()));
-        break;
-      case ApiUserResponseStatus.ERROR:
-        emit(state.copyWith(
-            userEventListStatus: UserEventListStatus.ERROR,
-            errorMessage: RuntimeErrorType.failedExamSignUp()));
-        break;
-      default:
-        emit(state.copyWith(
-            userEventListStatus: UserEventListStatus.ERROR,
-            errorMessage: RuntimeErrorType.failedExamSignUp()));
-    }
-  }
-
-  Future<void> autoSignupToggle(bool value) async {
-    getIt<SharedPreferences>().setBool(PreferenceTypes.autoSignup, value);
-    emit(state.copyWith(autoSignup: value));
-  }
-
-  Future<void> runAutoSignup() async {
-    await _userRepo
-        .putRegisterAllAvailableUserEvents(state.userSession!.sessionToken);
-  }
 
   void submitLogin(BuildContext context, String school) async {
     final username = state.usernameController.text;
     final password = state.passwordController.text;
     if (!formValidated()) {
       emit(state.copyWith(
-          authStatus: AuthStatus.INITIAL,
+          status: AuthStatus.INITIAL,
           errorMessage: RuntimeErrorType.invalidInputFields()));
       return;
     }
-    emit(state.copyWith(authStatus: AuthStatus.LOADING));
+    emit(state.copyWith(status: AuthStatus.LOADING));
     ApiUserResponse userRes =
         await _userRepo.postUserLogin(username, password, school);
 
@@ -149,13 +57,12 @@ class AuthCubit extends Cubit<AuthState> {
         emit(state.copyWith(loginSuccess: true));
         await Future.delayed(const Duration(seconds: 2));
         emit(state.copyWith(
-            authStatus: AuthStatus.AUTHENTICATED, userSession: userRes.data!));
+            status: AuthStatus.AUTHENTICATED, userSession: userRes.data!));
 
-        getUserEvents();
         break;
       case ApiUserResponseStatus.ERROR:
         emit(state.copyWith(
-            authStatus: AuthStatus.ERROR, errorMessage: userRes.message));
+            status: AuthStatus.ERROR, errorMessage: userRes.message));
         break;
       default:
     }
@@ -180,11 +87,16 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   void setUserLoggedIn() {
-    emit(state.copyWith(authStatus: AuthStatus.AUTHENTICATED));
+    emit(state.copyWith(status: AuthStatus.AUTHENTICATED));
+  }
+
+  Future<void> runAutoSignup() async {
+    await _userRepo
+        .putRegisterAllAvailableUserEvents(state.userSession!.sessionToken);
   }
 
   Future<void> login() async {
-    emit(state.copyWith(authStatus: AuthStatus.INITIAL));
+    emit(state.copyWith(status: AuthStatus.INITIAL));
     final secureStorage = getIt<SecureStorageRepository>();
     final userRepository = getIt<UserRepository>();
 
@@ -195,32 +107,31 @@ class AuthCubit extends Cubit<AuthState> {
       switch (loggedInUser.status) {
         case ApiUserResponseStatus.AUTHORIZED:
           emit(state.copyWith(
-              authStatus: AuthStatus.AUTHENTICATED,
+              status: AuthStatus.AUTHENTICATED,
               userSession: loggedInUser.data!));
           if (state.autoSignup) {
             runAutoSignup();
           }
           return;
         default:
-          emit(state.copyWith(authStatus: AuthStatus.UNAUTHENTICATED));
+          emit(state.copyWith(status: AuthStatus.UNAUTHENTICATED));
           return;
       }
     }
-    emit(state.copyWith(authStatus: AuthStatus.UNAUTHENTICATED));
+    emit(state.copyWith(status: AuthStatus.UNAUTHENTICATED));
   }
 
   void setUserSession(KronoxUserModel user) {
-    emit(state.copyWith(
-        authStatus: AuthStatus.AUTHENTICATED, userSession: user));
+    emit(state.copyWith(status: AuthStatus.AUTHENTICATED, userSession: user));
   }
 
   void logout() {
     getIt<SecureStorageRepository>().clear();
     emit(state.copyWith(
-        authStatus: AuthStatus.UNAUTHENTICATED,
+        status: AuthStatus.UNAUTHENTICATED,
         userSession: null,
         loginSuccess: false));
   }
 
-  bool get authenticated => state.authStatus == AuthStatus.AUTHENTICATED;
+  bool get authenticated => state.status == AuthStatus.AUTHENTICATED;
 }

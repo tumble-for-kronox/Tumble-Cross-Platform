@@ -30,9 +30,11 @@ class MainAppNavigationCubit extends Cubit<MainAppNavigationState> {
         emit(const MainAppNavigationState(
             navbarItem: NavbarItem.CALENDAR, index: 3, previewToggle: false));
         break;
-      case NavbarItem.ACCOUNT:
+      case NavbarItem.USER_OVERVIEW:
         emit(const MainAppNavigationState(
-            navbarItem: NavbarItem.ACCOUNT, index: 4, previewToggle: false));
+            navbarItem: NavbarItem.USER_OVERVIEW,
+            index: 4,
+            previewToggle: false));
         break;
     }
   }

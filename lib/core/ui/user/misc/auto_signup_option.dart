@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
 import 'package:tumble/core/ui/login/cubit/auth_cubit.dart';
 import 'package:tumble/core/ui/schedule/tumble_list_view/data/custom_alerts.dart';
+import 'package:tumble/core/ui/user/cubit/user_event_cubit.dart';
 
 class AutoSignupOption extends StatelessWidget {
   const AutoSignupOption({Key? key}) : super(key: key);
@@ -20,16 +21,21 @@ class AutoSignupOption extends StatelessWidget {
           child: SwitchListTile(
               title: Text(
                 S.authorizedPage.automaticExamSignup(),
-                style: TextStyle(color: Theme.of(context).colorScheme.onBackground),
+                style: TextStyle(
+                    color: Theme.of(context).colorScheme.onBackground),
               ),
-              shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
+              shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(10))),
               value: BlocProvider.of<AuthCubit>(context).state.autoSignup,
               onChanged: (value) {
                 value
                     ? showCupertinoDialog(
                         context: context,
-                        builder: (context) => CustomAlertDialog.automaticExamSignupWarning(context, value))
-                    : BlocProvider.of<AuthCubit>(context).autoSignupToggle(value);
+                        builder: (context) =>
+                            CustomAlertDialog.automaticExamSignupWarning(
+                                context, value))
+                    : BlocProvider.of<UserEventCubit>(context)
+                        .autoSignupToggle(value);
                 ;
               }),
         );

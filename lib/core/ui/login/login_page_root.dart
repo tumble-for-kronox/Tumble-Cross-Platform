@@ -25,7 +25,7 @@ class _LoginPageRootState extends State<LoginPageRoot> {
     final navigator = BlocProvider.of<AppNavigator>(context);
     return BlocConsumer<AuthCubit, AuthState>(
       listener: ((context, state) async {
-        switch (state.authStatus) {
+        switch (state.status) {
           case AuthStatus.INITIAL:
             if (state.errorMessage != null) {
               showScaffoldMessage(context, state.errorMessage!);
@@ -138,7 +138,7 @@ Widget _initialState(AuthState state, BuildContext context, String school) {
                         ),
                       );
                     }
-                    switch (state.authStatus) {
+                    switch (state.status) {
                       case AuthStatus.LOADING:
                         if (state.loginSuccess) {
                           return SizedBox(
@@ -200,7 +200,7 @@ Widget _form(AuthState state, BuildContext context, String school) {
                 height: 35,
               ),
               _formPasswordField(state, context, school),
-              if (state.authStatus == AuthStatus.ERROR)
+              if (state.status == AuthStatus.ERROR)
                 Container(
                   padding: const EdgeInsets.only(top: 40),
                   child: const Text(

@@ -2,22 +2,22 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tumble/core/theme/data/colors.dart';
-import 'package:tumble/core/ui/account/events/user_event_list.dart';
-import 'package:tumble/core/ui/account/user/user_account_info.dart';
 import 'package:tumble/core/ui/login/cubit/auth_cubit.dart';
+import 'package:tumble/core/ui/user/events/user_event_list.dart';
+import 'package:tumble/core/ui/user/overview/user_account_info.dart';
 
-class AuthenticatedPage extends StatefulWidget {
-  const AuthenticatedPage({Key? key}) : super(key: key);
+class AuthenticatedOverviewPage extends StatefulWidget {
+  const AuthenticatedOverviewPage({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _AuthenticatedPage();
 }
 
-class _AuthenticatedPage extends State<AuthenticatedPage>
+class _AuthenticatedPage extends State<AuthenticatedOverviewPage>
     with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
-    TabController tabController = TabController(length: 2, vsync: this);
+    TabController tabController = TabController(length: 3, vsync: this);
     return Column(
       children: [
         TabBar(
@@ -37,6 +37,12 @@ class _AuthenticatedPage extends State<AuthenticatedPage>
                   CupertinoIcons.news,
                   size: 25,
                 ),
+              ),
+              Tab(
+                icon: Icon(
+                  CupertinoIcons.house,
+                  size: 25,
+                ),
               )
             ]),
         Expanded(
@@ -51,6 +57,7 @@ class _AuthenticatedPage extends State<AuthenticatedPage>
                 value: BlocProvider.of<AuthCubit>(context),
                 child: const Events(),
               ),
+              Container()
             ]),
           ),
         )
