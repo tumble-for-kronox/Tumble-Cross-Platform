@@ -2,19 +2,19 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:tumble/core/ui/account/user_event_list/user_event_section.dart';
+import 'package:tumble/core/ui/account/events/user_event_section.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
 import 'package:tumble/core/ui/login/cubit/auth_cubit.dart';
 import 'package:tumble/core/ui/tumble_loading.dart';
 
-class UserEventList extends StatefulWidget {
-  const UserEventList({Key? key}) : super(key: key);
+class Events extends StatefulWidget {
+  const Events({Key? key}) : super(key: key);
 
   @override
-  State<UserEventList> createState() => _UserEventListState();
+  State<Events> createState() => _EventsState();
 }
 
-class _UserEventListState extends State<UserEventList> {
+class _EventsState extends State<Events> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AuthCubit, AuthState>(

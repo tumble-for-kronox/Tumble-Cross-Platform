@@ -24,7 +24,7 @@ abstract class ResourceModel with _$ResourceModel {
     List<TimeSlot>? timeSlots,
     DateTime? date,
     List<String>? locationIds,
-    Map<String, Map<String, AvailabilityValue>>? availabilities,
+    Map<String, Map<int, AvailabilityValue>>? availabilities,
   }) = _ResourceModel;
 
   factory ResourceModel.fromJson(Map<String, dynamic> json) =>

@@ -1,10 +1,7 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tumble/core/dependency_injection/get_it_instances.dart';
 import 'package:tumble/core/navigation/app_navigator.dart';
-import 'package:tumble/core/ui/account/tumble_account_page.dart';
+import 'package:tumble/core/ui/account/user/tumble_account_page.dart';
 import 'package:tumble/core/ui/bottom_nav_bar/cubit/bottom_nav_cubit.dart';
 import 'package:tumble/core/ui/bottom_nav_bar/data/nav_bar_items.dart';
 import 'package:tumble/core/ui/bottom_nav_bar/tumble_navigation_bar.dart';

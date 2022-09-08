@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tumble/core/models/api_models/available_user_event_model.dart';
 import 'package:tumble/core/models/api_models/upcoming_user_event_model.dart';
-import 'package:tumble/core/ui/account/user_event_list/cards/available_user_event_card.dart';
-import 'package:tumble/core/ui/account/user_event_list/cards/registered_passed_user_event_card.dart';
-import 'package:tumble/core/ui/account/user_event_list/cards/upcoming_user_event_card.dart';
-import 'package:tumble/core/ui/account/user_event_list/modals/registered_passed_user_event_modal.dart';
+import 'package:tumble/core/ui/account/events/cards/available_user_event_card.dart';
+import 'package:tumble/core/ui/account/events/cards/registered_passed_user_event_card.dart';
+import 'package:tumble/core/ui/account/events/cards/upcoming_user_event_card.dart';
+import 'package:tumble/core/ui/account/events/modals/registered_passed_user_event_modal.dart';
 
 import '../../login/cubit/auth_cubit.dart';
 import 'modals/available_user_event_modal.dart';
@@ -17,7 +17,10 @@ class UserEventSection extends StatelessWidget {
   final List<UpcomingUserEventModel>? upcomingEvents;
 
   const UserEventSection(
-      {Key? key, required this.sectionTitle, required this.availableEvents, required this.upcomingEvents})
+      {Key? key,
+      required this.sectionTitle,
+      required this.availableEvents,
+      required this.upcomingEvents})
       : super(key: key);
 
   @override
@@ -51,7 +54,9 @@ class UserEventSection extends StatelessWidget {
                                 showModalBottomSheet(
                                     isScrollControlled: true,
                                     context: context,
-                                    builder: (context) => RegisteredPassedUserEventModal(userEvent: e));
+                                    builder: (context) =>
+                                        RegisteredPassedUserEventModal(
+                                            userEvent: e));
                               },
                             )
                           : AvailableUserEventCard(
@@ -60,7 +65,8 @@ class UserEventSection extends StatelessWidget {
                                 showModalBottomSheet(
                                     isScrollControlled: true,
                                     context: context,
-                                    builder: (context) => AvailableUserEventModal(userEvent: e));
+                                    builder: (context) =>
+                                        AvailableUserEventModal(userEvent: e));
                               },
                             );
                     }).toList()),

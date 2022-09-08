@@ -2,8 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tumble/core/theme/data/colors.dart';
-import 'package:tumble/core/ui/account/user_account_info.dart';
-import 'package:tumble/core/ui/account/user_event_list/user_event_list.dart';
+import 'package:tumble/core/ui/account/events/user_event_list.dart';
+import 'package:tumble/core/ui/account/user/user_account_info.dart';
 import 'package:tumble/core/ui/login/cubit/auth_cubit.dart';
 
 class AuthenticatedPage extends StatefulWidget {
@@ -49,7 +49,7 @@ class _AuthenticatedPage extends State<AuthenticatedPage>
               ),
               BlocProvider.value(
                 value: BlocProvider.of<AuthCubit>(context),
-                child: const UserEventList(),
+                child: const Events(),
               ),
             ]),
           ),

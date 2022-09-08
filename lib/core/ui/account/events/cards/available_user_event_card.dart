@@ -1,19 +1,21 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:tumble/core/extensions/extensions.dart';
 import 'package:tumble/core/models/api_models/available_user_event_model.dart';
-import 'package:tumble/core/ui/account/user_event_list/user_event_register_button.dart';
+import 'package:tumble/core/ui/account/events/user_event_register_button.dart';
+import 'package:tumble/core/ui/data/string_constants.dart';
+import 'package:tumble/core/ui/login/cubit/auth_cubit.dart';
 
-import '../../../login/cubit/auth_cubit.dart';
+import '../user_event_unregister_button.dart';
 
-class RegisteredPassedUserEventCard extends StatelessWidget {
+class AvailableUserEventCard extends StatelessWidget {
   final AvailableUserEventModel userEvent;
   final Null Function() onTap;
 
-  const RegisteredPassedUserEventCard(
+  const AvailableUserEventCard(
       {Key? key, required this.userEvent, required this.onTap})
       : super(key: key);
 
@@ -24,7 +26,7 @@ class RegisteredPassedUserEventCard extends StatelessWidget {
         child: Stack(
           children: [
             Container(
-              height: userEvent.supportAvailable ? 140 : 80,
+              height: 140,
               width: double.infinity,
               margin: const EdgeInsets.only(top: 9, left: 10, right: 10),
               alignment: Alignment.topLeft,
@@ -95,14 +97,66 @@ class RegisteredPassedUserEventCard extends StatelessWidget {
                               )),
                         ],
                       ),
-                      userEvent.supportAvailable
-                          ? Container(
-                              padding: const EdgeInsets.only(right: 10),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  userEvent.isRegistered
+                                      ? S.userEvents.unregisterUntil()
+                                      : S.userEvents.registerBefore(),
+                                  style: TextStyle(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onSurface,
+                                      fontWeight: FontWeight.w400,
+                                      letterSpacing: 0.5),
+                                ),
+                                Text(
+                                  DateFormat(
+                                          "dd-MM-yyyy",
+                                          Localizations.localeOf(context)
+                                              .languageCode)
+                                      .format(userEvent.lastSignupDate),
+                                  style: TextStyle(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onBackground,
+                                    fontWeight: FontWeight.w400,
+                                    letterSpacing: 0.5,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Expanded(
+                            child: Container(
                               alignment: Alignment.centerRight,
-                              child: const UserEventRegisterButton(
-                                  linkToKronox: true),
-                            )
-                          : Container(),
+                              padding:
+                                  const EdgeInsets.only(right: 10, bottom: 10),
+                              child: userEvent.isRegistered
+                                  ? UserEventUnregisterButton(
+                                      onPressed: () {
+                                        BlocProvider.of<AuthCubit>(context)
+                                            .unregisterUserEvent(userEvent.id);
+                                      },
+                                    )
+                                  : UserEventRegisterButton(
+                                      linkToKronox:
+                                          userEvent.requiresChoosingLocation,
+                                      onPressed: () {
+                                        BlocProvider.of<AuthCubit>(context)
+                                            .registerUserEvent(userEvent.id);
+                                      }),
+                            ),
+                          ),
+                        ],
+                      )
                     ],
                   ),
                 ),
@@ -119,7 +173,7 @@ class RegisteredPassedUserEventCard extends StatelessWidget {
                         bottomLeft: Radius.circular(10)),
                   ),
                   width: 8,
-                  height: userEvent.supportAvailable ? 140 : 80,
+                  height: 140,
                 )),
           ],
         ));
