@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SlideableLogo extends StatelessWidget {
@@ -14,9 +15,11 @@ class SlideableLogo extends StatelessWidget {
           duration: const Duration(milliseconds: 150),
           child: SizedOverflowBox(
             size: Size(double.infinity, (focused ? 0 : 300)),
-            child: const Image(
-                height: 150,
-                image: AssetImage("assets/images/tumbleAppLogo.png")),
+            child: Image(
+              height: 150,
+              image: const AssetImage("assets/images/tumbleAppLogo.png"),
+              color: Theme.of(context).colorScheme.primary,
+            ),
           ),
         ));
   }
