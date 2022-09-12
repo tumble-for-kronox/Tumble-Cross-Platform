@@ -30,7 +30,7 @@ class Schools {
       schoolUrl: "schema.ltu.se",
       schoolName: 'Luleå University of Technology',
       schoolLogo: 'assets/school_logos/ltu_logo.png',
-      loginRequired: true,
+      loginRequired: false,
     ),
     School(
       schoolId: SchoolEnum.hig,

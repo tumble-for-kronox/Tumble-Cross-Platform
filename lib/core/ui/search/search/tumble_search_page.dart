@@ -30,71 +30,57 @@ class _TumbleSearchPageState extends State<TumbleSearchPage> {
     return Stack(
       children: [
         Container(
-          margin:
-              EdgeInsets.only(top: MediaQuery.of(context).viewPadding.top + 20),
+          margin: EdgeInsets.only(top: MediaQuery.of(context).viewPadding.top + 20),
           alignment: Alignment.center,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             mainAxisSize: MainAxisSize.max,
             children: [
-              Expanded(
-                child: AnimatedSwitcher(
-                    duration: const Duration(milliseconds: 200),
-                    child: BlocBuilder<SearchPageCubit, SearchPageState>(
-                      builder: (_, state) {
-                        switch (state.searchPageStatus) {
-                          case SearchPageStatus.FOUND:
-                            return ListView(
-                              padding: const EdgeInsets.only(top: 70),
-                              children: [
-                                Container(
-                                  padding: const EdgeInsets.only(
-                                      left: 25, bottom: 10),
-                                  child: Text(
-                                    '${state.programList!.length} results',
-                                    style: TextStyle(
-                                        fontSize: 15,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .onSurface
-                                            .withOpacity(.8)),
-                                  ),
+              AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 200),
+                  child: BlocBuilder<SearchPageCubit, SearchPageState>(
+                    builder: (_, state) {
+                      switch (state.searchPageStatus) {
+                        case SearchPageStatus.FOUND:
+                          return ListView(
+                            padding: const EdgeInsets.only(top: 70),
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.only(left: 25, bottom: 10),
+                                child: Text(
+                                  '${state.programList!.length} results',
+                                  style: TextStyle(
+                                      fontSize: 15, color: Theme.of(context).colorScheme.onSurface.withOpacity(.8)),
                                 ),
-                                Divider(
-                                  indent: 10,
-                                  endIndent: 10,
-                                  height: 10,
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onBackground,
-                                ),
-                                _buildProgramsList(state.programList!, context)
-                              ],
-                            );
-                          case SearchPageStatus.LOADING:
-                            return const TumbleLoading();
-                          case SearchPageStatus.ERROR:
-                            return SearchErrorMessage(
-                              errorType: state.errorMessage!,
-                            );
-                          case SearchPageStatus.INITIAL:
-                            return Container();
-                          case SearchPageStatus.NO_SCHEDULES:
-                            return NoScheduleAvailable(
-                                errorType: state.errorMessage!,
-                                cupertinoAlertDialog: null);
-                          case SearchPageStatus.DISPLAY_PREVIEW:
-                            return SchedulePreview(
-                              toggleBookmark: (value) =>
-                                  BlocProvider.of<MainAppNavigationCubit>(
-                                          context)
-                                      .setPreviewToggle(),
-                            );
-                        }
-                      },
-                    )),
-              )
+                              ),
+                              Divider(
+                                indent: 10,
+                                endIndent: 10,
+                                height: 10,
+                                color: Theme.of(context).colorScheme.onBackground,
+                              ),
+                              _buildProgramsList(state.programList!, context)
+                            ],
+                          );
+                        case SearchPageStatus.LOADING:
+                          return const TumbleLoading();
+                        case SearchPageStatus.ERROR:
+                          return SearchErrorMessage(
+                            errorType: state.errorMessage!,
+                          );
+                        case SearchPageStatus.INITIAL:
+                          return Container();
+                        case SearchPageStatus.NO_SCHEDULES:
+                          return NoScheduleAvailable(errorType: state.errorMessage!, cupertinoAlertDialog: null);
+                        case SearchPageStatus.DISPLAY_PREVIEW:
+                          return SchedulePreview(
+                            toggleBookmark: (value) =>
+                                BlocProvider.of<MainAppNavigationCubit>(context).setPreviewToggle(),
+                          );
+                      }
+                    },
+                  ))
             ],
           ),
         ),
@@ -112,12 +98,10 @@ _buildProgramsList(List<Item> programList, BuildContext context) => Column(
         .map((program) => ProgramCard(
             programName: program.title,
             programSubtitle: program.subtitle,
-            schoolName:
-                BlocProvider.of<InitCubit>(context).state.defaultSchool!,
+            schoolName: BlocProvider.of<InitCubit>(context).state.defaultSchool!,
             onTap: () async {
               context.read<SearchPageCubit>().setPreviewLoading();
               context.read<SearchPageCubit>().displayPreview();
-              await BlocProvider.of<SearchPageCubit>(context)
-                  .fetchNewSchedule(program.id);
+              await BlocProvider.of<SearchPageCubit>(context).fetchNewSchedule(program.id);
             }))
         .toList());

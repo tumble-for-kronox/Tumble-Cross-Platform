@@ -5,6 +5,7 @@ import 'package:tumble/core/theme/data/colors.dart';
 import 'package:tumble/core/ui/login/cubit/auth_cubit.dart';
 import 'package:tumble/core/ui/user/events/user_event_list.dart';
 import 'package:tumble/core/ui/user/overview/user_account_info.dart';
+import 'package:tumble/core/ui/user/resources/tumble_resource_page.dart';
 
 class AuthenticatedOverviewPage extends StatefulWidget {
   const AuthenticatedOverviewPage({Key? key}) : super(key: key);
@@ -13,8 +14,7 @@ class AuthenticatedOverviewPage extends StatefulWidget {
   State<StatefulWidget> createState() => _AuthenticatedPage();
 }
 
-class _AuthenticatedPage extends State<AuthenticatedOverviewPage>
-    with TickerProviderStateMixin {
+class _AuthenticatedPage extends State<AuthenticatedOverviewPage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     TabController tabController = TabController(length: 3, vsync: this);
@@ -25,22 +25,25 @@ class _AuthenticatedPage extends State<AuthenticatedOverviewPage>
             indicatorColor: CustomColors.orangePrimary,
             labelStyle: const TextStyle(fontSize: 17),
             labelColor: Theme.of(context).colorScheme.onBackground,
-            tabs: const [
+            tabs: [
               Tab(
                 icon: Icon(
                   CupertinoIcons.person,
+                  color: Theme.of(context).colorScheme.onBackground,
                   size: 25,
                 ),
               ),
               Tab(
                 icon: Icon(
                   CupertinoIcons.news,
+                  color: Theme.of(context).colorScheme.onBackground,
                   size: 25,
                 ),
               ),
               Tab(
                 icon: Icon(
                   CupertinoIcons.house,
+                  color: Theme.of(context).colorScheme.onBackground,
                   size: 25,
                 ),
               )
@@ -57,7 +60,10 @@ class _AuthenticatedPage extends State<AuthenticatedOverviewPage>
                 value: BlocProvider.of<AuthCubit>(context),
                 child: const Events(),
               ),
-              Container()
+              BlocProvider.value(
+                value: BlocProvider.of<AuthCubit>(context),
+                child: const ResourcePage(),
+              )
             ]),
           ),
         )

@@ -25,6 +25,7 @@ class PreviewListViewDayContainer extends StatelessWidget {
       margin: const EdgeInsets.only(top: 10, bottom: 20),
       padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Row(
             children: [
