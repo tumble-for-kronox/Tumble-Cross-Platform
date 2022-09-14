@@ -27,6 +27,9 @@ class UpcomingUserEventCard extends StatelessWidget {
               child: MaterialButton(
                 padding: const EdgeInsets.all(0),
                 onPressed: onTap,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
                 child: Container(
                   padding: const EdgeInsets.only(left: 24, top: 15),
                   width: double.infinity,

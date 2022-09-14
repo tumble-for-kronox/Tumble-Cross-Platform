@@ -18,8 +18,6 @@ part 'auth_state.dart';
 class AuthCubit extends Cubit<AuthState> {
   AuthCubit()
       : super(AuthState(
-          autoSignup:
-              getIt<SharedPreferences>().getBool(PreferenceTypes.autoSignup)!,
           status: AuthStatus.INITIAL,
           usernameController: TextEditingController(),
           passwordController: TextEditingController(),
@@ -35,14 +33,11 @@ class AuthCubit extends Cubit<AuthState> {
     final username = state.usernameController.text;
     final password = state.passwordController.text;
     if (!formValidated()) {
-      emit(state.copyWith(
-          status: AuthStatus.INITIAL,
-          errorMessage: RuntimeErrorType.invalidInputFields()));
+      emit(state.copyWith(status: AuthStatus.INITIAL, errorMessage: RuntimeErrorType.invalidInputFields()));
       return;
     }
     emit(state.copyWith(status: AuthStatus.LOADING));
-    ApiUserResponse userRes =
-        await _userRepo.postUserLogin(username, password, school);
+    ApiUserResponse userRes = await _userRepo.postUserLogin(username, password, school);
 
     state.usernameController.clear();
     state.passwordController.clear();
@@ -56,13 +51,11 @@ class AuthCubit extends Cubit<AuthState> {
         );
         emit(state.copyWith(loginSuccess: true));
         await Future.delayed(const Duration(seconds: 2));
-        emit(state.copyWith(
-            status: AuthStatus.AUTHENTICATED, userSession: userRes.data!));
+        emit(state.copyWith(status: AuthStatus.AUTHENTICATED, userSession: userRes.data!));
 
         break;
       case ApiUserResponseStatus.ERROR:
-        emit(state.copyWith(
-            status: AuthStatus.ERROR, errorMessage: userRes.message));
+        emit(state.copyWith(status: AuthStatus.ERROR, errorMessage: userRes.message));
         break;
       default:
     }
@@ -91,27 +84,21 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   Future<void> runAutoSignup() async {
-    await _userRepo
-        .putRegisterAllAvailableUserEvents(state.userSession!.sessionToken);
+    await _userRepo.putRegisterAllAvailableUserEvents(state.userSession!.sessionToken);
   }
 
   Future<void> login() async {
-    emit(state.copyWith(status: AuthStatus.INITIAL));
     final secureStorage = getIt<SecureStorageRepository>();
     final userRepository = getIt<UserRepository>();
 
     final refreshToken = await secureStorage.getRefreshToken();
     if (refreshToken != null) {
-      ApiUserResponse loggedInUser =
-          await userRepository.getRefreshSession(refreshToken);
+      ApiUserResponse loggedInUser = await userRepository.getRefreshSession(refreshToken);
       switch (loggedInUser.status) {
         case ApiUserResponseStatus.AUTHORIZED:
-          emit(state.copyWith(
-              status: AuthStatus.AUTHENTICATED,
-              userSession: loggedInUser.data!));
-          if (state.autoSignup) {
-            runAutoSignup();
-          }
+          log("LOGGED USER IN AGAIN!");
+          emit(state.copyWith(status: AuthStatus.AUTHENTICATED, userSession: loggedInUser.data!));
+
           return;
         default:
           emit(state.copyWith(status: AuthStatus.UNAUTHENTICATED));
@@ -127,10 +114,7 @@ class AuthCubit extends Cubit<AuthState> {
 
   void logout() {
     getIt<SecureStorageRepository>().clear();
-    emit(state.copyWith(
-        status: AuthStatus.UNAUTHENTICATED,
-        userSession: null,
-        loginSuccess: false));
+    emit(state.copyWith(status: AuthStatus.UNAUTHENTICATED, userSession: null, loginSuccess: false));
   }
 
   bool get authenticated => state.status == AuthStatus.AUTHENTICATED;

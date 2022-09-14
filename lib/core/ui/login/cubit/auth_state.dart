@@ -11,13 +11,11 @@ class AuthState extends Equatable {
   final TextEditingController usernameController;
   final TextEditingController passwordController;
   final bool passwordHidden;
-  final bool autoSignup;
   final bool loginSuccess;
   final String? errorMessage;
 
   const AuthState(
-      {required this.autoSignup,
-      required this.status,
+      {required this.status,
       required this.usernameController,
       required this.passwordController,
       required this.passwordHidden,
@@ -34,10 +32,8 @@ class AuthState extends Equatable {
           TextEditingController? passwordController,
           KronoxUserModel? userSession,
           bool? passwordHidden,
-          bool? autoSignup,
           bool? loginSuccess}) =>
       AuthState(
-          autoSignup: autoSignup ?? this.autoSignup,
           status: status ?? this.status,
           usernameController: usernameController ?? this.usernameController,
           passwordController: passwordController ?? this.passwordController,
@@ -54,7 +50,6 @@ class AuthState extends Equatable {
         passwordController,
         passwordHidden,
         userSession,
-        autoSignup,
         loginSuccess,
       ];
 }

@@ -14,7 +14,9 @@ import '../../api/apiservices/runtime_error_type.dart';
 extension BookingResponseParsing on Response {
   ApiBookingResponse parseSchoolResource() {
     if (statusCode == 200) {
-      return ApiBookingResponse.success(resourceModelFromJson(body));
+      List<dynamic> jsonList = json.decode(body);
+      List<ResourceModel> schoolResources = List<ResourceModel>.from(jsonList.map((e) => resourceModelFromJson(e)));
+      return ApiBookingResponse.success(schoolResources);
     } else if (statusCode == 401) {
       return ApiBookingResponse.unauthorized(RuntimeErrorType.authenticationError());
     } else if (statusCode == 404) {
@@ -66,7 +68,9 @@ extension BookingResponseParsing on Response {
 extension BookingHttpClientResponseParsing on HttpClientResponse {
   Future<ApiBookingResponse> parseSchoolResource() async {
     if (statusCode == 200) {
-      return ApiBookingResponse.success(resourceModelFromJson(await transform(utf8.decoder).join()));
+      List<dynamic> jsonList = json.decode(await transform(utf8.decoder).join());
+      List<ResourceModel> schoolResources = List<ResourceModel>.from(jsonList.map((e) => ResourceModel.fromJson(e)));
+      return ApiBookingResponse.success(schoolResources);
     } else if (statusCode == 401) {
       return ApiBookingResponse.unauthorized(RuntimeErrorType.authenticationError());
     } else if (statusCode == 404) {
@@ -78,7 +82,7 @@ extension BookingHttpClientResponseParsing on HttpClientResponse {
   Future<ApiBookingResponse> parseUserBookings() async {
     if (statusCode == 200) {
       List<dynamic> jsonList = json.decode(await transform(utf8.decoder).join());
-      List<Booking> userBookings = List<Booking>.from(jsonList.map((x) => Booking.fromJson(x)));
+      List<Booking> userBookings = List<Booking>.from(jsonList.map((e) => Booking.fromJson(e)));
       return ApiBookingResponse.success(userBookings);
     } else if (statusCode == 401) {
       return ApiBookingResponse.unauthorized(RuntimeErrorType.authenticationError());

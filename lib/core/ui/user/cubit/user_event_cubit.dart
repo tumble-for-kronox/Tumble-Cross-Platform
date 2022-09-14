@@ -26,16 +26,17 @@ class UserEventCubit extends Cubit<UserEventState> {
           resourcePageStatus: ResourcePageStatus.INITIAL,
           userBookingsStatus: UserBookingsStatus.INITIAL,
           bookUnbookStatus: BookUnbookStatus.INITIAL,
+          registerUnregisterStatus: RegisterUnregisterStatus.INITIAL,
           autoSignup: getIt<SharedPreferences>().getBool(PreferenceTypes.autoSignup)!,
         ));
 
   final _userRepo = getIt<UserRepository>();
 
-  Future<void> getUserEvents(AuthStatus authStatus, KronoxUserModel? userSession) async {
-    switch (authStatus) {
+  Future<void> getUserEvents(AuthCubit authCubit, bool showLoding) async {
+    switch (authCubit.state.status) {
       case AuthStatus.AUTHENTICATED:
-        emit(state.copyWith(userEventListStatus: UserOverviewStatus.LOADING));
-        ApiUserResponse userEventResponse = await _userRepo.getUserEvents(userSession!.sessionToken);
+        if (showLoding) emit(state.copyWith(userEventListStatus: UserOverviewStatus.LOADING));
+        ApiUserResponse userEventResponse = await _userRepo.getUserEvents(authCubit.state.userSession!.sessionToken);
         switch (userEventResponse.status) {
           case ApiUserResponseStatus.COMPLETED:
             emit(state.copyWith(
@@ -45,6 +46,10 @@ class UserEventCubit extends Cubit<UserEventState> {
             break;
           case ApiUserResponseStatus.ERROR:
             emit(state);
+            break;
+          case ApiUserResponseStatus.UNAUTHORIZED:
+            await authCubit.login();
+            await getUserEvents(authCubit, true);
             break;
           default:
             emit(state.copyWith(
@@ -57,49 +62,61 @@ class UserEventCubit extends Cubit<UserEventState> {
     }
   }
 
-  Future<void> registerUserEvent(String id, AuthStatus authStatus, KronoxUserModel? userSession) async {
-    emit(state.copyWith(userEventListStatus: UserOverviewStatus.LOADING));
-    ApiUserResponse registerResponse = await _userRepo.putRegisterUserEvent(id, userSession!.sessionToken);
+  Future<void> registerUserEvent(String id, AuthCubit authCubit) async {
+    emit(state.copyWith(registerUnregisterStatus: RegisterUnregisterStatus.LOADING));
+    ApiUserResponse registerResponse =
+        await _userRepo.putRegisterUserEvent(id, authCubit.state.userSession!.sessionToken);
     log(registerResponse.status.name);
     switch (registerResponse.status) {
       case ApiUserResponseStatus.COMPLETED:
       case ApiUserResponseStatus.AUTHORIZED:
-        getUserEvents(authStatus, userSession);
+        await getUserEvents(authCubit, false);
+        emit(state.copyWith(registerUnregisterStatus: RegisterUnregisterStatus.INITIAL));
         break;
       case ApiUserResponseStatus.UNAUTHORIZED:
-        emit(
-            state.copyWith(userEventListStatus: UserOverviewStatus.ERROR, errorMessage: RuntimeErrorType.loginError()));
+        await authCubit.login();
+        await registerUserEvent(id, authCubit);
         break;
       case ApiUserResponseStatus.ERROR:
         emit(state.copyWith(
-            userEventListStatus: UserOverviewStatus.ERROR, errorMessage: RuntimeErrorType.failedExamSignUp()));
+            registerUnregisterStatus: RegisterUnregisterStatus.INITIAL,
+            userEventListStatus: UserOverviewStatus.ERROR,
+            errorMessage: RuntimeErrorType.failedExamSignUp()));
         break;
       default:
         emit(state.copyWith(
-            userEventListStatus: UserOverviewStatus.ERROR, errorMessage: RuntimeErrorType.failedExamSignUp()));
+            registerUnregisterStatus: RegisterUnregisterStatus.INITIAL,
+            userEventListStatus: UserOverviewStatus.ERROR,
+            errorMessage: RuntimeErrorType.failedExamSignUp()));
     }
   }
 
-  Future<void> unregisterUserEvent(String id, AuthStatus authStatus, KronoxUserModel? userSession) async {
-    emit(state.copyWith(userEventListStatus: UserOverviewStatus.LOADING));
-    ApiUserResponse unregisterResponse = await _userRepo.putUnregisterUserEvent(id, userSession!.sessionToken);
+  Future<void> unregisterUserEvent(String id, AuthCubit authCubit) async {
+    emit(state.copyWith(registerUnregisterStatus: RegisterUnregisterStatus.LOADING));
+    ApiUserResponse unregisterResponse =
+        await _userRepo.putUnregisterUserEvent(id, authCubit.state.userSession!.sessionToken);
 
     switch (unregisterResponse.status) {
       case ApiUserResponseStatus.COMPLETED:
       case ApiUserResponseStatus.AUTHORIZED:
-        getUserEvents(authStatus, userSession);
+        await getUserEvents(authCubit, false);
+        emit(state.copyWith(registerUnregisterStatus: RegisterUnregisterStatus.INITIAL));
         break;
       case ApiUserResponseStatus.UNAUTHORIZED:
-        emit(
-            state.copyWith(userEventListStatus: UserOverviewStatus.ERROR, errorMessage: RuntimeErrorType.loginError()));
+        await authCubit.login();
+        await unregisterUserEvent(id, authCubit);
         break;
       case ApiUserResponseStatus.ERROR:
         emit(state.copyWith(
-            userEventListStatus: UserOverviewStatus.ERROR, errorMessage: RuntimeErrorType.failedExamSignUp()));
+            registerUnregisterStatus: RegisterUnregisterStatus.INITIAL,
+            userEventListStatus: UserOverviewStatus.ERROR,
+            errorMessage: RuntimeErrorType.failedExamSignUp()));
         break;
       default:
         emit(state.copyWith(
-            userEventListStatus: UserOverviewStatus.ERROR, errorMessage: RuntimeErrorType.failedExamSignUp()));
+            registerUnregisterStatus: RegisterUnregisterStatus.INITIAL,
+            userEventListStatus: UserOverviewStatus.ERROR,
+            errorMessage: RuntimeErrorType.failedExamSignUp()));
     }
   }
 
@@ -108,9 +125,9 @@ class UserEventCubit extends Cubit<UserEventState> {
     emit(state.copyWith(autoSignup: value));
   }
 
-  Future<void> getSchoolResources(KronoxUserModel? userSession) async {
+  Future<void> getSchoolResources(AuthCubit authCubit) async {
     emit(state.copyWith(resourcePageStatus: ResourcePageStatus.LOADING));
-    ApiBookingResponse schoolResources = await _userRepo.getSchoolResources(userSession!.sessionToken);
+    ApiBookingResponse schoolResources = await _userRepo.getSchoolResources(authCubit.state.userSession!.sessionToken);
 
     switch (schoolResources.status) {
       case ApiBookingResponseStatus.SUCCESS:
@@ -118,6 +135,9 @@ class UserEventCubit extends Cubit<UserEventState> {
         break;
       case ApiBookingResponseStatus.ERROR:
       case ApiBookingResponseStatus.UNAUTHORIZED:
+        await authCubit.login();
+        await getSchoolResources(authCubit);
+        break;
       case ApiBookingResponseStatus.NOT_FOUND:
         emit(state.copyWith(
             resourcePageStatus: ResourcePageStatus.ERROR, resourcePageErrorMessage: schoolResources.data));
@@ -125,10 +145,10 @@ class UserEventCubit extends Cubit<UserEventState> {
     }
   }
 
-  Future<void> getResourceAvailabilities(KronoxUserModel? userSession, String resourceId, DateTime date) async {
+  Future<void> getResourceAvailabilities(AuthCubit authCubit, String resourceId, DateTime date) async {
     emit(state.copyWith(resourcePageStatus: ResourcePageStatus.LOADING));
     ApiBookingResponse currentSelectedResource =
-        await _userRepo.getResourceAvailabilities(resourceId, date, userSession!.sessionToken);
+        await _userRepo.getResourceAvailabilities(resourceId, date, authCubit.state.userSession!.sessionToken);
 
     switch (currentSelectedResource.status) {
       case ApiBookingResponseStatus.SUCCESS:
@@ -137,6 +157,9 @@ class UserEventCubit extends Cubit<UserEventState> {
         break;
       case ApiBookingResponseStatus.ERROR:
       case ApiBookingResponseStatus.UNAUTHORIZED:
+        await authCubit.login();
+        await getResourceAvailabilities(authCubit, resourceId, date);
+        break;
       case ApiBookingResponseStatus.NOT_FOUND:
         emit(state.copyWith(
             resourcePageStatus: ResourcePageStatus.ERROR, resourcePageErrorMessage: currentSelectedResource.data));
@@ -144,9 +167,9 @@ class UserEventCubit extends Cubit<UserEventState> {
     }
   }
 
-  Future<void> getUserBookings(KronoxUserModel? userSession) async {
+  Future<void> getUserBookings(AuthCubit authCubit) async {
     emit(state.copyWith(userBookingsStatus: UserBookingsStatus.LOADING));
-    ApiBookingResponse userBookings = await _userRepo.getUserBookings(userSession!.sessionToken);
+    ApiBookingResponse userBookings = await _userRepo.getUserBookings(authCubit.state.userSession!.sessionToken);
 
     switch (userBookings.status) {
       case ApiBookingResponseStatus.SUCCESS:
@@ -154,6 +177,9 @@ class UserEventCubit extends Cubit<UserEventState> {
         break;
       case ApiBookingResponseStatus.ERROR:
       case ApiBookingResponseStatus.UNAUTHORIZED:
+        await authCubit.login();
+        await getUserBookings(authCubit);
+        break;
       case ApiBookingResponseStatus.NOT_FOUND:
         emit(state.copyWith(userBookingsStatus: UserBookingsStatus.ERROR, userBookingsErrorMessage: userBookings.data));
         break;
@@ -161,14 +187,18 @@ class UserEventCubit extends Cubit<UserEventState> {
   }
 
   Future<void> bookResource(
-      KronoxUserModel? userSession, String resourceId, DateTime date, AvailabilityValue bookingSlot) async {
+      AuthCubit authCubit, String resourceId, DateTime date, AvailabilityValue bookingSlot) async {
     emit(state.copyWith(bookUnbookStatus: BookUnbookStatus.LOADING));
     ApiBookingResponse bookResource =
-        await _userRepo.putBookResources(resourceId, date, bookingSlot, userSession!.sessionToken);
+        await _userRepo.putBookResources(resourceId, date, bookingSlot, authCubit.state.userSession!.sessionToken);
 
     switch (bookResource.status) {
       case ApiBookingResponseStatus.SUCCESS:
-        getResourceAvailabilities(userSession, resourceId, date);
+        getResourceAvailabilities(authCubit, resourceId, date);
+        break;
+      case ApiBookingResponseStatus.UNAUTHORIZED:
+        await authCubit.login();
+        await this.bookResource(authCubit, resourceId, date, bookingSlot);
         break;
       default:
         break;
@@ -177,18 +207,27 @@ class UserEventCubit extends Cubit<UserEventState> {
     return bookResource.data;
   }
 
-  Future<void> unbookResource(KronoxUserModel? userSession, String resourceId, DateTime date, String bookingId) async {
+  Future<void> unbookResource(AuthCubit authCubit, String resourceId, DateTime date, String bookingId) async {
     emit(state.copyWith(bookUnbookStatus: BookUnbookStatus.LOADING));
-    ApiBookingResponse bookResource = await _userRepo.putUnbookResources(userSession!.sessionToken, bookingId);
+    ApiBookingResponse bookResource =
+        await _userRepo.putUnbookResources(authCubit.state.userSession!.sessionToken, bookingId);
 
     switch (bookResource.status) {
       case ApiBookingResponseStatus.SUCCESS:
-        getUserBookings(userSession);
+        getUserBookings(authCubit);
+        break;
+      case ApiBookingResponseStatus.UNAUTHORIZED:
+        await authCubit.login();
+        await unbookResource(authCubit, resourceId, date, bookingId);
         break;
       default:
         break;
     }
     emit(state.copyWith(bookUnbookStatus: BookUnbookStatus.INITIAL));
     return bookResource.data;
+  }
+
+  void changeCurrentTabIndex(int newIndex) {
+    emit(state.copyWith(currentTabIndex: newIndex));
   }
 }

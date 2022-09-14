@@ -8,6 +8,8 @@ enum UserBookingsStatus { LOADING, LOADED, ERROR, INITIAL }
 
 enum ResourcePageStatus { LOADING, LOADED, ERROR, INITIAL }
 
+enum RegisterUnregisterStatus { LOADING, INITIAL }
+
 enum BookUnbookStatus { LOADING, INITIAL }
 
 class UserEventState extends Equatable {
@@ -15,10 +17,12 @@ class UserEventState extends Equatable {
   final ResourcePageStatus resourcePageStatus;
   final UserBookingsStatus userBookingsStatus;
   final BookUnbookStatus bookUnbookStatus;
+  final RegisterUnregisterStatus registerUnregisterStatus;
   final UserEventCollectionModel? userEvents;
   final List<ResourceModel>? schoolResources;
   final ResourceModel? currentLoadedResource;
   final List<Booking>? userBookings;
+  final int? currentTabIndex;
   final bool autoSignup;
   final String? errorMessage;
   final String? userBookingsErrorMessage;
@@ -29,6 +33,7 @@ class UserEventState extends Equatable {
     required this.resourcePageStatus,
     required this.userBookingsStatus,
     required this.bookUnbookStatus,
+    required this.registerUnregisterStatus,
     required this.autoSignup,
     this.userEvents,
     this.errorMessage,
@@ -37,6 +42,7 @@ class UserEventState extends Equatable {
     this.schoolResources,
     this.currentLoadedResource,
     this.userBookings,
+    this.currentTabIndex = 0,
   });
 
   UserEventState copyWith({
@@ -44,6 +50,7 @@ class UserEventState extends Equatable {
     ResourcePageStatus? resourcePageStatus,
     UserBookingsStatus? userBookingsStatus,
     BookUnbookStatus? bookUnbookStatus,
+    RegisterUnregisterStatus? registerUnregisterStatus,
     KronoxUserModel? userSession,
     bool? autoSignup,
     UserEventCollectionModel? userEvents,
@@ -53,12 +60,14 @@ class UserEventState extends Equatable {
     String? errorMessage,
     String? userBookingsErrorMessage,
     String? resourcePageErrorMessage,
+    int? currentTabIndex,
   }) =>
       UserEventState(
         userEventListStatus: userEventListStatus ?? this.userEventListStatus,
         resourcePageStatus: resourcePageStatus ?? this.resourcePageStatus,
         userBookingsStatus: userBookingsStatus ?? this.userBookingsStatus,
         bookUnbookStatus: bookUnbookStatus ?? this.bookUnbookStatus,
+        registerUnregisterStatus: registerUnregisterStatus ?? this.registerUnregisterStatus,
         autoSignup: autoSignup ?? this.autoSignup,
         userEvents: userEvents ?? this.userEvents,
         schoolResources: schoolResources ?? this.schoolResources,
@@ -67,6 +76,7 @@ class UserEventState extends Equatable {
         errorMessage: errorMessage ?? this.errorMessage,
         userBookingsErrorMessage: userBookingsErrorMessage ?? this.userBookingsErrorMessage,
         resourcePageErrorMessage: resourcePageErrorMessage ?? this.resourcePageErrorMessage,
+        currentTabIndex: currentTabIndex ?? this.currentTabIndex,
       );
 
   @override
@@ -75,6 +85,7 @@ class UserEventState extends Equatable {
         resourcePageStatus,
         userBookingsStatus,
         bookUnbookStatus,
+        registerUnregisterStatus,
         autoSignup,
         userEvents,
         schoolResources,
@@ -82,5 +93,6 @@ class UserEventState extends Equatable {
         userBookings,
         resourcePageErrorMessage,
         userBookingsErrorMessage,
+        currentTabIndex,
       ];
 }
