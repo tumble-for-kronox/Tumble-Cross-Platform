@@ -298,6 +298,8 @@
             }
         }
     },
+    "scaffoldMessageBookedResource": "Successfully booked",
+    "scaffoldMessageUnbookedResource": "Successfully unbooked",
     "runtimeErrorProgramFetch": "No program found",
     "runtimeErrorScheduleFetch": "No schedule found",
     "runtimeErrorTimeout": "Search timed out",
@@ -312,6 +314,9 @@
     "runtimeErrorNoCachedSchedule": "No cached schedule found",
     "runtimeErrorFailedExamSignup": "Couldn't sign up, try again later or go to kronox",
     "runtimeErrorInvalidInputFields": "Username and password cannot be empty",
+    "runtimeErrorResourceUnavailable": "The resource you tried reaching is unfortunately unavailable",
+    "runtimeErrorMaxResourcesBooked": "You already have the max number of resources booked",
+    "runtimeErrorResourceBookCollision": "The resource could not be booked as it is already booked by someone else",
     "popUpNotificationPermissionTitle": "Allow notifications",
     "popUpNotificationPermissionDescription": "This app would like to send you notifications",
     "popUpExamAutoSignupTitle": "Automatic exam registration should be used with caution!",
