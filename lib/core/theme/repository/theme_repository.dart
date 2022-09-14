@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -28,7 +29,6 @@ class ThemeRepository implements ThemePersistense {
   void _init() {
     final themeString = _sharedPreferences.getString(PreferenceTypes.theme);
     final localeString = _sharedPreferences.getString(PreferenceTypes.locale);
-
     switch (themeString) {
       case "light":
         _themeController.add(CustomTheme.light);
@@ -73,5 +73,8 @@ class ThemeRepository implements ThemePersistense {
   }
 
   @override
-  void dispose() => _themeController.close();
+  void dispose() {
+    _themeController.close();
+    _langController.close();
+  }
 }

@@ -13,10 +13,15 @@ import '../../dependency_injection/get_it_instances.dart';
 class ThemeCubit extends Cubit<ThemeState> {
   ThemeCubit()
       : super(ThemeState(
-            themeString: getIt<SharedPreferences>().getString(PreferenceTypes.theme)!.capitalize(),
-            locale: getIt<SharedPreferences>().getString(PreferenceTypes.locale) == null
-                ? null
-                : Locale(getIt<SharedPreferences>().getString(PreferenceTypes.locale)!)));
+            themeString: getIt<SharedPreferences>()
+                .getString(PreferenceTypes.theme)!
+                .capitalize(),
+            locale:
+                getIt<SharedPreferences>().getString(PreferenceTypes.locale) ==
+                        null
+                    ? null
+                    : Locale(getIt<SharedPreferences>()
+                        .getString(PreferenceTypes.locale)!)));
 
   final ThemePersistense themeRepository = getIt<ThemeRepository>();
   late StreamSubscription<CustomTheme> _themeSubscription;
@@ -50,7 +55,7 @@ class ThemeCubit extends Cubit<ThemeState> {
   void updateLocale(Locale? locale) {
     log("CHANGING LOCALE!");
     log((locale?.toLanguageTag()).toString());
-    emit(ThemeState(themeString: state.themeString, locale: locale));
+    emit(state.copyWith(locale: locale));
   }
 
   @override

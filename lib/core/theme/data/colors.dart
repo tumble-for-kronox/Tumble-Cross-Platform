@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 class CustomColors {
-  static const orangePrimary = Color(0xff4184d3);
-  static const orangePrimaryVariant = Color(0xff76bd9c);
+  static const orangePrimary = Color(0xffeb9605);
+  static const orangePrimaryVariant = Color(0xffffbe29);
 
   static const lightColors = ColorScheme(
     primary: orangePrimary,
