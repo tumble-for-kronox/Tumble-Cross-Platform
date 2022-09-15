@@ -73,7 +73,7 @@ class _TumbleCalendarViewState extends State<TumbleCalendarView> {
                                           Radius.circular(10),
                                         ),
                                         boxShadow: const [
-                                          BoxShadow(color: Colors.black26, blurRadius: 2, offset: Offset(1, 1))
+                                          BoxShadow(color: Colors.black26, blurRadius: 2, offset: Offset(0, 1))
                                         ]),
                                     padding: const EdgeInsets.only(left: 18, top: 8, right: 8, bottom: 8),
                                     child: Column(

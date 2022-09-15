@@ -7,6 +7,17 @@ class TumbleChosenResourcePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(child: Container());
+    return WillPopScope(
+      onWillPop: () async {
+        if (Navigator.of(context).canPop()) {
+          Navigator.of(context).pop();
+          return true;
+        }
+        return false;
+      },
+      child: SafeArea(
+        child: Container(),
+      ),
+    );
   }
 }

@@ -16,6 +16,7 @@ class TumbleEmptyWeekEventTile extends StatelessWidget {
           BoxShadow(
             color: Colors.black26,
             blurRadius: 1,
+            offset: Offset(0, 1),
           )
         ],
       ),

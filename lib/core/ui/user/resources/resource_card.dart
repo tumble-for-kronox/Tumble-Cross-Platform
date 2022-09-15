@@ -5,9 +5,12 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tumble/core/dependency_injection/get_it_instances.dart';
 import 'package:tumble/core/models/api_models/resource_model.dart';
+import 'package:tumble/core/navigation/navigation_route_labels.dart';
 import 'package:tumble/core/ui/login/cubit/auth_cubit.dart';
 import 'package:tumble/core/ui/user/cubit/user_event_cubit.dart';
 import 'package:tumble/core/ui/user/resources/tumble_chosen_resource_page.dart';
+
+import '../../../navigation/app_navigator.dart';
 
 class ResourceCard extends StatelessWidget {
   final ResourceModel resource;
@@ -22,10 +25,12 @@ class ResourceCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(10),
-        boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 2, offset: Offset(1, 1))],
+        boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 2, offset: Offset(0, 1))],
       ),
       child: MaterialButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.of(context).pushNamed('/chosenResource');
+        },
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
         ),
