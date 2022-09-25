@@ -12,11 +12,23 @@ import 'package:tumble/core/ui/data/string_constants.dart';
 import '../../api/apiservices/runtime_error_type.dart';
 
 extension BookingResponseParsing on Response {
-  ApiBookingResponse parseSchoolResource() {
+  ApiBookingResponse parseSchoolResources() {
     if (statusCode == 200) {
       List<dynamic> jsonList = json.decode(body);
       List<ResourceModel> schoolResources = List<ResourceModel>.from(jsonList.map((e) => resourceModelFromJson(e)));
       return ApiBookingResponse.success(schoolResources);
+    } else if (statusCode == 401) {
+      return ApiBookingResponse.unauthorized(RuntimeErrorType.authenticationError());
+    } else if (statusCode == 404) {
+      return ApiBookingResponse.notFound(RuntimeErrorType.resourceUnavailable());
+    }
+
+    return ApiBookingResponse.error(RuntimeErrorType.unknownError());
+  }
+
+  ApiBookingResponse parseSchoolResource() {
+    if (statusCode == 200) {
+      return ApiBookingResponse.success(resourceModelFromJson(body));
     } else if (statusCode == 401) {
       return ApiBookingResponse.unauthorized(RuntimeErrorType.authenticationError());
     } else if (statusCode == 404) {
@@ -66,11 +78,22 @@ extension BookingResponseParsing on Response {
 }
 
 extension BookingHttpClientResponseParsing on HttpClientResponse {
-  Future<ApiBookingResponse> parseSchoolResource() async {
+  Future<ApiBookingResponse> parseSchoolResources() async {
     if (statusCode == 200) {
       List<dynamic> jsonList = json.decode(await transform(utf8.decoder).join());
       List<ResourceModel> schoolResources = List<ResourceModel>.from(jsonList.map((e) => ResourceModel.fromJson(e)));
       return ApiBookingResponse.success(schoolResources);
+    } else if (statusCode == 401) {
+      return ApiBookingResponse.unauthorized(RuntimeErrorType.authenticationError());
+    } else if (statusCode == 404) {
+      return ApiBookingResponse.notFound(RuntimeErrorType.resourceUnavailable());
+    }
+    return ApiBookingResponse.error(RuntimeErrorType.unknownError());
+  }
+
+  Future<ApiBookingResponse> parseSchoolResource() async {
+    if (statusCode == 200) {
+      return ApiBookingResponse.success(resourceModelFromJson(await transform(utf8.decoder).join()));
     } else if (statusCode == 401) {
       return ApiBookingResponse.unauthorized(RuntimeErrorType.authenticationError());
     } else if (statusCode == 404) {

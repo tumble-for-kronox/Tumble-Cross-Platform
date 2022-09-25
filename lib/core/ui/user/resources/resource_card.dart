@@ -6,7 +6,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tumble/core/dependency_injection/get_it_instances.dart';
 import 'package:tumble/core/models/api_models/resource_model.dart';
 import 'package:tumble/core/navigation/navigation_route_labels.dart';
+import 'package:tumble/core/ui/data/string_constants.dart';
 import 'package:tumble/core/ui/login/cubit/auth_cubit.dart';
+import 'package:tumble/core/ui/scaffold_message.dart';
 import 'package:tumble/core/ui/user/cubit/user_event_cubit.dart';
 import 'package:tumble/core/ui/user/resources/tumble_chosen_resource_page.dart';
 
@@ -29,6 +31,14 @@ class ResourceCard extends StatelessWidget {
       ),
       child: MaterialButton(
         onPressed: () {
+          context
+              .read<UserEventCubit>()
+              .getResourceAvailabilities(context.read<AuthCubit>(), resource.id, DateTime.now())
+              .then((_) {
+            if (context.read<UserEventCubit>().state.resourcePageErrorMessage != null) {
+              showScaffoldMessage(context, context.read<UserEventCubit>().state.resourcePageErrorMessage!);
+            }
+          });
           Navigator.of(context).pushNamed('/chosenResource');
         },
         shape: RoundedRectangleBorder(

@@ -131,13 +131,13 @@ class BackendRepository implements IBackendService {
       if (response == null) {
         return ApiBookingResponse.error(RuntimeErrorType.timeoutError());
       }
-      return await response.parseSchoolResource();
+      return await response.parseSchoolResources();
     } else {
       var uri = Uri.https(ApiEndPoints.baseUrl, ApiEndPoints.getSchoolResources,
           {ApiEndPoints.school: school.toString(), ApiEndPoints.sessionToken: sessionToken});
 
       final response = await http.get(uri);
-      return response.parseSchoolResource();
+      return response.parseSchoolResources();
     }
   }
 
@@ -151,7 +151,7 @@ class BackendRepository implements IBackendService {
       var uri = Uri.https(ApiEndPoints.debugBaseUrl, ApiEndPoints.getResourceAvailability + resourceId, {
         ApiEndPoints.school: school.toString(),
         ApiEndPoints.sessionToken: sessionToken,
-        ApiEndPoints.date: date,
+        ApiEndPoints.date: date.toIso8601String(),
       });
 
       final response = await HttpService.sendGetRequestToServer(uri);

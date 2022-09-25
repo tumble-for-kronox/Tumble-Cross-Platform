@@ -15,7 +15,7 @@ class ResourcePage extends StatelessWidget {
 
   Map<String, Widget Function(BuildContext, UserEventState)> _routeBuilders(BuildContext context) {
     return {
-      '/': (context, state) => _schoolResourcesList(state),
+      '/': (context, state) => _schoolResourcesList(context, state),
       '/chosenResource': (context, state) => const TumbleChosenResourcePage(),
     };
   }
@@ -26,32 +26,32 @@ class ResourcePage extends StatelessWidget {
 
     return BlocBuilder<UserEventCubit, UserEventState>(
       builder: (context, state) {
-        return Scaffold(
-          body: Navigator(
-            initialRoute: '/',
-            onGenerateRoute: (routeSettings) {
-              return CupertinoPageRoute(builder: (context) => routeBuilders[routeSettings.name]!(context, state));
-            },
-          ),
+        return Navigator(
+          initialRoute: '/',
+          onGenerateRoute: (routeSettings) {
+            return CupertinoPageRoute(
+                builder: (context) => Container(
+                      color: Theme.of(context).colorScheme.background,
+                      child: routeBuilders[routeSettings.name]!(context, state),
+                    ));
+          },
         );
       },
     );
   }
 
-  Widget _schoolResourcesList(UserEventState state) {
-    return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          children: state.schoolResources!
-              .map((e) => Column(children: [
-                    ResourceCard(resource: e),
-                    const SizedBox(
-                      height: 25,
-                    )
-                  ]))
-              .toList(),
-        ),
+  Widget _schoolResourcesList(BuildContext context, UserEventState state) {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        children: state.schoolResources!
+            .map((e) => Column(children: [
+                  ResourceCard(resource: e),
+                  const SizedBox(
+                    height: 25,
+                  )
+                ]))
+            .toList(),
       ),
     );
   }
