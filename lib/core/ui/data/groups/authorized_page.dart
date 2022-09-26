@@ -8,6 +8,7 @@ class AuthorizedPageStrings extends StringConstantGroup {
   String hello() => localizedStrings.authorizedPageHello;
   String userOptionsTitle() => localizedStrings.authorizedPageUserOptionsTitle;
   String automaticExamSignup() => localizedStrings.authorizedPageAutomaticExamSignup;
+  String userBookingsTitle() => localizedStrings.authorizedPageUserBookingsTitle;
   String externalLinksTitle() => localizedStrings.authorizedPageExternalLinksTitle;
   String personalExternalLink(String webpageName) => localizedStrings.authorizedPagePersonalExternalLink(webpageName);
   String externalLinkKronox(String universityName) =>

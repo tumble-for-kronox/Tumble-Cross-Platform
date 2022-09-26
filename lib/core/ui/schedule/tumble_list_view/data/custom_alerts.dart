@@ -145,7 +145,7 @@ class CustomAlertDialog {
             style: TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 15, fontWeight: FontWeight.w400),
           ),
           onPressed: () {
-            Navigator.of(context).pop();
+            Navigator.of(context, rootNavigator: true).pop();
           },
         ),
         CupertinoDialogAction(
@@ -153,10 +153,41 @@ class CustomAlertDialog {
               style:
                   TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 15, fontWeight: FontWeight.w400)),
           onPressed: () {
-            Navigator.of(context).pop();
+            Navigator.of(context, rootNavigator: true).pop();
             BlocProvider.of<UserEventCubit>(context).autoSignupToggle(value);
           },
         )
+      ],
+    );
+  }
+
+  static AlertDialog resourceNotGettable(BuildContext context) {
+    return AlertDialog(
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
+      content: SizedBox(
+        height: 210,
+        child: Column(children: [
+          Text(S.popUps.resourceFetchErrorTitle(),
+              style: TextStyle(
+                  color: Theme.of(context).colorScheme.onBackground, fontSize: 16, fontWeight: FontWeight.w600)),
+          const SizedBox(
+            height: 20,
+          ),
+          Text(S.popUps.resourceFetchErrorBody(),
+              style: TextStyle(
+                  color: Theme.of(context).colorScheme.onBackground, fontSize: 16, fontWeight: FontWeight.w400))
+        ]),
+      ),
+      actions: [
+        CupertinoDialogAction(
+          child: Text(
+            S.general.ok(),
+            style: TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 15, fontWeight: FontWeight.w400),
+          ),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
       ],
     );
   }

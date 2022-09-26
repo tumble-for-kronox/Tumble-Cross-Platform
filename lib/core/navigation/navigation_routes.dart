@@ -64,9 +64,6 @@ class Routes {
       case NavigationRouteLabels.resourceBasePage:
         pageClass = const ResourcePage();
         break;
-      case NavigationRouteLabels.chosenResourcePage:
-        pageClass = const TumbleChosenResourcePage();
-        break;
       default:
         return CupertinoPage(
           key: const ValueKey('blankPage'),

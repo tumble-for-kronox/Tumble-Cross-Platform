@@ -8,6 +8,7 @@ import 'package:tumble/core/ui/login/cubit/auth_cubit.dart';
 import 'package:tumble/core/ui/main_app/main_app_navigation_root.dart';
 import 'package:tumble/core/ui/main_app/school_selection_page.dart';
 import 'package:tumble/core/ui/user/cubit/user_event_cubit.dart';
+import 'package:tumble/core/ui/user/resources/cubit/resource_cubit.dart';
 
 class MainApp extends StatefulWidget {
   const MainApp({Key? key}) : super(key: key);
@@ -33,12 +34,10 @@ class _MainAppState extends State<MainApp> {
                       );
                     case InitStatus.SCHOOL_AVAILABLE:
                       return MultiBlocProvider(providers: [
-                        BlocProvider.value(
-                            value: BlocProvider.of<AuthCubit>(context)),
-                        BlocProvider<UserEventCubit>(
-                            create: (context) => UserEventCubit()),
-                        BlocProvider<MainAppNavigationCubit>(
-                            create: (context) => MainAppNavigationCubit())
+                        BlocProvider.value(value: BlocProvider.of<AuthCubit>(context)),
+                        BlocProvider<UserEventCubit>(create: (context) => UserEventCubit()),
+                        BlocProvider<ResourceCubit>(create: (context) => ResourceCubit()),
+                        BlocProvider<MainAppNavigationCubit>(create: (context) => MainAppNavigationCubit())
                       ], child: const MainAppNavigationRootPage());
                   }
                 },

@@ -17,6 +17,7 @@ import 'package:tumble/core/ui/schedule/tumble_week_view/tumble_week_view.dart';
 import 'package:tumble/core/ui/search/cubit/search_page_cubit.dart';
 import 'package:tumble/core/ui/search/search/tumble_search_page.dart';
 import 'package:tumble/core/ui/user/cubit/user_event_cubit.dart';
+import 'package:tumble/core/ui/user/resources/cubit/resource_cubit.dart';
 import 'package:tumble/core/ui/user/tumble_user_overview_page_switch.dart';
 
 class MainAppNavigationRootPage extends StatefulWidget {
@@ -70,7 +71,7 @@ class _MainAppNavigationRootPageState extends State<MainAppNavigationRootPage> {
                         previous.status != current.status && current.status == AuthStatus.AUTHENTICATED),
                     listener: (context, state) {
                       context.read<UserEventCubit>().getUserEvents(context.read<AuthCubit>(), true);
-                      context.read<UserEventCubit>().getSchoolResources(context.read<AuthCubit>());
+                      context.read<ResourceCubit>().getSchoolResources(context.read<AuthCubit>());
                       if (context.read<UserEventCubit>().state.autoSignup) {
                         context.read<AuthCubit>().runAutoSignup();
                       }

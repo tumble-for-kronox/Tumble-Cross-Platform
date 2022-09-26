@@ -13,12 +13,13 @@ class AutoSignupOption extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AuthCubit, AuthState>(
+    return BlocBuilder<UserEventCubit, UserEventState>(
       builder: (context, state) {
         return Container(
           padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
           height: 55,
           child: SwitchListTile(
+              activeColor: Theme.of(context).colorScheme.primary,
               title: Text(
                 S.authorizedPage.automaticExamSignup(),
                 style: TextStyle(color: Theme.of(context).colorScheme.onBackground),

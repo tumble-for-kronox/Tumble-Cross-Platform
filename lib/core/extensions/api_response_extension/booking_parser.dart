@@ -54,7 +54,7 @@ extension BookingResponseParsing on Response {
     if (statusCode == 200) {
       return ApiBookingResponse.success(S.scaffoldMessages.bookedResource());
     } else if (statusCode == 401) {
-      return ApiBookingResponse.error(RuntimeErrorType.authenticationError());
+      return ApiBookingResponse.unauthorized(RuntimeErrorType.authenticationError());
     } else if (statusCode == 403) {
       return ApiBookingResponse.error(RuntimeErrorType.maxResourcesBooked());
     } else if (statusCode == 409) {
@@ -118,7 +118,7 @@ extension BookingHttpClientResponseParsing on HttpClientResponse {
     if (statusCode == 200) {
       return ApiBookingResponse.success(S.scaffoldMessages.bookedResource());
     } else if (statusCode == 401) {
-      return ApiBookingResponse.error(RuntimeErrorType.authenticationError());
+      return ApiBookingResponse.unauthorized(RuntimeErrorType.authenticationError());
     } else if (statusCode == 403) {
       return ApiBookingResponse.error(RuntimeErrorType.maxResourcesBooked());
     } else if (statusCode == 409) {

@@ -23,9 +23,6 @@ class UserEventCubit extends Cubit<UserEventState> {
   UserEventCubit()
       : super(UserEventState(
           userEventListStatus: UserOverviewStatus.INITIAL,
-          resourcePageStatus: ResourcePageStatus.INITIAL,
-          userBookingsStatus: UserBookingsStatus.INITIAL,
-          bookUnbookStatus: BookUnbookStatus.INITIAL,
           registerUnregisterStatus: RegisterUnregisterStatus.INITIAL,
           autoSignup: getIt<SharedPreferences>().getBool(PreferenceTypes.autoSignup)!,
         ));
@@ -123,108 +120,6 @@ class UserEventCubit extends Cubit<UserEventState> {
   Future<void> autoSignupToggle(bool value) async {
     getIt<SharedPreferences>().setBool(PreferenceTypes.autoSignup, value);
     emit(state.copyWith(autoSignup: value));
-  }
-
-  Future<void> getSchoolResources(AuthCubit authCubit) async {
-    emit(state.copyWith(resourcePageStatus: ResourcePageStatus.LOADING));
-    ApiBookingResponse schoolResources = await _userRepo.getSchoolResources(authCubit.state.userSession!.sessionToken);
-
-    switch (schoolResources.status) {
-      case ApiBookingResponseStatus.SUCCESS:
-        emit(state.copyWith(resourcePageStatus: ResourcePageStatus.LOADED, schoolResources: schoolResources.data));
-        break;
-      case ApiBookingResponseStatus.ERROR:
-      case ApiBookingResponseStatus.UNAUTHORIZED:
-        await authCubit.login();
-        await getSchoolResources(authCubit);
-        break;
-      case ApiBookingResponseStatus.NOT_FOUND:
-        emit(state.copyWith(
-            resourcePageStatus: ResourcePageStatus.ERROR, resourcePageErrorMessage: schoolResources.data));
-        break;
-    }
-  }
-
-  Future<void> getResourceAvailabilities(AuthCubit authCubit, String resourceId, DateTime date) async {
-    emit(state.copyWith(resourcePageStatus: ResourcePageStatus.LOADING));
-    ApiBookingResponse currentSelectedResource =
-        await _userRepo.getResourceAvailabilities(resourceId, date, authCubit.state.userSession!.sessionToken);
-
-    switch (currentSelectedResource.status) {
-      case ApiBookingResponseStatus.SUCCESS:
-        emit(state.copyWith(
-            resourcePageStatus: ResourcePageStatus.LOADED, currentLoadedResource: currentSelectedResource.data));
-        break;
-      case ApiBookingResponseStatus.ERROR:
-      case ApiBookingResponseStatus.UNAUTHORIZED:
-        await authCubit.login();
-        await getResourceAvailabilities(authCubit, resourceId, date);
-        break;
-      case ApiBookingResponseStatus.NOT_FOUND:
-        emit(state.copyWith(
-            resourcePageStatus: ResourcePageStatus.ERROR, resourcePageErrorMessage: currentSelectedResource.data));
-        break;
-    }
-  }
-
-  Future<void> getUserBookings(AuthCubit authCubit) async {
-    emit(state.copyWith(userBookingsStatus: UserBookingsStatus.LOADING));
-    ApiBookingResponse userBookings = await _userRepo.getUserBookings(authCubit.state.userSession!.sessionToken);
-
-    switch (userBookings.status) {
-      case ApiBookingResponseStatus.SUCCESS:
-        emit(state.copyWith(userBookingsStatus: UserBookingsStatus.LOADED, userBookings: userBookings.data));
-        break;
-      case ApiBookingResponseStatus.ERROR:
-      case ApiBookingResponseStatus.UNAUTHORIZED:
-        await authCubit.login();
-        await getUserBookings(authCubit);
-        break;
-      case ApiBookingResponseStatus.NOT_FOUND:
-        emit(state.copyWith(userBookingsStatus: UserBookingsStatus.ERROR, userBookingsErrorMessage: userBookings.data));
-        break;
-    }
-  }
-
-  Future<void> bookResource(
-      AuthCubit authCubit, String resourceId, DateTime date, AvailabilityValue bookingSlot) async {
-    emit(state.copyWith(bookUnbookStatus: BookUnbookStatus.LOADING));
-    ApiBookingResponse bookResource =
-        await _userRepo.putBookResources(resourceId, date, bookingSlot, authCubit.state.userSession!.sessionToken);
-
-    switch (bookResource.status) {
-      case ApiBookingResponseStatus.SUCCESS:
-        getResourceAvailabilities(authCubit, resourceId, date);
-        break;
-      case ApiBookingResponseStatus.UNAUTHORIZED:
-        await authCubit.login();
-        await this.bookResource(authCubit, resourceId, date, bookingSlot);
-        break;
-      default:
-        break;
-    }
-    emit(state.copyWith(bookUnbookStatus: BookUnbookStatus.INITIAL));
-    return bookResource.data;
-  }
-
-  Future<void> unbookResource(AuthCubit authCubit, String resourceId, DateTime date, String bookingId) async {
-    emit(state.copyWith(bookUnbookStatus: BookUnbookStatus.LOADING));
-    ApiBookingResponse bookResource =
-        await _userRepo.putUnbookResources(authCubit.state.userSession!.sessionToken, bookingId);
-
-    switch (bookResource.status) {
-      case ApiBookingResponseStatus.SUCCESS:
-        getUserBookings(authCubit);
-        break;
-      case ApiBookingResponseStatus.UNAUTHORIZED:
-        await authCubit.login();
-        await unbookResource(authCubit, resourceId, date, bookingId);
-        break;
-      default:
-        break;
-    }
-    emit(state.copyWith(bookUnbookStatus: BookUnbookStatus.INITIAL));
-    return bookResource.data;
   }
 
   void changeCurrentTabIndex(int newIndex) {

@@ -270,8 +270,8 @@ class BackendRepository implements IBackendService {
     final school = Schools().fromString(defaultSchool).schoolId.index;
     final Map<String, dynamic> body = {
       ApiEndPoints.resourceId: resourceId,
-      ApiEndPoints.date: date,
-      ApiEndPoints.bookingSlot: bookingSlot
+      ApiEndPoints.date: date.toIso8601String(),
+      ApiEndPoints.bookingSlot: bookingSlot,
     };
 
     if (kDebugMode) {

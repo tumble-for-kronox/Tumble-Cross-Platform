@@ -45,6 +45,7 @@ class UserInfo extends StatelessWidget {
                 onPressed: onPressed,
                 prefixIcon: CupertinoIcons.person_circle,
                 text: S.loginPage.signInButton(),
+                loading: false,
               ),
             ),
           ),

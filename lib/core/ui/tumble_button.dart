@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:tumble/core/ui/tumble_loading.dart';
 
 class TumbleButton extends StatelessWidget {
   final void Function() onPressed;
   final IconData prefixIcon;
   final String text;
+  final bool loading;
 
   const TumbleButton({
     Key? key,
     required this.onPressed,
     required this.prefixIcon,
     required this.text,
+    required this.loading,
   }) : super(key: key);
 
   @override
@@ -23,10 +26,14 @@ class TumbleButton extends StatelessWidget {
         color: Theme.of(context).colorScheme.primary,
         child: Row(
           children: [
-            Icon(
-              prefixIcon,
-              color: Theme.of(context).colorScheme.onPrimary,
-            ),
+            loading
+                ? TumbleLoading(
+                    color: Theme.of(context).colorScheme.onPrimary,
+                  )
+                : Icon(
+                    prefixIcon,
+                    color: Theme.of(context).colorScheme.onPrimary,
+                  ),
             Expanded(
               child: Text(
                 text,

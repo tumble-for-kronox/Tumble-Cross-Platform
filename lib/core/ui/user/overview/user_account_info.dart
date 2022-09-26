@@ -120,48 +120,58 @@ class _UserAccountInfo extends State<UserAccountInfo> {
                     const SizedBox(
                       height: 20,
                     ),
+                    _sectionDivider(context, S.authorizedPage.userBookingsTitle()),
+                    const SizedBox(
+                      height: 20,
+                    ),
                     _sectionDivider(context, S.authorizedPage.externalLinksTitle()),
                     const SizedBox(
                       height: 10,
                     ),
-                    UserAccountExternalLink(
-                      title: S.authorizedPage.personalExternalLink("Canvas"),
-                      color: const Color(0xFFe23e29),
-                      link:
-                          "https://${Schools.schools.firstWhere((school) => school.schoolName == getIt<SharedPreferences>().getString(PreferenceTypes.school)).schoolId.name}.instructure.com",
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    UserAccountExternalLink(
-                      title: S.authorizedPage.personalExternalLink("Ladok"),
-                      color: const Color(0xFF3c9a00),
-                      link: "https://www.student.ladok.se/student/app/studentwebb/",
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    UserAccountExternalLink(
-                      title: S.authorizedPage.externalLinkKronox(Schools.schools
-                          .firstWhere((school) =>
-                              school.schoolName == getIt<SharedPreferences>().getString(PreferenceTypes.school))
-                          .schoolName),
-                      color: const Color(0xFF0089da),
-                      link:
-                          "https://${Schools.schools.firstWhere((school) => school.schoolName == getIt<SharedPreferences>().getString(PreferenceTypes.school)).schoolUrl}",
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        UserAccountExternalLink(
+                          title: "Canvas",
+                          color: const Color(0xFFe23e29),
+                          icon: CupertinoIcons.add,
+                          link:
+                              "https://${Schools.schools.firstWhere((school) => school.schoolName == getIt<SharedPreferences>().getString(PreferenceTypes.school)).schoolId.name}.instructure.com",
+                        ),
+                        const SizedBox(
+                          width: 20,
+                        ),
+                        const UserAccountExternalLink(
+                          title: "Ladok",
+                          color: Color(0xFF3c9a00),
+                          icon: CupertinoIcons.add,
+                          link: "https://www.student.ladok.se/student/app/studentwebb/",
+                        ),
+                        const SizedBox(
+                          width: 20,
+                        ),
+                        UserAccountExternalLink(
+                          title: "Kronox",
+                          color: const Color(0xFF0089da),
+                          icon: CupertinoIcons.add,
+                          link:
+                              "https://${Schools.schools.firstWhere((school) => school.schoolName == getIt<SharedPreferences>().getString(PreferenceTypes.school)).schoolUrl}",
+                        ),
+                      ],
                     ),
                     const SizedBox(
                       height: 50,
                     ),
                     FractionallySizedBox(
-                      widthFactor: 0.6,
-                      child: TumbleButton(
+                        widthFactor: 0.6,
+                        child: TumbleButton(
                           onPressed: () {
                             BlocProvider.of<AuthCubit>(context).logout();
                           },
                           prefixIcon: CupertinoIcons.arrow_left_square,
-                          text: S.authorizedPage.signOut()),
-                    ),
+                          text: S.authorizedPage.signOut(),
+                          loading: false,
+                        )),
                     const SizedBox(
                       height: 20,
                     ),
