@@ -2,6 +2,10 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 
+///
+/// Stores all endpoints used for interacting with the .NET backend,
+/// as well as the query parameters for different endpoints.
+///
 @immutable
 class ApiEndPoints {
   // Endpoints
@@ -25,7 +29,7 @@ class ApiEndPoints {
   // Path parameters
   static const String eventId = 'eventId';
 
-  // Query parameters
+  // Schedule query parameters
   static const String school = 'schoolId';
   static const String startTag = 'startTag';
   static const String search = 'searchQuery';
@@ -33,13 +37,13 @@ class ApiEndPoints {
   static const String resourceId = 'resourceId';
   static const String bookingId = 'bookingId';
 
-  // Body parameters
+  // Login parameters
   static const String password = 'password';
   static const String username = 'username';
   static const String date = 'date';
   static const String bookingSlot = 'slot';
 
-  // Issue body parameters
+  // Issue parameters
   static const String issueSubject = 'title';
   static const String issueBody = 'description';
 }

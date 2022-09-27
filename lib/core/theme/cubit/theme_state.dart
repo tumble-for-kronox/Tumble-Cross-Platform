@@ -15,7 +15,7 @@ class ThemeState extends Equatable {
   ThemeState copyWith({ThemeMode? themeMode, Locale? locale}) => ThemeState(
         locale: locale ?? this.locale,
         themeMode: themeMode ?? this.themeMode,
-        themeString: getIt<SharedPreferences>().getString(PreferenceTypes.theme)!.capitalize(),
+        themeString: getIt<SharedPreferences>().getString(PreferenceTypes.theme)!,
       );
 
   @override

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tumble/core/theme/cubit/theme_cubit.dart';
@@ -24,6 +26,7 @@ class _MainAppState extends State<MainApp> {
         builder: ((context, state) => FutureBuilder(
             future: BlocProvider.of<InitCubit>(context).init(),
             builder: (context, snapshot) {
+              log(state.themeString);
               return BlocBuilder<InitCubit, InitState>(
                 builder: (context, state) {
                   switch (state.status) {
@@ -34,14 +37,10 @@ class _MainAppState extends State<MainApp> {
                       );
                     case InitStatus.SCHOOL_AVAILABLE:
                       return MultiBlocProvider(providers: [
-                        BlocProvider.value(
-                            value: BlocProvider.of<AuthCubit>(context)),
-                        BlocProvider<UserEventCubit>(
-                            create: (context) => UserEventCubit()),
-                        BlocProvider<ResourceCubit>(
-                            create: (context) => ResourceCubit()),
-                        BlocProvider<MainAppNavigationCubit>(
-                            create: (context) => MainAppNavigationCubit())
+                        BlocProvider.value(value: BlocProvider.of<AuthCubit>(context)),
+                        BlocProvider<UserEventCubit>(create: (context) => UserEventCubit()),
+                        BlocProvider<ResourceCubit>(create: (context) => ResourceCubit()),
+                        BlocProvider<MainAppNavigationCubit>(create: (context) => MainAppNavigationCubit())
                       ], child: const MainAppNavigationRootPage());
                   }
                 },

@@ -8,6 +8,7 @@ abstract class INotificationServiceBuilder {
     required String channelName,
     required String channelDescription,
   });
+
   Future<bool> buildNotification(
       {required int id,
       required String channelKey,
@@ -15,5 +16,4 @@ abstract class INotificationServiceBuilder {
       required String title,
       required String body,
       required DateTime date});
-  Future<bool> initializeAllNotificationChannels();
 }

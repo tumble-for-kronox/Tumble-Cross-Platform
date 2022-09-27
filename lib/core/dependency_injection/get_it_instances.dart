@@ -14,8 +14,9 @@ import 'package:tumble/core/theme/repository/theme_repository.dart';
 final GetIt getIt = GetIt.instance;
 
 class DependencyInjection {
-  /// Initialize dependency injection
-  static Future<void> initSingletons() async {
+  /// These are singleton objects created at runtime so that
+  /// shared objects share the same reference to a resource.
+  static Future<void> initialize() async {
     SharedPreferences sharedPref = await SharedPreferences.getInstance();
     getIt.registerLazySingleton(() => AppDependencies());
     getIt.registerLazySingleton(() => sharedPref);

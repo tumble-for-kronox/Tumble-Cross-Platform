@@ -5,11 +5,9 @@ class ApiBugReportResponse<T> {
   T? data;
   String? message;
 
-  ApiBugReportResponse.success(this.data)
-      : status = ApiBugReportResponseStatus.SUCCESS;
+  ApiBugReportResponse.success(this.data) : status = ApiBugReportResponseStatus.SUCCESS;
 
-  ApiBugReportResponse.error(this.message)
-      : status = ApiBugReportResponseStatus.ERROR;
+  ApiBugReportResponse.error(this.message) : status = ApiBugReportResponseStatus.ERROR;
 
   @override
   String toString() {
@@ -17,7 +15,4 @@ class ApiBugReportResponse<T> {
   }
 }
 
-enum ApiBugReportResponseStatus {
-  SUCCESS,
-  ERROR,
-}
+enum ApiBugReportResponseStatus { SUCCESS, ERROR }

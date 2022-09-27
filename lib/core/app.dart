@@ -34,11 +34,11 @@ class _AppState extends State<App> {
         BlocProvider<InitCubit>(create: (_) => InitCubit()),
         BlocProvider<AuthCubit>(create: (_) => AuthCubit()),
         BlocProvider<ThemeCubit>(
-            create: (context) => ThemeCubit()
+            create: (_) => ThemeCubit()
               ..getCurrentTheme()
               ..getCurrentLang()),
-        BlocProvider<SearchPageCubit>(create: (context) => SearchPageCubit()),
-        BlocProvider<MainAppCubit>(create: (context) => MainAppCubit()),
+        BlocProvider<SearchPageCubit>(create: (_) => SearchPageCubit()),
+        BlocProvider<MainAppCubit>(create: (_) => MainAppCubit()),
       ],
       child: BlocBuilder<ThemeCubit, ThemeState>(
           builder: ((context, state) => MaterialApp(
@@ -54,18 +54,14 @@ class _AppState extends State<App> {
               supportedLocales: AppLocalizations.supportedLocales,
               locale: state.locale,
               localeResolutionCallback: (locale, supportedLocales) =>
-                  supportedLocales.contains(locale)
-                      ? locale
-                      : const Locale('en'),
+                  supportedLocales.contains(locale) ? locale : const Locale('en'),
               theme: ThemeData(
-                bottomSheetTheme: const BottomSheetThemeData(
-                    backgroundColor: Colors.transparent),
+                bottomSheetTheme: const BottomSheetThemeData(backgroundColor: Colors.transparent),
                 colorScheme: CustomColors.lightColors,
                 fontFamily: 'Roboto',
               ),
               darkTheme: ThemeData(
-                bottomSheetTheme: const BottomSheetThemeData(
-                    backgroundColor: Colors.transparent),
+                bottomSheetTheme: const BottomSheetThemeData(backgroundColor: Colors.transparent),
                 colorScheme: CustomColors.darkColors,
                 bottomNavigationBarTheme: BottomNavigationBarThemeData(
                   selectedItemColor: CustomColors.darkColors.primary,
@@ -77,16 +73,11 @@ class _AppState extends State<App> {
                 S.init(context);
                 return MultiBlocProvider(
                   providers: [
-                    BlocProvider.value(
-                        value: BlocProvider.of<AppNavigator>(context)),
-                    BlocProvider.value(
-                        value: BlocProvider.of<InitCubit>(context)),
-                    BlocProvider.value(
-                        value: BlocProvider.of<AuthCubit>(context)),
-                    BlocProvider.value(
-                        value: BlocProvider.of<ThemeCubit>(context)),
-                    BlocProvider.value(
-                        value: BlocProvider.of<SearchPageCubit>(context)),
+                    BlocProvider.value(value: BlocProvider.of<AppNavigator>(context)),
+                    BlocProvider.value(value: BlocProvider.of<InitCubit>(context)),
+                    BlocProvider.value(value: BlocProvider.of<AuthCubit>(context)),
+                    BlocProvider.value(value: BlocProvider.of<ThemeCubit>(context)),
+                    BlocProvider.value(value: BlocProvider.of<SearchPageCubit>(context)),
                   ],
                   child: const AppNavigatorProvider(initialPages: [
                     NavigationRouteLabels.mainAppPage,

@@ -18,7 +18,6 @@ class InitCubit extends Cubit<InitState> {
   final _cacheAndInteractionService = getIt<CacheAndInteractionRepository>();
   final _databaseService = getIt<DatabaseRepository>();
   final _appDeps = getIt<AppDependencies>();
-  final _preferenceService = getIt<SharedPreferences>();
 
   Future<void> init() async {
     SharedPreferenceResponse sharedPreferenceResponse = await _cacheAndInteractionService.verifyDefaultSchoolExists();
@@ -34,27 +33,17 @@ class InitCubit extends Cubit<InitState> {
   }
 
   void changeSchool(String schoolName) {
-    /// Retrieve preferences
-    final notificationOffset = _preferenceService.getInt(PreferenceTypes.notificationOffset);
-    final theme = _preferenceService.getString(PreferenceTypes.theme);
-    final autoSignup = _preferenceService.getBool(PreferenceTypes.autoSignup);
-
-    /// Clear all items in shared preferences
-    _preferenceService.clear();
-
     /// Renew items in shared preferences
-    _appDeps.initDependencies(
-      schoolName: schoolName,
-      theme: theme,
-      notificationOffset: notificationOffset,
-      autoSignup: autoSignup,
-    );
+    _appDeps.updateDependencies(schoolName);
 
-    /// Clear local db
-    _databaseService.removeAll();
-    _databaseService.removeAllCachedCourseColors();
+    if (state.status == InitStatus.NO_SCHOOL) {
+      /// Clear local db
+      _databaseService.removeAll();
+      _databaseService.removeAllCachedCourseColors();
 
-    /// Tell app to update
-    emit(InitState(defaultSchool: schoolName, status: InitStatus.SCHOOL_AVAILABLE));
+      emit(InitState(defaultSchool: schoolName, status: InitStatus.SCHOOL_AVAILABLE));
+    } else if (state.status == InitStatus.NO_SCHOOL) {
+      emit(state.copyWith(defaultSchool: schoolName));
+    }
   }
 }

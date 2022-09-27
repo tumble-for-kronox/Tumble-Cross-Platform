@@ -1,9 +1,9 @@
 class PreferenceTypes {
-  static const school = 'school';
-  static const view = 'view';
-  static const theme = 'theme';
-  static const notificationOffset = 'notificationTime';
-  static const bookmarks = 'favorites';
-  static const autoSignup = 'autoSignup';
-  static const locale = 'language';
+  static const school = 'SCHOOL';
+  static const view = 'VIEW';
+  static const theme = 'THEME';
+  static const notificationOffset = 'NOTIF_OFFSET';
+  static const bookmarks = 'BOOKMARKS';
+  static const autoSignup = 'AUTOSIGNUP';
+  static const locale = 'LANG';
 }

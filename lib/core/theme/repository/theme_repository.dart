@@ -5,16 +5,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tumble/core/shared/preference_types.dart';
 import 'package:tumble/core/dependency_injection/get_it_instances.dart';
+import 'package:tumble/core/theme/data/theme_strings.dart';
 
 abstract class ThemePersistense {
-  Stream<CustomTheme> getTheme();
+  Stream<String> getTheme();
   Stream<Locale?> getLocale();
-  Future<void> saveTheme(CustomTheme theme);
-  Future<void> saveLocale(Locale locale);
+  Future<bool> saveTheme(String theme);
+  Future<bool> saveLocale(Locale locale);
   void dispose();
 }
-
-enum CustomTheme { light, dark, system }
 
 class ThemeRepository implements ThemePersistense {
   ThemeRepository() {
@@ -23,24 +22,25 @@ class ThemeRepository implements ThemePersistense {
 
   final SharedPreferences _sharedPreferences = getIt<SharedPreferences>();
 
-  final _themeController = StreamController<CustomTheme>.broadcast();
+  final _themeController = StreamController<String>.broadcast();
   final _langController = StreamController<Locale?>.broadcast();
 
   void _init() {
-    final themeString = _sharedPreferences.getString(PreferenceTypes.theme);
+    final String? themeString = _sharedPreferences.getString(PreferenceTypes.theme);
     final localeString = _sharedPreferences.getString(PreferenceTypes.locale);
+    log(themeString!);
     switch (themeString) {
-      case "light":
-        _themeController.add(CustomTheme.light);
+      case ThemeType.light:
+        _themeController.add(ThemeType.light);
         break;
-      case "dark":
-        _themeController.add(CustomTheme.dark);
+      case ThemeType.dark:
+        _themeController.add(ThemeType.dark);
         break;
-      case "system":
-        _themeController.add(CustomTheme.system);
+      case ThemeType.system:
+        _themeController.add(ThemeType.system);
         break;
       default:
-        _themeController.add(CustomTheme.system);
+        _themeController.add(ThemeType.system);
         break;
     }
 
@@ -48,7 +48,7 @@ class ThemeRepository implements ThemePersistense {
   }
 
   @override
-  Stream<CustomTheme> getTheme() async* {
+  Stream<String> getTheme() async* {
     yield* _themeController.stream;
   }
 
@@ -58,18 +58,17 @@ class ThemeRepository implements ThemePersistense {
   }
 
   @override
-  Future<void> saveTheme(CustomTheme theme) {
+  Future<bool> saveTheme(String theme) async {
     _themeController.add(theme);
-    return _sharedPreferences.setString(PreferenceTypes.theme, theme.name);
+    return await _sharedPreferences.setString(PreferenceTypes.theme, theme);
   }
 
   @override
-  Future<void> saveLocale(Locale? locale) {
+  Future<bool> saveLocale(Locale? locale) async {
     _langController.add(locale);
     return locale == null
-        ? _sharedPreferences.remove(PreferenceTypes.locale)
-        : _sharedPreferences.setString(
-            PreferenceTypes.locale, locale.languageCode);
+        ? await _sharedPreferences.remove(PreferenceTypes.locale)
+        : await _sharedPreferences.setString(PreferenceTypes.locale, locale.languageCode);
   }
 
   @override

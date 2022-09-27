@@ -11,6 +11,11 @@ import 'package:tumble/core/shared/preference_types.dart';
 import 'package:tumble/core/dependency_injection/get_it_instances.dart';
 
 class BackgroundTask {
+  ///
+  /// Background update attempted on boot sequence.
+  /// Function updates only the visible schedules and will only update schedules
+  /// if they have not been updated in the last 30 minutes.
+  ///
   static Future<void> callbackDispatcher() async {
     final backendService = getIt<BackendRepository>();
     final preferenceService = getIt<SharedPreferences>();
@@ -22,43 +27,34 @@ class BackgroundTask {
         .map((json) => bookmarkedScheduleModelFromJson(json))
         .where((bookmark) => bookmark.toggledValue == true);
     log(bookmarkedSchedulesToggledToBeVisible.toString());
-    final defaultUserSchool =
-        preferenceService.getString(PreferenceTypes.school);
+    final defaultUserSchool = preferenceService.getString(PreferenceTypes.school);
 
-    if (bookmarkedSchedulesToggledToBeVisible.isEmpty ||
-        defaultUserSchool == null) {
+    if (bookmarkedSchedulesToggledToBeVisible.isEmpty || defaultUserSchool == null) {
       return;
     }
 
-    List<ScheduleModel?> cachedScheduleModels = await Future.wait(
-        bookmarkedSchedulesToggledToBeVisible
-            .map((bookmarkedScheduleModel) async => (await databaseService
-                .getOneSchedule(bookmarkedScheduleModel.scheduleId)))
-            .toList());
+    List<ScheduleModel?> cachedScheduleModels = await Future.wait(bookmarkedSchedulesToggledToBeVisible
+        .map((bookmarkedScheduleModel) async =>
+            (await databaseService.getOneSchedule(bookmarkedScheduleModel.scheduleId)))
+        .toList());
 
     for (ScheduleModel? cachedScheduleModel in cachedScheduleModels) {
       if (cachedScheduleModel != null) {
-        // Don't update cache if the schedule was cached anytime within the past 30 minutes
-        if (cachedScheduleModel.cachedAt
-            .isAfter(DateTime.now().subtract(const Duration(minutes: 30)))) {
+        if (cachedScheduleModel.cachedAt.isAfter(DateTime.now().subtract(const Duration(minutes: 30)))) {
           return;
         }
 
-        // Update schedule forcefully
         ApiScheduleOrProgrammeResponse apiResponseOfNewScheduleModel =
-            await backendService.getRequestSchedule(
-                cachedScheduleModel.id, defaultUserSchool);
+            await backendService.getRequestSchedule(cachedScheduleModel.id, defaultUserSchool);
 
         switch (apiResponseOfNewScheduleModel.status) {
           case ApiScheduleOrProgrammeStatus.FETCHED:
-            ScheduleModel newScheduleModel =
-                apiResponseOfNewScheduleModel.data!;
+            ScheduleModel newScheduleModel = apiResponseOfNewScheduleModel.data!;
 
             if (newScheduleModel != cachedScheduleModel) {
               databaseService.update(newScheduleModel);
 
-              notificationService.updateDispatcher(
-                  newScheduleModel, cachedScheduleModel);
+              notificationService.updateDispatcher(newScheduleModel, cachedScheduleModel);
             }
             break;
           default:

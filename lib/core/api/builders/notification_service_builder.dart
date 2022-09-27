@@ -1,5 +1,4 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tumble/core/api/interface/inotification_service_builder.dart';
@@ -7,12 +6,17 @@ import 'package:tumble/core/dependency_injection/get_it_instances.dart';
 import 'package:tumble/core/shared/preference_types.dart';
 import 'package:tumble/core/theme/data/colors.dart';
 
+///
+/// Implementation of [INotificationServiceBuilder] interface,
+/// invoking methods which are meant to create a notification
+/// at a scheduled time, as well as dynamically allocate channels for
+/// invoking any notifications.
+///
 class NotificationServiceBuilder implements INotificationServiceBuilder {
   final Color defaultColor = CustomColors.orangePrimary;
   final String defaultIcon = "resource://drawable/res_tumble_app_logo";
   final _awesomeNotifications = getIt<AwesomeNotifications>();
 
-  /// Build notification channel dynamically
   @override
   NotificationChannel buildNotificationChannel({
     required String channelKey, // Schedule ID
@@ -26,8 +30,6 @@ class NotificationServiceBuilder implements INotificationServiceBuilder {
         defaultColor: defaultColor,
       );
 
-  /// Build notification with required params according
-  /// to app context dynamically
   @override
   Future<bool> buildNotification(
           {required int id,
@@ -53,46 +55,8 @@ class NotificationServiceBuilder implements INotificationServiceBuilder {
           ],
           schedule: NotificationCalendar.fromDate(
               date: date
-                  .subtract(Duration(
-                      minutes: getIt<SharedPreferences>()
-                          .getInt(PreferenceTypes.notificationOffset)!))
+                  .subtract(Duration(minutes: getIt<SharedPreferences>().getInt(PreferenceTypes.notificationOffset)!))
                   .toUtc(),
               allowWhileIdle: true,
               preciseAlarm: true));
-
-  @override
-  Future<bool> initializeAllNotificationChannels() {
-    // TODO: implement initializeAllNotificationChannels
-    throw UnimplementedError();
-  }
-
-  /* void updateNotificationChannelKeys() {
-  List<NotificationChannel> notificationChannels = [];
-  ScheduleRepository.getAllDatabaseScheduleNames().then((rowNames) {
-    if (rowNames != null) {
-      for (var rowName in rowNames) {
-        notificationChannels.add(NotificationChannel(
-          channelKey: rowName.scheduleId,
-          channelName: '${rowName.scheduleId} notifications',
-          channelDescription: 'Channel for ${rowName.scheduleId} notifications',
-          defaultColor: CustomColors.lightColors.secondary,
-          importance: NotificationImportance.High,
-        ));
-        AwesomeNotifications().initialize(
-            "resource://drawable/res_tumble_app_logo", notificationChannels);
-        log('Updated notification channels to ${notificationChannels.toString()}');
-      }
-
-      /// This extra addition should be commented out in production build.
-      /* notificationChannels.add(NotificationChannel(
-        channelKey: 'testing',
-        channelName: 'channel for testing',
-        channelDescription: 'Notification channel meant to be used for testing',
-        defaultColor: CustomColors.lightColors.secondary,
-        importance: NotificationImportance.High,
-      )); */
-
-    }
-  });
-} */
 }
