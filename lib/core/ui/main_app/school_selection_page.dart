@@ -56,7 +56,6 @@ class _SchoolSelectionPageState extends State<SchoolSelectionPage> {
                                 BlocProvider.of<InitCubit>(context)
                                     .changeSchool(school.schoolName);
                                 BlocProvider.of<AuthCubit>(context).logout();
-
                                 navigator.pushAndRemoveAll(
                                     NavigationRouteLabels.appTopRootBuilder);
                               }

@@ -38,10 +38,10 @@ class MainAppCubit extends Cubit<MainAppState> {
   final _notificationBuilder = NotificationServiceBuilder();
   final _awesomeNotifications = getIt<AwesomeNotifications>();
   final _databaseService = getIt<DatabaseRepository>();
+  final _preferenceService = getIt<SharedPreferences>();
   final ScrollController _listViewScrollController = ScrollController();
 
   ScrollController get controller => _listViewScrollController;
-  SharedPreferences get sharedPrefs => getIt<SharedPreferences>();
   int get viewType => getIt<SharedPreferences>().getInt(PreferenceTypes.view)!;
   bool get hasBookMarkedSchedules => getIt<SharedPreferences>()
       .getStringList(PreferenceTypes.bookmarks)!
@@ -67,7 +67,10 @@ class MainAppCubit extends Cubit<MainAppState> {
   }
 
   Future<void> attemptToFetchCachedSchedules() async {
-    final currentScheduleIds = getIt<SharedPreferences>()
+    dev.log(_preferenceService
+        .getStringList(PreferenceTypes.bookmarks)!
+        .toString());
+    final currentScheduleIds = _preferenceService
         .getStringList(PreferenceTypes.bookmarks)!
         .map((json) => bookmarkedScheduleModelFromJson(json).scheduleId)
         .toList();
@@ -77,7 +80,7 @@ class MainAppCubit extends Cubit<MainAppState> {
     for (String? scheduleId in currentScheduleIds) {
       // Check if bookmarked schedule is toggled to be visible
       // before trying to fetch it
-      final bool userHasBookmarks = getIt<SharedPreferences>()
+      final bool userHasBookmarks = _preferenceService
           .getStringList(PreferenceTypes.bookmarks)!
           .map((json) => bookmarkedScheduleModelFromJson(json).scheduleId)
           .toList()
@@ -85,12 +88,11 @@ class MainAppCubit extends Cubit<MainAppState> {
 
       /// Schedule id might have been removed from preferences
       /// during the running of this method
-      final bool? currentScheduleIsToggledToBeVisible =
-          getIt<SharedPreferences>()
-              .getStringList(PreferenceTypes.bookmarks)!
-              .map((json) => bookmarkedScheduleModelFromJson(json))
-              .firstWhereOrNull((bookmark) => bookmark.scheduleId == scheduleId)
-              ?.toggledValue;
+      final bool? currentScheduleIsToggledToBeVisible = _preferenceService
+          .getStringList(PreferenceTypes.bookmarks)!
+          .map((json) => bookmarkedScheduleModelFromJson(json))
+          .firstWhereOrNull((bookmark) => bookmark.scheduleId == scheduleId)
+          ?.toggledValue;
 
       if (scheduleId != null && userHasBookmarks) {
         if (currentScheduleIsToggledToBeVisible != null &&
@@ -307,7 +309,7 @@ class MainAppCubit extends Cubit<MainAppState> {
   }
 
   forceRefreshAll() async {
-    final bookmarks = getIt<SharedPreferences>()
+    final bookmarks = _preferenceService
         .getStringList(PreferenceTypes.bookmarks)!
         .map((e) => bookmarkedScheduleModelFromJson(e))
         .where((bookmark) => bookmark.toggledValue)

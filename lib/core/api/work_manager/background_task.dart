@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tumble/core/api/apiservices/api_schedule_or_programme_response.dart';
 import 'package:tumble/core/api/repository/backend_repository.dart';
@@ -19,7 +21,7 @@ class BackgroundTask {
         .getStringList(PreferenceTypes.bookmarks)!
         .map((json) => bookmarkedScheduleModelFromJson(json))
         .where((bookmark) => bookmark.toggledValue == true);
-
+    log(bookmarkedSchedulesToggledToBeVisible.toString());
     final defaultUserSchool =
         preferenceService.getString(PreferenceTypes.school);
 

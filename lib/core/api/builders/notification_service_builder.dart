@@ -55,7 +55,7 @@ class NotificationServiceBuilder implements INotificationServiceBuilder {
               date: date
                   .subtract(Duration(
                       minutes: getIt<SharedPreferences>()
-                          .getInt(PreferenceTypes.notificationTime)!))
+                          .getInt(PreferenceTypes.notificationOffset)!))
                   .toUtc(),
               allowWhileIdle: true,
               preciseAlarm: true));

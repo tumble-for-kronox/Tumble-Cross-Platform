@@ -1,33 +1,43 @@
+import 'dart:developer';
+
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tumble/core/api/repository/notification_repository.dart';
 import 'package:tumble/core/dependency_injection/get_it_instances.dart';
+import 'package:tumble/core/models/ui_models/school_model.dart';
 import 'package:tumble/core/shared/preference_types.dart';
 import 'package:tumble/core/shared/view_types.dart';
 
 class AppDependencies {
-  static Future<void> initDependencies() async {
+  ///
+  /// Initializes preferences and notification channels for user.
+  /// Application depends on these values.
+
+  /// [schoolname] -> Name of school
+  /// [theme] -> Theme (dark, light, system)
+  /// [notificationOffset] -> Offset time for notifications
+  /// [autoSignup] -> If user selected auto signup for exams
+  ///
+  Future<void> initDependencies({String? schoolName, String? theme, int? notificationOffset, bool? autoSignup}) async {
     await getIt<NotificationRepository>().initialize();
-    _setupRequiredSharedPreferences();
+    _setupSharedPreferences(schoolName, theme, notificationOffset, autoSignup);
   }
 
-  static void _setupRequiredSharedPreferences() {
-    final sharedPrefs = getIt<SharedPreferences>();
+  void _setupSharedPreferences(String? schoolName, String? theme, int? notificationOffset, bool? autoSignup) {
+    final preferenceService = getIt<SharedPreferences>();
 
-    final possibleTheme = sharedPrefs.getString(PreferenceTypes.theme);
-    final possibleView = sharedPrefs.getInt(PreferenceTypes.view);
-    final possibleNotification = sharedPrefs.getInt(PreferenceTypes.notificationTime);
-    final possibleSchool = sharedPrefs.getString(PreferenceTypes.school);
-    final possibleAutoSignup = sharedPrefs.getBool(PreferenceTypes.autoSignup);
+    preferenceService.setString(PreferenceTypes.theme, theme ?? 'system');
+    preferenceService.setInt(PreferenceTypes.view, ScheduleViewTypes.list);
+    preferenceService.setInt(PreferenceTypes.notificationOffset, notificationOffset ?? 60);
+    preferenceService.setBool(PreferenceTypes.autoSignup, autoSignup ?? false);
 
-    /// Check if previously attempted fetches are null, assign accordingly
-    sharedPrefs.setString(PreferenceTypes.theme, possibleTheme ?? 'system');
+    if (schoolName != null) {
+      preferenceService.setString(PreferenceTypes.school, schoolName);
+    }
 
-    sharedPrefs.setInt(PreferenceTypes.view, possibleView ?? ScheduleViewTypes.list);
-    sharedPrefs.setInt(PreferenceTypes.notificationTime, possibleNotification ?? 60);
-    sharedPrefs.setBool(PreferenceTypes.autoSignup, possibleAutoSignup ?? false);
-    possibleSchool == null ? null : sharedPrefs.setString(PreferenceTypes.school, possibleSchool);
-    sharedPrefs.getStringList(PreferenceTypes.bookmarks) == null
-        ? sharedPrefs.setStringList(PreferenceTypes.bookmarks, <String>[])
-        : null;
+    /// Checks if the calling function is main() and only set bookmarks to empty
+    /// list if bookmarks in Shared Preferences hasn't been set
+    if (preferenceService.getStringList(PreferenceTypes.bookmarks) == null) {
+      preferenceService.setStringList(PreferenceTypes.bookmarks, <String>[]);
+    }
   }
 }

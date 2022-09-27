@@ -10,35 +10,43 @@ import 'package:tumble/core/dependency_injection/get_it_instances.dart';
 
 class UserRepository implements IUserService {
   final _backendRepository = getIt<BackendRepository>();
-  final _sharedPrefs = getIt<SharedPreferences>();
+  final _preferenceService = getIt<SharedPreferences>();
 
   String? _getDefaultSchool() {
-    return _sharedPrefs.getString(PreferenceTypes.school);
+    return _preferenceService.getString(PreferenceTypes.school);
   }
 
   @override
   Future<ApiUserResponse> getUserEvents(String sessionToken) async {
-    return await _backendRepository.getUserEvents(sessionToken, _getDefaultSchool()!);
+    return await _backendRepository.getUserEvents(
+        sessionToken, _getDefaultSchool()!);
   }
 
   @override
-  Future<ApiUserResponse> postUserLogin(String username, String password, String school) async {
+  Future<ApiUserResponse> postUserLogin(
+      String username, String password, String school) async {
     return await _backendRepository.postUserLogin(username, password, school);
   }
 
   @override
-  Future<ApiUserResponse> putRegisterUserEvent(String eventId, String sessionToken) async {
-    return await _backendRepository.putRegisterUserEvent(eventId, sessionToken, _getDefaultSchool()!);
+  Future<ApiUserResponse> putRegisterUserEvent(
+      String eventId, String sessionToken) async {
+    return await _backendRepository.putRegisterUserEvent(
+        eventId, sessionToken, _getDefaultSchool()!);
   }
 
   @override
-  Future<ApiUserResponse> putUnregisterUserEvent(String eventId, String sessionToken) async {
-    return await _backendRepository.putUnregisterUserEvent(eventId, sessionToken, _getDefaultSchool()!);
+  Future<ApiUserResponse> putUnregisterUserEvent(
+      String eventId, String sessionToken) async {
+    return await _backendRepository.putUnregisterUserEvent(
+        eventId, sessionToken, _getDefaultSchool()!);
   }
 
   @override
-  Future<ApiUserResponse> putRegisterAllAvailableUserEvents(String sessionToken) async {
-    return await _backendRepository.putRegisterAllAvailableUserEvents(sessionToken, _getDefaultSchool()!);
+  Future<ApiUserResponse> putRegisterAllAvailableUserEvents(
+      String sessionToken) async {
+    return await _backendRepository.putRegisterAllAvailableUserEvents(
+        sessionToken, _getDefaultSchool()!);
   }
 
   @override
@@ -51,28 +59,35 @@ class UserRepository implements IUserService {
   }
 
   @override
-  Future<ApiBookingResponse> getResourceAvailabilities(String resourceId, DateTime date, String sessionToken) async {
-    return await _backendRepository.getResourceAvailabilities(sessionToken, _getDefaultSchool()!, resourceId, date);
+  Future<ApiBookingResponse> getResourceAvailabilities(
+      String resourceId, DateTime date, String sessionToken) async {
+    return await _backendRepository.getResourceAvailabilities(
+        sessionToken, _getDefaultSchool()!, resourceId, date);
   }
 
   @override
   Future<ApiBookingResponse> getSchoolResources(String sessionToken) async {
-    return await _backendRepository.getSchoolResources(sessionToken, _getDefaultSchool()!);
+    return await _backendRepository.getSchoolResources(
+        sessionToken, _getDefaultSchool()!);
   }
 
   @override
   Future<ApiBookingResponse> getUserBookings(String sessionToken) async {
-    return await _backendRepository.getUserBookings(sessionToken, _getDefaultSchool()!);
+    return await _backendRepository.getUserBookings(
+        sessionToken, _getDefaultSchool()!);
   }
 
   @override
-  Future<ApiBookingResponse> putBookResources(
-      String resourceId, DateTime date, AvailabilityValue bookingSlot, String sessionToken) async {
-    return await _backendRepository.putBookResource(sessionToken, _getDefaultSchool()!, resourceId, date, bookingSlot);
+  Future<ApiBookingResponse> putBookResources(String resourceId, DateTime date,
+      AvailabilityValue bookingSlot, String sessionToken) async {
+    return await _backendRepository.putBookResource(
+        sessionToken, _getDefaultSchool()!, resourceId, date, bookingSlot);
   }
 
   @override
-  Future<ApiBookingResponse> putUnbookResources(String bookingId, String sessionToken) async {
-    return await _backendRepository.putUnbookResource(sessionToken, _getDefaultSchool()!, bookingId);
+  Future<ApiBookingResponse> putUnbookResources(
+      String bookingId, String sessionToken) async {
+    return await _backendRepository.putUnbookResource(
+        sessionToken, _getDefaultSchool()!, bookingId);
   }
 }

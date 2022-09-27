@@ -8,7 +8,7 @@ import 'package:tumble/core/dependency_injection/get_it_instances.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await DependencyInjection.initSingletons();
-  await AppDependencies.initDependencies();
+  await getIt<AppDependencies>().initDependencies();
   await BackgroundTask.callbackDispatcher();
   runApp(const App());
 }

@@ -8,6 +8,7 @@ import 'package:tumble/core/api/repository/user_repository.dart';
 import 'package:tumble/core/database/database.dart';
 import 'package:tumble/core/database/repository/database_repository.dart';
 import 'package:tumble/core/database/repository/secure_storage_repository.dart';
+import 'package:tumble/core/shared/app_dependencies.dart';
 import 'package:tumble/core/theme/repository/theme_repository.dart';
 
 final GetIt getIt = GetIt.instance;
@@ -16,6 +17,7 @@ class DependencyInjection {
   /// Initialize dependency injection
   static Future<void> initSingletons() async {
     SharedPreferences sharedPref = await SharedPreferences.getInstance();
+    getIt.registerLazySingleton(() => AppDependencies());
     getIt.registerLazySingleton(() => sharedPref);
     getIt.registerLazySingleton(() => SecureStorageRepository());
     getIt.registerLazySingleton(() => BackendRepository());

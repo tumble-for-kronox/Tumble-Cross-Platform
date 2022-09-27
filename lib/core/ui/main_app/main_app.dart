@@ -34,10 +34,14 @@ class _MainAppState extends State<MainApp> {
                       );
                     case InitStatus.SCHOOL_AVAILABLE:
                       return MultiBlocProvider(providers: [
-                        BlocProvider.value(value: BlocProvider.of<AuthCubit>(context)),
-                        BlocProvider<UserEventCubit>(create: (context) => UserEventCubit()),
-                        BlocProvider<ResourceCubit>(create: (context) => ResourceCubit()),
-                        BlocProvider<MainAppNavigationCubit>(create: (context) => MainAppNavigationCubit())
+                        BlocProvider.value(
+                            value: BlocProvider.of<AuthCubit>(context)),
+                        BlocProvider<UserEventCubit>(
+                            create: (context) => UserEventCubit()),
+                        BlocProvider<ResourceCubit>(
+                            create: (context) => ResourceCubit()),
+                        BlocProvider<MainAppNavigationCubit>(
+                            create: (context) => MainAppNavigationCubit())
                       ], child: const MainAppNavigationRootPage());
                   }
                 },
