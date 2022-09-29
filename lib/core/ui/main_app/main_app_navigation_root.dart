@@ -72,6 +72,7 @@ class _MainAppNavigationRootPageState extends State<MainAppNavigationRootPage> {
                     listener: (context, state) {
                       context.read<UserEventCubit>().getUserEvents(context.read<AuthCubit>(), true);
                       context.read<ResourceCubit>().getSchoolResources(context.read<AuthCubit>());
+                      context.read<ResourceCubit>().getUserBookings(context.read<AuthCubit>());
                       if (context.read<UserEventCubit>().state.autoSignup) {
                         context.read<AuthCubit>().runAutoSignup();
                       }

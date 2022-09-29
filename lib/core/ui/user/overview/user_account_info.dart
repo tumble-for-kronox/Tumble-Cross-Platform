@@ -10,6 +10,7 @@ import 'package:tumble/core/ui/main_app/data/schools.dart';
 import 'package:tumble/core/ui/tumble_button.dart';
 import 'package:tumble/core/ui/user/misc/auto_signup_option.dart';
 import 'package:tumble/core/ui/user/misc/user_account_info_external_link.dart';
+import 'package:tumble/core/ui/user/overview/user_bookings.dart';
 
 class UserAccountInfo extends StatefulWidget {
   const UserAccountInfo({Key? key}) : super(key: key);
@@ -121,6 +122,10 @@ class _UserAccountInfo extends State<UserAccountInfo> {
                       height: 20,
                     ),
                     _sectionDivider(context, S.authorizedPage.userBookingsTitle()),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    const UserBookingsContainer(),
                     const SizedBox(
                       height: 20,
                     ),

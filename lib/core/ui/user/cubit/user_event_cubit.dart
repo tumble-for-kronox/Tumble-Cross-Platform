@@ -29,7 +29,7 @@ class UserEventCubit extends Cubit<UserEventState> {
 
   final _userRepo = getIt<UserRepository>();
 
-  Future<void> getUserEvents(AuthCubit authCubit, bool showLoding) async {
+  Future<void> getUserEvents(AuthCubit authCubit, bool showLoding, {bool loginLooped = false}) async {
     switch (authCubit.state.status) {
       case AuthStatus.AUTHENTICATED:
         if (showLoding) emit(state.copyWith(userEventListStatus: UserOverviewStatus.LOADING));
@@ -45,8 +45,12 @@ class UserEventCubit extends Cubit<UserEventState> {
             emit(state);
             break;
           case ApiUserResponseStatus.UNAUTHORIZED:
-            await authCubit.login();
-            await getUserEvents(authCubit, true);
+            if (!loginLooped) {
+              await authCubit.login();
+              await getUserEvents(authCubit, true, loginLooped: true);
+            } else {
+              authCubit.logout();
+            }
             break;
           default:
             emit(state.copyWith(
@@ -59,7 +63,7 @@ class UserEventCubit extends Cubit<UserEventState> {
     }
   }
 
-  Future<void> registerUserEvent(String id, AuthCubit authCubit) async {
+  Future<void> registerUserEvent(String id, AuthCubit authCubit, {bool loginLooped = false}) async {
     emit(state.copyWith(registerUnregisterStatus: RegisterUnregisterStatus.LOADING));
     ApiUserResponse registerResponse =
         await _userRepo.putRegisterUserEvent(id, authCubit.state.userSession!.sessionToken);
@@ -71,8 +75,12 @@ class UserEventCubit extends Cubit<UserEventState> {
         emit(state.copyWith(registerUnregisterStatus: RegisterUnregisterStatus.INITIAL));
         break;
       case ApiUserResponseStatus.UNAUTHORIZED:
-        await authCubit.login();
-        await registerUserEvent(id, authCubit);
+        if (!loginLooped) {
+          await authCubit.login();
+          await registerUserEvent(id, authCubit, loginLooped: true);
+        } else {
+          authCubit.logout();
+        }
         break;
       case ApiUserResponseStatus.ERROR:
         emit(state.copyWith(
@@ -88,7 +96,7 @@ class UserEventCubit extends Cubit<UserEventState> {
     }
   }
 
-  Future<void> unregisterUserEvent(String id, AuthCubit authCubit) async {
+  Future<void> unregisterUserEvent(String id, AuthCubit authCubit, {bool loginLooped = false}) async {
     emit(state.copyWith(registerUnregisterStatus: RegisterUnregisterStatus.LOADING));
     ApiUserResponse unregisterResponse =
         await _userRepo.putUnregisterUserEvent(id, authCubit.state.userSession!.sessionToken);
@@ -100,8 +108,12 @@ class UserEventCubit extends Cubit<UserEventState> {
         emit(state.copyWith(registerUnregisterStatus: RegisterUnregisterStatus.INITIAL));
         break;
       case ApiUserResponseStatus.UNAUTHORIZED:
-        await authCubit.login();
-        await unregisterUserEvent(id, authCubit);
+        if (!loginLooped) {
+          await authCubit.login();
+          await unregisterUserEvent(id, authCubit, loginLooped: true);
+        } else {
+          authCubit.logout();
+        }
         break;
       case ApiUserResponseStatus.ERROR:
         emit(state.copyWith(

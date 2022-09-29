@@ -57,8 +57,6 @@ abstract class TimeSlot with _$TimeSlot {
     required DateTime from,
     required DateTime to,
     required String duration,
-    required DateTime getConfirmationOpens,
-    required DateTime getConfirmationCloses,
   }) = _TimeSlot;
 
   factory TimeSlot.fromJson(Map<String, dynamic> json) => _$TimeSlotFromJson(json);
@@ -70,6 +68,8 @@ abstract class Booking with _$Booking {
     required String id,
     required TimeSlot timeSlot,
     required String locationId,
+    required DateTime? getConfirmationOpens,
+    required DateTime? getConfirmationCloses,
   }) = _Booking;
 
   factory Booking.fromJson(Map<String, dynamic> json) => _$BookingFromJson(json);
