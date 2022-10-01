@@ -371,5 +371,6 @@
     "contributorsModalDevelopment": "Development",
     "contributorsModalDesign": "Design",
     "contributorsModalTranslation": "Translation",
-    "contributorsModalSpecialThanks": "Special thanks"
+    "contributorsModalSpecialThanks": "Special thanks",
+    "userBookingsNoBookings": "You currently have no bookings"
 }

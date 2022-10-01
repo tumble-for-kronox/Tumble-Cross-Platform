@@ -9,6 +9,7 @@ import 'groups/scaffold_message_types.dart';
 import 'groups/search_page.dart';
 import 'groups/list_view_page.dart';
 import 'groups/support_modal.dart';
+import 'groups/user_booking_strings.dart';
 import 'groups/user_events.dart';
 import 'groups/week_view_page.dart';
 import 'groups/calendar_view_page.dart';
@@ -42,4 +43,5 @@ class S {
   static DetailsModalStrings get detailsModal => DetailsModalStrings(_localizedStrings!);
   static SupportModalStrings get supportModal => SupportModalStrings(_localizedStrings!);
   static ContributorsModalStrings get contributorsModal => ContributorsModalStrings(_localizedStrings!);
+  static UserBookingStrings get userBookings => UserBookingStrings(_localizedStrings!);
 }

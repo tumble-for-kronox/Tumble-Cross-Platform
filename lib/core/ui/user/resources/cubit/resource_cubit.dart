@@ -23,7 +23,7 @@ class ResourceCubit extends Cubit<ResourceState> {
 
   final _userRepo = getIt<UserRepository>();
 
-  Future<void> getSchoolResources(AuthCubit authCubit) async {
+  Future<void> getSchoolResources(AuthCubit authCubit, {bool loginLooped = false}) async {
     emit(state.copyWith(status: ResourceStatus.LOADING));
     ApiBookingResponse schoolResources = await _userRepo.getSchoolResources(authCubit.state.userSession!.sessionToken);
 
@@ -33,8 +33,12 @@ class ResourceCubit extends Cubit<ResourceState> {
         break;
       case ApiBookingResponseStatus.ERROR:
       case ApiBookingResponseStatus.UNAUTHORIZED:
-        await authCubit.login();
-        await getSchoolResources(authCubit);
+        if (!loginLooped) {
+          await authCubit.login();
+          await getSchoolResources(authCubit, loginLooped: true);
+        } else {
+          authCubit.logout();
+        }
         break;
       case ApiBookingResponseStatus.NOT_FOUND:
         emit(state.copyWith(status: ResourceStatus.ERROR, resourcePageErrorMessage: schoolResources.data));
@@ -42,7 +46,8 @@ class ResourceCubit extends Cubit<ResourceState> {
     }
   }
 
-  Future<void> getResourceAvailabilities(AuthCubit authCubit, String resourceId, DateTime date) async {
+  Future<void> getResourceAvailabilities(AuthCubit authCubit, String resourceId, DateTime date,
+      {bool loginLooped = false}) async {
     emit(state.copyWithoutSelections(status: ResourceStatus.LOADING));
     ApiBookingResponse currentSelectedResource =
         await _userRepo.getResourceAvailabilities(resourceId, date, authCubit.state.userSession!.sessionToken);
@@ -53,8 +58,12 @@ class ResourceCubit extends Cubit<ResourceState> {
         break;
       case ApiBookingResponseStatus.ERROR:
       case ApiBookingResponseStatus.UNAUTHORIZED:
-        await authCubit.login();
-        await getResourceAvailabilities(authCubit, resourceId, date);
+        if (!loginLooped) {
+          await authCubit.login();
+          await getResourceAvailabilities(authCubit, resourceId, date);
+        } else {
+          authCubit.logout();
+        }
         break;
       case ApiBookingResponseStatus.NOT_FOUND:
         emit(state.copyWith(status: ResourceStatus.ERROR, resourcePageErrorMessage: currentSelectedResource.data));
@@ -90,18 +99,26 @@ class ResourceCubit extends Cubit<ResourceState> {
         availableTimeSlots: availableTimeSlots, availableLocationsForTimeSlots: availableLocationsForTimeSlots));
   }
 
-  Future<void> getUserBookings(AuthCubit authCubit) async {
+  Future<void> getUserBookings(AuthCubit authCubit, {bool loginLooped = false}) async {
     emit(state.copyWith(userBookingsStatus: UserBookingsStatus.LOADING));
     ApiBookingResponse userBookings = await _userRepo.getUserBookings(authCubit.state.userSession!.sessionToken);
 
     switch (userBookings.status) {
       case ApiBookingResponseStatus.SUCCESS:
-        emit(state.copyWith(userBookingsStatus: UserBookingsStatus.LOADED, userBookings: userBookings.data));
+        List<bool> confirmationLoading = List<bool>.filled((userBookings.data as List<Booking>).length, false);
+        emit(state.copyWith(
+            userBookingsStatus: UserBookingsStatus.LOADED,
+            userBookings: userBookings.data,
+            confirmationLoading: confirmationLoading));
         break;
       case ApiBookingResponseStatus.ERROR:
       case ApiBookingResponseStatus.UNAUTHORIZED:
-        await authCubit.login();
-        await getUserBookings(authCubit);
+        if (!loginLooped) {
+          await authCubit.login();
+          await getUserBookings(authCubit);
+        } else {
+          authCubit.logout();
+        }
         break;
       case ApiBookingResponseStatus.NOT_FOUND:
         emit(state.copyWith(userBookingsStatus: UserBookingsStatus.ERROR, userBookingsErrorMessage: userBookings.data));
@@ -109,8 +126,8 @@ class ResourceCubit extends Cubit<ResourceState> {
     }
   }
 
-  Future<dynamic> bookResource(
-      AuthCubit authCubit, String resourceId, DateTime date, AvailabilityValue bookingSlot) async {
+  Future<dynamic> bookResource(AuthCubit authCubit, String resourceId, DateTime date, AvailabilityValue bookingSlot,
+      {bool loginLooped = false}) async {
     emit(state.copyWith(bookUnbookStatus: BookUnbookStatus.LOADING));
     ApiBookingResponse bookResource =
         await _userRepo.putBookResources(resourceId, date, bookingSlot, authCubit.state.userSession!.sessionToken);
@@ -119,8 +136,12 @@ class ResourceCubit extends Cubit<ResourceState> {
         getResourceAvailabilities(authCubit, resourceId, date);
         break;
       case ApiBookingResponseStatus.UNAUTHORIZED:
-        await authCubit.login();
-        bookResource.data = await this.bookResource(authCubit, resourceId, date, bookingSlot);
+        if (!loginLooped) {
+          await authCubit.login();
+          bookResource.data = await this.bookResource(authCubit, resourceId, date, bookingSlot);
+        } else {
+          authCubit.logout();
+        }
         break;
       default:
         break;
@@ -129,7 +150,7 @@ class ResourceCubit extends Cubit<ResourceState> {
     return bookResource.data;
   }
 
-  Future<void> unbookResource(AuthCubit authCubit, String resourceId, DateTime date, String bookingId) async {
+  Future<void> unbookResource(AuthCubit authCubit, String bookingId, {bool loginLooped = false}) async {
     emit(state.copyWith(bookUnbookStatus: BookUnbookStatus.LOADING));
     ApiBookingResponse bookResource =
         await _userRepo.putUnbookResources(authCubit.state.userSession!.sessionToken, bookingId);
@@ -139,8 +160,12 @@ class ResourceCubit extends Cubit<ResourceState> {
         getUserBookings(authCubit);
         break;
       case ApiBookingResponseStatus.UNAUTHORIZED:
-        await authCubit.login();
-        await unbookResource(authCubit, resourceId, date, bookingId);
+        if (!loginLooped) {
+          await authCubit.login();
+          await unbookResource(authCubit, bookingId);
+        } else {
+          authCubit.logout();
+        }
         break;
       default:
         break;
