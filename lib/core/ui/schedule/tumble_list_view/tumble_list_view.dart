@@ -7,8 +7,8 @@ import 'package:tumble/core/api/apiservices/runtime_error_type.dart';
 import 'package:tumble/core/navigation/app_navigator.dart';
 import 'package:tumble/core/ui/bottom_nav_bar/cubit/bottom_nav_cubit.dart';
 import 'package:tumble/core/ui/bottom_nav_bar/data/nav_bar_items.dart';
-import 'package:tumble/core/ui/main_app/cubit/main_app_cubit.dart';
-import 'package:tumble/core/ui/main_app/main_app.dart';
+import 'package:tumble/core/ui/app_switch/cubit/app_switch_cubit.dart';
+import 'package:tumble/core/ui/app_switch/app_switch.dart';
 import 'package:tumble/core/ui/schedule/no_schedule.dart';
 import 'package:tumble/core/ui/schedule/tumble_list_view/data/custom_alerts.dart';
 import 'package:tumble/core/ui/schedule/tumble_list_view/data/to_top_button.dart';
@@ -21,7 +21,7 @@ class TumbleListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AppNavigator navigator = BlocProvider.of<AppNavigator>(context);
-    return BlocBuilder<MainAppCubit, MainAppState>(
+    return BlocBuilder<AppSwitchCubit, AppSwitchState>(
       builder: (context, state) {
         switch (state.status) {
           case MainAppStatus.INITIAL:
@@ -41,11 +41,11 @@ class TumbleListView extends StatelessWidget {
               children: [
                 RefreshIndicator(
                   onRefresh: () async {
-                    context.read<MainAppCubit>().setLoading();
-                    await context.read<MainAppCubit>().forceRefreshAll();
+                    context.read<AppSwitchCubit>().setLoading();
+                    await context.read<AppSwitchCubit>().forceRefreshAll();
                   },
                   child: SingleChildScrollView(
-                    controller: context.read<MainAppCubit>().controller,
+                    controller: context.read<AppSwitchCubit>().controller,
                     child: Column(
                         children: state.listOfDays!
                             .where((day) =>
@@ -55,20 +55,20 @@ class TumbleListView extends StatelessWidget {
                             .map((day) => TumbleListViewDayContainer(
                                   day: day,
                                   mainAppCubit:
-                                      BlocProvider.of<MainAppCubit>(context),
+                                      BlocProvider.of<AppSwitchCubit>(context),
                                 ))
                             .toList()),
                   ),
                 ),
                 AnimatedPositioned(
                   bottom: 30,
-                  right: context.read<MainAppCubit>().toTopButtonVisible()
+                  right: context.read<AppSwitchCubit>().toTopButtonVisible()
                       ? 35
                       : -60,
                   duration: const Duration(milliseconds: 200),
                   child: ToTopButton(
                       scrollToTop: () =>
-                          context.read<MainAppCubit>().scrollToTop()),
+                          context.read<AppSwitchCubit>().scrollToTop()),
                 ),
               ],
             );

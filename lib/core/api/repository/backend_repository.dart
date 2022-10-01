@@ -16,7 +16,7 @@ import 'package:tumble/core/extensions/api_response_extension/misc_parser.dart';
 import 'package:tumble/core/extensions/api_response_extension/schedule_and_programme_parser.dart';
 import 'package:tumble/core/extensions/api_response_extension/user_parser.dart';
 import 'package:tumble/core/extensions/extensions.dart';
-import 'package:tumble/core/ui/main_app/data/schools.dart';
+import 'package:tumble/core/ui/app_switch/data/schools.dart';
 
 import '../../models/api_models/resource_model.dart';
 

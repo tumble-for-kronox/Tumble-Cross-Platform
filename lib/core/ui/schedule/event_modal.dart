@@ -5,15 +5,15 @@ import 'package:intl/intl.dart';
 import 'package:tumble/core/extensions/extensions.dart';
 import 'package:tumble/core/models/api_models/schedule_model.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
-import 'package:tumble/core/ui/main_app/cubit/main_app_cubit.dart';
-import 'package:tumble/core/ui/main_app/misc/tumble_details_modal_base.dart';
+import 'package:tumble/core/ui/app_switch/cubit/app_switch_cubit.dart';
+import 'package:tumble/core/ui/app_switch/misc/tumble_details_modal_base.dart';
 import 'package:tumble/core/ui/schedule/event_options.dart';
 import 'package:tumble/core/ui/schedule/modal_info_row.dart';
 
 class TumbleEventModal extends StatelessWidget {
   final Event event;
   final Color color;
-  final MainAppCubit? mainAppCubit;
+  final AppSwitchCubit? mainAppCubit;
   final bool showSettings;
   const TumbleEventModal(
       {Key? key, required this.event, required this.color, required this.showSettings, this.mainAppCubit})
@@ -23,7 +23,7 @@ class TumbleEventModal extends StatelessWidget {
     BuildContext context,
     Event event,
     Color color,
-    MainAppCubit mainAppCubit,
+    AppSwitchCubit mainAppCubit,
   ) {
     showModalBottomSheet(
         isScrollControlled: true,

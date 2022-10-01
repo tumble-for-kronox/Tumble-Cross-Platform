@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:tumble/core/extensions/extensions.dart';
-import 'package:tumble/core/ui/main_app/misc/tumble_drag_pill.dart';
+import 'package:tumble/core/ui/app_switch/misc/tumble_drag_pill.dart';
 
 class TumbleDetailsModalBase extends StatelessWidget {
   final Widget body;

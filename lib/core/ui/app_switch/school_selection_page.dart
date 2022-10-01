@@ -5,7 +5,7 @@ import 'package:tumble/core/navigation/navigation_route_labels.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
 import 'package:tumble/core/ui/init_cubit/init_cubit.dart';
 import 'package:tumble/core/ui/login/cubit/auth_cubit.dart';
-import 'package:tumble/core/ui/main_app/data/schools.dart';
+import 'package:tumble/core/ui/app_switch/data/schools.dart';
 import 'package:tumble/core/ui/search/search/school_card.dart';
 
 class SchoolSelectionPage extends StatefulWidget {

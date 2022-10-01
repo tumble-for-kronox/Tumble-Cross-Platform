@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:tumble/core/extensions/extensions.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
-import 'package:tumble/core/ui/main_app/misc/tumble_drag_pill.dart';
-import 'package:tumble/core/ui/main_app/misc/tumble_drawer/drawer_generic/data/default_views_map.dart';
+import 'package:tumble/core/ui/app_switch/misc/tumble_drag_pill.dart';
+import 'package:tumble/core/ui/app_switch/misc/tumble_drawer/drawer_generic/data/default_views_map.dart';
 import 'package:tumble/core/ui/scaffold_message.dart';
 import 'package:tumble/core/ui/schedule/cancel_button.dart';
 

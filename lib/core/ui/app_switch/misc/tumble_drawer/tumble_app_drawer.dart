@@ -11,19 +11,19 @@ import 'package:tumble/core/navigation/navigation_route_labels.dart';
 import 'package:tumble/core/theme/cubit/theme_cubit.dart';
 import 'package:tumble/core/ui/data/groups/scaffold_message_types.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
-import 'package:tumble/core/ui/main_app/cubit/main_app_cubit.dart';
-import 'package:tumble/core/ui/main_app/data/event_types.dart';
-import 'package:tumble/core/ui/main_app/data/schools.dart';
-import 'package:tumble/core/ui/main_app/misc/tumble_drawer/contributors_modal/contributors_modal.dart';
-import 'package:tumble/core/ui/main_app/misc/tumble_drawer/data/review_strings.dart';
-import 'package:tumble/core/ui/main_app/misc/tumble_drawer/drawer_generic/app_language_picker.dart';
-import 'package:tumble/core/ui/main_app/misc/tumble_drawer/support_modal/support_modal.dart';
-import 'package:tumble/core/ui/main_app/misc/tumble_app_drawer_tile.dart';
-import 'package:tumble/core/ui/main_app/misc/tumble_drawer/cubit/drawer_state.dart';
-import 'package:tumble/core/ui/main_app/misc/tumble_drawer/drawer_generic/app_bookmark_schedule_toggle.dart';
-import 'package:tumble/core/ui/main_app/misc/tumble_drawer/drawer_generic/app_notification_time_picker.dart';
-import 'package:tumble/core/ui/main_app/misc/tumble_drawer/drawer_generic/app_theme_picker.dart';
-import 'package:tumble/core/ui/main_app/misc/tumble_settings_section.dart';
+import 'package:tumble/core/ui/app_switch/cubit/app_switch_cubit.dart';
+import 'package:tumble/core/ui/app_switch/data/event_types.dart';
+import 'package:tumble/core/ui/app_switch/data/schools.dart';
+import 'package:tumble/core/ui/app_switch/misc/tumble_drawer/contributors_modal/contributors_modal.dart';
+import 'package:tumble/core/ui/app_switch/misc/tumble_drawer/data/review_strings.dart';
+import 'package:tumble/core/ui/app_switch/misc/tumble_drawer/drawer_generic/app_language_picker.dart';
+import 'package:tumble/core/ui/app_switch/misc/tumble_drawer/support_modal/support_modal.dart';
+import 'package:tumble/core/ui/app_switch/misc/tumble_app_drawer_tile.dart';
+import 'package:tumble/core/ui/app_switch/misc/tumble_drawer/cubit/drawer_state.dart';
+import 'package:tumble/core/ui/app_switch/misc/tumble_drawer/drawer_generic/app_bookmark_schedule_toggle.dart';
+import 'package:tumble/core/ui/app_switch/misc/tumble_drawer/drawer_generic/app_notification_time_picker.dart';
+import 'package:tumble/core/ui/app_switch/misc/tumble_drawer/drawer_generic/app_theme_picker.dart';
+import 'package:tumble/core/ui/app_switch/misc/tumble_settings_section.dart';
 import 'package:tumble/core/ui/scaffold_message.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
@@ -209,8 +209,8 @@ class TumbleAppDrawer extends StatelessWidget {
                     child: const AppBookmarkScheduleToggle(),
                   )).whenComplete(() async {
             if (tempBookmarks != context.read<DrawerCubit>().state.bookmarks!) {
-              BlocProvider.of<MainAppCubit>(context).setLoading();
-              await BlocProvider.of<MainAppCubit>(context)
+              BlocProvider.of<AppSwitchCubit>(context).setLoading();
+              await BlocProvider.of<AppSwitchCubit>(context)
                   .attemptToFetchCachedSchedules();
             }
           });

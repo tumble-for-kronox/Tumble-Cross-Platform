@@ -15,7 +15,7 @@ import 'package:tumble/core/dependency_injection/get_it_instances.dart';
 import 'package:tumble/core/theme/data/theme_strings.dart';
 import 'package:tumble/core/theme/repository/theme_repository.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:tumble/core/ui/main_app/data/locale_names.dart';
+import 'package:tumble/core/ui/app_switch/data/locale_names.dart';
 
 import '../../../../../api/repository/notification_repository.dart';
 import '../../../../data/string_constants.dart';

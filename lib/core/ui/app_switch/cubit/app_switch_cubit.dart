@@ -1,4 +1,3 @@
-// ignore_for_file: no_leading_underscores_for_local_identifiers
 
 import 'dart:developer' as dev;
 import 'package:collection/collection.dart';
@@ -22,11 +21,11 @@ import 'package:tumble/core/dependency_injection/get_it_instances.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
 import 'package:tumble/core/ui/scaffold_message.dart';
 
-part 'main_app_state.dart';
+part 'app_switch_state.dart';
 
-class MainAppCubit extends Cubit<MainAppState> {
-  MainAppCubit()
-      : super(const MainAppState(
+class AppSwitchCubit extends Cubit<AppSwitchState> {
+  AppSwitchCubit()
+      : super(const AppSwitchState(
             status: MainAppStatus.LOADING,
             listOfDays: null,
             listOfWeeks: null,
@@ -47,13 +46,8 @@ class MainAppCubit extends Cubit<MainAppState> {
       .getStringList(PreferenceTypes.bookmarks)!
       .isNotEmpty;
 
-  bool toTopButtonVisible() {
-    if (_listViewScrollController.hasClients) {
-      return _listViewScrollController.offset >= 1000;
-    } else {
-      return false;
-    }
-  }
+  bool toTopButtonVisible() =>
+      _listViewScrollController.hasClients ? _listViewScrollController.offset >= 1000 : false;
 
   Future<void> init() async {
     await attemptToFetchCachedSchedules();
@@ -67,9 +61,6 @@ class MainAppCubit extends Cubit<MainAppState> {
   }
 
   Future<void> attemptToFetchCachedSchedules() async {
-    dev.log(_preferenceService
-        .getStringList(PreferenceTypes.bookmarks)!
-        .toString());
     final currentScheduleIds = _preferenceService
         .getStringList(PreferenceTypes.bookmarks)!
         .map((json) => bookmarkedScheduleModelFromJson(json).scheduleId)
@@ -78,33 +69,30 @@ class MainAppCubit extends Cubit<MainAppState> {
     List<List<Day>> matrixListOfDays = [];
 
     for (String? scheduleId in currentScheduleIds) {
-      // Check if bookmarked schedule is toggled to be visible
-      // before trying to fetch it
+
       final bool userHasBookmarks = _preferenceService
           .getStringList(PreferenceTypes.bookmarks)!
           .map((json) => bookmarkedScheduleModelFromJson(json).scheduleId)
           .toList()
           .isNotEmpty;
 
-      /// Schedule id might have been removed from preferences
-      /// during the running of this method
-      final bool? currentScheduleIsToggledToBeVisible = _preferenceService
+      final bool? toggledToBeVisible = _preferenceService
           .getStringList(PreferenceTypes.bookmarks)!
           .map((json) => bookmarkedScheduleModelFromJson(json))
           .firstWhereOrNull((bookmark) => bookmark.scheduleId == scheduleId)
           ?.toggledValue;
 
       if (scheduleId != null && userHasBookmarks) {
-        if (currentScheduleIsToggledToBeVisible != null &&
-            currentScheduleIsToggledToBeVisible) {
-          final ApiScheduleOrProgrammeResponse _apiResponse =
+        if (toggledToBeVisible != null &&
+            toggledToBeVisible) {
+          final ApiScheduleOrProgrammeResponse apiResponse =
               await _cacheAndInteractionService
                   .getCachedOrNewSchedule(scheduleId);
 
-          switch (_apiResponse.status) {
+          switch (apiResponse.status) {
             case ApiScheduleOrProgrammeStatus.FETCHED:
             case ApiScheduleOrProgrammeStatus.CACHED:
-              ScheduleModel currentScheduleModel = _apiResponse.data!;
+              ScheduleModel currentScheduleModel = apiResponse.data!;
               if (currentScheduleModel.isNotPhonySchedule()) {
                 matrixListOfDays.add(currentScheduleModel.days);
                 listOfScheduleModelAndCourses.add(ScheduleModelAndCourses(
@@ -204,7 +192,7 @@ class MainAppCubit extends Cubit<MainAppState> {
 
         return true;
       }
-      dev.log('No new notifications created. Not allowed');
+      dev.log('No new notifications created. User not allowed');
       return false;
     });
   }
@@ -254,18 +242,18 @@ class MainAppCubit extends Cubit<MainAppState> {
     });
   }
 
-  Future<bool> checkIfNotificationIsSetForEvent(Event event) async {
-    return (((await _awesomeNotifications.listScheduledNotifications())
+  Future<bool> checkIfNotificationIsSetForEvent(Event event) async =>
+    (((await _awesomeNotifications.listScheduledNotifications())
             .singleWhereOrNull(
           (notificationModel) =>
               notificationModel.content!.id ==
               event.id.encodeUniqueIdentifier(),
         )) !=
         null);
-  }
+
 
   /// Returns true if course id is found in current list of notifications
-  Future<bool> checkifNotificationIsSetForCourse(Event event) async {
+  Future<bool> checkIfNotificationIsSetForCourse(Event event) async {
     return (((await _awesomeNotifications.listScheduledNotifications())
             .firstWhereOrNull(
           (notificationModel) =>
@@ -283,7 +271,7 @@ class MainAppCubit extends Cubit<MainAppState> {
   /// Returns true if notification is still set for course
   Future<bool> cancelCourseNotifications(Event event) async {
     await _awesomeNotifications.cancelSchedulesByGroupKey(event.course.id);
-    return await checkifNotificationIsSetForCourse(event);
+    return await checkIfNotificationIsSetForCourse(event);
   }
 
   void changeCourseColor(BuildContext context, Course course, Color color) {
@@ -304,11 +292,11 @@ class MainAppCubit extends Cubit<MainAppState> {
     });
   }
 
-  permissionRequest() async {
+  Future<void> permissionRequest() async {
     await _awesomeNotifications.requestPermissionToSendNotifications();
   }
 
-  forceRefreshAll() async {
+  Future<void> forceRefreshAll() async {
     final bookmarks = _preferenceService
         .getStringList(PreferenceTypes.bookmarks)!
         .map((e) => bookmarkedScheduleModelFromJson(e))
@@ -316,13 +304,13 @@ class MainAppCubit extends Cubit<MainAppState> {
         .toList();
 
     for (var bookmark in bookmarks) {
-      final ApiScheduleOrProgrammeResponse _apiResponse =
+      final ApiScheduleOrProgrammeResponse apiResponse =
           await _cacheAndInteractionService
               .scheduleFetchDispatcher(bookmark.scheduleId);
 
-      switch (_apiResponse.status) {
+      switch (apiResponse.status) {
         case ApiScheduleOrProgrammeStatus.FETCHED:
-          await _databaseService.update(_apiResponse.data as ScheduleModel);
+          await _databaseService.update(apiResponse.data as ScheduleModel);
           break;
         default:
           break;

@@ -1,6 +1,6 @@
 // ignore_for_file: constant_identifier_names
 
-part of 'main_app_cubit.dart';
+part of 'app_switch_cubit.dart';
 
 enum MainAppStatus {
   INITIAL,
@@ -11,14 +11,14 @@ enum MainAppStatus {
   EMPTY_SCHEDULE
 }
 
-class MainAppState extends Equatable {
+class AppSwitchState extends Equatable {
   final MainAppStatus status;
   final bool listViewToTopButtonVisible;
   final List<Day>? listOfDays;
   final List<Week>? listOfWeeks;
   final String? message;
   final List<ScheduleModelAndCourses?>? scheduleModelAndCourses;
-  const MainAppState(
+  const AppSwitchState(
       {required this.status,
       required this.scheduleModelAndCourses,
       required this.listOfDays,
@@ -26,7 +26,7 @@ class MainAppState extends Equatable {
       required this.listViewToTopButtonVisible,
       required this.message});
 
-  MainAppState copyWith(
+  AppSwitchState copyWith(
           {MainAppStatus? status,
           bool? toggledFavorite,
           bool? listViewToTopButtonVisible,
@@ -34,7 +34,7 @@ class MainAppState extends Equatable {
           List<Week>? listOfWeeks,
           String? message,
           List<ScheduleModelAndCourses?>? scheduleModelAndCourses}) =>
-      MainAppState(
+      AppSwitchState(
           status: status ?? this.status,
           listViewToTopButtonVisible:
               listViewToTopButtonVisible ?? this.listViewToTopButtonVisible,

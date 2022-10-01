@@ -5,7 +5,7 @@ import 'package:tumble/core/api/apiservices/runtime_error_type.dart';
 import 'package:tumble/core/navigation/app_navigator.dart';
 import 'package:tumble/core/ui/bottom_nav_bar/cubit/bottom_nav_cubit.dart';
 import 'package:tumble/core/ui/bottom_nav_bar/data/nav_bar_items.dart';
-import 'package:tumble/core/ui/main_app/cubit/main_app_cubit.dart';
+import 'package:tumble/core/ui/app_switch/cubit/app_switch_cubit.dart';
 import 'package:tumble/core/ui/schedule/no_schedule.dart';
 import 'package:tumble/core/ui/schedule/tumble_list_view/data/custom_alerts.dart';
 import 'package:tumble/core/ui/schedule/tumble_week_view/week_list_view.dart';
@@ -22,7 +22,7 @@ class _TumbleWeekViewState extends State<TumbleWeekView> {
   @override
   Widget build(BuildContext context) {
     final AppNavigator navigator = BlocProvider.of<AppNavigator>(context);
-    return BlocBuilder<MainAppCubit, MainAppState>(
+    return BlocBuilder<AppSwitchCubit, AppSwitchState>(
       builder: (context, state) {
         switch (state.status) {
           case MainAppStatus.INITIAL:
@@ -46,7 +46,7 @@ class _TumbleWeekViewState extends State<TumbleWeekView> {
                         return state.listOfWeeks!
                             .map((e) => TumbleWeekPageContainer(
                                   week: e,
-                                  cubit: BlocProvider.of<MainAppCubit>(context),
+                                  cubit: BlocProvider.of<AppSwitchCubit>(context),
                                 ))
                             .toList()[index];
                       }))

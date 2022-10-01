@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tumble/core/ui/bottom_nav_bar/cubit/bottom_nav_cubit.dart';
 import 'package:tumble/core/ui/bottom_nav_bar/data/nav_bar_items.dart';
-import 'package:tumble/core/ui/main_app/cubit/main_app_cubit.dart';
+import 'package:tumble/core/ui/app_switch/cubit/app_switch_cubit.dart';
 import 'package:tumble/core/ui/search/cubit/search_page_cubit.dart';
 import 'package:tumble/core/ui/search/search/schedule_search_bar.dart';
 import 'package:tumble/core/ui/search/search/search_page_slideable_logo.dart';
@@ -52,7 +52,7 @@ class _SearchBarAndLogoContainerState extends State<SearchBarAndLogoContainer> {
                       child: const ScheduleSearchBar(),
                     ),
                   ),
-                  if (context.read<MainAppCubit>().hasBookMarkedSchedules)
+                  if (context.read<AppSwitchCubit>().hasBookMarkedSchedules)
                     Expanded(
                       child: BlocBuilder<SearchPageCubit, SearchPageState>(
                         builder: (context, state) {

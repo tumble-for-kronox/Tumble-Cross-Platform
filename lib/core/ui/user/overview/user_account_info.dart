@@ -6,7 +6,7 @@ import 'package:tumble/core/shared/preference_types.dart';
 import 'package:tumble/core/dependency_injection/get_it_instances.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
 import 'package:tumble/core/ui/login/cubit/auth_cubit.dart';
-import 'package:tumble/core/ui/main_app/data/schools.dart';
+import 'package:tumble/core/ui/app_switch/data/schools.dart';
 import 'package:tumble/core/ui/tumble_button.dart';
 import 'package:tumble/core/ui/user/misc/auto_signup_option.dart';
 import 'package:tumble/core/ui/user/misc/user_account_info_external_link.dart';

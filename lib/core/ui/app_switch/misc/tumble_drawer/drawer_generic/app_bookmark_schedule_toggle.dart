@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
-import 'package:tumble/core/ui/main_app/misc/tumble_drawer/cubit/drawer_state.dart';
+import 'package:tumble/core/ui/app_switch/misc/tumble_drawer/cubit/drawer_state.dart';
 
 class AppBookmarkScheduleToggle extends StatefulWidget {
   const AppBookmarkScheduleToggle({

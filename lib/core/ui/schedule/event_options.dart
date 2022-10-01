@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:tumble/core/extensions/extensions.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
-import 'package:tumble/core/ui/main_app/cubit/main_app_cubit.dart';
+import 'package:tumble/core/ui/app_switch/cubit/app_switch_cubit.dart';
 import 'package:tumble/core/ui/schedule/cancel_button.dart';
 
 import '../../models/api_models/schedule_model.dart';
@@ -11,7 +11,7 @@ import '../permission_handler.dart';
 import '../scaffold_message.dart';
 
 class EventOptions extends StatelessWidget {
-  final MainAppCubit cubit;
+  final AppSwitchCubit cubit;
   final Event event;
   final BuildContext context;
 
@@ -23,7 +23,7 @@ class EventOptions extends StatelessWidget {
       : super(key: key);
 
   static void showEventOptions(
-      BuildContext context, Event event, MainAppCubit cubit) {
+      BuildContext context, Event event, AppSwitchCubit cubit) {
     showModalBottomSheet(
         context: context,
         builder: (_) =>
@@ -53,7 +53,7 @@ class EventOptions extends StatelessWidget {
               child: FutureBuilder(
                 future: Future.wait([
                   cubit.checkIfNotificationIsSetForEvent(event),
-                  cubit.checkifNotificationIsSetForCourse(event),
+                  cubit.checkIfNotificationIsSetForCourse(event),
                 ]),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.done) {

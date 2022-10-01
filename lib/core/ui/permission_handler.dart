@@ -1,10 +1,10 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
-import 'package:tumble/core/ui/main_app/cubit/main_app_cubit.dart';
+import 'package:tumble/core/ui/app_switch/cubit/app_switch_cubit.dart';
 
 class PermissionHandler extends StatelessWidget {
-  final MainAppCubit cubit;
+  final AppSwitchCubit cubit;
   const PermissionHandler({Key? key, required this.cubit}) : super(key: key);
 
   @override
