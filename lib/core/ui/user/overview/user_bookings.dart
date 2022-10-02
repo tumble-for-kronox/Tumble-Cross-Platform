@@ -18,6 +18,8 @@ class UserBookingsContainer extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
       constraints: const BoxConstraints(
         minHeight: 100,
+        maxHeight: 500,
+        maxWidth: double.maxFinite,
       ),
       child: BlocBuilder<ResourceCubit, ResourceState>(builder: (context, state) {
         switch (state.userBookingsStatus) {
@@ -35,16 +37,18 @@ class UserBookingsContainer extends StatelessWidget {
                             fontSize: 18,
                             fontWeight: FontWeight.w400)),
                   )
-                : Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: state.userBookings!
-                        .asMap()
-                        .entries
-                        .map((entry) => UserBooking(
-                              booking: entry.value,
-                              loading: state.confirmationLoading![entry.key],
-                            ))
-                        .toList(),
+                : SizedBox(
+                    width: double.maxFinite,
+                    child: Column(
+                      children: state.userBookings!
+                          .asMap()
+                          .entries
+                          .map((entry) => UserBooking(
+                                booking: entry.value,
+                                loading: state.confirmationLoading![entry.key],
+                              ))
+                          .toList(),
+                    ),
                   );
           case UserBookingsStatus.ERROR:
             return Center(

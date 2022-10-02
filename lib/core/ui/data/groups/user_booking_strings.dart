@@ -6,4 +6,5 @@ class UserBookingStrings extends StringConstantGroup {
   UserBookingStrings(AppLocalizations localizedStrings) : super(localizedStrings);
 
   String noBookings() => localizedStrings.userBookingsNoBookings;
+  String noAvailableTimeSlots() => localizedStrings.userBookingsNoAvailableTimeSlots;
 }

@@ -372,5 +372,6 @@
     "contributorsModalDesign": "Design",
     "contributorsModalTranslation": "Translation",
     "contributorsModalSpecialThanks": "Special thanks",
-    "userBookingsNoBookings": "You currently have no bookings"
+    "userBookingsNoBookings": "You currently have no bookings",
+    "userBookingsNoAvailableTimeSlots": "There aren't any rooms available, try another date"
 }

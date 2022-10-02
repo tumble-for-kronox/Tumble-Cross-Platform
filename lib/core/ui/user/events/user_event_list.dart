@@ -7,7 +7,9 @@ import 'package:tumble/core/ui/user/cubit/user_event_cubit.dart';
 import 'package:tumble/core/ui/user/events/user_event_section.dart';
 
 class Events extends StatefulWidget {
-  const Events({Key? key}) : super(key: key);
+  final Future<void> Function() onRefresh;
+
+  const Events({Key? key, required this.onRefresh}) : super(key: key);
 
   @override
   State<Events> createState() => _EventsState();
@@ -18,35 +20,43 @@ class _EventsState extends State<Events> {
   Widget build(BuildContext context) {
     return BlocBuilder<UserEventCubit, UserEventState>(
       builder: (context, state) {
-        return Container(
-          width: double.infinity,
-          height: double.maxFinite,
-          padding: const EdgeInsets.symmetric(horizontal: 15),
-          child: Builder(
-            builder: (context) {
-              switch (state.userEventListStatus) {
-                case UserOverviewStatus.LOADING:
-                  return const Center(child: TumbleLoading());
-                case UserOverviewStatus.LOADED:
-                  return SingleChildScrollView(child: _loaded(context, state));
-                case UserOverviewStatus.ERROR:
-                  return Center(
-                    child: Text(
-                      S.userEvents.failedToLoad(),
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(fontSize: 17),
-                    ),
-                  );
-                case UserOverviewStatus.INITIAL:
-                  return const Center(
-                    child: Text(
-                      "We couldn't find any upcoming exams",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 17),
-                    ),
-                  );
-              }
-            },
+        return RefreshIndicator(
+          onRefresh: widget.onRefresh,
+          child: SizedBox(
+            height: double.infinity,
+            child: SingleChildScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                child: Builder(
+                  builder: (context) {
+                    switch (state.userEventListStatus) {
+                      case UserOverviewStatus.LOADING:
+                        return const Center(child: TumbleLoading());
+                      case UserOverviewStatus.LOADED:
+                        return _loaded(context, state);
+                      case UserOverviewStatus.ERROR:
+                        return Center(
+                          child: Text(
+                            S.userEvents.failedToLoad(),
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(fontSize: 17),
+                          ),
+                        );
+                      case UserOverviewStatus.INITIAL:
+                        return Center(
+                          child: Text(
+                            S.userEvents.empty(),
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(fontSize: 17),
+                          ),
+                        );
+                    }
+                  },
+                ),
+              ),
+            ),
           ),
         );
       },
