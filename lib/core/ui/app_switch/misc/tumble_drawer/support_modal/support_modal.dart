@@ -45,9 +45,7 @@ class SupportModalBuilder extends StatefulWidget {
 
 class _SupportModalBuilderState extends State<SupportModalBuilder> {
   @override
-  Widget build(BuildContext context) => FutureBuilder(
-        future: context.read<SupportModalCubit>().init(),
-        builder: (_, snapshot) => SizedBox(
+  Widget build(BuildContext context) => SizedBox(
           height: MediaQuery.of(context).size.height - 400,
           child: BlocBuilder<SupportModalCubit, SupportModalState>(
             builder: (context, state) {
@@ -69,7 +67,6 @@ class _SupportModalBuilderState extends State<SupportModalBuilder> {
                   status: state.status!);
             },
           ),
-        ),
       );
 }
 

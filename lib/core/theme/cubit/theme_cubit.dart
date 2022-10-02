@@ -19,7 +19,7 @@ class ThemeCubit extends Cubit<ThemeState> {
                 ? null
                 : Locale(getIt<SharedPreferences>().getString(PreferenceTypes.locale)!)));
 
-  final ThemePersistense themeRepository = getIt<ThemeRepository>();
+  final ThemePersistence themeRepository = getIt<ThemeRepository>();
   late StreamSubscription<String> _themeSubscription;
   late StreamSubscription<Locale?> _langSubscription;
 

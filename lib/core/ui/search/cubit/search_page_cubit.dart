@@ -44,7 +44,9 @@ class SearchPageCubit extends Cubit<SearchPageState> {
             previewScheduleModelAndCourses: null,
             previewListOfDays: null,
             previewToggledFavorite: false,
-            previewCurrentScheduleId: null));
+            previewCurrentScheduleId: null)) {
+    init();
+  }
 
   final _textEditingControllerSearch = TextEditingController();
   final FocusNode _focusNode = FocusNode();

@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tumble/core/api/repository/notification_repository.dart';
 import 'package:tumble/core/dependency_injection/get_it_instances.dart';
+import 'package:tumble/core/extensions/extensions.dart';
 import 'package:tumble/core/models/api_models/bookmarked_schedule_model.dart';
 import 'package:tumble/core/navigation/app_navigator.dart';
 import 'package:tumble/core/navigation/navigation_route_labels.dart';
@@ -86,16 +87,16 @@ class TumbleAppDrawer extends StatelessWidget {
                               .toUpperCase()),
                       suffixIcon: CupertinoIcons.arrow_right_arrow_left,
                       eventType: EventType.CHANGE_SCHOOL,
-                      drawerEvent: (eventType) => handleDrawerEvent(
+                      drawerEvent: (eventType) => _handleDrawerEvent(
                           eventType, context, navigator, null),
                     ),
                     TumbleAppDrawerTile(
                       drawerTileTitle: S.settingsPage.changeThemeTitle(),
                       subtitle: S.settingsPage.changeThemeSubtitle(
-                          context.read<DrawerCubit>().state.theme!),
+                          context.read<DrawerCubit>().state.theme!.capitalize()),
                       suffixIcon: CupertinoIcons.device_phone_portrait,
                       eventType: EventType.CHANGE_THEME,
-                      drawerEvent: (eventType) => handleDrawerEvent(
+                      drawerEvent: (eventType) => _handleDrawerEvent(
                           eventType, context, navigator, null),
                     ),
                     TumbleAppDrawerTile(
@@ -103,7 +104,7 @@ class TumbleAppDrawer extends StatelessWidget {
                       subtitle: S.settingsPage.languageSubtitle(),
                       suffixIcon: CupertinoIcons.textformat_abc_dottedunderline,
                       eventType: EventType.CHANGE_LANGUAGE,
-                      drawerEvent: (eventType) => handleDrawerEvent(eventType,
+                      drawerEvent: (eventType) => _handleDrawerEvent(eventType,
                           context, navigator, context.read<DrawerCubit>()),
                     ),
                   ], title: S.settingsPage.commonTitle()),
@@ -121,7 +122,7 @@ class TumbleAppDrawer extends StatelessWidget {
                         subtitle: S.settingsPage.defaultScheduleSubtitle(),
                         suffixIcon: CupertinoIcons.bookmark,
                         eventType: EventType.TOGGLE_BOOKMARKED_SCHEDULES,
-                        drawerEvent: (eventType) => handleDrawerEvent(
+                        drawerEvent: (eventType) => _handleDrawerEvent(
                             eventType, context, navigator, null)),
                   ], title: S.settingsPage.scheduleTitle()),
                   Divider(
@@ -136,7 +137,7 @@ class TumbleAppDrawer extends StatelessWidget {
                         drawerTileTitle: S.settingsPage.clearAllTitle(),
                         subtitle: S.settingsPage.clearAllSubtitle(),
                         eventType: EventType.CANCEL_ALL_NOTIFICATIONS,
-                        drawerEvent: (eventType) => handleDrawerEvent(
+                        drawerEvent: (eventType) => _handleDrawerEvent(
                             eventType, context, navigator, null)),
                     TumbleAppDrawerTile(
                       suffixIcon: CupertinoIcons.clock,
@@ -145,7 +146,7 @@ class TumbleAppDrawer extends StatelessWidget {
                           getIt<SharedPreferences>()
                               .getInt(PreferenceTypes.notificationOffset)!),
                       eventType: EventType.EDIT_NOTIFICATION_TIME,
-                      drawerEvent: (eventType) => handleDrawerEvent(eventType,
+                      drawerEvent: (eventType) => _handleDrawerEvent(eventType,
                           context, navigator, context.read<DrawerCubit>()),
                     )
                   ], title: S.settingsPage.notificationTitle()),
@@ -163,7 +164,7 @@ class TumbleAppDrawer extends StatelessWidget {
                       subtitle: S.settingsPage.reportBugSubtitle(),
                       suffixIcon: CupertinoIcons.ant,
                       eventType: EventType.SUPPORT,
-                      drawerEvent: (eventType) => handleDrawerEvent(eventType,
+                      drawerEvent: (eventType) => _handleDrawerEvent(eventType,
                           context, navigator, context.read<DrawerCubit>()),
                     ),
                     TumbleAppDrawerTile(
@@ -171,7 +172,7 @@ class TumbleAppDrawer extends StatelessWidget {
                       drawerTileTitle: "Contributors",
                       subtitle: "See who helped out",
                       eventType: EventType.CONTRIBUTORS,
-                      drawerEvent: (eventType) => handleDrawerEvent(
+                      drawerEvent: (eventType) => _handleDrawerEvent(
                           eventType, context, navigator, null),
                     ),
                   ], title: S.settingsPage.miscTitle()),
@@ -184,7 +185,7 @@ class TumbleAppDrawer extends StatelessWidget {
     );
   }
 
-  void handleDrawerEvent(Enum eventType, BuildContext context,
+  void _handleDrawerEvent(Enum eventType, BuildContext context,
       AppNavigator navigator, DrawerCubit? cubit) async {
     switch (eventType) {
       case EventType.CHANGE_SCHOOL:

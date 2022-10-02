@@ -32,9 +32,8 @@ class _InitializedNavigationRootPageState extends State<InitializedNavigationRoo
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => MainAppNavigationCubit(),
-      child: FutureBuilder(
-        future: BlocProvider.of<AppSwitchCubit>(context).init(),
-        builder: (_, snapshot) => BlocBuilder<MainAppNavigationCubit, MainAppNavigationState>(
+      child:
+        BlocBuilder<MainAppNavigationCubit, MainAppNavigationState>(
           builder: (context, navState) {
             return Scaffold(
                 backgroundColor: Theme.of(context).colorScheme.background,
@@ -136,7 +135,6 @@ class _InitializedNavigationRootPageState extends State<InitializedNavigationRoo
                 }));
           },
         ),
-      ),
     );
   }
 }

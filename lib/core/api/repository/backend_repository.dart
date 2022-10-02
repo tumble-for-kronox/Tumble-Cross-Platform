@@ -32,7 +32,7 @@ class BackendRepository implements IBackendService {
       });
       final response = await HttpService.sendGetRequestToServer(uri);
       if (response == null) {
-        return ApiScheduleOrProgrammeResponse.error('Timeout error' /* Should be -> RuntimeErrorType.timeoutError() */);
+        return ApiScheduleOrProgrammeResponse.error(RuntimeErrorType.timeoutError());
       }
       return response.parseSchedule();
     } else {
@@ -63,7 +63,6 @@ class BackendRepository implements IBackendService {
       final response = await compute(http.get, uri);
       return response.parsePrograms();
     }
-    // final response = await compute(http.get, uri);
   }
 
   /// [HttpGet]
@@ -81,7 +80,7 @@ class BackendRepository implements IBackendService {
 
       return await response.parseUserEvents();
     } else {
-      var uri = Uri.https(ApiEndPoints.baseUrl, ApiEndPoints.getSchedules,
+      Uri uri = Uri.https(ApiEndPoints.baseUrl, ApiEndPoints.getSchedules,
           {ApiEndPoints.sessionToken: sessionToken, ApiEndPoints.school: school.toString()});
       final response = await compute(http.get, uri);
       return response.parseUserEvents();

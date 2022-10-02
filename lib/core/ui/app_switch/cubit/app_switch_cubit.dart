@@ -31,7 +31,9 @@ class AppSwitchCubit extends Cubit<AppSwitchState> {
             listOfWeeks: null,
             listViewToTopButtonVisible: false,
             message: null,
-            scheduleModelAndCourses: null));
+            scheduleModelAndCourses: null)) {
+    _init();
+  }
 
   final _cacheAndInteractionService = getIt<CacheAndInteractionRepository>();
   final _notificationBuilder = NotificationServiceBuilder();
@@ -49,7 +51,8 @@ class AppSwitchCubit extends Cubit<AppSwitchState> {
   bool toTopButtonVisible() =>
       _listViewScrollController.hasClients ? _listViewScrollController.offset >= 1000 : false;
 
-  Future<void> init() async {
+  Future<void> _init() async {
+    dev.log('Fetching ...');
     await attemptToFetchCachedSchedules();
     _listViewScrollController.addListener((setScrollController));
   }

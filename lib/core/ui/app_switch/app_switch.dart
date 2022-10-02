@@ -23,11 +23,8 @@ class _AppSwitchState extends State<AppSwitch> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ThemeCubit, ThemeState>(
-        builder: ((context, state) => FutureBuilder(
-            future: BlocProvider.of<InitCubit>(context).init(),
-            builder: (context, snapshot) {
-              log(state.themeString);
-              return BlocBuilder<InitCubit, InitState>(
+        builder: ((context, state) =>
+            BlocBuilder<InitCubit, InitState>(
                 builder: (context, state) {
                   switch (state.status) {
                     case InitStatus.NO_SCHOOL:
@@ -44,7 +41,6 @@ class _AppSwitchState extends State<AppSwitch> {
                       ], child: const InitializedNavigationRootPage());
                   }
                 },
-              );
-            })));
+            )));
   }
 }
