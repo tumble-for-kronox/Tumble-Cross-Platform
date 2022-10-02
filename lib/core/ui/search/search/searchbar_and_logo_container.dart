@@ -20,97 +20,86 @@ class SearchBarAndLogoContainer extends StatefulWidget {
 class _SearchBarAndLogoContainerState extends State<SearchBarAndLogoContainer> {
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: BlocProvider.of<SearchPageCubit>(context).init(),
-      builder: ((context, snapshot) {
-        switch (snapshot.connectionState) {
-          case ConnectionState.done:
-            return Container(
-              margin: EdgeInsets.only(top: MediaQuery.of(context).viewPadding.top + 5),
-              alignment: Alignment.center,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
-                    child: BlocBuilder<SearchPageCubit, SearchPageState>(builder: (context, state) {
-                      return SlideableLogo(
-                        focused: state.focused,
-                      );
-                    }),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
-                    margin: const EdgeInsets.only(bottom: 10),
-                    child: BlocProvider.value(
-                      value: BlocProvider.of<SearchPageCubit>(context),
-                      child: const ScheduleSearchBar(),
-                    ),
-                  ),
-                  if (context.read<AppSwitchCubit>().hasBookMarkedSchedules)
-                    Expanded(
-                      child: BlocBuilder<SearchPageCubit, SearchPageState>(
-                        builder: (context, state) {
-                          if (state.focused) {
-                            return Container();
-                          }
-                          return Container(
-                            padding: const EdgeInsets.only(top: 185),
-                            child: Stack(
-                              children: [
-                                MaterialButton(
-                                  height: 160,
-                                  padding: const EdgeInsets.only(top: 15),
-                                  focusElevation: 0,
-                                  highlightElevation: 0,
-                                  color: Theme.of(context).colorScheme.primary,
-                                  onPressed: () =>
-                                      context.read<MainAppNavigationCubit>().getNavBarItem(NavbarItem.LIST),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        'View your schedules',
-                                        style: TextStyle(
-                                          color: Theme.of(context).colorScheme.onPrimary.withOpacity(.9),
-                                          fontSize: 14,
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        width: 10,
-                                      ),
-                                      Icon(
-                                        CupertinoIcons.arrow_right,
-                                        size: 15,
-                                        color: Theme.of(context).colorScheme.onPrimary.withOpacity(.9),
-                                      )
-                                    ],
-                                  ),
+    return Container(
+      margin: EdgeInsets.only(top: MediaQuery.of(context).viewPadding.top + 5),
+      alignment: Alignment.center,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+            padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+            child: BlocBuilder<SearchPageCubit, SearchPageState>(builder: (context, state) {
+              return SlideableLogo(
+                focused: state.focused,
+              );
+            }),
+          ),
+          Container(
+            padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+            margin: const EdgeInsets.only(bottom: 10),
+            child: BlocProvider.value(
+              value: BlocProvider.of<SearchPageCubit>(context),
+              child: const ScheduleSearchBar(),
+            ),
+          ),
+          if (context.read<AppSwitchCubit>().hasBookMarkedSchedules)
+            Expanded(
+              child: BlocBuilder<SearchPageCubit, SearchPageState>(
+                builder: (context, state) {
+                  if (state.focused) {
+                    return Container();
+                  }
+                  return Container(
+                    padding: const EdgeInsets.only(top: 185),
+                    child: Stack(
+                      children: [
+                        MaterialButton(
+                          height: 160,
+                          padding: const EdgeInsets.only(top: 15),
+                          focusElevation: 0,
+                          highlightElevation: 0,
+                          color: Theme.of(context).colorScheme.primary,
+                          onPressed: () => context.read<MainAppNavigationCubit>().getNavBarItem(NavbarItem.LIST),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'View your schedules',
+                                style: TextStyle(
+                                  color: Theme.of(context).colorScheme.onPrimary.withOpacity(.9),
+                                  fontSize: 14,
                                 ),
-                                Align(
-                                  alignment: Alignment.topCenter,
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      color: Theme.of(context).colorScheme.background,
-                                      borderRadius: const BorderRadius.only(
-                                          bottomLeft: Radius.circular(20), bottomRight: Radius.circular(20)),
-                                    ),
-                                    height: 25,
-                                  ),
-                                ),
-                              ],
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Icon(
+                                CupertinoIcons.arrow_right,
+                                size: 15,
+                                color: Theme.of(context).colorScheme.onPrimary.withOpacity(.9),
+                              )
+                            ],
+                          ),
+                        ),
+                        Align(
+                          alignment: Alignment.topCenter,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).colorScheme.background,
+                              borderRadius: const BorderRadius.only(
+                                  bottomLeft: Radius.circular(20), bottomRight: Radius.circular(20)),
                             ),
-                          );
-                        },
-                      ),
-                    )
-                ],
+                            height: 25,
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
               ),
-            );
-          default:
-            return Container();
-        }
-      }),
+            )
+        ],
+      ),
     );
   }
 }

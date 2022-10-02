@@ -43,7 +43,9 @@ class SearchPageCubit extends Cubit<SearchPageState> {
             previewScheduleModelAndCourses: null,
             previewListOfDays: null,
             previewToggledFavorite: false,
-            previewCurrentScheduleId: null));
+            previewCurrentScheduleId: null)) {
+    _init();
+  }
 
   final _textEditingControllerSearch = TextEditingController();
   final FocusNode _focusNode = FocusNode();
@@ -57,7 +59,7 @@ class SearchPageCubit extends Cubit<SearchPageState> {
   TextEditingController get textEditingControllerSearch => _textEditingControllerSearch;
   FocusNode get focusNode => _focusNode;
 
-  Future<void> init() async {
+  Future<void> _init() async {
     _focusNode.addListener((setSearchBarFocused));
     _listViewScrollController.addListener((setScrollController));
   }
