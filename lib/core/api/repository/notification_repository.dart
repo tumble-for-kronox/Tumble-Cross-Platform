@@ -20,8 +20,7 @@ class NotificationRepository implements INotificationService {
 
   @override
   void assignAllNotificationsWithNewDuration(Duration newDuration) async {
-    List<NotificationModel> currentNotifications =
-        await _awesomeNotifications.listScheduledNotifications();
+    List<NotificationModel> currentNotifications = await _awesomeNotifications.listScheduledNotifications();
 
     final List<String> bookmarkedScheduleIds = getIt<SharedPreferences>()
         .getStringList(PreferenceTypes.bookmarks)!
@@ -29,16 +28,14 @@ class NotificationRepository implements INotificationService {
         .toList();
 
     List<String?> notificationChannelKeys = currentNotifications
-        .map((NotificationModel notificationModel) =>
-            notificationModel.content!.id.toString())
+        .map((NotificationModel notificationModel) => notificationModel.content!.id.toString())
         .toList();
 
     final List<ScheduleModel?> bookmarkedUserSchedules = [];
 
     if (bookmarkedScheduleIds.isNotEmpty) {
       for (String scheduleId in bookmarkedScheduleIds) {
-        bookmarkedUserSchedules
-            .add(await _databaseService.getOneSchedule(scheduleId));
+        bookmarkedUserSchedules.add(await _databaseService.getOneSchedule(scheduleId));
       }
 
       for (ScheduleModel? bookmarkedSchedule in bookmarkedUserSchedules) {
@@ -46,8 +43,7 @@ class NotificationRepository implements INotificationService {
           if (currentNotifications.isNotEmpty) {
             final List<Event> eventsThatNeedReassign = bookmarkedSchedule.days
                 .expand((Day day) => day.events) // Flatten nested list
-                .where((Event event) => notificationChannelKeys
-                    .contains(event.id.encodeUniqueIdentifier().toString()))
+                .where((Event event) => notificationChannelKeys.contains(event.id.encodeUniqueIdentifier().toString()))
                 .toList();
             for (Event event in eventsThatNeedReassign) {
               _notificationServiceBuilder.buildNotification(
@@ -65,35 +61,23 @@ class NotificationRepository implements INotificationService {
   }
 
   @override
-  void updateDispatcher(
-      ScheduleModel newScheduleModel, ScheduleModel oldScheduleModel) async {
-    final List<NotificationModel> currentNotifications =
-        await _awesomeNotifications.listScheduledNotifications();
+  void updateDispatcher(ScheduleModel newScheduleModel, ScheduleModel oldScheduleModel) async {
+    final List<NotificationModel> currentNotifications = await _awesomeNotifications.listScheduledNotifications();
 
     final List<String?> notificationChannelKeys = currentNotifications
-        .map((NotificationModel notificationModel) =>
-            notificationModel.content!.id.toString())
+        .map((NotificationModel notificationModel) => notificationModel.content!.id.toString())
         .toList();
 
-    final Set<Event> newEvents = newScheduleModel.days
-        .expand((Day day) => day.events)
-        .distinct((e) => e.id)
-        .toSet();
-    final Set<Event> oldEvents = oldScheduleModel.days
-        .expand((Day day) => day.events)
-        .distinct((e) => e.id)
-        .toSet();
+    final Set<Event> newEvents = newScheduleModel.days.expand((Day day) => day.events).distinct((e) => e.id).toSet();
+    final Set<Event> oldEvents = oldScheduleModel.days.expand((Day day) => day.events).distinct((e) => e.id).toSet();
 
     /// Get all differing events by performing set subtraction on
     /// [oldEvents] and [newEvents], then filter to only get the
     /// events that have notifications created for them
     List<Event> eventsThatNeedReassign = newEvents
         .difference(oldEvents)
-        .where((Event event) => notificationChannelKeys
-            .contains(event.id.encodeUniqueIdentifier().toString()))
+        .where((Event event) => notificationChannelKeys.contains(event.id.encodeUniqueIdentifier().toString()))
         .toList();
-
-    log(eventsThatNeedReassign.toString());
 
     for (Event event in eventsThatNeedReassign) {
       _notificationServiceBuilder.buildNotification(
@@ -113,22 +97,18 @@ class NotificationRepository implements INotificationService {
 
   @override
   Future<bool> initialize() async {
-    if (getIt<SharedPreferences>().getStringList(PreferenceTypes.bookmarks) !=
-        null) {
+    if (getIt<SharedPreferences>().getStringList(PreferenceTypes.bookmarks) != null) {
       final List<String> bookmarkedScheduleIds = getIt<SharedPreferences>()
           .getStringList(PreferenceTypes.bookmarks)!
           .map((e) => bookmarkedScheduleModelFromJson(e).scheduleId)
           .toList();
-      log(bookmarkedScheduleIds.toString());
       return await getIt<AwesomeNotifications>().initialize(
           _defaultIcon,
           bookmarkedScheduleIds
-              .map((scheduleId) =>
-                  _notificationServiceBuilder.buildNotificationChannel(
-                      channelKey: scheduleId,
-                      channelName: 'Channel for $scheduleId',
-                      channelDescription:
-                          'A notification channel for the schedule under id -> $scheduleId'))
+              .map((scheduleId) => _notificationServiceBuilder.buildNotificationChannel(
+                  channelKey: scheduleId,
+                  channelName: 'Channel for $scheduleId',
+                  channelDescription: 'A notification channel for the schedule under id -> $scheduleId'))
               .toList());
     }
     return false;

@@ -80,7 +80,7 @@ class _AppState extends State<App> {
                     BlocProvider.value(value: BlocProvider.of<SearchPageCubit>(context)),
                   ],
                   child: const AppNavigatorProvider(initialPages: [
-                    NavigationRouteLabels.mainAppPage,
+                    NavigationRouteLabels.appSwitchPage,
                   ]),
                 );
               })))),

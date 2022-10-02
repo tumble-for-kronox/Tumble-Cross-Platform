@@ -41,7 +41,6 @@ class AuthCubit extends Cubit<AuthState> {
 
     state.usernameController.clear();
     state.passwordController.clear();
-    log(userRes.status.toString());
     switch (userRes.status) {
       case ApiUserResponseStatus.AUTHORIZED:
         storeUserCreds((userRes.data! as KronoxUserModel).refreshToken);

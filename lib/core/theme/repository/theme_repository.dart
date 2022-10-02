@@ -28,7 +28,6 @@ class ThemeRepository implements ThemePersistence {
   void _init() {
     final String? themeString = _sharedPreferences.getString(PreferenceTypes.theme);
     final localeString = _sharedPreferences.getString(PreferenceTypes.locale);
-    log(themeString!);
     switch (themeString) {
       case ThemeType.light:
         _themeController.add(ThemeType.light);

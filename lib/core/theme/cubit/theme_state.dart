@@ -6,7 +6,7 @@ import 'package:tumble/core/shared/preference_types.dart';
 import 'package:tumble/core/dependency_injection/get_it_instances.dart';
 
 class ThemeState extends Equatable {
-  const ThemeState({required this.themeString, required this.locale, this.themeMode = ThemeMode.system});
+  const ThemeState({required this.themeString, required this.locale, required this.themeMode});
 
   final ThemeMode themeMode;
   final String themeString;

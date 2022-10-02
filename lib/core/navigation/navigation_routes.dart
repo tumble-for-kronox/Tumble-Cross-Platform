@@ -16,7 +16,7 @@ class Routes {
   Routes._();
 
   static List<String> pages = [
-    NavigationRouteLabels.mainAppPage,
+    NavigationRouteLabels.appSwitchPage,
     NavigationRouteLabels.mainAppNavigationRootPage,
     NavigationRouteLabels.schoolSelectionPage,
     NavigationRouteLabels.loginPageRoot,
@@ -32,7 +32,7 @@ class Routes {
   static Page getPage(String page, {dynamic arguments}) {
     dynamic pageClass;
     switch (page) {
-      case NavigationRouteLabels.mainAppPage:
+      case NavigationRouteLabels.appSwitchPage:
         pageClass = const AppSwitch();
         break;
       case NavigationRouteLabels.mainAppNavigationRootPage:

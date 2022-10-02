@@ -76,7 +76,6 @@ class DrawerCubit extends Cubit<DrawerState> {
         .map((e) => bookmarkedScheduleModelFromJson(e))
         .toList();
     bookmarks.removeWhere((bookmark) => bookmark.scheduleId == id);
-    log(bookmarks.toString());
 
     getIt<SharedPreferences>()
         .setStringList(PreferenceTypes.bookmarks, bookmarks.map((bookmark) => jsonEncode(bookmark)).toList());
