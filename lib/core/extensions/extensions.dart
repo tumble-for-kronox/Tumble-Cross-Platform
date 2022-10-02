@@ -9,7 +9,7 @@ import 'package:tumble/core/models/ui_models/school_model.dart';
 import 'package:tumble/core/models/ui_models/week_model.dart';
 import 'package:tumble/core/ui/bottom_nav_bar/data/nav_bar_items.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
-import 'package:tumble/core/ui/main_app/data/schools.dart';
+import 'package:tumble/core/ui/app_switch/data/schools.dart';
 
 import '../database/repository/database_repository.dart';
 import '../dependency_injection/get_it_instances.dart';

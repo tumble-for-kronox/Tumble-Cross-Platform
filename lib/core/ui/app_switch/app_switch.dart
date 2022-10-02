@@ -7,27 +7,24 @@ import 'package:tumble/core/theme/cubit/theme_state.dart';
 import 'package:tumble/core/ui/bottom_nav_bar/cubit/bottom_nav_cubit.dart';
 import 'package:tumble/core/ui/init_cubit/init_cubit.dart';
 import 'package:tumble/core/ui/login/cubit/auth_cubit.dart';
-import 'package:tumble/core/ui/main_app/main_app_navigation_root.dart';
-import 'package:tumble/core/ui/main_app/school_selection_page.dart';
+import 'package:tumble/core/ui/app_switch//initialized_navigation_root_page.dart';
+import 'package:tumble/core/ui/app_switch/school_selection_page.dart';
 import 'package:tumble/core/ui/user/cubit/user_event_cubit.dart';
 import 'package:tumble/core/ui/user/resources/cubit/resource_cubit.dart';
 
-class MainApp extends StatefulWidget {
-  const MainApp({Key? key}) : super(key: key);
+class AppSwitch extends StatefulWidget {
+  const AppSwitch({Key? key}) : super(key: key);
 
   @override
-  State<MainApp> createState() => _MainAppState();
+  State<AppSwitch> createState() => _AppSwitchState();
 }
 
-class _MainAppState extends State<MainApp> {
+class _AppSwitchState extends State<AppSwitch> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ThemeCubit, ThemeState>(
-        builder: ((context, state) => FutureBuilder(
-            future: BlocProvider.of<InitCubit>(context).init(),
-            builder: (context, snapshot) {
-              log(state.themeString);
-              return BlocBuilder<InitCubit, InitState>(
+        builder: ((context, state) =>
+            BlocBuilder<InitCubit, InitState>(
                 builder: (context, state) {
                   switch (state.status) {
                     case InitStatus.NO_SCHOOL:
@@ -41,10 +38,9 @@ class _MainAppState extends State<MainApp> {
                         BlocProvider<UserEventCubit>(create: (context) => UserEventCubit()),
                         BlocProvider<ResourceCubit>(create: (context) => ResourceCubit()),
                         BlocProvider<MainAppNavigationCubit>(create: (context) => MainAppNavigationCubit())
-                      ], child: const MainAppNavigationRootPage());
+                      ], child: const InitializedNavigationRootPage());
                   }
                 },
-              );
-            })));
+            )));
   }
 }

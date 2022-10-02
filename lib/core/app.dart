@@ -14,7 +14,7 @@ import 'package:tumble/core/theme/data/colors.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
 import 'package:tumble/core/ui/init_cubit/init_cubit.dart';
 import 'package:tumble/core/ui/login/cubit/auth_cubit.dart';
-import 'package:tumble/core/ui/main_app/cubit/main_app_cubit.dart';
+import 'package:tumble/core/ui/app_switch/cubit/app_switch_cubit.dart';
 import 'package:tumble/core/ui/search/cubit/search_page_cubit.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -30,20 +30,20 @@ class _AppState extends State<App> {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider<AppNavigator>(create: (_) => AppNavigator()),
         BlocProvider<InitCubit>(create: (_) => InitCubit()),
+        BlocProvider<AppNavigator>(create: (_) => AppNavigator()),
         BlocProvider<AuthCubit>(create: (_) => AuthCubit()),
         BlocProvider<ThemeCubit>(
             create: (_) => ThemeCubit()
               ..getCurrentTheme()
               ..getCurrentLang()),
         BlocProvider<SearchPageCubit>(create: (_) => SearchPageCubit()),
-        BlocProvider<MainAppCubit>(create: (_) => MainAppCubit()),
+        BlocProvider<AppSwitchCubit>(create: (_) => AppSwitchCubit()),
       ],
       child: BlocBuilder<ThemeCubit, ThemeState>(
           builder: ((context, state) => MaterialApp(
               debugShowCheckedModeBanner: false,
-              title: 'Tumble',
+              title: 'Tumble for Kronox',
               localizationsDelegates: const [
                 GlobalCupertinoLocalizations.delegate,
                 GlobalMaterialLocalizations.delegate,
@@ -80,7 +80,7 @@ class _AppState extends State<App> {
                     BlocProvider.value(value: BlocProvider.of<SearchPageCubit>(context)),
                   ],
                   child: const AppNavigatorProvider(initialPages: [
-                    NavigationRouteLabels.mainAppPage,
+                    NavigationRouteLabels.appSwitchPage,
                   ]),
                 );
               })))),

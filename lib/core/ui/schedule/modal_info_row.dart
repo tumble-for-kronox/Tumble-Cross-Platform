@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tumble/core/api/apiservices/runtime_error_type.dart';
 import 'package:tumble/core/extensions/extensions.dart';
 import 'package:tumble/core/models/api_models/schedule_model.dart';
-import 'package:tumble/core/ui/main_app/main_app.dart';
+import 'package:tumble/core/ui/app_switch/app_switch.dart';
 
 class ModalInfoRow extends StatelessWidget {
   final List<Location>? locations;

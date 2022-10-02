@@ -1,6 +1,6 @@
 class NavigationRouteLabels {
   static const rootPage = 'RootPage';
-  static const mainAppPage = 'MainAppPage';
+  static const appSwitchPage = 'MainAppPage';
   static const mainAppNavigationRootPage = 'MainAppNavigationRootPage';
   static const schoolSelectionPage = 'SchoolSelectionPage';
   static const loginPageRoot = 'LoginPageRoot';

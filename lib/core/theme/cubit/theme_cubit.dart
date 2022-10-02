@@ -17,9 +17,11 @@ class ThemeCubit extends Cubit<ThemeState> {
             themeString: getIt<SharedPreferences>().getString(PreferenceTypes.theme)!,
             locale: getIt<SharedPreferences>().getString(PreferenceTypes.locale) == null
                 ? null
-                : Locale(getIt<SharedPreferences>().getString(PreferenceTypes.locale)!)));
+                : Locale(getIt<SharedPreferences>().getString(PreferenceTypes.locale)!),
+            themeMode: ThemeMode.values
+                .firstWhere((theme) => theme.name == getIt<SharedPreferences>().getString(PreferenceTypes.theme))));
 
-  final ThemePersistense themeRepository = getIt<ThemeRepository>();
+  final ThemePersistence themeRepository = getIt<ThemeRepository>();
   late StreamSubscription<String> _themeSubscription;
   late StreamSubscription<Locale?> _langSubscription;
 
@@ -32,7 +34,6 @@ class ThemeCubit extends Cubit<ThemeState> {
   }
 
   void updateTheme(String theme) {
-    log(theme);
     switch (theme) {
       case ThemeType.light:
         emit(state.copyWith(themeMode: ThemeMode.light));

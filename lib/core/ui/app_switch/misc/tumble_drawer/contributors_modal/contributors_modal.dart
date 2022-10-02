@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
-import 'package:tumble/core/ui/main_app/misc/tumble_details_modal_base.dart';
-import 'package:tumble/core/ui/main_app/misc/tumble_drawer/contributors_modal/contributors_section.dart';
+import 'package:tumble/core/ui/app_switch/misc/tumble_details_modal_base.dart';
+import 'package:tumble/core/ui/app_switch/misc/tumble_drawer/contributors_modal/contributors_section.dart';
 
 class ContributorsModal extends StatelessWidget {
   const ContributorsModal({Key? key}) : super(key: key);

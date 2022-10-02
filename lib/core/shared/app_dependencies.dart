@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tumble/core/api/repository/notification_repository.dart';
 import 'package:tumble/core/dependency_injection/get_it_instances.dart';

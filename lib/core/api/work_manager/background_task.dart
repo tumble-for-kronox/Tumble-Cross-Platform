@@ -26,7 +26,6 @@ class BackgroundTask {
         .getStringList(PreferenceTypes.bookmarks)!
         .map((json) => bookmarkedScheduleModelFromJson(json))
         .where((bookmark) => bookmark.toggledValue == true);
-    log(bookmarkedSchedulesToggledToBeVisible.toString());
     final defaultUserSchool = preferenceService.getString(PreferenceTypes.school);
 
     if (bookmarkedSchedulesToggledToBeVisible.isEmpty || defaultUserSchool == null) {

@@ -7,7 +7,7 @@ import 'package:tumble/core/shared/preference_types.dart';
 import 'package:tumble/core/dependency_injection/get_it_instances.dart';
 import 'package:tumble/core/theme/data/theme_strings.dart';
 
-abstract class ThemePersistense {
+abstract class ThemePersistence {
   Stream<String> getTheme();
   Stream<Locale?> getLocale();
   Future<bool> saveTheme(String theme);
@@ -15,7 +15,7 @@ abstract class ThemePersistense {
   void dispose();
 }
 
-class ThemeRepository implements ThemePersistense {
+class ThemeRepository implements ThemePersistence {
   ThemeRepository() {
     _init();
   }
@@ -28,7 +28,6 @@ class ThemeRepository implements ThemePersistense {
   void _init() {
     final String? themeString = _sharedPreferences.getString(PreferenceTypes.theme);
     final localeString = _sharedPreferences.getString(PreferenceTypes.locale);
-    log(themeString!);
     switch (themeString) {
       case ThemeType.light:
         _themeController.add(ThemeType.light);

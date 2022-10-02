@@ -13,11 +13,13 @@ import 'package:tumble/core/dependency_injection/get_it_instances.dart';
 part 'init_state.dart';
 
 class InitCubit extends Cubit<InitState> {
-  InitCubit() : super(const InitState(defaultSchool: null, status: InitStatus.NO_SCHOOL));
+  InitCubit() : super(const InitState(defaultSchool: null, status: InitStatus.NO_SCHOOL)) {
+    init();
+  }
 
   final _cacheAndInteractionService = getIt<CacheAndInteractionRepository>();
   final _databaseService = getIt<DatabaseRepository>();
-  final _appDeps = getIt<AppDependencies>();
+  final _appDependencies = getIt<AppDependencies>();
 
   Future<void> init() async {
     SharedPreferenceResponse sharedPreferenceResponse = await _cacheAndInteractionService.verifyDefaultSchoolExists();
@@ -34,16 +36,16 @@ class InitCubit extends Cubit<InitState> {
 
   void changeSchool(String schoolName) {
     /// Renew items in shared preferences
-    _appDeps.updateDependencies(schoolName);
+    _appDependencies.updateDependencies(schoolName);
 
-    if (state.status == InitStatus.NO_SCHOOL) {
+    if (state.status == InitStatus.SCHOOL_AVAILABLE) {
       /// Clear local db
       _databaseService.removeAll();
       _databaseService.removeAllCachedCourseColors();
 
-      emit(InitState(defaultSchool: schoolName, status: InitStatus.SCHOOL_AVAILABLE));
-    } else if (state.status == InitStatus.NO_SCHOOL) {
       emit(state.copyWith(defaultSchool: schoolName));
+    } else if (state.status == InitStatus.NO_SCHOOL) {
+      emit(state.copyWith(defaultSchool: schoolName, status: InitStatus.SCHOOL_AVAILABLE));
     }
   }
 }

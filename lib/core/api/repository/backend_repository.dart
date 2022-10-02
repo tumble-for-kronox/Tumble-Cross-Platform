@@ -16,7 +16,7 @@ import 'package:tumble/core/extensions/api_response_extension/misc_parser.dart';
 import 'package:tumble/core/extensions/api_response_extension/schedule_and_programme_parser.dart';
 import 'package:tumble/core/extensions/api_response_extension/user_parser.dart';
 import 'package:tumble/core/extensions/extensions.dart';
-import 'package:tumble/core/ui/main_app/data/schools.dart';
+import 'package:tumble/core/ui/app_switch/data/schools.dart';
 
 import '../../models/api_models/resource_model.dart';
 
@@ -32,7 +32,7 @@ class BackendRepository implements IBackendService {
       });
       final response = await HttpService.sendGetRequestToServer(uri);
       if (response == null) {
-        return ApiScheduleOrProgrammeResponse.error('Timeout error' /* Should be -> RuntimeErrorType.timeoutError() */);
+        return ApiScheduleOrProgrammeResponse.error(RuntimeErrorType.timeoutError());
       }
       return response.parseSchedule();
     } else {
@@ -63,7 +63,6 @@ class BackendRepository implements IBackendService {
       final response = await compute(http.get, uri);
       return response.parsePrograms();
     }
-    // final response = await compute(http.get, uri);
   }
 
   /// [HttpGet]
@@ -81,7 +80,7 @@ class BackendRepository implements IBackendService {
 
       return await response.parseUserEvents();
     } else {
-      var uri = Uri.https(ApiEndPoints.baseUrl, ApiEndPoints.getSchedules,
+      Uri uri = Uri.https(ApiEndPoints.baseUrl, ApiEndPoints.getSchedules,
           {ApiEndPoints.sessionToken: sessionToken, ApiEndPoints.school: school.toString()});
       final response = await compute(http.get, uri);
       return response.parseUserEvents();

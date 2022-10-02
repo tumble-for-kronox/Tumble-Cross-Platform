@@ -8,7 +8,7 @@ import 'package:tumble/core/models/api_models/program_model.dart';
 import 'package:tumble/core/theme/data/colors.dart';
 import 'package:tumble/core/ui/bottom_nav_bar/cubit/bottom_nav_cubit.dart';
 import 'package:tumble/core/ui/init_cubit/init_cubit.dart';
-import 'package:tumble/core/ui/main_app/cubit/main_app_cubit.dart';
+import 'package:tumble/core/ui/app_switch/cubit/app_switch_cubit.dart';
 import 'package:tumble/core/ui/schedule/no_schedule.dart';
 import 'package:tumble/core/ui/search/cubit/search_page_cubit.dart';
 import 'package:tumble/core/ui/search/search/program_card.dart';

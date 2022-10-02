@@ -3,9 +3,9 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:tumble/core/models/api_models/schedule_model.dart';
-import 'package:tumble/core/ui/main_app/cubit/main_app_cubit.dart';
+import 'package:tumble/core/ui/app_switch/cubit/app_switch_cubit.dart';
 
-Future<EventsDataSource> getCalendarDataSource(List<Day> days, MainAppCubit cubit) async {
+Future<EventsDataSource> getCalendarDataSource(List<Day> days, AppSwitchCubit cubit) async {
   List<Event> appointments = <Event>[];
   for (Day day in days) {
     for (Event event in day.events) {
@@ -16,7 +16,7 @@ Future<EventsDataSource> getCalendarDataSource(List<Day> days, MainAppCubit cubi
 }
 
 class EventsDataSource extends CalendarDataSource {
-  MainAppCubit cubit;
+  AppSwitchCubit cubit;
 
   EventsDataSource(List<Event> source, this.cubit) {
     appointments = source;

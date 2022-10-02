@@ -7,10 +7,10 @@ import 'package:tumble/core/ui/bottom_nav_bar/cubit/bottom_nav_cubit.dart';
 import 'package:tumble/core/ui/bottom_nav_bar/data/nav_bar_items.dart';
 import 'package:tumble/core/ui/bottom_nav_bar/tumble_navigation_bar.dart';
 import 'package:tumble/core/ui/login/cubit/auth_cubit.dart';
-import 'package:tumble/core/ui/main_app/cubit/main_app_cubit.dart';
-import 'package:tumble/core/ui/main_app/misc/tumble_app_bar.dart';
-import 'package:tumble/core/ui/main_app/misc/tumble_drawer/cubit/drawer_state.dart';
-import 'package:tumble/core/ui/main_app/misc/tumble_drawer/tumble_app_drawer.dart';
+import 'package:tumble/core/ui/app_switch/cubit/app_switch_cubit.dart';
+import 'package:tumble/core/ui/app_switch/misc/tumble_app_bar.dart';
+import 'package:tumble/core/ui/app_switch/misc/tumble_drawer/cubit/drawer_state.dart';
+import 'package:tumble/core/ui/app_switch/misc/tumble_drawer/tumble_app_drawer.dart';
 import 'package:tumble/core/ui/schedule/tumble_calendar_view/tumble_calendar_view.dart';
 import 'package:tumble/core/ui/schedule/tumble_list_view/tumble_list_view.dart';
 import 'package:tumble/core/ui/schedule/tumble_week_view/tumble_week_view.dart';
@@ -20,28 +20,27 @@ import 'package:tumble/core/ui/user/cubit/user_event_cubit.dart';
 import 'package:tumble/core/ui/user/resources/cubit/resource_cubit.dart';
 import 'package:tumble/core/ui/user/tumble_user_overview_page_switch.dart';
 
-class MainAppNavigationRootPage extends StatefulWidget {
-  const MainAppNavigationRootPage({Key? key}) : super(key: key);
+class InitializedNavigationRootPage extends StatefulWidget {
+  const InitializedNavigationRootPage({Key? key}) : super(key: key);
 
   @override
-  State<MainAppNavigationRootPage> createState() => _MainAppNavigationRootPageState();
+  State<InitializedNavigationRootPage> createState() => _InitializedNavigationRootPageState();
 }
 
-class _MainAppNavigationRootPageState extends State<MainAppNavigationRootPage> {
+class _InitializedNavigationRootPageState extends State<InitializedNavigationRootPage> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => MainAppNavigationCubit(),
-      child: FutureBuilder(
-        future: BlocProvider.of<MainAppCubit>(context).init(),
-        builder: (_, snapshot) => BlocBuilder<MainAppNavigationCubit, MainAppNavigationState>(
+      child:
+        BlocBuilder<MainAppNavigationCubit, MainAppNavigationState>(
           builder: (context, navState) {
             return Scaffold(
                 backgroundColor: Theme.of(context).colorScheme.background,
                 endDrawer: MultiBlocProvider(
                   providers: [
                     BlocProvider<DrawerCubit>(create: (_) => DrawerCubit(Localizations.localeOf(context))),
-                    BlocProvider<MainAppCubit>.value(value: BlocProvider.of<MainAppCubit>(context))
+                    BlocProvider<AppSwitchCubit>.value(value: BlocProvider.of<AppSwitchCubit>(context))
                   ],
                   child: const TumbleAppDrawer(),
                 ),
@@ -49,7 +48,7 @@ class _MainAppNavigationRootPageState extends State<MainAppNavigationRootPage> {
                   preferredSize: const Size.fromHeight(60),
                   child: MultiBlocProvider(
                     providers: [
-                      BlocProvider.value(value: BlocProvider.of<MainAppCubit>(context)),
+                      BlocProvider.value(value: BlocProvider.of<AppSwitchCubit>(context)),
                       BlocProvider.value(value: BlocProvider.of<MainAppNavigationCubit>(context)),
                       BlocProvider.value(value: BlocProvider.of<AppNavigator>(context))
                     ],
@@ -57,16 +56,16 @@ class _MainAppNavigationRootPageState extends State<MainAppNavigationRootPage> {
                       pageIndex: navState.index,
                       toggleBookmark: () async {
                         await context.read<SearchPageCubit>().toggleFavorite(context).then((_) {
-                          BlocProvider.of<MainAppCubit>(context).setLoading();
-                          BlocProvider.of<MainAppCubit>(context).attemptToFetchCachedSchedules();
+                          BlocProvider.of<AppSwitchCubit>(context).setLoading();
+                          BlocProvider.of<AppSwitchCubit>(context).attemptToFetchCachedSchedules();
                           BlocProvider.of<MainAppNavigationCubit>(context).getNavBarItem(NavbarItem.LIST);
                         });
                       },
                     ),
                   ),
                 ),
-                body: () {
-                  return BlocListener<AuthCubit, AuthState>(
+                body:
+                   BlocListener<AuthCubit, AuthState>(
                     listenWhen: ((previous, current) =>
                         previous.status != current.status && current.status == AuthStatus.AUTHENTICATED),
                     listener: (context, state) {
@@ -84,7 +83,7 @@ class _MainAppNavigationRootPageState extends State<MainAppNavigationRootPage> {
                           case NavbarItem.SEARCH:
                             return MultiBlocProvider(
                               providers: [
-                                BlocProvider.value(value: BlocProvider.of<MainAppCubit>(context)),
+                                BlocProvider.value(value: BlocProvider.of<AppSwitchCubit>(context)),
                                 BlocProvider.value(value: BlocProvider.of<MainAppNavigationCubit>(context)),
                                 BlocProvider.value(value: BlocProvider.of<SearchPageCubit>(context))
                               ],
@@ -94,7 +93,7 @@ class _MainAppNavigationRootPageState extends State<MainAppNavigationRootPage> {
                           case NavbarItem.LIST:
                             return MultiBlocProvider(
                               providers: [
-                                BlocProvider.value(value: BlocProvider.of<MainAppCubit>(context)),
+                                BlocProvider.value(value: BlocProvider.of<AppSwitchCubit>(context)),
                                 BlocProvider.value(value: BlocProvider.of<MainAppNavigationCubit>(context)),
                               ],
                               key: const ValueKey<int>(1),
@@ -103,7 +102,7 @@ class _MainAppNavigationRootPageState extends State<MainAppNavigationRootPage> {
                           case NavbarItem.WEEK:
                             return MultiBlocProvider(
                               providers: [
-                                BlocProvider.value(value: BlocProvider.of<MainAppCubit>(context)),
+                                BlocProvider.value(value: BlocProvider.of<AppSwitchCubit>(context)),
                                 BlocProvider.value(value: BlocProvider.of<MainAppNavigationCubit>(context)),
                               ],
                               key: const ValueKey<int>(2),
@@ -112,7 +111,7 @@ class _MainAppNavigationRootPageState extends State<MainAppNavigationRootPage> {
                           case NavbarItem.CALENDAR:
                             return MultiBlocProvider(
                               providers: [
-                                BlocProvider.value(value: BlocProvider.of<MainAppCubit>(context)),
+                                BlocProvider.value(value: BlocProvider.of<AppSwitchCubit>(context)),
                                 BlocProvider.value(value: BlocProvider.of<MainAppNavigationCubit>(context)),
                               ],
                               key: const ValueKey<int>(3),
@@ -130,14 +129,12 @@ class _MainAppNavigationRootPageState extends State<MainAppNavigationRootPage> {
                         }
                       }(),
                     ),
-                  );
-                }(),
+                  ),
                 bottomNavigationBar: TumbleNavigationBar(onTap: (index) {
                   BlocProvider.of<MainAppNavigationCubit>(context).getNavBarItem(NavbarItem.values[index]);
                 }));
           },
         ),
-      ),
     );
   }
 }

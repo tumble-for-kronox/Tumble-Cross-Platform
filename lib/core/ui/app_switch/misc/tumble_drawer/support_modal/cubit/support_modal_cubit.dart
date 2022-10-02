@@ -5,7 +5,9 @@ class SupportModalCubit extends Cubit<SupportModalState> {
       : super(const SupportModalState(
             isSubjectValid: false,
             isBodyValid: false,
-            status: SupportModalStatus.INITIAL));
+            status: SupportModalStatus.INITIAL)) {
+    _init();
+  }
 
   final _backendService = getIt<BackendRepository>();
   final _textEditingControllerSubject = TextEditingController();
@@ -21,7 +23,7 @@ class SupportModalCubit extends Cubit<SupportModalState> {
     return super.close();
   }
 
-  Future<void> init() async {
+  Future<void> _init() async {
     _textEditingControllerSubject.addListener(subjectListener);
     _textEditingControllerBody.addListener(bodyListener);
   }

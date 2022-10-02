@@ -7,9 +7,9 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:tumble/core/extensions/extensions.dart';
 import 'package:tumble/core/theme/data/colors.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
-import 'package:tumble/core/ui/main_app/misc/tumble_details_modal_base.dart';
-import 'package:tumble/core/ui/main_app/misc/tumble_drawer/cubit/drawer_state.dart';
-import 'package:tumble/core/ui/main_app/misc/tumble_drawer/support_modal/cubit/support_modal_state.dart';
+import 'package:tumble/core/ui/app_switch/misc/tumble_details_modal_base.dart';
+import 'package:tumble/core/ui/app_switch/misc/tumble_drawer/cubit/drawer_state.dart';
+import 'package:tumble/core/ui/app_switch/misc/tumble_drawer/support_modal/cubit/support_modal_state.dart';
 import 'package:tumble/core/ui/tumble_button.dart';
 import 'package:tumble/core/ui/tumble_loading.dart';
 
@@ -45,9 +45,7 @@ class SupportModalBuilder extends StatefulWidget {
 
 class _SupportModalBuilderState extends State<SupportModalBuilder> {
   @override
-  Widget build(BuildContext context) => FutureBuilder(
-        future: context.read<SupportModalCubit>().init(),
-        builder: (_, snapshot) => SizedBox(
+  Widget build(BuildContext context) => SizedBox(
           height: MediaQuery.of(context).size.height - 400,
           child: BlocBuilder<SupportModalCubit, SupportModalState>(
             builder: (context, state) {
@@ -69,7 +67,6 @@ class _SupportModalBuilderState extends State<SupportModalBuilder> {
                   status: state.status!);
             },
           ),
-        ),
       );
 }
 
