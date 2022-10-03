@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tumble/core/dependency_injection/get_it_instances.dart';
+import 'package:tumble/core/models/ui_models/school_model.dart';
 import 'package:tumble/core/navigation/app_navigator.dart';
 import 'package:tumble/core/navigation/navigation_route_labels.dart';
+import 'package:tumble/core/shared/preference_types.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
 import 'package:tumble/core/ui/init_cubit/init_cubit.dart';
 import 'package:tumble/core/ui/login/cubit/auth_cubit.dart';
@@ -47,23 +51,27 @@ class _SchoolSelectionPageState extends State<SchoolSelectionPage> {
                             schoolName: school.schoolName,
                             schoolId: school.schoolId,
                             schoolLogo: school.schoolLogo,
-                            selectSchool: () {
-                              if (school.loginRequired) {
-                                navigator.push(
-                                    NavigationRouteLabels.loginPageRoot,
-                                    arguments: school.schoolName);
-                              } else {
-                                BlocProvider.of<InitCubit>(context)
-                                    .changeSchool(school.schoolName);
-                                BlocProvider.of<AuthCubit>(context).logout();
-                                navigator.pushAndRemoveAll(
-                                    NavigationRouteLabels.appTopRootBuilder);
-                              }
-                            }))
+                            selectSchool: () =>
+                                onPressSchool(school, navigator, context)))
                         .toList(),
                   ),
                 ],
               ),
             )));
+  }
+}
+
+void onPressSchool(
+    School school, AppNavigator navigator, BuildContext context) {
+  if (school.loginRequired) {
+    navigator.push(NavigationRouteLabels.loginPageRoot,
+        arguments: school.schoolName);
+  } else {
+    BlocProvider.of<InitCubit>(context)
+        .changeSchool(school.schoolName)
+        .then((_) {
+      BlocProvider.of<AuthCubit>(context).logout();
+      navigator.pushAndRemoveAll(NavigationRouteLabels.appTopRootBuilder);
+    });
   }
 }

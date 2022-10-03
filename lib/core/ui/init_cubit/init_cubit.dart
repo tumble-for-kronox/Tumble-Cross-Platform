@@ -13,30 +13,35 @@ import 'package:tumble/core/dependency_injection/get_it_instances.dart';
 part 'init_state.dart';
 
 class InitCubit extends Cubit<InitState> {
-  InitCubit() : super(const InitState(defaultSchool: null, status: InitStatus.NO_SCHOOL)) {
-    init();
+  InitCubit()
+      : super(const InitState(
+            defaultSchool: null, status: InitStatus.NO_SCHOOL)) {
+    _init();
   }
 
   final _cacheAndInteractionService = getIt<CacheAndInteractionRepository>();
   final _databaseService = getIt<DatabaseRepository>();
   final _appDependencies = getIt<AppDependencies>();
 
-  Future<void> init() async {
-    SharedPreferenceResponse sharedPreferenceResponse = await _cacheAndInteractionService.verifyDefaultSchoolExists();
+  Future<void> _init() async {
+    SharedPreferenceResponse sharedPreferenceResponse =
+        await _cacheAndInteractionService.verifyDefaultSchoolExists();
     switch (sharedPreferenceResponse.status) {
       case InitialStatus.NO_SCHOOL:
-        emit(const InitState(defaultSchool: null, status: InitStatus.NO_SCHOOL));
+        emit(
+            const InitState(defaultSchool: null, status: InitStatus.NO_SCHOOL));
         break;
       case InitialStatus.SCHOOL_AVAILABLE:
         String defaultSchool = sharedPreferenceResponse.data;
-        emit(InitState(defaultSchool: defaultSchool, status: InitStatus.SCHOOL_AVAILABLE));
+        emit(InitState(
+            defaultSchool: defaultSchool, status: InitStatus.SCHOOL_AVAILABLE));
         break;
     }
   }
 
-  void changeSchool(String schoolName) {
+  Future<void> changeSchool(String schoolName) async {
     /// Renew items in shared preferences
-    _appDependencies.updateDependencies(schoolName);
+    await _appDependencies.updateDependencies(schoolName);
 
     if (state.status == InitStatus.SCHOOL_AVAILABLE) {
       /// Clear local db
@@ -44,8 +49,10 @@ class InitCubit extends Cubit<InitState> {
       _databaseService.removeAllCachedCourseColors();
 
       emit(state.copyWith(defaultSchool: schoolName));
+      return;
     } else if (state.status == InitStatus.NO_SCHOOL) {
-      emit(state.copyWith(defaultSchool: schoolName, status: InitStatus.SCHOOL_AVAILABLE));
+      emit(state.copyWith(
+          defaultSchool: schoolName, status: InitStatus.SCHOOL_AVAILABLE));
     }
   }
 }
