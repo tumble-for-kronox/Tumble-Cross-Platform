@@ -50,15 +50,9 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   
-  flutter_native_splash: ^2.2.6
-
   drift_dev: ^1.5.2
   flutter_lints: ^2.0.0
   json_serializable: ^6.2.0
-
-flutter_native_splash:
-  image: assets/images/tumbleAppLogo.png
-  color: "f7f7f7"
 
 flutter:
   generate: true
