@@ -14,11 +14,32 @@ class SlideableLogo extends StatelessWidget {
           opacity: focused ? 0 : 1,
           duration: const Duration(milliseconds: 150),
           child: SizedOverflowBox(
+            alignment: Alignment.center,
             size: Size(double.infinity, (focused ? 0 : 300)),
-            child: Image(
-              height: 150,
-              image: const AssetImage("assets/images/tumbleAppLogo.png"),
-              color: Theme.of(context).colorScheme.primary,
+            child: Align(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image(
+                    height: 45,
+                    image: const AssetImage("assets/images/tumbleAppLogo.png"),
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Text(
+                    "TUMBLE",
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onBackground,
+                      fontSize: 32,
+                      letterSpacing: 3,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
         ));
