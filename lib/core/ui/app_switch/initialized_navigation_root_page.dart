@@ -24,117 +24,157 @@ class InitializedNavigationRootPage extends StatefulWidget {
   const InitializedNavigationRootPage({Key? key}) : super(key: key);
 
   @override
-  State<InitializedNavigationRootPage> createState() => _InitializedNavigationRootPageState();
+  State<InitializedNavigationRootPage> createState() =>
+      _InitializedNavigationRootPageState();
 }
 
-class _InitializedNavigationRootPageState extends State<InitializedNavigationRootPage> {
+class _InitializedNavigationRootPageState
+    extends State<InitializedNavigationRootPage> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => MainAppNavigationCubit(),
-      child:
-        BlocBuilder<MainAppNavigationCubit, MainAppNavigationState>(
-          builder: (context, navState) {
-            return Scaffold(
-                backgroundColor: Theme.of(context).colorScheme.background,
-                endDrawer: MultiBlocProvider(
+      child: BlocBuilder<MainAppNavigationCubit, MainAppNavigationState>(
+        builder: (context, navState) {
+          return Scaffold(
+              backgroundColor: Theme.of(context).colorScheme.background,
+              endDrawer: MultiBlocProvider(
+                providers: [
+                  BlocProvider<DrawerCubit>(
+                      create: (_) =>
+                          DrawerCubit(Localizations.localeOf(context))),
+                  BlocProvider<AppSwitchCubit>.value(
+                      value: BlocProvider.of<AppSwitchCubit>(context))
+                ],
+                child: const TumbleAppDrawer(),
+              ),
+              appBar: PreferredSize(
+                preferredSize: const Size.fromHeight(60),
+                child: MultiBlocProvider(
                   providers: [
-                    BlocProvider<DrawerCubit>(create: (_) => DrawerCubit(Localizations.localeOf(context))),
-                    BlocProvider<AppSwitchCubit>.value(value: BlocProvider.of<AppSwitchCubit>(context))
+                    BlocProvider.value(
+                        value: BlocProvider.of<AppSwitchCubit>(context)),
+                    BlocProvider.value(
+                        value:
+                            BlocProvider.of<MainAppNavigationCubit>(context)),
+                    BlocProvider.value(
+                        value: BlocProvider.of<AppNavigator>(context))
                   ],
-                  child: const TumbleAppDrawer(),
-                ),
-                appBar: PreferredSize(
-                  preferredSize: const Size.fromHeight(60),
-                  child: MultiBlocProvider(
-                    providers: [
-                      BlocProvider.value(value: BlocProvider.of<AppSwitchCubit>(context)),
-                      BlocProvider.value(value: BlocProvider.of<MainAppNavigationCubit>(context)),
-                      BlocProvider.value(value: BlocProvider.of<AppNavigator>(context))
-                    ],
-                    child: TumbleAppBar(
-                      pageIndex: navState.index,
-                      toggleBookmark: () async {
-                        await context.read<SearchPageCubit>().toggleFavorite(context).then((_) {
-                          BlocProvider.of<AppSwitchCubit>(context).setLoading();
-                          BlocProvider.of<AppSwitchCubit>(context).attemptToFetchCachedSchedules();
-                          BlocProvider.of<MainAppNavigationCubit>(context).getNavBarItem(NavbarItem.LIST);
-                        });
-                      },
-                    ),
-                  ),
-                ),
-                body:
-                   BlocListener<AuthCubit, AuthState>(
-                    listenWhen: ((previous, current) =>
-                        previous.status != current.status && current.status == AuthStatus.AUTHENTICATED),
-                    listener: (context, state) {
-                      context.read<UserEventCubit>().getUserEvents(context.read<AuthCubit>(), true);
-                      context.read<ResourceCubit>().getSchoolResources(context.read<AuthCubit>());
-                      context.read<ResourceCubit>().getUserBookings(context.read<AuthCubit>());
-                      if (context.read<UserEventCubit>().state.autoSignup) {
-                        context.read<AuthCubit>().runAutoSignup();
-                      }
+                  child: TumbleAppBar(
+                    pageIndex: navState.index,
+                    toggleBookmark: () {
+                      BlocProvider.of<AppSwitchCubit>(context).setLoading();
+                      BlocProvider.of<MainAppNavigationCubit>(context)
+                          .getNavBarItem(NavbarItem.LIST);
+                      context.read<SearchPageCubit>().toggleFavorite(context);
+                      BlocProvider.of<AppSwitchCubit>(context)
+                          .attemptToFetchCachedSchedules();
                     },
-                    child: AnimatedSwitcher(
-                      duration: const Duration(milliseconds: 100),
-                      child: () {
-                        switch (context.read<MainAppNavigationCubit>().state.navbarItem) {
-                          case NavbarItem.SEARCH:
-                            return MultiBlocProvider(
-                              providers: [
-                                BlocProvider.value(value: BlocProvider.of<AppSwitchCubit>(context)),
-                                BlocProvider.value(value: BlocProvider.of<MainAppNavigationCubit>(context)),
-                                BlocProvider.value(value: BlocProvider.of<SearchPageCubit>(context))
-                              ],
-                              key: const ValueKey<int>(0),
-                              child: const TumbleSearchPage(),
-                            );
-                          case NavbarItem.LIST:
-                            return MultiBlocProvider(
-                              providers: [
-                                BlocProvider.value(value: BlocProvider.of<AppSwitchCubit>(context)),
-                                BlocProvider.value(value: BlocProvider.of<MainAppNavigationCubit>(context)),
-                              ],
-                              key: const ValueKey<int>(1),
-                              child: const TumbleListView(),
-                            );
-                          case NavbarItem.WEEK:
-                            return MultiBlocProvider(
-                              providers: [
-                                BlocProvider.value(value: BlocProvider.of<AppSwitchCubit>(context)),
-                                BlocProvider.value(value: BlocProvider.of<MainAppNavigationCubit>(context)),
-                              ],
-                              key: const ValueKey<int>(2),
-                              child: const TumbleWeekView(),
-                            );
-                          case NavbarItem.CALENDAR:
-                            return MultiBlocProvider(
-                              providers: [
-                                BlocProvider.value(value: BlocProvider.of<AppSwitchCubit>(context)),
-                                BlocProvider.value(value: BlocProvider.of<MainAppNavigationCubit>(context)),
-                              ],
-                              key: const ValueKey<int>(3),
-                              child: const TumbleCalendarView(),
-                            );
-                          case NavbarItem.USER_OVERVIEW:
-                            return MultiBlocProvider(
-                              providers: [
-                                BlocProvider.value(value: BlocProvider.of<AuthCubit>(context)),
-                                BlocProvider.value(value: BlocProvider.of<UserEventCubit>(context)),
-                              ],
-                              key: const ValueKey<int>(4),
-                              child: const TumbleUserOverviewPageSwitch(),
-                            );
-                        }
-                      }(),
-                    ),
                   ),
-                bottomNavigationBar: TumbleNavigationBar(onTap: (index) {
-                  BlocProvider.of<MainAppNavigationCubit>(context).getNavBarItem(NavbarItem.values[index]);
-                }));
-          },
-        ),
+                ),
+              ),
+              body: BlocListener<AuthCubit, AuthState>(
+                listenWhen: ((previous, current) =>
+                    previous.status != current.status &&
+                    current.status == AuthStatus.AUTHENTICATED),
+                listener: (context, state) {
+                  context
+                      .read<UserEventCubit>()
+                      .getUserEvents(context.read<AuthCubit>(), true);
+                  context
+                      .read<ResourceCubit>()
+                      .getSchoolResources(context.read<AuthCubit>());
+                  context
+                      .read<ResourceCubit>()
+                      .getUserBookings(context.read<AuthCubit>());
+                  if (context.read<UserEventCubit>().state.autoSignup) {
+                    context.read<AuthCubit>().runAutoSignup();
+                  }
+                },
+                child: AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 100),
+                  child: () {
+                    switch (context
+                        .read<MainAppNavigationCubit>()
+                        .state
+                        .navbarItem) {
+                      case NavbarItem.SEARCH:
+                        return MultiBlocProvider(
+                          providers: [
+                            BlocProvider.value(
+                                value:
+                                    BlocProvider.of<AppSwitchCubit>(context)),
+                            BlocProvider.value(
+                                value: BlocProvider.of<MainAppNavigationCubit>(
+                                    context)),
+                            BlocProvider.value(
+                                value:
+                                    BlocProvider.of<SearchPageCubit>(context))
+                          ],
+                          key: const ValueKey<int>(0),
+                          child: const TumbleSearchPage(),
+                        );
+                      case NavbarItem.LIST:
+                        return MultiBlocProvider(
+                          providers: [
+                            BlocProvider.value(
+                                value:
+                                    BlocProvider.of<AppSwitchCubit>(context)),
+                            BlocProvider.value(
+                                value: BlocProvider.of<MainAppNavigationCubit>(
+                                    context)),
+                          ],
+                          key: const ValueKey<int>(1),
+                          child: const TumbleListView(),
+                        );
+                      case NavbarItem.WEEK:
+                        return MultiBlocProvider(
+                          providers: [
+                            BlocProvider.value(
+                                value:
+                                    BlocProvider.of<AppSwitchCubit>(context)),
+                            BlocProvider.value(
+                                value: BlocProvider.of<MainAppNavigationCubit>(
+                                    context)),
+                          ],
+                          key: const ValueKey<int>(2),
+                          child: const TumbleWeekView(),
+                        );
+                      case NavbarItem.CALENDAR:
+                        return MultiBlocProvider(
+                          providers: [
+                            BlocProvider.value(
+                                value:
+                                    BlocProvider.of<AppSwitchCubit>(context)),
+                            BlocProvider.value(
+                                value: BlocProvider.of<MainAppNavigationCubit>(
+                                    context)),
+                          ],
+                          key: const ValueKey<int>(3),
+                          child: const TumbleCalendarView(),
+                        );
+                      case NavbarItem.USER_OVERVIEW:
+                        return MultiBlocProvider(
+                          providers: [
+                            BlocProvider.value(
+                                value: BlocProvider.of<AuthCubit>(context)),
+                            BlocProvider.value(
+                                value:
+                                    BlocProvider.of<UserEventCubit>(context)),
+                          ],
+                          key: const ValueKey<int>(4),
+                          child: const TumbleUserOverviewPageSwitch(),
+                        );
+                    }
+                  }(),
+                ),
+              ),
+              bottomNavigationBar: TumbleNavigationBar(onTap: (index) {
+                BlocProvider.of<MainAppNavigationCubit>(context)
+                    .getNavBarItem(NavbarItem.values[index]);
+              }));
+        },
+      ),
     );
   }
 }

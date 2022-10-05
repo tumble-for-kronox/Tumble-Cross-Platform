@@ -16,7 +16,8 @@ import 'cubit/resource_cubit.dart';
 class ResourcePage extends StatelessWidget {
   const ResourcePage({Key? key}) : super(key: key);
 
-  Map<String, Widget Function(BuildContext, ResourceState)> _routeBuilders(BuildContext context) {
+  Map<String, Widget Function(BuildContext, ResourceState)> _routeBuilders(
+      BuildContext context) {
     return {
       '/': (context, state) => _schoolResourcesList(context, state),
       '/chosenResource': (context, state) => const TumbleChosenResourcePage(),
@@ -44,7 +45,7 @@ class ResourcePage extends StatelessWidget {
   }
 
   Widget _schoolResourcesList(BuildContext context, ResourceState state) {
-    return Container(
+    return SingleChildScrollView(
       padding: const EdgeInsets.all(20),
       child: Column(
         children: state.schoolResources!

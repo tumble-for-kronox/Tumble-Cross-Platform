@@ -10,7 +10,7 @@ import 'package:tumble/core/ui/search/cubit/search_page_cubit.dart';
 
 class TumbleAppBar extends StatefulWidget {
   final int? pageIndex;
-  final AsyncCallback? toggleBookmark;
+  final VoidCallback? toggleBookmark;
   const TumbleAppBar({
     this.pageIndex,
     this.toggleBookmark,

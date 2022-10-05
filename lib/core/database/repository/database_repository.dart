@@ -68,6 +68,7 @@ class DatabaseRepository implements IDatabaseScheduleService {
     final finder = Finder(filter: Filter.equals('id', id));
     final recordSnapshot =
         await _scheduleStore.findFirst(await _db, finder: finder);
+    log('Current record snapshot: $recordSnapshot');
     if (recordSnapshot != null) {
       return ScheduleModel.fromJson(recordSnapshot.value);
     }

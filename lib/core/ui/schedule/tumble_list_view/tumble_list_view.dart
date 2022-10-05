@@ -74,7 +74,7 @@ class TumbleListView extends StatelessWidget {
             );
           case MainAppStatus.FETCH_ERROR:
             return NoScheduleAvailable(
-              errorType: state.message!,
+              errorType: RuntimeErrorType.scheduleFetchError(),
               cupertinoAlertDialog: CustomAlertDialog.fetchError(
                   context,
                   () => context

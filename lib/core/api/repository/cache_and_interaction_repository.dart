@@ -1,5 +1,8 @@
+import 'dart:developer';
+
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tumble/core/api/apiservices/api_schedule_or_programme_response.dart';
+import 'package:tumble/core/api/apiservices/runtime_error_type.dart';
 import 'package:tumble/core/api/interface/icache_and_interaction_service.dart';
 import 'package:tumble/core/api/repository/backend_repository.dart';
 import 'package:tumble/core/database/database_response.dart';
@@ -41,7 +44,6 @@ class CacheAndInteractionRepository implements ICacheAndInteractionService {
         .getStringList(PreferenceTypes.bookmarks)!
         .map((json) => bookmarkedScheduleModelFromJson(json).scheduleId)
         .contains(scheduleId);
-
     if (favoritesContainsThisScheduleId) {
       final ScheduleModel? userCachedSchedule =
           await _getCachedSchedule(scheduleId);
@@ -60,6 +62,8 @@ class CacheAndInteractionRepository implements ICacheAndInteractionService {
         if (apiResponse.data != null) {
           return apiResponse;
         }
+        return ApiScheduleOrProgrammeResponse.error(
+            RuntimeErrorType.noCachedSchedule());
       }
 
       return ApiScheduleOrProgrammeResponse.cached(userCachedSchedule);
