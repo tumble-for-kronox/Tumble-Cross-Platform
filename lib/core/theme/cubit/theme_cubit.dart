@@ -54,6 +54,7 @@ class ThemeCubit extends Cubit<ThemeState> {
   @override
   Future<void> close() {
     _themeSubscription.cancel();
+    _langSubscription.cancel();
     themeRepository.dispose();
     return super.close();
   }

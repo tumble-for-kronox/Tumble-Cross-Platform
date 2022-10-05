@@ -13,9 +13,9 @@ import 'package:tumble/core/ui/user/misc/user_account_info_external_link.dart';
 import 'package:tumble/core/ui/user/overview/user_bookings.dart';
 
 class UserAccountInfo extends StatefulWidget {
-  Future<void> Function() onRefresh;
+  final Future<void> Function() onRefresh;
 
-  UserAccountInfo({Key? key, required this.onRefresh}) : super(key: key);
+  const UserAccountInfo({Key? key, required this.onRefresh}) : super(key: key);
 
   @override
   State<UserAccountInfo> createState() => _UserAccountInfo();

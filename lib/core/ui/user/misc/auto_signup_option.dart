@@ -28,7 +28,6 @@ class AutoSignupOption extends StatelessWidget {
                     ? showCupertinoDialog(
                         context: context, builder: (_) => CustomAlertDialog.automaticExamSignupWarning(context, value))
                     : BlocProvider.of<UserEventCubit>(context).autoSignupToggle(value);
-                ;
               }),
         );
       },
