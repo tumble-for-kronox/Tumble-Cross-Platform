@@ -66,12 +66,19 @@ void onPressSchool(
   if (school.loginRequired) {
     navigator.push(NavigationRouteLabels.loginPageRoot,
         arguments: school.schoolName);
-  } else {
+  } else if (getIt<SharedPreferences>().getString(PreferenceTypes.school) !=
+      null) {
     BlocProvider.of<InitCubit>(context)
         .changeSchool(school.schoolName)
         .then((_) {
       BlocProvider.of<AuthCubit>(context).logout();
       navigator.pushAndRemoveAll(NavigationRouteLabels.appTopRootBuilder);
+    });
+  } else {
+    BlocProvider.of<InitCubit>(context)
+        .changeSchool(school.schoolName)
+        .then((_) {
+      BlocProvider.of<AuthCubit>(context).logout();
     });
   }
 }

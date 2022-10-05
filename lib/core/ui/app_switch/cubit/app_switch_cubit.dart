@@ -43,12 +43,16 @@ class AppSwitchCubit extends Cubit<AppSwitchState> {
 
   ScrollController get controller => _listViewScrollController;
   int get viewType => getIt<SharedPreferences>().getInt(PreferenceTypes.view)!;
-  bool get hasBookMarkedSchedules => getIt<SharedPreferences>().getStringList(PreferenceTypes.bookmarks)!.isNotEmpty;
+  bool get hasBookMarkedSchedules => getIt<SharedPreferences>()
+      .getStringList(PreferenceTypes.bookmarks)!
+      .isNotEmpty;
 
-  bool toTopButtonVisible() => _listViewScrollController.hasClients ? _listViewScrollController.offset >= 1000 : false;
+  bool toTopButtonVisible() => _listViewScrollController.hasClients
+      ? _listViewScrollController.offset >= 1000
+      : false;
 
   Future<void> _init() async {
-    dev.log('Fetching ...');
+    dev.log(name: 'app_switch_cubit', 'Fetching cache ...');
     await attemptToFetchCachedSchedules();
     _listViewScrollController.addListener((setScrollController));
   }
@@ -83,20 +87,35 @@ class AppSwitchCubit extends Cubit<AppSwitchState> {
       if (scheduleId != null && userHasBookmarks) {
         if (toggledToBeVisible != null && toggledToBeVisible) {
           final ApiScheduleOrProgrammeResponse apiResponse =
-              await _cacheAndInteractionService.getCachedOrNewSchedule(scheduleId);
+              await _cacheAndInteractionService
+                  .getCachedOrNewSchedule(scheduleId);
 
           switch (apiResponse.status) {
             case ApiScheduleOrProgrammeStatus.FETCHED:
             case ApiScheduleOrProgrammeStatus.CACHED:
-              ScheduleModel currentScheduleModel = apiResponse.data!;
+              ScheduleModel currentScheduleModel = apiResponse.data;
               if (currentScheduleModel.isNotPhonySchedule()) {
                 matrixListOfDays.add(currentScheduleModel.days);
                 listOfScheduleModelAndCourses.add(ScheduleModelAndCourses(
                     scheduleModel: currentScheduleModel,
-                    courses: await _databaseService.getCachedCoursesFromId(currentScheduleModel.id)));
+                    courses: await _databaseService
+                        .getCachedCoursesFromId(currentScheduleModel.id)));
               }
               break;
+            case ApiScheduleOrProgrammeStatus.ERROR:
+
+              /// If an error occurs here, there is an underlying error in
+              /// communication with regards to communication, the cache is
+              /// broken, or the backend is down.
+              emit(state.copyWith(status: MainAppStatus.FETCH_ERROR));
+              dev.log(
+                  name: 'app_switch_cubit',
+                  'Error in retrieveing schedule cache ..\nError on schedule: [$scheduleId');
+              return;
             default:
+              dev.log(
+                  name: 'app_switch_cubit',
+                  'Unknown communication error occured on schedule: [$scheduleId]..');
               break;
           }
         }
@@ -105,8 +124,10 @@ class AppSwitchCubit extends Cubit<AppSwitchState> {
       }
     }
     if (listOfScheduleModelAndCourses.isNotEmpty) {
-      final flattened = matrixListOfDays.expand((listOfDays) => listOfDays).toList();
-      flattened.sort((prevDay, nextDay) => prevDay.isoString.compareTo(nextDay.isoString));
+      final flattened =
+          matrixListOfDays.expand((listOfDays) => listOfDays).toList();
+      flattened.sort(
+          (prevDay, nextDay) => prevDay.isoString.compareTo(nextDay.isoString));
 
       var seen = <String>{};
 
@@ -117,7 +138,10 @@ class AppSwitchCubit extends Cubit<AppSwitchState> {
               date: dayGrouper.value[0].date,
               isoString: dayGrouper.value[0].isoString,
               weekNumber: dayGrouper.value[0].weekNumber,
-              events: dayGrouper.value.expand((day) => day.events).where((event) => seen.add(event.id)).toList()
+              events: dayGrouper.value
+                  .expand((day) => day.events)
+                  .where((event) => seen.add(event.id))
+                  .toList()
                 ..sort(((a, b) => a.from.compareTo(b.from)))))
           .toList();
 
@@ -127,6 +151,9 @@ class AppSwitchCubit extends Cubit<AppSwitchState> {
         listOfDays: listOfDays,
         listOfWeeks: listOfDays.splitToWeek(),
       ));
+      dev.log(
+          name: 'app_switch_cubit',
+          'Successfully updated entire schedule view. Exiting ..');
     } else {
       emit(state.copyWith(status: MainAppStatus.NO_VIEW));
     }
@@ -141,7 +168,8 @@ class AppSwitchCubit extends Cubit<AppSwitchState> {
   }
 
   void scrollToTop() {
-    _listViewScrollController.animateTo(0, duration: const Duration(seconds: 1), curve: Curves.easeInOut);
+    _listViewScrollController.animateTo(0,
+        duration: const Duration(seconds: 1), curve: Curves.easeInOut);
   }
 
   setLoading() {
@@ -151,7 +179,8 @@ class AppSwitchCubit extends Cubit<AppSwitchState> {
   Color getColorForCourse(Event event) {
     return Color(state.scheduleModelAndCourses!
         .expand((scheduleModelAndCourses) => scheduleModelAndCourses!.courses)
-        .firstWhere((courseUiModel) => courseUiModel!.courseId == event.course.id)!
+        .firstWhere(
+            (courseUiModel) => courseUiModel!.courseId == event.course.id)!
         .color);
   }
 
@@ -161,8 +190,9 @@ class AppSwitchCubit extends Cubit<AppSwitchState> {
         _notificationBuilder.buildOffsetNotification(
             id: event.id.encodeUniqueIdentifier(),
             channelKey: state.scheduleModelAndCourses!
-                .firstWhere((scheduleModelAndCourses) => scheduleModelAndCourses!.courses
-                    .any((courseUiModel) => courseUiModel!.courseId == event.course.id))!
+                .firstWhere((scheduleModelAndCourses) =>
+                    scheduleModelAndCourses!.courses.any((courseUiModel) =>
+                        courseUiModel!.courseId == event.course.id))!
                 .scheduleModel
                 .id,
             groupkey: event.course.id,
@@ -170,25 +200,35 @@ class AppSwitchCubit extends Cubit<AppSwitchState> {
             body: event.course.englishName,
             date: event.from);
 
-        dev.log('Created notification for event "${event.title.capitalize()}"');
+        dev.log(
+            name: 'app_switch_cubit',
+            'Created notification for event "${event.title.capitalize()}"');
 
-        showScaffoldMessage(context, S.scaffoldMessages.createdNotificationForEvent(event.title.capitalize()));
+        showScaffoldMessage(
+            context,
+            S.scaffoldMessages
+                .createdNotificationForEvent(event.title.capitalize()));
 
         return true;
       }
-      dev.log('No new notifications created. User not allowed');
+      dev.log(
+          name: 'app_switch_cubit',
+          'No new notifications created. User not allowed');
       return false;
     });
   }
 
-  Future<bool> createNotificationForCourse(Event event, BuildContext context) async {
+  Future<bool> createNotificationForCourse(
+      Event event, BuildContext context) async {
     return _awesomeNotifications.isNotificationAllowed().then((isAllowed) {
       if (isAllowed) {
         List<Event> events = state.scheduleModelAndCourses!
-            .expand((scheduleModelAndCourses) => scheduleModelAndCourses!.scheduleModel.days)
+            .expand((scheduleModelAndCourses) =>
+                scheduleModelAndCourses!.scheduleModel.days)
             .expand((Day day) => day.events) // Flatten nested list
             .toList()
-            .where((Event eventInDefaultSchedule) => event.course.id == eventInDefaultSchedule.course.id)
+            .where((Event eventInDefaultSchedule) =>
+                event.course.id == eventInDefaultSchedule.course.id)
             .toList();
 
         event.id.encodeUniqueIdentifier();
@@ -198,8 +238,9 @@ class AppSwitchCubit extends Cubit<AppSwitchState> {
             _notificationBuilder.buildOffsetNotification(
                 id: event.id.encodeUniqueIdentifier(),
                 channelKey: state.scheduleModelAndCourses!
-                    .firstWhere((scheduleModelAndCourses) => scheduleModelAndCourses!.courses
-                        .any((courseUiModel) => courseUiModel!.courseId == event.course.id))!
+                    .firstWhere((scheduleModelAndCourses) =>
+                        scheduleModelAndCourses!.courses.any((courseUiModel) =>
+                            courseUiModel!.courseId == event.course.id))!
                     .scheduleModel
                     .id,
                 groupkey: event.course.id,
@@ -208,33 +249,46 @@ class AppSwitchCubit extends Cubit<AppSwitchState> {
                 date: event.from);
           }
         }
-        dev.log('Created ${events.length} new notifications for ${event.course}');
+        dev.log(
+            name: 'app_switch_cubit',
+            'Created ${events.length} new notifications for ${event.course}');
+
         showScaffoldMessage(
-            context, S.scaffoldMessages.createdNotificationForCourse(event.course.englishName, events.length));
+            context,
+            S.scaffoldMessages.createdNotificationForCourse(
+                event.course.englishName, events.length));
 
         return true;
       }
-      dev.log('No new notifications created. Not allowed');
+      dev.log(
+          name: 'app_switch_cubit',
+          'No new notifications created. Not allowed');
       return false;
     });
   }
 
   Future<bool> checkIfNotificationIsSetForEvent(Event event) async =>
-      (((await _awesomeNotifications.listScheduledNotifications()).singleWhereOrNull(
-            (notificationModel) => notificationModel.content!.id == event.id.encodeUniqueIdentifier(),
+      (((await _awesomeNotifications.listScheduledNotifications())
+              .singleWhereOrNull(
+            (notificationModel) =>
+                notificationModel.content!.id ==
+                event.id.encodeUniqueIdentifier(),
           )) !=
           null);
 
   /// Returns true if course id is found in current list of notifications
   Future<bool> checkIfNotificationIsSetForCourse(Event event) async {
-    return (((await _awesomeNotifications.listScheduledNotifications()).firstWhereOrNull(
-          (notificationModel) => notificationModel.content!.groupKey == event.course.id,
+    return (((await _awesomeNotifications.listScheduledNotifications())
+            .firstWhereOrNull(
+          (notificationModel) =>
+              notificationModel.content!.groupKey == event.course.id,
         )) !=
         null);
   }
 
   Future<bool> cancelEventNotification(Event event) async {
-    await _awesomeNotifications.cancelSchedule(event.id.encodeUniqueIdentifier());
+    await _awesomeNotifications
+        .cancelSchedule(event.id.encodeUniqueIdentifier());
     return !await checkIfNotificationIsSetForEvent(event);
   }
 
@@ -249,13 +303,15 @@ class AppSwitchCubit extends Cubit<AppSwitchState> {
         .updateCourseInstance(CourseUiModel(
             scheduleId: state.scheduleModelAndCourses!
                 .firstWhere((scheduleModelAndCourses) =>
-                    scheduleModelAndCourses!.courses.any((courseUiModel) => courseUiModel!.courseId == course.id))!
+                    scheduleModelAndCourses!.courses.any((courseUiModel) =>
+                        courseUiModel!.courseId == course.id))!
                 .scheduleModel
                 .id,
             courseId: course.id,
             color: color.value))
         .then((value) {
-      showScaffoldMessage(context, S.scaffoldMessages.updatedCourseColor(course.englishName));
+      showScaffoldMessage(
+          context, S.scaffoldMessages.updatedCourseColor(course.englishName));
       attemptToFetchCachedSchedules();
     });
   }
@@ -273,7 +329,8 @@ class AppSwitchCubit extends Cubit<AppSwitchState> {
 
     for (var bookmark in bookmarks) {
       final ApiScheduleOrProgrammeResponse apiResponse =
-          await _cacheAndInteractionService.scheduleFetchDispatcher(bookmark.scheduleId);
+          await _cacheAndInteractionService
+              .scheduleFetchDispatcher(bookmark.scheduleId);
 
       switch (apiResponse.status) {
         case ApiScheduleOrProgrammeStatus.FETCHED:

@@ -68,6 +68,9 @@ class DatabaseRepository implements IDatabaseScheduleService {
     final finder = Finder(filter: Filter.equals('id', id));
     final recordSnapshot =
         await _scheduleStore.findFirst(await _db, finder: finder);
+    log(
+        name: 'database_repository',
+        'Current record snapshot: $recordSnapshot');
     if (recordSnapshot != null) {
       return ScheduleModel.fromJson(recordSnapshot.value);
     }
@@ -107,13 +110,17 @@ class DatabaseRepository implements IDatabaseScheduleService {
         await _db, courseUiModelToJson(courseUiModel),
         finder:
             Finder(filter: Filter.equals('courseId', courseUiModel.courseId)));
-    log("updateCourseInstance successfully called on id  --> ${courseUiModel.courseId}");
+    log(
+        name: 'database_repository',
+        "updateCourseInstance successfully called on id  --> ${courseUiModel.courseId}");
   }
 
   @override
   Future addCourseInstance(CourseUiModel courseUiModel) async {
     await _courseColorStore.add(await _db, courseUiModelToJson(courseUiModel));
-    log("addCourseInstance sucessfully called on id --> ${courseUiModel.toString()}");
+    log(
+        name: 'database_repository',
+        "addCourseInstance sucessfully called on id --> ${courseUiModel.toString()}");
   }
 
   @override
@@ -122,7 +129,9 @@ class DatabaseRepository implements IDatabaseScheduleService {
     final recordSnapshot =
         await _courseColorStore.findFirst(await _db, finder: finder);
     Color color = Color(CourseUiModel.fromJson(recordSnapshot!.value).color);
-    log("getCourseColor sucessfully called called on id --> $id");
+    log(
+        name: 'database_repository',
+        "getCourseColor sucessfully called called on id --> $id");
     return color;
   }
 
@@ -137,7 +146,7 @@ class DatabaseRepository implements IDatabaseScheduleService {
   @override
   Future removeAllCachedCourseColors() async {
     await _courseColorStore.delete(await _db);
-    log('Removed all cached course colors');
+    log(name: 'database_repository', 'Removed all cached course colors');
   }
 
   @override

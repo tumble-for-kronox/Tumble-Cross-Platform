@@ -4,14 +4,18 @@ class DrawerCubit extends Cubit<DrawerState> {
   DrawerCubit(Locale locale)
       : super(DrawerState(
           locale: locale,
-          theme: getIt<SharedPreferences>().getString(PreferenceTypes.theme)!.capitalize(),
-          viewType: ScheduleViewTypes.viewTypesMap[getIt<SharedPreferences>().getInt(PreferenceTypes.view)],
+          theme: getIt<SharedPreferences>()
+              .getString(PreferenceTypes.theme)!
+              .capitalize(),
+          viewType: ScheduleViewTypes.viewTypesMap[
+              getIt<SharedPreferences>().getInt(PreferenceTypes.view)],
           school: getIt<SharedPreferences>().getString(PreferenceTypes.school),
           bookmarks: getIt<SharedPreferences>()
               .getStringList(PreferenceTypes.bookmarks)!
               .map((e) => bookmarkedScheduleModelFromJson(e))
               .toList(),
-          notificationTime: getIt<SharedPreferences>().getInt(PreferenceTypes.notificationOffset),
+          notificationTime: getIt<SharedPreferences>()
+              .getInt(PreferenceTypes.notificationOffset),
           mapOfIdToggles: {
             for (var bookmark in getIt<SharedPreferences>()
                 .getStringList(PreferenceTypes.bookmarks)!
@@ -50,17 +54,20 @@ class DrawerCubit extends Cubit<DrawerState> {
 
   /// Toggle visibility of certain schedule via settings tab
   void toggleSchedule(String scheduleId, bool toggledValue) {
-    List<BookmarkedScheduleModel> bookmarkedSchedules = getIt<SharedPreferences>()
-        .getStringList(PreferenceTypes.bookmarks)!
-        .map((json) => bookmarkedScheduleModelFromJson(json))
-        .toList();
+    List<BookmarkedScheduleModel> bookmarkedSchedules =
+        getIt<SharedPreferences>()
+            .getStringList(PreferenceTypes.bookmarks)!
+            .map((json) => bookmarkedScheduleModelFromJson(json))
+            .toList();
 
-    bookmarkedSchedules.removeWhere((bookmark) => bookmark.scheduleId == scheduleId);
+    bookmarkedSchedules
+        .removeWhere((bookmark) => bookmark.scheduleId == scheduleId);
 
-    bookmarkedSchedules.add(BookmarkedScheduleModel(scheduleId: scheduleId, toggledValue: toggledValue));
+    bookmarkedSchedules.add(BookmarkedScheduleModel(
+        scheduleId: scheduleId, toggledValue: toggledValue));
 
-    getIt<SharedPreferences>()
-        .setStringList(PreferenceTypes.bookmarks, bookmarkedSchedules.map((bookmark) => jsonEncode(bookmark)).toList());
+    getIt<SharedPreferences>().setStringList(PreferenceTypes.bookmarks,
+        bookmarkedSchedules.map((bookmark) => jsonEncode(bookmark)).toList());
 
     emit(state.copyWith(bookmarks: bookmarkedSchedules, mapOfIdToggles: {
       for (var bookmark in getIt<SharedPreferences>()
@@ -77,8 +84,8 @@ class DrawerCubit extends Cubit<DrawerState> {
         .toList();
     bookmarks.removeWhere((bookmark) => bookmark.scheduleId == id);
 
-    getIt<SharedPreferences>()
-        .setStringList(PreferenceTypes.bookmarks, bookmarks.map((bookmark) => jsonEncode(bookmark)).toList());
+    getIt<SharedPreferences>().setStringList(PreferenceTypes.bookmarks,
+        bookmarks.map((bookmark) => jsonEncode(bookmark)).toList());
 
     await _databaseService.remove(id, AccessStores.SCHEDULE_STORE);
     await _databaseService.remove(id, AccessStores.COURSE_COLOR_STORE);
@@ -98,9 +105,12 @@ class DrawerCubit extends Cubit<DrawerState> {
 
   void setNotificationTime(int time) async {
     getIt<SharedPreferences>().setInt(PreferenceTypes.notificationOffset, time);
-    getIt<NotificationRepository>().assignAllNotificationsWithNewDuration(Duration(minutes: time));
+    getIt<NotificationRepository>()
+        .assignAllNotificationsWithNewDuration(Duration(minutes: time));
 
-    emit(state.copyWith(notificationTime: getIt<SharedPreferences>().getInt(PreferenceTypes.notificationOffset)));
+    emit(state.copyWith(
+        notificationTime: getIt<SharedPreferences>()
+            .getInt(PreferenceTypes.notificationOffset)));
   }
 
   Map<String, int> getNotificationTimes(BuildContext context) {
@@ -117,13 +127,17 @@ class DrawerCubit extends Cubit<DrawerState> {
       "System Language": null,
     };
 
-    localeMap.addAll(
-        {for (var item in AppLocalizations.supportedLocales) LocaleNames.getDisplayLanguage(item.languageCode): item});
+    localeMap.addAll({
+      for (var item in AppLocalizations.supportedLocales)
+        LocaleNames.getDisplayLanguage(item.languageCode): item
+    });
 
     return localeMap;
   }
 
   bool getScheduleToggleValue(String scheduleId) {
-    return state.bookmarks!.firstWhere((bookmark) => bookmark.scheduleId == scheduleId).toggledValue;
+    return state.bookmarks!
+        .firstWhere((bookmark) => bookmark.scheduleId == scheduleId)
+        .toggledValue;
   }
 }
