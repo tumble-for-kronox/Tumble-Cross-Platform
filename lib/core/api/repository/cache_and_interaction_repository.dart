@@ -40,15 +40,16 @@ class CacheAndInteractionRepository implements ICacheAndInteractionService {
   @override
   Future<ApiScheduleOrProgrammeResponse> getCachedOrNewSchedule(
       String scheduleId) async {
-    final bool favoritesContainsThisScheduleId = _preferenceService
+    final bool bookmarksContainsThisScheduleId = _preferenceService
         .getStringList(PreferenceTypes.bookmarks)!
         .map((json) => bookmarkedScheduleModelFromJson(json).scheduleId)
         .contains(scheduleId);
-    if (favoritesContainsThisScheduleId) {
+
+    if (bookmarksContainsThisScheduleId) {
       final ScheduleModel? userCachedSchedule =
           await _getCachedSchedule(scheduleId);
 
-      /// If the schedule for some reason is not found in the database (maybe it was just bookmarked),
+      /// If the schedule for some reason is not found in the database,
       /// or if the schedule is more than 30 minutes old
       if (userCachedSchedule == null ||
           DateTime.now()
@@ -61,9 +62,11 @@ class CacheAndInteractionRepository implements ICacheAndInteractionService {
             await scheduleFetchDispatcher(scheduleId);
         if (apiResponse.data != null) {
           return apiResponse;
+        } else if (userCachedSchedule != null) {
+          return ApiScheduleOrProgrammeResponse.cached(userCachedSchedule);
         }
         return ApiScheduleOrProgrammeResponse.error(
-            RuntimeErrorType.noCachedSchedule());
+            RuntimeErrorType.scheduleFetchError());
       }
 
       return ApiScheduleOrProgrammeResponse.cached(userCachedSchedule);
