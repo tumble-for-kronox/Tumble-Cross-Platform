@@ -221,9 +221,13 @@ class SearchPageCubit extends Cubit<SearchPageState> {
     await _awesomeNotifications.removeChannel(state.previewCurrentScheduleId!);
 
     emit(state.copyWith(previewToggledFavorite: false));
+    log(name: 'search_page_cubit', 'Finished executing bookmark REMOVE');
   }
 
   Future<void> _toggleSave() async {
+    /// Add this schedule to local database
+    _databaseService.add(state.previewScheduleModelAndCourses!.scheduleModel);
+
     List<BookmarkedScheduleModel> bookmarks = getIt<SharedPreferences>()
         .getStringList(PreferenceTypes.bookmarks)!
         .map((json) => bookmarkedScheduleModelFromJson(json))
@@ -240,26 +244,16 @@ class SearchPageCubit extends Cubit<SearchPageState> {
       }
     }
 
-    await _databaseService
-        .add(state.previewScheduleModelAndCourses!.scheduleModel);
-
     /// Rebuild notification channels
     _notificationRepository.initialize();
 
     _textEditingControllerSearch.clear();
-
     emit(state.copyWith(
-        focused: false,
         searchPageStatus: SearchPageStatus.INITIAL,
-        previewFetchStatus: PreviewFetchStatus.INITIAL,
+        focused: false,
         clearButtonVisible: false,
-        errorMessage: null,
-        programList: null,
-        previewToTopButtonVisible: false,
-        previewScheduleModelAndCourses: null,
-        previewListOfDays: null,
-        previewToggledFavorite: false,
-        previewCurrentScheduleId: null));
+        previewFetchStatus: PreviewFetchStatus.INITIAL));
+    log(name: 'search_page_cubit', 'Finished executing bookmark SAVE');
   }
 
   void resetCubit() {
