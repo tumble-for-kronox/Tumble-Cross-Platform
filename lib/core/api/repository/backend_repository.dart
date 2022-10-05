@@ -281,7 +281,7 @@ class BackendRepository implements IBackendService {
       if (response == null) {
         return ApiBookingResponse.error(RuntimeErrorType.timeoutError());
       }
-      return await response.parseBookResource();
+      return response.parseBookResource();
     } else {
       var uri = Uri.https(ApiEndPoints.baseUrl, ApiEndPoints.putBookResource,
           {ApiEndPoints.school: school.toString(), ApiEndPoints.sessionToken: sessionToken});
@@ -307,7 +307,7 @@ class BackendRepository implements IBackendService {
       if (response == null) {
         return ApiBookingResponse.error(RuntimeErrorType.timeoutError());
       }
-      return await response.parseUnbookResource();
+      return response.parseUnbookResource();
     } else {
       var uri = Uri.https(ApiEndPoints.baseUrl, ApiEndPoints.putUnbookResource, {
         ApiEndPoints.school: school.toString(),
@@ -340,7 +340,7 @@ class BackendRepository implements IBackendService {
       if (response == null) {
         return ApiBookingResponse.error(RuntimeErrorType.timeoutError());
       }
-      return await response.parseConfirmBooking();
+      return response.parseConfirmBooking();
     } else {
       var uri = Uri.https(ApiEndPoints.baseUrl, ApiEndPoints.putConfirmBooking, {
         ApiEndPoints.school: school.toString(),
