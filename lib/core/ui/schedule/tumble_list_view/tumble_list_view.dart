@@ -20,15 +20,19 @@ class TumbleListView extends StatelessWidget {
     return BlocBuilder<AppSwitchCubit, AppSwitchState>(
       builder: (context, state) {
         switch (state.status) {
-          case MainAppStatus.INITIAL:
+          case AppScheduleViewStatus.INITIAL:
             return NoScheduleAvailable(
               cupertinoAlertDialog: CustomAlertDialog.noBookMarkedSchedules(
-                  context, () => context.read<MainAppNavigationCubit>().getNavBarItem(NavbarItem.SEARCH), navigator),
+                  context,
+                  () => context
+                      .read<MainAppNavigationCubit>()
+                      .getNavBarItem(NavbarItem.SEARCH),
+                  navigator),
               errorType: RuntimeErrorType.noCachedSchedule(),
             );
-          case MainAppStatus.LOADING:
+          case AppScheduleViewStatus.LOADING:
             return const TumbleLoading();
-          case MainAppStatus.POPULATED_VIEW:
+          case AppScheduleViewStatus.POPULATED_VIEW:
             return Stack(
               children: [
                 RefreshIndicator(
@@ -42,41 +46,59 @@ class TumbleListView extends StatelessWidget {
                         children: state.listOfDays!
                             .where((day) =>
                                 day.events.isNotEmpty &&
-                                day.isoString.isAfter(DateTime.now().subtract(const Duration(days: 1))))
+                                day.isoString.isAfter(DateTime.now()
+                                    .subtract(const Duration(days: 1))))
                             .map((day) => TumbleListViewDayContainer(
                                   day: day,
-                                  mainAppCubit: BlocProvider.of<AppSwitchCubit>(context),
+                                  mainAppCubit:
+                                      BlocProvider.of<AppSwitchCubit>(context),
                                 ))
                             .toList()),
                   ),
                 ),
                 AnimatedPositioned(
                   bottom: 30,
-                  right: context.read<AppSwitchCubit>().toTopButtonVisible() ? 35 : -60,
+                  right: context.read<AppSwitchCubit>().toTopButtonVisible()
+                      ? 35
+                      : -60,
                   duration: const Duration(milliseconds: 200),
-                  child: ToTopButton(scrollToTop: () => context.read<AppSwitchCubit>().scrollToTop()),
+                  child: ToTopButton(
+                      scrollToTop: () =>
+                          context.read<AppSwitchCubit>().scrollToTop()),
                 ),
               ],
             );
-          case MainAppStatus.FETCH_ERROR:
+          case AppScheduleViewStatus.FETCH_ERROR:
             return NoScheduleAvailable(
               errorType: RuntimeErrorType.scheduleFetchError(),
-              cupertinoAlertDialog: CustomAlertDialog.fetchError(
-                  context, () => context.read<MainAppNavigationCubit>().getNavBarItem(NavbarItem.SEARCH), navigator),
+              cupertinoAlertDialog: CustomAlertDialog.scheduleCacheFetchError(
+                  context,
+                  () => context
+                      .read<MainAppNavigationCubit>()
+                      .getNavBarItem(NavbarItem.SEARCH),
+                  navigator),
             );
 
-          case MainAppStatus.EMPTY_SCHEDULE:
+          case AppScheduleViewStatus.EMPTY_SCHEDULE:
             return NoScheduleAvailable(
               errorType: RuntimeErrorType.emptyScheduleError(),
               cupertinoAlertDialog: CustomAlertDialog.previewContainsNoViews(
-                  context, () => context.read<MainAppNavigationCubit>().getNavBarItem(NavbarItem.SEARCH), navigator),
+                  context,
+                  () => context
+                      .read<MainAppNavigationCubit>()
+                      .getNavBarItem(NavbarItem.SEARCH),
+                  navigator),
             );
 
-          case MainAppStatus.NO_VIEW:
+          case AppScheduleViewStatus.NO_VIEW:
             return NoScheduleAvailable(
               errorType: RuntimeErrorType.noBookmarks(),
               cupertinoAlertDialog: CustomAlertDialog.noBookMarkedSchedules(
-                  context, () => context.read<MainAppNavigationCubit>().getNavBarItem(NavbarItem.SEARCH), navigator),
+                  context,
+                  () => context
+                      .read<MainAppNavigationCubit>()
+                      .getNavBarItem(NavbarItem.SEARCH),
+                  navigator),
             );
         }
       },
