@@ -21,6 +21,7 @@ class ResourceState extends Equatable {
   final String? selectedLocationId;
   final List<Booking>? userBookings;
   final List<bool>? confirmationLoading;
+  final List<bool>? unbookLoading;
   final String? userBookingsErrorMessage;
   final String? resourcePageErrorMessage;
 
@@ -35,6 +36,7 @@ class ResourceState extends Equatable {
     this.currentLoadedResource,
     this.userBookings,
     this.confirmationLoading,
+    this.unbookLoading,
     this.availableTimeSlots,
     this.availableLocationsForTimeSlots,
     this.selectedLocationId,
@@ -50,6 +52,7 @@ class ResourceState extends Equatable {
     ResourceModel? currentLoadedResource,
     List<Booking>? userBookings,
     List<bool>? confirmationLoading,
+    List<bool>? unbookLoading,
     String? userBookingsErrorMessage,
     String? resourcePageErrorMessage,
     List<TimeSlot>? availableTimeSlots,
@@ -66,6 +69,7 @@ class ResourceState extends Equatable {
         currentLoadedResource: currentLoadedResource ?? this.currentLoadedResource,
         userBookings: userBookings ?? this.userBookings,
         confirmationLoading: confirmationLoading ?? this.confirmationLoading,
+        unbookLoading: unbookLoading ?? this.unbookLoading,
         userBookingsErrorMessage: userBookingsErrorMessage ?? this.userBookingsErrorMessage,
         resourcePageErrorMessage: resourcePageErrorMessage ?? this.resourcePageErrorMessage,
         availableTimeSlots: availableTimeSlots ?? this.availableTimeSlots,
@@ -83,6 +87,7 @@ class ResourceState extends Equatable {
     ResourceModel? currentLoadedResource,
     List<Booking>? userBookings,
     List<bool>? confirmationLoading,
+    List<bool>? unbookLoading,
     String? userBookingsErrorMessage,
     String? resourcePageErrorMessage,
     List<TimeSlot>? availableTimeSlots,
@@ -97,6 +102,7 @@ class ResourceState extends Equatable {
         currentLoadedResource: currentLoadedResource ?? this.currentLoadedResource,
         userBookings: userBookings ?? this.userBookings,
         confirmationLoading: confirmationLoading ?? this.confirmationLoading,
+        unbookLoading: unbookLoading ?? this.unbookLoading,
         userBookingsErrorMessage: userBookingsErrorMessage ?? this.userBookingsErrorMessage,
         resourcePageErrorMessage: resourcePageErrorMessage ?? this.resourcePageErrorMessage,
         availableTimeSlots: availableTimeSlots ?? this.availableTimeSlots,
@@ -121,5 +127,6 @@ class ResourceState extends Equatable {
         selectedLocationId,
         selectedTimeSlot,
         confirmationLoading,
+        unbookLoading,
       ];
 }

@@ -22,6 +22,8 @@ class BackgroundTask {
     final databaseService = getIt<DatabaseRepository>();
     final notificationService = getIt<NotificationRepository>();
 
+    notificationService.initialize();
+
     final bookmarkedSchedulesToggledToBeVisible = preferenceService
         .getStringList(PreferenceTypes.bookmarks)!
         .map((json) => bookmarkedScheduleModelFromJson(json))

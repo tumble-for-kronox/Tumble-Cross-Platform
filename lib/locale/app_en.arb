@@ -301,6 +301,41 @@
     },
     "scaffoldMessageBookedResource": "Successfully booked",
     "scaffoldMessageUnbookedResource": "Successfully unbooked",
+    "scaffoldMessageConfirmedBooking": "Successfully confirmed your booking",
+    "scaffoldMessageAutoSignupCompleted": "You have been signed up for {numOfSignedUpEvents} events! Check them out in the event list",
+    "@scaffoldMessageAutoSignupCompleted": {
+        "description": "Message to show how many events a user was signed up to through auto-signup",
+        "placeholders": {
+            "numOfSignedUpEvents": {
+                "type": "int",
+                "example": "2"
+            }
+        }
+    },
+    "scaffoldMessageAutoSignupFailed": "There were {numOfFailedSignUpEvents} events we couldn't sign you up for! Check them out in the event list",
+    "@scaffoldMessageAutoSignupFailed": {
+        "description": "Message to show how many events failed to sign up through auto-signup",
+        "placeholders": {
+            "numOfFailedSignUpEvents": {
+                "type": "int",
+                "example": "2"
+            }
+        }
+    },
+    "scaffoldMessageAutoSignupCompletedAndFailed": "You have been signed up for {numOfSignedUpEvents}, but unfortunately there were {numOfFailedSignUpEvents} events we couldn't sign you up for! Check them out in the event list",
+    "@scaffoldMessageAutoSignupCompletedAndFailed": {
+        "description": "Message to show how many events failed to sign up through auto-signup",
+        "placeholders": {
+            "numOfFailedSignUpEvents": {
+                "type": "int",
+                "example": "2"
+            },
+            "numOfSignedUpEvents": {
+                "type": "int",
+                "example": "2"
+            }
+        }
+    },
     "runtimeErrorProgramFetch": "No program found",
     "runtimeErrorScheduleFetch": "No schedule found",
     "runtimeErrorTimeout": "Search timed out",
@@ -318,6 +353,7 @@
     "runtimeErrorResourceUnavailable": "The resource you tried reaching is unfortunately unavailable",
     "runtimeErrorMaxResourcesBooked": "You already have the max number of resources booked",
     "runtimeErrorResourceBookCollision": "The resource could not be booked. You may already have a different booking in the same time slot",
+    "runtimeErrorConfirmBookingFailed": "Couldn't confirm the booking. Something must have gone wrong",
     "popUpNotificationPermissionTitle": "Allow notifications",
     "popUpNotificationPermissionDescription": "This app would like to send you notifications",
     "popUpExamAutoSignupTitle": "Automatic exam registration should be used with caution!",
@@ -339,6 +375,7 @@
     "tryAgain": "Please try again",
     "send": "Send",
     "unknown": "Unknown",
+    "confirm": "Confirm",
     "eventOptionsRemoveEventNotification": "Remove notification for event",
     "eventOptionsRemoveCourseNotifications": "Remove all nofitications for course",
     "eventOptionsAddEventNotification": "Set notification for event",
@@ -373,5 +410,10 @@
     "contributorsModalTranslation": "Translation",
     "contributorsModalSpecialThanks": "Special thanks",
     "userBookingsNoBookings": "You currently have no bookings",
-    "userBookingsNoAvailableTimeSlots": "There aren't any rooms available, try another date"
+    "userBookingsNoAvailableTimeSlots": "There aren't any rooms available, try another date",
+    "userBookingsUnbookButton": "Unbook",
+    "userBookingsBookingCardRoomTitle": "Room",
+    "userBookingsBookingCardOngoingTitle": "Ongoing",
+    "userBookingsNotificationConfirmReminderTitle": "Confirm your booking!",
+    "userBookingsNotificationConfirmReminderBody": "You have a booking coming up, make sure to confirm the booking so you don't lose it!"
 }

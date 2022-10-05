@@ -113,7 +113,7 @@ class _UserAccountInfo extends State<UserAccountInfo> {
                         ),
                       ),
                       const SizedBox(
-                        height: 20,
+                        height: 50,
                       ),
                       _sectionDivider(context, S.authorizedPage.userOptionsTitle()),
                       const SizedBox(
@@ -124,15 +124,15 @@ class _UserAccountInfo extends State<UserAccountInfo> {
                         child: const AutoSignupOption(),
                       ),
                       const SizedBox(
-                        height: 20,
+                        height: 40,
                       ),
                       _sectionDivider(context, S.authorizedPage.userBookingsTitle()),
                       const SizedBox(
-                        height: 20,
+                        height: 10,
                       ),
                       const UserBookingsContainer(),
                       const SizedBox(
-                        height: 20,
+                        height: 40,
                       ),
                       _sectionDivider(context, S.authorizedPage.externalLinksTitle()),
                       const SizedBox(
@@ -170,7 +170,7 @@ class _UserAccountInfo extends State<UserAccountInfo> {
                         ],
                       ),
                       const SizedBox(
-                        height: 50,
+                        height: 80,
                       ),
                       FractionallySizedBox(
                           widthFactor: 0.6,

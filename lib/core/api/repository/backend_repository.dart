@@ -320,6 +320,38 @@ class BackendRepository implements IBackendService {
     }
   }
 
+  /// [HttpPut]
+  @override
+  Future<ApiBookingResponse> putConfirmBooking(
+      String sessionToken, String defaultSchool, String resourceId, String bookingId) async {
+    final school = Schools().fromString(defaultSchool).schoolId.index;
+    final Map<String, dynamic> body = {
+      ApiEndPoints.resourceId: resourceId,
+      ApiEndPoints.bookingId: bookingId,
+    };
+
+    if (kDebugMode) {
+      var uri = Uri.https(ApiEndPoints.debugBaseUrl, ApiEndPoints.putConfirmBooking, {
+        ApiEndPoints.school: school.toString(),
+        ApiEndPoints.sessionToken: sessionToken,
+      });
+
+      final response = await HttpService.sendPutRequestToServer(uri, body: jsonEncode(body));
+      if (response == null) {
+        return ApiBookingResponse.error(RuntimeErrorType.timeoutError());
+      }
+      return await response.parseConfirmBooking();
+    } else {
+      var uri = Uri.https(ApiEndPoints.baseUrl, ApiEndPoints.putConfirmBooking, {
+        ApiEndPoints.school: school.toString(),
+        ApiEndPoints.sessionToken: sessionToken,
+      });
+
+      final response = await http.put(uri, body: body);
+      return response.parseConfirmBooking();
+    }
+  }
+
   /// [HttpPost]
   @override
   Future<ApiUserResponse> postUserLogin(String username, String password, String defaultSchool) async {

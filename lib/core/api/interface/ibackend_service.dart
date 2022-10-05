@@ -51,5 +51,7 @@ abstract class IBackendService {
   /// [HttpPut]
   Future<ApiBookingResponse> putUnbookResource(String sessionToken, String defaultSchool, String bookingId);
 
-  ///
+  /// [HttpPut]
+  Future<ApiBookingResponse> putConfirmBooking(
+      String sessionToken, String defaultSchool, String resourceId, String bookingId);
 }

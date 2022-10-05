@@ -9,7 +9,15 @@ abstract class INotificationServiceBuilder {
     required String channelDescription,
   });
 
-  Future<bool> buildNotification(
+  Future<bool> buildOffsetNotification(
+      {required int id,
+      required String channelKey,
+      required String groupkey,
+      required String title,
+      required String body,
+      required DateTime date});
+
+  Future<bool> buildExactNotification(
       {required int id,
       required String channelKey,
       required String groupkey,

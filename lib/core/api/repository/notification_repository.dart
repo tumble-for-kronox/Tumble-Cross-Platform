@@ -9,6 +9,7 @@ import 'package:tumble/core/database/repository/database_repository.dart';
 import 'package:tumble/core/extensions/extensions.dart';
 import 'package:tumble/core/models/api_models/bookmarked_schedule_model.dart';
 import 'package:tumble/core/models/api_models/schedule_model.dart';
+import 'package:tumble/core/shared/notification_channels.dart';
 import 'package:tumble/core/shared/preference_types.dart';
 import 'package:tumble/core/dependency_injection/get_it_instances.dart';
 
@@ -46,7 +47,7 @@ class NotificationRepository implements INotificationService {
                 .where((Event event) => notificationChannelKeys.contains(event.id.encodeUniqueIdentifier().toString()))
                 .toList();
             for (Event event in eventsThatNeedReassign) {
-              _notificationServiceBuilder.buildNotification(
+              _notificationServiceBuilder.buildOffsetNotification(
                   id: event.id.encodeUniqueIdentifier(),
                   channelKey: bookmarkedSchedule.id,
                   groupkey: event.course.id,
@@ -80,7 +81,7 @@ class NotificationRepository implements INotificationService {
         .toList();
 
     for (Event event in eventsThatNeedReassign) {
-      _notificationServiceBuilder.buildNotification(
+      _notificationServiceBuilder.buildOffsetNotification(
           id: event.id.encodeUniqueIdentifier(),
           channelKey: newScheduleModel.id,
           groupkey: event.course.id,
@@ -97,20 +98,24 @@ class NotificationRepository implements INotificationService {
 
   @override
   Future<bool> initialize() async {
-    if (getIt<SharedPreferences>().getStringList(PreferenceTypes.bookmarks) != null) {
-      final List<String> bookmarkedScheduleIds = getIt<SharedPreferences>()
-          .getStringList(PreferenceTypes.bookmarks)!
-          .map((e) => bookmarkedScheduleModelFromJson(e).scheduleId)
-          .toList();
-      return await getIt<AwesomeNotifications>().initialize(
-          _defaultIcon,
-          bookmarkedScheduleIds
-              .map((scheduleId) => _notificationServiceBuilder.buildNotificationChannel(
-                  channelKey: scheduleId,
-                  channelName: 'Channel for $scheduleId',
-                  channelDescription: 'A notification channel for the schedule under id -> $scheduleId'))
-              .toList());
-    }
-    return false;
+    List<String>? bookmarkedScheduleIdStrings = getIt<SharedPreferences>().getStringList(PreferenceTypes.bookmarks);
+    bookmarkedScheduleIdStrings ??= <String>[];
+
+    final List<String> bookmarkedScheduleIds =
+        bookmarkedScheduleIdStrings.map((e) => bookmarkedScheduleModelFromJson(e).scheduleId).toList();
+
+    return await getIt<AwesomeNotifications>().initialize(_defaultIcon, [
+      ...bookmarkedScheduleIds
+          .map((scheduleId) => _notificationServiceBuilder.buildNotificationChannel(
+              channelKey: scheduleId,
+              channelName: 'Channel for $scheduleId',
+              channelDescription: 'A notification channel for the schedule under id -> $scheduleId'))
+          .toList(),
+      _notificationServiceBuilder.buildNotificationChannel(
+        channelKey: NotificationChannels.resources,
+        channelName: "Resources",
+        channelDescription: "A notification channel for the school resources and user bookings systems",
+      ),
+    ]);
   }
 }

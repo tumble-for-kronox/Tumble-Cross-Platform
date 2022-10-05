@@ -31,7 +31,7 @@ class NotificationServiceBuilder implements INotificationServiceBuilder {
       );
 
   @override
-  Future<bool> buildNotification(
+  Future<bool> buildOffsetNotification(
           {required int id,
           required String channelKey,
           required String groupkey,
@@ -59,4 +59,29 @@ class NotificationServiceBuilder implements INotificationServiceBuilder {
                   .toUtc(),
               allowWhileIdle: true,
               preciseAlarm: true));
+
+  @override
+  Future<bool> buildExactNotification(
+          {required int id,
+          required String channelKey,
+          required String groupkey,
+          required String title,
+          required String body,
+          required DateTime date}) =>
+      _awesomeNotifications.createNotification(
+          content: NotificationContent(
+              id: id,
+              channelKey: channelKey, // Schedule id
+              groupKey: groupkey, //Schedule course
+              title: title,
+              icon: defaultIcon,
+              color: defaultColor,
+              body: body,
+              wakeUpScreen: true,
+              notificationLayout: NotificationLayout.Default,
+              category: NotificationCategory.Reminder),
+          actionButtons: [
+            NotificationActionButton(key: 'VIEW', label: 'View'),
+          ],
+          schedule: NotificationCalendar.fromDate(date: date, allowWhileIdle: true, preciseAlarm: true));
 }

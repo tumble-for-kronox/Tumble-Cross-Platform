@@ -1,10 +1,17 @@
+import 'dart:developer';
 import 'dart:io';
 
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tumble/core/api/repository/notification_repository.dart';
+import 'package:tumble/core/extensions/extensions.dart';
+import 'package:tumble/core/shared/notification_channels.dart';
+import 'package:tumble/core/ui/data/string_constants.dart';
 
 import '../../../../api/apiservices/api_booking_response.dart';
+import '../../../../api/builders/notification_service_builder.dart';
 import '../../../../api/repository/user_repository.dart';
 import '../../../../dependency_injection/get_it_instances.dart';
 import '../../../../models/api_models/resource_model.dart';
@@ -13,6 +20,9 @@ import '../../../login/cubit/auth_cubit.dart';
 part 'resource_state.dart';
 
 class ResourceCubit extends Cubit<ResourceState> {
+  final _notificationBuilder = NotificationServiceBuilder();
+  final _awesomeNotifications = getIt<AwesomeNotifications>();
+
   ResourceCubit()
       : super(ResourceState(
           status: ResourceStatus.INITIAL,
@@ -105,11 +115,15 @@ class ResourceCubit extends Cubit<ResourceState> {
 
     switch (userBookings.status) {
       case ApiBookingResponseStatus.SUCCESS:
-        List<bool> confirmationLoading = List<bool>.filled((userBookings.data as List<Booking>).length, false);
+        updateNotificationsForIncomingBookings(userBookings.data);
+
+        List<bool> falseFilledLoadingList = List<bool>.filled((userBookings.data as List<Booking>).length, false);
         emit(state.copyWith(
-            userBookingsStatus: UserBookingsStatus.LOADED,
-            userBookings: userBookings.data,
-            confirmationLoading: confirmationLoading));
+          userBookingsStatus: UserBookingsStatus.LOADED,
+          userBookings: userBookings.data,
+          confirmationLoading: falseFilledLoadingList,
+          unbookLoading: falseFilledLoadingList,
+        ));
         break;
       case ApiBookingResponseStatus.ERROR:
       case ApiBookingResponseStatus.UNAUTHORIZED:
@@ -126,11 +140,12 @@ class ResourceCubit extends Cubit<ResourceState> {
     }
   }
 
-  Future<dynamic> bookResource(AuthCubit authCubit, String resourceId, DateTime date, AvailabilityValue bookingSlot,
+  Future<String> bookResource(AuthCubit authCubit, String resourceId, DateTime date, AvailabilityValue bookingSlot,
       {bool loginLooped = false}) async {
     emit(state.copyWith(bookUnbookStatus: BookUnbookStatus.LOADING));
     ApiBookingResponse bookResource =
         await _userRepo.putBookResources(resourceId, date, bookingSlot, authCubit.state.userSession!.sessionToken);
+
     switch (bookResource.status) {
       case ApiBookingResponseStatus.SUCCESS:
         getResourceAvailabilities(authCubit, resourceId, date);
@@ -147,22 +162,24 @@ class ResourceCubit extends Cubit<ResourceState> {
         break;
     }
     emit(state.copyWith(bookUnbookStatus: BookUnbookStatus.INITIAL));
-    return bookResource.data;
+    return bookResource.data as String;
   }
 
-  Future<void> unbookResource(AuthCubit authCubit, String bookingId, {bool loginLooped = false}) async {
-    emit(state.copyWith(bookUnbookStatus: BookUnbookStatus.LOADING));
+  Future<String> unbookResource(AuthCubit authCubit, String bookingId, unbookLoadingIndex,
+      {bool loginLooped = false}) async {
+    emit(state.copyWith(unbookLoading: state.unbookLoading!.copyAndUpdate(unbookLoadingIndex, true)));
     ApiBookingResponse bookResource =
         await _userRepo.putUnbookResources(authCubit.state.userSession!.sessionToken, bookingId);
 
     switch (bookResource.status) {
       case ApiBookingResponseStatus.SUCCESS:
+        cancelNotificationForBooking(bookingId);
         getUserBookings(authCubit);
         break;
       case ApiBookingResponseStatus.UNAUTHORIZED:
         if (!loginLooped) {
           await authCubit.login();
-          await unbookResource(authCubit, bookingId);
+          bookResource.data = await unbookResource(authCubit, bookingId, unbookLoadingIndex);
         } else {
           authCubit.logout();
         }
@@ -170,8 +187,36 @@ class ResourceCubit extends Cubit<ResourceState> {
       default:
         break;
     }
-    emit(state.copyWith(bookUnbookStatus: BookUnbookStatus.INITIAL));
-    return bookResource.data;
+
+    emit(state.copyWith(unbookLoading: state.unbookLoading!.copyAndUpdate(unbookLoadingIndex, false)));
+    return bookResource.data as String;
+  }
+
+  Future<String> confirmBooking(AuthCubit authCubit, String resourceId, String bookingId, int confirmLoadingIndex,
+      {bool loginLooped = false}) async {
+    emit(state.copyWith(confirmationLoading: state.confirmationLoading!.copyAndUpdate(confirmLoadingIndex, true)));
+
+    ApiBookingResponse confirmBooking =
+        await _userRepo.putConfirmBooking(authCubit.state.userSession!.sessionToken, resourceId, bookingId);
+
+    switch (confirmBooking.status) {
+      case ApiBookingResponseStatus.SUCCESS:
+        getUserBookings(authCubit);
+        break;
+      case ApiBookingResponseStatus.UNAUTHORIZED:
+        if (!loginLooped) {
+          await authCubit.login();
+          confirmBooking.data = await this.confirmBooking(authCubit, resourceId, bookingId, confirmLoadingIndex);
+        } else {
+          authCubit.logout();
+        }
+        break;
+      default:
+        break;
+    }
+
+    emit(state.copyWith(confirmationLoading: state.confirmationLoading!.copyAndUpdate(confirmLoadingIndex, false)));
+    return confirmBooking.data;
   }
 
   Future<DateTime?> userUpdateActiveDate(BuildContext context) async {
@@ -198,5 +243,50 @@ class ResourceCubit extends Cubit<ResourceState> {
 
   void changeSelectedLocationId(String newLocationId) {
     emit(state.copyWith(selectedLocationId: newLocationId));
+  }
+
+  bool userBookingOngoing(Booking booking) {
+    return booking.timeSlot.from.isBefore(DateTime.now()) && booking.timeSlot.to.isAfter(DateTime.now());
+  }
+
+  Future<void> updateNotificationsForIncomingBookings(List<Booking> bookings) async {
+    List<NotificationModel> setBookingNotifications = (await _awesomeNotifications.listScheduledNotifications())
+        .where((element) => element.content!.channelKey == NotificationChannels.resources)
+        .toList();
+
+    for (Booking booking in bookings) {
+      if (booking.confirmationOpen == null) continue;
+
+      if (!setBookingNotifications.any((element) {
+        log(booking.id.hashCode.toString());
+        log(element.content!.id.toString());
+        return element.content!.id == booking.id.hashCode;
+      })) {
+        createNotificationForBooking(booking);
+      }
+    }
+  }
+
+  Future<bool> createNotificationForBooking(Booking booking) async {
+    return _awesomeNotifications.isNotificationAllowed().then((isAllowed) {
+      if (isAllowed) {
+        _notificationBuilder.buildExactNotification(
+          id: booking.id.hashCode,
+          channelKey: NotificationChannels.resources,
+          groupkey: NotificationGroups.resourcesConfirmRemind,
+          title: S.userBookings.notificationConfirmRemindTitle(),
+          body: S.userBookings.notificationConfirmRemindBody(),
+          date: booking.confirmationOpen!,
+        );
+        log("Created notification for ${booking.id}");
+        return true;
+      }
+      return false;
+    });
+  }
+
+  void cancelNotificationForBooking(String bookingId) {
+    _awesomeNotifications.cancel(bookingId.hashCode);
+    log("Cancelled notification for $bookingId");
   }
 }
