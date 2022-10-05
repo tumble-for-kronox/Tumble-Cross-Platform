@@ -49,6 +49,7 @@
     "loginPasswordValidationError": "Lösenord kan inte vara tomt",
     "unauthorizedPageDescription": "Koppla ditt Kronox konto genom att logga in",
     "authorizedPageHello": "Hej!",
+    "authorizedPageUserBookingsTitle": "Dina bokningar",
     "authorizedPageUserOptionsTitle": "Användaralternativ",
     "authorizedPageAutomaticExamSignup": "Automatisk registrering för examinationstillfällen",
     "authorizedPageExternalLinksTitle": "Externa linkar",
@@ -141,6 +142,7 @@
     "settingsMiscBugSubtitle": "Skicka en bug anmälan på ditt problem",
     "settingsMiscRateTitle": "Betygsätt vår app",
     "settingsMiscRateSubtitle": "Betygsätt vår app på {storeName}",
+    
     "@settingsMiscRateSubtitle": {
         "description": "String pointing to either App Store or Google Play",
         "placeholders": {
@@ -150,6 +152,8 @@
             }
         }
     },
+    "settingsMiscChangeLanguageTitle": "Byt språk",
+    "settingsMiscChangeLanguageSubtitle": "Byt språk i appen",
     "scaffoldMessageCreatedNotificationForCourse": "Skapade {eventCount} notifikationer för {courseName}",
     "@scaffoldMessageCreatedNotificationForCourse": {
         "description": "Message including the number of notifications created and the name of a course.",
@@ -296,6 +300,43 @@
             }
         }
     },
+    "scaffoldMessageBookedResource": "Bokat",
+    "scaffoldMessageUnbookedResource": "Avbokat",
+    "scaffoldMessageConfirmedBooking": "Din bokning är konfirmerad",
+    "scaffoldMessageAutoSignupCompleted": "Du har blivit anmäld till {numOfSignedUpEvents} händelser! Ta en titt på de i händelselistan",
+    "@scaffoldMessageAutoSignupCompleted": {
+        "description": "Message to show how many events a user was signed up to through auto-signup",
+        "placeholders": {
+            "numOfSignedUpEvents": {
+                "type": "int",
+                "example": "2"
+            }
+        }
+    },
+    "scaffoldMessageAutoSignupFailed": "Vi kunde inte anmäla dig till {numOfFailedSignUpEvents} händelser! Ta en titt på de i händelselistan",
+    "@scaffoldMessageAutoSignupFailed": {
+        "description": "Message to show how many events failed to sign up through auto-signup",
+        "placeholders": {
+            "numOfFailedSignUpEvents": {
+                "type": "int",
+                "example": "2"
+            }
+        }
+    },
+    "scaffoldMessageAutoSignupCompletedAndFailed": "Du har blivit anmäld till {numOfSignedUpEvents} händelser, men tyvärr var det {numOfFailedSignUpEvents} vi inte kunde anmäla dig för! Ta en titt på de i händelselistan",
+    "@scaffoldMessageAutoSignupCompletedAndFailed": {
+        "description": "Message to show how many events failed to sign up through auto-signup",
+        "placeholders": {
+            "numOfFailedSignUpEvents": {
+                "type": "int",
+                "example": "2"
+            },
+            "numOfSignedUpEvents": {
+                "type": "int",
+                "example": "2"
+            }
+        }
+    },
     "runtimeErrorProgramFetch": "Inga program hittades",
     "runtimeErrorScheduleFetch": "Inget schema hittades",
     "runtimeErrorTimeout": "Sökningnstimeout",
@@ -310,6 +351,10 @@
     "runtimeErrorNoCachedSchedule": "Inga sparade scheman hittade",
     "runtimeErrorFailedExamSignup": "Kunde inte logga in, var god försök igen senare eller gå till Kronox webbsida.",
     "runtimeErrorInvalidInputFields": "Användarnamn och lösenord får inte vara tomma",
+    "runtimeErrorResourceUnavailable": "Resursen du försöker att nå är tyvärr otillgänglig",
+    "runtimeErrorMaxResourcesBooked": "Du har nått max antal bokningsbara resurser",
+    "runtimeErrorResourceBookCollision": "Resursen kunde inte bokas. Du har kanske redan en bokning i samma tidslucka",
+    "runtimeErrorConfirmBookingFailed": "Det gick inte att konfirmera bokningen. Något måste ha gått fel",
     "popUpNotificationPermissionTitle": "Tillåt notifikationer",
     "popUpNotificationPermissionDescription": "Denna appen skulle vilja skicka notifikationer",
     "popUpExamAutoSignupTitle": "Automatisk registrering på examinationstillfällen bör användas med försiktighet!",
@@ -319,6 +364,8 @@
     "popUpScheduleIsEmptyTitle": "Detta schemat verkar vara tomt men är fortfarande kvar i Kronox databas",
     "popUpScheduleIsEmptyBody": "Kronox lagrar scheman även om de inte innehåller någon data, så våra sökningar kan tyvärr hitta tomma scheman ibland",
     "popUpScheduleFetchError": "Något gick fel när detta schema skulle hämtas",
+    "popUpResourceFetchErrorTitle": "Det gick inte att hämta resursen",
+    "popUpResourceFetchErrorBody": "Detta händer vanligtvis när det valda datimet inte är tillgängligt för resursen, dock, om det inte går att ändra datimet, var vänlig anmäl ett fel genom inställningar",
     "no": "Nej",
     "yes": "Ja",
     "cancel": "Avbryt",
@@ -329,6 +376,7 @@
     "tryAgain": "Var god försök igen",
     "send": "Skicka",
     "unknown": "Okänd",
+    "confirm": "Konfirmera",
     "eventOptionsRemoveEventNotification": "Ta bort notifikation för händelse",
     "eventOptionsRemoveCourseNotifications": "Ta bort alla notifikationer för kurs",
     "eventOptionsAddEventNotification": "Ställ in notifikation för händelse",
@@ -356,5 +404,18 @@
     "supportModalExplainIssueLabel": "Förklara ditt problem",
     "supportModalExplainIssueHelper": "Förklara ditt problem i mer detalj, så vi kan hjälpa",
     "supportModalSendSuccess": "Bug amäld!",
-    "supportModalSendFail": "Det uppstod ett fel med din begäran!\nFörsök igen vid ett senare tillfälle"
+    "supportModalSendFail": "Det uppstod ett fel med din begäran!\nFörsök igen vid ett senare tillfälle",
+    "contributorsModalTitle": "Medarbetare",
+    "contributorsModalDevelopment": "Utveckling",
+    "contributorsModalDesign": "Design",
+    "contributorsModalTranslation": "Översättning",
+    "contributorsModalSpecialThanks": "Särskilt tack",
+    "userBookingsNoBookings": "Du har för närvarande inga bokningar",
+    "userBookingsNoAvailableTimeSlots": "Det finns inga rum tillgängliga, testa ett annat datum",
+    "userBookingsUnbookButton": "Avboka",
+    "userBookingsBookingCardRoomTitle": "Rum",
+    "userBookingsBookingCardOngoingTitle": "Pågående",
+    "userBookingsNotificationConfirmReminderTitle": "Bekräfta din bokning!",
+    "userBookingsNotificationConfirmReminderBody": "Du har en bokning som snart behöver bekräftas! Bekräfta den så du inte förlorar bokningen!"
+    
 }
