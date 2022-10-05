@@ -24,7 +24,7 @@ class _TumbleWeekViewState extends State<TumbleWeekView> {
     return BlocBuilder<AppSwitchCubit, AppSwitchState>(
       builder: (context, state) {
         switch (state.status) {
-          case MainAppStatus.INITIAL:
+          case AppScheduleViewStatus.INITIAL:
             return NoScheduleAvailable(
               errorType: RuntimeErrorType.noCachedSchedule(),
               cupertinoAlertDialog: CustomAlertDialog.noBookMarkedSchedules(
@@ -34,9 +34,9 @@ class _TumbleWeekViewState extends State<TumbleWeekView> {
                       .getNavBarItem(NavbarItem.SEARCH),
                   navigator),
             );
-          case MainAppStatus.LOADING:
+          case AppScheduleViewStatus.LOADING:
             return const TumbleLoading();
-          case MainAppStatus.POPULATED_VIEW:
+          case AppScheduleViewStatus.POPULATED_VIEW:
             return Stack(children: [
               SizedBox(
                   child: PageView.builder(
@@ -45,22 +45,23 @@ class _TumbleWeekViewState extends State<TumbleWeekView> {
                         return state.listOfWeeks!
                             .map((e) => TumbleWeekPageContainer(
                                   week: e,
-                                  cubit: BlocProvider.of<AppSwitchCubit>(context),
+                                  cubit:
+                                      BlocProvider.of<AppSwitchCubit>(context),
                                 ))
                             .toList()[index];
                       }))
             ]);
-          case MainAppStatus.FETCH_ERROR:
+          case AppScheduleViewStatus.FETCH_ERROR:
             return NoScheduleAvailable(
               errorType: state.message!,
-              cupertinoAlertDialog: CustomAlertDialog.fetchError(
+              cupertinoAlertDialog: CustomAlertDialog.scheduleCacheFetchError(
                   context,
                   () => context
                       .read<MainAppNavigationCubit>()
                       .getNavBarItem(NavbarItem.SEARCH),
                   navigator),
             );
-          case MainAppStatus.EMPTY_SCHEDULE:
+          case AppScheduleViewStatus.EMPTY_SCHEDULE:
             return NoScheduleAvailable(
               errorType: RuntimeErrorType.emptyScheduleError(),
               cupertinoAlertDialog: CustomAlertDialog.previewContainsNoViews(
@@ -70,7 +71,7 @@ class _TumbleWeekViewState extends State<TumbleWeekView> {
                       .getNavBarItem(NavbarItem.SEARCH),
                   navigator),
             );
-          case MainAppStatus.NO_VIEW:
+          case AppScheduleViewStatus.NO_VIEW:
             return NoScheduleAvailable(
               errorType: RuntimeErrorType.noBookmarks(),
               cupertinoAlertDialog: CustomAlertDialog.noBookMarkedSchedules(

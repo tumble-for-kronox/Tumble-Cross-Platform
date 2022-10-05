@@ -65,8 +65,8 @@ class _SchedulePreviewState extends State<SchedulePreview> {
           case PreviewFetchStatus.FETCH_ERROR:
             return NoScheduleAvailable(
               errorType: RuntimeErrorType.scheduleFetchError(),
-              cupertinoAlertDialog:
-                  CustomAlertDialog.fetchError(context, () => {}, navigator),
+              cupertinoAlertDialog: CustomAlertDialog.programFetchError(
+                  context, () => {}, navigator),
             );
           case PreviewFetchStatus.EMPTY_SCHEDULE:
             return NoScheduleAvailable(

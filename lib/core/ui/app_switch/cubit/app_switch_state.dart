@@ -2,7 +2,7 @@
 
 part of 'app_switch_cubit.dart';
 
-enum MainAppStatus {
+enum AppScheduleViewStatus {
   INITIAL,
   LOADING,
   POPULATED_VIEW,
@@ -12,7 +12,7 @@ enum MainAppStatus {
 }
 
 class AppSwitchState extends Equatable {
-  final MainAppStatus status;
+  final AppScheduleViewStatus status;
   final bool listViewToTopButtonVisible;
   final List<Day>? listOfDays;
   final List<Week>? listOfWeeks;
@@ -27,7 +27,7 @@ class AppSwitchState extends Equatable {
       required this.message});
 
   AppSwitchState copyWith(
-          {MainAppStatus? status,
+          {AppScheduleViewStatus? status,
           bool? toggledFavorite,
           bool? listViewToTopButtonVisible,
           List<Day>? listOfDays,

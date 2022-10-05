@@ -25,7 +25,7 @@ part 'app_switch_state.dart';
 class AppSwitchCubit extends Cubit<AppSwitchState> {
   AppSwitchCubit()
       : super(const AppSwitchState(
-            status: MainAppStatus.LOADING,
+            status: AppScheduleViewStatus.LOADING,
             listOfDays: null,
             listOfWeeks: null,
             listViewToTopButtonVisible: false,
@@ -107,7 +107,7 @@ class AppSwitchCubit extends Cubit<AppSwitchState> {
               /// If an error occurs here, there is an underlying error in
               /// communication with regards to communication, the cache is
               /// broken, or the backend is down.
-              emit(state.copyWith(status: MainAppStatus.FETCH_ERROR));
+              emit(state.copyWith(status: AppScheduleViewStatus.FETCH_ERROR));
               dev.log(
                   name: 'app_switch_cubit',
                   'Error in retrieveing schedule cache ..\nError on schedule: [$scheduleId');
@@ -120,7 +120,7 @@ class AppSwitchCubit extends Cubit<AppSwitchState> {
           }
         }
       } else {
-        emit(state.copyWith(status: MainAppStatus.NO_VIEW));
+        emit(state.copyWith(status: AppScheduleViewStatus.NO_VIEW));
       }
     }
     if (listOfScheduleModelAndCourses.isNotEmpty) {
@@ -146,7 +146,7 @@ class AppSwitchCubit extends Cubit<AppSwitchState> {
           .toList();
 
       emit(state.copyWith(
-        status: MainAppStatus.POPULATED_VIEW,
+        status: AppScheduleViewStatus.POPULATED_VIEW,
         scheduleModelAndCourses: listOfScheduleModelAndCourses,
         listOfDays: listOfDays,
         listOfWeeks: listOfDays.splitToWeek(),
@@ -155,7 +155,7 @@ class AppSwitchCubit extends Cubit<AppSwitchState> {
           name: 'app_switch_cubit',
           'Successfully updated entire schedule view. Exiting ..');
     } else {
-      emit(state.copyWith(status: MainAppStatus.NO_VIEW));
+      emit(state.copyWith(status: AppScheduleViewStatus.NO_VIEW));
     }
   }
 
@@ -173,7 +173,7 @@ class AppSwitchCubit extends Cubit<AppSwitchState> {
   }
 
   setLoading() {
-    emit(state.copyWith(status: MainAppStatus.LOADING));
+    emit(state.copyWith(status: AppScheduleViewStatus.LOADING));
   }
 
   Color getColorForCourse(Event event) {
