@@ -21,7 +21,7 @@ class SlideableLogo extends StatelessWidget {
                 children: [
                   Image(
                     height: 45,
-                    image: const AssetImage("assets/images/tumbleAppLogo.png"),
+                    image: const AssetImage("assets/images/ic_launcher.png"),
                     color: Theme.of(context).colorScheme.primary,
                   ),
                   const SizedBox(
