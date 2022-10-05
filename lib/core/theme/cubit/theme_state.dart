@@ -18,6 +18,12 @@ class ThemeState extends Equatable {
         themeString: getIt<SharedPreferences>().getString(PreferenceTypes.theme)!,
       );
 
+  ThemeState copyWithAllowNullLocale({ThemeMode? themeMode, Locale? locale}) => ThemeState(
+        locale: locale,
+        themeMode: themeMode ?? this.themeMode,
+        themeString: getIt<SharedPreferences>().getString(PreferenceTypes.theme)!,
+      );
+
   @override
   List<Object?> get props => [themeMode, themeString, locale];
 }

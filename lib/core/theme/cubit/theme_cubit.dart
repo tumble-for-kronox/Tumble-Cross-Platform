@@ -51,7 +51,7 @@ class ThemeCubit extends Cubit<ThemeState> {
   }
 
   void updateLocale(Locale? locale) {
-    emit(state.copyWith(locale: locale));
+    emit(state.copyWithAllowNullLocale(locale: locale));
   }
 
   @override
