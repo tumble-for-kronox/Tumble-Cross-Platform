@@ -23,6 +23,7 @@ class ApiEndPoints {
   static const String putUnregisterEvent = 'users/events/unregister/';
   static const String putBookResource = 'resources/book';
   static const String putUnbookResource = 'resources/unbook';
+  static const String putConfirmBooking = 'resources/confirm';
   static const String postSubmitIssue = '/misc/submitIssue';
   static const String postUserLogin = 'users/login';
 

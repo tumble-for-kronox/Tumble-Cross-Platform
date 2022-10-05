@@ -19,4 +19,5 @@ class RuntimeErrorType {
   static String resourceUnavailable() => S.runtimeError.resourceUnavailable();
   static String maxResourcesBooked() => S.runtimeError.maxResourcesBooked();
   static String resourceBookCollision() => S.runtimeError.resourceBookCollision();
+  static String confirmBookingFailed() => S.runtimeError.confirmBookingFailed();
 }

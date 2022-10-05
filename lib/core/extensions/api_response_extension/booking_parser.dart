@@ -75,6 +75,16 @@ extension BookingResponseParsing on Response {
 
     return ApiBookingResponse.error(RuntimeErrorType.unknownError());
   }
+
+  ApiBookingResponse parseConfirmBooking() {
+    if (statusCode == 200) {
+      return ApiBookingResponse.success(S.scaffoldMessages.confirmedBooking());
+    } else if (statusCode == 404) {
+      return ApiBookingResponse.error(RuntimeErrorType.confirmBookingFailed());
+    }
+
+    return ApiBookingResponse.error(RuntimeErrorType.unknownError());
+  }
 }
 
 extension BookingHttpClientResponseParsing on HttpClientResponse {
@@ -135,6 +145,16 @@ extension BookingHttpClientResponseParsing on HttpClientResponse {
       return ApiBookingResponse.unauthorized(RuntimeErrorType.authenticationError());
     } else if (statusCode == 404) {
       return ApiBookingResponse.error(RuntimeErrorType.resourceUnavailable());
+    }
+
+    return ApiBookingResponse.error(RuntimeErrorType.unknownError());
+  }
+
+  ApiBookingResponse parseConfirmBooking() {
+    if (statusCode == 200) {
+      return ApiBookingResponse.success(S.scaffoldMessages.confirmedBooking());
+    } else if (statusCode == 404) {
+      return ApiBookingResponse.error(RuntimeErrorType.confirmBookingFailed());
     }
 
     return ApiBookingResponse.error(RuntimeErrorType.unknownError());

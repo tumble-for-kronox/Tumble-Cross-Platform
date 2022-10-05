@@ -9,9 +9,11 @@ import 'package:tumble/core/api/apiservices/runtime_error_type.dart';
 import 'package:tumble/core/api/repository/user_repository.dart';
 import 'package:tumble/core/database/repository/secure_storage_repository.dart';
 import 'package:tumble/core/models/api_models/kronox_user_model.dart';
+import 'package:tumble/core/models/api_models/multi_registration_result_model.dart';
 import 'package:tumble/core/models/ui_models/school_model.dart';
 import 'package:tumble/core/shared/preference_types.dart';
 import 'package:tumble/core/dependency_injection/get_it_instances.dart';
+import 'package:tumble/core/ui/data/string_constants.dart';
 
 part 'auth_state.dart';
 
@@ -82,8 +84,30 @@ class AuthCubit extends Cubit<AuthState> {
     emit(state.copyWith(status: AuthStatus.AUTHENTICATED));
   }
 
-  Future<void> runAutoSignup() async {
-    await _userRepo.putRegisterAllAvailableUserEvents(state.userSession!.sessionToken);
+  Future<String?> runAutoSignup() async {
+    ApiUserResponse<dynamic> resp = await _userRepo.putRegisterAllAvailableUserEvents(state.userSession!.sessionToken);
+
+    switch (resp.status) {
+      case ApiUserResponseStatus.COMPLETED:
+        MultiRegistrationResultModel results = resp.data as MultiRegistrationResultModel;
+        if (results.failedRegistrations.isEmpty && results.successfulRegistrations.isEmpty) {
+          return null;
+        }
+
+        if (results.failedRegistrations.isNotEmpty && results.successfulRegistrations.isEmpty) {
+          return S.scaffoldMessages.autoSignupFailed(results.failedRegistrations.length);
+        }
+
+        if (results.failedRegistrations.isEmpty && results.successfulRegistrations.isNotEmpty) {
+          return S.scaffoldMessages.autoSignupCompleted(results.successfulRegistrations.length);
+        }
+
+        return S.scaffoldMessages
+            .autoSignupCompleteAndFail(results.successfulRegistrations.length, results.failedRegistrations.length);
+      default:
+        break;
+    }
+    return resp.data;
   }
 
   Future<void> login() async {

@@ -66,10 +66,13 @@ abstract class TimeSlot with _$TimeSlot {
 abstract class Booking with _$Booking {
   const factory Booking({
     required String id,
+    required String resourceId,
     required TimeSlot timeSlot,
     required String locationId,
-    required DateTime? getConfirmationOpens,
-    required DateTime? getConfirmationCloses,
+    required bool showConfirmButton,
+    required bool showUnbookButton,
+    required DateTime? confirmationOpen,
+    required DateTime? confirmationClosed,
   }) = _Booking;
 
   factory Booking.fromJson(Map<String, dynamic> json) => _$BookingFromJson(json);

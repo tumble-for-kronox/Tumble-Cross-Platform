@@ -29,4 +29,11 @@ class ScaffoldMessageType extends StringConstantGroup {
   String updatedCourseColor(String courseName) => localizedStrings.scaffoldMessageUpdatedCourseColor(courseName);
   String bookedResource() => localizedStrings.scaffoldMessageBookedResource;
   String unbookedResource() => localizedStrings.scaffoldMessageUnbookedResource;
+  String confirmedBooking() => localizedStrings.scaffoldMessageConfirmedBooking;
+  String autoSignupCompleted(int numberOfSignedUpEvents) =>
+      localizedStrings.scaffoldMessageAutoSignupCompleted(numberOfSignedUpEvents);
+  String autoSignupFailed(int numberOfFailedSignUpEvents) =>
+      localizedStrings.scaffoldMessageAutoSignupFailed(numberOfFailedSignUpEvents);
+  String autoSignupCompleteAndFail(int numberOfSignedUpEvents, int numberOfFailedSignUpEvents) =>
+      localizedStrings.scaffoldMessageAutoSignupCompletedAndFailed(numberOfFailedSignUpEvents, numberOfSignedUpEvents);
 }

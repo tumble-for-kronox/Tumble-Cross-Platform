@@ -187,7 +187,7 @@ class AppSwitchCubit extends Cubit<AppSwitchState> {
   Future<bool> createNotificationForEvent(Event event, BuildContext context) {
     return _awesomeNotifications.isNotificationAllowed().then((isAllowed) {
       if (isAllowed) {
-        _notificationBuilder.buildNotification(
+        _notificationBuilder.buildOffsetNotification(
             id: event.id.encodeUniqueIdentifier(),
             channelKey: state.scheduleModelAndCourses!
                 .firstWhere((scheduleModelAndCourses) =>
@@ -235,7 +235,7 @@ class AppSwitchCubit extends Cubit<AppSwitchState> {
 
         for (Event event in events) {
           if (event.from.isAfter(DateTime.now())) {
-            _notificationBuilder.buildNotification(
+            _notificationBuilder.buildOffsetNotification(
                 id: event.id.encodeUniqueIdentifier(),
                 channelKey: state.scheduleModelAndCourses!
                     .firstWhere((scheduleModelAndCourses) =>
@@ -252,6 +252,7 @@ class AppSwitchCubit extends Cubit<AppSwitchState> {
         dev.log(
             name: 'app_switch_cubit',
             'Created ${events.length} new notifications for ${event.course}');
+
         showScaffoldMessage(
             context,
             S.scaffoldMessages.createdNotificationForCourse(

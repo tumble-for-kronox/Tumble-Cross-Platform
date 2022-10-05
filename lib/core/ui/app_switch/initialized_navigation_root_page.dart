@@ -11,6 +11,7 @@ import 'package:tumble/core/ui/app_switch/cubit/app_switch_cubit.dart';
 import 'package:tumble/core/ui/app_switch/misc/tumble_app_bar.dart';
 import 'package:tumble/core/ui/app_switch/misc/tumble_drawer/cubit/drawer_state.dart';
 import 'package:tumble/core/ui/app_switch/misc/tumble_drawer/tumble_app_drawer.dart';
+import 'package:tumble/core/ui/scaffold_message.dart';
 import 'package:tumble/core/ui/schedule/tumble_calendar_view/tumble_calendar_view.dart';
 import 'package:tumble/core/ui/schedule/tumble_list_view/tumble_list_view.dart';
 import 'package:tumble/core/ui/schedule/tumble_week_view/tumble_week_view.dart';
@@ -62,13 +63,17 @@ class _InitializedNavigationRootPageState
                   ],
                   child: TumbleAppBar(
                     pageIndex: navState.index,
-                    toggleBookmark: () {
-                      BlocProvider.of<AppSwitchCubit>(context).setLoading();
-                      BlocProvider.of<MainAppNavigationCubit>(context)
-                          .getNavBarItem(NavbarItem.LIST);
-                      context.read<SearchPageCubit>().toggleFavorite(context);
-                      BlocProvider.of<AppSwitchCubit>(context)
-                          .attemptToFetchCachedSchedules();
+                    toggleBookmark: () async {
+                      await context
+                          .read<SearchPageCubit>()
+                          .toggleFavorite(context)
+                          .then((_) {
+                        BlocProvider.of<AppSwitchCubit>(context).setLoading();
+                        BlocProvider.of<AppSwitchCubit>(context)
+                            .attemptToFetchCachedSchedules();
+                        BlocProvider.of<MainAppNavigationCubit>(context)
+                            .getNavBarItem(NavbarItem.LIST);
+                      });
                     },
                   ),
                 ),
@@ -130,6 +135,12 @@ class _InitializedNavigationRootPageState
                       case NavbarItem.WEEK:
                         return MultiBlocProvider(
                           providers: [
+                            BlocProvider.value(
+                                value:
+                                    BlocProvider.of<AppSwitchCubit>(context)),
+                            BlocProvider.value(
+                                value: BlocProvider.of<MainAppNavigationCubit>(
+                                    context)),
                             BlocProvider.value(
                                 value:
                                     BlocProvider.of<AppSwitchCubit>(context)),

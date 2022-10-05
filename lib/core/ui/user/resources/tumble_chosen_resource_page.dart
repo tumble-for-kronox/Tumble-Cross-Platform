@@ -16,6 +16,7 @@ import 'package:tumble/core/ui/user/resources/resource_room_card.dart';
 import 'package:tumble/core/ui/user/resources/time_stamp_containers.dart';
 import 'package:tumble/core/ui/user/resources/resource_time_stamp_card.dart';
 
+import '../../data/string_constants.dart';
 import '../../login/cubit/auth_cubit.dart';
 import 'cubit/resource_cubit.dart';
 
@@ -74,7 +75,18 @@ class TumbleChosenResourcePage extends StatelessWidget {
       case ResourceStatus.LOADING:
         return const TumbleLoading();
       case ResourceStatus.LOADED:
-        return _lowerSectionLoaded(context, state);
+        return state.availableTimeSlots!.isEmpty
+            ? Padding(
+                padding: const EdgeInsets.all(20),
+                child: Center(
+                  child: Text(
+                    S.userBookings.noAvailableTimeSlots(),
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(fontSize: 17),
+                  ),
+                ),
+              )
+            : _lowerSectionLoaded(context, state);
       case ResourceStatus.ERROR:
       case ResourceStatus.INITIAL:
         return _lowerSectionError(context, state);

@@ -15,4 +15,6 @@ flutter pub get > $dir/log.txt
 echo "Generating freezed models under sub-directories in lib/models/.."
 flutter pub run build_runner build --delete-conflicting-outputs > $dir/log.txt
 echo "Verbose output directed to $dir/log.txt"
+flutter gen-l10n
+echo "Finished generating localization classes"
 exit 1

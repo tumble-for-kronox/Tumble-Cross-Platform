@@ -28,4 +28,6 @@ abstract class IUserService {
       String resourceId, DateTime date, AvailabilityValue bookingSlot, String sessionToken);
 
   Future<ApiBookingResponse> putUnbookResources(String bookingId, String sessionToken);
+
+  Future<ApiBookingResponse> putConfirmBooking(String sessionToken, String resourceId, String bookingId);
 }
