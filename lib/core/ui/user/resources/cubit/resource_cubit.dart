@@ -1,11 +1,8 @@
 import 'dart:developer';
-import 'dart:io';
-
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tumble/core/api/repository/notification_repository.dart';
 import 'package:tumble/core/extensions/extensions.dart';
 import 'package:tumble/core/shared/notification_channels.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';

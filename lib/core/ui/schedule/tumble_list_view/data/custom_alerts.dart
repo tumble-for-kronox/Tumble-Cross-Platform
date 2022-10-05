@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tumble/core/navigation/app_navigator.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
-import 'package:tumble/core/ui/login/cubit/auth_cubit.dart';
 import 'package:tumble/core/ui/user/cubit/user_event_cubit.dart';
 
 typedef NavigateToSearchFromView = void Function();
@@ -97,7 +96,7 @@ class CustomAlertDialog {
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
       contentPadding: const EdgeInsets.all(25),
       content: Column(children: [
-        Text(S.popUps.scheduleFetchError(),
+        Text(S.popUps.resourceFetchErrorTitle(),
             style: TextStyle(
                 color: Theme.of(context).colorScheme.onBackground, fontSize: 16, fontWeight: FontWeight.w400)),
         const SizedBox(

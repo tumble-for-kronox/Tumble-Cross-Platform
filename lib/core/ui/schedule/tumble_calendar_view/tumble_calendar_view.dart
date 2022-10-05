@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:tumble/core/api/apiservices/runtime_error_type.dart';
 import 'package:tumble/core/extensions/extensions.dart';
 import 'package:tumble/core/navigation/app_navigator.dart';
-import 'package:tumble/core/theme/data/colors.dart';
 import 'package:tumble/core/ui/bottom_nav_bar/cubit/bottom_nav_cubit.dart';
 import 'package:tumble/core/ui/bottom_nav_bar/data/nav_bar_items.dart';
 import 'package:tumble/core/ui/app_switch/cubit/app_switch_cubit.dart';

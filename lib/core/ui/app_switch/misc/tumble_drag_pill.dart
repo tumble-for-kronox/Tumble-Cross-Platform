@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tumble/core/extensions/extensions.dart';
 
 class TumbleDragPill extends StatelessWidget {
   final Color barColor;

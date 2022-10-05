@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
 
 class RuntimeErrorType {

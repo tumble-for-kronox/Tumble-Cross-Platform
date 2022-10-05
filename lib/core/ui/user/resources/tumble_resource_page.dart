@@ -1,15 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tumble/core/models/api_models/resource_model.dart';
-import 'package:tumble/core/ui/login/cubit/auth_cubit.dart';
-import 'package:tumble/core/ui/user/cubit/user_event_cubit.dart';
 import 'package:tumble/core/ui/user/resources/resource_card.dart';
-import 'package:tumble/core/ui/user/resources/time_stamp_containers.dart';
-import 'package:tumble/core/ui/user/resources/resource_room_card.dart';
-import 'package:tumble/core/ui/user/resources/resource_time_stamp_card.dart';
 import 'package:tumble/core/ui/user/resources/tumble_chosen_resource_page.dart';
 
 import 'cubit/resource_cubit.dart';
