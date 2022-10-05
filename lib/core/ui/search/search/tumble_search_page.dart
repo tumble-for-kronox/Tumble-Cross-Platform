@@ -86,6 +86,39 @@ class _TumbleSearchPageState extends State<TumbleSearchPage> {
             ],
           ),
         ),
+        // Align(
+        //   alignment: Alignment.bottomCenter,
+        //   child: SizedBox(
+        //     width: double.maxFinite,
+        //     height: 150,
+        //     child: Stack(
+        //       children: [
+        //         Align(
+        //           alignment: Alignment.bottomCenter,
+        //           child: Container(
+        //             height: 145,
+        //             decoration: BoxDecoration(
+        //               color: Theme.of(context).colorScheme.primary,
+        //             ),
+        //           ),
+        //         ),
+        //         Align(
+        //           alignment: Alignment.topCenter,
+        //           child: Container(
+        //             width: double.maxFinite,
+        //             height: 40,
+        //             decoration: BoxDecoration(
+        //                 color: Theme.of(context).colorScheme.background,
+        //                 borderRadius: const BorderRadius.only(
+        //                   bottomLeft: Radius.circular(20),
+        //                   bottomRight: Radius.circular(20),
+        //                 )),
+        //           ),
+        //         )
+        //       ],
+        //     ),
+        //   ),
+        // ),
         BlocProvider.value(
           value: BlocProvider.of<SearchPageCubit>(context),
           child: const SearchBarAndLogoContainer(),
