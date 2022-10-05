@@ -1,6 +1,7 @@
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tumble/core/api/apiservices/api_schedule_or_programme_response.dart';
 import 'package:tumble/core/api/apiservices/runtime_error_type.dart';
+import 'package:tumble/core/api/data/time_constants.dart';
 import 'package:tumble/core/api/interface/icache_and_interaction_service.dart';
 import 'package:tumble/core/api/repository/backend_repository.dart';
 import 'package:tumble/core/database/database_response.dart';
@@ -42,7 +43,7 @@ class CacheAndInteractionRepository implements ICacheAndInteractionService {
       /// If the schedule for some reason is not found in the database,
       /// or if the schedule is more than 30 minutes old
       if (userCachedSchedule == null ||
-          DateTime.now().subtract(const Duration(minutes: 30)).isAfter(userCachedSchedule.cachedAt.toLocal())) {
+          DateTime.now().subtract(TimeConstants.updateOffset).isAfter(userCachedSchedule.cachedAt.toLocal())) {
         /// Make sure that only if the user has an internet connection and the
         /// schedule is 'outdated', the app will display the new schedule.
         /// Otherwise it returns [ApiResponse.cached(userCachedSchedule)]
