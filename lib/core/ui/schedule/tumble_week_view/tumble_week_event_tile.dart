@@ -6,13 +6,13 @@ import 'package:tumble/core/extensions/extensions.dart';
 import 'package:tumble/core/models/api_models/schedule_model.dart';
 import 'package:tumble/core/models/ui_models/course_ui_model.dart';
 import 'package:tumble/core/theme/data/colors.dart';
-import 'package:tumble/core/ui/main_app/cubit/main_app_cubit.dart';
+import 'package:tumble/core/ui/app_switch/cubit/app_switch_cubit.dart';
 import 'package:tumble/core/ui/schedule/event_modal.dart';
 import 'package:tumble/main.dart';
 
 class TumbleWeekEventTile extends StatelessWidget {
   final Event event;
-  final MainAppCubit mainAppCubit;
+  final AppSwitchCubit mainAppCubit;
   const TumbleWeekEventTile({Key? key, required this.event, required this.mainAppCubit}) : super(key: key);
 
   @override
@@ -28,6 +28,7 @@ class TumbleWeekEventTile extends StatelessWidget {
           BoxShadow(
             color: Colors.black26,
             blurRadius: 1,
+            offset: Offset(0, 1),
           )
         ],
       ),

@@ -13,4 +13,6 @@ class PopUpStrings extends StringConstantGroup {
   String scheduleIsEmptyTitle() => localizedStrings.popUpScheduleIsEmptyTitle;
   String scheduleIsEmptyBody() => localizedStrings.popUpScheduleIsEmptyBody;
   String scheduleFetchError() => localizedStrings.popUpScheduleFetchError;
+  String resourceFetchErrorTitle() => localizedStrings.popUpResourceFetchErrorTitle;
+  String resourceFetchErrorBody() => localizedStrings.popUpResourceFetchErrorBody;
 }

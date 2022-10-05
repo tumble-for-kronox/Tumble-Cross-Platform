@@ -2,19 +2,21 @@ import 'package:flutter/cupertino.dart';
 import 'package:tumble/core/app.dart';
 import 'package:tumble/core/navigation/navigation_route_labels.dart';
 import 'package:tumble/core/ui/login/login_page_root.dart';
-import 'package:tumble/core/ui/main_app/main_app.dart';
-import 'package:tumble/core/ui/main_app/main_app_navigation_root.dart';
-import 'package:tumble/core/ui/main_app/school_selection_page.dart';
+import 'package:tumble/core/ui/app_switch/app_switch.dart';
+import 'package:tumble/core/ui/app_switch/initialized_navigation_root_page.dart';
+import 'package:tumble/core/ui/app_switch/school_selection_page.dart';
 import 'package:tumble/core/ui/schedule/tumble_calendar_view/tumble_calendar_view.dart';
 import 'package:tumble/core/ui/schedule/tumble_list_view/tumble_list_view.dart';
 import 'package:tumble/core/ui/schedule/tumble_week_view/tumble_week_view.dart';
 import 'package:tumble/core/ui/search/search/tumble_search_page.dart';
+import 'package:tumble/core/ui/user/resources/tumble_chosen_resource_page.dart';
+import 'package:tumble/core/ui/user/resources/tumble_resource_page.dart';
 
 class Routes {
   Routes._();
 
   static List<String> pages = [
-    NavigationRouteLabels.mainAppPage,
+    NavigationRouteLabels.appSwitchPage,
     NavigationRouteLabels.mainAppNavigationRootPage,
     NavigationRouteLabels.schoolSelectionPage,
     NavigationRouteLabels.loginPageRoot,
@@ -22,17 +24,19 @@ class Routes {
     NavigationRouteLabels.tumbleListView,
     NavigationRouteLabels.tumbleWeekView,
     NavigationRouteLabels.tumbleCalendarView,
-    NavigationRouteLabels.appTopRootBuilder
+    NavigationRouteLabels.appTopRootBuilder,
+    NavigationRouteLabels.resourceBasePage,
+    NavigationRouteLabels.chosenResourcePage,
   ];
 
   static Page getPage(String page, {dynamic arguments}) {
     dynamic pageClass;
     switch (page) {
-      case NavigationRouteLabels.mainAppPage:
-        pageClass = const MainApp();
+      case NavigationRouteLabels.appSwitchPage:
+        pageClass = const AppSwitch();
         break;
       case NavigationRouteLabels.mainAppNavigationRootPage:
-        pageClass = const MainAppNavigationRootPage();
+        pageClass = const InitializedNavigationRootPage();
         break;
       case NavigationRouteLabels.schoolSelectionPage:
         pageClass = const SchoolSelectionPage();
@@ -56,6 +60,9 @@ class Routes {
         break;
       case NavigationRouteLabels.appTopRootBuilder:
         pageClass = const App();
+        break;
+      case NavigationRouteLabels.resourceBasePage:
+        pageClass = const ResourcePage();
         break;
       default:
         return CupertinoPage(

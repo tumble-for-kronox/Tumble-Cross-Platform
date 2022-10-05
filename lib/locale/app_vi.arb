@@ -1,0 +1,367 @@
+{
+    "searchBarUnfocusedPlaceholder": "Tìm lịnh",
+    "searchBarFocusedPlaceholder": "Mã, Tên , Giáo viên",
+    "searchPageTitle": "Tìm",
+    "listViewTitle": "Danh sách",
+    "listViewToTopButton": "Đỉnh",
+    "weekViewTitle": "Tuần",
+    "calendarViewTitle": "Lịch",
+    "accountPageTitle": "Tài khoản",
+    "weekViewNumber": "w. {Xố tuần}",
+    "@weekViewNumber": {
+        "description": "Week number shown in week view.",
+        "placeholders": {
+            "weekNumber": {
+                "type": "String",
+                "example": "32"
+            }
+        }
+    },
+    "weekViewTodayLabel": "Hôm nay",
+    "weekViewNoActivities": "Không có viêc ở lịch",
+    "signInButtonTitle": "Đăng nhập",
+    "signOutButtonTitle": "Đăng xuất",
+    "loginPageTitle": "Đăng nhập ở kronox",
+    "loginPageDescription": "Đăng nhập ở Knrox cùng với điểm của học sinh {universityName} để có đượng trải nghiệm tốt nhất",
+    "@loginPageDescription": {
+        "description": "Message prompting user to login to their kronox account.",
+        "placeholders": {
+            "universityName": {
+                "type": "String",
+                "example": "Kristianstad University"
+            }
+        }
+    },
+    "loginPageUsernamePlaceholder": "Người Dùng/Email",
+    "loginPagePasswordPlaceholder": "Mật khẩu",
+    "loginPageSuccessTitle": "Đăng nhập vào Kronox!",
+    "loginPageSuccessDescription": "Đăng nhập vào {universityName} bằng Kronox",
+    "@loginPageSuccessDescription": {
+        "description": "Message telling user they successfully logged into their kronox account.",
+        "placeholders": {
+            "universityName": {
+                "type": "String",
+                "example": "Kristianstad University"
+            }
+        }
+    },
+    "loginEmailValidationError": "Người Dùng/Email không được để trống",
+    "loginPasswordValidationError": "Mật khẩu không được để trống",
+    "unauthorizedPageDescription": "Kết nối với tài khoản Kronox bằng cách đăng nhập",
+    "authorizedPageHello": "Xin chào",
+    "authorizedPageUserOptionsTitle": "Người dùng lựa chọn",
+    "authorizedPageAutomaticExamSignup": "Kết nối tự động",
+    "authorizedPageExternalLinksTitle": "Kết nối bên ngoài",
+    "authorizedPagePersonalExternalLink": "Của {webpageName}",
+    "@authorizedPagePersonalExternalLink": {
+        "description": "Default title on a link to something that is user connected.",
+        "placeholders": {
+            "webpageName": {
+                "type": "String",
+                "example": "Canvas"
+            }
+        }
+    },
+    "authorizedPageExternalLinksKronox": "Kronox cho {universityName}",
+    "@authorizedPageExternalLinksKronox": {
+        "description": "Title for link to kronox for the user's default school.",
+        "placeholders": {
+            "universityName": {
+                "type": "String",
+                "example": "Kristianstad University"
+            }
+        }
+    },
+    "userEventsNeedToSignupTitle": "Cần đăng nhập?",
+    "userEventsAlreadySignedUpTitle": "Đang đăng nhập",
+    "userEventsUpcomingTitle": "Sắp tới",
+    "userEventsRegisterButton": "Đăng ký",
+    "userEventsUnregisterButton": "Hủy đăng ký",
+    "userEventsOpenKronoxButton": "Mở Kronox",
+    "userEventsFailedToLoadExams": "Chúng tôi không thể lấy bài kiểm tra của bạn, hãy thử lại sau một chút.",
+    "userEventsEmpty": "Không có bài kiểm tra",
+    "userEventsUnregisterUntil": "Hủy đăng ký đến khi",
+    "userEventsRegisterBefore": "Đăng ký trước khi",
+    "settingsTitle": "CÀI ĐẶT",
+    "settingsCommonTitle": "Bình thường",
+    "settingsCommonChangeSchoolsTitle": "Đổi trường",
+    "settingsCommonChangeSchoolsSubtitle": "Trường hiện tại {schoolAbbreviation}",
+    "@settingsCommonChangeSchoolsSubtitle": {
+        "description": "Subtitle of the change schools settings item.",
+        "placeholders": {
+            "schoolAbbreviation": {
+                "type": "String",
+                "example": "HKR"
+            }
+        }
+    },
+    "settingsChooseUniversity": "Chọn trường đại học",
+    "settingsCommonChangeThemeTitle": "Đổi kiểu",
+    "settingsCommonChangeThemeSubtitle": "Kiểu hiện tại: {themeName}",
+    "@settingsCommonChangeThemeSubtitle": {
+        "description": "Subtitle of the change theme settings item.",
+        "placeholders": {
+            "themeName": {
+                "type": "String",
+                "example": "System"
+            }
+        }
+    },
+    "settingsScheduleTitle": "Lịch",
+    "settingsScheduleDefaultScheduleTitle": "Đặt hiện lịch",
+    "settingsScheduleDefaultScheduleSubtitle": "Chọn trong số thẻ đánh dấu",
+    "settingsScheduleNoBookmarks": "Không có đánh dấu",
+    "settingsNotificationTitle": "Thông báo",
+    "settingsNotificationClearAllTitle": "Xóa tất cả",
+    "settingsNotificationClearAllSubtitle": "Xóa tất cả thông báo",
+    "settingsNotificationOffsetTitle": "Đặt báo trước",
+    "settingNotificationOffsetSubtitle": "Báo trước: ",
+    "settingsNotificationOffsetMinutes": "{minutes} Phút",
+    "@settingsNotificationOffsetMinutes": {
+        "description": "Convert minutes into hour label automatically",
+        "placeholders": {
+            "minutes": {
+                "type": "int",
+                "example": "30"
+            }
+        }
+    },
+    "settingsNotificationOffsetHours": "{hours,plural, =1{{hours} hour} other{{hours} hours}}",
+    "@settingsNotificationOffsetHours": {
+        "description": "Convert minutes into hour label automatically",
+        "placeholders": {
+            "hours": {
+                "type": "int",
+                "example": "1"
+            }
+        }
+    },
+    "settingsMiscTitle": "Những thứ khác",
+    "settingsMiscBugTitle": "Thông báo lỗi",
+    "settingsMiscBugSubtitle": "Gửi cho chúng tôi về lỗi của phần mềm",
+    "settingsMiscRateTitle": "Đánh giá ứng dụng của chúng tôi",
+    "settingsMiscRateSubtitle": "Đánh giá ứng dụng của chúng tôi ở {storeName}",
+    "@settingsMiscRateSubtitle": {
+        "description": "String pointing to either App Store or Google Play",
+        "placeholders": {
+            "storeName": {
+                "type": "String",
+                "example": "Google Play"
+            }
+        }
+    },
+    "settingsMiscChangeLanguageTitle": "Đổi ngôn ngữ",
+    "settingsMiscChangeLanguageSubtitle": "Đổi ngỗn ngữ của phần mềm",
+    "scaffoldMessageCreatedNotificationForCourse": "Thành công tạo ra {eventCount} và thông báo cho {courseName}",
+    "@scaffoldMessageCreatedNotificationForCourse": {
+        "description": "Message including the number of notifications created and the name of a course.",
+        "placeholders": {
+            "eventCount": {
+                "type": "int",
+                "example": "2"
+            },
+            "courseName": {
+                "type": "String",
+                "example": "Math"
+            }
+        }
+    },
+    "scaffoldMessageCreatedNotificationForEvent": "Thành công tạo ra thông báo cho {eventName}",
+    "@scaffoldMessageCreatedNotificationForEvent": {
+        "description": "Message showing that notification was set for a given event name.",
+        "placeholders": {
+            "eventName": {
+                "type": "String",
+                "example": "Lecture 2"
+            }
+        }
+    },
+    "scaffoldMessageCancelledAllSetNotifications": "Đã hủy tất cả các thông báo",
+    "scaffoldMessageCancelledEventNotification": "Đã hủy thông báo cho {eventName}",
+    "@scaffoldMessageCancelledEventNotification": {
+        "description": "Message showing that notification was removed from a given event name.",
+        "placeholders": {
+            "eventName": {
+                "type": "String",
+                "example": "Lecture 2"
+            }
+        }
+    },
+    "scaffoldMessageCancelledCourseNotifications": "Thông báo bị hủy đối với {courseName}",
+    "@scaffoldMessageCancelledCourseNotifications": {
+        "description": "Message showing that notifications were removed from a given course name.",
+        "placeholders": {
+            "courseName": {
+                "type": "String",
+                "example": "Math"
+            }
+        }
+    },
+    "scaffoldMessageCancelNotificationsFailed": "Không thể hủy thông báo cho {courseOrEventName}",
+    "@scaffoldMessageCancelNotificationsFailed": {
+        "description": "Message to show that cancelling notifications of events or course failed.",
+        "placeholders": {
+            "courseOrEventName": {
+                "type": "String",
+                "example": "Math or Lecture 1"
+            }
+        }
+    },
+    "scaffoldMessageOpenEventOptionsFailed": "Lịch biểu phải được đặt mặc định để truy cập các tùy chọn",
+    "scaffoldMessageChangeTheme": "Đã thay đổi chủ đề thành {themeTypeName}",
+    "@scaffoldMessageChangeTheme": {
+        "description": "Message to show that the default theme was changed.",
+        "placeholders": {
+            "themeTypeName": {
+                "type": "String",
+                "example": "Dark Theme"
+            }
+        }
+    },
+    "scaffoldMessageChangedSchool": "Đã đổi trường thành {schoolName}",
+    "@scaffoldMessageChangedSchool": {
+        "description": "Message to show that the default school has been changed.",
+        "placeholders": {
+            "schoolName": {
+                "type": "String",
+                "example": "Kristianstad University"
+            }
+        }
+    },
+    "scaffoldMessageChangedDefaultView": "Đã thay đổi chế độ xem mặc định thành {viewType}",
+    "@scaffoldMessageChangedDefaultView": {
+        "description": "Message to show that the default view type has been changed.",
+        "placeholders": {
+            "viewType": {
+                "type": "String",
+                "example": "Calendar"
+            }
+        }
+    },
+    "scaffoldMessageChangedDefaultSchedule": "Đã thay đổi lịch biểu mặc định thành {scheduleId}",
+    "@scaffoldMessageChangedDefaultSchedule": {
+        "description": "Message to show that the default schedule has been changed.",
+        "placeholders": {
+            "scheduleId": {
+                "type": "String",
+                "example": "p.TBSE2+2020+36+100+NML+en"
+            }
+        }
+    },
+    "scaffoldMessageChangedDefaultNotificationOffset": "Đã thay đổi phần bù thông báo mặc định thành {notificationOffset} trước khi bắt đầu",
+    "@scaffoldMessageChangedDefaultNotificationOffset": {
+        "description": "Message to show that the default notification offset has been changed.",
+        "placeholders": {
+            "notificationOffset": {
+                "type": "String",
+                "example": "60"
+            }
+        }
+    },
+    "scaffoldMessageAddedBookmark": "Đã lưu {scheduleId} dấu trang",
+    "@scaffoldMessageAddedBookmark": {
+        "description": "Message to show that a schedule has been favourited.",
+        "placeholders": {
+            "scheduleId": {
+                "type": "String",
+                "example": "p.TBSE2+2020+36+100+NML+en"
+            }
+        }
+    },
+    "scaffoldMessageRemovedBookmark": "Loại bỏ {scheduleId} từ dấu trang",
+    "@scaffoldMessageRemovedBookmark": {
+        "description": "Message to show that a schedule has been unfavourited.",
+        "placeholders": {
+            "scheduleId": {
+                "type": "String",
+                "example": "p.TBSE2+2020+36+100+NML+en"
+            }
+        }
+    },
+    "scaffoldMessageOpenExternalUrlFailed": "Không thể mở {webpageName}",
+    "@scaffoldMessageOpenExternalUrlFailed": {
+        "description": "Message to show that opening an external webpage failed",
+        "placeholders": {
+            "webpageName": {
+                "type": "String",
+                "example": "Kronox"
+            }
+        }
+    },
+    "scaffoldMessageUpdatedCourseColor": "Đã cập nhật màu khóa học cho {courseName}",
+    "@scaffoldMessageUpdatedCourseColor": {
+        "description": "Message to show that a course color has been changed.",
+        "placeholders": {
+            "courseName": {
+                "type": "String",
+                "example": "Math"
+            }
+        }
+    },
+    "runtimeErrorProgramFetch": "Không tìm thấy chương trình",
+    "runtimeErrorScheduleFetch": "Không tìm thấy lịch",
+    "runtimeErrorTimeout": "Đã hết thời gian tìm kiếm",
+    "runtimeErrorEmptySchedule": "Lịch biểu trống",
+    "runtimeErrorLogin": "Không đăng nhập được",
+    "runtimeErrorUnknown": "Đã xảy ra lỗi. Vui lòng thử lại",
+    "runtimeErrorAuthentication": "Xác thực không thành công, vui lòng thử đăng nhập lại",
+    "runtimeErrorLoginSuccess": "Đã đăng nhập thành công",
+    "runtimeErrorNoBookmarks": "Không có lịch dấu trang",
+    "runtimeErrorMissingLocations": "Vị trí không xác định",
+    "runtimeErrorMissingTeachers": "Giáo viên không xác định",
+    "runtimeErrorNoCachedSchedule": "Không tìm thấy lịch trong bộ nhớ cache",
+    "runtimeErrorFailedExamSignup": "Không thể đăng ký, hãy thử lại sau hoặc truy cập kronox",
+    "runtimeErrorInvalidInputFields": "Tên người dùng và mật khẩu không được để trống",
+    "popUpNotificationPermissionTitle": "Cho phép thông báo",
+    "popUpNotificationPermissionDescription": "Ứng dụng này muốn gửi cho bạn thông báo",
+    "popUpExamAutoSignupTitle": "Đăng ký thi tự động nên sử dụng một cách thận trọng!",
+    "popUpExamAutoSignupBody": "Mọi thứ có thể xảy ra sai sót và do đó, trách nhiệm của bạn vẫn là đảm bảo rằng bạn đã đăng ký cho các bài thi của mình. Nếu bài kiểm tra có yêu cầu bạn chọn một lớp mà không thể tự động đăng ký (tương tự như vậy) bạn phải bật hỗ trợ nếu cần thiết",
+    "popUpScheduleHelpFirstLine": "Lịch có thể được đánh dấu bằng biểu tượng này",
+    "popUpScheduleHelpSecondLine": "Nó sẽ xuất hiện ở góc trên cùng bên trái khi bạn đã tìm và mở lịch của mình",
+    "popUpScheduleIsEmptyTitle": "Lịch này có vẻ trống nhưng vẫn nằm trong bộ liêu nhớ của Kronox",
+    "popUpScheduleIsEmptyBody": "Kronox lưu trữ lịch ngay cả khi chúng không chứa bất kỳ dữ liệu nào, vì vậy, tìm lịch của bạn đôi khi có thể tìm thấy lịch trống",
+    "popUpScheduleFetchError": "Đã xảy ra lỗi khi truy xuất lịch biểu này",
+    "no": "Không",
+    "yes": "Có",
+    "cancel": "Hủy bỏ",
+    "understood": "Hiểu",
+    "done": "Xong",
+    "ok": "Ok",
+    "toSearch": "Đưa tôi đến chỗ tìm kiếm",
+    "tryAgain": "Thử lại",
+    "send": "Gửi",
+    "unknown": "Không biết",
+    "eventOptionsRemoveEventNotification": "Xóa thông báo cho sự kiện",
+    "eventOptionsRemoveCourseNotifications": "Xóa tất cả thông báo cho khóa",
+    "eventOptionsAddEventNotification": "Đặt thông báo cho sự kiện",
+    "eventOptionsAddCourseNotifications": "Đặt thông báo cho sự khóa",
+    "eventOptionsChangeCourseColor": "Thay đổi màu cho khóa ",
+    "eventOptionsColorPickerTitle": "Chọn màu",
+    "detailsTitle": "Chi tiết",
+    "detailsDate": "Ngày",
+    "detailsTime": "Giờ",
+    "detailsRegisterBefore": "Đăng ký trước",
+    "detailsType": "Kiểu",
+    "detailsSupport": "Hỗ trợ",
+    "detailsSupportAvailable": "Có hỗ trợ, kích hoạt trên Kronox",
+    "detailsSupportUnavailable": "Không có hỗ trợ",
+    "detailsAnonymousCode": "Mã ẩn danh",
+    "detailsRegistrationOpens": "Đăng ký đang mở",
+    "detailsLocation": "Vị trí",
+    "detailsCourse": "Khóa",
+    "detailsTeachers": "Giáo viên",
+    "supportModalTitle": "Giúp",
+    "supportModalSubjectTooShort": "Chủ đề phải lớn hơn 5 ký tự",
+    "supportModalIssueTypeLabel": "Loại vấn đề",
+    "supportModalIssueSummaryHelper": "Tóm tắt vấn đề của bạn trong tiêu đề",
+    "supportModalBodyTooShort": "Nội dung phải lớn hơn 5 ký tự",
+    "supportModalExplainIssueLabel": "Giải thích vấn đề của bạn",
+    "supportModalExplainIssueHelper": "Giải thích vấn đề của bạn chi tiết hơn để chúng tôi có thể trợ giúp",
+    "supportModalSendSuccess": "Đã gửi báo cáo lỗi!",
+    "supportModalSendFail": "Đã xảy ra lỗi với yêu cầu của bạn! \nVui lòng thử lại sau",
+    "contributorsModalTitle": "ĐÓNG GÓP",
+    "contributorsModalDevelopment": "Chế tạo",
+    "contributorsModalDesign": "Thiết kế",
+    "contributorsModalTranslation": "Biên dịch",
+    "contributorsModalSpecialThanks": "Cảm ơn"
+}

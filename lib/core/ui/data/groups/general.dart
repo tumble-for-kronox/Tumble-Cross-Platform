@@ -14,4 +14,5 @@ class GeneralStrings extends StringConstantGroup {
   String tryAgain() => localizedStrings.tryAgain;
   String send() => localizedStrings.send;
   String unknown() => localizedStrings.unknown;
+  String confirm() => localizedStrings.confirm;
 }

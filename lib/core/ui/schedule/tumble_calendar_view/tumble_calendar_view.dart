@@ -10,7 +10,7 @@ import 'package:tumble/core/navigation/app_navigator.dart';
 import 'package:tumble/core/theme/data/colors.dart';
 import 'package:tumble/core/ui/bottom_nav_bar/cubit/bottom_nav_cubit.dart';
 import 'package:tumble/core/ui/bottom_nav_bar/data/nav_bar_items.dart';
-import 'package:tumble/core/ui/main_app/cubit/main_app_cubit.dart';
+import 'package:tumble/core/ui/app_switch/cubit/app_switch_cubit.dart';
 import 'package:tumble/core/ui/schedule/no_schedule.dart';
 import 'package:tumble/core/ui/schedule/tumble_calendar_view/data/calendar_data_source.dart';
 import 'package:tumble/core/ui/schedule/tumble_list_view/data/custom_alerts.dart';
@@ -31,7 +31,7 @@ class _TumbleCalendarViewState extends State<TumbleCalendarView> {
   @override
   Widget build(BuildContext context) {
     final AppNavigator navigator = BlocProvider.of<AppNavigator>(context);
-    return BlocBuilder<MainAppCubit, MainAppState>(
+    return BlocBuilder<AppSwitchCubit, AppSwitchState>(
       builder: (context, state) {
         switch (state.status) {
           case MainAppStatus.INITIAL:
@@ -45,7 +45,7 @@ class _TumbleCalendarViewState extends State<TumbleCalendarView> {
 
           case MainAppStatus.POPULATED_VIEW:
             return FutureBuilder(
-                future: getCalendarDataSource(state.listOfDays!, BlocProvider.of<MainAppCubit>(context)),
+                future: getCalendarDataSource(state.listOfDays!, BlocProvider.of<AppSwitchCubit>(context)),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     return SfCalendar(
@@ -53,7 +53,7 @@ class _TumbleCalendarViewState extends State<TumbleCalendarView> {
                       dataSource: snapshot.data as EventsDataSource,
                       appointmentBuilder: (context, details) {
                         final Event event = details.appointments.first;
-                        final Color eventColor = BlocProvider.of<MainAppCubit>(context).getColorForCourse(event);
+                        final Color eventColor = BlocProvider.of<AppSwitchCubit>(context).getColorForCourse(event);
                         return ClipPath(
                             clipper: ShapeBorderClipper(
                                 shape: RoundedRectangleBorder(
@@ -73,7 +73,7 @@ class _TumbleCalendarViewState extends State<TumbleCalendarView> {
                                           Radius.circular(10),
                                         ),
                                         boxShadow: const [
-                                          BoxShadow(color: Colors.black26, blurRadius: 2, offset: Offset(1, 1))
+                                          BoxShadow(color: Colors.black26, blurRadius: 2, offset: Offset(0, 1))
                                         ]),
                                     padding: const EdgeInsets.only(left: 18, top: 8, right: 8, bottom: 8),
                                     child: Column(
@@ -140,7 +140,7 @@ class _TumbleCalendarViewState extends State<TumbleCalendarView> {
                           return;
                         }
                         Event event = calendarLongPressDetails.appointments![0];
-                        EventOptions.showEventOptions(context, event, BlocProvider.of<MainAppCubit>(context));
+                        EventOptions.showEventOptions(context, event, BlocProvider.of<AppSwitchCubit>(context));
                       },
                       onTap: (calendarTapDetails) {
                         if (calendarTapDetails.targetElement != CalendarElement.appointment) {
@@ -150,8 +150,8 @@ class _TumbleCalendarViewState extends State<TumbleCalendarView> {
                         TumbleEventModal.showBookmarkEventModal(
                             context,
                             event,
-                            BlocProvider.of<MainAppCubit>(context).getColorForCourse(event),
-                            BlocProvider.of<MainAppCubit>(context));
+                            BlocProvider.of<AppSwitchCubit>(context).getColorForCourse(event),
+                            BlocProvider.of<AppSwitchCubit>(context));
                       },
                     );
                   }

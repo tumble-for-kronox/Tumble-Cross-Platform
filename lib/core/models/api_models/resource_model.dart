@@ -11,8 +11,7 @@ import 'dart:convert';
 part 'resource_model.freezed.dart';
 part 'resource_model.g.dart';
 
-ResourceModel resourceModelFromJson(String str) =>
-    ResourceModel.fromJson(json.decode(str));
+ResourceModel resourceModelFromJson(String str) => ResourceModel.fromJson(json.decode(str));
 
 String resourceModelToJson(ResourceModel data) => json.encode(data.toJson());
 
@@ -27,8 +26,7 @@ abstract class ResourceModel with _$ResourceModel {
     Map<String, Map<int, AvailabilityValue>>? availabilities,
   }) = _ResourceModel;
 
-  factory ResourceModel.fromJson(Map<String, dynamic> json) =>
-      _$ResourceModelFromJson(json);
+  factory ResourceModel.fromJson(Map<String, dynamic> json) => _$ResourceModelFromJson(json);
 }
 
 @freezed
@@ -41,8 +39,7 @@ abstract class AvailabilityValue with _$AvailabilityValue {
     String? bookedBy,
   }) = _AvailabilityValue;
 
-  factory AvailabilityValue.fromJson(Map<String, dynamic> json) =>
-      _$AvailabilityValueFromJson(json);
+  factory AvailabilityValue.fromJson(Map<String, dynamic> json) => _$AvailabilityValueFromJson(json);
 }
 
 enum AvailabilityEnum { AVAILABLE, BOOKED, UNAVAILABLE }
@@ -60,24 +57,25 @@ abstract class TimeSlot with _$TimeSlot {
     required DateTime from,
     required DateTime to,
     required String duration,
-    required DateTime getConfirmationOpens,
-    required DateTime getConfirmationCloses,
   }) = _TimeSlot;
 
-  factory TimeSlot.fromJson(Map<String, dynamic> json) =>
-      _$TimeSlotFromJson(json);
+  factory TimeSlot.fromJson(Map<String, dynamic> json) => _$TimeSlotFromJson(json);
 }
 
 @freezed
 abstract class Booking with _$Booking {
   const factory Booking({
     required String id,
+    required String resourceId,
     required TimeSlot timeSlot,
     required String locationId,
+    required bool showConfirmButton,
+    required bool showUnbookButton,
+    required DateTime? confirmationOpen,
+    required DateTime? confirmationClosed,
   }) = _Booking;
 
-  factory Booking.fromJson(Map<String, dynamic> json) =>
-      _$BookingFromJson(json);
+  factory Booking.fromJson(Map<String, dynamic> json) => _$BookingFromJson(json);
 }
 
 class EnumValues<T> {

@@ -1,0 +1,87 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/src/foundation/key.dart';
+import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tumble/core/ui/data/string_constants.dart';
+import 'package:tumble/core/ui/tumble_loading.dart';
+import 'package:tumble/core/ui/user/resources/cubit/resource_cubit.dart';
+import 'package:tumble/core/ui/user/resources/user_booking.dart';
+
+import '../../login/cubit/auth_cubit.dart';
+import '../../scaffold_message.dart';
+
+class UserBookingsContainer extends StatelessWidget {
+  const UserBookingsContainer({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 200),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+      constraints: const BoxConstraints(
+        minHeight: 100,
+        maxHeight: 500,
+        maxWidth: double.maxFinite,
+      ),
+      child: BlocBuilder<ResourceCubit, ResourceState>(builder: (context, state) {
+        switch (state.userBookingsStatus) {
+          case UserBookingsStatus.LOADING:
+            return Center(
+              heightFactor: 0.1,
+              child: TumbleLoading(color: Theme.of(context).colorScheme.primary),
+            );
+          case UserBookingsStatus.LOADED:
+            return state.userBookings!.where((booking) => booking.timeSlot.to.isAfter(DateTime.now())).isEmpty
+                ? Center(
+                    heightFactor: 0.1,
+                    child: Text(S.userBookings.noBookings(),
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.onBackground,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w400,
+                        )),
+                  )
+                : SizedBox(
+                    width: double.maxFinite,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: state.userBookings!
+                          .asMap()
+                          .entries
+                          .where((entry) => entry.value.timeSlot.to.isAfter(DateTime.now()))
+                          .map((entry) => Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
+                                child: UserBooking(
+                                  onConfirm: () => context
+                                      .read<ResourceCubit>()
+                                      .confirmBooking(
+                                          context.read<AuthCubit>(), entry.value.resourceId, entry.value.id, entry.key)
+                                      .then((value) => showScaffoldMessage(context, value)),
+                                  onUnbook: () => context
+                                      .read<ResourceCubit>()
+                                      .unbookResource(BlocProvider.of<AuthCubit>(context), entry.value.id, entry.key)
+                                      .then((value) => showScaffoldMessage(context, value)),
+                                  booking: entry.value,
+                                  confirmLoading: state.confirmationLoading![entry.key],
+                                  unbookLoading: state.unbookLoading![entry.key],
+                                ),
+                              ))
+                          .toList(),
+                    ),
+                  );
+          case UserBookingsStatus.ERROR:
+            return Center(
+              child: Text(context.read<ResourceCubit>().state.userBookingsErrorMessage!,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      color: Theme.of(context).colorScheme.onBackground, fontSize: 20, fontWeight: FontWeight.w500)),
+            );
+          case UserBookingsStatus.INITIAL:
+            return Container();
+        }
+      }),
+    );
+  }
+}

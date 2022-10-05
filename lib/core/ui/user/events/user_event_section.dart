@@ -17,16 +17,13 @@ class UserEventSection extends StatelessWidget {
   final List<UpcomingUserEventModel>? upcomingEvents;
 
   const UserEventSection(
-      {Key? key,
-      required this.sectionTitle,
-      required this.availableEvents,
-      required this.upcomingEvents})
+      {Key? key, required this.sectionTitle, required this.availableEvents, required this.upcomingEvents})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AuthCubit, AuthState>(builder: (context, state) {
-      return Padding(
+      return Container(
         padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 0),
         child: Column(
           children: <Widget>[
@@ -54,9 +51,7 @@ class UserEventSection extends StatelessWidget {
                                 showModalBottomSheet(
                                     isScrollControlled: true,
                                     context: context,
-                                    builder: (context) =>
-                                        RegisteredPassedUserEventModal(
-                                            userEvent: e));
+                                    builder: (context) => RegisteredPassedUserEventModal(userEvent: e));
                               },
                             )
                           : AvailableUserEventCard(
@@ -65,8 +60,7 @@ class UserEventSection extends StatelessWidget {
                                 showModalBottomSheet(
                                     isScrollControlled: true,
                                     context: context,
-                                    builder: (context) =>
-                                        AvailableUserEventModal(userEvent: e));
+                                    builder: (context) => AvailableUserEventModal(userEvent: e));
                               },
                             );
                     }).toList()),

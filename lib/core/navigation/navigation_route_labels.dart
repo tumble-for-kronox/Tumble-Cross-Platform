@@ -1,6 +1,6 @@
 class NavigationRouteLabels {
   static const rootPage = 'RootPage';
-  static const mainAppPage = 'MainAppPage';
+  static const appSwitchPage = 'MainAppPage';
   static const mainAppNavigationRootPage = 'MainAppNavigationRootPage';
   static const schoolSelectionPage = 'SchoolSelectionPage';
   static const loginPageRoot = 'LoginPageRoot';
@@ -9,4 +9,6 @@ class NavigationRouteLabels {
   static const tumbleWeekView = 'TumbleWeekView';
   static const tumbleCalendarView = 'TumbleCalendarView';
   static const appTopRootBuilder = 'App';
+  static const resourceBasePage = 'ResourcePage';
+  static const chosenResourcePage = 'TumbleChosenResourcePage';
 }

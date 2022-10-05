@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:tumble/core/models/api_models/available_user_event_model.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
-import 'package:tumble/core/ui/main_app/misc/tumble_details_modal_base.dart';
+import 'package:tumble/core/ui/app_switch/misc/tumble_details_modal_base.dart';
 
 import '../../../schedule/modal_info_row.dart';
 

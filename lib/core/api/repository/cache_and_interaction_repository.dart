@@ -74,7 +74,7 @@ class CacheAndInteractionRepository implements ICacheAndInteractionService {
   /// have at least a default school or even a default school
   /// and a default schedule)
   @override
-  Future<SharedPreferenceResponse> verifyDefaultSchoolSet() async {
+  Future<SharedPreferenceResponse> verifyDefaultSchoolExists() async {
     final String? defaultSchool =
         _preferenceService.getString(PreferenceTypes.school);
 

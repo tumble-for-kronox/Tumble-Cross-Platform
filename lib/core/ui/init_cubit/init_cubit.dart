@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -12,15 +14,18 @@ part 'init_state.dart';
 
 class InitCubit extends Cubit<InitState> {
   InitCubit()
-      : super(
-            const InitState(defaultSchool: null, status: InitStatus.NO_SCHOOL));
+      : super(const InitState(
+            defaultSchool: null, status: InitStatus.NO_SCHOOL)) {
+    _init();
+  }
 
   final _cacheAndInteractionService = getIt<CacheAndInteractionRepository>();
   final _databaseService = getIt<DatabaseRepository>();
+  final _appDependencies = getIt<AppDependencies>();
 
-  Future<void> init() async {
+  Future<void> _init() async {
     SharedPreferenceResponse sharedPreferenceResponse =
-        await _cacheAndInteractionService.verifyDefaultSchoolSet();
+        await _cacheAndInteractionService.verifyDefaultSchoolExists();
     switch (sharedPreferenceResponse.status) {
       case InitialStatus.NO_SCHOOL:
         emit(
@@ -34,15 +39,20 @@ class InitCubit extends Cubit<InitState> {
     }
   }
 
-  void changeSchool(String schoolName) {
-    final theme = getIt<SharedPreferences>().getString(PreferenceTypes.theme);
-    getIt<SharedPreferences>().clear();
-    AppDependencies.initDependencies();
-    getIt<SharedPreferences>().setString(PreferenceTypes.school, schoolName);
-    getIt<SharedPreferences>().setString(PreferenceTypes.theme, theme!);
-    _databaseService.removeAll();
-    _databaseService.removeAllCachedCourseColors();
-    emit(InitState(
-        defaultSchool: schoolName, status: InitStatus.SCHOOL_AVAILABLE));
+  Future<void> changeSchool(String schoolName) async {
+    /// Renew items in shared preferences
+    await _appDependencies.updateDependencies(schoolName);
+
+    if (state.status == InitStatus.SCHOOL_AVAILABLE) {
+      /// Clear local db
+      _databaseService.removeAll();
+      _databaseService.removeAllCachedCourseColors();
+
+      emit(state.copyWith(defaultSchool: schoolName));
+      return;
+    } else if (state.status == InitStatus.NO_SCHOOL) {
+      emit(state.copyWith(
+          defaultSchool: schoolName, status: InitStatus.SCHOOL_AVAILABLE));
+    }
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -14,9 +16,7 @@ class AvailableUserEventCard extends StatelessWidget {
   final AvailableUserEventModel userEvent;
   final Null Function() onTap;
 
-  const AvailableUserEventCard(
-      {Key? key, required this.userEvent, required this.onTap})
-      : super(key: key);
+  const AvailableUserEventCard({Key? key, required this.userEvent, required this.onTap}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -32,15 +32,13 @@ class AvailableUserEventCard extends StatelessWidget {
               decoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.surface,
                   borderRadius: BorderRadius.circular(10),
-                  boxShadow: const [
-                    BoxShadow(
-                        color: Colors.black26,
-                        blurRadius: 2,
-                        offset: Offset(1, 1))
-                  ]),
+                  boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 2, offset: Offset(0, 1))]),
               child: MaterialButton(
                 padding: const EdgeInsets.all(0),
                 onPressed: onTap,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
                 child: Container(
                   padding: const EdgeInsets.only(left: 24, top: 15),
                   width: double.infinity,
@@ -61,8 +59,7 @@ class AvailableUserEventCard extends StatelessWidget {
                                   height: 5,
                                   decoration: BoxDecoration(
                                     shape: BoxShape.circle,
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
+                                    color: Theme.of(context).colorScheme.primary,
                                   ),
                                 ),
                                 const SizedBox(width: 6),
@@ -73,9 +70,7 @@ class AvailableUserEventCard extends StatelessWidget {
                                     style: TextStyle(
                                         fontSize: 13,
                                         fontWeight: FontWeight.w400,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .onSecondary,
+                                        color: Theme.of(context).colorScheme.onSecondary,
                                         letterSpacing: .5),
                                   ),
                                 ),
@@ -88,8 +83,7 @@ class AvailableUserEventCard extends StatelessWidget {
                           Text(userEvent.title.capitalize(),
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
-                                color:
-                                    Theme.of(context).colorScheme.onBackground,
+                                color: Theme.of(context).colorScheme.onBackground,
                                 fontSize: 19,
                                 letterSpacing: .5,
                                 fontWeight: FontWeight.w400,
@@ -110,22 +104,15 @@ class AvailableUserEventCard extends StatelessWidget {
                                       ? S.userEvents.unregisterUntil()
                                       : S.userEvents.registerBefore(),
                                   style: TextStyle(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onSurface,
+                                      color: Theme.of(context).colorScheme.onSurface,
                                       fontWeight: FontWeight.w400,
                                       letterSpacing: 0.5),
                                 ),
                                 Text(
-                                  DateFormat(
-                                          "dd-MM-yyyy",
-                                          Localizations.localeOf(context)
-                                              .languageCode)
+                                  DateFormat("dd-MM-yyyy", Localizations.localeOf(context).languageCode)
                                       .format(userEvent.lastSignupDate),
                                   style: TextStyle(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onBackground,
+                                    color: Theme.of(context).colorScheme.onBackground,
                                     fontWeight: FontWeight.w400,
                                     letterSpacing: 0.5,
                                   ),
@@ -135,42 +122,27 @@ class AvailableUserEventCard extends StatelessWidget {
                           ),
                           Expanded(
                             child: Container(
-                              alignment: Alignment.centerRight,
-                              padding:
-                                  const EdgeInsets.only(right: 10, bottom: 10),
-                              child: userEvent.isRegistered
-                                  ? UserEventUnregisterButton(
-                                      onPressed: () {
-                                        BlocProvider.of<UserEventCubit>(context)
-                                            .unregisterUserEvent(
-                                                userEvent.id,
-                                                context
-                                                    .read<AuthCubit>()
-                                                    .state
-                                                    .status,
-                                                context
-                                                    .read<AuthCubit>()
-                                                    .state
-                                                    .userSession);
-                                      },
-                                    )
-                                  : UserEventRegisterButton(
-                                      linkToKronox:
-                                          userEvent.requiresChoosingLocation,
-                                      onPressed: () {
-                                        BlocProvider.of<UserEventCubit>(context)
-                                            .registerUserEvent(
-                                                userEvent.id,
-                                                context
-                                                    .read<AuthCubit>()
-                                                    .state
-                                                    .status,
-                                                context
-                                                    .read<AuthCubit>()
-                                                    .state
-                                                    .userSession);
-                                      }),
-                            ),
+                                alignment: Alignment.centerRight,
+                                padding: const EdgeInsets.only(right: 10, bottom: 10),
+                                child: BlocBuilder<UserEventCubit, UserEventState>(
+                                  builder: (context, state) {
+                                    return userEvent.isRegistered
+                                        ? UserEventUnregisterButton(
+                                            loading: state.registerUnregisterStatus == RegisterUnregisterStatus.LOADING,
+                                            onPressed: () {
+                                              BlocProvider.of<UserEventCubit>(context)
+                                                  .unregisterUserEvent(userEvent.id, context.read<AuthCubit>());
+                                            },
+                                          )
+                                        : UserEventRegisterButton(
+                                            loading: state.registerUnregisterStatus == RegisterUnregisterStatus.LOADING,
+                                            linkToKronox: userEvent.requiresChoosingLocation,
+                                            onPressed: () {
+                                              BlocProvider.of<UserEventCubit>(context)
+                                                  .registerUserEvent(userEvent.id, context.read<AuthCubit>());
+                                            });
+                                  },
+                                )),
                           ),
                         ],
                       )
@@ -185,9 +157,8 @@ class AvailableUserEventCard extends StatelessWidget {
                 child: Container(
                   decoration: BoxDecoration(
                     color: Theme.of(context).colorScheme.primary,
-                    borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(10),
-                        bottomLeft: Radius.circular(10)),
+                    borderRadius:
+                        const BorderRadius.only(topLeft: Radius.circular(10), bottomLeft: Radius.circular(10)),
                   ),
                   width: 8,
                   height: 140,

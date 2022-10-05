@@ -16,4 +16,8 @@ class RuntimeErrorType {
   static String noCachedSchedule() => S.runtimeError.noCachedSchedule();
   static String failedExamSignUp() => S.runtimeError.failedExamSignup();
   static String invalidInputFields() => S.runtimeError.invalidInputFields();
+  static String resourceUnavailable() => S.runtimeError.resourceUnavailable();
+  static String maxResourcesBooked() => S.runtimeError.maxResourcesBooked();
+  static String resourceBookCollision() => S.runtimeError.resourceBookCollision();
+  static String confirmBookingFailed() => S.runtimeError.confirmBookingFailed();
 }

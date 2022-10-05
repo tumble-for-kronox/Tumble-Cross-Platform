@@ -4,7 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tumble/core/shared/preference_types.dart';
 import 'package:tumble/core/dependency_injection/get_it_instances.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
-import 'package:tumble/core/ui/main_app/data/schools.dart';
+import 'package:tumble/core/ui/app_switch/data/schools.dart';
 import 'package:tumble/core/ui/tumble_button.dart';
 
 class UserInfo extends StatelessWidget {
@@ -45,6 +45,7 @@ class UserInfo extends StatelessWidget {
                 onPressed: onPressed,
                 prefixIcon: CupertinoIcons.person_circle,
                 text: S.loginPage.signInButton(),
+                loading: false,
               ),
             ),
           ),

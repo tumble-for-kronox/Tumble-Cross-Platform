@@ -28,7 +28,7 @@ class SchoolCard extends StatelessWidget {
             BoxShadow(
               color: Colors.black26,
               blurRadius: 2,
-              offset: Offset(0, 2),
+              offset: Offset(0, 1),
             ),
           ]),
       child: MaterialButton(
