@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:tumble/core/api/apiservices/api_booking_response.dart';
-import 'package:tumble/core/api/apiservices/api_schedule_or_programme_response.dart';
 import 'package:tumble/core/api/apiservices/api_user_response.dart';
 import 'package:tumble/core/models/api_models/resource_model.dart';
 

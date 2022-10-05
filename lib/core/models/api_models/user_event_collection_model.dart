@@ -2,7 +2,6 @@
 //
 //     final userEventCollectionModel = userEventCollectionModelFromJson(jsonString);
 
-import 'package:meta/meta.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:tumble/core/models/api_models/available_user_event_model.dart';
 import 'dart:convert';

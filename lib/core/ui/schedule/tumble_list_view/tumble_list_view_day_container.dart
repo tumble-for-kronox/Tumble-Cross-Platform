@@ -1,16 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
 import 'package:tumble/core/extensions/extensions.dart';
 import 'package:tumble/core/models/api_models/schedule_model.dart';
-import 'package:tumble/core/models/ui_models/course_ui_model.dart';
-import 'package:tumble/core/theme/data/colors.dart';
-import 'package:tumble/core/ui/data/groups/scaffold_message_types.dart';
 import 'package:tumble/core/ui/app_switch/cubit/app_switch_cubit.dart';
-import 'package:tumble/core/ui/app_switch/app_switch.dart';
-import 'package:tumble/core/ui/permission_handler.dart';
-import 'package:tumble/core/ui/scaffold_message.dart';
 import 'package:tumble/core/ui/schedule/event_modal.dart';
 import 'package:tumble/core/ui/schedule/event_options.dart';
 import 'package:tumble/core/ui/schedule/tumble_list_view/tumble_list_view_schedule_card.dart';
@@ -18,9 +10,7 @@ import 'package:tumble/core/ui/schedule/tumble_list_view/tumble_list_view_schedu
 class TumbleListViewDayContainer extends StatelessWidget {
   final Day day;
   final AppSwitchCubit mainAppCubit;
-  const TumbleListViewDayContainer(
-      {Key? key, required this.day, required this.mainAppCubit})
-      : super(key: key);
+  const TumbleListViewDayContainer({Key? key, required this.day, required this.mainAppCubit}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -31,11 +21,10 @@ class TumbleListViewDayContainer extends StatelessWidget {
         children: [
           Row(
             children: [
-              Text("${DateFormat.EEEE(Localizations.localeOf(context).languageCode).format(day.isoString).capitalize()} ${DateFormat("d/M", Localizations.localeOf(context).languageCode).format(day.isoString)}",
+              Text(
+                  "${DateFormat.EEEE(Localizations.localeOf(context).languageCode).format(day.isoString).capitalize()} ${DateFormat("d/M", Localizations.localeOf(context).languageCode).format(day.isoString)}",
                   style: TextStyle(
-                      color: Theme.of(context).colorScheme.onBackground,
-                      fontSize: 17,
-                      fontWeight: FontWeight.w400)),
+                      color: Theme.of(context).colorScheme.onBackground, fontSize: 17, fontWeight: FontWeight.w400)),
               Expanded(
                   child: Divider(
                 color: Theme.of(context).colorScheme.onBackground,
@@ -49,19 +38,12 @@ class TumbleListViewDayContainer extends StatelessWidget {
             child: Column(
               children: day.events
                   .map((event) => GestureDetector(
-                        onLongPress: () => EventOptions.showEventOptions(
-                            context, event, mainAppCubit),
+                        onLongPress: () => EventOptions.showEventOptions(context, event, mainAppCubit),
                         child: ScheduleCard(
                             event: event,
-                            color: event.isSpecial
-                                ? Colors.redAccent
-                                : mainAppCubit.getColorForCourse(event),
-                            onTap: () =>
-                                TumbleEventModal.showBookmarkEventModal(
-                                    context,
-                                    event,
-                                    mainAppCubit.getColorForCourse(event),
-                                    mainAppCubit)),
+                            color: event.isSpecial ? Colors.redAccent : mainAppCubit.getColorForCourse(event),
+                            onTap: () => TumbleEventModal.showBookmarkEventModal(
+                                context, event, mainAppCubit.getColorForCourse(event), mainAppCubit)),
                       ))
                   .toList(),
             ),

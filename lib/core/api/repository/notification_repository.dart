@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:darq/darq.dart';
 import 'package:shared_preferences/shared_preferences.dart';

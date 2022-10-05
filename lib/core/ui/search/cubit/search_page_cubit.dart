@@ -10,7 +10,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tumble/core/api/apiservices/api_schedule_or_programme_response.dart';
-import 'package:tumble/core/api/builders/notification_service_builder.dart';
 import 'package:tumble/core/api/repository/cache_and_interaction_repository.dart';
 import 'package:tumble/core/api/repository/notification_repository.dart';
 import 'package:tumble/core/database/data/access_stores.dart';
@@ -23,9 +22,7 @@ import 'package:tumble/core/models/api_models/schedule_model.dart';
 import 'package:tumble/core/models/ui_models/course_ui_model.dart';
 import 'package:tumble/core/models/ui_models/schedule_model_and_courses.dart';
 import 'package:tumble/core/models/ui_models/week_model.dart';
-import 'package:tumble/core/shared/app_dependencies.dart';
 import 'package:tumble/core/shared/preference_types.dart';
-import 'package:tumble/core/ui/data/scaffold_message_types.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
 import 'package:tumble/core/ui/scaffold_message.dart';
 

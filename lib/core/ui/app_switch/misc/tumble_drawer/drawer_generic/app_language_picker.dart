@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tumble/core/extensions/extensions.dart';
-import 'package:tumble/core/ui/data/string_constants.dart';
 import 'package:tumble/core/ui/app_switch/misc/tumble_drag_pill.dart';
 import 'package:tumble/core/ui/schedule/cancel_button.dart';
 
@@ -12,11 +11,7 @@ class AppLanguagePicker extends StatelessWidget {
   final Function(Locale?) setLocale;
   final Locale? currentLocale;
 
-  const AppLanguagePicker(
-      {Key? key,
-      required this.parameterMap,
-      required this.setLocale,
-      required this.currentLocale})
+  const AppLanguagePicker({Key? key, required this.parameterMap, required this.setLocale, required this.currentLocale})
       : super(key: key);
 
   @override
@@ -39,32 +34,23 @@ class AppLanguagePicker extends StatelessWidget {
                   child: Card(
                 elevation: 0,
                 color: Theme.of(context).colorScheme.surface,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0)),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
                 child: SingleChildScrollView(
                   child: Column(
                       children: (parameterMap.keys)
                           .map((key) => ListTile(
-                              leading: parameterMap[key] == currentLocale
-                                  ? const Icon(CupertinoIcons.check_mark)
-                                  : null,
-                              shape: const RoundedRectangleBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(20))),
+                              leading:
+                                  parameterMap[key] == currentLocale ? const Icon(CupertinoIcons.check_mark) : null,
+                              shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
                               title: Text(
                                 key,
-                                style: TextStyle(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onSurface),
+                                style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
                               ),
                               onTap: () => setLocale(parameterMap[key])))
                           .toList()),
                 ),
               )),
-              TumbleDragPill(
-                  barColor:
-                      Theme.of(context).colorScheme.background.contrastColor())
+              TumbleDragPill(barColor: Theme.of(context).colorScheme.background.contrastColor())
             ],
           ),
         ),

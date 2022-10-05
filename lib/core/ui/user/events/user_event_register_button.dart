@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:tumble/core/theme/data/colors.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tumble/core/dependency_injection/get_it_instances.dart';

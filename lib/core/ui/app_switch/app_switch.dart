@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tumble/core/theme/cubit/theme_cubit.dart';
@@ -23,24 +21,23 @@ class _AppSwitchState extends State<AppSwitch> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ThemeCubit, ThemeState>(
-        builder: ((context, state) =>
-            BlocBuilder<InitCubit, InitState>(
-                builder: (context, state) {
-                  switch (state.status) {
-                    case InitStatus.NO_SCHOOL:
-                      return BlocProvider.value(
-                        value: BlocProvider.of<InitCubit>(context),
-                        child: const SchoolSelectionPage(),
-                      );
-                    case InitStatus.SCHOOL_AVAILABLE:
-                      return MultiBlocProvider(providers: [
-                        BlocProvider.value(value: BlocProvider.of<AuthCubit>(context)),
-                        BlocProvider<UserEventCubit>(create: (context) => UserEventCubit()),
-                        BlocProvider<ResourceCubit>(create: (context) => ResourceCubit()),
-                        BlocProvider<MainAppNavigationCubit>(create: (context) => MainAppNavigationCubit())
-                      ], child: const InitializedNavigationRootPage());
-                  }
-                },
+        builder: ((context, state) => BlocBuilder<InitCubit, InitState>(
+              builder: (context, state) {
+                switch (state.status) {
+                  case InitStatus.NO_SCHOOL:
+                    return BlocProvider.value(
+                      value: BlocProvider.of<InitCubit>(context),
+                      child: const SchoolSelectionPage(),
+                    );
+                  case InitStatus.SCHOOL_AVAILABLE:
+                    return MultiBlocProvider(providers: [
+                      BlocProvider.value(value: BlocProvider.of<AuthCubit>(context)),
+                      BlocProvider<UserEventCubit>(create: (context) => UserEventCubit()),
+                      BlocProvider<ResourceCubit>(create: (context) => ResourceCubit()),
+                      BlocProvider<MainAppNavigationCubit>(create: (context) => MainAppNavigationCubit())
+                    ], child: const InitializedNavigationRootPage());
+                }
+              },
             )));
   }
 }

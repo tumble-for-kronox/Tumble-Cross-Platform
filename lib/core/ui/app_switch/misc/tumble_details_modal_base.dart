@@ -1,7 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:tumble/core/extensions/extensions.dart';
 import 'package:tumble/core/ui/app_switch/misc/tumble_drag_pill.dart';
 
@@ -12,11 +10,7 @@ class TumbleDetailsModalBase extends StatelessWidget {
   final Color barColor;
 
   const TumbleDetailsModalBase(
-      {Key? key,
-      required this.body,
-      required this.title,
-      required this.barColor,
-      this.onSettingsPressed})
+      {Key? key, required this.body, required this.title, required this.barColor, this.onSettingsPressed})
       : super(key: key);
 
   @override

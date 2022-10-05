@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tumble/core/navigation/navigation_routes.dart';
@@ -39,8 +37,7 @@ class AppNavigator extends Cubit<List<Page>> {
     return true;
   }
 
-  bool pushAndRemoveUntil(String page,
-      {required String lastPage, dynamic arguments}) {
+  bool pushAndRemoveUntil(String page, {required String lastPage, dynamic arguments}) {
     List<Page> list = List.from(state);
     if (list.length <= 1) return false;
     if (list.last.name == page && list.last.arguments == arguments) {

@@ -2,19 +2,15 @@ import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tumble/core/api/apiservices/api_booking_response.dart';
 import 'package:tumble/core/api/apiservices/api_user_response.dart';
 import 'package:tumble/core/api/apiservices/runtime_error_type.dart';
 import 'package:tumble/core/api/repository/user_repository.dart';
 import 'package:tumble/core/dependency_injection/get_it_instances.dart';
 import 'package:tumble/core/models/api_models/kronox_user_model.dart';
-import 'package:tumble/core/models/api_models/resource_model.dart';
 import 'package:tumble/core/models/api_models/user_event_collection_model.dart';
 import 'package:tumble/core/shared/preference_types.dart';
 import 'package:tumble/core/ui/login/cubit/auth_cubit.dart';
-import 'package:tumble/core/ui/scaffold_message.dart';
 
 part 'user_event_state.dart';
 

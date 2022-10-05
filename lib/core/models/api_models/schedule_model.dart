@@ -1,10 +1,7 @@
 // To parse this JSON data, do
 //
 //     final scheduleModel = scheduleModelFromJson(jsonString);
-import 'dart:math' as math;
-import 'package:flutter/material.dart';
 import 'package:html_unescape/html_unescape.dart';
-import 'package:meta/meta.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'dart:convert';
 

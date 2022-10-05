@@ -9,7 +9,6 @@ import 'package:tumble/core/ui/schedule/tumble_calendar_view/tumble_calendar_vie
 import 'package:tumble/core/ui/schedule/tumble_list_view/tumble_list_view.dart';
 import 'package:tumble/core/ui/schedule/tumble_week_view/tumble_week_view.dart';
 import 'package:tumble/core/ui/search/search/tumble_search_page.dart';
-import 'package:tumble/core/ui/user/resources/tumble_chosen_resource_page.dart';
 import 'package:tumble/core/ui/user/resources/tumble_resource_page.dart';
 
 class Routes {

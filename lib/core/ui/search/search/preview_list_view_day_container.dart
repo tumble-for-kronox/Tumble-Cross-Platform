@@ -1,16 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:tumble/core/models/api_models/schedule_model.dart';
-import 'package:tumble/core/models/ui_models/course_ui_model.dart';
-import 'package:tumble/core/theme/data/colors.dart';
-import 'package:tumble/core/ui/data/scaffold_message_types.dart';
-import 'package:tumble/core/ui/app_switch/cubit/app_switch_cubit.dart';
-import 'package:tumble/core/ui/app_switch/app_switch.dart';
-import 'package:tumble/core/ui/permission_handler.dart';
-import 'package:tumble/core/ui/scaffold_message.dart';
 import 'package:tumble/core/ui/schedule/event_modal.dart';
-import 'package:tumble/core/ui/schedule/event_options.dart';
 import 'package:tumble/core/ui/schedule/tumble_list_view/tumble_list_view_schedule_card.dart';
 import 'package:tumble/core/ui/search/cubit/search_page_cubit.dart';
 

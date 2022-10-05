@@ -1,7 +1,5 @@
 import 'dart:math';
 
-import 'package:flutter/material.dart';
-
 class ColorPicker {
   final List<int> _colors = [
     // Shades of blue

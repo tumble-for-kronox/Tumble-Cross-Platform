@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,7 +10,6 @@ import 'package:tumble/core/ui/app_switch/cubit/app_switch_cubit.dart';
 import 'package:tumble/core/ui/app_switch/misc/tumble_app_bar.dart';
 import 'package:tumble/core/ui/app_switch/misc/tumble_drawer/cubit/drawer_state.dart';
 import 'package:tumble/core/ui/app_switch/misc/tumble_drawer/tumble_app_drawer.dart';
-import 'package:tumble/core/ui/scaffold_message.dart';
 import 'package:tumble/core/ui/schedule/tumble_calendar_view/tumble_calendar_view.dart';
 import 'package:tumble/core/ui/schedule/tumble_list_view/tumble_list_view.dart';
 import 'package:tumble/core/ui/schedule/tumble_week_view/tumble_week_view.dart';

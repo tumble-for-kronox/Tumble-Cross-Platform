@@ -1,6 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
 class LocationCardContainer extends StatelessWidget {
