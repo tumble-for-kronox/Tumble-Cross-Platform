@@ -67,7 +67,7 @@ Widget _initialState(AuthState state, BuildContext context, String school) {
                 children: [
                   CircleAvatar(
                     backgroundColor: CustomColors.lightColors.background,
-                    child: const Image(image: AssetImage('assets/images/tumbleAppLogo.png')),
+                    child: const Image(image: AssetImage('assets/images/ic_launcher.png')),
                   ),
                   const SizedBox(
                     width: 15,

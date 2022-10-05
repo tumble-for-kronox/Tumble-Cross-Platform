@@ -59,7 +59,7 @@ flutter:
   assets:
     - assets/animations/lottie_success_burst.json
     - assets/images/cardBanner.png
-    - assets/images/tumbleAppLogo.png
+    - assets/images/ic_launcher.png
     - assets/images/detailsSplitter.png
     - assets/school_logos/hkr_logo.png
     - assets/school_logos/ltu_logo.png
