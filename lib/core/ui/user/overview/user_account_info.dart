@@ -144,7 +144,7 @@ class _UserAccountInfo extends State<UserAccountInfo> {
                           UserAccountExternalLink(
                             title: "Canvas",
                             color: const Color(0xFFe23e29),
-                            icon: CupertinoIcons.add,
+                            image: const AssetImage("assets/images/canvas_logo.png"),
                             link:
                                 "https://${Schools.schools.firstWhere((school) => school.schoolName == getIt<SharedPreferences>().getString(PreferenceTypes.school)).schoolId.name}.instructure.com",
                           ),
@@ -154,7 +154,7 @@ class _UserAccountInfo extends State<UserAccountInfo> {
                           const UserAccountExternalLink(
                             title: "Ladok",
                             color: Color(0xFF3c9a00),
-                            icon: CupertinoIcons.add,
+                            image: AssetImage("assets/images/ladok_logo.png"),
                             link: "https://www.student.ladok.se/student/app/studentwebb/",
                           ),
                           const SizedBox(
@@ -163,7 +163,7 @@ class _UserAccountInfo extends State<UserAccountInfo> {
                           UserAccountExternalLink(
                             title: "Kronox",
                             color: const Color(0xFF0089da),
-                            icon: CupertinoIcons.add,
+                            image: const AssetImage("assets/images/kronox_logo.png"),
                             link:
                                 "https://${Schools.schools.firstWhere((school) => school.schoolName == getIt<SharedPreferences>().getString(PreferenceTypes.school)).schoolUrl}",
                           ),

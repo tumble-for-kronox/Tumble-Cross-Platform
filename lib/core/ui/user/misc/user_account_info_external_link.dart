@@ -11,14 +11,14 @@ class UserAccountExternalLink extends StatelessWidget {
   final String title;
   final String link;
   final Color color;
-  final IconData icon;
+  final AssetImage image;
 
   const UserAccountExternalLink({
     Key? key,
     required this.title,
     required this.color,
     required this.link,
-    required this.icon,
+    required this.image,
   }) : super(key: key);
 
   @override
@@ -40,8 +40,9 @@ class UserAccountExternalLink extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              icon,
+            Image(
+              height: 25,
+              image: image,
               color: Colors.white,
             ),
             Text(
