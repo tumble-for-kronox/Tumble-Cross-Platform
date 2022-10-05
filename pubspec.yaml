@@ -76,6 +76,9 @@ flutter:
     - assets/school_logos/hv_logo.png
     - assets/school_logos/mdh_logo.png
     - assets/school_logos/sh_logo.png
+    - assets/images/kronox_logo.png
+    - assets/images/canvas_logo.png
+    - assets/images/ladok_logo.png
 
   fonts:
     - family: Roboto
