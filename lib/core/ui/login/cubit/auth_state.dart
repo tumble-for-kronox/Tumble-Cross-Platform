@@ -13,6 +13,7 @@ class AuthState extends Equatable {
   final bool passwordHidden;
   final bool loginSuccess;
   final String? errorMessage;
+  final bool focused;
 
   const AuthState(
       {required this.status,
@@ -20,6 +21,7 @@ class AuthState extends Equatable {
       required this.passwordController,
       required this.passwordHidden,
       required this.loginSuccess,
+      required this.focused,
       this.userSession,
       this.school,
       this.errorMessage});
@@ -32,7 +34,8 @@ class AuthState extends Equatable {
           TextEditingController? passwordController,
           KronoxUserModel? userSession,
           bool? passwordHidden,
-          bool? loginSuccess}) =>
+          bool? loginSuccess,
+          bool? focused}) =>
       AuthState(
           status: status ?? this.status,
           usernameController: usernameController ?? this.usernameController,
@@ -41,7 +44,8 @@ class AuthState extends Equatable {
           userSession: userSession ?? this.userSession,
           passwordHidden: passwordHidden ?? this.passwordHidden,
           loginSuccess: loginSuccess ?? this.loginSuccess,
-          errorMessage: errorMessage ?? this.errorMessage);
+          errorMessage: errorMessage ?? this.errorMessage,
+          focused: focused ?? this.focused);
 
   @override
   List<Object?> get props => [
@@ -51,5 +55,6 @@ class AuthState extends Equatable {
         passwordHidden,
         userSession,
         loginSuccess,
+        focused,
       ];
 }

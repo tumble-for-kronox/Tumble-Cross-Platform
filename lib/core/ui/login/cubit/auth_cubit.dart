@@ -20,16 +20,50 @@ part 'auth_state.dart';
 class AuthCubit extends Cubit<AuthState> {
   AuthCubit()
       : super(AuthState(
-          status: AuthStatus.INITIAL,
-          usernameController: TextEditingController(),
-          passwordController: TextEditingController(),
-          passwordHidden: true,
-          loginSuccess: false,
-        )) {
+            status: AuthStatus.INITIAL,
+            usernameController: TextEditingController(),
+            passwordController: TextEditingController(),
+            passwordHidden: true,
+            loginSuccess: false,
+            focused: false)) {
+    _init();
     login();
   }
   final _userRepo = getIt<UserRepository>();
   final _secureStorage = getIt<SecureStorageRepository>();
+  final _focusNodePassword = FocusNode();
+  final _focusNodeUsername = FocusNode();
+
+  FocusNode get focusNodePassword => _focusNodePassword;
+  FocusNode get focusNodeUsername => _focusNodeUsername;
+
+  void _init() {
+    _focusNodePassword.addListener(setFocusNodePassword);
+    _focusNodeUsername.addListener(setFocusNodeUsername);
+  }
+
+  @override
+  Future<void> close() async {
+    _focusNodePassword.dispose();
+    _focusNodeUsername.dispose();
+    super.close();
+  }
+
+  void setFocusNodePassword() {
+    if (_focusNodePassword.hasFocus) {
+      emit(state.copyWith(focused: true));
+    } else if (!_focusNodePassword.hasFocus) {
+      emit(state.copyWith(focused: false));
+    }
+  }
+
+  void setFocusNodeUsername() {
+    if (_focusNodeUsername.hasFocus) {
+      emit(state.copyWith(focused: true));
+    } else if (!_focusNodeUsername.hasFocus) {
+      emit(state.copyWith(focused: false));
+    }
+  }
 
   void submitLogin(BuildContext context, String school) async {
     final username = state.usernameController.text;
@@ -141,4 +175,8 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   bool get authenticated => state.status == AuthStatus.AUTHENTICATED;
+
+  void setFocusFalse() {
+    emit(state.copyWith(focused: false));
+  }
 }

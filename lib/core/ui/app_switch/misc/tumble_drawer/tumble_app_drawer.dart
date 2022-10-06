@@ -150,7 +150,7 @@ class TumbleAppDrawer extends StatelessWidget {
                       drawerTileTitle: S.settingsPage.reportBugTitle(),
                       subtitle: S.settingsPage.reportBugSubtitle(),
                       suffixIcon: CupertinoIcons.ant,
-                      eventType: EventType.SUPPORT,
+                      eventType: EventType.BUG_REPORT,
                       drawerEvent: (eventType) =>
                           _handleDrawerEvent(eventType, context, navigator, context.read<DrawerCubit>()),
                     ),
@@ -216,8 +216,8 @@ class TumbleAppDrawer extends StatelessWidget {
                   },
                 ));
         break;
-      case EventType.SUPPORT:
-        SupportModal.showSupportModal(context, cubit!);
+      case EventType.BUG_REPORT:
+        BugReportModal.showBugReportModal(context, cubit!);
         break;
       case EventType.OPEN_REVIEW:
         final uri = Platform.isIOS ? StoreUriString.ios : StoreUriString.android;
