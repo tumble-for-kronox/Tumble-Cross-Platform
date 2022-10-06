@@ -1,14 +1,12 @@
 import 'dart:async';
-import 'dart:convert';
+import 'dart:developer';
 import 'package:http/http.dart' as http;
-import 'package:flutter/foundation.dart';
 import 'package:tumble/core/api/apiservices/api_booking_response.dart';
 import 'package:tumble/core/api/apiservices/api_bug_report_response.dart';
 import 'package:tumble/core/api/apiservices/api_endpoints.dart';
 import 'package:tumble/core/api/apiservices/api_schedule_or_programme_response.dart';
 import 'package:tumble/core/api/apiservices/api_user_response.dart';
-import 'package:tumble/core/api/apiservices/runtime_error_type.dart';
-import 'package:tumble/core/api/cert_bypass.dart';
+import 'package:tumble/core/api/data/time_constants.dart';
 import 'package:tumble/core/api/interface/ibackend_service.dart';
 import 'package:tumble/core/extensions/api_response_extension/booking_parser.dart';
 import 'package:tumble/core/extensions/api_response_extension/misc_parser.dart';
@@ -25,23 +23,19 @@ class BackendRepository implements IBackendService {
   Future<ApiScheduleOrProgrammeResponse> getRequestSchedule(String scheduleId, String defaultSchool) async {
     final school = Schools().fromString(defaultSchool).schoolId.index;
 
-    if (kDebugMode) {
-      var uri = Uri.https(ApiEndPoints.debugBaseUrl, '${ApiEndPoints.getOneSchedule}$scheduleId', {
-        ApiEndPoints.school: school.toString(),
-      });
-      final response = await HttpService.sendGetRequestToServer(uri);
-      if (response == null) {
-        return ApiScheduleOrProgrammeResponse.error(RuntimeErrorType.timeoutError());
-      }
+    Uri uri = Uri.https(
+        ApiEndPoints.baseUrl,
+        '${ApiEndPoints.getOneSchedule}$scheduleId',
+        {
+          ApiEndPoints.school: school,
+        }.map((key, value) => MapEntry(key, value.toString())));
+
+    return http.get(uri).timeout(TimeConstants.apiTimeout).then((response) {
       return response.parseSchedule();
-    } else {
-      var uri = Uri.https(ApiEndPoints.baseUrl, '${ApiEndPoints.getOneSchedule}$scheduleId', {
-        ApiEndPoints.school: school,
-      });
-      final response = await http.get(uri).timeout(const Duration(seconds: 5));
-      //final response = await compute(http.get, uri);
-      return response.parseSchedule();
-    }
+    }).onError((error, stackTrace) {
+      log(name: 'backend_repository', error: error, '$error.message');
+      return ApiScheduleOrProgrammeResponse.error('Timed out');
+    });
   }
 
   /// [HttpGet]
@@ -49,20 +43,18 @@ class BackendRepository implements IBackendService {
   Future<ApiScheduleOrProgrammeResponse> getPrograms(String searchQuery, String defaultSchool) async {
     final school = Schools().fromString(defaultSchool).schoolId.index;
 
-    if (kDebugMode) {
-      var uri = Uri.https(ApiEndPoints.debugBaseUrl, ApiEndPoints.getSchedules,
-          {ApiEndPoints.search: searchQuery, ApiEndPoints.school: school.toString()});
-      final response = await HttpService.sendGetRequestToServer(uri);
-      if (response == null) {
-        return ApiScheduleOrProgrammeResponse.error(RuntimeErrorType.timeoutError());
-      }
-      return await response.parsePrograms();
-    } else {
-      var uri = Uri.https(ApiEndPoints.baseUrl, ApiEndPoints.getSchedules,
-          {ApiEndPoints.search: searchQuery, ApiEndPoints.school: school.toString()});
-      final response = await http.get(uri).timeout(const Duration(seconds: 5));
+    Uri uri = Uri.https(
+        ApiEndPoints.baseUrl,
+        ApiEndPoints.getSchedules,
+        {ApiEndPoints.search: searchQuery, ApiEndPoints.school: school.toString()}
+            .map((key, value) => MapEntry(key, value.toString())));
+
+    return await http.get(uri).timeout(TimeConstants.apiTimeout).then((response) {
       return response.parsePrograms();
-    }
+    }).onError((error, stackTrace) {
+      log(name: 'backend_repository', error: error, '$error.message');
+      return ApiScheduleOrProgrammeResponse.error('Timed out');
+    });
   }
 
   /// [HttpGet]
@@ -70,21 +62,18 @@ class BackendRepository implements IBackendService {
   Future<ApiUserResponse> getUserEvents(String sessionToken, String defaultSchool) async {
     final school = Schools().fromString(defaultSchool).schoolId.index;
 
-    if (kDebugMode) {
-      var uri = Uri.https(ApiEndPoints.debugBaseUrl, ApiEndPoints.getUserEvents,
-          {ApiEndPoints.sessionToken: sessionToken, ApiEndPoints.school: school.toString()});
-      final response = await HttpService.sendGetRequestToServer(uri);
-      if (response == null) {
-        return ApiUserResponse.error(RuntimeErrorType.timeoutError());
-      }
+    Uri uri = Uri.https(
+        ApiEndPoints.baseUrl,
+        ApiEndPoints.getSchedules,
+        {ApiEndPoints.sessionToken: sessionToken, ApiEndPoints.school: school.toString()}
+            .map((key, value) => MapEntry(key, value.toString())));
 
-      return await response.parseUserEvents();
-    } else {
-      Uri uri = Uri.https(ApiEndPoints.baseUrl, ApiEndPoints.getSchedules,
-          {ApiEndPoints.sessionToken: sessionToken, ApiEndPoints.school: school.toString()});
-      final response = await http.get(uri).timeout(const Duration(seconds: 5));
+    return await http.get(uri).timeout(TimeConstants.apiTimeout).then((response) {
       return response.parseUserEvents();
-    }
+    }).onError((error, stackTrace) {
+      log(name: 'backend_repository', error: error, '$error.message');
+      return ApiUserResponse.error('Timed out');
+    });
   }
 
   /// [HttpGet]
@@ -93,28 +82,18 @@ class BackendRepository implements IBackendService {
     final school = Schools().fromString(defaultSchool).schoolId.index;
     Map<String, String> headers = {"Authorization": refreshToken};
 
-    if (kDebugMode) {
-      var uri = Uri.https(
-        ApiEndPoints.debugBaseUrl,
-        ApiEndPoints.getRefreshSession,
-        {ApiEndPoints.school: school.toString()},
-      );
-
-      final response = await HttpService.sendGetRequestToServer(uri, headers: headers);
-      if (response == null) {
-        return ApiUserResponse.error(RuntimeErrorType.timeoutError());
-      }
-      return await response.parseUser();
-    } else {
-      var uri = Uri.https(
-        ApiEndPoints.baseUrl,
-        ApiEndPoints.getRefreshSession,
-        {ApiEndPoints.school: school.toString()},
-      );
-
-      final response = await http.get(uri, headers: headers).timeout(const Duration(seconds: 5));
+    Uri uri = Uri.https(
+      ApiEndPoints.baseUrl,
+      ApiEndPoints.getRefreshSession,
+      {ApiEndPoints.school: school}.map((key, value) => MapEntry(key, value.toString())),
+    );
+    return await http.get(uri, headers: headers).timeout(TimeConstants.apiTimeout).then((response) {
       return response.parseUser();
-    }
+    }).onError((error, stackTrace) {
+      log(name: 'backend_repository', 'REFRESH SESSION ERROR');
+      log(name: 'backend_repository', error: error, '$error.message');
+      return ApiUserResponse.error('Timed out');
+    });
   }
 
   /// [HttpGet]
@@ -122,22 +101,18 @@ class BackendRepository implements IBackendService {
   Future<ApiBookingResponse> getSchoolResources(String sessionToken, String defaultSchool) async {
     final school = Schools().fromString(defaultSchool).schoolId.index;
 
-    if (kDebugMode) {
-      var uri = Uri.https(ApiEndPoints.debugBaseUrl, ApiEndPoints.getSchoolResources,
-          {ApiEndPoints.school: school.toString(), ApiEndPoints.sessionToken: sessionToken});
+    var uri = Uri.https(
+        ApiEndPoints.baseUrl,
+        ApiEndPoints.getSchoolResources,
+        {ApiEndPoints.school: school.toString(), ApiEndPoints.sessionToken: sessionToken}
+            .map((key, value) => MapEntry(key, value.toString())));
 
-      final response = await HttpService.sendGetRequestToServer(uri);
-      if (response == null) {
-        return ApiBookingResponse.error(RuntimeErrorType.timeoutError());
-      }
-      return await response.parseSchoolResources();
-    } else {
-      var uri = Uri.https(ApiEndPoints.baseUrl, ApiEndPoints.getSchoolResources,
-          {ApiEndPoints.school: school.toString(), ApiEndPoints.sessionToken: sessionToken});
-
-      final response = await http.get(uri).timeout(const Duration(seconds: 5));
+    return await http.get(uri).timeout(TimeConstants.apiTimeout).then((response) {
       return response.parseSchoolResources();
-    }
+    }).onError((error, stackTrace) {
+      log(name: 'backend_repository', error: error, '$error.message');
+      return ApiBookingResponse.error('Timed out');
+    });
   }
 
   /// [HttpGet]
@@ -146,28 +121,20 @@ class BackendRepository implements IBackendService {
       String sessionToken, String defaultSchool, String resourceId, DateTime date) async {
     final school = Schools().fromString(defaultSchool).schoolId.index;
 
-    if (kDebugMode) {
-      var uri = Uri.https(ApiEndPoints.debugBaseUrl, ApiEndPoints.getResourceAvailability + resourceId, {
-        ApiEndPoints.school: school.toString(),
-        ApiEndPoints.sessionToken: sessionToken,
-        ApiEndPoints.date: date.toIso8601String(),
-      });
-
-      final response = await HttpService.sendGetRequestToServer(uri);
-      if (response == null) {
-        return ApiBookingResponse.error(RuntimeErrorType.timeoutError());
-      }
-      return await response.parseSchoolResource();
-    } else {
-      var uri = Uri.https(ApiEndPoints.baseUrl, ApiEndPoints.getResourceAvailability + resourceId, {
-        ApiEndPoints.school: school.toString(),
-        ApiEndPoints.sessionToken: sessionToken,
-        ApiEndPoints.date: date,
-      });
-
-      final response = await http.get(uri).timeout(const Duration(seconds: 5));
+    Uri uri = Uri.https(
+        ApiEndPoints.baseUrl,
+        ApiEndPoints.getResourceAvailability + resourceId,
+        {
+          ApiEndPoints.school: school.toString(),
+          ApiEndPoints.sessionToken: sessionToken,
+          ApiEndPoints.date: date,
+        }.map((key, value) => MapEntry(key, value.toString())));
+    return await http.get(uri).timeout(TimeConstants.apiTimeout).then((response) {
       return response.parseSchoolResource();
-    }
+    }).onError((error, stackTrace) {
+      log(name: 'backend_repository', error: error, '$error.message');
+      return ApiBookingResponse.error('Timed out');
+    });
   }
 
   /// [HttpGet]
@@ -175,26 +142,19 @@ class BackendRepository implements IBackendService {
   Future<ApiBookingResponse> getUserBookings(String sessionToken, String defaultSchool) async {
     final school = Schools().fromString(defaultSchool).schoolId.index;
 
-    if (kDebugMode) {
-      var uri = Uri.https(ApiEndPoints.debugBaseUrl, ApiEndPoints.getUserBookings, {
-        ApiEndPoints.school: school.toString(),
-        ApiEndPoints.sessionToken: sessionToken,
-      });
-
-      final response = await HttpService.sendGetRequestToServer(uri);
-      if (response == null) {
-        return ApiBookingResponse.error(RuntimeErrorType.timeoutError());
-      }
-      return await response.parseUserBookings();
-    } else {
-      var uri = Uri.https(ApiEndPoints.baseUrl, ApiEndPoints.getUserBookings, {
-        ApiEndPoints.school: school.toString(),
-        ApiEndPoints.sessionToken: sessionToken,
-      });
-
-      final response = await http.get(uri).timeout(const Duration(seconds: 5));
+    Uri uri = Uri.https(
+        ApiEndPoints.baseUrl,
+        ApiEndPoints.getUserBookings,
+        {
+          ApiEndPoints.school: school.toString(),
+          ApiEndPoints.sessionToken: sessionToken,
+        }.map((key, value) => MapEntry(key, value.toString())));
+    return await http.get(uri).timeout(TimeConstants.apiTimeout).then((response) {
       return response.parseUserBookings();
-    }
+    }).onError((error, stackTrace) {
+      log(name: 'backend_repository', error: error, '$error.message');
+      return ApiBookingResponse.error('Timed out');
+    });
   }
 
   /// [HttpPut]
@@ -202,21 +162,17 @@ class BackendRepository implements IBackendService {
   Future<ApiUserResponse> putRegisterUserEvent(String eventId, String sessionToken, String defaultSchool) async {
     final school = Schools().fromString(defaultSchool).schoolId.index;
 
-    if (kDebugMode) {
-      var uri = Uri.https(ApiEndPoints.debugBaseUrl, ApiEndPoints.putRegisterEvent + eventId,
-          {ApiEndPoints.school: school.toString(), ApiEndPoints.sessionToken: sessionToken});
-
-      final response = await HttpService.sendPutRequestToServer(uri);
-      if (response == null) {
-        return ApiUserResponse.error(RuntimeErrorType.timeoutError());
-      }
+    Uri uri = Uri.https(
+        ApiEndPoints.baseUrl,
+        ApiEndPoints.getSchedules + eventId,
+        {ApiEndPoints.school: school.toString(), ApiEndPoints.sessionToken: sessionToken}
+            .map((key, value) => MapEntry(key, value.toString())));
+    return await http.put(uri).timeout(TimeConstants.apiTimeout).then((response) {
       return response.parseRegisterOrUnregister();
-    } else {
-      var uri = Uri.https(ApiEndPoints.baseUrl, ApiEndPoints.getSchedules + eventId,
-          {ApiEndPoints.school: school.toString(), ApiEndPoints.sessionToken: sessionToken});
-      final response = await http.put(uri).timeout(const Duration(seconds: 5));
-      return response.parseRegisterOrUnregister();
-    }
+    }).onError((error, stackTrace) {
+      log(name: 'backend_repository', error: error, '$error.message');
+      return ApiUserResponse.error('Timed out');
+    });
   }
 
   /// [HttpPut]
@@ -224,42 +180,34 @@ class BackendRepository implements IBackendService {
   Future<ApiUserResponse> putUnregisterUserEvent(String eventId, String sessionToken, String defaultSchool) async {
     final school = Schools().fromString(defaultSchool).schoolId.index;
 
-    if (kDebugMode) {
-      var uri = Uri.https(ApiEndPoints.debugBaseUrl, ApiEndPoints.putUnregisterEvent + eventId,
-          {ApiEndPoints.school: school.toString(), ApiEndPoints.sessionToken: sessionToken});
-
-      final response = await HttpService.sendPutRequestToServer(uri);
-      if (response == null) {
-        return ApiUserResponse.error(RuntimeErrorType.timeoutError());
-      }
+    Uri uri = Uri.https(
+        ApiEndPoints.baseUrl,
+        ApiEndPoints.getSchedules + eventId,
+        {ApiEndPoints.school: school.toString(), ApiEndPoints.sessionToken: sessionToken}
+            .map((key, value) => MapEntry(key, value.toString())));
+    return await http.put(uri).timeout(TimeConstants.apiTimeout).then((response) {
       return response.parseRegisterOrUnregister();
-    } else {
-      var uri = Uri.https(ApiEndPoints.baseUrl, ApiEndPoints.getSchedules + eventId,
-          {ApiEndPoints.school: school.toString(), ApiEndPoints.sessionToken: sessionToken});
-      final response = await http.put(uri).timeout(const Duration(seconds: 5));
-      return response.parseRegisterOrUnregister();
-    }
+    }).onError((error, stackTrace) {
+      log(name: 'backend_repository', error: error, '$error.message');
+      return ApiUserResponse.error('Timed out');
+    });
   }
 
   /// [HttpPut]
   @override
   Future<ApiUserResponse> putRegisterAllAvailableUserEvents(String sessionToken, String defaultSchool) async {
     final school = Schools().fromString(defaultSchool).schoolId.index;
-
-    if (kDebugMode) {
-      var uri = Uri.https(ApiEndPoints.debugBaseUrl, ApiEndPoints.putRegisterAll,
-          {ApiEndPoints.school: school.toString(), ApiEndPoints.sessionToken: sessionToken});
-      final response = await HttpService.sendPutRequestToServer(uri);
-      if (response == null) {
-        return ApiUserResponse.error(RuntimeErrorType.timeoutError());
-      }
+    Uri uri = Uri.https(
+        ApiEndPoints.baseUrl,
+        ApiEndPoints.putRegisterAll,
+        {ApiEndPoints.school: school.toString(), ApiEndPoints.sessionToken: sessionToken}
+            .map((key, value) => MapEntry(key, value.toString())));
+    return await http.put(uri).timeout(TimeConstants.apiTimeout).then((response) {
       return response.parseMultiRegistrationResult();
-    } else {
-      var uri = Uri.https(ApiEndPoints.baseUrl, ApiEndPoints.putRegisterAll,
-          {ApiEndPoints.school: school.toString(), ApiEndPoints.sessionToken: sessionToken});
-      final response = await http.put(uri).timeout(const Duration(seconds: 5));
-      return response.parseMultiRegistrationResult();
-    }
+    }).onError((error, stackTrace) {
+      log(name: 'backend_repository', error: error, '$error.message');
+      return ApiUserResponse.error('Timed out');
+    });
   }
 
   /// [HttpPut]
@@ -272,23 +220,17 @@ class BackendRepository implements IBackendService {
       ApiEndPoints.date: date.toIso8601String(),
       ApiEndPoints.bookingSlot: bookingSlot,
     };
-
-    if (kDebugMode) {
-      var uri = Uri.https(ApiEndPoints.debugBaseUrl, ApiEndPoints.putBookResource,
-          {ApiEndPoints.school: school.toString(), ApiEndPoints.sessionToken: sessionToken});
-
-      final response = await HttpService.sendPutRequestToServer(uri, body: jsonEncode(body));
-      if (response == null) {
-        return ApiBookingResponse.error(RuntimeErrorType.timeoutError());
-      }
+    Uri uri = Uri.https(
+        ApiEndPoints.baseUrl,
+        ApiEndPoints.putBookResource,
+        {ApiEndPoints.school: school.toString(), ApiEndPoints.sessionToken: sessionToken}
+            .map((key, value) => MapEntry(key, value.toString())));
+    return await http.put(uri, body: body).timeout(TimeConstants.apiTimeout).then((response) {
       return response.parseBookResource();
-    } else {
-      var uri = Uri.https(ApiEndPoints.baseUrl, ApiEndPoints.putBookResource,
-          {ApiEndPoints.school: school.toString(), ApiEndPoints.sessionToken: sessionToken});
-
-      final response = await http.put(uri, body: body).timeout(const Duration(seconds: 5));
-      return response.parseBookResource();
-    }
+    }).onError((error, stackTrace) {
+      log(name: 'backend_repository', error: error, '$error.message');
+      return ApiBookingResponse.error('Timed out');
+    });
   }
 
   /// [HttpPut]
@@ -296,28 +238,20 @@ class BackendRepository implements IBackendService {
   Future<ApiBookingResponse> putUnbookResource(String sessionToken, String defaultSchool, String bookingId) async {
     final school = Schools().fromString(defaultSchool).schoolId.index;
 
-    if (kDebugMode) {
-      var uri = Uri.https(ApiEndPoints.debugBaseUrl, ApiEndPoints.putUnbookResource, {
-        ApiEndPoints.school: school.toString(),
-        ApiEndPoints.sessionToken: sessionToken,
-        ApiEndPoints.bookingId: bookingId
-      });
-
-      final response = await HttpService.sendPutRequestToServer(uri);
-      if (response == null) {
-        return ApiBookingResponse.error(RuntimeErrorType.timeoutError());
-      }
+    Uri uri = Uri.https(
+        ApiEndPoints.baseUrl,
+        ApiEndPoints.putUnbookResource,
+        {
+          ApiEndPoints.school: school.toString(),
+          ApiEndPoints.sessionToken: sessionToken,
+          ApiEndPoints.bookingId: bookingId
+        }.map((key, value) => MapEntry(key, value.toString())));
+    return await http.put(uri).timeout(TimeConstants.apiTimeout).then((response) {
       return response.parseUnbookResource();
-    } else {
-      var uri = Uri.https(ApiEndPoints.baseUrl, ApiEndPoints.putUnbookResource, {
-        ApiEndPoints.school: school.toString(),
-        ApiEndPoints.sessionToken: sessionToken,
-        ApiEndPoints.bookingId: bookingId
-      });
-
-      final response = await http.put(uri).timeout(const Duration(seconds: 5));
-      return response.parseUnbookResource();
-    }
+    }).onError((error, stackTrace) {
+      log(name: 'backend_repository', error: error, '$error.message');
+      return ApiBookingResponse.error('Timed out');
+    });
   }
 
   /// [HttpPut]
@@ -330,26 +264,19 @@ class BackendRepository implements IBackendService {
       ApiEndPoints.bookingId: bookingId,
     };
 
-    if (kDebugMode) {
-      var uri = Uri.https(ApiEndPoints.debugBaseUrl, ApiEndPoints.putConfirmBooking, {
-        ApiEndPoints.school: school.toString(),
-        ApiEndPoints.sessionToken: sessionToken,
-      });
-
-      final response = await HttpService.sendPutRequestToServer(uri, body: jsonEncode(body));
-      if (response == null) {
-        return ApiBookingResponse.error(RuntimeErrorType.timeoutError());
-      }
+    Uri uri = Uri.https(
+        ApiEndPoints.baseUrl,
+        ApiEndPoints.putConfirmBooking,
+        {
+          ApiEndPoints.school: school.toString(),
+          ApiEndPoints.sessionToken: sessionToken,
+        }.map((key, value) => MapEntry(key, value.toString())));
+    return await http.put(uri, body: body).timeout(TimeConstants.apiTimeout).then((response) {
       return response.parseConfirmBooking();
-    } else {
-      var uri = Uri.https(ApiEndPoints.baseUrl, ApiEndPoints.putConfirmBooking, {
-        ApiEndPoints.school: school.toString(),
-        ApiEndPoints.sessionToken: sessionToken,
-      });
-
-      final response = await http.put(uri, body: body);
-      return response.parseConfirmBooking();
-    }
+    }).onError((error, stackTrace) {
+      log(name: 'backend_repository', error: error, '$error.message');
+      return ApiBookingResponse.error('Timed out');
+    });
   }
 
   /// [HttpPost]
@@ -357,20 +284,15 @@ class BackendRepository implements IBackendService {
   Future<ApiUserResponse> postUserLogin(String username, String password, String defaultSchool) async {
     final school = Schools().fromString(defaultSchool).schoolId.index;
     final Map<String, String> body = {ApiEndPoints.username: username, ApiEndPoints.password: password};
-    if (kDebugMode) {
-      var uri =
-          Uri.https(ApiEndPoints.debugBaseUrl, ApiEndPoints.postUserLogin, {ApiEndPoints.school: school.toString()});
+    Uri uri = Uri.https(ApiEndPoints.baseUrl, ApiEndPoints.getSchedules,
+        {ApiEndPoints.school: school.toString()}.map((key, value) => MapEntry(key, value.toString())));
 
-      final response = await HttpService.sendPostRequestToServer(uri, jsonEncode(body));
-      if (response == null) {
-        return ApiUserResponse.error(RuntimeErrorType.timeoutError());
-      }
-      return await response.parseUser();
-    } else {
-      var uri = Uri.https(ApiEndPoints.baseUrl, ApiEndPoints.getSchedules, {ApiEndPoints.school: school.toString()});
-      final response = await http.post(uri, body: body).timeout(const Duration(seconds: 5));
+    return await http.post(uri, body: body).timeout(TimeConstants.apiTimeout).then((response) {
       return response.parseUser();
-    }
+    }).onError((error, stackTrace) {
+      log(name: 'backend_repository', error: error, '$error.message');
+      return ApiUserResponse.error('Timed out');
+    });
   }
 
   /// [HttpPost]
@@ -380,24 +302,15 @@ class BackendRepository implements IBackendService {
       ApiEndPoints.issueSubject: issueSubject,
       ApiEndPoints.issueBody: issueBody
     };
-    if (kDebugMode) {
-      var uri = Uri.https(
-        ApiEndPoints.debugBaseUrl,
-        ApiEndPoints.postSubmitIssue,
-      );
-      final response = await HttpService.sendPostRequestToServer(uri, jsonEncode(requestBody));
-
-      if (response == null) {
-        return ApiBugReportResponse.error(RuntimeErrorType.timeoutError());
-      }
-      return await response.parseIssue();
-    } else {
-      var uri = Uri.https(
-        ApiEndPoints.baseUrl,
-        ApiEndPoints.postSubmitIssue,
-      );
-      final response = await http.post(uri, body: requestBody).timeout(const Duration(seconds: 5));
+    Uri uri = Uri.https(
+      ApiEndPoints.baseUrl,
+      ApiEndPoints.postSubmitIssue,
+    );
+    return await http.post(uri, body: requestBody).timeout(TimeConstants.apiTimeout).then((response) {
       return response.parseIssue();
-    }
+    }).onError((error, stackTrace) {
+      log(name: 'backend_repository', error: error, '$error.message');
+      return ApiBugReportResponse.error('Timed out');
+    });
   }
 }

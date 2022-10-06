@@ -12,8 +12,7 @@ import 'package:tumble/core/dependency_injection/get_it_instances.dart';
 class DatabaseRepository implements IDatabaseScheduleService {
   final _scheduleStore = intMapStoreFactory.store(AccessStores.SCHEDULE_STORE);
   final _userStore = intMapStoreFactory.store(AccessStores.USER_STORE);
-  final _courseColorStore =
-      intMapStoreFactory.store(AccessStores.COURSE_COLOR_STORE);
+  final _courseColorStore = intMapStoreFactory.store(AccessStores.COURSE_COLOR_STORE);
 
   Future<Database> get _db async => await getIt<AppDatabase>().database;
 
@@ -43,8 +42,7 @@ class DatabaseRepository implements IDatabaseScheduleService {
   @override
   Future<void> update(dynamic scheduleModel) async {
     final finder = Finder(filter: Filter.equals("id", scheduleModel.id));
-    (await _scheduleStore.update(await _db, scheduleModel.toJson(),
-        finder: finder));
+    (await _scheduleStore.update(await _db, scheduleModel.toJson(), finder: finder));
   }
 
   @override
@@ -56,9 +54,7 @@ class DatabaseRepository implements IDatabaseScheduleService {
   @override
   Future<List<ScheduleModel>> getAll() async {
     final recordSnapshots = await _scheduleStore.find(await _db);
-    return recordSnapshots
-        .map((snapshot) => ScheduleModel.fromJson(snapshot.value))
-        .toList();
+    return recordSnapshots.map((snapshot) => ScheduleModel.fromJson(snapshot.value)).toList();
   }
 
   /* ------------------- Repository specific methods ---------------------- */
@@ -66,11 +62,8 @@ class DatabaseRepository implements IDatabaseScheduleService {
   @override
   Future<ScheduleModel?> getOneSchedule(String id) async {
     final finder = Finder(filter: Filter.equals('id', id));
-    final recordSnapshot =
-        await _scheduleStore.findFirst(await _db, finder: finder);
-    log(
-        name: 'database_repository',
-        'Current record snapshot: $recordSnapshot');
+    final recordSnapshot = await _scheduleStore.findFirst(await _db, finder: finder);
+    //log(name: 'database_repository', 'Current record snapshot: $recordSnapshot');
     if (recordSnapshot != null) {
       return ScheduleModel.fromJson(recordSnapshot.value);
     }
@@ -80,9 +73,7 @@ class DatabaseRepository implements IDatabaseScheduleService {
   @override
   Future<List<String>> getAllScheduleIds() async {
     final recordSnapshots = await _scheduleStore.find(await _db);
-    return recordSnapshots
-        .map((snapshot) => ScheduleModel.fromJson(snapshot.value).id)
-        .toList();
+    return recordSnapshots.map((snapshot) => ScheduleModel.fromJson(snapshot.value).id).toList();
   }
 
   @override
@@ -106,56 +97,42 @@ class DatabaseRepository implements IDatabaseScheduleService {
 
   @override
   Future updateCourseInstance(CourseUiModel courseUiModel) async {
-    await _courseColorStore.update(
-        await _db, courseUiModelToJson(courseUiModel),
-        finder:
-            Finder(filter: Filter.equals('courseId', courseUiModel.courseId)));
-    log(
-        name: 'database_repository',
-        "updateCourseInstance successfully called on id  --> ${courseUiModel.courseId}");
+    await _courseColorStore.update(await _db, courseUiModelToJson(courseUiModel),
+        finder: Finder(filter: Filter.equals('courseId', courseUiModel.courseId)));
+    log(name: 'database_repository', "updateCourseInstance successfully called on id  --> ${courseUiModel.courseId}");
   }
 
   @override
   Future addCourseInstance(CourseUiModel courseUiModel) async {
     await _courseColorStore.add(await _db, courseUiModelToJson(courseUiModel));
-    log(
-        name: 'database_repository',
-        "addCourseInstance sucessfully called on id --> ${courseUiModel.toString()}");
+    log(name: 'database_repository', "addCourseInstance sucessfully called on id --> ${courseUiModel.toString()}");
   }
 
   @override
   Future<Color> getCourseColor(String id) async {
     final finder = Finder(filter: Filter.equals('id', id));
-    final recordSnapshot =
-        await _courseColorStore.findFirst(await _db, finder: finder);
+    final recordSnapshot = await _courseColorStore.findFirst(await _db, finder: finder);
     Color color = Color(CourseUiModel.fromJson(recordSnapshot!.value).color);
-    log(
-        name: 'database_repository',
-        "getCourseColor sucessfully called called on id --> $id");
+    log(name: 'database_repository', "getCourseColor sucessfully called called on id --> $id");
     return color;
   }
 
   @override
   Future<List<String>> getAllCachedCourses() async {
     final recordSnapshots = await _courseColorStore.find(await _db);
-    return recordSnapshots
-        .map((snapshot) => CourseUiModel.fromJson(snapshot.value).courseId)
-        .toList();
+    return recordSnapshots.map((snapshot) => CourseUiModel.fromJson(snapshot.value).courseId).toList();
   }
 
   @override
   Future removeAllCachedCourseColors() async {
     await _courseColorStore.delete(await _db);
-    log(name: 'database_repository', 'Removed all cached course colors');
+    //log(name: 'database_repository', 'Removed all cached course colors');
   }
 
   @override
   Future<List<CourseUiModel>> getCachedCoursesFromId(String scheduleId) async {
     final finder = Finder(filter: Filter.equals('scheduleId', scheduleId));
-    final recordSnapshot =
-        await _courseColorStore.find(await _db, finder: finder);
-    return recordSnapshot
-        .map((snapshot) => CourseUiModel.fromJson(snapshot.value))
-        .toList();
+    final recordSnapshot = await _courseColorStore.find(await _db, finder: finder);
+    return recordSnapshot.map((snapshot) => CourseUiModel.fromJson(snapshot.value)).toList();
   }
 }

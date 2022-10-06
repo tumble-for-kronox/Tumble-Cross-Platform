@@ -9,6 +9,5 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await DependencyInjection.initialize();
   await getIt<AppDependencies>().initialize();
-  await BackgroundTask.callbackDispatcher();
   runApp(const App());
 }
