@@ -1,7 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
-
-import 'package:http/http.dart';
+import 'package:dio/dio.dart';
 
 import '../../api/apiservices/api_user_response.dart';
 import '../../api/apiservices/runtime_error_type.dart';
@@ -12,7 +10,7 @@ import '../../models/api_models/user_event_collection_model.dart';
 extension UserResponseParsing on Response {
   ApiUserResponse parseUser() {
     if (statusCode == 200) {
-      return ApiUserResponse.authorized(kronoxUserModelFromJson(body));
+      return ApiUserResponse.authorized(kronoxUserModelFromJson(data));
     } else if (statusCode == 401) {
       return ApiUserResponse.error(RuntimeErrorType.loginError());
     }
@@ -21,7 +19,7 @@ extension UserResponseParsing on Response {
 
   ApiUserResponse parseUserEvents() {
     if (statusCode == 200) {
-      return ApiUserResponse.completed(userEventCollectionModelFromJson(body));
+      return ApiUserResponse.completed(userEventCollectionModelFromJson(data));
     } else if (statusCode == 401) {
       return ApiUserResponse.unauthorized(RuntimeErrorType.authenticationError());
     }
@@ -39,7 +37,7 @@ extension UserResponseParsing on Response {
 
   ApiUserResponse parseMultiRegistrationResult() {
     if (statusCode == 200) {
-      return ApiUserResponse.completed(multiRegistrationResultModelFromJson(body));
+      return ApiUserResponse.completed(multiRegistrationResultModelFromJson(data));
     } else if (statusCode == 401) {
       return ApiUserResponse.unauthorized(RuntimeErrorType.authenticationError());
     }
@@ -47,7 +45,7 @@ extension UserResponseParsing on Response {
   }
 }
 
-extension UserHttpClientResponseParsing on HttpClientResponse {
+/* extension UserHttpClientResponseParsing on HttpClientResponse {
   Future<ApiUserResponse> parseUser() async {
     if (statusCode == 200) {
       return ApiUserResponse.authorized(kronoxUserModelFromJson(await transform(utf8.decoder).join()));
@@ -82,3 +80,4 @@ extension UserHttpClientResponseParsing on HttpClientResponse {
     return ApiUserResponse.error(RuntimeErrorType.programFetchError());
   }
 }
+ */
