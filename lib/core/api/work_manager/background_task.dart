@@ -45,9 +45,10 @@ class BackgroundTask {
 
     for (ScheduleModel? cachedScheduleModel in cachedScheduleModels) {
       if (cachedScheduleModel != null) {
-        /* if (cachedScheduleModel.cachedAt.isAfter(DateTime.now().subtract(TimeConstants.updateOffset))) {
+        if (cachedScheduleModel.cachedAt
+            .isAfter(DateTime.now().subtract(TimeConstants.updateOffset))) {
           return;
-        } */
+        }
 
         ApiScheduleOrProgrammeResponse apiResponseOfNewScheduleModel =
             await backendService.getRequestSchedule(
