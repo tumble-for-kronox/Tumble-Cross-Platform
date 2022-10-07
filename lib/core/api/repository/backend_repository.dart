@@ -36,7 +36,9 @@ class BackendRepository implements IBackendService {
           ApiEndPoints.school: school,
         }.map((key, value) => MapEntry(key, value.toString())));
 
-    return await dioHandle.getUri(uri).then((response) {
+    return await dioHandle
+        .getUri(uri, options: Options(validateStatus: (_) => true))
+        .then((response) {
       return response.parseSchedule();
     }).onError((error, stackTrace) {
       log(name: 'backend_repository', error: error, '$error.message');
@@ -58,7 +60,9 @@ class BackendRepository implements IBackendService {
           ApiEndPoints.school: school.toString()
         }.map((key, value) => MapEntry(key, value.toString())));
 
-    return await dioHandle.getUri(uri).then((response) {
+    return await dioHandle
+        .getUri(uri, options: Options(validateStatus: (_) => true))
+        .then((response) {
       return response.parsePrograms();
     }).onError((error, stackTrace) {
       log(name: 'backend_repository', error: error, '$error.message');
@@ -80,7 +84,9 @@ class BackendRepository implements IBackendService {
           ApiEndPoints.school: school.toString()
         }.map((key, value) => MapEntry(key, value.toString())));
 
-    return await dioHandle.getUri(uri).then((response) {
+    return await dioHandle
+        .getUri(uri, options: Options(validateStatus: (_) => true))
+        .then((response) {
       return response.parseUserEvents();
     }).onError((error, stackTrace) {
       log(
@@ -105,7 +111,11 @@ class BackendRepository implements IBackendService {
           .map((key, value) => MapEntry(key, value.toString())),
     );
     return await dioHandle
-        .getUri(uri, options: Options(headers: headers))
+        .getUri(uri,
+            options: Options(
+              headers: headers,
+              validateStatus: (_) => true,
+            ))
         .then((response) {
       return response.parseUser();
     }).onError((error, stackTrace) {
@@ -132,7 +142,9 @@ class BackendRepository implements IBackendService {
           ApiEndPoints.sessionToken: sessionToken
         }.map((key, value) => MapEntry(key, value.toString())));
 
-    return await dioHandle.getUri(uri).then((response) {
+    return await dioHandle
+        .getUri(uri, options: Options(validateStatus: (_) => true))
+        .then((response) {
       return response.parseSchoolResources();
     }).onError((error, stackTrace) {
       log(
@@ -157,7 +169,9 @@ class BackendRepository implements IBackendService {
           ApiEndPoints.sessionToken: sessionToken,
           ApiEndPoints.date: date,
         }.map((key, value) => MapEntry(key, value.toString())));
-    return await dioHandle.getUri(uri).then((response) {
+    return await dioHandle
+        .getUri(uri, options: Options(validateStatus: (_) => true))
+        .then((response) {
       return response.parseSchoolResource();
     }).onError((error, stackTrace) {
       log(
@@ -181,7 +195,9 @@ class BackendRepository implements IBackendService {
           ApiEndPoints.school: school.toString(),
           ApiEndPoints.sessionToken: sessionToken,
         }.map((key, value) => MapEntry(key, value.toString())));
-    return await dioHandle.getUri(uri).then((response) {
+    return await dioHandle
+        .getUri(uri, options: Options(validateStatus: (_) => true))
+        .then((response) {
       return response.parseUserBookings();
     }).onError((error, stackTrace) {
       log(
@@ -205,7 +221,9 @@ class BackendRepository implements IBackendService {
           ApiEndPoints.school: school.toString(),
           ApiEndPoints.sessionToken: sessionToken
         }.map((key, value) => MapEntry(key, value.toString())));
-    return dioHandle.putUri(uri).then((response) {
+    return dioHandle
+        .putUri(uri, options: Options(validateStatus: (_) => true))
+        .then((response) {
       return response.parseRegisterOrUnregister();
     }).onError((error, stackTrace) {
       log(
@@ -229,7 +247,9 @@ class BackendRepository implements IBackendService {
           ApiEndPoints.school: school.toString(),
           ApiEndPoints.sessionToken: sessionToken
         }.map((key, value) => MapEntry(key, value.toString())));
-    return await dioHandle.putUri(uri).then((response) {
+    return await dioHandle
+        .putUri(uri, options: Options(validateStatus: (_) => true))
+        .then((response) {
       return response.parseRegisterOrUnregister();
     }).onError((error, stackTrace) {
       log(
@@ -252,7 +272,9 @@ class BackendRepository implements IBackendService {
           ApiEndPoints.school: school.toString(),
           ApiEndPoints.sessionToken: sessionToken
         }.map((key, value) => MapEntry(key, value.toString())));
-    return await dioHandle.putUri(uri).then((response) {
+    return await dioHandle
+        .putUri(uri, options: Options(validateStatus: (_) => true))
+        .then((response) {
       return response.parseMultiRegistrationResult();
     }).onError((error, stackTrace) {
       log(
@@ -284,7 +306,11 @@ class BackendRepository implements IBackendService {
           ApiEndPoints.school: school.toString(),
           ApiEndPoints.sessionToken: sessionToken
         }.map((key, value) => MapEntry(key, value.toString())));
-    return await dioHandle.putUri(uri, data: jsonEncode(data)).then((response) {
+    return await dioHandle
+        .putUri(uri,
+            data: jsonEncode(data),
+            options: Options(validateStatus: (_) => true))
+        .then((response) {
       return response.parseBookResource();
     }).onError((error, stackTrace) {
       log(
@@ -309,7 +335,9 @@ class BackendRepository implements IBackendService {
           ApiEndPoints.sessionToken: sessionToken,
           ApiEndPoints.bookingId: bookingId
         }.map((key, value) => MapEntry(key, value.toString())));
-    return await dioHandle.putUri(uri).then((response) {
+    return await dioHandle
+        .putUri(uri, options: Options(validateStatus: (_) => true))
+        .then((response) {
       return response.parseUnbookResource();
     }).onError((error, stackTrace) {
       log(
@@ -337,7 +365,11 @@ class BackendRepository implements IBackendService {
           ApiEndPoints.school: school.toString(),
           ApiEndPoints.sessionToken: sessionToken,
         }.map((key, value) => MapEntry(key, value.toString())));
-    return await dioHandle.putUri(uri, data: jsonEncode(data)).then((response) {
+    return await dioHandle
+        .putUri(uri,
+            data: jsonEncode(data),
+            options: Options(validateStatus: (_) => true))
+        .then((response) {
       return response.parseConfirmBooking();
     }).onError((error, stackTrace) {
       log(
@@ -364,7 +396,9 @@ class BackendRepository implements IBackendService {
             .map((key, value) => MapEntry(key, value.toString())));
     log(uri.toString());
     return await dioHandle
-        .postUri(uri, data: jsonEncode(data))
+        .postUri(uri,
+            data: jsonEncode(data),
+            options: Options(validateStatus: (_) => true))
         .then((response) {
       return response.parseUser();
     }).onError((error, stackTrace) {
@@ -389,7 +423,9 @@ class BackendRepository implements IBackendService {
       ApiEndPoints.postSubmitIssue,
     );
     return await dioHandle
-        .postUri(uri, data: jsonEncode(data))
+        .postUri(uri,
+            data: jsonEncode(data),
+            options: Options(validateStatus: (_) => true))
         .then((response) {
       return response.parseIssue();
     }).onError((error, stackTrace) {
