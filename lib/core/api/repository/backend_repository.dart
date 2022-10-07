@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:tumble/core/api/apiservices/api_booking_response.dart';
@@ -6,7 +7,6 @@ import 'package:tumble/core/api/apiservices/api_bug_report_response.dart';
 import 'package:tumble/core/api/apiservices/api_endpoints.dart';
 import 'package:tumble/core/api/apiservices/api_schedule_or_programme_response.dart';
 import 'package:tumble/core/api/apiservices/api_user_response.dart';
-import 'package:tumble/core/api/data/time_constants.dart';
 import 'package:tumble/core/api/interface/ibackend_service.dart';
 import 'package:tumble/core/extensions/api_response_extension/booking_parser.dart';
 import 'package:tumble/core/extensions/api_response_extension/misc_parser.dart';
@@ -25,7 +25,8 @@ class BackendRepository implements IBackendService {
 
   /// [HttpGet]
   @override
-  Future<ApiScheduleOrProgrammeResponse> getRequestSchedule(String scheduleId, String defaultSchool) async {
+  Future<ApiScheduleOrProgrammeResponse> getRequestSchedule(
+      String scheduleId, String defaultSchool) async {
     final school = Schools().fromString(defaultSchool).schoolId.index;
 
     Uri uri = Uri.https(
@@ -45,14 +46,17 @@ class BackendRepository implements IBackendService {
 
   /// [HttpGet]
   @override
-  Future<ApiScheduleOrProgrammeResponse> getPrograms(String searchQuery, String defaultSchool) async {
+  Future<ApiScheduleOrProgrammeResponse> getPrograms(
+      String searchQuery, String defaultSchool) async {
     final school = Schools().fromString(defaultSchool).schoolId.index;
 
     Uri uri = Uri.https(
         ApiEndPoints.baseUrl,
         ApiEndPoints.getSchedules,
-        {ApiEndPoints.search: searchQuery, ApiEndPoints.school: school.toString()}
-            .map((key, value) => MapEntry(key, value.toString())));
+        {
+          ApiEndPoints.search: searchQuery,
+          ApiEndPoints.school: school.toString()
+        }.map((key, value) => MapEntry(key, value.toString())));
 
     return await dioHandle.getUri(uri).then((response) {
       return response.parsePrograms();
@@ -64,66 +68,85 @@ class BackendRepository implements IBackendService {
 
   /// [HttpGet]
   @override
-  Future<ApiUserResponse> getUserEvents(String sessionToken, String defaultSchool) async {
+  Future<ApiUserResponse> getUserEvents(
+      String sessionToken, String defaultSchool) async {
     final school = Schools().fromString(defaultSchool).schoolId.index;
 
     Uri uri = Uri.https(
         ApiEndPoints.baseUrl,
-        ApiEndPoints.getSchedules,
-        {ApiEndPoints.sessionToken: sessionToken, ApiEndPoints.school: school.toString()}
-            .map((key, value) => MapEntry(key, value.toString())));
+        ApiEndPoints.getUserEvents,
+        {
+          ApiEndPoints.sessionToken: sessionToken,
+          ApiEndPoints.school: school.toString()
+        }.map((key, value) => MapEntry(key, value.toString())));
 
     return await dioHandle.getUri(uri).then((response) {
       return response.parseUserEvents();
     }).onError((error, stackTrace) {
-      log(name: 'backend_repository', error: error, '$error.message');
+      log(
+          name: 'backend_repository',
+          error: error,
+          '$error.message in [getUserEvents]');
       return ApiUserResponse.error('Timed out');
     });
   }
 
   /// [HttpGet]
   @override
-  Future<ApiUserResponse> getRefreshSession(String refreshToken, String defaultSchool) async {
+  Future<ApiUserResponse> getRefreshSession(
+      String refreshToken, String defaultSchool) async {
     final school = Schools().fromString(defaultSchool).schoolId.index;
     Map<String, String> headers = {"Authorization": refreshToken};
 
     Uri uri = Uri.https(
       ApiEndPoints.baseUrl,
       ApiEndPoints.getRefreshSession,
-      {ApiEndPoints.school: school}.map((key, value) => MapEntry(key, value.toString())),
+      {ApiEndPoints.school: school}
+          .map((key, value) => MapEntry(key, value.toString())),
     );
-    return await dioHandle.getUri(uri, options: Options(headers: headers)).then((response) {
+    return await dioHandle
+        .getUri(uri, options: Options(headers: headers))
+        .then((response) {
       return response.parseUser();
     }).onError((error, stackTrace) {
       log(name: 'backend_repository', 'REFRESH SESSION ERROR');
-      log(name: 'backend_repository', error: error, '$error.message');
+      log(
+          name: 'backend_repository',
+          error: error,
+          '$error.message in [getRefreshSession]');
       return ApiUserResponse.error('Timed out');
     });
   }
 
   /// [HttpGet]
   @override
-  Future<ApiBookingResponse> getSchoolResources(String sessionToken, String defaultSchool) async {
+  Future<ApiBookingResponse> getSchoolResources(
+      String sessionToken, String defaultSchool) async {
     final school = Schools().fromString(defaultSchool).schoolId.index;
 
     var uri = Uri.https(
         ApiEndPoints.baseUrl,
         ApiEndPoints.getSchoolResources,
-        {ApiEndPoints.school: school.toString(), ApiEndPoints.sessionToken: sessionToken}
-            .map((key, value) => MapEntry(key, value.toString())));
+        {
+          ApiEndPoints.school: school.toString(),
+          ApiEndPoints.sessionToken: sessionToken
+        }.map((key, value) => MapEntry(key, value.toString())));
 
     return await dioHandle.getUri(uri).then((response) {
       return response.parseSchoolResources();
     }).onError((error, stackTrace) {
-      log(name: 'backend_repository', error: error, '$error.message');
+      log(
+          name: 'backend_repository',
+          error: error,
+          '$error.message in [getSchoolResources]');
       return ApiBookingResponse.error('Timed out');
     });
   }
 
   /// [HttpGet]
   @override
-  Future<ApiBookingResponse> getResourceAvailabilities(
-      String sessionToken, String defaultSchool, String resourceId, DateTime date) async {
+  Future<ApiBookingResponse> getResourceAvailabilities(String sessionToken,
+      String defaultSchool, String resourceId, DateTime date) async {
     final school = Schools().fromString(defaultSchool).schoolId.index;
 
     Uri uri = Uri.https(
@@ -137,14 +160,18 @@ class BackendRepository implements IBackendService {
     return await dioHandle.getUri(uri).then((response) {
       return response.parseSchoolResource();
     }).onError((error, stackTrace) {
-      log(name: 'backend_repository', error: error, '$error.message');
+      log(
+          name: 'backend_repository',
+          error: error,
+          '$error.message in [getResourceAvailabilities]');
       return ApiBookingResponse.error('Timed out');
     });
   }
 
   /// [HttpGet]
   @override
-  Future<ApiBookingResponse> getUserBookings(String sessionToken, String defaultSchool) async {
+  Future<ApiBookingResponse> getUserBookings(
+      String sessionToken, String defaultSchool) async {
     final school = Schools().fromString(defaultSchool).schoolId.index;
 
     Uri uri = Uri.https(
@@ -157,68 +184,93 @@ class BackendRepository implements IBackendService {
     return await dioHandle.getUri(uri).then((response) {
       return response.parseUserBookings();
     }).onError((error, stackTrace) {
-      log(name: 'backend_repository', error: error, '$error.message');
+      log(
+          name: 'backend_repository',
+          error: error,
+          '$error.message in [getUserBookings]');
       return ApiBookingResponse.error('Timed out');
     });
   }
 
   /// [HttpPut]
   @override
-  Future<ApiUserResponse> putRegisterUserEvent(String eventId, String sessionToken, String defaultSchool) async {
+  Future<ApiUserResponse> putRegisterUserEvent(
+      String eventId, String sessionToken, String defaultSchool) async {
     final school = Schools().fromString(defaultSchool).schoolId.index;
 
     Uri uri = Uri.https(
         ApiEndPoints.baseUrl,
-        ApiEndPoints.getSchedules + eventId,
-        {ApiEndPoints.school: school.toString(), ApiEndPoints.sessionToken: sessionToken}
-            .map((key, value) => MapEntry(key, value.toString())));
+        ApiEndPoints.putRegisterEvent + eventId,
+        {
+          ApiEndPoints.school: school.toString(),
+          ApiEndPoints.sessionToken: sessionToken
+        }.map((key, value) => MapEntry(key, value.toString())));
     return dioHandle.putUri(uri).then((response) {
       return response.parseRegisterOrUnregister();
     }).onError((error, stackTrace) {
-      log(name: 'backend_repository', error: error, '$error.message');
+      log(
+          name: 'backend_repository',
+          error: error,
+          '$error.message in [getUserBookings]');
       return ApiUserResponse.error('Timed out');
     });
   }
 
   /// [HttpPut]
   @override
-  Future<ApiUserResponse> putUnregisterUserEvent(String eventId, String sessionToken, String defaultSchool) async {
+  Future<ApiUserResponse> putUnregisterUserEvent(
+      String eventId, String sessionToken, String defaultSchool) async {
     final school = Schools().fromString(defaultSchool).schoolId.index;
 
     Uri uri = Uri.https(
         ApiEndPoints.baseUrl,
         ApiEndPoints.getSchedules + eventId,
-        {ApiEndPoints.school: school.toString(), ApiEndPoints.sessionToken: sessionToken}
-            .map((key, value) => MapEntry(key, value.toString())));
+        {
+          ApiEndPoints.school: school.toString(),
+          ApiEndPoints.sessionToken: sessionToken
+        }.map((key, value) => MapEntry(key, value.toString())));
     return await dioHandle.putUri(uri).then((response) {
       return response.parseRegisterOrUnregister();
     }).onError((error, stackTrace) {
-      log(name: 'backend_repository', error: error, '$error.message');
+      log(
+          name: 'backend_repository',
+          error: error,
+          '$error.message in [putUnregisterUserEvent]');
       return ApiUserResponse.error('Timed out');
     });
   }
 
   /// [HttpPut]
   @override
-  Future<ApiUserResponse> putRegisterAllAvailableUserEvents(String sessionToken, String defaultSchool) async {
+  Future<ApiUserResponse> putRegisterAllAvailableUserEvents(
+      String sessionToken, String defaultSchool) async {
     final school = Schools().fromString(defaultSchool).schoolId.index;
     Uri uri = Uri.https(
         ApiEndPoints.baseUrl,
         ApiEndPoints.putRegisterAll,
-        {ApiEndPoints.school: school.toString(), ApiEndPoints.sessionToken: sessionToken}
-            .map((key, value) => MapEntry(key, value.toString())));
+        {
+          ApiEndPoints.school: school.toString(),
+          ApiEndPoints.sessionToken: sessionToken
+        }.map((key, value) => MapEntry(key, value.toString())));
     return await dioHandle.putUri(uri).then((response) {
       return response.parseMultiRegistrationResult();
     }).onError((error, stackTrace) {
-      log(name: 'backend_repository', error: error, '$error.message');
+      log(
+          name: 'backend_repository',
+          error: error,
+          '$error.message in [putRegisterAllAvailableUserEvents]');
       return ApiUserResponse.error('Timed out');
     });
   }
 
   /// [HttpPut]
   @override
-  Future<ApiBookingResponse> putBookResource(String sessionToken, String defaultSchool, String resourceId,
-      DateTime date, AvailabilityValue bookingSlot) async {
+  Future<ApiBookingResponse> putBookResource(
+      String sessionToken,
+      String defaultSchool,
+      String resourceId,
+      DateTime date,
+      AvailabilityValue bookingSlot) async {
     final school = Schools().fromString(defaultSchool).schoolId.index;
     final Map<String, dynamic> data = {
       ApiEndPoints.resourceId: resourceId,
@@ -228,19 +280,25 @@ class BackendRepository implements IBackendService {
     Uri uri = Uri.https(
         ApiEndPoints.baseUrl,
         ApiEndPoints.putBookResource,
-        {ApiEndPoints.school: school.toString(), ApiEndPoints.sessionToken: sessionToken}
-            .map((key, value) => MapEntry(key, value.toString())));
-    return await dioHandle.putUri(uri, data: data).then((response) {
+        {
+          ApiEndPoints.school: school.toString(),
+          ApiEndPoints.sessionToken: sessionToken
+        }.map((key, value) => MapEntry(key, value.toString())));
+    return await dioHandle.putUri(uri, data: jsonEncode(data)).then((response) {
       return response.parseBookResource();
     }).onError((error, stackTrace) {
-      log(name: 'backend_repository', error: error, '$error.message');
+      log(
+          name: 'backend_repository',
+          error: error,
+          '$error.message in [putBookResource]');
       return ApiBookingResponse.error('Timed out');
     });
   }
 
   /// [HttpPut]
   @override
-  Future<ApiBookingResponse> putUnbookResource(String sessionToken, String defaultSchool, String bookingId) async {
+  Future<ApiBookingResponse> putUnbookResource(
+      String sessionToken, String defaultSchool, String bookingId) async {
     final school = Schools().fromString(defaultSchool).schoolId.index;
 
     Uri uri = Uri.https(
@@ -254,15 +312,18 @@ class BackendRepository implements IBackendService {
     return await dioHandle.putUri(uri).then((response) {
       return response.parseUnbookResource();
     }).onError((error, stackTrace) {
-      log(name: 'backend_repository', error: error, '$error.message');
+      log(
+          name: 'backend_repository',
+          error: error,
+          '$error.message in [putUnbookResource]');
       return ApiBookingResponse.error('Timed out');
     });
   }
 
   /// [HttpPut]
   @override
-  Future<ApiBookingResponse> putConfirmBooking(
-      String sessionToken, String defaultSchool, String resourceId, String bookingId) async {
+  Future<ApiBookingResponse> putConfirmBooking(String sessionToken,
+      String defaultSchool, String resourceId, String bookingId) async {
     final school = Schools().fromString(defaultSchool).schoolId.index;
     final Map<String, dynamic> data = {
       ApiEndPoints.resourceId: resourceId,
@@ -276,42 +337,66 @@ class BackendRepository implements IBackendService {
           ApiEndPoints.school: school.toString(),
           ApiEndPoints.sessionToken: sessionToken,
         }.map((key, value) => MapEntry(key, value.toString())));
-    return await dioHandle.putUri(uri, data: data).then((response) {
+    return await dioHandle.putUri(uri, data: jsonEncode(data)).then((response) {
       return response.parseConfirmBooking();
     }).onError((error, stackTrace) {
-      log(name: 'backend_repository', error: error, '$error.message');
+      log(
+          name: 'backend_repository',
+          error: error,
+          '$error.message in [putConfirmBooking]');
       return ApiBookingResponse.error('Timed out');
     });
   }
 
   /// [HttpPost]
   @override
-  Future<ApiUserResponse> postUserLogin(String username, String password, String defaultSchool) async {
+  Future<ApiUserResponse> postUserLogin(
+      String username, String password, String defaultSchool) async {
     final school = Schools().fromString(defaultSchool).schoolId.index;
-    final Map<String, String> data = {ApiEndPoints.username: username, ApiEndPoints.password: password};
-    Uri uri = Uri.https(ApiEndPoints.baseUrl, ApiEndPoints.getSchedules,
-        {ApiEndPoints.school: school.toString()}.map((key, value) => MapEntry(key, value.toString())));
-
-    return await dioHandle.postUri(uri, data: data).then((response) {
+    final Map<String, dynamic> data = {
+      ApiEndPoints.username: username,
+      ApiEndPoints.password: password
+    };
+    Uri uri = Uri.https(
+        ApiEndPoints.baseUrl,
+        ApiEndPoints.postUserLogin,
+        {ApiEndPoints.school: school}
+            .map((key, value) => MapEntry(key, value.toString())));
+    log(uri.toString());
+    return await dioHandle
+        .postUri(uri, data: jsonEncode(data))
+        .then((response) {
       return response.parseUser();
     }).onError((error, stackTrace) {
-      log(name: 'backend_repository', error: error, '$error.message');
+      log(
+          name: 'backend_repository',
+          error: error,
+          '$error.message in [postUserLogin]');
       return ApiUserResponse.error('Timed out');
     });
   }
 
   /// [HttpPost]
   @override
-  Future<ApiBugReportResponse> postSubmitIssue(String issueSubject, String issueBody) async {
-    final Map<String, String> data = {ApiEndPoints.issueSubject: issueSubject, ApiEndPoints.issueBody: issueBody};
+  Future<ApiBugReportResponse> postSubmitIssue(
+      String issueSubject, String issueBody) async {
+    final Map<String, String> data = {
+      ApiEndPoints.issueSubject: issueSubject,
+      ApiEndPoints.issueBody: issueBody
+    };
     Uri uri = Uri.https(
       ApiEndPoints.baseUrl,
       ApiEndPoints.postSubmitIssue,
     );
-    return await dioHandle.postUri(uri, data: data).then((response) {
+    return await dioHandle
+        .postUri(uri, data: jsonEncode(data))
+        .then((response) {
       return response.parseIssue();
     }).onError((error, stackTrace) {
-      log(name: 'backend_repository', error: error, '$error.message');
+      log(
+          name: 'backend_repository',
+          error: error,
+          '$error.message in [postSubmitIssue]');
       return ApiBugReportResponse.error('Timed out');
     });
   }

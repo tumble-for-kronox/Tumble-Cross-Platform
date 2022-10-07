@@ -9,7 +9,8 @@ import 'package:flutter/foundation.dart';
 @immutable
 class ApiEndPoints {
   // Endpoints
-  static String debugBaseUrl = Platform.isAndroid ? '10.0.2.2:7036' : 'localhost:7036';
+  static String debugBaseUrl =
+      Platform.isAndroid ? '10.0.2.2:7036' : '192.168.1.178:80';
   static const String baseUrl = 'tumble.hkr.se:443';
   static const String getSchedules = '/schedules/search';
   static const String getOneSchedule = '/schedules/';

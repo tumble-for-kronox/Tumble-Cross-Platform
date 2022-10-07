@@ -30,13 +30,17 @@ class ResourceCubit extends Cubit<ResourceState> {
 
   final _userRepo = getIt<UserRepository>();
 
-  Future<void> getSchoolResources(AuthCubit authCubit, {bool loginLooped = false}) async {
+  Future<void> getSchoolResources(AuthCubit authCubit,
+      {bool loginLooped = false}) async {
     emit(state.copyWith(status: ResourceStatus.LOADING));
-    ApiBookingResponse schoolResources = await _userRepo.getSchoolResources(authCubit.state.userSession!.sessionToken);
+    ApiBookingResponse schoolResources = await _userRepo
+        .getSchoolResources(authCubit.state.userSession!.sessionToken);
 
     switch (schoolResources.status) {
       case ApiBookingResponseStatus.SUCCESS:
-        emit(state.copyWith(status: ResourceStatus.LOADED, schoolResources: schoolResources.data));
+        emit(state.copyWith(
+            status: ResourceStatus.LOADED,
+            schoolResources: schoolResources.data));
         break;
       case ApiBookingResponseStatus.ERROR:
       case ApiBookingResponseStatus.UNAUTHORIZED:
@@ -48,20 +52,26 @@ class ResourceCubit extends Cubit<ResourceState> {
         }
         break;
       case ApiBookingResponseStatus.NOT_FOUND:
-        emit(state.copyWith(status: ResourceStatus.ERROR, resourcePageErrorMessage: schoolResources.data));
+        emit(state.copyWith(
+            status: ResourceStatus.ERROR,
+            resourcePageErrorMessage: schoolResources.data));
         break;
     }
   }
 
-  Future<void> getResourceAvailabilities(AuthCubit authCubit, String resourceId, DateTime date,
+  Future<void> getResourceAvailabilities(
+      AuthCubit authCubit, String resourceId, DateTime date,
       {bool loginLooped = false}) async {
     emit(state.copyWithoutSelections(status: ResourceStatus.LOADING));
     ApiBookingResponse currentSelectedResource =
-        await _userRepo.getResourceAvailabilities(resourceId, date, authCubit.state.userSession!.sessionToken);
+        await _userRepo.getResourceAvailabilities(
+            resourceId, date, authCubit.state.userSession!.sessionToken);
     switch (currentSelectedResource.status) {
       case ApiBookingResponseStatus.SUCCESS:
         parseResourceAvailabilities(currentSelectedResource.data);
-        emit(state.copyWith(status: ResourceStatus.LOADED, currentLoadedResource: currentSelectedResource.data));
+        emit(state.copyWith(
+            status: ResourceStatus.LOADED,
+            currentLoadedResource: currentSelectedResource.data));
         break;
       case ApiBookingResponseStatus.ERROR:
       case ApiBookingResponseStatus.UNAUTHORIZED:
@@ -73,7 +83,9 @@ class ResourceCubit extends Cubit<ResourceState> {
         }
         break;
       case ApiBookingResponseStatus.NOT_FOUND:
-        emit(state.copyWith(status: ResourceStatus.ERROR, resourcePageErrorMessage: currentSelectedResource.data));
+        emit(state.copyWith(
+            status: ResourceStatus.ERROR,
+            resourcePageErrorMessage: currentSelectedResource.data));
         break;
     }
   }
@@ -92,7 +104,8 @@ class ResourceCubit extends Cubit<ResourceState> {
           availableLocationsForTimeSlots[timeSlot.id!] = [];
         }
 
-        if (resource.availabilities![locationId]![timeSlot.id]!.availability == AvailabilityEnum.AVAILABLE) {
+        if (resource.availabilities![locationId]![timeSlot.id]!.availability ==
+            AvailabilityEnum.AVAILABLE) {
           availableLocationsForTimeSlots[timeSlot.id]!.add(locationId);
 
           if (!availableTimeSlots.any((element) => element.id == timeSlot.id)) {
@@ -103,18 +116,22 @@ class ResourceCubit extends Cubit<ResourceState> {
     }
 
     emit(state.copyWith(
-        availableTimeSlots: availableTimeSlots, availableLocationsForTimeSlots: availableLocationsForTimeSlots));
+        availableTimeSlots: availableTimeSlots,
+        availableLocationsForTimeSlots: availableLocationsForTimeSlots));
   }
 
-  Future<void> getUserBookings(AuthCubit authCubit, {bool loginLooped = false}) async {
+  Future<void> getUserBookings(AuthCubit authCubit,
+      {bool loginLooped = false}) async {
     emit(state.copyWith(userBookingsStatus: UserBookingsStatus.LOADING));
-    ApiBookingResponse userBookings = await _userRepo.getUserBookings(authCubit.state.userSession!.sessionToken);
+    ApiBookingResponse userBookings = await _userRepo
+        .getUserBookings(authCubit.state.userSession!.sessionToken);
 
     switch (userBookings.status) {
       case ApiBookingResponseStatus.SUCCESS:
         updateNotificationsForIncomingBookings(userBookings.data);
 
-        List<bool> falseFilledLoadingList = List<bool>.filled((userBookings.data as List<Booking>).length, false);
+        List<bool> falseFilledLoadingList = List<bool>.filled(
+            (userBookings.data as List<Booking>).length, false);
         emit(state.copyWith(
           userBookingsStatus: UserBookingsStatus.LOADED,
           userBookings: userBookings.data,
@@ -132,16 +149,22 @@ class ResourceCubit extends Cubit<ResourceState> {
         }
         break;
       case ApiBookingResponseStatus.NOT_FOUND:
-        emit(state.copyWith(userBookingsStatus: UserBookingsStatus.ERROR, userBookingsErrorMessage: userBookings.data));
+        emit(state.copyWith(
+            userBookingsStatus: UserBookingsStatus.ERROR,
+            userBookingsErrorMessage: userBookings.data));
         break;
     }
   }
 
-  Future<String> bookResource(AuthCubit authCubit, String resourceId, DateTime date, AvailabilityValue bookingSlot,
+  Future<String> bookResource(AuthCubit authCubit, String resourceId,
+      DateTime date, AvailabilityValue bookingSlot,
       {bool loginLooped = false}) async {
     emit(state.copyWith(bookUnbookStatus: BookUnbookStatus.LOADING));
-    ApiBookingResponse bookResource =
-        await _userRepo.putBookResources(resourceId, date, bookingSlot, authCubit.state.userSession!.sessionToken);
+    ApiBookingResponse bookResource = await _userRepo.putBookResources(
+        resourceId,
+        date,
+        bookingSlot,
+        authCubit.state.userSession!.sessionToken);
 
     switch (bookResource.status) {
       case ApiBookingResponseStatus.SUCCESS:
@@ -150,7 +173,8 @@ class ResourceCubit extends Cubit<ResourceState> {
       case ApiBookingResponseStatus.UNAUTHORIZED:
         if (!loginLooped) {
           await authCubit.login();
-          bookResource.data = await this.bookResource(authCubit, resourceId, date, bookingSlot);
+          bookResource.data =
+              await this.bookResource(authCubit, resourceId, date, bookingSlot);
         } else {
           authCubit.logout();
         }
@@ -162,11 +186,14 @@ class ResourceCubit extends Cubit<ResourceState> {
     return bookResource.data as String;
   }
 
-  Future<String> unbookResource(AuthCubit authCubit, String bookingId, unbookLoadingIndex,
+  Future<String> unbookResource(
+      AuthCubit authCubit, String bookingId, unbookLoadingIndex,
       {bool loginLooped = false}) async {
-    emit(state.copyWith(unbookLoading: state.unbookLoading!.copyAndUpdate(unbookLoadingIndex, true)));
-    ApiBookingResponse bookResource =
-        await _userRepo.putUnbookResources(authCubit.state.userSession!.sessionToken, bookingId);
+    emit(state.copyWith(
+        unbookLoading:
+            state.unbookLoading!.copyAndUpdate(unbookLoadingIndex, true)));
+    ApiBookingResponse bookResource = await _userRepo.putUnbookResources(
+        authCubit.state.userSession!.sessionToken, bookingId);
 
     switch (bookResource.status) {
       case ApiBookingResponseStatus.SUCCESS:
@@ -176,7 +203,8 @@ class ResourceCubit extends Cubit<ResourceState> {
       case ApiBookingResponseStatus.UNAUTHORIZED:
         if (!loginLooped) {
           await authCubit.login();
-          bookResource.data = await unbookResource(authCubit, bookingId, unbookLoadingIndex);
+          bookResource.data =
+              await unbookResource(authCubit, bookingId, unbookLoadingIndex);
         } else {
           authCubit.logout();
         }
@@ -185,16 +213,21 @@ class ResourceCubit extends Cubit<ResourceState> {
         break;
     }
 
-    emit(state.copyWith(unbookLoading: state.unbookLoading!.copyAndUpdate(unbookLoadingIndex, false)));
+    emit(state.copyWith(
+        unbookLoading:
+            state.unbookLoading!.copyAndUpdate(unbookLoadingIndex, false)));
     return bookResource.data as String;
   }
 
-  Future<String> confirmBooking(AuthCubit authCubit, String resourceId, String bookingId, int confirmLoadingIndex,
+  Future<String> confirmBooking(AuthCubit authCubit, String resourceId,
+      String bookingId, int confirmLoadingIndex,
       {bool loginLooped = false}) async {
-    emit(state.copyWith(confirmationLoading: state.confirmationLoading!.copyAndUpdate(confirmLoadingIndex, true)));
+    emit(state.copyWith(
+        confirmationLoading: state.confirmationLoading!
+            .copyAndUpdate(confirmLoadingIndex, true)));
 
-    ApiBookingResponse confirmBooking =
-        await _userRepo.putConfirmBooking(authCubit.state.userSession!.sessionToken, resourceId, bookingId);
+    ApiBookingResponse confirmBooking = await _userRepo.putConfirmBooking(
+        authCubit.state.userSession!.sessionToken, resourceId, bookingId);
 
     switch (confirmBooking.status) {
       case ApiBookingResponseStatus.SUCCESS:
@@ -203,7 +236,8 @@ class ResourceCubit extends Cubit<ResourceState> {
       case ApiBookingResponseStatus.UNAUTHORIZED:
         if (!loginLooped) {
           await authCubit.login();
-          confirmBooking.data = await this.confirmBooking(authCubit, resourceId, bookingId, confirmLoadingIndex);
+          confirmBooking.data = await this.confirmBooking(
+              authCubit, resourceId, bookingId, confirmLoadingIndex);
         } else {
           authCubit.logout();
         }
@@ -212,7 +246,9 @@ class ResourceCubit extends Cubit<ResourceState> {
         break;
     }
 
-    emit(state.copyWith(confirmationLoading: state.confirmationLoading!.copyAndUpdate(confirmLoadingIndex, false)));
+    emit(state.copyWith(
+        confirmationLoading: state.confirmationLoading!
+            .copyAndUpdate(confirmLoadingIndex, false)));
     return confirmBooking.data;
   }
 
@@ -243,20 +279,22 @@ class ResourceCubit extends Cubit<ResourceState> {
   }
 
   bool userBookingOngoing(Booking booking) {
-    return booking.timeSlot.from.isBefore(DateTime.now()) && booking.timeSlot.to.isAfter(DateTime.now());
+    return booking.timeSlot.from.isBefore(DateTime.now()) &&
+        booking.timeSlot.to.isAfter(DateTime.now());
   }
 
-  Future<void> updateNotificationsForIncomingBookings(List<Booking> bookings) async {
-    List<NotificationModel> setBookingNotifications = (await _awesomeNotifications.listScheduledNotifications())
-        .where((element) => element.content!.channelKey == NotificationChannels.resources)
-        .toList();
+  Future<void> updateNotificationsForIncomingBookings(
+      List<Booking> bookings) async {
+    List<NotificationModel> setBookingNotifications =
+        (await _awesomeNotifications.listScheduledNotifications())
+            .where((element) =>
+                element.content!.channelKey == NotificationChannels.resources)
+            .toList();
 
     for (Booking booking in bookings) {
       if (booking.confirmationOpen == null) continue;
 
       if (!setBookingNotifications.any((element) {
-        log(booking.id.hashCode.toString());
-        log(element.content!.id.toString());
         return element.content!.id == booking.id.hashCode;
       })) {
         createNotificationForBooking(booking);
@@ -275,7 +313,7 @@ class ResourceCubit extends Cubit<ResourceState> {
           body: S.userBookings.notificationConfirmRemindBody(),
           date: booking.confirmationOpen!,
         );
-        log("Created notification for ${booking.id}");
+        log(name: 'resource_cubit', "Created notification for ${booking.id}");
         return true;
       }
       return false;
@@ -284,6 +322,6 @@ class ResourceCubit extends Cubit<ResourceState> {
 
   void cancelNotificationForBooking(String bookingId) {
     _awesomeNotifications.cancel(bookingId.hashCode);
-    log("Cancelled notification for $bookingId");
+    log(name: 'resource_cubit', "Cancelled notification for $bookingId");
   }
 }

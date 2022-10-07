@@ -63,7 +63,6 @@ class UserEventCubit extends Cubit<UserEventState> {
     emit(state.copyWith(registerUnregisterStatus: RegisterUnregisterStatus.LOADING));
     ApiUserResponse registerResponse =
         await _userRepo.putRegisterUserEvent(id, authCubit.state.userSession!.sessionToken);
-    log(registerResponse.status.name);
     switch (registerResponse.status) {
       case ApiUserResponseStatus.COMPLETED:
       case ApiUserResponseStatus.AUTHORIZED:

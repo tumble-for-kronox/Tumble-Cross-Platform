@@ -8,7 +8,8 @@ import 'dart:convert';
 part 'program_model.freezed.dart';
 part 'program_model.g.dart';
 
-ProgramModel programModelFromJson(String str) => ProgramModel.fromJson(json.decode(str));
+ProgramModel programModelFromJson(String str) =>
+    ProgramModel.fromJson(json.decode(str));
 
 String programModelToJson(ProgramModel data) => json.encode(data.toJson());
 
@@ -19,7 +20,8 @@ abstract class ProgramModel with _$ProgramModel {
     required List<Item> items,
   }) = _ProgramModel;
 
-  factory ProgramModel.fromJson(Map<String, dynamic> json) => _$ProgramModelFromJson(json);
+  factory ProgramModel.fromJson(Map<String, dynamic> json) =>
+      _$ProgramModelFromJson(json);
 }
 
 @freezed

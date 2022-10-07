@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:dio/dio.dart';
 
 import '../../api/apiservices/api_schedule_or_programme_response.dart';
@@ -9,16 +10,20 @@ import '../../models/api_models/schedule_model.dart';
 extension ScheduleOrProgrammeResponseParsing on Response {
   ApiScheduleOrProgrammeResponse parseSchedule() {
     if (statusCode == 200) {
-      return ApiScheduleOrProgrammeResponse.fetched(scheduleModelFromJson(data));
+      return ApiScheduleOrProgrammeResponse.fetched(
+          scheduleModelFromJson(jsonEncode(data)));
     }
-    return ApiScheduleOrProgrammeResponse.error(RuntimeErrorType.scheduleFetchError());
+    return ApiScheduleOrProgrammeResponse.error(
+        RuntimeErrorType.scheduleFetchError());
   }
 
   ApiScheduleOrProgrammeResponse parsePrograms() {
     if (statusCode == 200) {
-      return ApiScheduleOrProgrammeResponse.fetched(programModelFromJson(data));
+      return ApiScheduleOrProgrammeResponse.fetched(
+          programModelFromJson(jsonEncode(data)));
     }
-    return ApiScheduleOrProgrammeResponse.error(RuntimeErrorType.programFetchError());
+    return ApiScheduleOrProgrammeResponse.error(
+        RuntimeErrorType.programFetchError());
   }
 }
 

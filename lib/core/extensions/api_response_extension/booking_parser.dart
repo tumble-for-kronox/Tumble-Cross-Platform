@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:tumble/core/api/apiservices/api_booking_response.dart';
 import 'package:tumble/core/models/api_models/resource_model.dart';
@@ -9,13 +10,15 @@ import '../../api/apiservices/runtime_error_type.dart';
 extension BookingResponseParsing on Response {
   ApiBookingResponse parseSchoolResources() {
     if (statusCode == 200) {
-      List<dynamic> jsonList = json.decode(data);
-      List<ResourceModel> schoolResources = List<ResourceModel>.from(jsonList.map((e) => resourceModelFromJson(e)));
+      List<ResourceModel> schoolResources = List<ResourceModel>.from(
+          data.map((e) => resourceModelFromJson(jsonEncode(e))));
       return ApiBookingResponse.success(schoolResources);
     } else if (statusCode == 401) {
-      return ApiBookingResponse.unauthorized(RuntimeErrorType.authenticationError());
+      return ApiBookingResponse.unauthorized(
+          RuntimeErrorType.authenticationError());
     } else if (statusCode == 404) {
-      return ApiBookingResponse.notFound(RuntimeErrorType.resourceUnavailable());
+      return ApiBookingResponse.notFound(
+          RuntimeErrorType.resourceUnavailable());
     }
 
     return ApiBookingResponse.error(RuntimeErrorType.unknownError());
@@ -23,11 +26,14 @@ extension BookingResponseParsing on Response {
 
   ApiBookingResponse parseSchoolResource() {
     if (statusCode == 200) {
-      return ApiBookingResponse.success(resourceModelFromJson(data));
+      return ApiBookingResponse.success(
+          resourceModelFromJson(jsonEncode(data)));
     } else if (statusCode == 401) {
-      return ApiBookingResponse.unauthorized(RuntimeErrorType.authenticationError());
+      return ApiBookingResponse.unauthorized(
+          RuntimeErrorType.authenticationError());
     } else if (statusCode == 404) {
-      return ApiBookingResponse.notFound(RuntimeErrorType.resourceUnavailable());
+      return ApiBookingResponse.notFound(
+          RuntimeErrorType.resourceUnavailable());
     }
 
     return ApiBookingResponse.error(RuntimeErrorType.unknownError());
@@ -35,11 +41,13 @@ extension BookingResponseParsing on Response {
 
   Future<ApiBookingResponse> parseUserBookings() async {
     if (statusCode == 200) {
-      List<dynamic> jsonList = json.decode(data);
-      List<Booking> userBookings = List<Booking>.from(jsonList.map((x) => Booking.fromJson(x)));
+      List<dynamic> jsonList = json.decode(jsonEncode(data));
+      List<Booking> userBookings =
+          List<Booking>.from(jsonList.map((x) => Booking.fromJson(x)));
       return ApiBookingResponse.success(userBookings);
     } else if (statusCode == 401) {
-      return ApiBookingResponse.unauthorized(RuntimeErrorType.authenticationError());
+      return ApiBookingResponse.unauthorized(
+          RuntimeErrorType.authenticationError());
     }
 
     return ApiBookingResponse.error(RuntimeErrorType.unknownError());
@@ -49,7 +57,8 @@ extension BookingResponseParsing on Response {
     if (statusCode == 200) {
       return ApiBookingResponse.success(S.scaffoldMessages.bookedResource());
     } else if (statusCode == 401) {
-      return ApiBookingResponse.unauthorized(RuntimeErrorType.authenticationError());
+      return ApiBookingResponse.unauthorized(
+          RuntimeErrorType.authenticationError());
     } else if (statusCode == 403) {
       return ApiBookingResponse.error(RuntimeErrorType.maxResourcesBooked());
     } else if (statusCode == 409) {
@@ -63,7 +72,8 @@ extension BookingResponseParsing on Response {
     if (statusCode == 200) {
       return ApiBookingResponse.success(S.scaffoldMessages.unbookedResource());
     } else if (statusCode == 401) {
-      return ApiBookingResponse.unauthorized(RuntimeErrorType.authenticationError());
+      return ApiBookingResponse.unauthorized(
+          RuntimeErrorType.authenticationError());
     } else if (statusCode == 404) {
       return ApiBookingResponse.error(RuntimeErrorType.resourceUnavailable());
     }

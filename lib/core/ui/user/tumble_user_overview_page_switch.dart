@@ -24,6 +24,7 @@ class _TumbleUserOverviewPageSwitchState
             return const AuthenticatedOverviewPage();
           case AuthStatus.INITIAL:
           case AuthStatus.UNAUTHENTICATED:
+          case AuthStatus.ERROR:
             return const UnauthenticatedOverviewPage();
           default:
             return const TumbleLoading();
