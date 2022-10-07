@@ -33,7 +33,7 @@ class BackendRepository implements IBackendService {
         ApiEndPoints.baseUrl,
         '${ApiEndPoints.getOneSchedule}$scheduleId',
         {
-          ApiEndPoints.school: school,
+          ApiEndPoints.school: school.toString(),
         }.map((key, value) => MapEntry(key, value.toString())));
 
     return await dioHandle
@@ -41,7 +41,10 @@ class BackendRepository implements IBackendService {
         .then((response) {
       return response.parseSchedule();
     }).onError((error, stackTrace) {
-      log(name: 'backend_repository', error: error, '$error.message');
+      log(
+          name: 'backend_repository',
+          error: error,
+          '$error.message in [getRequestSchedule]');
       return ApiScheduleOrProgrammeResponse.error('Timed out');
     });
   }
@@ -65,7 +68,10 @@ class BackendRepository implements IBackendService {
         .then((response) {
       return response.parsePrograms();
     }).onError((error, stackTrace) {
-      log(name: 'backend_repository', error: error, '$error.message');
+      log(
+          name: 'backend_repository',
+          error: error,
+          '$error.message in [getPrograms]');
       return ApiScheduleOrProgrammeResponse.error('Timed out');
     });
   }

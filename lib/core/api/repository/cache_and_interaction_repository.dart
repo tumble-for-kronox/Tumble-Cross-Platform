@@ -17,43 +17,55 @@ class CacheAndInteractionRepository implements ICacheAndInteractionService {
   final _databaseService = getIt<DatabaseRepository>();
 
   @override
-  Future<ApiScheduleOrProgrammeResponse> programSearchDispatcher(String searchQuery) async {
-    String defaultSchool = _preferenceService.getString(PreferenceTypes.school)!;
-    ApiScheduleOrProgrammeResponse response = await _backendService.getPrograms(searchQuery, defaultSchool);
+  Future<ApiScheduleOrProgrammeResponse> programSearchDispatcher(
+      String searchQuery) async {
+    String defaultSchool =
+        _preferenceService.getString(PreferenceTypes.school)!;
+    ApiScheduleOrProgrammeResponse response =
+        await _backendService.getPrograms(searchQuery, defaultSchool);
     return response;
   }
 
   @override
-  Future<ApiScheduleOrProgrammeResponse> scheduleFetchDispatcher(scheduleId) async {
-    String defaultSchool = _preferenceService.getString(PreferenceTypes.school)!;
-    ApiScheduleOrProgrammeResponse response = await _backendService.getRequestSchedule(scheduleId, defaultSchool);
+  Future<ApiScheduleOrProgrammeResponse> scheduleFetchDispatcher(
+      scheduleId) async {
+    String defaultSchool =
+        _preferenceService.getString(PreferenceTypes.school)!;
+    ApiScheduleOrProgrammeResponse response =
+        await _backendService.getRequestSchedule(scheduleId, defaultSchool);
     return response;
   }
 
   @override
-  Future<ApiScheduleOrProgrammeResponse> getCachedOrNewSchedule(String scheduleId) async {
+  Future<ApiScheduleOrProgrammeResponse> getCachedOrNewSchedule(
+      String scheduleId) async {
     final bool bookmarksContainsThisScheduleId = _preferenceService
         .getStringList(PreferenceTypes.bookmarks)!
         .map((json) => bookmarkedScheduleModelFromJson(json).scheduleId)
         .contains(scheduleId);
 
     if (bookmarksContainsThisScheduleId) {
-      final ScheduleModel? userCachedSchedule = await _getCachedSchedule(scheduleId);
+      final ScheduleModel? userCachedSchedule =
+          await _getCachedSchedule(scheduleId);
 
       /// If the schedule for some reason is not found in the database,
       /// or if the schedule is more than 30 minutes old
       if (userCachedSchedule == null ||
-          DateTime.now().subtract(TimeConstants.updateOffset).isAfter(userCachedSchedule.cachedAt.toLocal())) {
+          DateTime.now()
+              .subtract(TimeConstants.updateOffset)
+              .isAfter(userCachedSchedule.cachedAt.toLocal())) {
         /// Make sure that only if the user has an internet connection and the
         /// schedule is 'outdated', the app will display the new schedule.
         /// Otherwise it returns [ApiResponse.cached(userCachedSchedule)]
-        ApiScheduleOrProgrammeResponse apiResponse = await scheduleFetchDispatcher(scheduleId);
+        ApiScheduleOrProgrammeResponse apiResponse =
+            await scheduleFetchDispatcher(scheduleId);
         if (apiResponse.data != null) {
           return apiResponse;
         } else if (userCachedSchedule != null) {
           return ApiScheduleOrProgrammeResponse.cached(userCachedSchedule);
         }
-        return ApiScheduleOrProgrammeResponse.error(RuntimeErrorType.scheduleFetchError());
+        return ApiScheduleOrProgrammeResponse.error(
+            RuntimeErrorType.scheduleFetchError());
       }
 
       return ApiScheduleOrProgrammeResponse.cached(userCachedSchedule);
@@ -69,7 +81,8 @@ class CacheAndInteractionRepository implements ICacheAndInteractionService {
   /// and a default schedule)
   @override
   Future<SharedPreferenceResponse> verifyDefaultSchoolExists() async {
-    final String? defaultSchool = _preferenceService.getString(PreferenceTypes.school);
+    final String? defaultSchool =
+        _preferenceService.getString(PreferenceTypes.school);
 
     if (defaultSchool != null) {
       return SharedPreferenceResponse.schoolAvailable(defaultSchool);
