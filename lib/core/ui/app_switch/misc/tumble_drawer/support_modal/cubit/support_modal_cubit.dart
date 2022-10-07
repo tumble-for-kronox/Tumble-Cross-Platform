@@ -3,18 +3,20 @@ part of 'support_modal_state.dart';
 class SupportModalCubit extends Cubit<SupportModalState> {
   SupportModalCubit()
       : super(const SupportModalState(
-            isSubjectValid: false,
-            isBodyValid: false,
-            status: SupportModalStatus.INITIAL)) {
+            isSubjectValid: false, isBodyValid: false, status: SupportModalStatus.INITIAL, focused: false)) {
     _init();
   }
 
   final _backendService = getIt<BackendRepository>();
   final _textEditingControllerSubject = TextEditingController();
   final _textEditingControllerBody = TextEditingController();
+  final _focusNodeSubject = FocusNode();
+  final _focusNodeBody = FocusNode();
 
   TextEditingController get subjectController => _textEditingControllerSubject;
   TextEditingController get bodyController => _textEditingControllerBody;
+  FocusNode get focusNodeSubject => _focusNodeSubject;
+  FocusNode get focusNodeBody => _focusNodeBody;
 
   @override
   Future<void> close() async {
@@ -26,13 +28,30 @@ class SupportModalCubit extends Cubit<SupportModalState> {
   Future<void> _init() async {
     _textEditingControllerSubject.addListener(subjectListener);
     _textEditingControllerBody.addListener(bodyListener);
+    _focusNodeBody.addListener(setBodyFocused);
+    _focusNodeSubject.addListener(setSubjectFocused);
+  }
+
+  void setBodyFocused() {
+    if (_focusNodeBody.hasFocus) {
+      emit(state.copyWith(focused: true));
+    } else {
+      emit(state.copyWith(focused: false));
+    }
+  }
+
+  void setSubjectFocused() {
+    if (_focusNodeSubject.hasFocus) {
+      emit(state.copyWith(focused: true));
+    } else {
+      emit(state.copyWith(focused: false));
+    }
   }
 
   Future<void> sendBugReport() async {
     final String subject = _textEditingControllerSubject.text;
     final String body = _textEditingControllerBody.text;
-    final ApiBugReportResponse response =
-        await _backendService.postSubmitIssue(subject, body);
+    final ApiBugReportResponse response = await _backendService.postSubmitIssue(subject, body);
     if (response.status == ApiBugReportResponseStatus.SUCCESS) {
       emit(state.copyWith(status: SupportModalStatus.SENT));
     } else {

@@ -1,4 +1,3 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,23 +9,23 @@ import 'package:tumble/core/ui/app_switch/misc/tumble_drawer/support_modal/cubit
 import 'package:tumble/core/ui/tumble_button.dart';
 import 'package:tumble/core/ui/tumble_loading.dart';
 
-class SupportModal extends StatefulWidget {
-  const SupportModal({Key? key}) : super(key: key);
+class BugReportModal extends StatefulWidget {
+  const BugReportModal({Key? key}) : super(key: key);
 
   @override
-  State<SupportModal> createState() => _SupportModalState();
+  State<BugReportModal> createState() => _BugReportModalState();
 
-  static void showSupportModal(BuildContext context, DrawerCubit cubit) {
+  static void showBugReportModal(BuildContext context, DrawerCubit cubit) {
     showModalBottomSheet(
         isScrollControlled: true,
         enableDrag: true,
         isDismissible: true,
         context: context,
-        builder: (context) => const SupportModal());
+        builder: (context) => const BugReportModal());
   }
 }
 
-class _SupportModalState extends State<SupportModal> {
+class _BugReportModalState extends State<BugReportModal> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(create: (context) => SupportModalCubit(), child: const SupportModalBuilder());
@@ -42,28 +41,32 @@ class SupportModalBuilder extends StatefulWidget {
 
 class _SupportModalBuilderState extends State<SupportModalBuilder> {
   @override
-  Widget build(BuildContext context) => SizedBox(
-          height: MediaQuery.of(context).size.height - 400,
-          child: BlocBuilder<SupportModalCubit, SupportModalState>(
-            builder: (context, state) {
-              return SupportModalShell(
+  Widget build(BuildContext context) => BlocBuilder<SupportModalCubit, SupportModalState>(
+        builder: (context, state) {
+          return AnimatedSize(
+            duration: const Duration(milliseconds: 200),
+            child: SizedBox(
+              height:
+                  !state.focused ? MediaQuery.of(context).size.height - 400 : MediaQuery.of(context).size.height - 200,
+              child: SupportModalShell(
                   subjectValidator: (_) {
-                    return state.isSubjectValid! ? null : S.supportModal.subjectTooShort();
+                    return state.isSubjectValid ? null : S.supportModal.subjectTooShort();
                   },
                   bodyValidator: (_) {
-                    return state.isBodyValid! ? null : S.supportModal.bodyTooShort();
+                    return state.isBodyValid ? null : S.supportModal.bodyTooShort();
                   },
                   subjectController: context.read<SupportModalCubit>().subjectController,
                   bodyController: context.read<SupportModalCubit>().bodyController,
                   onPressed: () async {
-                    if (state.isBodyValid! && state.isSubjectValid!) {
+                    if (state.isBodyValid && state.isSubjectValid) {
                       context.read<SupportModalCubit>().setLoading();
                       context.read<SupportModalCubit>().sendBugReport();
                     }
                   },
-                  status: state.status!);
-            },
-          ),
+                  status: state.status!),
+            ),
+          );
+        },
       );
 }
 
@@ -89,9 +92,8 @@ class SupportModalShell extends StatelessWidget {
   @override
   Widget build(BuildContext context) => TumbleDetailsModalBase(
         body: Container(
-          height: MediaQuery.of(context).size.height - 240,
           width: double.infinity,
-          padding: const EdgeInsets.only(left: 20, right: 20, top: 50),
+          padding: const EdgeInsets.only(left: 20, right: 20, top: 60),
           decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.background,
               borderRadius: const BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20))),
@@ -99,7 +101,7 @@ class SupportModalShell extends StatelessWidget {
             crossAxisAlignment: (status == SupportModalStatus.INITIAL || status == SupportModalStatus.ERROR)
                 ? CrossAxisAlignment.start
                 : CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               if (status == SupportModalStatus.INITIAL) _buildTextFormFields(context),
               Center(
@@ -149,6 +151,7 @@ class SupportModalShell extends StatelessWidget {
   _buildTextFormFields(BuildContext context) => Column(
         children: [
           TextFormField(
+            focusNode: context.read<SupportModalCubit>().focusNodeSubject,
             autovalidateMode: AutovalidateMode.onUserInteraction,
             autocorrect: true,
             validator: subjectValidator,
@@ -174,6 +177,7 @@ class SupportModalShell extends StatelessWidget {
             height: 30,
           ),
           TextFormField(
+            focusNode: context.read<SupportModalCubit>().focusNodeBody,
             autovalidateMode: AutovalidateMode.onUserInteraction,
             autocorrect: true,
             validator: bodyValidator,

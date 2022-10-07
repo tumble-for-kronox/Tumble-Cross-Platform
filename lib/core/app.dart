@@ -29,7 +29,6 @@ class _AppState extends State<App> {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await BackgroundTask.callbackDispatcher();
     });
-
     super.initState();
   }
 
@@ -78,18 +77,9 @@ class _AppState extends State<App> {
               themeMode: state.themeMode,
               home: Builder(builder: (context) {
                 S.init(context);
-                return MultiBlocProvider(
-                  providers: [
-                    BlocProvider.value(value: BlocProvider.of<AppNavigator>(context)),
-                    BlocProvider.value(value: BlocProvider.of<InitCubit>(context)),
-                    BlocProvider.value(value: BlocProvider.of<AuthCubit>(context)),
-                    BlocProvider.value(value: BlocProvider.of<ThemeCubit>(context)),
-                    BlocProvider.value(value: BlocProvider.of<SearchPageCubit>(context)),
-                  ],
-                  child: const AppNavigatorProvider(initialPages: [
-                    NavigationRouteLabels.appSwitchPage,
-                  ]),
-                );
+                return const AppNavigatorProvider(initialPages: [
+                  NavigationRouteLabels.appSwitchPage,
+                ]);
               })))),
     );
   }

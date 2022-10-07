@@ -22,7 +22,10 @@ class ContributorsModal extends StatelessWidget {
             children: [
               ContributorsSection(
                 sessionTitle: S.contributorsModal.development(),
-                contributors: const ["Lasse Poulsen", "Adis Veletanlic"],
+                contributors: const [
+                  "Lasse Poulsen",
+                  "Adis Veletanlic",
+                ],
               ),
               Divider(
                 height: 30,
@@ -51,7 +54,8 @@ class ContributorsModal extends StatelessWidget {
                   "Tom Welter (German, French)",
                   "Anne-Claire (French)",
                   "Moritz Held (German)",
-                  "Tian (Chinese)"
+                  "Tian (Chinese)",
+                  "Quang Minh Nguyen (Vietnamese)",
                 ],
               ),
               Divider(
@@ -61,7 +65,10 @@ class ContributorsModal extends StatelessWidget {
               ),
               ContributorsSection(
                 sessionTitle: S.contributorsModal.specialThanks(),
-                contributors: const ["Braco Veletanlic", "Ted Ekström"],
+                contributors: const [
+                  "Braco Veletanlic",
+                  "Ted Ekström",
+                ],
               ),
             ],
           ),

@@ -9,12 +9,10 @@ class TumbleUserOverviewPageSwitch extends StatefulWidget {
   const TumbleUserOverviewPageSwitch({Key? key}) : super(key: key);
 
   @override
-  State<TumbleUserOverviewPageSwitch> createState() =>
-      _TumbleUserOverviewPageSwitchState();
+  State<TumbleUserOverviewPageSwitch> createState() => _TumbleUserOverviewPageSwitchState();
 }
 
-class _TumbleUserOverviewPageSwitchState
-    extends State<TumbleUserOverviewPageSwitch> {
+class _TumbleUserOverviewPageSwitchState extends State<TumbleUserOverviewPageSwitch> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AuthCubit, AuthState>(
@@ -23,6 +21,7 @@ class _TumbleUserOverviewPageSwitchState
           case AuthStatus.AUTHENTICATED:
             return const AuthenticatedOverviewPage();
           case AuthStatus.INITIAL:
+          case AuthStatus.ERROR:
           case AuthStatus.UNAUTHENTICATED:
           case AuthStatus.ERROR:
             return const UnauthenticatedOverviewPage();
