@@ -43,8 +43,9 @@ class _ScheduleSearchBarState extends State<ScheduleSearchBar> {
                     decoration: InputDecoration(
                       hintStyle: TextStyle(color: Theme.of(context).colorScheme.onSecondary.withOpacity(.5)),
                       prefixIcon: IconButton(
-                        icon: const Icon(
+                        icon: Icon(
                           CupertinoIcons.search,
+                          color: Theme.of(context).colorScheme.onBackground,
                         ),
                         onPressed: () async {
                           if (BlocProvider.of<SearchPageCubit>(context)
@@ -62,6 +63,7 @@ class _ScheduleSearchBarState extends State<ScheduleSearchBar> {
                           return IconButton(
                             onPressed: () => BlocProvider.of<SearchPageCubit>(context).resetCubit(),
                             icon: const Icon(CupertinoIcons.clear),
+                            color: Theme.of(context).colorScheme.onBackground,
                           );
                         }
                       }(),

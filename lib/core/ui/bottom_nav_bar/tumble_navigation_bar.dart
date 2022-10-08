@@ -18,7 +18,7 @@ class TumbleNavigationBar extends StatelessWidget {
         return BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
           selectedIconTheme: const IconThemeData(size: 24),
-          unselectedIconTheme: const IconThemeData(size: 22),
+          unselectedIconTheme: IconThemeData(size: 22, color: Theme.of(context).colorScheme.onBackground),
           onTap: onTap,
           selectedFontSize: 12,
           unselectedFontSize: 10,
@@ -32,7 +32,10 @@ class TumbleNavigationBar extends StatelessWidget {
                   CupertinoIcons.search,
                 ),
                 label: S.searchPage.title()),
-            BottomNavigationBarItem(icon: const Icon(CupertinoIcons.collections), label: S.listViewPage.title()),
+            BottomNavigationBarItem(
+              icon: const Icon(CupertinoIcons.collections),
+              label: S.listViewPage.title(),
+            ),
             BottomNavigationBarItem(icon: const Icon(CupertinoIcons.list_bullet_indent), label: S.weekViewPage.title()),
             BottomNavigationBarItem(icon: const Icon(CupertinoIcons.calendar_today), label: S.calendarViewPage.title()),
             BottomNavigationBarItem(icon: const Icon(CupertinoIcons.person), label: S.authorizedPage.title()),
