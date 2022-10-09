@@ -50,11 +50,11 @@ class ResourcePage extends StatelessWidget {
             style: TextStyle(
                 fontWeight: FontWeight.w500,
                 letterSpacing: 1,
-                fontSize: 20,
+                fontSize: 24,
                 color: Theme.of(context).colorScheme.onBackground),
           ),
           const SizedBox(
-            height: 20,
+            height: 25,
           ),
           Expanded(
             child: RefreshIndicator(
