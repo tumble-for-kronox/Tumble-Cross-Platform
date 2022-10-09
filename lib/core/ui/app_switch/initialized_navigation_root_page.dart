@@ -9,6 +9,7 @@ import 'package:tumble/core/ui/app_switch/cubit/app_switch_cubit.dart';
 import 'package:tumble/core/ui/app_switch/misc/tumble_app_bar.dart';
 import 'package:tumble/core/ui/app_switch/misc/tumble_drawer/cubit/drawer_state.dart';
 import 'package:tumble/core/ui/app_switch/misc/tumble_drawer/tumble_app_drawer.dart';
+import 'package:tumble/core/ui/permission_handler.dart';
 import 'package:tumble/core/ui/schedule/tumble_calendar_view/tumble_calendar_view.dart';
 import 'package:tumble/core/ui/schedule/tumble_list_view/tumble_list_view.dart';
 import 'package:tumble/core/ui/schedule/tumble_week_view/tumble_week_view.dart';
@@ -22,10 +23,28 @@ class InitializedNavigationRootPage extends StatefulWidget {
   const InitializedNavigationRootPage({Key? key}) : super(key: key);
 
   @override
-  State<InitializedNavigationRootPage> createState() => _InitializedNavigationRootPageState();
+  State<InitializedNavigationRootPage> createState() =>
+      _InitializedNavigationRootPageState();
 }
 
-class _InitializedNavigationRootPageState extends State<InitializedNavigationRootPage> {
+class _InitializedNavigationRootPageState
+    extends State<InitializedNavigationRootPage> {
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if (context.read<AppSwitchCubit>().notificationCheck) {
+        showDialog(
+            barrierDismissible: false,
+            useRootNavigator: false,
+            context: context,
+            builder: (_) => PermissionHandler(
+                  cubit: context.read<AppSwitchCubit>(),
+                ));
+      }
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -43,21 +62,33 @@ class _InitializedNavigationRootPageState extends State<InitializedNavigationRoo
                 child: TumbleAppBar(
                   pageIndex: navState.index,
                   toggleBookmark: () async {
-                    await context.read<SearchPageCubit>().toggleFavorite(context).then((_) {
+                    await context
+                        .read<SearchPageCubit>()
+                        .toggleFavorite(context)
+                        .then((_) {
                       BlocProvider.of<AppSwitchCubit>(context).setLoading();
-                      BlocProvider.of<AppSwitchCubit>(context).attemptToFetchCachedSchedules();
-                      BlocProvider.of<MainAppNavigationCubit>(context).getNavBarItem(NavbarItem.LIST);
+                      BlocProvider.of<AppSwitchCubit>(context)
+                          .attemptToFetchCachedSchedules();
+                      BlocProvider.of<MainAppNavigationCubit>(context)
+                          .getNavBarItem(NavbarItem.LIST);
                     });
                   },
                 ),
               ),
               body: BlocListener<AuthCubit, AuthState>(
                 listenWhen: ((previous, current) =>
-                    previous.status != current.status && current.status == AuthStatus.AUTHENTICATED),
+                    previous.status != current.status &&
+                    current.status == AuthStatus.AUTHENTICATED),
                 listener: (context, state) {
-                  context.read<UserEventCubit>().getUserEvents(context.read<AuthCubit>(), true);
-                  context.read<ResourceCubit>().getSchoolResources(context.read<AuthCubit>());
-                  context.read<ResourceCubit>().getUserBookings(context.read<AuthCubit>());
+                  context
+                      .read<UserEventCubit>()
+                      .getUserEvents(context.read<AuthCubit>(), true);
+                  context
+                      .read<ResourceCubit>()
+                      .getSchoolResources(context.read<AuthCubit>());
+                  context
+                      .read<ResourceCubit>()
+                      .getUserBookings(context.read<AuthCubit>());
                   if (context.read<UserEventCubit>().state.autoSignup) {
                     context.read<AuthCubit>().runAutoSignup();
                   }
@@ -65,7 +96,10 @@ class _InitializedNavigationRootPageState extends State<InitializedNavigationRoo
                 child: AnimatedSwitcher(
                   duration: const Duration(milliseconds: 100),
                   child: () {
-                    switch (context.read<MainAppNavigationCubit>().state.navbarItem) {
+                    switch (context
+                        .read<MainAppNavigationCubit>()
+                        .state
+                        .navbarItem) {
                       case NavbarItem.SEARCH:
                         return const TumbleSearchPage();
                       case NavbarItem.LIST:
@@ -81,7 +115,8 @@ class _InitializedNavigationRootPageState extends State<InitializedNavigationRoo
                 ),
               ),
               bottomNavigationBar: TumbleNavigationBar(onTap: (index) {
-                BlocProvider.of<MainAppNavigationCubit>(context).getNavBarItem(NavbarItem.values[index]);
+                BlocProvider.of<MainAppNavigationCubit>(context)
+                    .getNavBarItem(NavbarItem.values[index]);
               }));
         },
       ),

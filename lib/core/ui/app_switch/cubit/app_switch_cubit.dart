@@ -15,6 +15,7 @@ import 'package:tumble/core/models/api_models/schedule_model.dart';
 import 'package:tumble/core/models/ui_models/course_ui_model.dart';
 import 'package:tumble/core/models/ui_models/schedule_model_and_courses.dart';
 import 'package:tumble/core/models/ui_models/week_model.dart';
+import 'package:tumble/core/shared/app_dependencies.dart';
 import 'package:tumble/core/shared/preference_types.dart';
 import 'package:tumble/core/dependency_injection/get_it_instances.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
@@ -42,11 +43,12 @@ class AppSwitchCubit extends Cubit<AppSwitchState> {
   final ScrollController _listViewScrollController = ScrollController();
 
   ScrollController get controller => _listViewScrollController;
-  int get viewType => getIt<SharedPreferences>().getInt(PreferenceTypes.view)!;
   bool get hasBookMarkedSchedules => getIt<SharedPreferences>()
       .getStringList(PreferenceTypes.bookmarks)!
       .isNotEmpty;
-
+  bool get notificationCheck =>
+      getIt<SharedPreferences>().getBool(PreferenceTypes.notificationAllowed) ==
+      null;
   bool toTopButtonVisible() => _listViewScrollController.hasClients
       ? _listViewScrollController.offset >= 1000
       : false;
@@ -316,8 +318,11 @@ class AppSwitchCubit extends Cubit<AppSwitchState> {
     });
   }
 
-  Future<void> permissionRequest() async {
-    await _awesomeNotifications.requestPermissionToSendNotifications();
+  Future<void> permissionRequest(bool value) async {
+    if (value) {
+      await _awesomeNotifications.requestPermissionToSendNotifications();
+    }
+    await getIt<AppDependencies>().setNotifictionPermission(value);
   }
 
   Future<void> forceRefreshAll() async {

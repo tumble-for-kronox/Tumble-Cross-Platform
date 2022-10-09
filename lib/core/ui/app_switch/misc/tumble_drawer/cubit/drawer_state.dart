@@ -21,7 +21,6 @@ import '../../../../data/string_constants.dart';
 part 'drawer_cubit.dart';
 
 class DrawerState extends Equatable {
-  final String? viewType;
   final String? school;
   final String? theme;
   final Map<String, bool>? mapOfIdToggles;
@@ -29,7 +28,6 @@ class DrawerState extends Equatable {
   final int? notificationTime;
   final Locale locale;
   const DrawerState({
-    required this.viewType,
     required this.school,
     required this.theme,
     required this.bookmarks,
@@ -39,7 +37,6 @@ class DrawerState extends Equatable {
   });
 
   DrawerState copyWith({
-    String? viewType,
     String? school,
     String? theme,
     List<BookmarkedScheduleModel>? bookmarks,
@@ -48,7 +45,6 @@ class DrawerState extends Equatable {
     Locale? locale,
   }) =>
       DrawerState(
-        viewType: viewType ?? this.viewType,
         school: school ?? this.school,
         theme: theme ?? this.theme,
         bookmarks: bookmarks ?? this.bookmarks,
@@ -58,5 +54,6 @@ class DrawerState extends Equatable {
       );
 
   @override
-  List<Object?> get props => [viewType, school, theme, bookmarks, notificationTime, mapOfIdToggles, locale];
+  List<Object?> get props =>
+      [school, theme, bookmarks, notificationTime, mapOfIdToggles, locale];
 }

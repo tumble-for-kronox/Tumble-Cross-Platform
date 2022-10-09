@@ -24,7 +24,8 @@ class _TumbleSearchPageState extends State<TumbleSearchPage> {
     return Stack(
       children: [
         Container(
-          margin: EdgeInsets.only(top: MediaQuery.of(context).viewPadding.top + 20),
+          margin:
+              EdgeInsets.only(top: MediaQuery.of(context).viewPadding.top + 20),
           alignment: Alignment.center,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -42,18 +43,25 @@ class _TumbleSearchPageState extends State<TumbleSearchPage> {
                               padding: const EdgeInsets.only(top: 70),
                               children: [
                                 Container(
-                                  padding: const EdgeInsets.only(left: 25, bottom: 10),
+                                  padding: const EdgeInsets.only(
+                                      left: 25, bottom: 10),
                                   child: Text(
                                     '${state.programList!.length} results',
                                     style: TextStyle(
-                                        fontSize: 15, color: Theme.of(context).colorScheme.onSurface.withOpacity(.8)),
+                                        fontSize: 15,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onSurface
+                                            .withOpacity(.8)),
                                   ),
                                 ),
                                 Divider(
                                   indent: 10,
                                   endIndent: 10,
                                   height: 10,
-                                  color: Theme.of(context).colorScheme.onBackground,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onBackground,
                                 ),
                                 _buildProgramsList(state.programList!, context)
                               ],
@@ -67,11 +75,15 @@ class _TumbleSearchPageState extends State<TumbleSearchPage> {
                           case SearchPageStatus.INITIAL:
                             return Container();
                           case SearchPageStatus.NO_SCHEDULES:
-                            return NoScheduleAvailable(errorType: state.errorMessage!, cupertinoAlertDialog: null);
+                            return NoScheduleAvailable(
+                                errorType: state.errorMessage!,
+                                cupertinoAlertDialog: null);
                           case SearchPageStatus.DISPLAY_PREVIEW:
                             return SchedulePreview(
                               toggleBookmark: (value) =>
-                                  BlocProvider.of<MainAppNavigationCubit>(context).setPreviewToggle(),
+                                  BlocProvider.of<MainAppNavigationCubit>(
+                                          context)
+                                      .setPreviewToggle(),
                             );
                         }
                       },
@@ -80,39 +92,6 @@ class _TumbleSearchPageState extends State<TumbleSearchPage> {
             ],
           ),
         ),
-        // Align(
-        //   alignment: Alignment.bottomCenter,
-        //   child: SizedBox(
-        //     width: double.maxFinite,
-        //     height: 150,
-        //     child: Stack(
-        //       children: [
-        //         Align(
-        //           alignment: Alignment.bottomCenter,
-        //           child: Container(
-        //             height: 145,
-        //             decoration: BoxDecoration(
-        //               color: Theme.of(context).colorScheme.primary,
-        //             ),
-        //           ),
-        //         ),
-        //         Align(
-        //           alignment: Alignment.topCenter,
-        //           child: Container(
-        //             width: double.maxFinite,
-        //             height: 40,
-        //             decoration: BoxDecoration(
-        //                 color: Theme.of(context).colorScheme.background,
-        //                 borderRadius: const BorderRadius.only(
-        //                   bottomLeft: Radius.circular(20),
-        //                   bottomRight: Radius.circular(20),
-        //                 )),
-        //           ),
-        //         )
-        //       ],
-        //     ),
-        //   ),
-        // ),
         BlocProvider.value(
           value: BlocProvider.of<SearchPageCubit>(context),
           child: const SearchBarAndLogoContainer(),
@@ -127,10 +106,12 @@ _buildProgramsList(List<Item> programList, BuildContext context) => Column(
         .map((program) => ProgramCard(
             programName: program.title,
             programSubtitle: program.subtitle,
-            schoolName: BlocProvider.of<InitCubit>(context).state.defaultSchool!,
+            schoolName:
+                BlocProvider.of<InitCubit>(context).state.defaultSchool!,
             onTap: () async {
               context.read<SearchPageCubit>().setPreviewLoading();
               context.read<SearchPageCubit>().displayPreview();
-              await BlocProvider.of<SearchPageCubit>(context).fetchNewSchedule(program.id);
+              await BlocProvider.of<SearchPageCubit>(context)
+                  .fetchNewSchedule(program.id);
             }))
         .toList());

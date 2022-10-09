@@ -7,8 +7,6 @@ class DrawerCubit extends Cubit<DrawerState> {
           theme: getIt<SharedPreferences>()
               .getString(PreferenceTypes.theme)!
               .capitalize(),
-          viewType: ScheduleViewTypes.viewTypesMap[
-              getIt<SharedPreferences>().getInt(PreferenceTypes.view)],
           school: getIt<SharedPreferences>().getString(PreferenceTypes.school),
           bookmarks: getIt<SharedPreferences>()
               .getStringList(PreferenceTypes.bookmarks)!
@@ -96,11 +94,6 @@ class DrawerCubit extends Cubit<DrawerState> {
           .map((json) => bookmarkedScheduleModelFromJson(json)))
         bookmark.scheduleId: bookmark.toggledValue
     }));
-  }
-
-  void setView(int viewType) {
-    getIt<SharedPreferences>().setInt(PreferenceTypes.view, viewType);
-    emit(state.copyWith(viewType: ScheduleViewTypes.viewTypesMap[viewType]));
   }
 
   void setNotificationTime(int time) async {
