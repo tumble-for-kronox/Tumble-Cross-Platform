@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tumble/core/api/backend/response_types/schedule_or_programme_response.dart';
+import 'package:tumble/core/api/preferences/repository/preference_repository.dart';
 import 'package:tumble/core/notifications/builders/notification_service_builder.dart';
 import 'package:tumble/core/api/backend/repository/cache_repository.dart';
 import 'package:tumble/core/api/database/repository/database_repository.dart';
@@ -36,21 +37,21 @@ class AppSwitchCubit extends Cubit<AppSwitchState> {
     _init();
   }
 
-  final _cacheAndInteractionService = getIt<CacheAndInteractionRepository>();
+  final _cacheAndInteractionService = getIt<CacheRepository>();
   final _notificationBuilder = NotificationServiceBuilder();
   final _notificationService = getIt<NotificationRepository>();
   final _databaseService = getIt<DatabaseRepository>();
-  final _preferenceService = getIt<SharedPreferences>();
+  final _preferenceService = getIt<PreferenceRepository>();
   final ScrollController _listViewScrollController = ScrollController();
 
   ScrollController get controller => _listViewScrollController;
-  bool get hasBookMarkedSchedules => getIt<SharedPreferences>().getStringList(PreferenceTypes.bookmarks)!.isNotEmpty;
-  bool get notificationCheck => getIt<SharedPreferences>().getBool(PreferenceTypes.notificationAllowed) == null;
+  bool get hasBookMarkedSchedules => getIt<PreferenceRepository>().bookmarkIds!.isNotEmpty;
+  bool get notificationCheck => getIt<PreferenceRepository>().allowedNotifications == null;
   bool toTopButtonVisible() => _listViewScrollController.hasClients ? _listViewScrollController.offset >= 1000 : false;
 
   Future<void> _init() async {
     dev.log(name: 'app_switch_cubit', 'Fetching cache ...');
-    await attemptToFetchCachedSchedules();
+    await getCachedSchedules();
     _listViewScrollController.addListener((setScrollController));
   }
 
@@ -60,60 +61,53 @@ class AppSwitchCubit extends Cubit<AppSwitchState> {
     return super.close();
   }
 
-  Future<void> attemptToFetchCachedSchedules() async {
-    final currentScheduleIds = _preferenceService
-        .getStringList(PreferenceTypes.bookmarks)!
-        .map((json) => bookmarkedScheduleModelFromJson(json).scheduleId)
-        .toList();
+  Future<void> getCachedSchedules() async {
+    final currentScheduleIds = _preferenceService.bookmarkIds;
     List<ScheduleModelAndCourses> listOfScheduleModelAndCourses = [];
     List<List<Day>> matrixListOfDays = [];
 
-    for (String? scheduleId in currentScheduleIds) {
-      final bool userHasBookmarks = _preferenceService
-          .getStringList(PreferenceTypes.bookmarks)!
-          .map((json) => bookmarkedScheduleModelFromJson(json).scheduleId)
-          .toList()
-          .isNotEmpty;
+    if (currentScheduleIds != null) {
+      for (String? scheduleId in currentScheduleIds) {
+        final bool userHasBookmarks = _preferenceService.userHasBookmarks;
 
-      final bool? toggledToBeVisible = _preferenceService
-          .getStringList(PreferenceTypes.bookmarks)!
-          .map((json) => bookmarkedScheduleModelFromJson(json))
-          .firstWhereOrNull((bookmark) => bookmark.scheduleId == scheduleId)
-          ?.toggledValue;
+        final bool? toggledToBeVisible = _preferenceService.bookmarkVisible(scheduleId);
 
-      if (scheduleId != null && userHasBookmarks) {
-        if (toggledToBeVisible != null && toggledToBeVisible) {
-          final ScheduleOrProgrammeResponse apiResponse = await _cacheAndInteractionService.findSchedule(scheduleId);
+        if (scheduleId != null && userHasBookmarks) {
+          if (toggledToBeVisible != null && toggledToBeVisible) {
+            final ScheduleOrProgrammeResponse apiResponse = await _cacheAndInteractionService.findSchedule(scheduleId);
 
-          switch (apiResponse.status) {
-            case ApiScheduleOrProgrammeStatus.FETCHED:
-            case ApiScheduleOrProgrammeStatus.CACHED:
-              ScheduleModel currentScheduleModel = apiResponse.data;
-              if (currentScheduleModel.isNotPhonySchedule()) {
-                matrixListOfDays.add(currentScheduleModel.days);
-                listOfScheduleModelAndCourses.add(ScheduleModelAndCourses(
-                    scheduleModel: currentScheduleModel,
-                    courses: await _databaseService.getCachedCoursesFromId(currentScheduleModel.id)));
-              }
-              break;
-            case ApiScheduleOrProgrammeStatus.ERROR:
+            switch (apiResponse.status) {
+              case ApiScheduleOrProgrammeStatus.FETCHED:
+              case ApiScheduleOrProgrammeStatus.CACHED:
+                ScheduleModel currentScheduleModel = apiResponse.data;
+                if (currentScheduleModel.isNotPhonySchedule()) {
+                  matrixListOfDays.add(currentScheduleModel.days);
+                  listOfScheduleModelAndCourses.add(ScheduleModelAndCourses(
+                      scheduleModel: currentScheduleModel,
+                      courses: await _databaseService.getCachedCoursesFromId(currentScheduleModel.id)));
+                }
+                break;
+              case ApiScheduleOrProgrammeStatus.ERROR:
 
-              /// If an error occurs here, there is an underlying error in
-              /// communication with regards to communication, the cache is
-              /// broken, or the backend is down.
-              emit(state.copyWith(status: AppScheduleViewStatus.FETCH_ERROR));
-              dev.log(
-                  name: 'app_switch_cubit', 'Error in retrieveing schedule cache ..\nError on schedule: [$scheduleId');
-              return;
-            default:
-              dev.log(name: 'app_switch_cubit', 'Unknown communication error occured on schedule: [$scheduleId]..');
-              break;
+                /// If an error occurs here, there is an underlying error in
+                /// communication with regards to communication, the cache is
+                /// broken, or the backend is down.
+                emit(state.copyWith(status: AppScheduleViewStatus.FETCH_ERROR));
+                dev.log(
+                    name: 'app_switch_cubit',
+                    'Error in retrieveing schedule cache ..\nError on schedule: [$scheduleId');
+                return;
+              default:
+                dev.log(name: 'app_switch_cubit', 'Unknown communication error occured on schedule: [$scheduleId]..');
+                break;
+            }
           }
+        } else {
+          emit(state.copyWith(status: AppScheduleViewStatus.NO_VIEW));
         }
-      } else {
-        emit(state.copyWith(status: AppScheduleViewStatus.NO_VIEW));
       }
     }
+
     if (listOfScheduleModelAndCourses.isNotEmpty) {
       final flattened = matrixListOfDays.expand((listOfDays) => listOfDays).toList();
       flattened.sort((prevDay, nextDay) => prevDay.isoString.compareTo(nextDay.isoString));
@@ -260,7 +254,7 @@ class AppSwitchCubit extends Cubit<AppSwitchState> {
             color: color.value))
         .then((value) {
       showScaffoldMessage(context, S.scaffoldMessages.updatedCourseColor(course.englishName));
-      attemptToFetchCachedSchedules();
+      getCachedSchedules();
     });
   }
 
@@ -268,17 +262,13 @@ class AppSwitchCubit extends Cubit<AppSwitchState> {
     if (value) {
       await _notificationService.getPermission();
     }
-    await getIt<AppDependencies>().setNotifictionPermission(value);
+    await _preferenceService.setNotificationAllowed(value);
   }
 
   Future<void> forceRefreshAll() async {
-    final bookmarks = _preferenceService
-        .getStringList(PreferenceTypes.bookmarks)!
-        .map((e) => bookmarkedScheduleModelFromJson(e))
-        .where((bookmark) => bookmark.toggledValue)
-        .toList();
+    final visibleBookmarks = _preferenceService.visibleBookmarkIds;
 
-    for (var bookmark in bookmarks) {
+    for (var bookmark in visibleBookmarks) {
       final ScheduleOrProgrammeResponse apiResponse =
           await _cacheAndInteractionService.updateSchedule(bookmark.scheduleId);
 
@@ -290,6 +280,6 @@ class AppSwitchCubit extends Cubit<AppSwitchState> {
           break;
       }
     }
-    await attemptToFetchCachedSchedules();
+    await getCachedSchedules();
   }
 }

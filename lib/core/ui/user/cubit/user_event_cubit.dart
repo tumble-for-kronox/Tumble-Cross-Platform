@@ -7,6 +7,7 @@ import 'package:tumble/core/api/backend/response_types/user_response.dart';
 import 'package:tumble/core/api/backend/response_types/runtime_error_type.dart';
 import 'package:tumble/core/api/backend/repository/user_action_repository.dart';
 import 'package:tumble/core/api/dependency_injection/get_it.dart';
+import 'package:tumble/core/api/preferences/repository/preference_repository.dart';
 import 'package:tumble/core/models/backend_models/kronox_user_model.dart';
 import 'package:tumble/core/models/backend_models/user_event_collection_model.dart';
 import 'package:tumble/core/shared/preference_types.dart';
@@ -20,16 +21,17 @@ class UserEventCubit extends Cubit<UserEventState> {
       : super(UserEventState(
           userEventListStatus: UserOverviewStatus.INITIAL,
           registerUnregisterStatus: RegisterUnregisterStatus.INITIAL,
-          autoSignup: getIt<SharedPreferences>().getBool(PreferenceTypes.autoSignup)!,
+          autoSignup: getIt<PreferenceRepository>().autoSignup!,
         ));
 
-  final _userRepo = getIt<UserActionRepository>();
+  final _userActionService = getIt<UserActionRepository>();
+  final _preferenceService = getIt<PreferenceRepository>();
 
   Future<void> getUserEvents(AuthCubit authCubit, bool showLoding, {bool loginLooped = false}) async {
     switch (authCubit.state.status) {
       case AuthStatus.AUTHENTICATED:
         if (showLoding) emit(state.copyWith(userEventListStatus: UserOverviewStatus.LOADING));
-        UserResponse userEventResponse = await _userRepo.userEvents(authCubit.state.userSession!.sessionToken);
+        UserResponse userEventResponse = await _userActionService.userEvents(authCubit.state.userSession!.sessionToken);
         switch (userEventResponse.status) {
           case ApiUserResponseStatus.COMPLETED:
             emit(state.copyWith(
@@ -61,7 +63,8 @@ class UserEventCubit extends Cubit<UserEventState> {
 
   Future<void> registerUserEvent(String id, AuthCubit authCubit, {bool loginLooped = false}) async {
     emit(state.copyWith(registerUnregisterStatus: RegisterUnregisterStatus.LOADING));
-    UserResponse registerResponse = await _userRepo.registerUserEvent(id, authCubit.state.userSession!.sessionToken);
+    UserResponse registerResponse =
+        await _userActionService.registerUserEvent(id, authCubit.state.userSession!.sessionToken);
     switch (registerResponse.status) {
       case ApiUserResponseStatus.COMPLETED:
       case ApiUserResponseStatus.AUTHORIZED:
@@ -93,7 +96,7 @@ class UserEventCubit extends Cubit<UserEventState> {
   Future<void> unregisterUserEvent(String id, AuthCubit authCubit, {bool loginLooped = false}) async {
     emit(state.copyWith(registerUnregisterStatus: RegisterUnregisterStatus.LOADING));
     UserResponse unregisterResponse =
-        await _userRepo.unregisterUserEvent(id, authCubit.state.userSession!.sessionToken);
+        await _userActionService.unregisterUserEvent(id, authCubit.state.userSession!.sessionToken);
 
     switch (unregisterResponse.status) {
       case ApiUserResponseStatus.COMPLETED:
@@ -124,7 +127,7 @@ class UserEventCubit extends Cubit<UserEventState> {
   }
 
   Future<void> autoSignupToggle(bool value) async {
-    getIt<SharedPreferences>().setBool(PreferenceTypes.autoSignup, value);
+    _preferenceService.setAutoSignup(value);
     emit(state.copyWith(autoSignup: value));
   }
 

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tumble/core/api/preferences/repository/preference_repository.dart';
 import 'package:tumble/core/navigation/app_navigator.dart';
 import 'package:tumble/core/navigation/navigation_route_labels.dart';
 import 'package:tumble/core/shared/preference_types.dart';
@@ -16,6 +17,6 @@ class UnauthenticatedOverviewPage extends StatelessWidget {
     return UserInfo(
         loggedIn: false,
         onPressed: () => navigator.push(NavigationRouteLabels.loginPageRoot,
-            arguments: getIt<SharedPreferences>().getString(PreferenceTypes.school)));
+            arguments: getIt<PreferenceRepository>().defaultSchool));
   }
 }

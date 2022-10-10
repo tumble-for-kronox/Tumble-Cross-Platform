@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tumble/core/api/backend/repository/cache_repository.dart';
+import 'package:tumble/core/api/preferences/repository/preference_repository.dart';
 import 'package:tumble/core/notifications/repository/notification_repository.dart';
 import 'package:tumble/core/api/database/shared_preference_response.dart';
 import 'package:tumble/core/api/database/repository/database_repository.dart';
@@ -14,10 +15,13 @@ class InitCubit extends Cubit<InitState> {
     _init();
   }
 
-  final _cacheAndInteractionService = getIt<CacheAndInteractionRepository>();
+  final _cacheAndInteractionService = getIt<CacheRepository>();
   final _databaseService = getIt<DatabaseRepository>();
   final _appDependencies = getIt<AppDependencies>();
   final _notificationService = getIt<NotificationRepository>();
+  final _preferenceService = getIt<PreferenceRepository>();
+
+  bool get schoolNotNull => _preferenceService.defaultSchool != null;
 
   Future<void> _init() async {
     SharedPreferenceResponse sharedPreferenceResponse = await _cacheAndInteractionService.hasSchool();

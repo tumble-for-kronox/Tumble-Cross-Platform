@@ -62,7 +62,7 @@ class _SchoolSelectionPageState extends State<SchoolSelectionPage> {
 void onPressSchool(School school, AppNavigator navigator, BuildContext context) {
   if (school.loginRequired) {
     navigator.push(NavigationRouteLabels.loginPageRoot, arguments: school.schoolName);
-  } else if (getIt<SharedPreferences>().getString(PreferenceTypes.school) != null) {
+  } else if (context.read<InitCubit>().schoolNotNull) {
     BlocProvider.of<InitCubit>(context).changeSchool(school.schoolName).then((_) {
       BlocProvider.of<AuthCubit>(context).logout();
       navigator.pushAndRemoveAll(NavigationRouteLabels.appTopRootBuilder);

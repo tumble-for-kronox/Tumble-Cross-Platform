@@ -8,6 +8,7 @@ import 'package:tumble/core/api/backend/response_types/user_response.dart';
 import 'package:tumble/core/api/backend/response_types/runtime_error_type.dart';
 import 'package:tumble/core/api/backend/repository/user_action_repository.dart';
 import 'package:tumble/core/api/database/repository/secure_storage_repository.dart';
+import 'package:tumble/core/api/preferences/repository/preference_repository.dart';
 import 'package:tumble/core/models/backend_models/kronox_user_model.dart';
 import 'package:tumble/core/models/backend_models/multi_registration_result_model.dart';
 import 'package:tumble/core/models/ui_models/school_model.dart';
@@ -36,6 +37,8 @@ class AuthCubit extends Cubit<AuthState> {
 
   FocusNode get focusNodePassword => _focusNodePassword;
   FocusNode get focusNodeUsername => _focusNodeUsername;
+
+  String get defaultSchool => getIt<PreferenceRepository>().defaultSchool!;
 
   void _init() {
     _focusNodePassword.addListener(setFocusNodePassword);
@@ -80,10 +83,7 @@ class AuthCubit extends Cubit<AuthState> {
     switch (userRes.status) {
       case ApiUserResponseStatus.AUTHORIZED:
         storeUserCreds((userRes.data! as KronoxUserModel).refreshToken);
-        getIt<SharedPreferences>().setString(
-          PreferenceTypes.school,
-          school,
-        );
+        getIt<PreferenceRepository>().setSchool(school);
         emit(state.copyWith(loginSuccess: true));
         await Future.delayed(const Duration(seconds: 2));
         emit(state.copyWith(status: AuthStatus.AUTHENTICATED, userSession: userRes.data!));

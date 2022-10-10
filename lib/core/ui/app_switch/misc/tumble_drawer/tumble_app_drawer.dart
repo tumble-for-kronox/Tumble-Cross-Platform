@@ -131,7 +131,7 @@ class TumbleAppDrawer extends StatelessWidget {
                       suffixIcon: CupertinoIcons.clock,
                       drawerTileTitle: S.settingsPage.offsetTitle(),
                       subtitle: S.settingsPage
-                          .offsetSubtitle(getIt<SharedPreferences>().getInt(PreferenceTypes.notificationOffset)!),
+                          .offsetSubtitle(context.read<DrawerCubit>().notificationOffset),
                       eventType: EventType.EDIT_NOTIFICATION_TIME,
                       drawerEvent: (eventType) =>
                           _handleDrawerEvent(eventType, context, navigator, context.read<DrawerCubit>()),
@@ -195,7 +195,7 @@ class TumbleAppDrawer extends StatelessWidget {
                   )).whenComplete(() async {
             if (tempBookmarks != context.read<DrawerCubit>().state.bookmarks!) {
               BlocProvider.of<AppSwitchCubit>(context).setLoading();
-              await BlocProvider.of<AppSwitchCubit>(context).attemptToFetchCachedSchedules();
+              await BlocProvider.of<AppSwitchCubit>(context).getCachedSchedules();
             }
           });
         }

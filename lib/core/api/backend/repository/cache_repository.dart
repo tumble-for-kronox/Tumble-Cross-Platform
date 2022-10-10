@@ -6,36 +6,34 @@ import 'package:tumble/core/api/backend/interface/icache_service.dart';
 import 'package:tumble/core/api/backend/repository/backend_repository.dart';
 import 'package:tumble/core/api/database/shared_preference_response.dart';
 import 'package:tumble/core/api/database/repository/database_repository.dart';
+import 'package:tumble/core/api/preferences/repository/preference_repository.dart';
 import 'package:tumble/core/models/backend_models/bookmarked_schedule_model.dart';
 import 'package:tumble/core/models/backend_models/schedule_model.dart';
 import 'package:tumble/core/shared/preference_types.dart';
 import 'package:tumble/core/api/dependency_injection/get_it.dart';
 
-class CacheAndInteractionRepository implements ICacheService {
+class CacheRepository implements ICacheService {
   final _backendService = getIt<BackendRepository>();
-  final _preferenceService = getIt<SharedPreferences>();
+  final _preferenceService = getIt<PreferenceRepository>();
   final _databaseService = getIt<DatabaseRepository>();
 
   @override
   Future<ScheduleOrProgrammeResponse> searchProgram(String searchQuery) async {
-    String defaultSchool = _preferenceService.getString(PreferenceTypes.school)!;
+    String defaultSchool = _preferenceService.defaultSchool!;
     ScheduleOrProgrammeResponse response = await _backendService.getPrograms(searchQuery, defaultSchool);
     return response;
   }
 
   @override
   Future<ScheduleOrProgrammeResponse> updateSchedule(scheduleId) async {
-    String defaultSchool = _preferenceService.getString(PreferenceTypes.school)!;
+    String defaultSchool = _preferenceService.defaultSchool!;
     ScheduleOrProgrammeResponse response = await _backendService.getSchedule(scheduleId, defaultSchool);
     return response;
   }
 
   @override
   Future<ScheduleOrProgrammeResponse> findSchedule(String scheduleId) async {
-    final bool bookmarksContainsThisScheduleId = _preferenceService
-        .getStringList(PreferenceTypes.bookmarks)!
-        .map((json) => bookmarkedScheduleModelFromJson(json).scheduleId)
-        .contains(scheduleId);
+    final bool bookmarksContainsThisScheduleId = _preferenceService.bookmarksHasId(scheduleId);
 
     if (bookmarksContainsThisScheduleId) {
       final ScheduleModel? userCachedSchedule = await _getCachedSchedule(scheduleId);
@@ -69,7 +67,7 @@ class CacheAndInteractionRepository implements ICacheService {
   /// and a default schedule)
   @override
   Future<SharedPreferenceResponse> hasSchool() async {
-    final String? defaultSchool = _preferenceService.getString(PreferenceTypes.school);
+    final String? defaultSchool = _preferenceService.defaultSchool;
 
     if (defaultSchool != null) {
       return SharedPreferenceResponse.schoolAvailable(defaultSchool);

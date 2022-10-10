@@ -7,11 +7,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tumble/core/api/backend/repository/user_action_repository.dart';
 import 'package:tumble/core/api/backend/response_types/booking_response.dart';
 import 'package:tumble/core/api/dependency_injection/get_it.dart';
+import 'package:tumble/core/api/preferences/repository/preference_repository.dart';
 import 'package:tumble/core/extensions/extensions.dart';
 import 'package:tumble/core/models/backend_models/resource_model.dart';
 import 'package:tumble/core/notifications/builders/notification_service_builder.dart';
 import 'package:tumble/core/notifications/repository/notification_repository.dart';
-import 'package:tumble/core/shared/notification_channels.dart';
+import 'package:tumble/core/notifications/data/notification_channels.dart';
 import 'package:tumble/core/shared/preference_types.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
 import 'package:tumble/core/ui/login/cubit/auth_cubit.dart';
@@ -21,7 +22,7 @@ part 'resource_state.dart';
 class ResourceCubit extends Cubit<ResourceState> {
   final _notificationBuilder = NotificationServiceBuilder();
   final _userService = getIt<UserActionRepository>();
-  final _preferenceService = getIt<SharedPreferences>();
+  final _preferenceService = getIt<PreferenceRepository>();
   final _notificationService = getIt<NotificationRepository>();
 
   ResourceCubit()
@@ -116,8 +117,7 @@ class ResourceCubit extends Cubit<ResourceState> {
     switch (userBookings.status) {
       case ApiBookingResponseStatus.SUCCESS:
         log(name: 'resource_cubit', 'Successfully retrieved user bookings ..');
-        if (_preferenceService.getBool(PreferenceTypes.notificationAllowed) != null &&
-            _preferenceService.getBool(PreferenceTypes.notificationAllowed)!) {
+        if (_preferenceService.allowedNotifications != null && _preferenceService.allowedNotifications!) {
           updateNotificationsForIncomingBookings(userBookings.data);
         }
 

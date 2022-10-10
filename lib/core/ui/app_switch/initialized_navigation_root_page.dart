@@ -23,12 +23,10 @@ class InitializedNavigationRootPage extends StatefulWidget {
   const InitializedNavigationRootPage({Key? key}) : super(key: key);
 
   @override
-  State<InitializedNavigationRootPage> createState() =>
-      _InitializedNavigationRootPageState();
+  State<InitializedNavigationRootPage> createState() => _InitializedNavigationRootPageState();
 }
 
-class _InitializedNavigationRootPageState
-    extends State<InitializedNavigationRootPage> {
+class _InitializedNavigationRootPageState extends State<InitializedNavigationRootPage> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
@@ -62,33 +60,21 @@ class _InitializedNavigationRootPageState
                 child: TumbleAppBar(
                   pageIndex: navState.index,
                   toggleBookmark: () async {
-                    await context
-                        .read<SearchPageCubit>()
-                        .toggleFavorite(context)
-                        .then((_) {
+                    await context.read<SearchPageCubit>().toggleFavorite(context).then((_) {
                       BlocProvider.of<AppSwitchCubit>(context).setLoading();
-                      BlocProvider.of<AppSwitchCubit>(context)
-                          .attemptToFetchCachedSchedules();
-                      BlocProvider.of<MainAppNavigationCubit>(context)
-                          .getNavBarItem(NavbarItem.LIST);
+                      BlocProvider.of<AppSwitchCubit>(context).getCachedSchedules();
+                      BlocProvider.of<MainAppNavigationCubit>(context).getNavBarItem(NavbarItem.LIST);
                     });
                   },
                 ),
               ),
               body: BlocListener<AuthCubit, AuthState>(
                 listenWhen: ((previous, current) =>
-                    previous.status != current.status &&
-                    current.status == AuthStatus.AUTHENTICATED),
+                    previous.status != current.status && current.status == AuthStatus.AUTHENTICATED),
                 listener: (context, state) {
-                  context
-                      .read<UserEventCubit>()
-                      .getUserEvents(context.read<AuthCubit>(), true);
-                  context
-                      .read<ResourceCubit>()
-                      .getSchoolResources(context.read<AuthCubit>());
-                  context
-                      .read<ResourceCubit>()
-                      .getUserBookings(context.read<AuthCubit>());
+                  context.read<UserEventCubit>().getUserEvents(context.read<AuthCubit>(), true);
+                  context.read<ResourceCubit>().getSchoolResources(context.read<AuthCubit>());
+                  context.read<ResourceCubit>().getUserBookings(context.read<AuthCubit>());
                   if (context.read<UserEventCubit>().state.autoSignup) {
                     context.read<AuthCubit>().runAutoSignup();
                   }
@@ -96,10 +82,7 @@ class _InitializedNavigationRootPageState
                 child: AnimatedSwitcher(
                   duration: const Duration(milliseconds: 100),
                   child: () {
-                    switch (context
-                        .read<MainAppNavigationCubit>()
-                        .state
-                        .navbarItem) {
+                    switch (context.read<MainAppNavigationCubit>().state.navbarItem) {
                       case NavbarItem.SEARCH:
                         return const TumbleSearchPage();
                       case NavbarItem.LIST:
@@ -115,8 +98,7 @@ class _InitializedNavigationRootPageState
                 ),
               ),
               bottomNavigationBar: TumbleNavigationBar(onTap: (index) {
-                BlocProvider.of<MainAppNavigationCubit>(context)
-                    .getNavBarItem(NavbarItem.values[index]);
+                BlocProvider.of<MainAppNavigationCubit>(context).getNavBarItem(NavbarItem.values[index]);
               }));
         },
       ),

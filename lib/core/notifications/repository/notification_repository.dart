@@ -1,31 +1,27 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:collection/collection.dart';
 import 'package:darq/darq.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tumble/core/api/preferences/repository/preference_repository.dart';
 import 'package:tumble/core/notifications/builders/notification_service_builder.dart';
 import 'package:tumble/core/api/database/repository/database_repository.dart';
 import 'package:tumble/core/extensions/extensions.dart';
-import 'package:tumble/core/models/backend_models/bookmarked_schedule_model.dart';
 import 'package:tumble/core/models/backend_models/schedule_model.dart';
 import 'package:tumble/core/notifications/interface/inotification_service.dart';
-import 'package:tumble/core/shared/notification_channels.dart';
-import 'package:tumble/core/shared/preference_types.dart';
+import 'package:tumble/core/notifications/data/notification_channels.dart';
 import 'package:tumble/core/api/dependency_injection/get_it.dart';
 
 class NotificationRepository implements INotificationService {
   final _notificationServiceBuilder = NotificationServiceBuilder();
   final _databaseService = getIt<DatabaseRepository>();
   final _awesomeNotifications = getIt<AwesomeNotifications>();
+  final _preferenceService = getIt<PreferenceRepository>();
   final String _defaultIcon = "resource://drawable/res_tumble_app_logo";
 
   @override
   void assignAllNotificationsWithNewDuration(Duration newDuration) async {
     List<NotificationModel> currentNotifications = await _awesomeNotifications.listScheduledNotifications();
 
-    final List<String> bookmarkedScheduleIds = getIt<SharedPreferences>()
-        .getStringList(PreferenceTypes.bookmarks)!
-        .map((json) => bookmarkedScheduleModelFromJson(json).scheduleId)
-        .toList();
+    final List<String>? bookmarkedScheduleIds = _preferenceService.bookmarkIds;
 
     List<String?> notificationChannelKeys = currentNotifications
         .map((NotificationModel notificationModel) => notificationModel.content!.id.toString())
@@ -33,7 +29,7 @@ class NotificationRepository implements INotificationService {
 
     final List<ScheduleModel?> bookmarkedUserSchedules = [];
 
-    if (bookmarkedScheduleIds.isNotEmpty) {
+    if (bookmarkedScheduleIds != null && bookmarkedScheduleIds.isNotEmpty) {
       for (String scheduleId in bookmarkedScheduleIds) {
         bookmarkedUserSchedules.add(await _databaseService.getOneSchedule(scheduleId));
       }
@@ -97,12 +93,8 @@ class NotificationRepository implements INotificationService {
 
   @override
   Future<bool> initialize() async {
-    List<String>? bookmarkedScheduleIdStrings = getIt<SharedPreferences>().getStringList(PreferenceTypes.bookmarks);
-    bookmarkedScheduleIdStrings ??= <String>[];
-
-    final List<String> bookmarkedScheduleIds =
-        bookmarkedScheduleIdStrings.map((e) => bookmarkedScheduleModelFromJson(e).scheduleId).toList();
-
+    List<String>? bookmarkedScheduleIds = _preferenceService.bookmarkIds;
+    bookmarkedScheduleIds ??= <String>[];
     return await getIt<AwesomeNotifications>().initialize(_defaultIcon, [
       ...bookmarkedScheduleIds
           .map((scheduleId) => _notificationServiceBuilder.buildNotificationChannel(

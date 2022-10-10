@@ -1,18 +1,18 @@
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tumble/core/api/backend/response_types/booking_response.dart';
 import 'package:tumble/core/api/backend/response_types/user_response.dart';
 import 'package:tumble/core/api/backend/interface/iuser_action_service.dart';
 import 'package:tumble/core/api/backend/repository/backend_repository.dart';
+import 'package:tumble/core/api/preferences/repository/preference_repository.dart';
 import 'package:tumble/core/models/backend_models/resource_model.dart';
 import 'package:tumble/core/shared/preference_types.dart';
 import 'package:tumble/core/api/dependency_injection/get_it.dart';
 
 class UserActionRepository implements IUserActionService {
   final _backendRepository = getIt<BackendRepository>();
-  final _preferenceService = getIt<SharedPreferences>();
+  final _preferenceService = getIt<PreferenceRepository>();
 
   String? _getDefaultSchool() {
-    return _preferenceService.getString(PreferenceTypes.school);
+    return _preferenceService.defaultSchool;
   }
 
   @override

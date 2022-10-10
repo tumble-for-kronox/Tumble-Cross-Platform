@@ -3,6 +3,7 @@ import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tumble/core/api/backend/repository/backend_repository.dart';
 import 'package:tumble/core/api/backend/repository/cache_repository.dart';
+import 'package:tumble/core/api/preferences/repository/preference_repository.dart';
 import 'package:tumble/core/notifications/repository/notification_repository.dart';
 import 'package:tumble/core/api/backend/repository/user_action_repository.dart';
 import 'package:tumble/core/api/database/app_database.dart';
@@ -25,9 +26,10 @@ class DependencyInjection {
     getIt.registerLazySingleton(() => AppDatabase());
     getIt.registerLazySingleton(() => DatabaseRepository());
     getIt.registerLazySingleton(() => ThemeRepository());
-    getIt.registerLazySingleton(() => CacheAndInteractionRepository());
+    getIt.registerLazySingleton(() => CacheRepository());
     getIt.registerLazySingleton(() => UserActionRepository());
     getIt.registerLazySingleton(() => NotificationRepository());
     getIt.registerLazySingleton(() => AwesomeNotifications());
+    getIt.registerLazySingleton(() => PreferenceRepository());
   }
 }

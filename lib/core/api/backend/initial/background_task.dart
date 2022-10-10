@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tumble/core/api/backend/response_types/schedule_or_programme_response.dart';
 import 'package:tumble/core/api/backend/data/constants.dart';
 import 'package:tumble/core/api/backend/repository/backend_repository.dart';
+import 'package:tumble/core/api/preferences/repository/preference_repository.dart';
 import 'package:tumble/core/notifications/repository/notification_repository.dart';
 import 'package:tumble/core/api/database/repository/database_repository.dart';
 import 'package:tumble/core/models/backend_models/bookmarked_schedule_model.dart';
@@ -19,16 +20,13 @@ class BackgroundTask {
   ///
   static Future<void> callbackDispatcher() async {
     final backendService = getIt<BackendRepository>();
-    final preferenceService = getIt<SharedPreferences>();
+    final preferenceService = getIt<PreferenceRepository>();
     final databaseService = getIt<DatabaseRepository>();
     final notificationService = getIt<NotificationRepository>();
 
-    final bookmarkedSchedulesToggledToBeVisible = preferenceService
-        .getStringList(PreferenceTypes.bookmarks)!
-        .map((json) => bookmarkedScheduleModelFromJson(json))
-        .where((bookmark) => bookmark.toggledValue == true);
+    final bookmarkedSchedulesToggledToBeVisible = preferenceService.visibleBookmarkIds;
 
-    final defaultUserSchool = preferenceService.getString(PreferenceTypes.school);
+    final defaultUserSchool = preferenceService.defaultSchool;
 
     if (bookmarkedSchedulesToggledToBeVisible.isEmpty || defaultUserSchool == null) {
       return;
