@@ -5,19 +5,20 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tumble/core/api/apiservices/api_schedule_or_programme_response.dart';
-import 'package:tumble/core/api/builders/notification_service_builder.dart';
-import 'package:tumble/core/api/repository/cache_and_interaction_repository.dart';
-import 'package:tumble/core/database/repository/database_repository.dart';
+import 'package:tumble/core/api/backend/response_types/schedule_or_programme_response.dart';
+import 'package:tumble/core/notifications/builders/notification_service_builder.dart';
+import 'package:tumble/core/api/backend/repository/cache_repository.dart';
+import 'package:tumble/core/api/database/repository/database_repository.dart';
 import 'package:tumble/core/extensions/extensions.dart';
-import 'package:tumble/core/models/api_models/bookmarked_schedule_model.dart';
-import 'package:tumble/core/models/api_models/schedule_model.dart';
+import 'package:tumble/core/models/backend_models/bookmarked_schedule_model.dart';
+import 'package:tumble/core/models/backend_models/schedule_model.dart';
 import 'package:tumble/core/models/ui_models/course_ui_model.dart';
 import 'package:tumble/core/models/ui_models/schedule_model_and_courses.dart';
 import 'package:tumble/core/models/ui_models/week_model.dart';
+import 'package:tumble/core/notifications/repository/notification_repository.dart';
 import 'package:tumble/core/shared/app_dependencies.dart';
 import 'package:tumble/core/shared/preference_types.dart';
-import 'package:tumble/core/dependency_injection/get_it_instances.dart';
+import 'package:tumble/core/api/dependency_injection/get_it.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
 import 'package:tumble/core/ui/scaffold_message.dart';
 
@@ -37,21 +38,15 @@ class AppSwitchCubit extends Cubit<AppSwitchState> {
 
   final _cacheAndInteractionService = getIt<CacheAndInteractionRepository>();
   final _notificationBuilder = NotificationServiceBuilder();
-  final _awesomeNotifications = getIt<AwesomeNotifications>();
+  final _notificationService = getIt<NotificationRepository>();
   final _databaseService = getIt<DatabaseRepository>();
   final _preferenceService = getIt<SharedPreferences>();
   final ScrollController _listViewScrollController = ScrollController();
 
   ScrollController get controller => _listViewScrollController;
-  bool get hasBookMarkedSchedules => getIt<SharedPreferences>()
-      .getStringList(PreferenceTypes.bookmarks)!
-      .isNotEmpty;
-  bool get notificationCheck =>
-      getIt<SharedPreferences>().getBool(PreferenceTypes.notificationAllowed) ==
-      null;
-  bool toTopButtonVisible() => _listViewScrollController.hasClients
-      ? _listViewScrollController.offset >= 1000
-      : false;
+  bool get hasBookMarkedSchedules => getIt<SharedPreferences>().getStringList(PreferenceTypes.bookmarks)!.isNotEmpty;
+  bool get notificationCheck => getIt<SharedPreferences>().getBool(PreferenceTypes.notificationAllowed) == null;
+  bool toTopButtonVisible() => _listViewScrollController.hasClients ? _listViewScrollController.offset >= 1000 : false;
 
   Future<void> _init() async {
     dev.log(name: 'app_switch_cubit', 'Fetching cache ...');
@@ -88,9 +83,7 @@ class AppSwitchCubit extends Cubit<AppSwitchState> {
 
       if (scheduleId != null && userHasBookmarks) {
         if (toggledToBeVisible != null && toggledToBeVisible) {
-          final ApiScheduleOrProgrammeResponse apiResponse =
-              await _cacheAndInteractionService
-                  .getCachedOrNewSchedule(scheduleId);
+          final ScheduleOrProgrammeResponse apiResponse = await _cacheAndInteractionService.findSchedule(scheduleId);
 
           switch (apiResponse.status) {
             case ApiScheduleOrProgrammeStatus.FETCHED:
@@ -100,8 +93,7 @@ class AppSwitchCubit extends Cubit<AppSwitchState> {
                 matrixListOfDays.add(currentScheduleModel.days);
                 listOfScheduleModelAndCourses.add(ScheduleModelAndCourses(
                     scheduleModel: currentScheduleModel,
-                    courses: await _databaseService
-                        .getCachedCoursesFromId(currentScheduleModel.id)));
+                    courses: await _databaseService.getCachedCoursesFromId(currentScheduleModel.id)));
               }
               break;
             case ApiScheduleOrProgrammeStatus.ERROR:
@@ -111,13 +103,10 @@ class AppSwitchCubit extends Cubit<AppSwitchState> {
               /// broken, or the backend is down.
               emit(state.copyWith(status: AppScheduleViewStatus.FETCH_ERROR));
               dev.log(
-                  name: 'app_switch_cubit',
-                  'Error in retrieveing schedule cache ..\nError on schedule: [$scheduleId');
+                  name: 'app_switch_cubit', 'Error in retrieveing schedule cache ..\nError on schedule: [$scheduleId');
               return;
             default:
-              dev.log(
-                  name: 'app_switch_cubit',
-                  'Unknown communication error occured on schedule: [$scheduleId]..');
+              dev.log(name: 'app_switch_cubit', 'Unknown communication error occured on schedule: [$scheduleId]..');
               break;
           }
         }
@@ -126,10 +115,8 @@ class AppSwitchCubit extends Cubit<AppSwitchState> {
       }
     }
     if (listOfScheduleModelAndCourses.isNotEmpty) {
-      final flattened =
-          matrixListOfDays.expand((listOfDays) => listOfDays).toList();
-      flattened.sort(
-          (prevDay, nextDay) => prevDay.isoString.compareTo(nextDay.isoString));
+      final flattened = matrixListOfDays.expand((listOfDays) => listOfDays).toList();
+      flattened.sort((prevDay, nextDay) => prevDay.isoString.compareTo(nextDay.isoString));
 
       var seen = <String>{};
 
@@ -140,10 +127,7 @@ class AppSwitchCubit extends Cubit<AppSwitchState> {
               date: dayGrouper.value[0].date,
               isoString: dayGrouper.value[0].isoString,
               weekNumber: dayGrouper.value[0].weekNumber,
-              events: dayGrouper.value
-                  .expand((day) => day.events)
-                  .where((event) => seen.add(event.id))
-                  .toList()
+              events: dayGrouper.value.expand((day) => day.events).where((event) => seen.add(event.id)).toList()
                 ..sort(((a, b) => a.from.compareTo(b.from)))))
           .toList();
 
@@ -153,9 +137,7 @@ class AppSwitchCubit extends Cubit<AppSwitchState> {
         listOfDays: listOfDays,
         listOfWeeks: listOfDays.splitToWeek(),
       ));
-      dev.log(
-          name: 'app_switch_cubit',
-          'Successfully updated entire schedule view. Exiting ..');
+      dev.log(name: 'app_switch_cubit', 'Successfully updated entire schedule view. Exiting ..');
     } else {
       emit(state.copyWith(status: AppScheduleViewStatus.NO_VIEW));
     }
@@ -170,8 +152,7 @@ class AppSwitchCubit extends Cubit<AppSwitchState> {
   }
 
   void scrollToTop() {
-    _listViewScrollController.animateTo(0,
-        duration: const Duration(seconds: 1), curve: Curves.easeInOut);
+    _listViewScrollController.animateTo(0, duration: const Duration(seconds: 1), curve: Curves.easeInOut);
   }
 
   setLoading() {
@@ -181,20 +162,18 @@ class AppSwitchCubit extends Cubit<AppSwitchState> {
   Color getColorForCourse(Event event) {
     return Color(state.scheduleModelAndCourses!
         .expand((scheduleModelAndCourses) => scheduleModelAndCourses!.courses)
-        .firstWhere(
-            (courseUiModel) => courseUiModel!.courseId == event.course.id)!
+        .firstWhere((courseUiModel) => courseUiModel!.courseId == event.course.id)!
         .color);
   }
 
   Future<bool> createNotificationForEvent(Event event, BuildContext context) {
-    return _awesomeNotifications.isNotificationAllowed().then((isAllowed) {
+    return _notificationService.allowedNotifications().then((isAllowed) {
       if (isAllowed) {
         _notificationBuilder.buildOffsetNotification(
             id: event.id.encodeUniqueIdentifier(),
             channelKey: state.scheduleModelAndCourses!
-                .firstWhere((scheduleModelAndCourses) =>
-                    scheduleModelAndCourses!.courses.any((courseUiModel) =>
-                        courseUiModel!.courseId == event.course.id))!
+                .firstWhere((scheduleModelAndCourses) => scheduleModelAndCourses!.courses
+                    .any((courseUiModel) => courseUiModel!.courseId == event.course.id))!
                 .scheduleModel
                 .id,
             groupkey: event.course.id,
@@ -202,35 +181,25 @@ class AppSwitchCubit extends Cubit<AppSwitchState> {
             body: event.course.englishName,
             date: event.from);
 
-        dev.log(
-            name: 'app_switch_cubit',
-            'Created notification for event "${event.title.capitalize()}"');
+        dev.log(name: 'app_switch_cubit', 'Created notification for event "${event.title.capitalize()}"');
 
-        showScaffoldMessage(
-            context,
-            S.scaffoldMessages
-                .createdNotificationForEvent(event.title.capitalize()));
+        showScaffoldMessage(context, S.scaffoldMessages.createdNotificationForEvent(event.title.capitalize()));
 
         return true;
       }
-      dev.log(
-          name: 'app_switch_cubit',
-          'No new notifications created. User not allowed');
+      dev.log(name: 'app_switch_cubit', 'No new notifications created. User not allowed');
       return false;
     });
   }
 
-  Future<bool> createNotificationForCourse(
-      Event event, BuildContext context) async {
-    return _awesomeNotifications.isNotificationAllowed().then((isAllowed) {
+  Future<bool> createNotificationForCourse(Event event, BuildContext context) async {
+    return _notificationService.allowedNotifications().then((isAllowed) {
       if (isAllowed) {
         List<Event> events = state.scheduleModelAndCourses!
-            .expand((scheduleModelAndCourses) =>
-                scheduleModelAndCourses!.scheduleModel.days)
+            .expand((scheduleModelAndCourses) => scheduleModelAndCourses!.scheduleModel.days)
             .expand((Day day) => day.events) // Flatten nested list
             .toList()
-            .where((Event eventInDefaultSchedule) =>
-                event.course.id == eventInDefaultSchedule.course.id)
+            .where((Event eventInDefaultSchedule) => event.course.id == eventInDefaultSchedule.course.id)
             .toList();
 
         event.id.encodeUniqueIdentifier();
@@ -240,9 +209,8 @@ class AppSwitchCubit extends Cubit<AppSwitchState> {
             _notificationBuilder.buildOffsetNotification(
                 id: event.id.encodeUniqueIdentifier(),
                 channelKey: state.scheduleModelAndCourses!
-                    .firstWhere((scheduleModelAndCourses) =>
-                        scheduleModelAndCourses!.courses.any((courseUiModel) =>
-                            courseUiModel!.courseId == event.course.id))!
+                    .firstWhere((scheduleModelAndCourses) => scheduleModelAndCourses!.courses
+                        .any((courseUiModel) => courseUiModel!.courseId == event.course.id))!
                     .scheduleModel
                     .id,
                 groupkey: event.course.id,
@@ -251,52 +219,32 @@ class AppSwitchCubit extends Cubit<AppSwitchState> {
                 date: event.from);
           }
         }
-        dev.log(
-            name: 'app_switch_cubit',
-            'Created ${events.length} new notifications for ${event.course}');
+        dev.log(name: 'app_switch_cubit', 'Created ${events.length} new notifications for ${event.course}');
 
         showScaffoldMessage(
-            context,
-            S.scaffoldMessages.createdNotificationForCourse(
-                event.course.englishName, events.length));
+            context, S.scaffoldMessages.createdNotificationForCourse(event.course.englishName, events.length));
 
         return true;
       }
-      dev.log(
-          name: 'app_switch_cubit',
-          'No new notifications created. Not allowed');
+      dev.log(name: 'app_switch_cubit', 'No new notifications created. Not allowed');
       return false;
     });
   }
 
-  Future<bool> checkIfNotificationIsSetForEvent(Event event) async =>
-      (((await _awesomeNotifications.listScheduledNotifications())
-              .singleWhereOrNull(
-            (notificationModel) =>
-                notificationModel.content!.id ==
-                event.id.encodeUniqueIdentifier(),
-          )) !=
-          null);
+  Future<bool> checkIfNotificationIsSetForEvent(Event event) async => _notificationService.eventHasNotification(event);
 
   /// Returns true if course id is found in current list of notifications
-  Future<bool> checkIfNotificationIsSetForCourse(Event event) async {
-    return (((await _awesomeNotifications.listScheduledNotifications())
-            .firstWhereOrNull(
-          (notificationModel) =>
-              notificationModel.content!.groupKey == event.course.id,
-        )) !=
-        null);
-  }
+  Future<bool> checkIfNotificationIsSetForCourse(Event event) async =>
+      _notificationService.courseHasNotifications(event);
 
   Future<bool> cancelEventNotification(Event event) async {
-    await _awesomeNotifications
-        .cancelSchedule(event.id.encodeUniqueIdentifier());
+    await _notificationService.cancelEventNotification(event);
     return !await checkIfNotificationIsSetForEvent(event);
   }
 
   /// Returns true if notification is still set for course
   Future<bool> cancelCourseNotifications(Event event) async {
-    await _awesomeNotifications.cancelSchedulesByGroupKey(event.course.id);
+    _notificationService.cancelCourseNotifications(event);
     return await checkIfNotificationIsSetForCourse(event);
   }
 
@@ -305,22 +253,20 @@ class AppSwitchCubit extends Cubit<AppSwitchState> {
         .updateCourseInstance(CourseUiModel(
             scheduleId: state.scheduleModelAndCourses!
                 .firstWhere((scheduleModelAndCourses) =>
-                    scheduleModelAndCourses!.courses.any((courseUiModel) =>
-                        courseUiModel!.courseId == course.id))!
+                    scheduleModelAndCourses!.courses.any((courseUiModel) => courseUiModel!.courseId == course.id))!
                 .scheduleModel
                 .id,
             courseId: course.id,
             color: color.value))
         .then((value) {
-      showScaffoldMessage(
-          context, S.scaffoldMessages.updatedCourseColor(course.englishName));
+      showScaffoldMessage(context, S.scaffoldMessages.updatedCourseColor(course.englishName));
       attemptToFetchCachedSchedules();
     });
   }
 
   Future<void> permissionRequest(bool value) async {
     if (value) {
-      await _awesomeNotifications.requestPermissionToSendNotifications();
+      await _notificationService.getPermission();
     }
     await getIt<AppDependencies>().setNotifictionPermission(value);
   }
@@ -333,9 +279,8 @@ class AppSwitchCubit extends Cubit<AppSwitchState> {
         .toList();
 
     for (var bookmark in bookmarks) {
-      final ApiScheduleOrProgrammeResponse apiResponse =
-          await _cacheAndInteractionService
-              .scheduleFetchDispatcher(bookmark.scheduleId);
+      final ScheduleOrProgrammeResponse apiResponse =
+          await _cacheAndInteractionService.updateSchedule(bookmark.scheduleId);
 
       switch (apiResponse.status) {
         case ApiScheduleOrProgrammeStatus.FETCHED:

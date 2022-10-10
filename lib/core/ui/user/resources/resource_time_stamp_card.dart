@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:tumble/core/models/api_models/resource_model.dart';
+import 'package:tumble/core/models/backend_models/resource_model.dart';
 import 'package:tumble/core/ui/user/resources/cubit/resource_cubit.dart';
 
 class TimeStampCard extends StatelessWidget {

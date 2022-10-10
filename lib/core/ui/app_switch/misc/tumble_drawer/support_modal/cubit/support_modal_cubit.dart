@@ -51,7 +51,7 @@ class SupportModalCubit extends Cubit<SupportModalState> {
   Future<void> sendBugReport() async {
     final String subject = _textEditingControllerSubject.text;
     final String body = _textEditingControllerBody.text;
-    final ApiBugReportResponse response = await _backendService.postSubmitIssue(subject, body);
+    final BugReportResponse response = await _backendService.postSubmitIssue(subject, body);
     if (response.status == ApiBugReportResponseStatus.SUCCESS) {
       emit(state.copyWith(status: SupportModalStatus.SENT));
     } else {

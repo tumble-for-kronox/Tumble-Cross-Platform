@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:tumble/core/extensions/extensions.dart';
-import 'package:tumble/core/models/api_models/schedule_model.dart';
+import 'package:tumble/core/models/backend_models/schedule_model.dart';
 import 'package:tumble/core/ui/app_switch/cubit/app_switch_cubit.dart';
 import 'package:tumble/core/ui/schedule/event_modal.dart';
 import 'package:tumble/core/ui/schedule/event_options.dart';

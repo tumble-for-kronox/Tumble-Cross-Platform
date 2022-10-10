@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tumble/core/models/api_models/program_model.dart';
+import 'package:tumble/core/models/backend_models/program_model.dart';
 import 'package:tumble/core/ui/bottom_nav_bar/cubit/bottom_nav_cubit.dart';
 import 'package:tumble/core/ui/init_cubit/init_cubit.dart';
 import 'package:tumble/core/ui/schedule/no_schedule.dart';
@@ -24,8 +24,7 @@ class _TumbleSearchPageState extends State<TumbleSearchPage> {
     return Stack(
       children: [
         Container(
-          margin:
-              EdgeInsets.only(top: MediaQuery.of(context).viewPadding.top + 20),
+          margin: EdgeInsets.only(top: MediaQuery.of(context).viewPadding.top + 20),
           alignment: Alignment.center,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -43,25 +42,18 @@ class _TumbleSearchPageState extends State<TumbleSearchPage> {
                               padding: const EdgeInsets.only(top: 70),
                               children: [
                                 Container(
-                                  padding: const EdgeInsets.only(
-                                      left: 25, bottom: 10),
+                                  padding: const EdgeInsets.only(left: 25, bottom: 10),
                                   child: Text(
                                     '${state.programList!.length} results',
                                     style: TextStyle(
-                                        fontSize: 15,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .onSurface
-                                            .withOpacity(.8)),
+                                        fontSize: 15, color: Theme.of(context).colorScheme.onSurface.withOpacity(.8)),
                                   ),
                                 ),
                                 Divider(
                                   indent: 10,
                                   endIndent: 10,
                                   height: 10,
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onBackground,
+                                  color: Theme.of(context).colorScheme.onBackground,
                                 ),
                                 _buildProgramsList(state.programList!, context)
                               ],
@@ -75,15 +67,11 @@ class _TumbleSearchPageState extends State<TumbleSearchPage> {
                           case SearchPageStatus.INITIAL:
                             return Container();
                           case SearchPageStatus.NO_SCHEDULES:
-                            return NoScheduleAvailable(
-                                errorType: state.errorMessage!,
-                                cupertinoAlertDialog: null);
+                            return NoScheduleAvailable(errorType: state.errorMessage!, cupertinoAlertDialog: null);
                           case SearchPageStatus.DISPLAY_PREVIEW:
                             return SchedulePreview(
                               toggleBookmark: (value) =>
-                                  BlocProvider.of<MainAppNavigationCubit>(
-                                          context)
-                                      .setPreviewToggle(),
+                                  BlocProvider.of<MainAppNavigationCubit>(context).setPreviewToggle(),
                             );
                         }
                       },
@@ -106,12 +94,10 @@ _buildProgramsList(List<Item> programList, BuildContext context) => Column(
         .map((program) => ProgramCard(
             programName: program.title,
             programSubtitle: program.subtitle,
-            schoolName:
-                BlocProvider.of<InitCubit>(context).state.defaultSchool!,
+            schoolName: BlocProvider.of<InitCubit>(context).state.defaultSchool!,
             onTap: () async {
               context.read<SearchPageCubit>().setPreviewLoading();
               context.read<SearchPageCubit>().displayPreview();
-              await BlocProvider.of<SearchPageCubit>(context)
-                  .fetchNewSchedule(program.id);
+              await BlocProvider.of<SearchPageCubit>(context).fetchNewSchedule(program.id);
             }))
         .toList());

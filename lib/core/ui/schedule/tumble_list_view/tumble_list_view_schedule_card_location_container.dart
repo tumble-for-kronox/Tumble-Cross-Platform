@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:tumble/core/models/api_models/schedule_model.dart';
+import 'package:tumble/core/models/backend_models/schedule_model.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
 
 class ScheduleCardLocationContainer extends StatelessWidget {

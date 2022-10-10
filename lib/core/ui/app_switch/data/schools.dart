@@ -1,4 +1,4 @@
-import 'package:tumble/core/helpers/school_enum.dart';
+import 'package:tumble/core/ui/app_switch/data/school_enum.dart';
 import 'package:tumble/core/models/ui_models/school_model.dart';
 
 /// Stores all respective schools by enum

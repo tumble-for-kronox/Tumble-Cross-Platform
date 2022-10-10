@@ -2,7 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:tumble/core/models/api_models/available_user_event_model.dart';
+import 'package:tumble/core/models/backend_models/available_user_event_model.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
 import 'package:tumble/core/ui/app_switch/misc/tumble_details_modal_base.dart';
 

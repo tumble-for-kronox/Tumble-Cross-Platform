@@ -3,9 +3,9 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tumble/core/api/apiservices/api_bug_report_response.dart';
-import 'package:tumble/core/api/repository/backend_repository.dart';
-import 'package:tumble/core/dependency_injection/get_it_instances.dart';
+import 'package:tumble/core/api/backend/response_types/bug_report_response.dart';
+import 'package:tumble/core/api/backend/repository/backend_repository.dart';
+import 'package:tumble/core/api/dependency_injection/get_it.dart';
 
 part 'support_modal_cubit.dart';
 
