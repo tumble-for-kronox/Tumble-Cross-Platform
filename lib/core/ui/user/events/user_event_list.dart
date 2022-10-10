@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
@@ -25,35 +26,61 @@ class _EventsState extends State<Events> {
             height: double.infinity,
             child: SingleChildScrollView(
               physics: const AlwaysScrollableScrollPhysics(),
-              child: Container(
-                width: double.infinity,
-                padding: const EdgeInsets.symmetric(horizontal: 15),
-                child: Builder(
-                  builder: (context) {
-                    switch (state.userEventListStatus) {
-                      case UserOverviewStatus.LOADING:
-                        return const Center(child: TumbleLoading());
-                      case UserOverviewStatus.LOADED:
-                        return _loaded(context, state);
-                      case UserOverviewStatus.ERROR:
-                        return Center(
-                          child: Text(
-                            S.userEvents.failedToLoad(),
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(fontSize: 17),
-                          ),
-                        );
-                      case UserOverviewStatus.INITIAL:
-                        return Center(
-                          child: Text(
-                            S.userEvents.empty(),
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(fontSize: 17),
-                          ),
-                        );
-                    }
-                  },
-                ),
+              child: Column(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.only(top: 20, left: 20, right: 20, bottom: 10),
+                    child: Row(
+                      children: [
+                        Icon(
+                          CupertinoIcons.calendar_badge_plus,
+                          color: Theme.of(context).colorScheme.onBackground,
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          'Available events',
+                          style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              letterSpacing: 1,
+                              fontSize: 24,
+                              color: Theme.of(context).colorScheme.onBackground),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(horizontal: 15),
+                    child: Builder(
+                      builder: (context) {
+                        switch (state.userEventListStatus) {
+                          case UserOverviewStatus.LOADING:
+                            return const Center(child: TumbleLoading());
+                          case UserOverviewStatus.LOADED:
+                            return _loaded(context, state);
+                          case UserOverviewStatus.ERROR:
+                            return Center(
+                              child: Text(
+                                S.userEvents.failedToLoad(),
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(fontSize: 17),
+                              ),
+                            );
+                          case UserOverviewStatus.INITIAL:
+                            return Center(
+                              child: Text(
+                                S.userEvents.empty(),
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(fontSize: 17),
+                              ),
+                            );
+                        }
+                      },
+                    ),
+                  ),
+                ],
               ),
             ),
           ),

@@ -38,7 +38,7 @@ class _UserAccountInfo extends State<UserAccountInfo> {
                   child: Column(
                     children: [
                       Container(
-                        height: 150,
+                        height: 120,
                         decoration: BoxDecoration(
                           boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 2, offset: Offset(0, 1))],
                           color: Theme.of(context).colorScheme.surface,
@@ -114,7 +114,7 @@ class _UserAccountInfo extends State<UserAccountInfo> {
                       const SizedBox(
                         height: 50,
                       ),
-                      _sectionDivider(context, S.authorizedPage.userOptionsTitle()),
+                      _sectionDivider(context, S.authorizedPage.userOptionsTitle(), CupertinoIcons.settings),
                       const SizedBox(
                         height: 10,
                       ),
@@ -125,7 +125,7 @@ class _UserAccountInfo extends State<UserAccountInfo> {
                       const SizedBox(
                         height: 40,
                       ),
-                      _sectionDivider(context, S.authorizedPage.userBookingsTitle()),
+                      _sectionDivider(context, S.authorizedPage.userBookingsTitle(), CupertinoIcons.house),
                       const SizedBox(
                         height: 10,
                       ),
@@ -133,7 +133,7 @@ class _UserAccountInfo extends State<UserAccountInfo> {
                       const SizedBox(
                         height: 40,
                       ),
-                      _sectionDivider(context, S.authorizedPage.externalLinksTitle()),
+                      _sectionDivider(context, S.authorizedPage.externalLinksTitle(), CupertinoIcons.link),
                       const SizedBox(
                         height: 10,
                       ),
@@ -196,9 +196,17 @@ class _UserAccountInfo extends State<UserAccountInfo> {
   }
 }
 
-Widget _sectionDivider(BuildContext context, String title) {
+Widget _sectionDivider(BuildContext context, String title, IconData icon) {
   return Row(
     children: [
+      Container(
+        padding: const EdgeInsets.only(left: 10, right: 8, bottom: 2.7),
+        child: Icon(
+          icon,
+          color: Theme.of(context).colorScheme.onBackground,
+          size: 16,
+        ),
+      ),
       Padding(
         padding: const EdgeInsets.only(right: 12),
         child: Text(

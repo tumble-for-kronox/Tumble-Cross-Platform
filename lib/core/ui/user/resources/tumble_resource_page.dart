@@ -45,13 +45,24 @@ class ResourcePage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            S.userBookings.resourcesListTitle(),
-            style: TextStyle(
-                fontWeight: FontWeight.w500,
-                letterSpacing: 1,
-                fontSize: 24,
-                color: Theme.of(context).colorScheme.onBackground),
+          Row(
+            children: [
+              Icon(
+                CupertinoIcons.building_2_fill,
+                color: Theme.of(context).colorScheme.onBackground,
+              ),
+              const SizedBox(
+                width: 10,
+              ),
+              Text(
+                S.userBookings.resourcesListTitle(),
+                style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    letterSpacing: 1,
+                    fontSize: 24,
+                    color: Theme.of(context).colorScheme.onBackground),
+              ),
+            ],
           ),
           const SizedBox(
             height: 25,
