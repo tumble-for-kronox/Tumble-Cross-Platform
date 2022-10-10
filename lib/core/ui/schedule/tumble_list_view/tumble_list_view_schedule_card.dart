@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 import 'package:tumble/core/extensions/extensions.dart';
-import 'package:tumble/core/models/api_models/schedule_model.dart';
+import 'package:tumble/core/models/backend_models/schedule_model.dart';
 import 'package:tumble/core/ui/schedule/tumble_list_view/tumble_list_view_schedule_card_location_container.dart';
 
 class ScheduleCard extends StatelessWidget {

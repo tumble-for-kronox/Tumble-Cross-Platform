@@ -9,6 +9,7 @@ import 'package:tumble/core/ui/app_switch/cubit/app_switch_cubit.dart';
 import 'package:tumble/core/ui/app_switch/misc/tumble_app_bar.dart';
 import 'package:tumble/core/ui/app_switch/misc/tumble_drawer/cubit/drawer_state.dart';
 import 'package:tumble/core/ui/app_switch/misc/tumble_drawer/tumble_app_drawer.dart';
+import 'package:tumble/core/ui/permission_handler.dart';
 import 'package:tumble/core/ui/schedule/tumble_calendar_view/tumble_calendar_view.dart';
 import 'package:tumble/core/ui/schedule/tumble_list_view/tumble_list_view.dart';
 import 'package:tumble/core/ui/schedule/tumble_week_view/tumble_week_view.dart';
@@ -26,6 +27,22 @@ class InitializedNavigationRootPage extends StatefulWidget {
 }
 
 class _InitializedNavigationRootPageState extends State<InitializedNavigationRootPage> {
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if (context.read<AppSwitchCubit>().notificationCheck) {
+        showDialog(
+            barrierDismissible: false,
+            useRootNavigator: false,
+            context: context,
+            builder: (_) => PermissionHandler(
+                  cubit: context.read<AppSwitchCubit>(),
+                ));
+      }
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -45,7 +62,7 @@ class _InitializedNavigationRootPageState extends State<InitializedNavigationRoo
                   toggleBookmark: () async {
                     await context.read<SearchPageCubit>().toggleFavorite(context).then((_) {
                       BlocProvider.of<AppSwitchCubit>(context).setLoading();
-                      BlocProvider.of<AppSwitchCubit>(context).attemptToFetchCachedSchedules();
+                      BlocProvider.of<AppSwitchCubit>(context).getCachedSchedules();
                       BlocProvider.of<MainAppNavigationCubit>(context).getNavBarItem(NavbarItem.LIST);
                     });
                   },

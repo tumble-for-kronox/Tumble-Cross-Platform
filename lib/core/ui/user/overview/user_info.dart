@@ -1,8 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tumble/core/api/preferences/repository/preference_repository.dart';
 import 'package:tumble/core/shared/preference_types.dart';
-import 'package:tumble/core/dependency_injection/get_it_instances.dart';
+import 'package:tumble/core/api/dependency_injection/get_it.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
 import 'package:tumble/core/ui/app_switch/data/schools.dart';
 import 'package:tumble/core/ui/tumble_button.dart';
@@ -25,7 +26,7 @@ class UserInfo extends StatelessWidget {
               radius: 50.0,
               backgroundColor: Theme.of(context).colorScheme.onSecondary,
               child: Image.asset(Schools.schools
-                  .where((school) => school.schoolName == getIt<SharedPreferences>().getString(PreferenceTypes.school))
+                  .where((school) => school.schoolName == getIt<PreferenceRepository>().defaultSchool)
                   .first
                   .schoolLogo)),
           const SizedBox(

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tumble/core/api/apiservices/runtime_error_type.dart';
+import 'package:tumble/core/api/backend/response_types/runtime_error_type.dart';
 import 'package:tumble/core/navigation/app_navigator.dart';
 import 'package:tumble/core/ui/bottom_nav_bar/cubit/bottom_nav_cubit.dart';
 import 'package:tumble/core/ui/bottom_nav_bar/data/nav_bar_items.dart';
@@ -28,11 +28,7 @@ class _TumbleWeekViewState extends State<TumbleWeekView> {
             return NoScheduleAvailable(
               errorType: RuntimeErrorType.noCachedSchedule(),
               cupertinoAlertDialog: CustomAlertDialog.noBookMarkedSchedules(
-                  context,
-                  () => context
-                      .read<MainAppNavigationCubit>()
-                      .getNavBarItem(NavbarItem.SEARCH),
-                  navigator),
+                  context, () => context.read<MainAppNavigationCubit>().getNavBarItem(NavbarItem.SEARCH), navigator),
             );
           case AppScheduleViewStatus.LOADING:
             return const TumbleLoading();
@@ -45,8 +41,7 @@ class _TumbleWeekViewState extends State<TumbleWeekView> {
                         return state.listOfWeeks!
                             .map((e) => TumbleWeekPageContainer(
                                   week: e,
-                                  cubit:
-                                      BlocProvider.of<AppSwitchCubit>(context),
+                                  cubit: BlocProvider.of<AppSwitchCubit>(context),
                                 ))
                             .toList()[index];
                       }))
@@ -55,31 +50,19 @@ class _TumbleWeekViewState extends State<TumbleWeekView> {
             return NoScheduleAvailable(
               errorType: state.message!,
               cupertinoAlertDialog: CustomAlertDialog.scheduleCacheFetchError(
-                  context,
-                  () => context
-                      .read<MainAppNavigationCubit>()
-                      .getNavBarItem(NavbarItem.SEARCH),
-                  navigator),
+                  context, () => context.read<MainAppNavigationCubit>().getNavBarItem(NavbarItem.SEARCH), navigator),
             );
           case AppScheduleViewStatus.EMPTY_SCHEDULE:
             return NoScheduleAvailable(
               errorType: RuntimeErrorType.emptyScheduleError(),
               cupertinoAlertDialog: CustomAlertDialog.previewContainsNoViews(
-                  context,
-                  () => context
-                      .read<MainAppNavigationCubit>()
-                      .getNavBarItem(NavbarItem.SEARCH),
-                  navigator),
+                  context, () => context.read<MainAppNavigationCubit>().getNavBarItem(NavbarItem.SEARCH), navigator),
             );
           case AppScheduleViewStatus.NO_VIEW:
             return NoScheduleAvailable(
               errorType: RuntimeErrorType.noBookmarks(),
               cupertinoAlertDialog: CustomAlertDialog.noBookMarkedSchedules(
-                  context,
-                  () => context
-                      .read<MainAppNavigationCubit>()
-                      .getNavBarItem(NavbarItem.SEARCH),
-                  navigator),
+                  context, () => context.read<MainAppNavigationCubit>().getNavBarItem(NavbarItem.SEARCH), navigator),
             );
         }
       },

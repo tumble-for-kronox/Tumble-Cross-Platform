@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tumble/core/helpers/school_enum.dart';
+import 'package:tumble/core/ui/app_switch/data/school_enum.dart';
 
 class SchoolCard extends StatelessWidget {
   final SchoolEnum schoolId;

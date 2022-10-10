@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tumble/core/api/apiservices/runtime_error_type.dart';
+import 'package:tumble/core/api/backend/response_types/runtime_error_type.dart';
 import 'package:tumble/core/navigation/app_navigator.dart';
 import 'package:tumble/core/ui/bottom_nav_bar/cubit/bottom_nav_cubit.dart';
 import 'package:tumble/core/ui/bottom_nav_bar/data/nav_bar_items.dart';
@@ -23,11 +23,7 @@ class TumbleListView extends StatelessWidget {
           case AppScheduleViewStatus.INITIAL:
             return NoScheduleAvailable(
               cupertinoAlertDialog: CustomAlertDialog.noBookMarkedSchedules(
-                  context,
-                  () => context
-                      .read<MainAppNavigationCubit>()
-                      .getNavBarItem(NavbarItem.SEARCH),
-                  navigator),
+                  context, () => context.read<MainAppNavigationCubit>().getNavBarItem(NavbarItem.SEARCH), navigator),
               errorType: RuntimeErrorType.noCachedSchedule(),
             );
           case AppScheduleViewStatus.LOADING:
@@ -46,25 +42,19 @@ class TumbleListView extends StatelessWidget {
                         children: state.listOfDays!
                             .where((day) =>
                                 day.events.isNotEmpty &&
-                                day.isoString.isAfter(DateTime.now()
-                                    .subtract(const Duration(days: 1))))
+                                day.isoString.isAfter(DateTime.now().subtract(const Duration(days: 1))))
                             .map((day) => TumbleListViewDayContainer(
                                   day: day,
-                                  mainAppCubit:
-                                      BlocProvider.of<AppSwitchCubit>(context),
+                                  mainAppCubit: BlocProvider.of<AppSwitchCubit>(context),
                                 ))
                             .toList()),
                   ),
                 ),
                 AnimatedPositioned(
                   bottom: 30,
-                  right: context.read<AppSwitchCubit>().toTopButtonVisible()
-                      ? 35
-                      : -60,
+                  right: context.read<AppSwitchCubit>().toTopButtonVisible() ? 35 : -60,
                   duration: const Duration(milliseconds: 200),
-                  child: ToTopButton(
-                      scrollToTop: () =>
-                          context.read<AppSwitchCubit>().scrollToTop()),
+                  child: ToTopButton(scrollToTop: () => context.read<AppSwitchCubit>().scrollToTop()),
                 ),
               ],
             );
@@ -72,33 +62,21 @@ class TumbleListView extends StatelessWidget {
             return NoScheduleAvailable(
               errorType: RuntimeErrorType.scheduleFetchError(),
               cupertinoAlertDialog: CustomAlertDialog.scheduleCacheFetchError(
-                  context,
-                  () => context
-                      .read<MainAppNavigationCubit>()
-                      .getNavBarItem(NavbarItem.SEARCH),
-                  navigator),
+                  context, () => context.read<MainAppNavigationCubit>().getNavBarItem(NavbarItem.SEARCH), navigator),
             );
 
           case AppScheduleViewStatus.EMPTY_SCHEDULE:
             return NoScheduleAvailable(
               errorType: RuntimeErrorType.emptyScheduleError(),
               cupertinoAlertDialog: CustomAlertDialog.previewContainsNoViews(
-                  context,
-                  () => context
-                      .read<MainAppNavigationCubit>()
-                      .getNavBarItem(NavbarItem.SEARCH),
-                  navigator),
+                  context, () => context.read<MainAppNavigationCubit>().getNavBarItem(NavbarItem.SEARCH), navigator),
             );
 
           case AppScheduleViewStatus.NO_VIEW:
             return NoScheduleAvailable(
               errorType: RuntimeErrorType.noBookmarks(),
               cupertinoAlertDialog: CustomAlertDialog.noBookMarkedSchedules(
-                  context,
-                  () => context
-                      .read<MainAppNavigationCubit>()
-                      .getNavBarItem(NavbarItem.SEARCH),
-                  navigator),
+                  context, () => context.read<MainAppNavigationCubit>().getNavBarItem(NavbarItem.SEARCH), navigator),
             );
         }
       },

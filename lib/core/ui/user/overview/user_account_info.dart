@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tumble/core/shared/preference_types.dart';
-import 'package:tumble/core/dependency_injection/get_it_instances.dart';
+import 'package:tumble/core/api/dependency_injection/get_it.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
 import 'package:tumble/core/ui/login/cubit/auth_cubit.dart';
 import 'package:tumble/core/ui/app_switch/data/schools.dart';
@@ -78,7 +78,7 @@ class _UserAccountInfo extends State<UserAccountInfo> {
                                           width: 10,
                                         ),
                                         Text(
-                                          getIt<SharedPreferences>().getString(PreferenceTypes.school)!,
+                                          context.read<AuthCubit>().defaultSchool,
                                           style:
                                               TextStyle(fontSize: 15, color: Theme.of(context).colorScheme.onSecondary),
                                         ),
@@ -97,9 +97,8 @@ class _UserAccountInfo extends State<UserAccountInfo> {
                                     borderRadius: BorderRadius.circular(14),
                                     child: Image.asset(
                                       Schools.schools
-                                          .where((school) =>
-                                              school.schoolName ==
-                                              getIt<SharedPreferences>().getString(PreferenceTypes.school))
+                                          .where(
+                                              (school) => school.schoolName == context.read<AuthCubit>().defaultSchool)
                                           .first
                                           .schoolLogo,
                                       height: 100,
@@ -146,7 +145,7 @@ class _UserAccountInfo extends State<UserAccountInfo> {
                             color: const Color(0xFFe23e29),
                             icon: CupertinoIcons.link,
                             link:
-                                "https://${Schools.schools.firstWhere((school) => school.schoolName == getIt<SharedPreferences>().getString(PreferenceTypes.school)).schoolId.name}.instructure.com",
+                                "https://${Schools.schools.firstWhere((school) => school.schoolName == context.read<AuthCubit>().defaultSchool).schoolId.name}.instructure.com",
                           ),
                           const SizedBox(
                             width: 20,
@@ -165,7 +164,7 @@ class _UserAccountInfo extends State<UserAccountInfo> {
                             color: const Color(0xFF0089da),
                             icon: CupertinoIcons.link,
                             link:
-                                "https://${Schools.schools.firstWhere((school) => school.schoolName == getIt<SharedPreferences>().getString(PreferenceTypes.school)).schoolUrl}",
+                                "https://${Schools.schools.firstWhere((school) => school.schoolName == context.read<AuthCubit>().defaultSchool).schoolUrl}",
                           ),
                         ],
                       ),

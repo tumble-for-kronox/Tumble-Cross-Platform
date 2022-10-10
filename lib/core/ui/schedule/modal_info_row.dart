@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:tumble/core/api/apiservices/runtime_error_type.dart';
+import 'package:tumble/core/api/backend/response_types/runtime_error_type.dart';
 import 'package:tumble/core/extensions/extensions.dart';
-import 'package:tumble/core/models/api_models/schedule_model.dart';
+import 'package:tumble/core/models/backend_models/schedule_model.dart';
 
 class ModalInfoRow extends StatelessWidget {
   final List<Location>? locations;
@@ -48,22 +48,13 @@ class ModalInfoRow extends StatelessWidget {
                           : RuntimeErrorType.missingLocations();
                     }
                     if (teachers != null) {
-                      return teachers!.isNotEmpty ||
-                              teachers!
-                                  .every((teacher) => teacher.firstName.isEmpty)
-                          ? teachers!
-                              .map((teacher) =>
-                                  '${teacher.firstName} ${teacher.lastName}')
-                              .join(', ')
+                      return teachers!.isNotEmpty || teachers!.every((teacher) => teacher.firstName.isEmpty)
+                          ? teachers!.map((teacher) => '${teacher.firstName} ${teacher.lastName}').join(', ')
                           : RuntimeErrorType.missingTeachers();
                     }
-                    return subtitle!.length < 38
-                        ? subtitle!
-                        : '${subtitle!.substring(0, 38)}..';
+                    return subtitle!.length < 38 ? subtitle! : '${subtitle!.substring(0, 38)}..';
                   })(),
-                  style: TextStyle(
-                      color: Theme.of(context).colorScheme.onBackground,
-                      fontSize: 16),
+                  style: TextStyle(color: Theme.of(context).colorScheme.onBackground, fontSize: 16),
                 ),
               ),
             ],

@@ -1,8 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:tumble/core/api/preferences/repository/preference_repository.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tumble/core/dependency_injection/get_it_instances.dart';
+import 'package:tumble/core/api/dependency_injection/get_it.dart';
 import 'package:tumble/core/shared/preference_types.dart';
 import 'package:tumble/core/ui/tumble_loading.dart';
 import 'package:url_launcher/url_launcher_string.dart';
@@ -25,7 +26,7 @@ class UserEventRegisterButton extends StatelessWidget {
                     ? null
                     : () async {
                         String urlString =
-                            "https://kronox.${getIt<SharedPreferences>().getString(PreferenceTypes.school)!.toLowerCase()}.se/aktivitetsanmalan.jsp?";
+                            "https://kronox.${getIt<PreferenceRepository>().defaultSchool!.toLowerCase()}.se/aktivitetsanmalan.jsp?";
                         await launchUrlString(urlString);
                       },
                 icon: const Icon(CupertinoIcons.person_crop_circle_badge_checkmark),

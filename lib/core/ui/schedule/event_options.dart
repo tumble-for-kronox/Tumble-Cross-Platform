@@ -6,7 +6,7 @@ import 'package:tumble/core/ui/data/string_constants.dart';
 import 'package:tumble/core/ui/app_switch/cubit/app_switch_cubit.dart';
 import 'package:tumble/core/ui/schedule/cancel_button.dart';
 
-import '../../models/api_models/schedule_model.dart';
+import '../../models/backend_models/schedule_model.dart';
 import '../permission_handler.dart';
 import '../scaffold_message.dart';
 

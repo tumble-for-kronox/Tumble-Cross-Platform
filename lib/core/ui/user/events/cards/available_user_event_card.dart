@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:tumble/core/extensions/extensions.dart';
-import 'package:tumble/core/models/api_models/available_user_event_model.dart';
+import 'package:tumble/core/models/backend_models/available_user_event_model.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
 import 'package:tumble/core/ui/login/cubit/auth_cubit.dart';
 import 'package:tumble/core/ui/user/cubit/user_event_cubit.dart';

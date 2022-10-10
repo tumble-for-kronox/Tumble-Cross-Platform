@@ -1,15 +1,16 @@
 import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tumble/core/api/preferences/repository/preference_repository.dart';
 import 'package:tumble/core/shared/preference_types.dart';
-import 'package:tumble/core/dependency_injection/get_it_instances.dart';
+import 'package:tumble/core/api/dependency_injection/get_it.dart';
 import 'package:tumble/core/theme/data/theme_strings.dart';
 
 abstract class ThemePersistence {
   Stream<String> getTheme();
   Stream<Locale?> getLocale();
-  Future<bool> saveTheme(String theme);
-  Future<bool> saveLocale(Locale locale);
+  Future<void> saveTheme(String theme);
+  Future<void> saveLocale(Locale locale);
   void dispose();
 }
 
@@ -18,14 +19,14 @@ class ThemeRepository implements ThemePersistence {
     _init();
   }
 
-  final SharedPreferences _sharedPreferences = getIt<SharedPreferences>();
+  final PreferenceRepository _preferenceService = getIt<PreferenceRepository>();
 
   final _themeController = StreamController<String>.broadcast();
   final _langController = StreamController<Locale?>.broadcast();
 
   void _init() {
-    final String? themeString = _sharedPreferences.getString(PreferenceTypes.theme);
-    final localeString = _sharedPreferences.getString(PreferenceTypes.locale);
+    final String? themeString = _preferenceService.theme;
+    final localeString = _preferenceService.locale;
     switch (themeString) {
       case ThemeType.light:
         _themeController.add(ThemeType.light);
@@ -55,17 +56,17 @@ class ThemeRepository implements ThemePersistence {
   }
 
   @override
-  Future<bool> saveTheme(String theme) async {
+  Future<void> saveTheme(String theme) async {
     _themeController.add(theme);
-    return await _sharedPreferences.setString(PreferenceTypes.theme, theme);
+    await _preferenceService.setTheme(theme);
   }
 
   @override
-  Future<bool> saveLocale(Locale? locale) async {
+  Future<void> saveLocale(Locale? locale) async {
     _langController.add(locale);
-    return locale == null
-        ? await _sharedPreferences.remove(PreferenceTypes.locale)
-        : await _sharedPreferences.setString(PreferenceTypes.locale, locale.languageCode);
+    locale == null
+        ? await _preferenceService.remove(PreferenceTypes.locale)
+        : await _preferenceService.setLocale(locale.languageCode);
   }
 
   @override

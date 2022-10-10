@@ -1,4 +1,4 @@
-import 'package:tumble/core/models/api_models/schedule_model.dart';
+import 'package:tumble/core/models/backend_models/schedule_model.dart';
 
 class Week {
   final int weekNumber;
