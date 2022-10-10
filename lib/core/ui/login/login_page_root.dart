@@ -175,7 +175,7 @@ PreferredSizeWidget _appBar(BuildContext context, AppNavigator navigator) {
         builder: (context, state) {
           return IconButton(
               color: Theme.of(context).colorScheme.onBackground,
-              icon: const Icon(CupertinoIcons.back),
+              icon: const Icon(CupertinoIcons.chevron_back),
               onPressed: () {
                 state.passwordController.clear();
                 state.usernameController.clear();

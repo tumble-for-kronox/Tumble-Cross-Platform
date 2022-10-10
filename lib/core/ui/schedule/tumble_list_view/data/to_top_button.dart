@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
 
@@ -22,7 +23,7 @@ class ToTopButton extends StatelessWidget {
           child: Column(
             children: [
               Icon(
-                Icons.keyboard_arrow_up_sharp,
+                CupertinoIcons.chevron_up,
                 color: Theme.of(context).colorScheme.onSurface,
               ),
               FittedBox(
