@@ -15,7 +15,7 @@ import 'package:tumble/core/ui/app_switch/cubit/app_switch_cubit.dart';
 import 'package:tumble/core/ui/app_switch/data/event_types.dart';
 import 'package:tumble/core/ui/app_switch/data/schools.dart';
 import 'package:tumble/core/ui/app_switch/misc/tumble_drawer/contributors_modal/contributors_modal.dart';
-import 'package:tumble/core/ui/app_switch/misc/tumble_drawer/data/review_strings.dart';
+import 'package:tumble/core/ui/app_switch/misc/tumble_drawer/data/constants.dart';
 import 'package:tumble/core/ui/app_switch/misc/tumble_drawer/drawer_generic/app_language_picker.dart';
 import 'package:tumble/core/ui/app_switch/misc/tumble_drawer/support_modal/support_modal.dart';
 import 'package:tumble/core/ui/app_switch/misc/tumble_app_drawer_tile.dart';
@@ -130,8 +130,7 @@ class TumbleAppDrawer extends StatelessWidget {
                     TumbleAppDrawerTile(
                       suffixIcon: CupertinoIcons.clock,
                       drawerTileTitle: S.settingsPage.offsetTitle(),
-                      subtitle: S.settingsPage
-                          .offsetSubtitle(context.read<DrawerCubit>().notificationOffset),
+                      subtitle: S.settingsPage.offsetSubtitle(context.read<DrawerCubit>().notificationOffset),
                       eventType: EventType.EDIT_NOTIFICATION_TIME,
                       drawerEvent: (eventType) =>
                           _handleDrawerEvent(eventType, context, navigator, context.read<DrawerCubit>()),
@@ -146,6 +145,12 @@ class TumbleAppDrawer extends StatelessWidget {
 
                   /// Misc
                   TumbleSettingsSection(tiles: [
+                    TumbleAppDrawerTile(
+                        suffixIcon: CupertinoIcons.chevron_left_slash_chevron_right,
+                        drawerTileTitle: 'Tumble on GitHub',
+                        subtitle: 'Source code for Tumble',
+                        eventType: EventType.GITHUB,
+                        drawerEvent: (eventType) => _handleDrawerEvent(eventType, context, navigator, null)),
                     TumbleAppDrawerTile(
                       drawerTileTitle: S.settingsPage.reportBugTitle(),
                       subtitle: S.settingsPage.reportBugSubtitle(),
@@ -220,7 +225,7 @@ class TumbleAppDrawer extends StatelessWidget {
         BugReportModal.showBugReportModal(context, cubit!);
         break;
       case EventType.OPEN_REVIEW:
-        final uri = Platform.isIOS ? StoreUriString.ios : StoreUriString.android;
+        final uri = Platform.isIOS ? Constants.ios : Constants.android;
         await launchUrlString(uri);
         break;
       case EventType.CHANGE_LANGUAGE:
@@ -235,8 +240,12 @@ class TumbleAppDrawer extends StatelessWidget {
               }),
         );
         break;
+      case EventType.GITHUB:
+        await launchUrlString(Constants.gitHub);
+        break;
       case EventType.CONTRIBUTORS:
         showModalBottomSheet(context: context, builder: (_) => const ContributorsModal());
+        break;
     }
   }
 }
