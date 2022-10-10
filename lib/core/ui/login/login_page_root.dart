@@ -171,16 +171,28 @@ Widget _initialState(BuildContext context, String school) {
 PreferredSizeWidget _appBar(BuildContext context, AppNavigator navigator) {
   return AppBar(
       backgroundColor: Theme.of(context).colorScheme.background,
+      leadingWidth: 100,
       leading: BlocBuilder<AuthCubit, AuthState>(
         builder: (context, state) {
-          return IconButton(
+          return ElevatedButton.icon(
+            icon: Icon(
+              CupertinoIcons.chevron_back,
               color: Theme.of(context).colorScheme.onBackground,
-              icon: const Icon(CupertinoIcons.chevron_back),
-              onPressed: () {
-                state.passwordController.clear();
-                state.usernameController.clear();
-                navigator.pop();
-              });
+            ),
+            style: ElevatedButton.styleFrom(
+              elevation: 0,
+              primary: Colors.transparent,
+            ),
+            onPressed: () {
+              state.passwordController.clear();
+              state.usernameController.clear();
+              navigator.pop();
+            },
+            label: Text(
+              'Back',
+              style: TextStyle(fontSize: 16, color: Theme.of(context).colorScheme.onBackground),
+            ),
+          );
         },
       ));
 }
@@ -323,7 +335,10 @@ Widget _formPasswordField(BuildContext context, String school) {
           decoration: InputDecoration(
               suffixIcon: IconButton(
                   onPressed: () => BlocProvider.of<AuthCubit>(context).togglePasswordVisibility(),
-                  icon: !state.passwordHidden ? const Icon(CupertinoIcons.eye) : const Icon(CupertinoIcons.eye_slash)),
+                  icon: Icon(
+                    !state.passwordHidden ? CupertinoIcons.eye : CupertinoIcons.eye_slash,
+                    color: Theme.of(context).colorScheme.onBackground.withOpacity(.9),
+                  )),
               icon: Icon(CupertinoIcons.lock, color: Theme.of(context).colorScheme.onBackground),
               labelText: S.loginPage.passwordPlaceholder(),
               enabledBorder: OutlineInputBorder(
