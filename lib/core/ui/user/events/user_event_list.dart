@@ -40,7 +40,7 @@ class _EventsState extends State<Events> {
                           width: 10,
                         ),
                         Text(
-                          'Available events',
+                          S.userEvents.availableEvents(),
                           style: TextStyle(
                               fontWeight: FontWeight.w500,
                               letterSpacing: 1,

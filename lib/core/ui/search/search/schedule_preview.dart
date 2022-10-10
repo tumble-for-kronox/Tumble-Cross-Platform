@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tumble/core/api/backend/response_types/runtime_error_type.dart';
 import 'package:tumble/core/navigation/app_navigator.dart';
-import 'package:tumble/core/ui/schedule/no_schedule.dart';
+import 'package:tumble/core/ui/data/string_constants.dart';
+import 'package:tumble/core/ui/schedule/dynamic_error_page.dart';
 import 'package:tumble/core/ui/schedule/tumble_list_view/data/custom_alerts.dart';
 import 'package:tumble/core/ui/schedule/tumble_list_view/data/to_top_button.dart';
 import 'package:tumble/core/ui/search/cubit/search_page_cubit.dart';
@@ -58,14 +59,22 @@ class _SchedulePreviewState extends State<SchedulePreview> {
               ],
             );
           case PreviewFetchStatus.FETCH_ERROR:
-            return NoScheduleAvailable(
-              errorType: RuntimeErrorType.scheduleFetchError(),
-              cupertinoAlertDialog: CustomAlertDialog.programFetchError(context, () => {}, navigator),
+            return Container(
+              padding: const EdgeInsets.only(top: 40, left: 7),
+              child: DynamicErrorPage(
+                toSearch: false,
+                errorType: RuntimeErrorType.scheduleFetchError(),
+                description: S.popUps.scheduleFetchError(),
+              ),
             );
           case PreviewFetchStatus.EMPTY_SCHEDULE:
-            return NoScheduleAvailable(
-              errorType: RuntimeErrorType.emptyScheduleError(),
-              cupertinoAlertDialog: CustomAlertDialog.previewContainsNoViews(context, () => {}, navigator),
+            return Container(
+              padding: const EdgeInsets.only(top: 40, left: 7),
+              child: DynamicErrorPage(
+                toSearch: false,
+                errorType: RuntimeErrorType.emptyScheduleError(),
+                description: S.popUps.scheduleIsEmptyBody(),
+              ),
             );
           case PreviewFetchStatus.INITIAL:
             return Container();

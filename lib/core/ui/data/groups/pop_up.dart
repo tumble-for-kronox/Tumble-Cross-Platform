@@ -5,6 +5,7 @@ class PopUpStrings extends StringConstantGroup {
   PopUpStrings(AppLocalizations localizedStrings) : super(localizedStrings);
 
   String notificationRequestTitle() => localizedStrings.popUpNotificationPermissionTitle;
+  String missingProgramRequestDescription() => localizedStrings.popUpProgramFetchErrorDescription;
   String notificationRequestDescription() => localizedStrings.popUpNotificationPermissionDescription;
   String autoSignupTitle() => localizedStrings.popUpExamAutoSignupTitle;
   String autoSignupBody() => localizedStrings.popUpExamAutoSignupBody;

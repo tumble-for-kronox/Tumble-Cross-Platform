@@ -38,7 +38,7 @@ class _UserAccountInfo extends State<UserAccountInfo> {
                   child: Column(
                     children: [
                       Container(
-                        height: 120,
+                        width: MediaQuery.of(context).size.width - 40,
                         decoration: BoxDecoration(
                           boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 2, offset: Offset(0, 1))],
                           color: Theme.of(context).colorScheme.surface,
@@ -90,7 +90,7 @@ class _UserAccountInfo extends State<UserAccountInfo> {
                             ),
                             Expanded(
                               child: Padding(
-                                padding: const EdgeInsets.only(top: 10, right: 10),
+                                padding: const EdgeInsets.only(top: 10, right: 10, bottom: 10),
                                 child: Align(
                                   alignment: Alignment.topRight,
                                   child: ClipRRect(
@@ -112,7 +112,7 @@ class _UserAccountInfo extends State<UserAccountInfo> {
                         ),
                       ),
                       const SizedBox(
-                        height: 50,
+                        height: 40,
                       ),
                       _sectionDivider(context, S.authorizedPage.userOptionsTitle(), CupertinoIcons.settings),
                       const SizedBox(
@@ -135,7 +135,7 @@ class _UserAccountInfo extends State<UserAccountInfo> {
                       ),
                       _sectionDivider(context, S.authorizedPage.externalLinksTitle(), CupertinoIcons.link),
                       const SizedBox(
-                        height: 10,
+                        height: 20,
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,

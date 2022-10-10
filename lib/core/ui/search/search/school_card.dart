@@ -19,15 +19,15 @@ class SchoolCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      height: 100,
+      height: 80,
       margin: const EdgeInsets.only(top: 20, left: 20, right: 20, bottom: 20),
       decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.surface,
-          borderRadius: BorderRadius.circular(5),
+          borderRadius: BorderRadius.circular(10),
           boxShadow: const <BoxShadow>[
             BoxShadow(
               color: Colors.black26,
-              blurRadius: 2,
+              blurRadius: 1,
               offset: Offset(0, 1),
             ),
           ]),
@@ -40,11 +40,14 @@ class SchoolCard extends StatelessWidget {
               width: 5,
               height: 100,
             ),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(5),
-              child: Image(
-                width: 90,
-                image: AssetImage(schoolLogo),
+            Container(
+              padding: const EdgeInsets.only(left: 10),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(5),
+                child: Image(
+                  width: 60,
+                  image: AssetImage(schoolLogo),
+                ),
               ),
             ),
             Expanded(
@@ -53,7 +56,7 @@ class SchoolCard extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.onSurface,
-                  fontSize: 22,
+                  fontSize: 20,
                   fontWeight: FontWeight.w300,
                 ),
               ),

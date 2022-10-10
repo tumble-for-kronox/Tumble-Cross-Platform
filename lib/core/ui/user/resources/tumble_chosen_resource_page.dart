@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:tumble/core/ui/schedule/dynamic_error_page.dart';
 import 'package:tumble/core/ui/schedule/tumble_list_view/data/custom_alerts.dart';
 import 'package:tumble/core/ui/tumble_loading.dart';
 import 'package:tumble/core/ui/user/resources/confirm_booking.dart';
@@ -24,6 +25,22 @@ class TumbleChosenResourcePage extends StatelessWidget {
         return Scaffold(
           extendBodyBehindAppBar: true,
           appBar: AppBar(
+            leadingWidth: 100,
+            leading: ElevatedButton.icon(
+              icon: Icon(
+                CupertinoIcons.chevron_back,
+                color: Theme.of(context).colorScheme.onPrimary,
+              ),
+              style: ElevatedButton.styleFrom(
+                elevation: 0,
+                primary: Colors.transparent,
+              ),
+              onPressed: () => Navigator.of(context).pop(),
+              label: Text(
+                S.general.back(),
+                style: TextStyle(fontSize: 16, color: Theme.of(context).colorScheme.onPrimary),
+              ),
+            ),
             elevation: 0,
             backgroundColor: Colors.transparent,
           ),
@@ -139,29 +156,11 @@ class TumbleChosenResourcePage extends StatelessWidget {
   }
 
   Widget _lowerSectionError(BuildContext context, ResourceState state) {
-    return Center(
-        child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Text(context.read<ResourceCubit>().state.resourcePageErrorMessage!,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-                color: Theme.of(context).colorScheme.onBackground, fontSize: 20, fontWeight: FontWeight.w500)),
-        Padding(
-          padding: const EdgeInsets.only(top: 0, left: 3),
-          child: IconButton(
-              iconSize: 20,
-              color: Theme.of(context).colorScheme.primary,
-              onPressed: () => showCupertinoDialog(
-                  context: context,
-                  builder: (context) {
-                    return CustomAlertDialog.resourceNotGettable(context);
-                  }),
-              icon: const Icon(CupertinoIcons.info_circle)),
-        )
-      ],
-    ));
+    return DynamicErrorPage(
+      errorType: S.popUps.resourceFetchErrorTitle(),
+      toSearch: false,
+      description: S.popUps.resourceFetchErrorBody(),
+    );
   }
 
   Widget _lowerSectionLoaded(BuildContext context, ResourceState state) {

@@ -14,4 +14,5 @@ class UserEventStrings extends StringConstantGroup {
   String unregisterButton() => localizedStrings.userEventsUnregisterButton;
   String unregisterUntil() => localizedStrings.userEventsUnregisterUntil;
   String registerBefore() => localizedStrings.userEventsRegisterBefore;
+  String availableEvents() => localizedStrings.userEventsAvailableEvents;
 }

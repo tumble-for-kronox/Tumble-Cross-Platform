@@ -189,7 +189,7 @@ PreferredSizeWidget _appBar(BuildContext context, AppNavigator navigator) {
               navigator.pop();
             },
             label: Text(
-              'Back',
+              S.general.back(),
               style: TextStyle(fontSize: 16, color: Theme.of(context).colorScheme.onBackground),
             ),
           );
