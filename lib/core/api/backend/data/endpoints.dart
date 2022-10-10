@@ -10,7 +10,7 @@ import 'package:flutter/foundation.dart';
 class Endpoints {
   // Endpoints
   static String debugBaseUrl = Platform.isAndroid ? 'tumble.hkr.se:443' : '192.168.1.178:80';
-  static const String baseUrl = 'tumble.hkr.se:443';
+  static const String baseUrl = 'tumble.hkr.se';
   static const String getSchedules = '/schedules/search';
   static const String getOneSchedule = '/schedules/';
   static const String getUserEvents = 'users/events';
