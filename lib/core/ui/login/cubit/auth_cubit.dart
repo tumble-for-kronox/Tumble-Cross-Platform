@@ -69,16 +69,12 @@ class AuthCubit extends Cubit<AuthState> {
     final username = state.usernameController.text;
     final password = state.passwordController.text;
     if (!formValidated()) {
-      emit(state.copyWith(
-          status: AuthStatus.INITIAL,
-          errorMessage: RuntimeErrorType.invalidInputFields()));
+      emit(state.copyWith(status: AuthStatus.INITIAL, errorMessage: RuntimeErrorType.invalidInputFields()));
       return;
     }
     emit(state.copyWith(status: AuthStatus.LOADING));
-    ApiUserResponse userRes =
-        await _userRepo.postUserLogin(username, password, school);
+    ApiUserResponse userRes = await _userRepo.postUserLogin(username, password, school);
 
-    state.usernameController.clear();
     state.passwordController.clear();
     switch (userRes.status) {
       case ApiUserResponseStatus.AUTHORIZED:
@@ -88,14 +84,16 @@ class AuthCubit extends Cubit<AuthState> {
           school,
         );
         emit(state.copyWith(loginSuccess: true));
+        state.usernameController.clear();
         await Future.delayed(const Duration(seconds: 2));
-        emit(state.copyWith(
-            status: AuthStatus.AUTHENTICATED, userSession: userRes.data!));
-
+        emit(state.copyWith(status: AuthStatus.AUTHENTICATED, userSession: userRes.data!));
+        break;
+      case ApiUserResponseStatus.UNAUTHORIZED:
+        log("UNAUTHORIZED: ${userRes.data}");
+        emit(state.copyWith(status: AuthStatus.ERROR, errorMessage: userRes.data));
         break;
       case ApiUserResponseStatus.ERROR:
-        emit(state.copyWith(
-            status: AuthStatus.ERROR, errorMessage: userRes.message));
+        emit(state.copyWith(status: AuthStatus.ERROR, errorMessage: userRes.data));
         break;
       default:
     }
@@ -124,33 +122,25 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   Future<String?> runAutoSignup() async {
-    ApiUserResponse<dynamic> resp = await _userRepo
-        .putRegisterAllAvailableUserEvents(state.userSession!.sessionToken);
+    ApiUserResponse<dynamic> resp = await _userRepo.putRegisterAllAvailableUserEvents(state.userSession!.sessionToken);
 
     switch (resp.status) {
       case ApiUserResponseStatus.COMPLETED:
-        MultiRegistrationResultModel results =
-            resp.data as MultiRegistrationResultModel;
-        if (results.failedRegistrations.isEmpty &&
-            results.successfulRegistrations.isEmpty) {
+        MultiRegistrationResultModel results = resp.data as MultiRegistrationResultModel;
+        if (results.failedRegistrations.isEmpty && results.successfulRegistrations.isEmpty) {
           return null;
         }
 
-        if (results.failedRegistrations.isNotEmpty &&
-            results.successfulRegistrations.isEmpty) {
-          return S.scaffoldMessages
-              .autoSignupFailed(results.failedRegistrations.length);
+        if (results.failedRegistrations.isNotEmpty && results.successfulRegistrations.isEmpty) {
+          return S.scaffoldMessages.autoSignupFailed(results.failedRegistrations.length);
         }
 
-        if (results.failedRegistrations.isEmpty &&
-            results.successfulRegistrations.isNotEmpty) {
-          return S.scaffoldMessages
-              .autoSignupCompleted(results.successfulRegistrations.length);
+        if (results.failedRegistrations.isEmpty && results.successfulRegistrations.isNotEmpty) {
+          return S.scaffoldMessages.autoSignupCompleted(results.successfulRegistrations.length);
         }
 
-        return S.scaffoldMessages.autoSignupCompleteAndFail(
-            results.successfulRegistrations.length,
-            results.failedRegistrations.length);
+        return S.scaffoldMessages
+            .autoSignupCompleteAndFail(results.successfulRegistrations.length, results.failedRegistrations.length);
       default:
         break;
     }
@@ -163,16 +153,11 @@ class AuthCubit extends Cubit<AuthState> {
 
     final refreshToken = await secureStorage.getRefreshToken();
     if (refreshToken != null) {
-      ApiUserResponse loggedInUser =
-          await userRepository.getRefreshSession(refreshToken);
+      ApiUserResponse loggedInUser = await userRepository.getRefreshSession(refreshToken);
       switch (loggedInUser.status) {
         case ApiUserResponseStatus.AUTHORIZED:
-          log(
-              name: 'auth_cubit',
-              "Successfully refreshed user session with token ..");
-          emit(state.copyWith(
-              status: AuthStatus.AUTHENTICATED,
-              userSession: loggedInUser.data!));
+          log(name: 'auth_cubit', "Successfully refreshed user session with token ..");
+          emit(state.copyWith(status: AuthStatus.AUTHENTICATED, userSession: loggedInUser.data!));
 
           return;
         default:
@@ -189,10 +174,7 @@ class AuthCubit extends Cubit<AuthState> {
 
   void logout() {
     getIt<SecureStorageRepository>().clear();
-    emit(state.copyWith(
-        status: AuthStatus.UNAUTHENTICATED,
-        userSession: null,
-        loginSuccess: false));
+    emit(state.copyWith(status: AuthStatus.UNAUTHENTICATED, userSession: null, loginSuccess: false));
   }
 
   bool get authenticated => state.status == AuthStatus.AUTHENTICATED;

@@ -10,21 +10,18 @@ import '../../models/api_models/user_event_collection_model.dart';
 extension UserResponseParsing on Response {
   ApiUserResponse parseUser() {
     if (statusCode == 200) {
-      return ApiUserResponse.authorized(
-          kronoxUserModelFromJson(jsonEncode(data)));
+      return ApiUserResponse.authorized(kronoxUserModelFromJson(jsonEncode(data)));
     } else if (statusCode == 401) {
-      return ApiUserResponse.error(RuntimeErrorType.loginError());
+      return ApiUserResponse.unauthorized(RuntimeErrorType.loginError());
     }
     return ApiUserResponse.error(RuntimeErrorType.unknownError());
   }
 
   ApiUserResponse parseUserEvents() {
     if (statusCode == 200) {
-      return ApiUserResponse.completed(
-          userEventCollectionModelFromJson(jsonEncode(data)));
+      return ApiUserResponse.completed(userEventCollectionModelFromJson(jsonEncode(data)));
     } else if (statusCode == 401) {
-      return ApiUserResponse.unauthorized(
-          RuntimeErrorType.authenticationError());
+      return ApiUserResponse.unauthorized(RuntimeErrorType.authenticationError());
     }
     return ApiUserResponse.error(RuntimeErrorType.unknownError());
   }
@@ -33,19 +30,16 @@ extension UserResponseParsing on Response {
     if (statusCode == 200) {
       return ApiUserResponse.completed(true);
     } else if (statusCode == 401) {
-      return ApiUserResponse.unauthorized(
-          RuntimeErrorType.authenticationError());
+      return ApiUserResponse.unauthorized(RuntimeErrorType.authenticationError());
     }
     return ApiUserResponse.error(RuntimeErrorType.unknownError());
   }
 
   ApiUserResponse parseMultiRegistrationResult() {
     if (statusCode == 200) {
-      return ApiUserResponse.completed(
-          multiRegistrationResultModelFromJson(jsonEncode(data)));
+      return ApiUserResponse.completed(multiRegistrationResultModelFromJson(jsonEncode(data)));
     } else if (statusCode == 401) {
-      return ApiUserResponse.unauthorized(
-          RuntimeErrorType.authenticationError());
+      return ApiUserResponse.unauthorized(RuntimeErrorType.authenticationError());
     }
     return ApiUserResponse.error(RuntimeErrorType.unknownError());
   }
