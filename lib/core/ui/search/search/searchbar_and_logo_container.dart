@@ -53,32 +53,35 @@ class _SearchBarAndLogoContainerState extends State<SearchBarAndLogoContainer> {
                     padding: const EdgeInsets.only(top: 185),
                     child: Stack(
                       children: [
-                        MaterialButton(
-                          height: 160,
-                          padding: const EdgeInsets.only(top: 15),
-                          focusElevation: 0,
-                          highlightElevation: 0,
-                          color: Theme.of(context).colorScheme.primary,
-                          onPressed: () => context.read<MainAppNavigationCubit>().getNavBarItem(NavbarItem.LIST),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                'View your schedules',
-                                style: TextStyle(
-                                  color: Theme.of(context).colorScheme.onPrimary.withOpacity(.9),
-                                  fontSize: 14,
+                        Padding(
+                          padding: const EdgeInsets.only(top: 1),
+                          child: MaterialButton(
+                            height: 159,
+                            padding: const EdgeInsets.only(top: 15),
+                            focusElevation: 0,
+                            highlightElevation: 0,
+                            color: Theme.of(context).colorScheme.primary,
+                            onPressed: () => context.read<MainAppNavigationCubit>().getNavBarItem(NavbarItem.LIST),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'View your schedules',
+                                  style: TextStyle(
+                                    color: Theme.of(context).colorScheme.onPrimary.withOpacity(.9),
+                                    fontSize: 14,
+                                  ),
                                 ),
-                              ),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              Icon(
-                                CupertinoIcons.arrow_right,
-                                size: 15,
-                                color: Theme.of(context).colorScheme.onPrimary.withOpacity(.9),
-                              )
-                            ],
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                Icon(
+                                  CupertinoIcons.arrow_right,
+                                  size: 15,
+                                  color: Theme.of(context).colorScheme.onPrimary.withOpacity(.9),
+                                )
+                              ],
+                            ),
                           ),
                         ),
                         Align(
