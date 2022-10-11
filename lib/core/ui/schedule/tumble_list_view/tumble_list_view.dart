@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tumble/core/api/backend/response_types/runtime_error_type.dart';
@@ -16,9 +18,10 @@ class TumbleListView extends StatelessWidget {
   TumbleListView({Key? key}) : super(key: key);
 
   final GlobalKey<AnimatedListState> _animatedListKey = GlobalKey();
-  final List<TumbleListViewDayContainer> _listItems = [];
+  List<TumbleListViewDayContainer> _listItems = [];
 
   void _buildItems(List<TumbleListViewDayContainer> fetchedList) {
+    _listItems = [];
     var future = Future(() {});
     for (var i = 0; i < fetchedList.length; i++) {
       future = future.then((_) {
@@ -54,6 +57,7 @@ class TumbleListView extends StatelessWidget {
                     await context.read<AppSwitchCubit>().forceRefreshAll();
                   },
                   child: AnimatedList(
+                    controller: context.read<AppSwitchCubit>().controller,
                     key: _animatedListKey,
                     initialItemCount: _listItems.length,
                     itemBuilder: (BuildContext context, int index, Animation<double> animation) {

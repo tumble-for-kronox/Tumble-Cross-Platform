@@ -1,8 +1,10 @@
 import 'dart:developer' as dev;
+import 'dart:developer';
 import 'package:collection/collection.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tumble/core/api/backend/response_types/schedule_or_programme_response.dart';
@@ -66,7 +68,6 @@ class AppSwitchCubit extends Cubit<AppSwitchState> {
     final currentScheduleIds = _preferenceService.bookmarkIds;
     List<ScheduleModelAndCourses> listOfScheduleModelAndCourses = [];
     List<List<Day>> matrixListOfDays = [];
-
     if (currentScheduleIds != null) {
       for (String? scheduleId in currentScheduleIds) {
         final bool userHasBookmarks = _preferenceService.userHasBookmarks;
@@ -155,10 +156,16 @@ class AppSwitchCubit extends Cubit<AppSwitchState> {
   }
 
   Color getColorForCourse(Event event) {
-    return Color(state.scheduleModelAndCourses!
-        .expand((scheduleModelAndCourses) => scheduleModelAndCourses!.courses)
-        .firstWhere((courseUiModel) => courseUiModel!.courseId == event.course.id)!
-        .color);
+    log("COURSE COLOR ACCESSED");
+    try {
+      return Color(state.scheduleModelAndCourses!
+          .expand((scheduleModelAndCourses) => scheduleModelAndCourses!.courses)
+          .firstWhere((courseUiModel) => courseUiModel!.courseId == event.course.id)!
+          .color);
+    } catch (e) {
+      log('Attempted to find color for event, but it does not exist');
+      return Colors.white;
+    }
   }
 
   Future<bool> createNotificationForEvent(Event event, BuildContext context) {

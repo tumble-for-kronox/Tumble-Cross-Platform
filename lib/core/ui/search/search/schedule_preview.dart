@@ -53,6 +53,7 @@ class _SchedulePreviewState extends State<SchedulePreview> {
                 Padding(
                   padding: const EdgeInsets.only(top: 50),
                   child: AnimatedList(
+                    controller: context.read<SearchPageCubit>().controller,
                     key: _animatedListKey,
                     initialItemCount: _listItems.length,
                     itemBuilder: (BuildContext context, int index, Animation<double> animation) {
