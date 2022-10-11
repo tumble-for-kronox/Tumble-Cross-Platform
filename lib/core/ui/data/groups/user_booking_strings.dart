@@ -11,4 +11,5 @@ class UserBookingStrings extends StringConstantGroup {
   String ongoingTitle() => localizedStrings.userBookingsBookingCardOngoingTitle;
   String notificationConfirmRemindTitle() => localizedStrings.userBookingsNotificationConfirmReminderTitle;
   String notificationConfirmRemindBody() => localizedStrings.userBookingsNotificationConfirmReminderBody;
+  String resourcesListTitle() => localizedStrings.userBookingsResourcesListTitle;
 }

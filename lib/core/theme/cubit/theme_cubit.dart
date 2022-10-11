@@ -2,21 +2,19 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tumble/core/api/dependency_injection/get_it.dart';
+import 'package:tumble/core/api/preferences/repository/preference_repository.dart';
+import 'package:tumble/core/shared/preference_types.dart';
 import 'package:tumble/core/theme/cubit/theme_state.dart';
 import 'package:tumble/core/theme/data/theme_strings.dart';
 import 'package:tumble/core/theme/repository/theme_repository.dart';
-import '../../shared/preference_types.dart';
-import '../../dependency_injection/get_it_instances.dart';
 
 class ThemeCubit extends Cubit<ThemeState> {
   ThemeCubit()
       : super(ThemeState(
-            themeString: getIt<SharedPreferences>().getString(PreferenceTypes.theme)!,
-            locale: getIt<SharedPreferences>().getString(PreferenceTypes.locale) == null
-                ? null
-                : Locale(getIt<SharedPreferences>().getString(PreferenceTypes.locale)!),
-            themeMode: ThemeMode.values
-                .firstWhere((theme) => theme.name == getIt<SharedPreferences>().getString(PreferenceTypes.theme))));
+            themeString: getIt<PreferenceRepository>().theme!,
+            locale: getIt<PreferenceRepository>().locale == null ? null : Locale(getIt<PreferenceRepository>().locale!),
+            themeMode: ThemeMode.values.firstWhere((theme) => theme.name == getIt<PreferenceRepository>().theme)));
 
   final ThemePersistence themeRepository = getIt<ThemeRepository>();
   late StreamSubscription<String> _themeSubscription;

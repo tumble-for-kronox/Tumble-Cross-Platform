@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tumble/core/api/apiservices/runtime_error_type.dart';
+import 'package:tumble/core/api/backend/response_types/runtime_error_type.dart';
 import 'package:tumble/core/navigation/app_navigator.dart';
 import 'package:tumble/core/ui/schedule/no_schedule.dart';
 import 'package:tumble/core/ui/schedule/tumble_list_view/data/custom_alerts.dart';
@@ -13,8 +13,7 @@ typedef ToggleBookmark = Function(bool value);
 
 class SchedulePreview extends StatefulWidget {
   final ToggleBookmark toggleBookmark;
-  const SchedulePreview({Key? key, required this.toggleBookmark})
-      : super(key: key);
+  const SchedulePreview({Key? key, required this.toggleBookmark}) : super(key: key);
 
   @override
   State<SchedulePreview> createState() => _SchedulePreviewState();
@@ -42,12 +41,10 @@ class _SchedulePreviewState extends State<SchedulePreview> {
                         children: state.previewListOfDays!
                             .where((day) =>
                                 day.events.isNotEmpty &&
-                                day.isoString.isAfter(DateTime.now()
-                                    .subtract(const Duration(days: 1))))
+                                day.isoString.isAfter(DateTime.now().subtract(const Duration(days: 1))))
                             .map((day) => PreviewListViewDayContainer(
                                   day: day,
-                                  searchPageCubit:
-                                      BlocProvider.of<SearchPageCubit>(context),
+                                  searchPageCubit: BlocProvider.of<SearchPageCubit>(context),
                                 ))
                             .toList()),
                   ),
@@ -56,23 +53,19 @@ class _SchedulePreviewState extends State<SchedulePreview> {
                   bottom: 30,
                   right: state.previewToTopButtonVisible! ? 35 : -60,
                   duration: const Duration(milliseconds: 200),
-                  child: ToTopButton(
-                      scrollToTop: () =>
-                          context.read<SearchPageCubit>().scrollToTop()),
+                  child: ToTopButton(scrollToTop: () => context.read<SearchPageCubit>().scrollToTop()),
                 ),
               ],
             );
           case PreviewFetchStatus.FETCH_ERROR:
             return NoScheduleAvailable(
               errorType: RuntimeErrorType.scheduleFetchError(),
-              cupertinoAlertDialog: CustomAlertDialog.programFetchError(
-                  context, () => {}, navigator),
+              cupertinoAlertDialog: CustomAlertDialog.programFetchError(context, () => {}, navigator),
             );
           case PreviewFetchStatus.EMPTY_SCHEDULE:
             return NoScheduleAvailable(
               errorType: RuntimeErrorType.emptyScheduleError(),
-              cupertinoAlertDialog: CustomAlertDialog.previewContainsNoViews(
-                  context, () => {}, navigator),
+              cupertinoAlertDialog: CustomAlertDialog.previewContainsNoViews(context, () => {}, navigator),
             );
           case PreviewFetchStatus.INITIAL:
             return Container();

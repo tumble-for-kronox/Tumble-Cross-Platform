@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:tumble/core/extensions/extensions.dart';
-import 'package:tumble/core/models/api_models/upcoming_user_event_model.dart';
+import 'package:tumble/core/models/backend_models/upcoming_user_event_model.dart';
 
 class UpcomingUserEventCard extends StatelessWidget {
   final UpcomingUserEventModel userEvent;

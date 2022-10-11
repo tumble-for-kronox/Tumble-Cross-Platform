@@ -4,15 +4,16 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tumble/core/api/apiservices/api_user_response.dart';
-import 'package:tumble/core/api/apiservices/runtime_error_type.dart';
-import 'package:tumble/core/api/repository/user_repository.dart';
-import 'package:tumble/core/database/repository/secure_storage_repository.dart';
-import 'package:tumble/core/models/api_models/kronox_user_model.dart';
-import 'package:tumble/core/models/api_models/multi_registration_result_model.dart';
+import 'package:tumble/core/api/backend/response_types/user_response.dart';
+import 'package:tumble/core/api/backend/response_types/runtime_error_type.dart';
+import 'package:tumble/core/api/backend/repository/user_action_repository.dart';
+import 'package:tumble/core/api/database/repository/secure_storage_repository.dart';
+import 'package:tumble/core/api/preferences/repository/preference_repository.dart';
+import 'package:tumble/core/models/backend_models/kronox_user_model.dart';
+import 'package:tumble/core/models/backend_models/multi_registration_result_model.dart';
 import 'package:tumble/core/models/ui_models/school_model.dart';
 import 'package:tumble/core/shared/preference_types.dart';
-import 'package:tumble/core/dependency_injection/get_it_instances.dart';
+import 'package:tumble/core/api/dependency_injection/get_it.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
 
 part 'auth_state.dart';
@@ -29,13 +30,15 @@ class AuthCubit extends Cubit<AuthState> {
     _init();
     login();
   }
-  final _userRepo = getIt<UserRepository>();
+  final _userRepo = getIt<UserActionRepository>();
   final _secureStorage = getIt<SecureStorageRepository>();
   final _focusNodePassword = FocusNode();
   final _focusNodeUsername = FocusNode();
 
   FocusNode get focusNodePassword => _focusNodePassword;
   FocusNode get focusNodeUsername => _focusNodeUsername;
+
+  String get defaultSchool => getIt<PreferenceRepository>().defaultSchool!;
 
   void _init() {
     _focusNodePassword.addListener(setFocusNodePassword);
@@ -73,16 +76,13 @@ class AuthCubit extends Cubit<AuthState> {
       return;
     }
     emit(state.copyWith(status: AuthStatus.LOADING));
-    ApiUserResponse userRes = await _userRepo.postUserLogin(username, password, school);
+    UserResponse userRes = await _userRepo.userLogin(username, password, school);
 
     state.passwordController.clear();
     switch (userRes.status) {
       case ApiUserResponseStatus.AUTHORIZED:
         storeUserCreds((userRes.data! as KronoxUserModel).refreshToken);
-        getIt<SharedPreferences>().setString(
-          PreferenceTypes.school,
-          school,
-        );
+        getIt<PreferenceRepository>().setSchool(school);
         emit(state.copyWith(loginSuccess: true));
         state.usernameController.clear();
         await Future.delayed(const Duration(seconds: 2));
@@ -122,7 +122,7 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   Future<String?> runAutoSignup() async {
-    ApiUserResponse<dynamic> resp = await _userRepo.putRegisterAllAvailableUserEvents(state.userSession!.sessionToken);
+    UserResponse<dynamic> resp = await _userRepo.registerAllAvailableUserEvents(state.userSession!.sessionToken);
 
     switch (resp.status) {
       case ApiUserResponseStatus.COMPLETED:
@@ -149,11 +149,11 @@ class AuthCubit extends Cubit<AuthState> {
 
   Future<void> login() async {
     final secureStorage = getIt<SecureStorageRepository>();
-    final userRepository = getIt<UserRepository>();
+    final userRepository = getIt<UserActionRepository>();
 
     final refreshToken = await secureStorage.getRefreshToken();
     if (refreshToken != null) {
-      ApiUserResponse loggedInUser = await userRepository.getRefreshSession(refreshToken);
+      UserResponse loggedInUser = await userRepository.refreshSession(refreshToken);
       switch (loggedInUser.status) {
         case ApiUserResponseStatus.AUTHORIZED:
           log(name: 'auth_cubit', "Successfully refreshed user session with token ..");

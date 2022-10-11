@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tumble/core/models/api_models/program_model.dart';
+import 'package:tumble/core/models/backend_models/program_model.dart';
 import 'package:tumble/core/ui/bottom_nav_bar/cubit/bottom_nav_cubit.dart';
 import 'package:tumble/core/ui/init_cubit/init_cubit.dart';
 import 'package:tumble/core/ui/schedule/no_schedule.dart';
@@ -80,39 +80,6 @@ class _TumbleSearchPageState extends State<TumbleSearchPage> {
             ],
           ),
         ),
-        // Align(
-        //   alignment: Alignment.bottomCenter,
-        //   child: SizedBox(
-        //     width: double.maxFinite,
-        //     height: 150,
-        //     child: Stack(
-        //       children: [
-        //         Align(
-        //           alignment: Alignment.bottomCenter,
-        //           child: Container(
-        //             height: 145,
-        //             decoration: BoxDecoration(
-        //               color: Theme.of(context).colorScheme.primary,
-        //             ),
-        //           ),
-        //         ),
-        //         Align(
-        //           alignment: Alignment.topCenter,
-        //           child: Container(
-        //             width: double.maxFinite,
-        //             height: 40,
-        //             decoration: BoxDecoration(
-        //                 color: Theme.of(context).colorScheme.background,
-        //                 borderRadius: const BorderRadius.only(
-        //                   bottomLeft: Radius.circular(20),
-        //                   bottomRight: Radius.circular(20),
-        //                 )),
-        //           ),
-        //         )
-        //       ],
-        //     ),
-        //   ),
-        // ),
         BlocProvider.value(
           value: BlocProvider.of<SearchPageCubit>(context),
           child: const SearchBarAndLogoContainer(),

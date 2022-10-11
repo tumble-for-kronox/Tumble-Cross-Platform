@@ -1,17 +1,16 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import "package:collection/collection.dart";
-import 'package:tumble/core/helpers/color_picker.dart';
-import 'package:tumble/core/models/api_models/schedule_model.dart';
+import 'package:tumble/core/api/database/repository/database_repository.dart';
+import 'package:tumble/core/api/dependency_injection/get_it.dart';
+import 'package:tumble/core/theme/color_picker.dart';
+import 'package:tumble/core/models/backend_models/schedule_model.dart';
 import 'package:tumble/core/models/ui_models/course_ui_model.dart';
 import 'package:tumble/core/models/ui_models/school_model.dart';
 import 'package:tumble/core/models/ui_models/week_model.dart';
 import 'package:tumble/core/ui/bottom_nav_bar/data/nav_bar_items.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
 import 'package:tumble/core/ui/app_switch/data/schools.dart';
-
-import '../database/repository/database_repository.dart';
-import '../dependency_injection/get_it_instances.dart';
 
 extension ScheduleParsing on ScheduleModel {
   Future<List<CourseUiModel?>> findNewCourses(String scheduleId) async {

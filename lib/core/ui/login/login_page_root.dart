@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
-import 'package:tumble/core/api/apiservices/runtime_error_type.dart';
+import 'package:tumble/core/api/backend/response_types/runtime_error_type.dart';
 import 'package:tumble/core/navigation/app_navigator.dart';
 import 'package:tumble/core/navigation/navigation_route_labels.dart';
 import 'package:tumble/core/theme/data/colors.dart';
@@ -171,16 +171,28 @@ Widget _initialState(BuildContext context, String school) {
 PreferredSizeWidget _appBar(BuildContext context, AppNavigator navigator) {
   return AppBar(
       backgroundColor: Theme.of(context).colorScheme.background,
+      leadingWidth: 100,
       leading: BlocBuilder<AuthCubit, AuthState>(
         builder: (context, state) {
-          return IconButton(
+          return ElevatedButton.icon(
+            icon: Icon(
+              CupertinoIcons.chevron_back,
               color: Theme.of(context).colorScheme.onBackground,
-              icon: const Icon(CupertinoIcons.back),
-              onPressed: () {
-                state.passwordController.clear();
-                state.usernameController.clear();
-                navigator.pop();
-              });
+            ),
+            style: ElevatedButton.styleFrom(
+              elevation: 0,
+              primary: Colors.transparent,
+            ),
+            onPressed: () {
+              state.passwordController.clear();
+              state.usernameController.clear();
+              navigator.pop();
+            },
+            label: Text(
+              'Back',
+              style: TextStyle(fontSize: 16, color: Theme.of(context).colorScheme.onBackground),
+            ),
+          );
         },
       ));
 }
@@ -323,7 +335,10 @@ Widget _formPasswordField(BuildContext context, String school) {
           decoration: InputDecoration(
               suffixIcon: IconButton(
                   onPressed: () => BlocProvider.of<AuthCubit>(context).togglePasswordVisibility(),
-                  icon: !state.passwordHidden ? const Icon(CupertinoIcons.eye) : const Icon(CupertinoIcons.eye_slash)),
+                  icon: Icon(
+                    !state.passwordHidden ? CupertinoIcons.eye : CupertinoIcons.eye_slash,
+                    color: Theme.of(context).colorScheme.onBackground.withOpacity(.9),
+                  )),
               icon: Icon(CupertinoIcons.lock, color: Theme.of(context).colorScheme.onBackground),
               labelText: S.loginPage.passwordPlaceholder(),
               enabledBorder: OutlineInputBorder(

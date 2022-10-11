@@ -12,7 +12,7 @@ class ContributorsModal extends StatelessWidget {
       body: Container(
         height: MediaQuery.of(context).size.height - 260,
         width: double.maxFinite,
-        padding: const EdgeInsets.only(left: 20, right: 20, top: 50),
+        padding: const EdgeInsets.only(left: 20, right: 20, top: 50, bottom: 50),
         decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.background,
             borderRadius: const BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20))),

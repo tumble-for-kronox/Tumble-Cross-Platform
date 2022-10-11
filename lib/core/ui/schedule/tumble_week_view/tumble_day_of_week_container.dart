@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:tumble/core/models/api_models/schedule_model.dart';
+import 'package:tumble/core/models/backend_models/schedule_model.dart';
 import 'package:tumble/core/ui/app_switch/cubit/app_switch_cubit.dart';
 import 'package:tumble/core/ui/schedule/tumble_week_view/tumble_day_of_week_divider.dart';
 import 'package:tumble/core/ui/schedule/tumble_week_view/tumble_empty_week_event_tile.dart';

@@ -22,7 +22,6 @@ class TumbleNavigationBar extends StatelessWidget {
           onTap: onTap,
           selectedFontSize: 12,
           unselectedFontSize: 10,
-          showUnselectedLabels: false,
           currentIndex: mainappstate.index,
           backgroundColor: Theme.of(context).colorScheme.background,
           elevation: 0,

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tumble/core/ui/data/string_constants.dart';
 import 'package:tumble/core/ui/user/resources/resource_card.dart';
 import 'package:tumble/core/ui/user/resources/tumble_chosen_resource_page.dart';
 
@@ -39,26 +40,55 @@ class ResourcePage extends StatelessWidget {
   }
 
   Widget _schoolResourcesList(BuildContext context, ResourceState state) {
-    return RefreshIndicator(
-      onRefresh: onSchoolResourcesRefresh!,
-      child: SizedBox(
-        height: double.infinity,
-        child: SingleChildScrollView(
-          physics: const AlwaysScrollableScrollPhysics(),
-          child: Container(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              children: state.schoolResources!
-                  .map((e) => Column(children: [
-                        ResourceCard(resource: e),
-                        const SizedBox(
-                          height: 25,
-                        )
-                      ]))
-                  .toList(),
+    return Padding(
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(
+                CupertinoIcons.building_2_fill,
+                color: Theme.of(context).colorScheme.onBackground,
+              ),
+              const SizedBox(
+                width: 10,
+              ),
+              Text(
+                S.userBookings.resourcesListTitle(),
+                style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    letterSpacing: 1,
+                    fontSize: 24,
+                    color: Theme.of(context).colorScheme.onBackground),
+              ),
+            ],
+          ),
+          const SizedBox(
+            height: 25,
+          ),
+          Expanded(
+            child: RefreshIndicator(
+              onRefresh: onSchoolResourcesRefresh!,
+              child: SizedBox(
+                height: double.infinity,
+                child: SingleChildScrollView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  child: Column(
+                    children: state.schoolResources!
+                        .map((e) => Column(children: [
+                              ResourceCard(resource: e),
+                              const SizedBox(
+                                height: 25,
+                              )
+                            ]))
+                        .toList(),
+                  ),
+                ),
+              ),
             ),
           ),
-        ),
+        ],
       ),
     );
   }

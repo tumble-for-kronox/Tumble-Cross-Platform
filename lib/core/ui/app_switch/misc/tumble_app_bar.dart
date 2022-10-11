@@ -103,7 +103,7 @@ class _TumbleAppBarState extends State<TumbleAppBar> {
                     builder: ((context, state) => Text(
                           state.navbarItem.toStringTitle(),
                           style: TextStyle(
-                              fontSize: 15, letterSpacing: 2, color: Theme.of(context).colorScheme.onBackground),
+                              fontSize: 14, letterSpacing: 2, color: Theme.of(context).colorScheme.onBackground),
                         ))),
               ),
               Row(

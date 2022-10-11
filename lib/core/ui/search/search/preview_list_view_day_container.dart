@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tumble/core/models/api_models/schedule_model.dart';
+import 'package:tumble/core/models/backend_models/schedule_model.dart';
 import 'package:tumble/core/ui/schedule/event_modal.dart';
 import 'package:tumble/core/ui/schedule/tumble_list_view/tumble_list_view_schedule_card.dart';
 import 'package:tumble/core/ui/search/cubit/search_page_cubit.dart';

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:syncfusion_localizations/syncfusion_localizations.dart';
-import 'package:tumble/core/api/work_manager/background_task.dart';
+import 'package:tumble/core/api/backend/initial/background_task.dart';
 import 'package:tumble/core/navigation/app_navigator.dart';
 import 'package:tumble/core/navigation/app_navigator_provider.dart';
 import 'package:tumble/core/navigation/navigation_route_labels.dart';

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
-import 'package:tumble/core/models/api_models/schedule_model.dart';
+import 'package:tumble/core/models/backend_models/schedule_model.dart';
 import 'package:tumble/core/ui/app_switch/cubit/app_switch_cubit.dart';
 
 Future<EventsDataSource> getCalendarDataSource(List<Day> days, AppSwitchCubit cubit) async {
