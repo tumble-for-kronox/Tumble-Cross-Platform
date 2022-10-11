@@ -114,7 +114,7 @@ class _UserAccountInfo extends State<UserAccountInfo> {
                       const SizedBox(
                         height: 40,
                       ),
-                      _sectionDivider(context, S.authorizedPage.userOptionsTitle(), CupertinoIcons.settings),
+                      _sectionDivider(context, S.authorizedPage.userOptionsTitle(), CupertinoIcons.gear),
                       const SizedBox(
                         height: 10,
                       ),
@@ -125,7 +125,7 @@ class _UserAccountInfo extends State<UserAccountInfo> {
                       const SizedBox(
                         height: 40,
                       ),
-                      _sectionDivider(context, S.authorizedPage.userBookingsTitle(), CupertinoIcons.house),
+                      _sectionDivider(context, S.authorizedPage.userBookingsTitle(), Icons.other_houses_outlined),
                       const SizedBox(
                         height: 10,
                       ),

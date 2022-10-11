@@ -44,7 +44,7 @@ class _TumbleSearchPageState extends State<TumbleSearchPage> {
                                 Container(
                                   padding: const EdgeInsets.only(left: 25, bottom: 10),
                                   child: Text(
-                                    '${state.programList!.length} results',
+                                    S.searchPage.results(state.programList!.length),
                                     style: TextStyle(
                                         fontSize: 15, color: Theme.of(context).colorScheme.onSurface.withOpacity(.8)),
                                   ),

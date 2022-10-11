@@ -225,8 +225,8 @@ Widget _form(BuildContext context, String school) {
                   if (state.status == AuthStatus.ERROR)
                     Container(
                       padding: const EdgeInsets.only(top: 40),
-                      child: const Text(
-                        'Something went wrong!\nTry again later',
+                      child: Text(
+                        state.errorMessage!,
                         textAlign: TextAlign.center,
                         style: TextStyle(color: Colors.red),
                       ),

@@ -2,6 +2,17 @@
     "searchBarUnfocusedPlaceholder": "Search schedules",
     "searchBarFocusedPlaceholder": "Code, name, teacher",
     "searchPageTitle": "Search",
+    "searchPageToScheduleViewButton": "View your schedules",
+    "searchPageResults": "{numOfResults} results",
+    "@searchPageResults": {
+        "description": "Text describing the number of results found when searching",
+        "placeholders": {
+            "numOfResults": {
+                "type": "int",
+                "example": "10"
+            }
+        }
+    },
     "listViewTitle": "List",
     "listViewToTopButton": "TOP",
     "weekViewTitle": "Week",
@@ -341,7 +352,7 @@
     "runtimeErrorScheduleFetch": "No schedule found",
     "runtimeErrorTimeout": "Search timed out",
     "runtimeErrorEmptySchedule": "Schedule is empty",
-    "runtimeErrorLogin": "Failed to sign in",
+    "runtimeErrorLogin": "Failed to sign in, check your username and password",
     "runtimeErrorUnknown": "Something went wrong, please try again",
     "runtimeErrorAuthentication": "Authentication failed, please try signing in again",
     "runtimeErrorLoginSuccess": "Successfully signed in",

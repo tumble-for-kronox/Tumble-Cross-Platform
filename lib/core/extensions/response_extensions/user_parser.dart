@@ -11,7 +11,7 @@ extension UserResponseParsing on Response {
     if (statusCode == 200) {
       return UserResponse.authorized(kronoxUserModelFromJson(jsonEncode(data)));
     } else if (statusCode == 401) {
-      return UserResponse.error(RuntimeErrorType.loginError());
+      return UserResponse.unauthorized(RuntimeErrorType.loginError());
     }
     return UserResponse.error(RuntimeErrorType.unknownError());
   }
