@@ -2,6 +2,17 @@
     "searchBarUnfocusedPlaceholder": "Search schedules",
     "searchBarFocusedPlaceholder": "Code, name, teacher",
     "searchPageTitle": "Search",
+    "searchPageToScheduleViewButton": "View your schedules",
+    "searchPageResults": "{numOfResults} results",
+    "@searchPageResults": {
+        "description": "Text describing the number of results found when searching",
+        "placeholders": {
+            "numOfResults": {
+                "type": "int",
+                "example": "10"
+            }
+        }
+    },
     "listViewTitle": "List",
     "listViewToTopButton": "TOP",
     "weekViewTitle": "Week",

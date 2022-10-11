@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tumble/core/models/backend_models/program_model.dart';
 import 'package:tumble/core/ui/bottom_nav_bar/cubit/bottom_nav_cubit.dart';
+import 'package:tumble/core/ui/data/string_constants.dart';
 import 'package:tumble/core/ui/init_cubit/init_cubit.dart';
 import 'package:tumble/core/ui/schedule/no_schedule.dart';
 import 'package:tumble/core/ui/search/cubit/search_page_cubit.dart';
@@ -44,7 +45,7 @@ class _TumbleSearchPageState extends State<TumbleSearchPage> {
                                 Container(
                                   padding: const EdgeInsets.only(left: 25, bottom: 10),
                                   child: Text(
-                                    '${state.programList!.length} results',
+                                    S.searchPage.results(state.programList!.length),
                                     style: TextStyle(
                                         fontSize: 15, color: Theme.of(context).colorScheme.onSurface.withOpacity(.8)),
                                   ),
