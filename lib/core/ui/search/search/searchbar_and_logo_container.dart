@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tumble/core/ui/bottom_nav_bar/cubit/bottom_nav_cubit.dart';
 import 'package:tumble/core/ui/bottom_nav_bar/data/nav_bar_items.dart';
 import 'package:tumble/core/ui/app_switch/cubit/app_switch_cubit.dart';
+import 'package:tumble/core/ui/data/string_constants.dart';
 import 'package:tumble/core/ui/search/cubit/search_page_cubit.dart';
 import 'package:tumble/core/ui/search/search/schedule_search_bar.dart';
 import 'package:tumble/core/ui/search/search/search_page_slideable_logo.dart';
@@ -66,7 +67,7 @@ class _SearchBarAndLogoContainerState extends State<SearchBarAndLogoContainer> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  'View your schedules',
+                                  S.searchPage.toScheduleView(),
                                   style: TextStyle(
                                     color: Theme.of(context).colorScheme.onPrimary.withOpacity(.9),
                                     fontSize: 14,

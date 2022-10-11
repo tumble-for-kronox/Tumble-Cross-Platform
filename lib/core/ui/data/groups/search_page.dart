@@ -7,4 +7,6 @@ class SearchPageStrings extends StringConstantGroup {
   String title() => localizedStrings.searchPageTitle;
   String searchBarUnfocusedPlaceholder() => localizedStrings.searchBarUnfocusedPlaceholder;
   String searchBarFocusedPlaceholder() => localizedStrings.searchBarFocusedPlaceholder;
+  String toScheduleView() => localizedStrings.searchPageToScheduleViewButton;
+  String results(int numOfResults) => localizedStrings.searchPageResults(numOfResults);
 }
