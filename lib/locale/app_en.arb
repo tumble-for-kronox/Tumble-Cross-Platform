@@ -340,7 +340,7 @@
     "runtimeErrorScheduleFetch": "No schedule found",
     "runtimeErrorTimeout": "Search timed out",
     "runtimeErrorEmptySchedule": "Schedule is empty",
-    "runtimeErrorLogin": "Failed to sign in",
+    "runtimeErrorLogin": "Failed to sign in, check your username and password",
     "runtimeErrorUnknown": "Something went wrong, please try again",
     "runtimeErrorAuthentication": "Authentication failed, please try signing in again",
     "runtimeErrorLoginSuccess": "Successfully signed in",

@@ -78,19 +78,22 @@ class AuthCubit extends Cubit<AuthState> {
     emit(state.copyWith(status: AuthStatus.LOADING));
     UserResponse userRes = await _userRepo.userLogin(username, password, school);
 
-    state.usernameController.clear();
     state.passwordController.clear();
     switch (userRes.status) {
       case ApiUserResponseStatus.AUTHORIZED:
         storeUserCreds((userRes.data! as KronoxUserModel).refreshToken);
         getIt<PreferenceRepository>().setSchool(school);
         emit(state.copyWith(loginSuccess: true));
+        state.usernameController.clear();
         await Future.delayed(const Duration(seconds: 2));
         emit(state.copyWith(status: AuthStatus.AUTHENTICATED, userSession: userRes.data!));
-
+        break;
+      case ApiUserResponseStatus.UNAUTHORIZED:
+        log("UNAUTHORIZED: ${userRes.data}");
+        emit(state.copyWith(status: AuthStatus.ERROR, errorMessage: userRes.data));
         break;
       case ApiUserResponseStatus.ERROR:
-        emit(state.copyWith(status: AuthStatus.ERROR, errorMessage: userRes.message));
+        emit(state.copyWith(status: AuthStatus.ERROR, errorMessage: userRes.data));
         break;
       default:
     }
