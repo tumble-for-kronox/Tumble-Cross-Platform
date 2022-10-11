@@ -38,7 +38,6 @@ class _UserAccountInfo extends State<UserAccountInfo> {
                   child: Column(
                     children: [
                       Container(
-                        height: 120,
                         decoration: BoxDecoration(
                           boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 2, offset: Offset(0, 1))],
                           color: Theme.of(context).colorScheme.surface,
@@ -114,7 +113,7 @@ class _UserAccountInfo extends State<UserAccountInfo> {
                       const SizedBox(
                         height: 50,
                       ),
-                      _sectionDivider(context, S.authorizedPage.userOptionsTitle(), CupertinoIcons.settings),
+                      _sectionDivider(context, S.authorizedPage.userOptionsTitle(), CupertinoIcons.gear),
                       const SizedBox(
                         height: 10,
                       ),
@@ -125,7 +124,7 @@ class _UserAccountInfo extends State<UserAccountInfo> {
                       const SizedBox(
                         height: 40,
                       ),
-                      _sectionDivider(context, S.authorizedPage.userBookingsTitle(), CupertinoIcons.house),
+                      _sectionDivider(context, S.authorizedPage.userBookingsTitle(), Icons.other_houses_outlined),
                       const SizedBox(
                         height: 10,
                       ),
