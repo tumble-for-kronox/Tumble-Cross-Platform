@@ -49,7 +49,7 @@ class Routes {
         pageClass = const TumbleSearchPage();
         break;
       case NavigationRouteLabels.tumbleListView:
-        pageClass = const TumbleListView();
+        pageClass = TumbleListView();
         break;
       case NavigationRouteLabels.tumbleWeekView:
         pageClass = const TumbleWeekView();

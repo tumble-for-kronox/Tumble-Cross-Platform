@@ -25,6 +25,7 @@ import 'package:tumble/core/models/ui_models/week_model.dart';
 import 'package:tumble/core/shared/preference_types.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
 import 'package:tumble/core/ui/scaffold_message.dart';
+import 'package:tumble/core/ui/search/search/preview_list_view_day_container.dart';
 
 part 'search_page_state.dart';
 
@@ -260,6 +261,17 @@ class SearchPageCubit extends Cubit<SearchPageState> {
 
   void displayPreview() {
     emit(state.copyWith(searchPageStatus: SearchPageStatus.DISPLAY_PREVIEW));
+  }
+
+  List<PreviewListViewDayContainer> getParsedPreviewDays() {
+    return state.previewListOfDays!
+        .where(
+            (day) => day.events.isNotEmpty && day.isoString.isAfter(DateTime.now().subtract(const Duration(days: 1))))
+        .map((day) => PreviewListViewDayContainer(
+              day: day,
+              searchPageCubit: this,
+            ))
+        .toList();
   }
 
   bool scheduleInBookmarks() => _preferenceService.bookmarksContainSchedule(state.previewCurrentScheduleId!);

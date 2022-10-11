@@ -22,6 +22,7 @@ import 'package:tumble/core/shared/preference_types.dart';
 import 'package:tumble/core/api/dependency_injection/get_it.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
 import 'package:tumble/core/ui/scaffold_message.dart';
+import 'package:tumble/core/ui/schedule/tumble_list_view/tumble_list_view_day_container.dart';
 
 part 'app_switch_state.dart';
 
@@ -281,5 +282,16 @@ class AppSwitchCubit extends Cubit<AppSwitchState> {
       }
     }
     await getCachedSchedules();
+  }
+
+  List<TumbleListViewDayContainer> getParsedDayList() {
+    return state.listOfDays!
+        .where(
+            (day) => day.events.isNotEmpty && day.isoString.isAfter(DateTime.now().subtract(const Duration(days: 1))))
+        .map((day) => TumbleListViewDayContainer(
+              day: day,
+              mainAppCubit: this,
+            ))
+        .toList();
   }
 }
