@@ -86,7 +86,7 @@ class _InitializedNavigationRootPageState extends State<InitializedNavigationRoo
                       case NavbarItem.SEARCH:
                         return const TumbleSearchPage();
                       case NavbarItem.LIST:
-                        return const TumbleListView();
+                        return TumbleListView();
                       case NavbarItem.WEEK:
                         return const TumbleWeekView();
                       case NavbarItem.CALENDAR:

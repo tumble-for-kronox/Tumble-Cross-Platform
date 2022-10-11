@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tumble/core/api/backend/response_types/runtime_error_type.dart';
@@ -5,14 +7,31 @@ import 'package:tumble/core/navigation/app_navigator.dart';
 import 'package:tumble/core/ui/bottom_nav_bar/cubit/bottom_nav_cubit.dart';
 import 'package:tumble/core/ui/bottom_nav_bar/data/nav_bar_items.dart';
 import 'package:tumble/core/ui/app_switch/cubit/app_switch_cubit.dart';
-import 'package:tumble/core/ui/schedule/no_schedule.dart';
+import 'package:tumble/core/ui/data/string_constants.dart';
+import 'package:tumble/core/ui/schedule/dynamic_error_page.dart';
 import 'package:tumble/core/ui/schedule/tumble_list_view/data/custom_alerts.dart';
 import 'package:tumble/core/ui/schedule/tumble_list_view/data/to_top_button.dart';
 import 'package:tumble/core/ui/tumble_loading.dart';
 import 'tumble_list_view_day_container.dart';
 
 class TumbleListView extends StatelessWidget {
-  const TumbleListView({Key? key}) : super(key: key);
+  TumbleListView({Key? key}) : super(key: key);
+
+  final GlobalKey<AnimatedListState> _animatedListKey = GlobalKey();
+  List<TumbleListViewDayContainer> _listItems = [];
+
+  void _buildItems(List<TumbleListViewDayContainer> fetchedList) {
+    _listItems = [];
+    var future = Future(() {});
+    for (var i = 0; i < fetchedList.length; i++) {
+      future = future.then((_) {
+        return Future.delayed(const Duration(milliseconds: 10), () {
+          _listItems.add(fetchedList[i]);
+          _animatedListKey.currentState?.insertItem(_listItems.length - 1, duration: const Duration(milliseconds: 300));
+        });
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,14 +40,15 @@ class TumbleListView extends StatelessWidget {
       builder: (context, state) {
         switch (state.status) {
           case AppScheduleViewStatus.INITIAL:
-            return NoScheduleAvailable(
-              cupertinoAlertDialog: CustomAlertDialog.noBookMarkedSchedules(
-                  context, () => context.read<MainAppNavigationCubit>().getNavBarItem(NavbarItem.SEARCH), navigator),
+            return DynamicErrorPage(
+              toSearch: true,
+              description: S.popUps.scheduleHelpFirstLine(),
               errorType: RuntimeErrorType.noCachedSchedule(),
             );
           case AppScheduleViewStatus.LOADING:
             return const TumbleLoading();
           case AppScheduleViewStatus.POPULATED_VIEW:
+            _buildItems(context.read<AppSwitchCubit>().getParsedDayList());
             return Stack(
               children: [
                 RefreshIndicator(
@@ -36,18 +56,20 @@ class TumbleListView extends StatelessWidget {
                     context.read<AppSwitchCubit>().setLoading();
                     await context.read<AppSwitchCubit>().forceRefreshAll();
                   },
-                  child: SingleChildScrollView(
+                  child: AnimatedList(
                     controller: context.read<AppSwitchCubit>().controller,
-                    child: Column(
-                        children: state.listOfDays!
-                            .where((day) =>
-                                day.events.isNotEmpty &&
-                                day.isoString.isAfter(DateTime.now().subtract(const Duration(days: 1))))
-                            .map((day) => TumbleListViewDayContainer(
-                                  day: day,
-                                  mainAppCubit: BlocProvider.of<AppSwitchCubit>(context),
-                                ))
-                            .toList()),
+                    key: _animatedListKey,
+                    initialItemCount: _listItems.length,
+                    itemBuilder: (BuildContext context, int index, Animation<double> animation) {
+                      return FadeTransition(
+                        opacity: animation,
+                        child: SlideTransition(
+                          position:
+                              Tween<Offset>(begin: const Offset(1, 0), end: const Offset(0, 0)).animate(animation),
+                          child: _listItems[index],
+                        ),
+                      );
+                    },
                   ),
                 ),
                 AnimatedPositioned(
@@ -59,24 +81,24 @@ class TumbleListView extends StatelessWidget {
               ],
             );
           case AppScheduleViewStatus.FETCH_ERROR:
-            return NoScheduleAvailable(
+            return DynamicErrorPage(
+              toSearch: false,
               errorType: RuntimeErrorType.scheduleFetchError(),
-              cupertinoAlertDialog: CustomAlertDialog.scheduleCacheFetchError(
-                  context, () => context.read<MainAppNavigationCubit>().getNavBarItem(NavbarItem.SEARCH), navigator),
+              description: S.popUps.scheduleIsEmptyTitle(),
             );
 
           case AppScheduleViewStatus.EMPTY_SCHEDULE:
-            return NoScheduleAvailable(
+            return DynamicErrorPage(
+              toSearch: false,
               errorType: RuntimeErrorType.emptyScheduleError(),
-              cupertinoAlertDialog: CustomAlertDialog.previewContainsNoViews(
-                  context, () => context.read<MainAppNavigationCubit>().getNavBarItem(NavbarItem.SEARCH), navigator),
+              description: S.popUps.scheduleIsEmptyBody(),
             );
 
           case AppScheduleViewStatus.NO_VIEW:
-            return NoScheduleAvailable(
+            return DynamicErrorPage(
+              toSearch: true,
               errorType: RuntimeErrorType.noBookmarks(),
-              cupertinoAlertDialog: CustomAlertDialog.noBookMarkedSchedules(
-                  context, () => context.read<MainAppNavigationCubit>().getNavBarItem(NavbarItem.SEARCH), navigator),
+              description: S.popUps.scheduleHelpFirstLine(),
             );
         }
       },

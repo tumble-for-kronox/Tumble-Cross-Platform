@@ -5,7 +5,8 @@ import 'package:tumble/core/navigation/app_navigator.dart';
 import 'package:tumble/core/ui/bottom_nav_bar/cubit/bottom_nav_cubit.dart';
 import 'package:tumble/core/ui/bottom_nav_bar/data/nav_bar_items.dart';
 import 'package:tumble/core/ui/app_switch/cubit/app_switch_cubit.dart';
-import 'package:tumble/core/ui/schedule/no_schedule.dart';
+import 'package:tumble/core/ui/data/string_constants.dart';
+import 'package:tumble/core/ui/schedule/dynamic_error_page.dart';
 import 'package:tumble/core/ui/schedule/tumble_list_view/data/custom_alerts.dart';
 import 'package:tumble/core/ui/schedule/tumble_week_view/week_list_view.dart';
 import 'package:tumble/core/ui/tumble_loading.dart';
@@ -25,10 +26,10 @@ class _TumbleWeekViewState extends State<TumbleWeekView> {
       builder: (context, state) {
         switch (state.status) {
           case AppScheduleViewStatus.INITIAL:
-            return NoScheduleAvailable(
+            return DynamicErrorPage(
+              toSearch: true,
               errorType: RuntimeErrorType.noCachedSchedule(),
-              cupertinoAlertDialog: CustomAlertDialog.noBookMarkedSchedules(
-                  context, () => context.read<MainAppNavigationCubit>().getNavBarItem(NavbarItem.SEARCH), navigator),
+              description: S.popUps.scheduleHelpFirstLine(),
             );
           case AppScheduleViewStatus.LOADING:
             return const TumbleLoading();
@@ -47,22 +48,19 @@ class _TumbleWeekViewState extends State<TumbleWeekView> {
                       }))
             ]);
           case AppScheduleViewStatus.FETCH_ERROR:
-            return NoScheduleAvailable(
-              errorType: state.message!,
-              cupertinoAlertDialog: CustomAlertDialog.scheduleCacheFetchError(
-                  context, () => context.read<MainAppNavigationCubit>().getNavBarItem(NavbarItem.SEARCH), navigator),
-            );
+            return DynamicErrorPage(
+                toSearch: false, errorType: state.message!, description: S.popUps.scheduleFetchError());
           case AppScheduleViewStatus.EMPTY_SCHEDULE:
-            return NoScheduleAvailable(
+            return DynamicErrorPage(
+              toSearch: false,
               errorType: RuntimeErrorType.emptyScheduleError(),
-              cupertinoAlertDialog: CustomAlertDialog.previewContainsNoViews(
-                  context, () => context.read<MainAppNavigationCubit>().getNavBarItem(NavbarItem.SEARCH), navigator),
+              description: S.popUps.scheduleIsEmptyBody(),
             );
           case AppScheduleViewStatus.NO_VIEW:
-            return NoScheduleAvailable(
+            return DynamicErrorPage(
+              toSearch: true,
               errorType: RuntimeErrorType.noBookmarks(),
-              cupertinoAlertDialog: CustomAlertDialog.noBookMarkedSchedules(
-                  context, () => context.read<MainAppNavigationCubit>().getNavBarItem(NavbarItem.SEARCH), navigator),
+              description: S.popUps.scheduleHelpFirstLine(),
             );
         }
       },

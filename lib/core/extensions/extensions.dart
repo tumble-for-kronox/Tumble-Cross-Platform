@@ -41,7 +41,7 @@ extension StringParse on String {
     if (length > 0) {
       return this[0].toUpperCase() + substring(1).toLowerCase();
     }
-    return "(Titlte is missing)";
+    return "(${S.runtimeError.missingTitle()})";
   }
 
   String humanize() {

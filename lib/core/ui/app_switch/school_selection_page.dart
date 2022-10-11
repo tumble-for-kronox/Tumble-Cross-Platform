@@ -33,9 +33,11 @@ class _SchoolSelectionPageState extends State<SchoolSelectionPage> {
             color: Theme.of(context).colorScheme.background,
             child: SingleChildScrollView(
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(top: 50, right: 20, left: 20),
+                    padding: const EdgeInsets.only(top: 80, right: 20, left: 20, bottom: 20),
                     child: Text(
                       S.settingsPage.chooseUniversity(),
                       style: TextStyle(

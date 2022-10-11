@@ -4,7 +4,7 @@ import 'package:tumble/core/models/backend_models/program_model.dart';
 import 'package:tumble/core/ui/bottom_nav_bar/cubit/bottom_nav_cubit.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
 import 'package:tumble/core/ui/init_cubit/init_cubit.dart';
-import 'package:tumble/core/ui/schedule/no_schedule.dart';
+import 'package:tumble/core/ui/schedule/dynamic_error_page.dart';
 import 'package:tumble/core/ui/search/cubit/search_page_cubit.dart';
 import 'package:tumble/core/ui/search/search/program_card.dart';
 import 'package:tumble/core/ui/search/search/schedule_preview.dart';
@@ -26,9 +26,8 @@ class _TumbleSearchPageState extends State<TumbleSearchPage> {
       children: [
         Container(
           margin: EdgeInsets.only(top: MediaQuery.of(context).viewPadding.top + 20),
-          alignment: Alignment.center,
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             mainAxisSize: MainAxisSize.max,
             children: [
@@ -62,13 +61,24 @@ class _TumbleSearchPageState extends State<TumbleSearchPage> {
                           case SearchPageStatus.LOADING:
                             return const TumbleLoading();
                           case SearchPageStatus.ERROR:
-                            return SearchErrorMessage(
-                              errorType: state.errorMessage!,
+                            return Container(
+                              padding: const EdgeInsets.only(top: 40, left: 7),
+                              child: DynamicErrorPage(
+                                toSearch: false,
+                                errorType: state.errorMessage!,
+                                description: S.popUps.missingProgramRequestDescription(),
+                              ),
                             );
                           case SearchPageStatus.INITIAL:
                             return Container();
                           case SearchPageStatus.NO_SCHEDULES:
-                            return NoScheduleAvailable(errorType: state.errorMessage!, cupertinoAlertDialog: null);
+                            return Container(
+                              padding: const EdgeInsets.only(top: 40),
+                              child: DynamicErrorPage(
+                                  toSearch: false,
+                                  errorType: state.errorMessage!,
+                                  description: S.popUps.scheduleIsEmptyBody()),
+                            );
                           case SearchPageStatus.DISPLAY_PREVIEW:
                             return SchedulePreview(
                               toggleBookmark: (value) =>

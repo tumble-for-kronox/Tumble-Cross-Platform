@@ -22,4 +22,5 @@ class RuntimeErrorStrings extends StringConstantGroup {
   String maxResourcesBooked() => localizedStrings.runtimeErrorMaxResourcesBooked;
   String resourceBookCollision() => localizedStrings.runtimeErrorResourceBookCollision;
   String confirmBookingFailed() => localizedStrings.runtimeErrorConfirmBookingFailed;
+  String missingTitle() => localizedStrings.runtimeErrorMissingTitle;
 }
