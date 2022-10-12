@@ -17,6 +17,9 @@ class ToTopButton extends StatelessWidget {
           boxShadow: const <BoxShadow>[BoxShadow(color: Colors.black26, blurRadius: 3, offset: Offset(0, 2))],
         ),
         child: MaterialButton(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(5),
+          ),
           onPressed: scrollToTop,
           visualDensity: VisualDensity.compact,
           splashColor: Colors.grey.shade200,

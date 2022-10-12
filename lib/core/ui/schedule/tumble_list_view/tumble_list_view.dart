@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:path/path.dart';
 import 'package:tumble/core/api/backend/response_types/runtime_error_type.dart';
 import 'package:tumble/core/navigation/app_navigator.dart';
 import 'package:tumble/core/ui/bottom_nav_bar/cubit/bottom_nav_cubit.dart';
@@ -51,7 +52,31 @@ class _TumbleListViewState extends State<TumbleListView> with TickerProviderStat
                     child: ListView.builder(
                         controller: context.read<AppSwitchCubit>().controller,
                         itemCount: dayList.length,
-                        itemBuilder: (context, index) => TumbleListViewDayContainer(day: dayList[index]))),
+                        itemBuilder: (context, index) {
+                          if (index == 0 || dayList[index].isoString.year != dayList[index - 1].isoString.year) {
+                            return Stack(
+                              children: [
+                                Align(
+                                  alignment: Alignment.topRight,
+                                  child: Text(
+                                    dayList[index].isoString.year.toString(),
+                                    style: TextStyle(
+                                      color: Theme.of(context).colorScheme.onBackground.withOpacity(0.3),
+                                      fontSize: 110,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 40),
+                                  child: TumbleListViewDayContainer(day: dayList[index]),
+                                )
+                              ],
+                            );
+                          }
+
+                          return TumbleListViewDayContainer(day: dayList[index]);
+                        })),
                 AnimatedPositioned(
                   bottom: 30,
                   right: context.read<AppSwitchCubit>().toTopButtonVisible ? 35 : -60,
