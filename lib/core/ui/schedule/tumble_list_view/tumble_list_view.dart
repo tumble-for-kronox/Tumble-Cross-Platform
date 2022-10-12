@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:path/path.dart';
 import 'package:tumble/core/api/backend/response_types/runtime_error_type.dart';
 import 'package:tumble/core/navigation/app_navigator.dart';
 import 'package:tumble/core/ui/bottom_nav_bar/cubit/bottom_nav_cubit.dart';
@@ -41,16 +42,45 @@ class TumbleListView extends StatelessWidget {
                   },
                   child: SingleChildScrollView(
                     controller: context.read<AppSwitchCubit>().controller,
-                    child: Column(
-                        children: state.listOfDays!
-                            .where((day) =>
-                                day.events.isNotEmpty &&
-                                day.isoString.isAfter(DateTime.now().subtract(const Duration(days: 1))))
-                            .map((day) => TumbleListViewDayContainer(
+                    child: Column(children: () {
+                      int currentYear = 0;
+                      return state.listOfDays!
+                          .where((day) =>
+                              day.events.isNotEmpty &&
+                              day.isoString.isAfter(DateTime.now().subtract(const Duration(days: 1))))
+                          .map((day) {
+                        if (day.isoString.year != currentYear) {
+                          currentYear = day.isoString.year;
+                          return Stack(
+                            children: [
+                              Align(
+                                alignment: Alignment.topRight,
+                                child: Text(
+                                  currentYear.toString(),
+                                  style: TextStyle(
+                                    color: Theme.of(context).colorScheme.onBackground.withOpacity(0.3),
+                                    fontSize: 110,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 40),
+                                child: TumbleListViewDayContainer(
                                   day: day,
                                   mainAppCubit: BlocProvider.of<AppSwitchCubit>(context),
-                                ))
-                            .toList()),
+                                ),
+                              )
+                            ],
+                          );
+                        }
+
+                        return TumbleListViewDayContainer(
+                          day: day,
+                          mainAppCubit: BlocProvider.of<AppSwitchCubit>(context),
+                        );
+                      }).toList();
+                    }()),
                   ),
                 ),
                 AnimatedPositioned(
