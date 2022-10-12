@@ -212,7 +212,8 @@ Widget _form(BuildContext context, String school) {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Column(
+              AutofillGroup(
+                  child: Column(
                 children: [
                   _formUsernameField(
                     context,
@@ -232,7 +233,7 @@ Widget _form(BuildContext context, String school) {
                       ),
                     )
                 ],
-              ),
+              )),
               _formSubmitButton(context, school),
             ],
           ),
@@ -284,6 +285,7 @@ Widget _formUsernameField(BuildContext context, String school) {
         return TextFormField(
           focusNode: context.read<AuthCubit>().focusNodeUsername,
           autocorrect: false,
+          autofillHints: const [AutofillHints.email],
           style: const TextStyle(fontSize: 14),
           controller: state.usernameController,
           decoration: InputDecoration(
@@ -329,6 +331,7 @@ Widget _formPasswordField(BuildContext context, String school) {
         return TextFormField(
           focusNode: context.read<AuthCubit>().focusNodePassword,
           autocorrect: false,
+          autofillHints: const [AutofillHints.password],
           style: const TextStyle(fontSize: 14),
           controller: state.passwordController,
           obscureText: state.passwordHidden,

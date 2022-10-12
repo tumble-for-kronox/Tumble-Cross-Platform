@@ -7,10 +7,11 @@ import 'package:tumble/core/ui/schedule/tumble_week_view/week_number.dart';
 class TumbleWeekPageContainer extends StatelessWidget {
   final Week week;
   final AppSwitchCubit cubit;
+  late int _currentYear;
 
-  const TumbleWeekPageContainer(
-      {Key? key, required this.week, required this.cubit})
-      : super(key: key);
+  TumbleWeekPageContainer({Key? key, required this.week, required this.cubit}) : super(key: key) {
+    _currentYear = week.days.first.isoString.year;
+  }
 
   @override
   Widget build(BuildContext context) {
