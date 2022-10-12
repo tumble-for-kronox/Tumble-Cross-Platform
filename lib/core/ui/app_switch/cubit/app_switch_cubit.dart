@@ -290,15 +290,4 @@ class AppSwitchCubit extends Cubit<AppSwitchState> {
     }
     await getCachedSchedules();
   }
-
-  List<TumbleListViewDayContainer> getParsedDayList() {
-    return state.listOfDays!
-        .where(
-            (day) => day.events.isNotEmpty && day.isoString.isAfter(DateTime.now().subtract(const Duration(days: 1))))
-        .map((day) => TumbleListViewDayContainer(
-              day: day,
-              mainAppCubit: this,
-            ))
-        .toList();
-  }
 }
