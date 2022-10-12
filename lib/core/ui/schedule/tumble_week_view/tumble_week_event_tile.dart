@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 import 'package:tumble/core/extensions/extensions.dart';
@@ -8,12 +9,11 @@ import 'package:tumble/core/ui/schedule/event_modal.dart';
 
 class TumbleWeekEventTile extends StatelessWidget {
   final Event event;
-  final AppSwitchCubit mainAppCubit;
-  const TumbleWeekEventTile({Key? key, required this.event, required this.mainAppCubit}) : super(key: key);
+  const TumbleWeekEventTile({Key? key, required this.event}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final courseColor = mainAppCubit.getColorForCourse(event);
+    final courseColor = context.read<AppSwitchCubit>().getColorForCourse(event);
     return Container(
       height: 23,
       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
@@ -40,7 +40,7 @@ class TumbleWeekEventTile extends StatelessWidget {
           child: MaterialButton(
             padding: const EdgeInsets.all(0),
             onPressed: () => TumbleEventModal.showBookmarkEventModal(
-                context, event, mainAppCubit.getColorForCourse(event), mainAppCubit),
+                context, event, context.read<AppSwitchCubit>().getColorForCourse(event)),
             child: Row(
               mainAxisSize: MainAxisSize.max,
               children: [

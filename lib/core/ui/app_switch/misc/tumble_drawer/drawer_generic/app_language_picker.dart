@@ -6,12 +6,13 @@ import 'package:tumble/core/ui/schedule/cancel_button.dart';
 
 typedef SetNotificationTime = void Function(int time);
 
-class AppLanguagePicker extends StatelessWidget {
+class ApplicationLanguagePicker extends StatelessWidget {
   final Map<String, Locale?> parameterMap;
   final Function(Locale?) setLocale;
   final Locale? currentLocale;
 
-  const AppLanguagePicker({Key? key, required this.parameterMap, required this.setLocale, required this.currentLocale})
+  const ApplicationLanguagePicker(
+      {Key? key, required this.parameterMap, required this.setLocale, required this.currentLocale})
       : super(key: key);
 
   @override
@@ -23,7 +24,7 @@ class AppLanguagePicker extends StatelessWidget {
       children: [
         Container(
           height: 290,
-          margin: const EdgeInsets.only(bottom: 25, left: 12, right: 12),
+          margin: const EdgeInsets.only(bottom: 20, left: 12, right: 12),
           decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.surface,
             borderRadius: BorderRadius.circular(20),
@@ -38,15 +39,23 @@ class AppLanguagePicker extends StatelessWidget {
                 child: SingleChildScrollView(
                   child: Column(
                       children: (parameterMap.keys)
-                          .map((key) => ListTile(
-                              leading:
-                                  parameterMap[key] == currentLocale ? const Icon(CupertinoIcons.check_mark) : null,
-                              shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
-                              title: Text(
-                                key,
-                                style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
-                              ),
-                              onTap: () => setLocale(parameterMap[key])))
+                          .map((key) => Container(
+                                padding: const EdgeInsets.only(top: 7),
+                                child: ListTile(
+                                    trailing: parameterMap[key] == currentLocale
+                                        ? const Icon(
+                                            CupertinoIcons.smallcircle_fill_circle,
+                                            size: 20,
+                                          )
+                                        : null,
+                                    shape: const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(Radius.circular(20))),
+                                    title: Text(
+                                      key,
+                                      style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+                                    ),
+                                    onTap: () => setLocale(parameterMap[key])),
+                              ))
                           .toList()),
                 ),
               )),

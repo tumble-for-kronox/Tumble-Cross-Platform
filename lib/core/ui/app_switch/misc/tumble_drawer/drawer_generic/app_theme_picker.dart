@@ -1,5 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tumble/core/extensions/extensions.dart';
+import 'package:tumble/core/ui/app_switch/misc/tumble_drawer/cubit/drawer_state.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
 import 'package:tumble/core/ui/app_switch/misc/tumble_drag_pill.dart';
 import 'package:tumble/core/ui/app_switch/misc/tumble_drawer/drawer_generic/data/default_views_map.dart';
@@ -8,10 +11,11 @@ import 'package:tumble/core/ui/schedule/cancel_button.dart';
 
 typedef SetTheme = void Function(String themeType);
 
-class AppThemePicker extends StatelessWidget {
+class ApplicationThemePicker extends StatelessWidget {
   final SetTheme setTheme;
+  final DrawerCubit cubit;
 
-  const AppThemePicker({Key? key, required this.setTheme}) : super(key: key);
+  const ApplicationThemePicker({Key? key, required this.setTheme, required this.cubit}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,8 +25,8 @@ class AppThemePicker extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         Container(
-          height: 180,
-          margin: const EdgeInsets.only(bottom: 25, left: 12, right: 12),
+          height: 210,
+          margin: const EdgeInsets.only(bottom: 20, left: 12, right: 12),
           decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.surface,
             borderRadius: BorderRadius.circular(20),
@@ -32,33 +36,33 @@ class AppThemePicker extends StatelessWidget {
                 child: Card(
                     elevation: 0,
                     color: Theme.of(context).colorScheme.surface,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0)),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
                     child: Column(
                         children: (IconAndTitleSet.themes.keys)
-                            .map((key) => ListTile(
-                                shape: const RoundedRectangleBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(20))),
-                                leading: IconAndTitleSet.themes[key],
-                                title: Text(
-                                  key,
-                                  style: TextStyle(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onBackground),
-                                ),
-                                onTap: () {
-                                  showScaffoldMessage(
-                                      context,
-                                      S.scaffoldMessages.changeTheme(
-                                          key.split(' ').first.toLowerCase()));
-                                  setTheme(key.split(' ').first.toLowerCase());
-                                }))
+                            .map((key) => Container(
+                                  padding: const EdgeInsets.only(top: 7),
+                                  child: ListTile(
+                                      shape: const RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.all(Radius.circular(20))),
+                                      leading: IconAndTitleSet.themes[key],
+                                      trailing: cubit.isCurrentTheme(key.split(" ")[0].toLowerCase())
+                                          ? const Icon(
+                                              CupertinoIcons.smallcircle_fill_circle,
+                                              size: 20,
+                                            )
+                                          : null,
+                                      title: Text(
+                                        key,
+                                        style: TextStyle(color: Theme.of(context).colorScheme.onBackground),
+                                      ),
+                                      onTap: () {
+                                        showScaffoldMessage(context,
+                                            S.scaffoldMessages.changeTheme(key.split(' ').first.toLowerCase()));
+                                        setTheme(key.split(' ').first.toLowerCase());
+                                      }),
+                                ))
                             .toList()))),
-            TumbleDragPill(
-                barColor:
-                    Theme.of(context).colorScheme.background.contrastColor())
+            TumbleDragPill(barColor: Theme.of(context).colorScheme.background.contrastColor())
           ]),
         ),
         const CancelButton()

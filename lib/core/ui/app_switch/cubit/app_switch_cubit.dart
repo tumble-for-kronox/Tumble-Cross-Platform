@@ -1,42 +1,37 @@
 import 'dart:developer' as dev;
 import 'dart:developer';
 import 'package:collection/collection.dart';
-import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tumble/core/api/backend/response_types/schedule_or_programme_response.dart';
 import 'package:tumble/core/api/preferences/repository/preference_repository.dart';
 import 'package:tumble/core/notifications/builders/notification_service_builder.dart';
 import 'package:tumble/core/api/backend/repository/cache_repository.dart';
 import 'package:tumble/core/api/database/repository/database_repository.dart';
 import 'package:tumble/core/extensions/extensions.dart';
-import 'package:tumble/core/models/backend_models/bookmarked_schedule_model.dart';
 import 'package:tumble/core/models/backend_models/schedule_model.dart';
 import 'package:tumble/core/models/ui_models/course_ui_model.dart';
 import 'package:tumble/core/models/ui_models/schedule_model_and_courses.dart';
 import 'package:tumble/core/models/ui_models/week_model.dart';
 import 'package:tumble/core/notifications/repository/notification_repository.dart';
-import 'package:tumble/core/shared/app_dependencies.dart';
-import 'package:tumble/core/shared/preference_types.dart';
 import 'package:tumble/core/api/dependency_injection/get_it.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
 import 'package:tumble/core/ui/scaffold_message.dart';
-import 'package:tumble/core/ui/schedule/tumble_list_view/tumble_list_view_day_container.dart';
 
 part 'app_switch_state.dart';
 
 class AppSwitchCubit extends Cubit<AppSwitchState> {
   AppSwitchCubit()
       : super(const AppSwitchState(
-            status: AppScheduleViewStatus.LOADING,
-            listOfDays: null,
-            listOfWeeks: null,
-            listViewToTopButtonVisible: false,
-            message: null,
-            scheduleModelAndCourses: null)) {
+          status: AppScheduleViewStatus.LOADING,
+          listOfDays: null,
+          listOfWeeks: null,
+          listViewToTopButtonVisible: false,
+          message: null,
+          scheduleModelAndCourses: null,
+        )) {
     _init();
   }
 
@@ -50,7 +45,8 @@ class AppSwitchCubit extends Cubit<AppSwitchState> {
   ScrollController get controller => _listViewScrollController;
   bool get hasBookMarkedSchedules => getIt<PreferenceRepository>().bookmarkIds!.isNotEmpty;
   bool get notificationCheck => getIt<PreferenceRepository>().allowedNotifications == null;
-  bool toTopButtonVisible() => _listViewScrollController.hasClients ? _listViewScrollController.offset >= 1000 : false;
+  bool get toTopButtonVisible =>
+      _listViewScrollController.hasClients ? _listViewScrollController.offset >= 1000 : false;
 
   Future<void> _init() async {
     dev.log(name: 'app_switch_cubit', 'Fetching cache ...');
@@ -68,6 +64,7 @@ class AppSwitchCubit extends Cubit<AppSwitchState> {
     final currentScheduleIds = _preferenceService.bookmarkIds;
     List<ScheduleModelAndCourses> listOfScheduleModelAndCourses = [];
     List<List<Day>> matrixListOfDays = [];
+    emit(state.copyWith(displayedListItems: [], listOfDays: []));
     if (currentScheduleIds != null) {
       for (String? scheduleId in currentScheduleIds) {
         final bool userHasBookmarks = _preferenceService.userHasBookmarks;
@@ -79,8 +76,8 @@ class AppSwitchCubit extends Cubit<AppSwitchState> {
             final ScheduleOrProgrammeResponse apiResponse = await _cacheAndInteractionService.findSchedule(scheduleId);
 
             switch (apiResponse.status) {
-              case ApiScheduleOrProgrammeStatus.FETCHED:
-              case ApiScheduleOrProgrammeStatus.CACHED:
+              case ScheduleOrProgrammeStatus.FETCHED:
+              case ScheduleOrProgrammeStatus.CACHED:
                 ScheduleModel currentScheduleModel = apiResponse.data;
                 if (currentScheduleModel.isNotPhonySchedule()) {
                   matrixListOfDays.add(currentScheduleModel.days);
@@ -89,11 +86,10 @@ class AppSwitchCubit extends Cubit<AppSwitchState> {
                       courses: await _databaseService.getCachedCoursesFromId(currentScheduleModel.id)));
                 }
                 break;
-              case ApiScheduleOrProgrammeStatus.ERROR:
+              case ScheduleOrProgrammeStatus.ERROR:
 
                 /// If an error occurs here, there is an underlying error in
-                /// communication with regards to communication, the cache is
-                /// broken, or the backend is down.
+                /// communication, the cache is broken, or the backend is down.
                 emit(state.copyWith(status: AppScheduleViewStatus.FETCH_ERROR));
                 dev.log(
                     name: 'app_switch_cubit',
@@ -108,8 +104,11 @@ class AppSwitchCubit extends Cubit<AppSwitchState> {
           emit(state.copyWith(status: AppScheduleViewStatus.NO_VIEW));
         }
       }
+      _setScheduleView(listOfScheduleModelAndCourses, matrixListOfDays);
     }
+  }
 
+  void _setScheduleView(List<ScheduleModelAndCourses> listOfScheduleModelAndCourses, List<List<Day>> matrixListOfDays) {
     if (listOfScheduleModelAndCourses.isNotEmpty) {
       final flattened = matrixListOfDays.expand((listOfDays) => listOfDays).toList();
       flattened.sort((prevDay, nextDay) => prevDay.isoString.compareTo(nextDay.isoString));
@@ -139,7 +138,7 @@ class AppSwitchCubit extends Cubit<AppSwitchState> {
     }
   }
 
-  setScrollController() {
+  setScrollController() async {
     if (_listViewScrollController.offset >= 1000) {
       emit(state.copyWith(listViewToTopButtonVisible: true));
     } else {
@@ -156,7 +155,6 @@ class AppSwitchCubit extends Cubit<AppSwitchState> {
   }
 
   Color getColorForCourse(Event event) {
-    log("COURSE COLOR ACCESSED");
     try {
       return Color(state.scheduleModelAndCourses!
           .expand((scheduleModelAndCourses) => scheduleModelAndCourses!.courses)
@@ -166,7 +164,7 @@ class AppSwitchCubit extends Cubit<AppSwitchState> {
       log('Attempted to find color for event, but it does not exist');
       return Colors.white;
     }
-  }
+  } // Thank fuck
 
   Future<bool> createNotificationForEvent(Event event, BuildContext context) {
     return _notificationService.allowedNotifications().then((isAllowed) {
@@ -281,7 +279,7 @@ class AppSwitchCubit extends Cubit<AppSwitchState> {
           await _cacheAndInteractionService.updateSchedule(bookmark.scheduleId);
 
       switch (apiResponse.status) {
-        case ApiScheduleOrProgrammeStatus.FETCHED:
+        case ScheduleOrProgrammeStatus.FETCHED:
           await _databaseService.update(apiResponse.data as ScheduleModel);
           break;
         default:

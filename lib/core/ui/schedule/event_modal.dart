@@ -13,17 +13,14 @@ import 'package:tumble/core/ui/schedule/modal_info_row.dart';
 class TumbleEventModal extends StatelessWidget {
   final Event event;
   final Color color;
-  final AppSwitchCubit? mainAppCubit;
   final bool showSettings;
-  const TumbleEventModal(
-      {Key? key, required this.event, required this.color, required this.showSettings, this.mainAppCubit})
+  const TumbleEventModal({Key? key, required this.event, required this.color, required this.showSettings})
       : super(key: key);
 
   static void showBookmarkEventModal(
     BuildContext context,
     Event event,
     Color color,
-    AppSwitchCubit mainAppCubit,
   ) {
     showModalBottomSheet(
         isScrollControlled: true,
@@ -33,7 +30,6 @@ class TumbleEventModal extends StatelessWidget {
         builder: (context) => TumbleEventModal(
               event: event,
               color: event.isSpecial ? Colors.redAccent : color,
-              mainAppCubit: mainAppCubit,
               showSettings: true,
             ));
   }
@@ -133,7 +129,7 @@ class TumbleEventModal extends StatelessWidget {
       ),
       title: S.detailsModal.title(),
       barColor: color,
-      onSettingsPressed: showSettings ? () => EventOptions.showEventOptions(context, event, mainAppCubit!) : null,
+      onSettingsPressed: showSettings ? () => EventOptions.showEventOptions(context, event) : null,
     );
   }
 }

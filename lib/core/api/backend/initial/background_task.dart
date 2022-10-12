@@ -48,7 +48,7 @@ class BackgroundTask {
             await backendService.getSchedule(cachedScheduleModel.id, defaultUserSchool);
 
         switch (apiResponseOfNewScheduleModel.status) {
-          case ApiScheduleOrProgrammeStatus.FETCHED:
+          case ScheduleOrProgrammeStatus.FETCHED:
             ScheduleModel newScheduleModel = apiResponseOfNewScheduleModel.data!;
 
             if (newScheduleModel != cachedScheduleModel) {
@@ -60,7 +60,7 @@ class BackgroundTask {
 
           /// Connection is not available or backend is down. No point
           /// in attempting to update any other schedules if this goes wrong.
-          case ApiScheduleOrProgrammeStatus.ERROR:
+          case ScheduleOrProgrammeStatus.ERROR:
             log(name: 'background_task', 'Failed to update schedules forcefully. Connection not available. Exiting ..');
             return;
           default:

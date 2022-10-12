@@ -11,6 +11,7 @@ import 'package:tumble/core/models/backend_models/bookmarked_schedule_model.dart
 import 'package:tumble/core/models/backend_models/schedule_model.dart';
 import 'package:tumble/core/shared/preference_types.dart';
 import 'package:tumble/core/api/dependency_injection/get_it.dart';
+import 'package:tumble/core/ui/data/string_constants.dart';
 
 class CacheRepository implements ICacheService {
   final _backendService = getIt<BackendRepository>();
@@ -51,7 +52,7 @@ class CacheRepository implements ICacheService {
         } else if (userCachedSchedule != null) {
           return ScheduleOrProgrammeResponse.cached(userCachedSchedule);
         }
-        return ScheduleOrProgrammeResponse.error(RuntimeErrorType.scheduleFetchError());
+        return ScheduleOrProgrammeResponse.error(RuntimeErrorType.scheduleFetchError(), S.popUps.scheduleFetchError());
       }
 
       return ScheduleOrProgrammeResponse.cached(userCachedSchedule);

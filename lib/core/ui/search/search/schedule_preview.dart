@@ -32,27 +32,25 @@ class _SchedulePreviewState extends State<SchedulePreview> {
             return const TumbleLoading();
           case PreviewFetchStatus.FETCHED_SCHEDULE:
           case PreviewFetchStatus.CACHED_SCHEDULE:
+            final dayList = state.previewListOfDays!
+                .where((day) =>
+                    day.events.isNotEmpty && day.isoString.isAfter(DateTime.now().subtract(const Duration(days: 1))))
+                .toList();
             return Stack(
               children: [
                 Padding(
                   padding: const EdgeInsets.only(top: 50),
-                  child: SingleChildScrollView(
-                    controller: context.read<SearchPageCubit>().controller,
-                    child: Column(children: () {
-                      int currentYear = 0;
-                      return state.previewListOfDays!
-                          .where((day) =>
-                              day.events.isNotEmpty &&
-                              day.isoString.isAfter(DateTime.now().subtract(const Duration(days: 1))))
-                          .map((day) {
-                        if (day.isoString.year != currentYear) {
-                          currentYear = day.isoString.year;
+                  child: ListView.builder(
+                      controller: context.read<SearchPageCubit>().controller,
+                      itemCount: dayList.length,
+                      itemBuilder: (context, index) {
+                        if (index == 0 || dayList[index].isoString.year != dayList[index - 1].isoString.year) {
                           return Stack(
                             children: [
                               Align(
                                 alignment: Alignment.topRight,
                                 child: Text(
-                                  currentYear.toString(),
+                                  dayList[index].isoString.year.toString(),
                                   style: TextStyle(
                                     color: Theme.of(context).colorScheme.onBackground.withOpacity(0.3),
                                     fontSize: 110,
@@ -62,22 +60,14 @@ class _SchedulePreviewState extends State<SchedulePreview> {
                               ),
                               Padding(
                                 padding: const EdgeInsets.only(top: 40),
-                                child: PreviewListViewDayContainer(
-                                  day: day,
-                                  searchPageCubit: BlocProvider.of<SearchPageCubit>(context),
-                                ),
+                                child: PreviewListViewDayContainer(day: dayList[index]),
                               )
                             ],
                           );
                         }
 
-                        return PreviewListViewDayContainer(
-                          day: day,
-                          searchPageCubit: BlocProvider.of<SearchPageCubit>(context),
-                        );
-                      }).toList();
-                    }()),
-                  ),
+                        return PreviewListViewDayContainer(day: dayList[index]);
+                      }),
                 ),
                 AnimatedPositioned(
                   bottom: 30,

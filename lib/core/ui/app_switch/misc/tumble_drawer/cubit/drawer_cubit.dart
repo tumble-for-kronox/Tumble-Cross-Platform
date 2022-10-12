@@ -23,6 +23,8 @@ class DrawerCubit extends Cubit<DrawerState> {
 
   int get notificationOffset => getIt<PreferenceRepository>().notificationOffset!;
 
+  bool isCurrentTheme(String theme) => _preferenceService.theme! == theme;
+
   void changeTheme(String themeString) {
     emit(state.copyWith(theme: themeString));
     switch (themeString) {

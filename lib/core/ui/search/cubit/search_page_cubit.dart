@@ -42,7 +42,8 @@ class SearchPageCubit extends Cubit<SearchPageState> {
             previewScheduleModelAndCourses: null,
             previewListOfDays: null,
             previewToggledFavorite: false,
-            previewCurrentScheduleId: null)) {
+            previewCurrentScheduleId: null,
+            errorDescription: null)) {
     _init();
   }
 
@@ -82,7 +83,7 @@ class SearchPageCubit extends Cubit<SearchPageState> {
   Future<void> fetchNewSchedule(String id) async {
     final apiResponse = await _cacheAndInteractionService.findSchedule(id);
     switch (apiResponse.status) {
-      case api.ApiScheduleOrProgrammeStatus.FETCHED:
+      case api.ScheduleOrProgrammeStatus.FETCHED:
         bool scheduleFavorited = false;
         ScheduleModel currentScheduleModel = apiResponse.data!;
         if (currentScheduleModel.isNotPhonySchedule()) {
@@ -110,7 +111,7 @@ class SearchPageCubit extends Cubit<SearchPageState> {
           emit(state.copyWith(previewFetchStatus: PreviewFetchStatus.EMPTY_SCHEDULE));
         }
         break;
-      case api.ApiScheduleOrProgrammeStatus.CACHED:
+      case api.ScheduleOrProgrammeStatus.CACHED:
         ScheduleModel currentScheduleModel = apiResponse.data!;
         if (currentScheduleModel.isNotPhonySchedule()) {
           emit(state.copyWith(
@@ -128,7 +129,7 @@ class SearchPageCubit extends Cubit<SearchPageState> {
           ));
         }
         break;
-      case api.ApiScheduleOrProgrammeStatus.ERROR:
+      case api.ScheduleOrProgrammeStatus.ERROR:
         emit(state.copyWith(previewFetchStatus: PreviewFetchStatus.FETCH_ERROR));
         break;
       default:
@@ -143,12 +144,15 @@ class SearchPageCubit extends Cubit<SearchPageState> {
 
     if (state.focused) {
       switch (apiResponse.status) {
-        case ApiScheduleOrProgrammeStatus.FETCHED:
+        case ScheduleOrProgrammeStatus.FETCHED:
           ProgramModel program = apiResponse.data as ProgramModel;
           emit(state.copyWith(searchPageStatus: SearchPageStatus.FOUND, programList: program.items));
           break;
-        case ApiScheduleOrProgrammeStatus.ERROR:
-          emit(state.copyWith(searchPageStatus: SearchPageStatus.ERROR, errorMessage: apiResponse.message));
+        case ScheduleOrProgrammeStatus.ERROR:
+          emit(state.copyWith(
+              searchPageStatus: SearchPageStatus.ERROR,
+              errorMessage: apiResponse.message,
+              errorDescription: apiResponse.description));
           break;
         default:
           break;

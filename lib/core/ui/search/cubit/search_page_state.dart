@@ -2,23 +2,9 @@
 
 part of 'search_page_cubit.dart';
 
-enum SearchPageStatus {
-  INITIAL,
-  LOADING,
-  FOUND,
-  NO_SCHEDULES,
-  ERROR,
-  DISPLAY_PREVIEW
-}
+enum SearchPageStatus { INITIAL, LOADING, FOUND, NO_SCHEDULES, ERROR, DISPLAY_PREVIEW }
 
-enum PreviewFetchStatus {
-  INITIAL,
-  LOADING,
-  CACHED_SCHEDULE,
-  FETCHED_SCHEDULE,
-  FETCH_ERROR,
-  EMPTY_SCHEDULE
-}
+enum PreviewFetchStatus { INITIAL, LOADING, CACHED_SCHEDULE, FETCHED_SCHEDULE, FETCH_ERROR, EMPTY_SCHEDULE }
 
 class SearchPageState extends Equatable {
   final SearchPageStatus searchPageStatus;
@@ -26,6 +12,7 @@ class SearchPageState extends Equatable {
   final bool focused;
   final bool clearButtonVisible;
   final String? errorMessage;
+  final String? errorDescription;
   final List<Item>? programList;
   final bool? previewToTopButtonVisible;
   final ScheduleModelAndCourses? previewScheduleModelAndCourses;
@@ -44,7 +31,8 @@ class SearchPageState extends Equatable {
       required this.previewScheduleModelAndCourses,
       required this.previewListOfDays,
       required this.previewToggledFavorite,
-      required this.previewCurrentScheduleId});
+      required this.previewCurrentScheduleId,
+      required this.errorDescription});
 
   SearchPageState copyWith(
           {bool? focused,
@@ -58,7 +46,8 @@ class SearchPageState extends Equatable {
           List<Day>? previewListOfDays,
           List<Week>? previewListOfWeeks,
           bool? previewToggledFavorite,
-          String? previewCurrentScheduleId}) =>
+          String? previewCurrentScheduleId,
+          String? errorDescription}) =>
       SearchPageState(
           focused: focused ?? this.focused,
           searchPageStatus: searchPageStatus ?? this.searchPageStatus,
@@ -66,15 +55,12 @@ class SearchPageState extends Equatable {
           clearButtonVisible: clearButtonVisible ?? this.clearButtonVisible,
           errorMessage: errorMessage ?? this.errorMessage,
           programList: programList ?? this.programList,
-          previewToTopButtonVisible:
-              previewToTopButtonVisible ?? this.previewToTopButtonVisible,
-          previewScheduleModelAndCourses: previewScheduleModelAndCourses ??
-              this.previewScheduleModelAndCourses,
+          previewToTopButtonVisible: previewToTopButtonVisible ?? this.previewToTopButtonVisible,
+          previewScheduleModelAndCourses: previewScheduleModelAndCourses ?? this.previewScheduleModelAndCourses,
           previewListOfDays: previewListOfDays ?? this.previewListOfDays,
-          previewToggledFavorite:
-              previewToggledFavorite ?? this.previewToggledFavorite,
-          previewCurrentScheduleId:
-              previewCurrentScheduleId ?? this.previewCurrentScheduleId);
+          previewToggledFavorite: previewToggledFavorite ?? this.previewToggledFavorite,
+          previewCurrentScheduleId: previewCurrentScheduleId ?? this.previewCurrentScheduleId,
+          errorDescription: errorDescription ?? this.errorDescription);
 
   @override
   List<Object?> get props => [
@@ -88,6 +74,7 @@ class SearchPageState extends Equatable {
         previewScheduleModelAndCourses,
         previewListOfDays,
         previewToggledFavorite,
-        previewCurrentScheduleId
+        previewCurrentScheduleId,
+        errorDescription
       ];
 }

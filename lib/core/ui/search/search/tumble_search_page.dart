@@ -38,25 +38,48 @@ class _TumbleSearchPageState extends State<TumbleSearchPage> {
                       builder: (_, state) {
                         switch (state.searchPageStatus) {
                           case SearchPageStatus.FOUND:
-                            return ListView(
+                            return Container(
                               padding: const EdgeInsets.only(top: 70),
-                              children: [
-                                Container(
-                                  padding: const EdgeInsets.only(left: 25, bottom: 10),
-                                  child: Text(
-                                    S.searchPage.results(state.programList!.length),
-                                    style: TextStyle(
-                                        fontSize: 15, color: Theme.of(context).colorScheme.onSurface.withOpacity(.8)),
-                                  ),
+                              child: SingleChildScrollView(
+                                physics: const ScrollPhysics(),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      padding: const EdgeInsets.only(left: 25, bottom: 10),
+                                      child: Text(
+                                        S.searchPage.results(state.programList!.length),
+                                        style: TextStyle(
+                                            fontSize: 15,
+                                            color: Theme.of(context).colorScheme.onSurface.withOpacity(.8)),
+                                      ),
+                                    ),
+                                    Divider(
+                                      indent: 10,
+                                      endIndent: 10,
+                                      height: 10,
+                                      color: Theme.of(context).colorScheme.onBackground,
+                                    ),
+                                    ListView.builder(
+                                      physics: const NeverScrollableScrollPhysics(),
+                                      scrollDirection: Axis.vertical,
+                                      shrinkWrap: true,
+                                      itemCount: state.programList!.length,
+                                      itemBuilder: (BuildContext context, int index) => ProgramCard(
+                                          programName: state.programList![index].title,
+                                          programSubtitle: state.programList![index].subtitle,
+                                          schoolName: BlocProvider.of<InitCubit>(context).state.defaultSchool!,
+                                          onTap: () async {
+                                            context.read<SearchPageCubit>().setPreviewLoading();
+                                            context.read<SearchPageCubit>().displayPreview();
+                                            await BlocProvider.of<SearchPageCubit>(context)
+                                                .fetchNewSchedule(state.programList![index].id);
+                                          }),
+                                    )
+                                  ],
                                 ),
-                                Divider(
-                                  indent: 10,
-                                  endIndent: 10,
-                                  height: 10,
-                                  color: Theme.of(context).colorScheme.onBackground,
-                                ),
-                                _buildProgramsList(state.programList!, context)
-                              ],
+                              ),
                             );
                           case SearchPageStatus.LOADING:
                             return const TumbleLoading();
@@ -66,7 +89,7 @@ class _TumbleSearchPageState extends State<TumbleSearchPage> {
                               child: DynamicErrorPage(
                                 toSearch: false,
                                 errorType: state.errorMessage!,
-                                description: S.popUps.missingProgramRequestDescription(),
+                                description: state.errorDescription,
                               ),
                             );
                           case SearchPageStatus.INITIAL:
@@ -99,16 +122,3 @@ class _TumbleSearchPageState extends State<TumbleSearchPage> {
     );
   }
 }
-
-_buildProgramsList(List<Item> programList, BuildContext context) => Column(
-    children: programList
-        .map((program) => ProgramCard(
-            programName: program.title,
-            programSubtitle: program.subtitle,
-            schoolName: BlocProvider.of<InitCubit>(context).state.defaultSchool!,
-            onTap: () async {
-              context.read<SearchPageCubit>().setPreviewLoading();
-              context.read<SearchPageCubit>().displayPreview();
-              await BlocProvider.of<SearchPageCubit>(context).fetchNewSchedule(program.id);
-            }))
-        .toList());

@@ -6,6 +6,7 @@ import 'package:tumble/core/api/backend/data/constants.dart';
 import 'package:tumble/core/api/backend/response_types/booking_response.dart';
 import 'package:tumble/core/api/backend/response_types/bug_report_response.dart';
 import 'package:tumble/core/api/backend/data/endpoints.dart';
+import 'package:tumble/core/api/backend/response_types/runtime_error_type.dart';
 import 'package:tumble/core/api/backend/response_types/schedule_or_programme_response.dart';
 import 'package:tumble/core/api/backend/response_types/user_response.dart';
 import 'package:tumble/core/api/backend/interface/ibackend_service.dart';
@@ -16,6 +17,7 @@ import 'package:tumble/core/extensions/response_extensions/user_parser.dart';
 import 'package:tumble/core/extensions/extensions.dart';
 import 'package:tumble/core/models/backend_models/resource_model.dart';
 import 'package:tumble/core/ui/app_switch/data/schools.dart';
+import 'package:tumble/core/ui/data/string_constants.dart';
 
 class BackendRepository implements IBackendService {
   final _dioHandle = Dio(BaseOptions(
@@ -40,7 +42,7 @@ class BackendRepository implements IBackendService {
       return response.parseSchedule();
     }).onError((error, stackTrace) {
       log(name: 'backend_repository', error: error, '$error.message in [getRequestSchedule]');
-      return ScheduleOrProgrammeResponse.error('Timed out');
+      return ScheduleOrProgrammeResponse.error(RuntimeErrorType.timeoutError(), S.popUps.timeOutDecsription());
     });
   }
 
@@ -59,7 +61,7 @@ class BackendRepository implements IBackendService {
       return response.parsePrograms();
     }).onError((error, stackTrace) {
       log(name: 'backend_repository', error: error, '$error.message in [getPrograms]');
-      return ScheduleOrProgrammeResponse.error('Timed out');
+      return ScheduleOrProgrammeResponse.error(RuntimeErrorType.timeoutError(), S.popUps.timeOutDecsription());
     });
   }
 
@@ -78,7 +80,7 @@ class BackendRepository implements IBackendService {
       return response.parseUserEvents();
     }).onError((error, stackTrace) {
       log(name: 'backend_repository', error: error, '$error.message in [getUserEvents]');
-      return UserResponse.error('Timed out');
+      return UserResponse.error(RuntimeErrorType.timeoutError());
     });
   }
 
@@ -104,7 +106,7 @@ class BackendRepository implements IBackendService {
     }).onError((error, stackTrace) {
       log(name: 'backend_repository', 'REFRESH SESSION ERROR');
       log(name: 'backend_repository', error: error, '$error.message in [getRefreshSession]');
-      return UserResponse.error('Timed out');
+      return UserResponse.error(RuntimeErrorType.timeoutError());
     });
   }
 
@@ -123,7 +125,7 @@ class BackendRepository implements IBackendService {
       return response.parseSchoolResources();
     }).onError((error, stackTrace) {
       log(name: 'backend_repository', error: error, '$error.message in [getSchoolResources]');
-      return BookingResponse.error('Timed out');
+      return BookingResponse.error(RuntimeErrorType.timeoutError());
     });
   }
 
@@ -145,7 +147,7 @@ class BackendRepository implements IBackendService {
       return response.parseSchoolResource();
     }).onError((error, stackTrace) {
       log(name: 'backend_repository', error: error, '$error.message in [getResourceAvailabilities]');
-      return BookingResponse.error('Timed out');
+      return BookingResponse.error(RuntimeErrorType.timeoutError());
     });
   }
 
@@ -165,7 +167,7 @@ class BackendRepository implements IBackendService {
       return response.parseUserBookings();
     }).onError((error, stackTrace) {
       log(name: 'backend_repository', error: error, '$error.message in [getUserBookings]');
-      return BookingResponse.error('Timed out');
+      return BookingResponse.error(RuntimeErrorType.timeoutError());
     });
   }
 
@@ -183,7 +185,7 @@ class BackendRepository implements IBackendService {
       return response.parseRegisterOrUnregister();
     }).onError((error, stackTrace) {
       log(name: 'backend_repository', error: error, '$error.message in [getUserBookings]');
-      return UserResponse.error('Timed out');
+      return UserResponse.error(RuntimeErrorType.timeoutError());
     });
   }
 
@@ -201,7 +203,7 @@ class BackendRepository implements IBackendService {
       return response.parseRegisterOrUnregister();
     }).onError((error, stackTrace) {
       log(name: 'backend_repository', error: error, '$error.message in [putUnregisterUserEvent]');
-      return UserResponse.error('Timed out');
+      return UserResponse.error(RuntimeErrorType.timeoutError());
     });
   }
 
@@ -218,7 +220,7 @@ class BackendRepository implements IBackendService {
       return response.parseMultiRegistrationResult();
     }).onError((error, stackTrace) {
       log(name: 'backend_repository', error: error, '$error.message in [putRegisterAllAvailableUserEvents]');
-      return UserResponse.error('Timed out');
+      return UserResponse.error(RuntimeErrorType.timeoutError());
     });
   }
 
@@ -243,7 +245,7 @@ class BackendRepository implements IBackendService {
       return response.parseBookResource();
     }).onError((error, stackTrace) {
       log(name: 'backend_repository', error: error, '$error.message in [putBookResource]');
-      return BookingResponse.error('Timed out');
+      return BookingResponse.error(RuntimeErrorType.timeoutError());
     });
   }
 
@@ -261,7 +263,7 @@ class BackendRepository implements IBackendService {
       return response.parseUnbookResource();
     }).onError((error, stackTrace) {
       log(name: 'backend_repository', error: error, '$error.message in [putUnbookResource]');
-      return BookingResponse.error('Timed out');
+      return BookingResponse.error(RuntimeErrorType.timeoutError());
     });
   }
 
@@ -288,7 +290,7 @@ class BackendRepository implements IBackendService {
       return response.parseConfirmBooking();
     }).onError((error, stackTrace) {
       log(name: 'backend_repository', error: error, '$error.message in [putConfirmBooking]');
-      return BookingResponse.error('Timed out');
+      return BookingResponse.error(RuntimeErrorType.timeoutError());
     });
   }
 
@@ -306,7 +308,7 @@ class BackendRepository implements IBackendService {
       return response.parseUser();
     }).onError((error, stackTrace) {
       log(name: 'backend_repository', error: error, '$error.message in [postUserLogin]');
-      return UserResponse.error('Timed out');
+      return UserResponse.error(RuntimeErrorType.timeoutError());
     });
   }
 
@@ -324,7 +326,7 @@ class BackendRepository implements IBackendService {
       return response.parseIssue();
     }).onError((error, stackTrace) {
       log(name: 'backend_repository', error: error, '$error.message in [postSubmitIssue]');
-      return BugReportResponse.error('Timed out');
+      return BugReportResponse.error(RuntimeErrorType.timeoutError());
     });
   }
 }

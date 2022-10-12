@@ -10,7 +10,7 @@ class TumbleDragPill extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Container(
         alignment: Alignment.topCenter,
-        padding: const EdgeInsets.only(top: 10),
+        padding: const EdgeInsets.only(top: 12),
         child: Container(
           width: 40,
           height: 4,

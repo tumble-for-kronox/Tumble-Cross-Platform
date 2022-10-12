@@ -20,13 +20,13 @@ class TumbleDetailsModalBase extends StatelessWidget {
       child: Stack(
         alignment: Alignment.bottomCenter,
         children: [
-          body,
+          Container(padding: const EdgeInsets.only(top: 10), child: body),
           Align(
             alignment: Alignment.topCenter,
             child: Container(
               alignment: Alignment.center,
               width: double.maxFinite,
-              height: 50,
+              height: 54,
               decoration: BoxDecoration(
                 color: barColor,
                 borderRadius: const BorderRadius.only(
@@ -35,7 +35,7 @@ class TumbleDetailsModalBase extends StatelessWidget {
                 ),
               ),
               child: Padding(
-                padding: const EdgeInsets.only(top: 5),
+                padding: const EdgeInsets.only(top: 15),
                 child: Text(
                   title,
                   style: TextStyle(
@@ -53,15 +53,18 @@ class TumbleDetailsModalBase extends StatelessWidget {
           () {
             return onSettingsPressed == null
                 ? Container()
-                : Align(
-                    alignment: Alignment.topRight,
-                    child: Material(
-                      color: Colors.transparent,
-                      child: IconButton(
-                        splashRadius: 20,
-                        color: barColor.contrastColor(),
-                        onPressed: onSettingsPressed,
-                        icon: const Icon(CupertinoIcons.ellipsis),
+                : Container(
+                    padding: const EdgeInsets.only(top: 5),
+                    child: Align(
+                      alignment: Alignment.topRight,
+                      child: Material(
+                        color: Colors.transparent,
+                        child: IconButton(
+                          splashRadius: 20,
+                          color: barColor.contrastColor(),
+                          onPressed: onSettingsPressed,
+                          icon: const Icon(CupertinoIcons.ellipsis),
+                        ),
                       ),
                     ),
                   );

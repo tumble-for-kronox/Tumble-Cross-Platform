@@ -1,9 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:tumble/core/extensions/extensions.dart';
-import 'package:tumble/core/ui/data/string_constants.dart';
 import 'package:tumble/core/ui/app_switch/cubit/app_switch_cubit.dart';
+import 'package:tumble/core/ui/data/string_constants.dart';
 import 'package:tumble/core/ui/schedule/cancel_button.dart';
 
 import '../../models/backend_models/schedule_model.dart';
@@ -11,14 +12,13 @@ import '../permission_handler.dart';
 import '../scaffold_message.dart';
 
 class EventOptions extends StatelessWidget {
-  final AppSwitchCubit cubit;
   final Event event;
   final BuildContext context;
 
-  const EventOptions({Key? key, required this.cubit, required this.event, required this.context}) : super(key: key);
+  const EventOptions({Key? key, required this.event, required this.context}) : super(key: key);
 
-  static void showEventOptions(BuildContext context, Event event, AppSwitchCubit cubit) {
-    showModalBottomSheet(context: context, builder: (_) => EventOptions(cubit: cubit, event: event, context: context));
+  static void showEventOptions(BuildContext context, Event event) {
+    showModalBottomSheet(context: context, builder: (_) => EventOptions(event: event, context: context));
   }
 
   @override
@@ -42,8 +42,8 @@ class EventOptions extends StatelessWidget {
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
               child: FutureBuilder(
                 future: Future.wait([
-                  cubit.checkIfNotificationIsSetForEvent(event),
-                  cubit.checkIfNotificationIsSetForCourse(event),
+                  context.read<AppSwitchCubit>().checkIfNotificationIsSetForEvent(event),
+                  context.read<AppSwitchCubit>().checkIfNotificationIsSetForCourse(event),
                 ]),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.done) {
@@ -67,22 +67,20 @@ class EventOptions extends StatelessWidget {
                             Navigator.of(context).pop();
 
                             if (notificationIsSetForCourse) {
-                              cubit.cancelCourseNotifications(event).then((notificationCancelled) =>
-                                  notificationCancelled
+                              context.read<AppSwitchCubit>().cancelCourseNotifications(event).then(
+                                  (notificationCancelled) => notificationCancelled
                                       ? showScaffoldMessage(context,
                                           S.scaffoldMessages.cancelledCourseNotifications(event.course.englishName))
                                       : showScaffoldMessage(context,
                                           S.scaffoldMessages.cancelNotificationsFailed(event.title.capitalize())));
                             } else {
                               bool sucessfullyCreatedNotifications =
-                                  await cubit.createNotificationForCourse(event, context);
+                                  await context.read<AppSwitchCubit>().createNotificationForCourse(event, context);
                               if (!sucessfullyCreatedNotifications) {
                                 await showDialog(
                                     useRootNavigator: false,
                                     context: context,
-                                    builder: (_) => PermissionHandler(
-                                          cubit: cubit,
-                                        ));
+                                    builder: (_) => const PermissionHandler());
                               }
                             }
                           },
@@ -106,7 +104,7 @@ class EventOptions extends StatelessWidget {
                             showDialog(
                               context: context,
                               builder: (context) {
-                                Color pickerColor = cubit.getColorForCourse(event);
+                                Color pickerColor = context.read<AppSwitchCubit>().getColorForCourse(event);
                                 return AlertDialog(
                                   title: Text(S.eventOptions.colorPickerTitle()),
                                   content: SingleChildScrollView(
@@ -122,8 +120,10 @@ class EventOptions extends StatelessWidget {
                                     ),
                                     TextButton(
                                       onPressed: () {
-                                        cubit.changeCourseColor(context, event.course, pickerColor);
-                                        cubit.setLoading();
+                                        context
+                                            .read<AppSwitchCubit>()
+                                            .changeCourseColor(context, event.course, pickerColor);
+                                        context.read<AppSwitchCubit>().setLoading();
                                         Navigator.pop(context);
                                       },
                                       child: Text(S.general.done()),
@@ -169,18 +169,17 @@ class EventOptions extends StatelessWidget {
           Navigator.of(context).pop();
 
           if (notificationIsSetForEvent) {
-            cubit.cancelEventNotification(event).then((notificationCancelled) => notificationCancelled
-                ? showScaffoldMessage(context, S.scaffoldMessages.cancelledEventNotification(event.title.capitalize()))
-                : showScaffoldMessage(context, S.scaffoldMessages.cancelNotificationsFailed(event.title.capitalize())));
+            context.read<AppSwitchCubit>().cancelEventNotification(event).then((notificationCancelled) =>
+                notificationCancelled
+                    ? showScaffoldMessage(
+                        context, S.scaffoldMessages.cancelledEventNotification(event.title.capitalize()))
+                    : showScaffoldMessage(
+                        context, S.scaffoldMessages.cancelNotificationsFailed(event.title.capitalize())));
           } else {
-            bool sucessfullyCreatedNotifications = await cubit.createNotificationForEvent(event, context);
+            bool sucessfullyCreatedNotifications =
+                await context.read<AppSwitchCubit>().createNotificationForEvent(event, context);
             if (!sucessfullyCreatedNotifications) {
-              await showDialog(
-                  useRootNavigator: false,
-                  context: context,
-                  builder: (_) => PermissionHandler(
-                        cubit: cubit,
-                      ));
+              await showDialog(useRootNavigator: false, context: context, builder: (_) => const PermissionHandler());
             }
           }
         },

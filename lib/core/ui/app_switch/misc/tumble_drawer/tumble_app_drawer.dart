@@ -79,24 +79,23 @@ class TumbleAppDrawer extends StatelessWidget {
                           .name
                           .toUpperCase()),
                       suffixIcon: CupertinoIcons.arrow_right_arrow_left,
-                      eventType: EventType.CHANGE_SCHOOL,
-                      drawerEvent: (eventType) => _handleDrawerEvent(eventType, context, navigator, null),
+                      eventType: EventType.SCHOOL,
+                      drawerEvent: (eventType) => _handleDrawerEvent(eventType, context, navigator),
                     ),
                     TumbleAppDrawerTile(
                       drawerTileTitle: S.settingsPage.changeThemeTitle(),
                       subtitle:
                           S.settingsPage.changeThemeSubtitle(context.read<DrawerCubit>().state.theme!.capitalize()),
                       suffixIcon: CupertinoIcons.device_phone_portrait,
-                      eventType: EventType.CHANGE_THEME,
-                      drawerEvent: (eventType) => _handleDrawerEvent(eventType, context, navigator, null),
+                      eventType: EventType.THEME,
+                      drawerEvent: (eventType) => _handleDrawerEvent(eventType, context, navigator),
                     ),
                     TumbleAppDrawerTile(
                       drawerTileTitle: S.settingsPage.languageTitle(),
                       subtitle: S.settingsPage.languageSubtitle(),
                       suffixIcon: CupertinoIcons.textformat_abc_dottedunderline,
-                      eventType: EventType.CHANGE_LANGUAGE,
-                      drawerEvent: (eventType) =>
-                          _handleDrawerEvent(eventType, context, navigator, context.read<DrawerCubit>()),
+                      eventType: EventType.LANGUAGE,
+                      drawerEvent: (eventType) => _handleDrawerEvent(eventType, context, navigator),
                     ),
                   ], title: S.settingsPage.commonTitle()),
                   Divider(
@@ -112,8 +111,8 @@ class TumbleAppDrawer extends StatelessWidget {
                         drawerTileTitle: S.settingsPage.defaultScheduleTitle(),
                         subtitle: S.settingsPage.defaultScheduleSubtitle(),
                         suffixIcon: CupertinoIcons.bookmark,
-                        eventType: EventType.TOGGLE_BOOKMARKED_SCHEDULES,
-                        drawerEvent: (eventType) => _handleDrawerEvent(eventType, context, navigator, null)),
+                        eventType: EventType.BOOKMARKS,
+                        drawerEvent: (eventType) => _handleDrawerEvent(eventType, context, navigator)),
                   ], title: S.settingsPage.scheduleTitle()),
                   Divider(
                     height: 40.0,
@@ -126,15 +125,14 @@ class TumbleAppDrawer extends StatelessWidget {
                         suffixIcon: CupertinoIcons.bell_slash,
                         drawerTileTitle: S.settingsPage.clearAllTitle(),
                         subtitle: S.settingsPage.clearAllSubtitle(),
-                        eventType: EventType.CANCEL_ALL_NOTIFICATIONS,
-                        drawerEvent: (eventType) => _handleDrawerEvent(eventType, context, navigator, null)),
+                        eventType: EventType.NOTIFICATIONS_CANCEL,
+                        drawerEvent: (eventType) => _handleDrawerEvent(eventType, context, navigator)),
                     TumbleAppDrawerTile(
                       suffixIcon: CupertinoIcons.clock,
                       drawerTileTitle: S.settingsPage.offsetTitle(),
                       subtitle: S.settingsPage.offsetSubtitle(context.read<DrawerCubit>().notificationOffset),
-                      eventType: EventType.EDIT_NOTIFICATION_TIME,
-                      drawerEvent: (eventType) =>
-                          _handleDrawerEvent(eventType, context, navigator, context.read<DrawerCubit>()),
+                      eventType: EventType.NOTIFICATIONS_OFFSET,
+                      drawerEvent: (eventType) => _handleDrawerEvent(eventType, context, navigator),
                     )
                   ], title: S.settingsPage.notificationTitle()),
                   Divider(
@@ -150,22 +148,21 @@ class TumbleAppDrawer extends StatelessWidget {
                         suffixIcon: CupertinoIcons.chevron_left_slash_chevron_right,
                         drawerTileTitle: 'Tumble on GitHub',
                         subtitle: 'Source code for Tumble',
-                        eventType: EventType.GITHUB,
-                        drawerEvent: (eventType) => _handleDrawerEvent(eventType, context, navigator, null)),
+                        eventType: EventType.SOURCE_CODE,
+                        drawerEvent: (eventType) => _handleDrawerEvent(eventType, context, navigator)),
                     TumbleAppDrawerTile(
                       drawerTileTitle: S.settingsPage.reportBugTitle(),
                       subtitle: S.settingsPage.reportBugSubtitle(),
                       suffixIcon: CupertinoIcons.ant,
-                      eventType: EventType.BUG_REPORT,
-                      drawerEvent: (eventType) =>
-                          _handleDrawerEvent(eventType, context, navigator, context.read<DrawerCubit>()),
+                      eventType: EventType.BUG,
+                      drawerEvent: (eventType) => _handleDrawerEvent(eventType, context, navigator),
                     ),
                     TumbleAppDrawerTile(
                       suffixIcon: CupertinoIcons.group,
                       drawerTileTitle: "Contributors",
                       subtitle: "See who helped out",
                       eventType: EventType.CONTRIBUTORS,
-                      drawerEvent: (eventType) => _handleDrawerEvent(eventType, context, navigator, null),
+                      drawerEvent: (eventType) => _handleDrawerEvent(eventType, context, navigator),
                     ),
                   ], title: S.settingsPage.miscTitle()),
                 ],
@@ -177,27 +174,41 @@ class TumbleAppDrawer extends StatelessWidget {
     );
   }
 
-  void _handleDrawerEvent(Enum eventType, BuildContext context, AppNavigator navigator, DrawerCubit? cubit) async {
+  void _handleDrawerEvent(Enum eventType, BuildContext context, AppNavigator navigator) async {
     switch (eventType) {
-      case EventType.CHANGE_SCHOOL:
+      case EventType.SCHOOL:
         navigator.push(NavigationRouteLabels.schoolSelectionPage);
         break;
-      case EventType.CHANGE_THEME:
+      case EventType.THEME:
         showModalBottomSheet(
             context: context,
-            builder: (_) => AppThemePicker(setTheme: (String themeType) {
+            builder: (_) => ApplicationThemePicker(
+                setTheme: (String themeType) {
                   context.read<DrawerCubit>().changeTheme(themeType);
                   Navigator.of(context).pop();
-                }));
+                },
+                cubit: context.read<DrawerCubit>()));
         break;
-      case EventType.TOGGLE_BOOKMARKED_SCHEDULES:
+      case EventType.LANGUAGE:
+        showModalBottomSheet(
+          context: context,
+          builder: (_) => ApplicationLanguagePicker(
+              currentLocale: BlocProvider.of<ThemeCubit>(context).state.locale,
+              parameterMap: context.read<DrawerCubit>().getLangOptions(),
+              setLocale: (Locale? locale) {
+                context.read<DrawerCubit>().changeLocale(locale);
+                Navigator.of(context).pop();
+              }),
+        );
+        break;
+      case EventType.BOOKMARKS:
         if (context.read<DrawerCubit>().state.bookmarks!.isNotEmpty) {
           List<BookmarkedScheduleModel> tempBookmarks = context.read<DrawerCubit>().state.bookmarks!;
           showModalBottomSheet(
               context: context,
               builder: (_) => BlocProvider.value(
                     value: BlocProvider.of<DrawerCubit>(context),
-                    child: const AppBookmarkScheduleToggle(),
+                    child: const ApplicationBookmarkPicker(),
                   )).whenComplete(() async {
             if (tempBookmarks != context.read<DrawerCubit>().state.bookmarks!) {
               BlocProvider.of<AppSwitchCubit>(context).setLoading();
@@ -206,43 +217,31 @@ class TumbleAppDrawer extends StatelessWidget {
           });
         }
         break;
-      case EventType.CANCEL_ALL_NOTIFICATIONS:
+      case EventType.NOTIFICATIONS_CANCEL:
         getIt<NotificationRepository>().cancelAllNotifications();
         showScaffoldMessage(context, S.scaffoldMessages.cancelledAllSetNotifications());
         break;
-      case EventType.EDIT_NOTIFICATION_TIME:
+      case EventType.NOTIFICATIONS_OFFSET:
         showModalBottomSheet(
             context: context,
-            builder: (_) => AppNotificationTimePicker(
-                  parameterMap: cubit!.getNotificationTimes(context),
-                  currentNotificationTime: cubit.state.notificationTime!,
+            builder: (_) => AppNotificationOffsetPicker(
+                  parameterMap: context.read<DrawerCubit>().getNotificationTimes(context),
+                  currentNotificationTime: context.read<DrawerCubit>().state.notificationTime!,
                   setNotificationTime: (time) {
-                    cubit.setNotificationTime(time);
+                    context.read<DrawerCubit>().setNotificationTime(time);
                     Navigator.of(context).pop();
                   },
                 ));
         break;
-      case EventType.BUG_REPORT:
-        BugReportModal.showBugReportModal(context, cubit!);
+      case EventType.SOURCE_CODE:
+        await launchUrlString(Constants.gitHub);
+        break;
+      case EventType.BUG:
+        BugReportModal.showBugReportModal(context, context.read<DrawerCubit>());
         break;
       case EventType.OPEN_REVIEW:
         final uri = Platform.isIOS ? Constants.ios : Constants.android;
         await launchUrlString(uri);
-        break;
-      case EventType.CHANGE_LANGUAGE:
-        showModalBottomSheet(
-          context: context,
-          builder: (_) => AppLanguagePicker(
-              currentLocale: BlocProvider.of<ThemeCubit>(context).state.locale,
-              parameterMap: cubit!.getLangOptions(),
-              setLocale: (Locale? locale) {
-                cubit.changeLocale(locale);
-                Navigator.of(context).pop();
-              }),
-        );
-        break;
-      case EventType.GITHUB:
-        await launchUrlString(Constants.gitHub);
         break;
       case EventType.CONTRIBUTORS:
         showModalBottomSheet(context: context, builder: (_) => const ContributorsModal());
