@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
 import 'package:tumble/core/ui/app_switch/cubit/app_switch_cubit.dart';
 
 class PermissionHandler extends StatelessWidget {
-  final AppSwitchCubit cubit;
-  const PermissionHandler({Key? key, required this.cubit}) : super(key: key);
+  const PermissionHandler({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -13,8 +13,7 @@ class PermissionHandler extends StatelessWidget {
         borderRadius: BorderRadius.all(Radius.circular(10.0)),
       ),
       backgroundColor: Theme.of(context).colorScheme.surface,
-      contentPadding:
-          const EdgeInsets.only(top: 19, bottom: 10, left: 17, right: 10),
+      contentPadding: const EdgeInsets.only(top: 19, bottom: 10, left: 17, right: 10),
       content: Container(
         decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.surface,
@@ -51,7 +50,7 @@ class PermissionHandler extends StatelessWidget {
                   child: TextButton(
                       onPressed: () async {
                         Navigator.pop(context);
-                        await cubit.permissionRequest(false);
+                        await context.read<AppSwitchCubit>().permissionRequest(false);
                       },
                       child: Text(S.general.no(),
                           style: const TextStyle(
@@ -63,7 +62,7 @@ class PermissionHandler extends StatelessWidget {
                   child: TextButton(
                       onPressed: () async {
                         Navigator.of(context).pop();
-                        await cubit.permissionRequest(true);
+                        await context.read<AppSwitchCubit>().permissionRequest(true);
                       },
                       child: Text(S.general.yes(),
                           style: const TextStyle(

@@ -2,14 +2,7 @@
 
 part of 'app_switch_cubit.dart';
 
-enum AppScheduleViewStatus {
-  INITIAL,
-  LOADING,
-  POPULATED_VIEW,
-  FETCH_ERROR,
-  NO_VIEW,
-  EMPTY_SCHEDULE
-}
+enum AppScheduleViewStatus { INITIAL, LOADING, POPULATED_VIEW, FETCH_ERROR, NO_VIEW, EMPTY_SCHEDULE }
 
 class AppSwitchState extends Equatable {
   final AppScheduleViewStatus status;
@@ -18,13 +11,14 @@ class AppSwitchState extends Equatable {
   final List<Week>? listOfWeeks;
   final String? message;
   final List<ScheduleModelAndCourses?>? scheduleModelAndCourses;
-  const AppSwitchState(
-      {required this.status,
-      required this.scheduleModelAndCourses,
-      required this.listOfDays,
-      required this.listOfWeeks,
-      required this.listViewToTopButtonVisible,
-      required this.message});
+  const AppSwitchState({
+    required this.status,
+    required this.scheduleModelAndCourses,
+    required this.listOfDays,
+    required this.listOfWeeks,
+    required this.listViewToTopButtonVisible,
+    required this.message,
+  });
 
   AppSwitchState copyWith(
           {AppScheduleViewStatus? status,
@@ -33,16 +27,17 @@ class AppSwitchState extends Equatable {
           List<Day>? listOfDays,
           List<Week>? listOfWeeks,
           String? message,
-          List<ScheduleModelAndCourses?>? scheduleModelAndCourses}) =>
+          List<ScheduleModelAndCourses?>? scheduleModelAndCourses,
+          List<Day>? displayedListItems,
+          bool? isLoadingListItems}) =>
       AppSwitchState(
-          status: status ?? this.status,
-          listViewToTopButtonVisible:
-              listViewToTopButtonVisible ?? this.listViewToTopButtonVisible,
-          listOfDays: listOfDays ?? this.listOfDays,
-          listOfWeeks: listOfWeeks ?? this.listOfWeeks,
-          message: message ?? this.message,
-          scheduleModelAndCourses:
-              scheduleModelAndCourses ?? this.scheduleModelAndCourses);
+        status: status ?? this.status,
+        listViewToTopButtonVisible: listViewToTopButtonVisible ?? this.listViewToTopButtonVisible,
+        listOfDays: listOfDays ?? this.listOfDays,
+        listOfWeeks: listOfWeeks ?? this.listOfWeeks,
+        message: message ?? this.message,
+        scheduleModelAndCourses: scheduleModelAndCourses ?? this.scheduleModelAndCourses,
+      );
 
   @override
   List<Object?> get props => [
@@ -51,6 +46,6 @@ class AppSwitchState extends Equatable {
         listOfWeeks,
         listViewToTopButtonVisible,
         message,
-        scheduleModelAndCourses
+        scheduleModelAndCourses,
       ];
 }

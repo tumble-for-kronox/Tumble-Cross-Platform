@@ -139,7 +139,7 @@ class _TumbleCalendarViewState extends State<TumbleCalendarView> {
                           return;
                         }
                         Event event = calendarLongPressDetails.appointments![0];
-                        EventOptions.showEventOptions(context, event, BlocProvider.of<AppSwitchCubit>(context));
+                        EventOptions.showEventOptions(context, event);
                       },
                       onTap: (calendarTapDetails) {
                         if (calendarTapDetails.targetElement != CalendarElement.appointment) {
@@ -147,10 +147,10 @@ class _TumbleCalendarViewState extends State<TumbleCalendarView> {
                         }
                         Event event = calendarTapDetails.appointments![0];
                         TumbleEventModal.showBookmarkEventModal(
-                            context,
-                            event,
-                            BlocProvider.of<AppSwitchCubit>(context).getColorForCourse(event),
-                            BlocProvider.of<AppSwitchCubit>(context));
+                          context,
+                          event,
+                          BlocProvider.of<AppSwitchCubit>(context).getColorForCourse(event),
+                        );
                       },
                     );
                   }

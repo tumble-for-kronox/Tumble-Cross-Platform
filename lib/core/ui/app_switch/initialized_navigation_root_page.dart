@@ -35,9 +35,7 @@ class _InitializedNavigationRootPageState extends State<InitializedNavigationRoo
             barrierDismissible: false,
             useRootNavigator: false,
             context: context,
-            builder: (_) => PermissionHandler(
-                  cubit: context.read<AppSwitchCubit>(),
-                ));
+            builder: (_) => const PermissionHandler());
       }
     });
     super.initState();
@@ -80,13 +78,13 @@ class _InitializedNavigationRootPageState extends State<InitializedNavigationRoo
                   }
                 },
                 child: AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 100),
+                  duration: const Duration(milliseconds: 200),
                   child: () {
                     switch (context.read<MainAppNavigationCubit>().state.navbarItem) {
                       case NavbarItem.SEARCH:
                         return const TumbleSearchPage();
                       case NavbarItem.LIST:
-                        return TumbleListView();
+                        return const TumbleListView();
                       case NavbarItem.WEEK:
                         return const TumbleWeekView();
                       case NavbarItem.CALENDAR:
@@ -98,7 +96,7 @@ class _InitializedNavigationRootPageState extends State<InitializedNavigationRoo
                 ),
               ),
               bottomNavigationBar: TumbleNavigationBar(onTap: (index) {
-                BlocProvider.of<MainAppNavigationCubit>(context).getNavBarItem(NavbarItem.values[index]);
+                context.read<MainAppNavigationCubit>().getNavBarItem(NavbarItem.values[index]);
               }));
         },
       ),

@@ -22,14 +22,12 @@ class ProgramCard extends StatelessWidget {
         Container(
           color: Theme.of(context).colorScheme.background,
           width: double.infinity,
-          height: 125,
+          height: 150,
           child: TextButton(
             onPressed: onTap,
             style: ButtonStyle(
-              overlayColor:
-                  MaterialStateProperty.all<Color>(Colors.grey.shade200),
-              foregroundColor: MaterialStateProperty.all<Color>(
-                  Theme.of(context).colorScheme.onBackground),
+              overlayColor: MaterialStateProperty.all<Color>(Colors.grey.shade200),
+              foregroundColor: MaterialStateProperty.all<Color>(Theme.of(context).colorScheme.onBackground),
             ),
             child: Container(
               width: double.infinity,
@@ -41,14 +39,16 @@ class ProgramCard extends StatelessWidget {
                     child: Text(
                       programSubtitle.trim(),
                       textAlign: TextAlign.left,
-                      style: const TextStyle(
-                          fontSize: 19, fontWeight: FontWeight.w400),
+                      style: const TextStyle(fontSize: 19, fontWeight: FontWeight.w400),
                     ),
                   ),
                   const SizedBox(
                     height: 10,
                   ),
-                  Row(
+                  Wrap(
+                    spacing: 8.0, // gap between adjacent chips
+                    runSpacing: 4.0, // gap between lines
+                    direction: Axis.horizontal, // main axis (rows or columns)
                     children: [
                       Text(
                         programName.split(RegExp(r'\s-')).first,

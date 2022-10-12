@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:tumble/core/extensions/extensions.dart';
 import 'package:tumble/core/models/backend_models/schedule_model.dart';
@@ -9,8 +10,7 @@ import 'package:tumble/core/ui/schedule/tumble_list_view/tumble_list_view_schedu
 
 class TumbleListViewDayContainer extends StatelessWidget {
   final Day day;
-  final AppSwitchCubit mainAppCubit;
-  const TumbleListViewDayContainer({Key? key, required this.day, required this.mainAppCubit}) : super(key: key);
+  const TumbleListViewDayContainer({Key? key, required this.day}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -38,12 +38,14 @@ class TumbleListViewDayContainer extends StatelessWidget {
             child: Column(
               children: day.events
                   .map((event) => GestureDetector(
-                        onLongPress: () => EventOptions.showEventOptions(context, event, mainAppCubit),
+                        onLongPress: () => EventOptions.showEventOptions(context, event),
                         child: ScheduleCard(
                             event: event,
-                            color: event.isSpecial ? Colors.redAccent : mainAppCubit.getColorForCourse(event),
+                            color: event.isSpecial
+                                ? Colors.redAccent
+                                : context.read<AppSwitchCubit>().getColorForCourse(event),
                             onTap: () => TumbleEventModal.showBookmarkEventModal(
-                                context, event, mainAppCubit.getColorForCourse(event), mainAppCubit)),
+                                context, event, context.read<AppSwitchCubit>().getColorForCourse(event))),
                       ))
                   .toList(),
             ),

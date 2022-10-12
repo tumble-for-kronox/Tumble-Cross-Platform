@@ -25,8 +25,8 @@ class TumbleDayOfWeekContainer extends StatelessWidget {
             children: <Widget>[DayOfWeekDivider(day: day)] +
                 day.events
                     .map((Event event) => GestureDetector(
-                        onLongPress: () => EventOptions.showEventOptions(context, event, cubit),
-                        child: TumbleWeekEventTile(event: event, mainAppCubit: cubit)))
+                        onLongPress: () => EventOptions.showEventOptions(context, event),
+                        child: TumbleWeekEventTile(event: event)))
                     .toList(),
           );
   }
