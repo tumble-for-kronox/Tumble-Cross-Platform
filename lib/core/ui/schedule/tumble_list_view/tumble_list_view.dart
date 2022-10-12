@@ -49,6 +49,7 @@ class _TumbleListViewState extends State<TumbleListView> with TickerProviderStat
                       await context.read<AppSwitchCubit>().forceRefreshAll();
                     },
                     child: ListView.builder(
+                        controller: context.read<AppSwitchCubit>().controller,
                         itemCount: dayList.length,
                         itemBuilder: (context, index) => TumbleListViewDayContainer(day: dayList[index]))),
                 AnimatedPositioned(
