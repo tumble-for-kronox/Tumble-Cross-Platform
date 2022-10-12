@@ -263,16 +263,5 @@ class SearchPageCubit extends Cubit<SearchPageState> {
     emit(state.copyWith(searchPageStatus: SearchPageStatus.DISPLAY_PREVIEW));
   }
 
-  List<PreviewListViewDayContainer> getParsedPreviewDays() {
-    return state.previewListOfDays!
-        .where(
-            (day) => day.events.isNotEmpty && day.isoString.isAfter(DateTime.now().subtract(const Duration(days: 1))))
-        .map((day) => PreviewListViewDayContainer(
-              day: day,
-              searchPageCubit: this,
-            ))
-        .toList();
-  }
-
   bool scheduleInBookmarks() => _preferenceService.bookmarksContainSchedule(state.previewCurrentScheduleId!);
 }

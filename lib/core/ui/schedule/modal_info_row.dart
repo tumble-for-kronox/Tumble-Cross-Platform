@@ -52,7 +52,7 @@ class ModalInfoRow extends StatelessWidget {
                           ? teachers!.map((teacher) => '${teacher.firstName} ${teacher.lastName}').join(', ')
                           : RuntimeErrorType.missingTeachers();
                     }
-                    return subtitle!.length < 38 ? subtitle! : '${subtitle!.substring(0, 38)}..';
+                    return subtitle!;
                   })(),
                   style: TextStyle(color: Theme.of(context).colorScheme.onBackground, fontSize: 16),
                 ),

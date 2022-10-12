@@ -15,23 +15,7 @@ import 'package:tumble/core/ui/tumble_loading.dart';
 import 'tumble_list_view_day_container.dart';
 
 class TumbleListView extends StatelessWidget {
-  TumbleListView({Key? key}) : super(key: key);
-
-  final GlobalKey<AnimatedListState> _animatedListKey = GlobalKey();
-  List<TumbleListViewDayContainer> _listItems = [];
-
-  void _buildItems(List<TumbleListViewDayContainer> fetchedList) {
-    _listItems = [];
-    var future = Future(() {});
-    for (var i = 0; i < fetchedList.length; i++) {
-      future = future.then((_) {
-        return Future.delayed(const Duration(milliseconds: 10), () {
-          _listItems.add(fetchedList[i]);
-          _animatedListKey.currentState?.insertItem(_listItems.length - 1, duration: const Duration(milliseconds: 300));
-        });
-      });
-    }
-  }
+  const TumbleListView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +32,6 @@ class TumbleListView extends StatelessWidget {
           case AppScheduleViewStatus.LOADING:
             return const TumbleLoading();
           case AppScheduleViewStatus.POPULATED_VIEW:
-            _buildItems(context.read<AppSwitchCubit>().getParsedDayList());
             return Stack(
               children: [
                 RefreshIndicator(
@@ -56,20 +39,18 @@ class TumbleListView extends StatelessWidget {
                     context.read<AppSwitchCubit>().setLoading();
                     await context.read<AppSwitchCubit>().forceRefreshAll();
                   },
-                  child: AnimatedList(
+                  child: SingleChildScrollView(
                     controller: context.read<AppSwitchCubit>().controller,
-                    key: _animatedListKey,
-                    initialItemCount: _listItems.length,
-                    itemBuilder: (BuildContext context, int index, Animation<double> animation) {
-                      return FadeTransition(
-                        opacity: animation,
-                        child: SlideTransition(
-                          position:
-                              Tween<Offset>(begin: const Offset(1, 0), end: const Offset(0, 0)).animate(animation),
-                          child: _listItems[index],
-                        ),
-                      );
-                    },
+                    child: Column(
+                        children: state.listOfDays!
+                            .where((day) =>
+                                day.events.isNotEmpty &&
+                                day.isoString.isAfter(DateTime.now().subtract(const Duration(days: 1))))
+                            .map((day) => TumbleListViewDayContainer(
+                                  day: day,
+                                  mainAppCubit: BlocProvider.of<AppSwitchCubit>(context),
+                                ))
+                            .toList()),
                   ),
                 ),
                 AnimatedPositioned(
