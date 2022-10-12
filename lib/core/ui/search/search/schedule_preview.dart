@@ -38,16 +38,45 @@ class _SchedulePreviewState extends State<SchedulePreview> {
                   padding: const EdgeInsets.only(top: 50),
                   child: SingleChildScrollView(
                     controller: context.read<SearchPageCubit>().controller,
-                    child: Column(
-                        children: state.previewListOfDays!
-                            .where((day) =>
-                                day.events.isNotEmpty &&
-                                day.isoString.isAfter(DateTime.now().subtract(const Duration(days: 1))))
-                            .map((day) => PreviewListViewDayContainer(
+                    child: Column(children: () {
+                      int currentYear = 0;
+                      return state.previewListOfDays!
+                          .where((day) =>
+                              day.events.isNotEmpty &&
+                              day.isoString.isAfter(DateTime.now().subtract(const Duration(days: 1))))
+                          .map((day) {
+                        if (day.isoString.year != currentYear) {
+                          currentYear = day.isoString.year;
+                          return Stack(
+                            children: [
+                              Align(
+                                alignment: Alignment.topRight,
+                                child: Text(
+                                  currentYear.toString(),
+                                  style: TextStyle(
+                                    color: Theme.of(context).colorScheme.onBackground.withOpacity(0.3),
+                                    fontSize: 110,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 40),
+                                child: PreviewListViewDayContainer(
                                   day: day,
                                   searchPageCubit: BlocProvider.of<SearchPageCubit>(context),
-                                ))
-                            .toList()),
+                                ),
+                              )
+                            ],
+                          );
+                        }
+
+                        return PreviewListViewDayContainer(
+                          day: day,
+                          searchPageCubit: BlocProvider.of<SearchPageCubit>(context),
+                        );
+                      }).toList();
+                    }()),
                   ),
                 ),
                 AnimatedPositioned(

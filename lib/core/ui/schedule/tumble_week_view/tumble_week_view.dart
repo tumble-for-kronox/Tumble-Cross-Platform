@@ -39,12 +39,28 @@ class _TumbleWeekViewState extends State<TumbleWeekView> {
                   child: PageView.builder(
                       itemCount: state.listOfWeeks!.length,
                       itemBuilder: (context, index) {
-                        return state.listOfWeeks!
-                            .map((e) => TumbleWeekPageContainer(
-                                  week: e,
-                                  cubit: BlocProvider.of<AppSwitchCubit>(context),
-                                ))
-                            .toList()[index];
+                        int currentYear = 0;
+
+                        return state.listOfWeeks!.map(
+                          (week) {
+                            if (week.days.first.isoString.year != currentYear) {
+                              currentYear = week.days.first.isoString.year;
+                              return Stack(
+                                children: [
+                                  Text(currentYear.toString(),
+                                      style: TextStyle(
+                                        color: Theme.of(context).colorScheme.onBackground.withOpacity(0.3),
+                                        fontSize: 110,
+                                        fontWeight: FontWeight.w600,
+                                      )),
+                                  TumbleWeekPageContainer(week: week, cubit: BlocProvider.of<AppSwitchCubit>(context))
+                                ],
+                              );
+                            }
+
+                            return TumbleWeekPageContainer(week: week, cubit: BlocProvider.of<AppSwitchCubit>(context));
+                          },
+                        ).toList()[index];
                       }))
             ]);
           case AppScheduleViewStatus.FETCH_ERROR:
