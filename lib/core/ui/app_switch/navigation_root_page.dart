@@ -97,7 +97,12 @@ class _NavigationRootPageState extends State<NavigationRootPage> {
                     value: context.read<AuthCubit>(),
                   ),
                 ],
-                child: const TumbleAppDrawer(),
+                child: TumbleAppDrawer(reloadViews: () async {
+                  final bookmarks = _searchPageCubit.updateBookmarkView();
+                  if (!bookmarks.contains(_searchPageCubit.state.previewCurrentScheduleId)) {
+                    _searchPageCubit.resetPreviewButton();
+                  }
+                }),
               ),
               appBar: const PreferredSize(
                 preferredSize: Size.fromHeight(60),
@@ -129,6 +134,7 @@ class _NavigationRootPageState extends State<NavigationRootPage> {
                         previous.previewToggledFavorite != current.previewToggledFavorite,
                     listener: (context, state) {
                       log(name: 'navigation_root_page', 'Fetching new schedules ..');
+                      _scheduleViewCubit.setLoading();
                       _scheduleViewCubit.getCachedSchedules();
                     },
                     child: AnimatedSwitcher(

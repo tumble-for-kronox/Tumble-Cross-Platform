@@ -1,13 +1,11 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:bloc/bloc.dart';
 import 'package:tumble/core/api/backend/response_types/schedule_or_programme_response.dart' as api;
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tumble/core/api/backend/response_types/schedule_or_programme_response.dart';
 import 'package:tumble/core/api/backend/repository/cache_repository.dart';
 import 'package:tumble/core/api/preferences/repository/preference_repository.dart';
@@ -22,10 +20,6 @@ import 'package:tumble/core/models/backend_models/schedule_model.dart';
 import 'package:tumble/core/models/ui_models/course_ui_model.dart';
 import 'package:tumble/core/models/ui_models/schedule_model_and_courses.dart';
 import 'package:tumble/core/models/ui_models/week_model.dart';
-import 'package:tumble/core/shared/preference_types.dart';
-import 'package:tumble/core/ui/data/string_constants.dart';
-import 'package:tumble/core/ui/scaffold_message.dart';
-import 'package:tumble/core/ui/search/preview_list_view_day_container.dart';
 
 part 'search_page_state.dart';
 
@@ -253,4 +247,11 @@ class SearchPageCubit extends Cubit<SearchPageState> {
         previewToggledFavorite: false, hasBookmarkedSchedules: getIt<PreferenceRepository>().bookmarkIds!.isNotEmpty));
     log(name: 'search_page_cubit', 'Finished executing bookmark REMOVE');
   }
+
+  List<String> updateBookmarkView() {
+    emit(state.copyWith(hasBookmarkedSchedules: _preferenceService.bookmarkIds!.isNotEmpty));
+    return _preferenceService.bookmarkIds!;
+  }
+
+  void resetPreviewButton() => emit(state.copyWith(previewToggledFavorite: false));
 }

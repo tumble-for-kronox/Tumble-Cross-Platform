@@ -16,7 +16,6 @@ class TumbleSearchPage extends StatefulWidget {
 }
 
 class _TumbleSearchPageState extends State<TumbleSearchPage> {
-
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SearchPageCubit, SearchPageState>(

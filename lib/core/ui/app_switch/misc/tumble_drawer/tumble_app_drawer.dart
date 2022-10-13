@@ -32,9 +32,8 @@ typedef HandleDrawerEvent = void Function(
 );
 
 class TumbleAppDrawer extends StatefulWidget {
-  const TumbleAppDrawer({
-    Key? key,
-  }) : super(key: key);
+  final VoidCallback reloadViews;
+  const TumbleAppDrawer({Key? key, required this.reloadViews}) : super(key: key);
 
   @override
   State<TumbleAppDrawer> createState() => _TumbleAppDrawerState();
@@ -250,8 +249,7 @@ class _TumbleAppDrawerState extends State<TumbleAppDrawer> {
                     child: const ApplicationBookmarkPicker(),
                   )).whenComplete(() async {
             if (tempBookmarks != context.read<DrawerCubit>().state.bookmarks!) {
-              BlocProvider.of<ScheduleViewCubit>(context).setLoading();
-              await BlocProvider.of<ScheduleViewCubit>(context).getCachedSchedules();
+              widget.reloadViews();
             }
           });
         }
