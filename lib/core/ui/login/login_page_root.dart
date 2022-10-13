@@ -11,6 +11,9 @@ import 'package:tumble/core/ui/data/string_constants.dart';
 import 'package:tumble/core/ui/scaffold_message.dart';
 import 'package:tumble/core/ui/tumble_loading.dart';
 
+import '../cubit/resource_cubit.dart';
+import '../cubit/user_event_cubit.dart';
+
 class LoginPageRoot extends StatefulWidget {
   const LoginPageRoot({Key? key}) : super(key: key);
 
@@ -49,7 +52,6 @@ class _LoginPageRootState extends State<LoginPageRoot> {
                 context.read<AuthCubit>().login().then((value) {
                   Future.delayed(const Duration(seconds: 1)).then((value) => Navigator.of(context).pop());
                 });
-
                 break;
               default:
                 break;
