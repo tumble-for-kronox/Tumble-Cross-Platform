@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tumble/core/extensions/extensions.dart';
-import 'package:tumble/core/ui/app_switch/misc/tumble_drawer/cubit/drawer_state.dart';
+import 'package:tumble/core/ui/cubit/drawer_state.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
 import 'package:tumble/core/ui/app_switch/misc/tumble_drag_pill.dart';
 import 'package:tumble/core/ui/app_switch/misc/tumble_drawer/drawer_generic/data/default_views_map.dart';

@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tumble/core/ui/bottom_nav_bar/cubit/bottom_nav_cubit.dart';
+import 'package:tumble/core/ui/cubit/bottom_nav_cubit.dart';
 
 import '../data/string_constants.dart';
 
@@ -13,7 +13,7 @@ class TumbleNavigationBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<MainAppNavigationCubit, MainAppNavigationState>(
+    return BlocBuilder<NavigationCubit, NavigationState>(
       builder: (context, mainappstate) {
         return Theme(
           data: Theme.of(context).copyWith(

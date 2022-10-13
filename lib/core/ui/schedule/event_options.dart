@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:tumble/core/extensions/extensions.dart';
-import 'package:tumble/core/ui/app_switch/cubit/app_switch_cubit.dart';
+import 'package:tumble/core/ui/cubit/schedule_view_cubit.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
 import 'package:tumble/core/ui/schedule/cancel_button.dart';
 
@@ -42,8 +42,8 @@ class EventOptions extends StatelessWidget {
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
               child: FutureBuilder(
                 future: Future.wait([
-                  context.read<AppSwitchCubit>().checkIfNotificationIsSetForEvent(event),
-                  context.read<AppSwitchCubit>().checkIfNotificationIsSetForCourse(event),
+                  context.read<ScheduleViewCubit>().checkIfNotificationIsSetForEvent(event),
+                  context.read<ScheduleViewCubit>().checkIfNotificationIsSetForCourse(event),
                 ]),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.done) {
@@ -67,7 +67,7 @@ class EventOptions extends StatelessWidget {
                             Navigator.of(context).pop();
 
                             if (notificationIsSetForCourse) {
-                              context.read<AppSwitchCubit>().cancelCourseNotifications(event).then(
+                              context.read<ScheduleViewCubit>().cancelCourseNotifications(event).then(
                                   (notificationCancelled) => notificationCancelled
                                       ? showScaffoldMessage(context,
                                           S.scaffoldMessages.cancelledCourseNotifications(event.course.englishName))
@@ -75,7 +75,7 @@ class EventOptions extends StatelessWidget {
                                           S.scaffoldMessages.cancelNotificationsFailed(event.title.capitalize())));
                             } else {
                               bool sucessfullyCreatedNotifications =
-                                  await context.read<AppSwitchCubit>().createNotificationForCourse(event, context);
+                                  await context.read<ScheduleViewCubit>().createNotificationForCourse(event, context);
                               if (!sucessfullyCreatedNotifications) {
                                 await showDialog(
                                     useRootNavigator: false,
@@ -104,7 +104,7 @@ class EventOptions extends StatelessWidget {
                             showDialog(
                               context: context,
                               builder: (context) {
-                                Color pickerColor = context.read<AppSwitchCubit>().getColorForCourse(event);
+                                Color pickerColor = context.read<ScheduleViewCubit>().getColorForCourse(event);
                                 return AlertDialog(
                                   title: Text(S.eventOptions.colorPickerTitle()),
                                   content: SingleChildScrollView(
@@ -121,9 +121,9 @@ class EventOptions extends StatelessWidget {
                                     TextButton(
                                       onPressed: () {
                                         context
-                                            .read<AppSwitchCubit>()
+                                            .read<ScheduleViewCubit>()
                                             .changeCourseColor(context, event.course, pickerColor);
-                                        context.read<AppSwitchCubit>().setLoading();
+                                        context.read<ScheduleViewCubit>().setLoading();
                                         Navigator.pop(context);
                                       },
                                       child: Text(S.general.done()),
@@ -169,7 +169,7 @@ class EventOptions extends StatelessWidget {
           Navigator.of(context).pop();
 
           if (notificationIsSetForEvent) {
-            context.read<AppSwitchCubit>().cancelEventNotification(event).then((notificationCancelled) =>
+            context.read<ScheduleViewCubit>().cancelEventNotification(event).then((notificationCancelled) =>
                 notificationCancelled
                     ? showScaffoldMessage(
                         context, S.scaffoldMessages.cancelledEventNotification(event.title.capitalize()))
@@ -177,7 +177,7 @@ class EventOptions extends StatelessWidget {
                         context, S.scaffoldMessages.cancelNotificationsFailed(event.title.capitalize())));
           } else {
             bool sucessfullyCreatedNotifications =
-                await context.read<AppSwitchCubit>().createNotificationForEvent(event, context);
+                await context.read<ScheduleViewCubit>().createNotificationForEvent(event, context);
             if (!sucessfullyCreatedNotifications) {
               await showDialog(useRootNavigator: false, context: context, builder: (_) => const PermissionHandler());
             }

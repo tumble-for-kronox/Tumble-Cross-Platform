@@ -3,9 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:tumble/core/extensions/extensions.dart';
 import 'package:tumble/core/models/backend_models/available_user_event_model.dart';
+import 'package:tumble/core/ui/cubit/auth_cubit.dart';
+import 'package:tumble/core/ui/cubit/user_event_cubit.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
-import 'package:tumble/core/ui/login/cubit/auth_cubit.dart';
-import 'package:tumble/core/ui/user/cubit/user_event_cubit.dart';
 import 'package:tumble/core/ui/user/events/user_event_register_button.dart';
 
 import '../user_event_unregister_button.dart';
@@ -128,16 +128,25 @@ class AvailableUserEventCard extends StatelessWidget {
                                         ? UserEventUnregisterButton(
                                             loading: state.registerUnregisterStatus == RegisterUnregisterStatus.LOADING,
                                             onPressed: () {
-                                              BlocProvider.of<UserEventCubit>(context)
-                                                  .unregisterUserEvent(userEvent.id, context.read<AuthCubit>());
+                                              BlocProvider.of<UserEventCubit>(context).unregisterUserEvent(
+                                                  userEvent.id,
+                                                  context.read<AuthCubit>().state.status,
+                                                  context.read<AuthCubit>().login,
+                                                  context.read<AuthCubit>().state.userSession!.sessionToken,
+                                                  context.read<AuthCubit>().logout);
                                             },
                                           )
                                         : UserEventRegisterButton(
                                             loading: state.registerUnregisterStatus == RegisterUnregisterStatus.LOADING,
                                             linkToKronox: userEvent.requiresChoosingLocation,
                                             onPressed: () {
-                                              BlocProvider.of<UserEventCubit>(context)
-                                                  .registerUserEvent(userEvent.id, context.read<AuthCubit>());
+                                              BlocProvider.of<UserEventCubit>(context).registerUserEvent(
+                                                context.read<AuthCubit>().state.status,
+                                                userEvent.id,
+                                                context.read<AuthCubit>().logout,
+                                                context.read<AuthCubit>().login,
+                                                context.read<AuthCubit>().state.userSession!.sessionToken,
+                                              );
                                             });
                                   },
                                 )),

@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tumble/core/models/backend_models/schedule_model.dart';
+import 'package:tumble/core/ui/cubit/search_page_cubit.dart';
 import 'package:tumble/core/ui/schedule/event_modal.dart';
 import 'package:tumble/core/ui/schedule/tumble_list_view/tumble_list_view_schedule_card.dart';
-import 'package:tumble/core/ui/search/cubit/search_page_cubit.dart';
 
 class PreviewListViewDayContainer extends StatelessWidget {
   final Day day;
-  const PreviewListViewDayContainer({Key? key, required this.day}) : super(key: key);
+  final SearchPageCubit searchPageCubit;
+  const PreviewListViewDayContainer({Key? key, required this.day, required this.searchPageCubit}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -36,10 +37,9 @@ class PreviewListViewDayContainer extends StatelessWidget {
               children: day.events
                   .map((event) => ScheduleCard(
                       event: event,
-                      color:
-                          event.isSpecial ? Colors.redAccent : context.read<SearchPageCubit>().getColorForCourse(event),
+                      color: event.isSpecial ? Colors.redAccent : searchPageCubit.getColorForCourse(event),
                       onTap: () => TumbleEventModal.showPreviewEventModal(
-                          context, event, context.read<SearchPageCubit>().getColorForCourse(event))))
+                          context, event, searchPageCubit.getColorForCourse(event))))
                   .toList(),
             ),
           )

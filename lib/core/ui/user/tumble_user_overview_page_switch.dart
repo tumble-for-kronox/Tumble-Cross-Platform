@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tumble/core/ui/login/cubit/auth_cubit.dart';
+import 'package:tumble/core/ui/cubit/auth_cubit.dart';
 import 'package:tumble/core/ui/tumble_loading.dart';
 import 'package:tumble/core/ui/user/overview/authenticated_overview_page.dart';
 import 'package:tumble/core/ui/user/overview/unauthenticated_overview_page.dart';
@@ -23,7 +23,6 @@ class _TumbleUserOverviewPageSwitchState extends State<TumbleUserOverviewPageSwi
           case AuthStatus.INITIAL:
           case AuthStatus.ERROR:
           case AuthStatus.UNAUTHENTICATED:
-          case AuthStatus.ERROR:
             return const UnauthenticatedOverviewPage();
           default:
             return const TumbleLoading();

@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tumble/core/ui/cubit/resource_cubit.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
 import 'package:tumble/core/ui/user/resources/resource_card.dart';
 import 'package:tumble/core/ui/user/resources/tumble_chosen_resource_page.dart';
 
-import 'cubit/resource_cubit.dart';
 
 class ResourcePage extends StatelessWidget {
   final Future<void> Function()? onSchoolResourcesRefresh;

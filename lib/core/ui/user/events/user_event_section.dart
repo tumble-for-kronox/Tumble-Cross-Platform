@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tumble/core/models/backend_models/available_user_event_model.dart';
 import 'package:tumble/core/models/backend_models/upcoming_user_event_model.dart';
+import 'package:tumble/core/ui/cubit/auth_cubit.dart';
 import 'package:tumble/core/ui/user/events/cards/available_user_event_card.dart';
 import 'package:tumble/core/ui/user/events/cards/registered_passed_user_event_card.dart';
 import 'package:tumble/core/ui/user/events/cards/upcoming_user_event_card.dart';
+import 'package:tumble/core/ui/user/events/modals/available_user_event_modal.dart';
 import 'package:tumble/core/ui/user/events/modals/registered_passed_user_event_modal.dart';
+import 'package:tumble/core/ui/user/events/modals/upcoming_user_event_modal.dart';
 
-import '../../login/cubit/auth_cubit.dart';
-import 'modals/available_user_event_modal.dart';
-import 'modals/upcoming_user_event_modal.dart';
 
 class UserEventSection extends StatelessWidget {
   final String sectionTitle;

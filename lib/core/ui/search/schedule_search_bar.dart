@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tumble/core/ui/cubit/search_page_cubit.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
-import 'package:tumble/core/ui/search/cubit/search_page_cubit.dart';
 
 class ScheduleSearchBar extends StatefulWidget {
   const ScheduleSearchBar({Key? key}) : super(key: key);

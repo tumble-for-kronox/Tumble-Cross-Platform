@@ -3,12 +3,12 @@ import 'package:tumble/core/app.dart';
 import 'package:tumble/core/navigation/navigation_route_labels.dart';
 import 'package:tumble/core/ui/login/login_page_root.dart';
 import 'package:tumble/core/ui/app_switch/app_switch.dart';
-import 'package:tumble/core/ui/app_switch/initialized_navigation_root_page.dart';
+import 'package:tumble/core/ui/app_switch/navigation_root_page.dart';
 import 'package:tumble/core/ui/app_switch/school_selection_page.dart';
 import 'package:tumble/core/ui/schedule/tumble_calendar_view/tumble_calendar_view.dart';
 import 'package:tumble/core/ui/schedule/tumble_list_view/tumble_list_view.dart';
 import 'package:tumble/core/ui/schedule/tumble_week_view/tumble_week_view.dart';
-import 'package:tumble/core/ui/search/search/tumble_search_page.dart';
+import 'package:tumble/core/ui/search/tumble_search_page.dart';
 import 'package:tumble/core/ui/user/resources/tumble_resource_page.dart';
 
 class Routes {
@@ -35,15 +35,13 @@ class Routes {
         pageClass = const AppSwitch();
         break;
       case NavigationRouteLabels.mainAppNavigationRootPage:
-        pageClass = const InitializedNavigationRootPage();
+        pageClass = const NavigationRootPage();
         break;
       case NavigationRouteLabels.schoolSelectionPage:
         pageClass = const SchoolSelectionPage();
         break;
       case NavigationRouteLabels.loginPageRoot:
-        pageClass = LoginPageRoot(
-          schoolName: arguments,
-        );
+        pageClass = const LoginPageRoot();
         break;
       case NavigationRouteLabels.tumbleSearchPage:
         pageClass = const TumbleSearchPage();

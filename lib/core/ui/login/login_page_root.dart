@@ -3,51 +3,62 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
 import 'package:tumble/core/api/backend/response_types/runtime_error_type.dart';
-import 'package:tumble/core/navigation/app_navigator.dart';
 import 'package:tumble/core/navigation/navigation_route_labels.dart';
 import 'package:tumble/core/theme/data/colors.dart';
+import 'package:tumble/core/ui/cubit/auth_cubit.dart';
+import 'package:tumble/core/ui/cubit/login_cubit.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
-import 'package:tumble/core/ui/login/cubit/auth_cubit.dart';
 import 'package:tumble/core/ui/scaffold_message.dart';
 import 'package:tumble/core/ui/tumble_loading.dart';
 
 class LoginPageRoot extends StatefulWidget {
-  final String? schoolName;
-  const LoginPageRoot({Key? key, this.schoolName}) : super(key: key);
+  const LoginPageRoot({Key? key}) : super(key: key);
 
   @override
   State<LoginPageRoot> createState() => _LoginPageRootState();
 }
 
 class _LoginPageRootState extends State<LoginPageRoot> {
+  late Map<dynamic, dynamic> _arguments;
+  late String _schoolName;
+  late LoginCubit _loginCubit;
+
+  @override
+  void initState() {
+    _loginCubit = LoginCubit();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _loginCubit.close();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final navigator = BlocProvider.of<AppNavigator>(context);
-    return BlocListener<AuthCubit, AuthState>(
-        listener: ((context, state) async {
-          switch (state.status) {
-            case AuthStatus.INITIAL:
-              if (state.errorMessage != null &&
-                  (state.passwordController.text.isNotEmpty || state.usernameController.text.isNotEmpty)) {
-                showScaffoldMessage(context, state.errorMessage!);
-              } else if (BlocProvider.of<AuthCubit>(context).authenticated) {
-                BlocProvider.of<AuthCubit>(context).setUserLoggedIn();
-              }
-              break;
-            case AuthStatus.AUTHENTICATED:
-              BlocProvider.of<AuthCubit>(context).setUserSession(state.userSession!);
-              showScaffoldMessage(context, RuntimeErrorType.loginSuccess());
-              navigator.pushAndRemoveAll(NavigationRouteLabels.appSwitchPage);
-              break;
-            default:
-              break;
-          }
-        }),
-        child: Scaffold(
-            backgroundColor: Theme.of(context).colorScheme.primary,
-            appBar: _appBar(context, navigator),
-            resizeToAvoidBottomInset: false,
-            body: _initialState(context, widget.schoolName!)));
+    _arguments = (ModalRoute.of(context)?.settings.arguments) as Map;
+    _schoolName = _arguments['schoolName'];
+    return BlocProvider.value(
+      value: _loginCubit,
+      child: BlocListener<LoginCubit, LoginState>(
+          listener: ((context, state) async {
+            switch (state.status) {
+              case LoginStatus.SUCCESS:
+                showScaffoldMessage(context, RuntimeErrorType.loginSuccess());
+                Navigator.of(context)
+                    .pushNamedAndRemoveUntil(NavigationRouteLabels.appTopRootBuilder, (route) => false);
+                break;
+              default:
+                break;
+            }
+          }),
+          child: Scaffold(
+              backgroundColor: Theme.of(context).colorScheme.primary,
+              appBar: _appBar(context),
+              resizeToAvoidBottomInset: false,
+              body: _initialState(context, _schoolName))),
+    );
   }
 }
 
@@ -59,7 +70,7 @@ Widget _initialState(BuildContext context, String school) {
       children: [
         /// This widget should be dynamic, toggling its visibility based
         /// on the focusnode on each input field in the login form.
-        BlocBuilder<AuthCubit, AuthState>(
+        BlocBuilder<LoginCubit, LoginState>(
           builder: (context, state) {
             return AnimatedSize(
               duration: const Duration(milliseconds: 200),
@@ -133,7 +144,7 @@ Widget _initialState(BuildContext context, String school) {
                       ),
                     ],
                   ),
-                  child: BlocBuilder<AuthCubit, AuthState>(
+                  child: BlocBuilder<LoginCubit, LoginState>(
                     builder: (context, state) {
                       if (state.loginSuccess) {
                         return SizedBox(
@@ -146,7 +157,7 @@ Widget _initialState(BuildContext context, String school) {
                         );
                       }
                       switch (state.status) {
-                        case AuthStatus.LOADING:
+                        case LoginStatus.LOADING:
                           if (state.loginSuccess) {
                             return SizedBox(
                               height: double.infinity,
@@ -168,11 +179,11 @@ Widget _initialState(BuildContext context, String school) {
   );
 }
 
-PreferredSizeWidget _appBar(BuildContext context, AppNavigator navigator) {
+PreferredSizeWidget _appBar(BuildContext context) {
   return AppBar(
       backgroundColor: Theme.of(context).colorScheme.background,
       leadingWidth: 100,
-      leading: BlocBuilder<AuthCubit, AuthState>(
+      leading: BlocBuilder<LoginCubit, LoginState>(
         builder: (context, state) {
           return ElevatedButton.icon(
             icon: Icon(
@@ -186,7 +197,7 @@ PreferredSizeWidget _appBar(BuildContext context, AppNavigator navigator) {
             onPressed: () {
               state.passwordController.clear();
               state.usernameController.clear();
-              navigator.pop();
+              Navigator.of(context).pop();
             },
             label: Text(
               S.general.back(),
@@ -198,13 +209,13 @@ PreferredSizeWidget _appBar(BuildContext context, AppNavigator navigator) {
 }
 
 Widget _form(BuildContext context, String school) {
-  return BlocBuilder<AuthCubit, AuthState>(
+  return BlocBuilder<LoginCubit, LoginState>(
     builder: (context, state) {
       return Form(
         onWillPop: () async {
           state.passwordController.clear();
           state.usernameController.clear();
-          context.read<AuthCubit>().setFocusFalse();
+          context.read<LoginCubit>().setFocusFalse();
           return true;
         },
         child: Container(
@@ -223,13 +234,13 @@ Widget _form(BuildContext context, String school) {
                     height: 35,
                   ),
                   _formPasswordField(context, school),
-                  if (state.status == AuthStatus.ERROR)
+                  if (state.status == LoginStatus.FAIL)
                     Container(
                       padding: const EdgeInsets.only(top: 40),
                       child: Text(
                         state.errorMessage!,
                         textAlign: TextAlign.center,
-                        style: TextStyle(color: Colors.red),
+                        style: const TextStyle(color: Colors.red),
                       ),
                     )
                 ],
@@ -250,7 +261,7 @@ Widget _formSubmitButton(BuildContext context, String school) {
     height: 105,
     child: OutlinedButton(
       onPressed: () {
-        BlocProvider.of<AuthCubit>(context).submitLogin(context, school);
+        BlocProvider.of<LoginCubit>(context).submitLogin(context, school);
       },
       style: ButtonStyle(
         backgroundColor: MaterialStateProperty.all<Color>(CustomColors.orangePrimary),
@@ -280,10 +291,10 @@ Widget _formUsernameField(BuildContext context, String school) {
   return Container(
     padding: const EdgeInsets.only(right: 15),
     width: 340,
-    child: BlocBuilder<AuthCubit, AuthState>(
+    child: BlocBuilder<LoginCubit, LoginState>(
       builder: (context, state) {
         return TextFormField(
-          focusNode: context.read<AuthCubit>().focusNodeUsername,
+          focusNode: context.read<LoginCubit>().focusNodeUsername,
           autocorrect: false,
           autofillHints: const [AutofillHints.email],
           style: const TextStyle(fontSize: 14),
@@ -311,7 +322,7 @@ Widget _formUsernameField(BuildContext context, String school) {
                   borderRadius: BorderRadius.circular(20))),
           keyboardType: TextInputType.emailAddress,
           textInputAction: TextInputAction.done,
-          onFieldSubmitted: (String s) => BlocProvider.of<AuthCubit>(context).submitLogin(context, school),
+          onFieldSubmitted: (String s) => BlocProvider.of<LoginCubit>(context).submitLogin(context, school),
           autovalidateMode: AutovalidateMode.onUserInteraction,
           validator: (String? text) {
             return text == "" ? S.loginPage.emailValidationError() : null;
@@ -326,10 +337,10 @@ Widget _formPasswordField(BuildContext context, String school) {
   return Container(
     padding: const EdgeInsets.only(right: 15),
     width: 340,
-    child: BlocBuilder<AuthCubit, AuthState>(
+    child: BlocBuilder<LoginCubit, LoginState>(
       builder: (context, state) {
         return TextFormField(
-          focusNode: context.read<AuthCubit>().focusNodePassword,
+          focusNode: context.read<LoginCubit>().focusNodePassword,
           autocorrect: false,
           autofillHints: const [AutofillHints.password],
           style: const TextStyle(fontSize: 14),
@@ -337,7 +348,7 @@ Widget _formPasswordField(BuildContext context, String school) {
           obscureText: state.passwordHidden,
           decoration: InputDecoration(
               suffixIcon: IconButton(
-                  onPressed: () => BlocProvider.of<AuthCubit>(context).togglePasswordVisibility(),
+                  onPressed: () => BlocProvider.of<LoginCubit>(context).togglePasswordVisibility(),
                   icon: Icon(
                     !state.passwordHidden ? CupertinoIcons.eye : CupertinoIcons.eye_slash,
                     color: Theme.of(context).colorScheme.onBackground.withOpacity(.9),
@@ -360,7 +371,7 @@ Widget _formPasswordField(BuildContext context, String school) {
                   borderSide: BorderSide(width: 1, color: const Color.fromARGB(255, 235, 36, 5).withOpacity(.5)),
                   borderRadius: BorderRadius.circular(20))),
           textInputAction: TextInputAction.done,
-          onFieldSubmitted: (String s) => BlocProvider.of<AuthCubit>(context).submitLogin(
+          onFieldSubmitted: (String s) => BlocProvider.of<LoginCubit>(context).submitLogin(
             context,
             school,
           ),

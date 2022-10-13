@@ -2,10 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tumble/core/theme/data/colors.dart';
+import 'package:tumble/core/ui/cubit/drawer_state.dart';
+import 'package:tumble/core/ui/cubit/support_modal_state.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
 import 'package:tumble/core/ui/app_switch/misc/tumble_details_modal_base.dart';
-import 'package:tumble/core/ui/app_switch/misc/tumble_drawer/cubit/drawer_state.dart';
-import 'package:tumble/core/ui/app_switch/misc/tumble_drawer/support_modal/cubit/support_modal_state.dart';
 import 'package:tumble/core/ui/tumble_button.dart';
 import 'package:tumble/core/ui/tumble_loading.dart';
 

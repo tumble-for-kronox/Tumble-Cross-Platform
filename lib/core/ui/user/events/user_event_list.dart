@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tumble/core/ui/cubit/user_event_cubit.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
 import 'package:tumble/core/ui/tumble_loading.dart';
-import 'package:tumble/core/ui/user/cubit/user_event_cubit.dart';
 import 'package:tumble/core/ui/user/events/user_event_section.dart';
 
 class Events extends StatefulWidget {

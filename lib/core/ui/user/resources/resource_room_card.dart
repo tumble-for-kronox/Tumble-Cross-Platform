@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tumble/core/ui/cubit/resource_cubit.dart';
 
-import 'cubit/resource_cubit.dart';
 
 class RoomCard extends StatelessWidget {
   final String roomId;

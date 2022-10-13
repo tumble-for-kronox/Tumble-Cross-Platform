@@ -1,31 +1,32 @@
-import 'dart:developer' as dev;
 import 'dart:developer';
+import 'dart:ui';
+
+import 'package:bloc/bloc.dart';
 import 'package:collection/collection.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tumble/core/api/backend/response_types/schedule_or_programme_response.dart';
-import 'package:tumble/core/api/preferences/repository/preference_repository.dart';
-import 'package:tumble/core/notifications/builders/notification_service_builder.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:tumble/core/api/backend/repository/cache_repository.dart';
+import 'package:tumble/core/api/backend/response_types/schedule_or_programme_response.dart';
 import 'package:tumble/core/api/database/repository/database_repository.dart';
+import 'package:tumble/core/api/dependency_injection/get_it.dart';
+import 'package:tumble/core/api/preferences/repository/preference_repository.dart';
 import 'package:tumble/core/extensions/extensions.dart';
 import 'package:tumble/core/models/backend_models/schedule_model.dart';
 import 'package:tumble/core/models/ui_models/course_ui_model.dart';
 import 'package:tumble/core/models/ui_models/schedule_model_and_courses.dart';
 import 'package:tumble/core/models/ui_models/week_model.dart';
+import 'package:tumble/core/notifications/builders/notification_service_builder.dart';
 import 'package:tumble/core/notifications/repository/notification_repository.dart';
-import 'package:tumble/core/api/dependency_injection/get_it.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
 import 'package:tumble/core/ui/scaffold_message.dart';
 
-part 'app_switch_state.dart';
+part 'schedule_view_state.dart';
 
-class AppSwitchCubit extends Cubit<AppSwitchState> {
-  AppSwitchCubit()
-      : super(const AppSwitchState(
-          status: AppScheduleViewStatus.LOADING,
+class ScheduleViewCubit extends Cubit<ScheduleViewState> {
+  ScheduleViewCubit()
+      : super(const ScheduleViewState(
+          status: ScheduleViewStatus.LOADING,
           listOfDays: null,
           listOfWeeks: null,
           listViewToTopButtonVisible: false,
@@ -49,7 +50,7 @@ class AppSwitchCubit extends Cubit<AppSwitchState> {
       _listViewScrollController.hasClients ? _listViewScrollController.offset >= 1000 : false;
 
   Future<void> _init() async {
-    dev.log(name: 'app_switch_cubit', 'Fetching cache ...');
+    log(name: 'schedule_view_cubit', 'Fetching cache ...');
     await getCachedSchedules();
     _listViewScrollController.addListener((setScrollController));
   }
@@ -90,18 +91,18 @@ class AppSwitchCubit extends Cubit<AppSwitchState> {
 
                 /// If an error occurs here, there is an underlying error in
                 /// communication, the cache is broken, or the backend is down.
-                emit(state.copyWith(status: AppScheduleViewStatus.FETCH_ERROR));
-                dev.log(
-                    name: 'app_switch_cubit',
+                emit(state.copyWith(status: ScheduleViewStatus.FETCH_ERROR));
+                log(
+                    name: 'schedule_view_cubit',
                     'Error in retrieveing schedule cache ..\nError on schedule: [$scheduleId');
                 return;
               default:
-                dev.log(name: 'app_switch_cubit', 'Unknown communication error occured on schedule: [$scheduleId]..');
+                log(name: 'schedule_view_cubit', 'Unknown communication error occured on schedule: [$scheduleId]..');
                 break;
             }
           }
         } else {
-          emit(state.copyWith(status: AppScheduleViewStatus.NO_VIEW));
+          emit(state.copyWith(status: ScheduleViewStatus.NO_VIEW));
         }
       }
       _setScheduleView(listOfScheduleModelAndCourses, matrixListOfDays);
@@ -127,14 +128,14 @@ class AppSwitchCubit extends Cubit<AppSwitchState> {
           .toList();
 
       emit(state.copyWith(
-        status: AppScheduleViewStatus.POPULATED_VIEW,
+        status: ScheduleViewStatus.POPULATED_VIEW,
         scheduleModelAndCourses: listOfScheduleModelAndCourses,
         listOfDays: listOfDays,
         listOfWeeks: listOfDays.splitToWeek(),
       ));
-      dev.log(name: 'app_switch_cubit', 'Successfully updated entire schedule view. Exiting ..');
+      log(name: 'schedule_view_cubit', 'Successfully updated entire schedule view. Exiting ..');
     } else {
-      emit(state.copyWith(status: AppScheduleViewStatus.NO_VIEW));
+      emit(state.copyWith(status: ScheduleViewStatus.NO_VIEW));
     }
   }
 
@@ -151,7 +152,7 @@ class AppSwitchCubit extends Cubit<AppSwitchState> {
   }
 
   setLoading() {
-    emit(state.copyWith(status: AppScheduleViewStatus.LOADING));
+    emit(state.copyWith(status: ScheduleViewStatus.LOADING));
   }
 
   Color getColorForCourse(Event event) {
@@ -181,13 +182,13 @@ class AppSwitchCubit extends Cubit<AppSwitchState> {
             body: event.course.englishName,
             date: event.from);
 
-        dev.log(name: 'app_switch_cubit', 'Created notification for event "${event.title.capitalize()}"');
+        log(name: 'schedule_view_cubit', 'Created notification for event "${event.title.capitalize()}"');
 
         showScaffoldMessage(context, S.scaffoldMessages.createdNotificationForEvent(event.title.capitalize()));
 
         return true;
       }
-      dev.log(name: 'app_switch_cubit', 'No new notifications created. User not allowed');
+      log(name: 'schedule_view_cubit', 'No new notifications created. User not allowed');
       return false;
     });
   }
@@ -219,14 +220,14 @@ class AppSwitchCubit extends Cubit<AppSwitchState> {
                 date: event.from);
           }
         }
-        dev.log(name: 'app_switch_cubit', 'Created ${events.length} new notifications for ${event.course}');
+        log(name: 'schedule_view_cubit', 'Created ${events.length} new notifications for ${event.course}');
 
         showScaffoldMessage(
             context, S.scaffoldMessages.createdNotificationForCourse(event.course.englishName, events.length));
 
         return true;
       }
-      dev.log(name: 'app_switch_cubit', 'No new notifications created. Not allowed');
+      log(name: 'schedule_view_cubit', 'No new notifications created. Not allowed');
       return false;
     });
   }
@@ -288,4 +289,6 @@ class AppSwitchCubit extends Cubit<AppSwitchState> {
     }
     await getCachedSchedules();
   }
+
+  void cancelAllNotifications() => _notificationService.cancelAllNotifications();
 }

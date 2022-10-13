@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tumble/core/api/dependency_injection/get_it.dart';
 import 'package:tumble/core/models/ui_models/school_model.dart';
-import 'package:tumble/core/navigation/app_navigator.dart';
 import 'package:tumble/core/navigation/navigation_route_labels.dart';
-import 'package:tumble/core/shared/preference_types.dart';
+import 'package:tumble/core/ui/cubit/app_switch_cubit.dart';
+import 'package:tumble/core/ui/cubit/auth_cubit.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
-import 'package:tumble/core/ui/init_cubit/init_cubit.dart';
-import 'package:tumble/core/ui/login/cubit/auth_cubit.dart';
 import 'package:tumble/core/ui/app_switch/data/schools.dart';
-import 'package:tumble/core/ui/search/search/school_card.dart';
+import 'package:tumble/core/ui/search/school_card.dart';
 
 class SchoolSelectionPage extends StatefulWidget {
   const SchoolSelectionPage({
@@ -24,7 +20,6 @@ class SchoolSelectionPage extends StatefulWidget {
 class _SchoolSelectionPageState extends State<SchoolSelectionPage> {
   @override
   Widget build(BuildContext context) {
-    final navigator = BlocProvider.of<AppNavigator>(context);
     return Scaffold(
         extendBodyBehindAppBar: true,
         body: Container(
@@ -52,7 +47,7 @@ class _SchoolSelectionPageState extends State<SchoolSelectionPage> {
                             schoolName: school.schoolName,
                             schoolId: school.schoolId,
                             schoolLogo: school.schoolLogo,
-                            selectSchool: () => onPressSchool(school, navigator, context)))
+                            selectSchool: () => onPressSchool(school, context)))
                         .toList(),
                   ),
                 ],
@@ -61,16 +56,17 @@ class _SchoolSelectionPageState extends State<SchoolSelectionPage> {
   }
 }
 
-void onPressSchool(School school, AppNavigator navigator, BuildContext context) {
+void onPressSchool(School school, BuildContext context) {
   if (school.loginRequired) {
-    navigator.push(NavigationRouteLabels.loginPageRoot, arguments: school.schoolName);
-  } else if (context.read<InitCubit>().schoolNotNull) {
-    BlocProvider.of<InitCubit>(context).changeSchool(school.schoolName).then((_) {
+    Navigator.of(context).pushNamed(NavigationRouteLabels.loginPageRoot, arguments: {'schoolName': school.schoolName});
+    return;
+  } else if (context.read<AppSwitchCubit>().schoolNotNull) {
+    BlocProvider.of<AppSwitchCubit>(context).changeSchool(school.schoolName).then((_) {
       BlocProvider.of<AuthCubit>(context).logout();
-      navigator.pushAndRemoveAll(NavigationRouteLabels.appTopRootBuilder);
+      Navigator.pushNamedAndRemoveUntil(context, NavigationRouteLabels.appTopRootBuilder, (route) => false);
     });
   } else {
-    BlocProvider.of<InitCubit>(context).changeSchool(school.schoolName).then((_) {
+    BlocProvider.of<AppSwitchCubit>(context).changeSchool(school.schoolName).then((_) {
       BlocProvider.of<AuthCubit>(context).logout();
     });
   }

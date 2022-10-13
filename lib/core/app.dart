@@ -3,18 +3,19 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:syncfusion_localizations/syncfusion_localizations.dart';
 import 'package:tumble/core/api/backend/initial/background_task.dart';
-import 'package:tumble/core/navigation/app_navigator.dart';
-import 'package:tumble/core/navigation/app_navigator_provider.dart';
 import 'package:tumble/core/navigation/navigation_route_labels.dart';
 import 'package:tumble/core/theme/cubit/theme_cubit.dart';
 import 'package:tumble/core/theme/cubit/theme_state.dart';
 import 'package:tumble/core/theme/data/colors.dart';
+import 'package:tumble/core/ui/app_switch/app_switch.dart';
+import 'package:tumble/core/ui/app_switch/school_selection_page.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
-import 'package:tumble/core/ui/init_cubit/init_cubit.dart';
-import 'package:tumble/core/ui/login/cubit/auth_cubit.dart';
-import 'package:tumble/core/ui/app_switch/cubit/app_switch_cubit.dart';
-import 'package:tumble/core/ui/search/cubit/search_page_cubit.dart';
+import 'package:tumble/core/ui/login/login_page_root.dart';
+import 'package:tumble/core/ui/schedule/tumble_calendar_view/tumble_calendar_view.dart';
+import 'package:tumble/core/ui/schedule/tumble_list_view/tumble_list_view.dart';
+import 'package:tumble/core/ui/schedule/tumble_week_view/tumble_week_view.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:tumble/core/ui/search/tumble_search_page.dart';
 
 class App extends StatefulWidget {
   const App({Key? key}) : super(key: key);
@@ -36,15 +37,10 @@ class _AppState extends State<App> {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider<InitCubit>(create: (_) => InitCubit()),
-        BlocProvider<AppNavigator>(create: (_) => AppNavigator()),
-        BlocProvider<AuthCubit>(create: (_) => AuthCubit()),
         BlocProvider<ThemeCubit>(
-            create: (_) => ThemeCubit()
+            create: (context) => ThemeCubit()
               ..getCurrentTheme()
               ..getCurrentLang()),
-        BlocProvider<SearchPageCubit>(create: (_) => SearchPageCubit()),
-        BlocProvider<AppSwitchCubit>(create: (_) => AppSwitchCubit()),
       ],
       child: BlocBuilder<ThemeCubit, ThemeState>(
           builder: ((context, state) => MaterialApp(
@@ -57,6 +53,16 @@ class _AppState extends State<App> {
                 AppLocalizations.delegate,
                 SfGlobalLocalizations.delegate
               ],
+              routes: {
+                NavigationRouteLabels.appSwitchPage: (context) => const AppSwitch(),
+                NavigationRouteLabels.appTopRootBuilder: (context) => const App(),
+                NavigationRouteLabels.loginPageRoot: (context) => const LoginPageRoot(),
+                NavigationRouteLabels.schoolSelectionPage: (context) => const SchoolSelectionPage(),
+                NavigationRouteLabels.tumbleCalendarView: (context) => const TumbleCalendarView(),
+                NavigationRouteLabels.tumbleListView: (context) => const TumbleListView(),
+                NavigationRouteLabels.tumbleWeekView: (context) => const TumbleWeekView(),
+                NavigationRouteLabels.tumbleSearchPage: (context) => const TumbleSearchPage()
+              },
               supportedLocales: AppLocalizations.supportedLocales,
               locale: state.locale,
               localeResolutionCallback: (locale, supportedLocales) =>
@@ -77,9 +83,7 @@ class _AppState extends State<App> {
               themeMode: state.themeMode,
               home: Builder(builder: (context) {
                 S.init(context);
-                return const AppNavigatorProvider(initialPages: [
-                  NavigationRouteLabels.appSwitchPage,
-                ]);
+                return const AppSwitch();
               })))),
     );
   }

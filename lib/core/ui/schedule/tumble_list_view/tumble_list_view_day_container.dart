@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:tumble/core/extensions/extensions.dart';
 import 'package:tumble/core/models/backend_models/schedule_model.dart';
-import 'package:tumble/core/ui/app_switch/cubit/app_switch_cubit.dart';
+import 'package:tumble/core/ui/cubit/schedule_view_cubit.dart';
 import 'package:tumble/core/ui/schedule/event_modal.dart';
 import 'package:tumble/core/ui/schedule/event_options.dart';
 import 'package:tumble/core/ui/schedule/tumble_list_view/tumble_list_view_schedule_card.dart';
@@ -43,9 +43,9 @@ class TumbleListViewDayContainer extends StatelessWidget {
                             event: event,
                             color: event.isSpecial
                                 ? Colors.redAccent
-                                : context.read<AppSwitchCubit>().getColorForCourse(event),
+                                : context.read<ScheduleViewCubit>().getColorForCourse(event),
                             onTap: () => TumbleEventModal.showBookmarkEventModal(
-                                context, event, context.read<AppSwitchCubit>().getColorForCourse(event))),
+                                context, event, context.read<ScheduleViewCubit>().getColorForCourse(event))),
                       ))
                   .toList(),
             ),
