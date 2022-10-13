@@ -139,7 +139,8 @@ class _NavigationRootPageState extends State<NavigationRootPage> {
                             return BlocProvider.value(
                               value: BlocProvider.of<AuthCubit>(context),
                               child: Builder(builder: (context) {
-                                if (!calledThisBuild) {
+                                if (!calledThisBuild &&
+                                    context.read<AuthCubit>().state.status == AuthStatus.AUTHENTICATED) {
                                   context.read<UserEventCubit>().getUserEvents(
                                       context.read<AuthCubit>().state.status,
                                       context.read<AuthCubit>().login,
