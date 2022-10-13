@@ -129,14 +129,26 @@ class _NavigationRootPageState extends State<NavigationRootPage> {
                       value: BlocProvider.of<AppSwitchCubit>(context),
                     )
                   ],
-                  child: BlocListener<SearchPageCubit, SearchPageState>(
-                    listenWhen: (previous, current) =>
-                        previous.previewToggledFavorite != current.previewToggledFavorite,
-                    listener: (context, state) {
-                      log(name: 'navigation_root_page', 'Fetching new schedules ..');
-                      _scheduleViewCubit.setLoading();
-                      _scheduleViewCubit.getCachedSchedules();
-                    },
+                  child: MultiBlocListener(
+                    listeners: [
+                      BlocListener<SearchPageCubit, SearchPageState>(
+                        listenWhen: (previous, current) =>
+                            previous.previewToggledFavorite != current.previewToggledFavorite,
+                        listener: (context, state) {
+                          log(name: 'navigation_root_page', 'Fetching new schedules ..');
+                          _scheduleViewCubit.setLoading();
+                          _scheduleViewCubit.getCachedSchedules();
+                        },
+                      ),
+                      BlocListener<AuthCubit, AuthState>(
+                        listenWhen: (previous, current) =>
+                            (current.status == AuthStatus.AUTHENTICATED) ||
+                            (previous.status == AuthStatus.INITIAL && current.status == AuthStatus.AUTHENTICATED),
+                        listener: (context, state) {
+                          _initialiseUserData(context);
+                        },
+                      ),
+                    ],
                     child: AnimatedSwitcher(
                       duration: const Duration(milliseconds: 200),
                       child: () {
@@ -168,5 +180,26 @@ class _NavigationRootPageState extends State<NavigationRootPage> {
         },
       ),
     );
+  }
+
+  void _initialiseUserData(BuildContext context) {
+    if (context.read<AuthCubit>().state.status == AuthStatus.AUTHENTICATED) {
+      context.read<UserEventCubit>().getUserEvents(
+          context.read<AuthCubit>().state.status,
+          context.read<AuthCubit>().login,
+          context.read<AuthCubit>().logout,
+          context.read<AuthCubit>().state.userSession!.sessionToken,
+          true);
+      context.read<ResourceCubit>().getSchoolResources(
+            context.read<AuthCubit>().state.userSession!.sessionToken,
+            context.read<AuthCubit>().login,
+            context.read<AuthCubit>().logout,
+          );
+      context.read<ResourceCubit>().getUserBookings(
+            context.read<AuthCubit>().state.userSession!.sessionToken,
+            context.read<AuthCubit>().login,
+            context.read<AuthCubit>().logout,
+          );
+    }
   }
 }

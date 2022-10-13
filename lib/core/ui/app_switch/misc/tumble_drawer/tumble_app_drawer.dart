@@ -250,6 +250,8 @@ class _TumbleAppDrawerState extends State<TumbleAppDrawer> {
                   )).whenComplete(() async {
             if (tempBookmarks != context.read<DrawerCubit>().state.bookmarks!) {
               widget.reloadViews();
+              context.read<ScheduleViewCubit>().setLoading();
+              context.read<ScheduleViewCubit>().getCachedSchedules();
             }
           });
         }

@@ -22,7 +22,6 @@ class _TumbleUserOverviewPageSwitchState extends State<TumbleUserOverviewPageSwi
       builder: (context, state) {
         switch (state.status) {
           case AuthStatus.AUTHENTICATED:
-            _initialiseUserData(context);
             return const AuthenticatedOverviewPage();
           case AuthStatus.INITIAL:
           case AuthStatus.ERROR:
@@ -33,26 +32,5 @@ class _TumbleUserOverviewPageSwitchState extends State<TumbleUserOverviewPageSwi
         }
       },
     );
-  }
-
-  void _initialiseUserData(BuildContext context) {
-    if (context.read<AuthCubit>().state.status == AuthStatus.AUTHENTICATED) {
-      context.read<UserEventCubit>().getUserEvents(
-          context.read<AuthCubit>().state.status,
-          context.read<AuthCubit>().login,
-          context.read<AuthCubit>().logout,
-          context.read<AuthCubit>().state.userSession!.sessionToken,
-          true);
-      context.read<ResourceCubit>().getSchoolResources(
-            context.read<AuthCubit>().state.userSession!.sessionToken,
-            context.read<AuthCubit>().login,
-            context.read<AuthCubit>().logout,
-          );
-      context.read<ResourceCubit>().getUserBookings(
-            context.read<AuthCubit>().state.userSession!.sessionToken,
-            context.read<AuthCubit>().login,
-            context.read<AuthCubit>().logout,
-          );
-    }
   }
 }
