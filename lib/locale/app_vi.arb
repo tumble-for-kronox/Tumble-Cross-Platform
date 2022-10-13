@@ -7,7 +7,7 @@
     "weekViewTitle": "Tuần",
     "calendarViewTitle": "Lịch",
     "accountPageTitle": "Tài khoản",
-    "weekViewNumber": "w. {Xố tuần}",
+    "weekViewNumber": "Tuần {weekNumber}",
     "@weekViewNumber": {
         "description": "Week number shown in week view.",
         "placeholders": {
