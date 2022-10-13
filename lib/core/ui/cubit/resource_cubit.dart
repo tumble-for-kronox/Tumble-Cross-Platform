@@ -160,6 +160,7 @@ class ResourceCubit extends Cubit<ResourceState> {
     switch (bookResource.status) {
       case ApiBookingResponseStatus.SUCCESS:
         getResourceAvailabilities(sessionToken, login, logOut, resourceId, date);
+        getUserBookings(sessionToken, login, logOut);
         break;
       case ApiBookingResponseStatus.UNAUTHORIZED:
         if (!loginLooped) {
