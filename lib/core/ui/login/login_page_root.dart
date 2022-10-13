@@ -42,12 +42,14 @@ class _LoginPageRootState extends State<LoginPageRoot> {
     return BlocProvider.value(
       value: _loginCubit,
       child: BlocListener<LoginCubit, LoginState>(
-          listener: ((context, state) async {
+          listener: ((_, state) async {
             switch (state.status) {
               case LoginStatus.SUCCESS:
                 showScaffoldMessage(context, RuntimeErrorType.loginSuccess());
-                Navigator.of(context)
-                    .pushNamedAndRemoveUntil(NavigationRouteLabels.appTopRootBuilder, (route) => false);
+                context.read<AuthCubit>().login().then((value) {
+                  Future.delayed(const Duration(seconds: 1)).then((value) => Navigator.of(context).pop());
+                });
+
                 break;
               default:
                 break;

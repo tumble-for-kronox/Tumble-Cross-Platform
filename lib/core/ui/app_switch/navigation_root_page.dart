@@ -144,27 +144,13 @@ class _NavigationRootPageState extends State<NavigationRootPage> {
                           case NavbarItem.CALENDAR:
                             return const TumbleCalendarView();
                           case NavbarItem.USER_OVERVIEW:
-                            return Builder(builder: (context) {
-                              if (!calledThisBuild &&
-                                  context.read<AuthCubit>().state.status == AuthStatus.AUTHENTICATED) {
-                                context.read<UserEventCubit>().getUserEvents(
-                                    context.read<AuthCubit>().state.status,
-                                    context.read<AuthCubit>().login,
-                                    context.read<AuthCubit>().logout,
-                                    context.read<AuthCubit>().state.userSession!.sessionToken,
-                                    true);
-                                context.read<ResourceCubit>().getSchoolResources(
-                                    context.read<AuthCubit>().state.userSession!.sessionToken,
-                                    context.read<AuthCubit>().login,
-                                    context.read<AuthCubit>().logout);
-                                context.read<ResourceCubit>().getUserBookings(
-                                    context.read<AuthCubit>().state.userSession!.sessionToken,
-                                    context.read<AuthCubit>().login,
-                                    context.read<AuthCubit>().logout);
-                                calledThisBuild = true;
-                              }
-                              return const TumbleUserOverviewPageSwitch();
-                            });
+                            return BlocProvider.value(
+                              value: BlocProvider.of<AuthCubit>(context),
+                              child: Builder(builder: (context) {
+                                _initialiseUserData(context);
+                                return const TumbleUserOverviewPageSwitch();
+                              }),
+                            );
                         }
                       }(),
                     ),
@@ -177,5 +163,21 @@ class _NavigationRootPageState extends State<NavigationRootPage> {
         },
       ),
     );
+  }
+
+  void _initialiseUserData(BuildContext context) {
+    if (!calledThisBuild && context.read<AuthCubit>().state.status == AuthStatus.AUTHENTICATED) {
+      context.read<UserEventCubit>().getUserEvents(
+          context.read<AuthCubit>().state.status,
+          context.read<AuthCubit>().login,
+          context.read<AuthCubit>().logout,
+          context.read<AuthCubit>().state.userSession!.sessionToken,
+          true);
+      context.read<ResourceCubit>().getSchoolResources(context.read<AuthCubit>().state.userSession!.sessionToken,
+          context.read<AuthCubit>().login, context.read<AuthCubit>().logout);
+      context.read<ResourceCubit>().getUserBookings(context.read<AuthCubit>().state.userSession!.sessionToken,
+          context.read<AuthCubit>().login, context.read<AuthCubit>().logout);
+      calledThisBuild = true;
+    }
   }
 }

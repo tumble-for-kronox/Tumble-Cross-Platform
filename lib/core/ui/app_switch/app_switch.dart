@@ -17,20 +17,17 @@ class AppSwitch extends StatefulWidget {
 
 class _AppSwitchState extends State<AppSwitch> {
   late AppSwitchCubit _appSwitchCubit;
-  late AuthCubit _authCubit;
 
   /// Global Cubit instances
   @override
   void initState() {
     _appSwitchCubit = AppSwitchCubit();
-    _authCubit = AuthCubit();
     super.initState();
   }
 
   @override
   void dispose() {
     _appSwitchCubit.close();
-    _authCubit.close();
     super.dispose();
   }
 
@@ -46,7 +43,7 @@ class _AppSwitchState extends State<AppSwitch> {
                       return MultiBlocProvider(
                         providers: [
                           BlocProvider.value(
-                            value: _authCubit,
+                            value: context.read<AuthCubit>(),
                           ),
                           BlocProvider.value(
                             value: _appSwitchCubit,
@@ -56,7 +53,7 @@ class _AppSwitchState extends State<AppSwitch> {
                       );
                     case AppSwitchStatus.INITIALIZED:
                       return BlocProvider.value(
-                        value: _authCubit,
+                        value: context.read<AuthCubit>(),
                         child: const NavigationRootPage(),
                       );
                     default:
