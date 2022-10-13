@@ -110,7 +110,7 @@ class EventOptions extends StatelessWidget {
                           onTap: () async {
                             showDialog(
                               context: context,
-                              builder: (context) {
+                              builder: (_) {
                                 Color pickerColor = context.read<ScheduleViewCubit>().getColorForCourse(event);
                                 return AlertDialog(
                                   title: Text(S.eventOptions.colorPickerTitle()),
@@ -131,6 +131,8 @@ class EventOptions extends StatelessWidget {
                                             .read<ScheduleViewCubit>()
                                             .changeCourseColor(context, event.course, pickerColor);
                                         context.read<ScheduleViewCubit>().setLoading();
+                                        showScaffoldMessage(
+                                            context, S.scaffoldMessages.updatedCourseColor(event.course.englishName));
                                         Navigator.pop(context);
                                       },
                                       child: Text(S.general.done()),

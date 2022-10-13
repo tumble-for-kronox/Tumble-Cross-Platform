@@ -235,8 +235,7 @@ class ScheduleViewCubit extends Cubit<ScheduleViewState> {
   Future<bool> checkIfNotificationIsSetForEvent(Event event) => _notificationService.eventHasNotification(event);
 
   /// Returns true if course id is found in current list of notifications
-  Future<bool> checkIfNotificationIsSetForCourse(Event event) =>
-      _notificationService.courseHasNotifications(event);
+  Future<bool> checkIfNotificationIsSetForCourse(Event event) => _notificationService.courseHasNotifications(event);
 
   Future<bool> cancelEventNotification(Event event) async {
     await _notificationService.cancelEventNotification(event);
@@ -260,7 +259,6 @@ class ScheduleViewCubit extends Cubit<ScheduleViewState> {
             courseId: course.id,
             color: color.value))
         .then((value) {
-      showScaffoldMessage(context, S.scaffoldMessages.updatedCourseColor(course.englishName));
       getCachedSchedules();
     });
   }
