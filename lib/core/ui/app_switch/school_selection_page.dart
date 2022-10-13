@@ -63,7 +63,7 @@ void onPressSchool(School school, BuildContext context) {
   } else if (context.read<AppSwitchCubit>().schoolNotNull) {
     BlocProvider.of<AppSwitchCubit>(context).changeSchool(school.schoolName).then((_) {
       BlocProvider.of<AuthCubit>(context).logout();
-      Navigator.pushNamedAndRemoveUntil(context, NavigationRouteLabels.appTopRootBuilder, (route) => false);
+      Navigator.pushNamedAndRemoveUntil(context, NavigationRouteLabels.appSwitchPage, (route) => false);
     });
   } else {
     BlocProvider.of<AppSwitchCubit>(context).changeSchool(school.schoolName).then((_) {

@@ -9,6 +9,7 @@ import 'package:tumble/core/theme/cubit/theme_state.dart';
 import 'package:tumble/core/theme/data/colors.dart';
 import 'package:tumble/core/ui/app_switch/app_switch.dart';
 import 'package:tumble/core/ui/app_switch/school_selection_page.dart';
+import 'package:tumble/core/ui/cubit/auth_cubit.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
 import 'package:tumble/core/ui/login/login_page_root.dart';
 import 'package:tumble/core/ui/schedule/tumble_calendar_view/tumble_calendar_view.dart';
@@ -41,6 +42,9 @@ class _AppState extends State<App> {
             create: (context) => ThemeCubit()
               ..getCurrentTheme()
               ..getCurrentLang()),
+        BlocProvider<AuthCubit>(
+          create: (context) => AuthCubit(),
+        ),
       ],
       child: BlocBuilder<ThemeCubit, ThemeState>(
           builder: ((context, state) => MaterialApp(
@@ -55,13 +59,13 @@ class _AppState extends State<App> {
               ],
               routes: {
                 NavigationRouteLabels.appSwitchPage: (context) => const AppSwitch(),
-                NavigationRouteLabels.appTopRootBuilder: (context) => const App(),
+                // NavigationRouteLabels.appTopRootBuilder: (context) => const App(),
                 NavigationRouteLabels.loginPageRoot: (context) => const LoginPageRoot(),
                 NavigationRouteLabels.schoolSelectionPage: (context) => const SchoolSelectionPage(),
-                NavigationRouteLabels.tumbleCalendarView: (context) => const TumbleCalendarView(),
-                NavigationRouteLabels.tumbleListView: (context) => const TumbleListView(),
-                NavigationRouteLabels.tumbleWeekView: (context) => const TumbleWeekView(),
-                NavigationRouteLabels.tumbleSearchPage: (context) => const TumbleSearchPage()
+                // NavigationRouteLabels.tumbleCalendarView: (context) => const TumbleCalendarView(),
+                // NavigationRouteLabels.tumbleListView: (context) => const TumbleListView(),
+                // NavigationRouteLabels.tumbleWeekView: (context) => const TumbleWeekView(),
+                // NavigationRouteLabels.tumbleSearchPage: (context) => const TumbleSearchPage()
               },
               supportedLocales: AppLocalizations.supportedLocales,
               locale: state.locale,
