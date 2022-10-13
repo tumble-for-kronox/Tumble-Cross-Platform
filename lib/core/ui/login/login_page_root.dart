@@ -238,7 +238,7 @@ Widget _form(BuildContext context, String school) {
                     Container(
                       padding: const EdgeInsets.only(top: 40),
                       child: Text(
-                        state.errorMessage!,
+                        RuntimeErrorType.loginError(),
                         textAlign: TextAlign.center,
                         style: const TextStyle(color: Colors.red),
                       ),

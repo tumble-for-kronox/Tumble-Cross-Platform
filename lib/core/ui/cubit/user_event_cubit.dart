@@ -31,12 +31,18 @@ class UserEventCubit extends Cubit<UserEventState> {
         UserResponse userEventResponse = await _userActionService.userEvents(sessionToken);
         switch (userEventResponse.status) {
           case ApiUserResponseStatus.COMPLETED:
+            if (isClosed) {
+              return;
+            }
             emit(state.copyWith(
               userEventListStatus: UserOverviewStatus.LOADED,
               userEvents: userEventResponse.data!,
             ));
             break;
           case ApiUserResponseStatus.ERROR:
+            if (isClosed) {
+              return;
+            }
             emit(state);
             break;
           case ApiUserResponseStatus.UNAUTHORIZED:
@@ -48,6 +54,9 @@ class UserEventCubit extends Cubit<UserEventState> {
             }
             break;
           default:
+            if (isClosed) {
+              return;
+            }
             emit(state.copyWith(
               userEventListStatus: UserOverviewStatus.ERROR,
             ));
@@ -60,12 +69,18 @@ class UserEventCubit extends Cubit<UserEventState> {
 
   Future<void> registerUserEvent(AuthStatus status, String id, Function logOut, Function login, String sessionToken,
       {bool loginLooped = false}) async {
+    if (isClosed) {
+      return;
+    }
     emit(state.copyWith(registerUnregisterStatus: RegisterUnregisterStatus.LOADING));
     UserResponse registerResponse = await _userActionService.registerUserEvent(id, sessionToken);
     switch (registerResponse.status) {
       case ApiUserResponseStatus.COMPLETED:
       case ApiUserResponseStatus.AUTHORIZED:
         await getUserEvents(status, login, logOut, sessionToken, false);
+        if (isClosed) {
+          return;
+        }
         emit(state.copyWith(registerUnregisterStatus: RegisterUnregisterStatus.INITIAL));
         break;
       case ApiUserResponseStatus.UNAUTHORIZED:
@@ -77,12 +92,18 @@ class UserEventCubit extends Cubit<UserEventState> {
         }
         break;
       case ApiUserResponseStatus.ERROR:
+        if (isClosed) {
+          return;
+        }
         emit(state.copyWith(
             registerUnregisterStatus: RegisterUnregisterStatus.INITIAL,
             userEventListStatus: UserOverviewStatus.ERROR,
             errorMessage: RuntimeErrorType.failedExamSignUp()));
         break;
       default:
+        if (isClosed) {
+          return;
+        }
         emit(state.copyWith(
             registerUnregisterStatus: RegisterUnregisterStatus.INITIAL,
             userEventListStatus: UserOverviewStatus.ERROR,
@@ -90,15 +111,21 @@ class UserEventCubit extends Cubit<UserEventState> {
     }
   }
 
-  Future<void> unregisterUserEvent(String id, AuthStatus status, Function login, String sessionToken, Function logOut, {bool loginLooped = false}) async {
+  Future<void> unregisterUserEvent(String id, AuthStatus status, Function login, String sessionToken, Function logOut,
+      {bool loginLooped = false}) async {
+    if (isClosed) {
+      return;
+    }
     emit(state.copyWith(registerUnregisterStatus: RegisterUnregisterStatus.LOADING));
-    UserResponse unregisterResponse =
-        await _userActionService.unregisterUserEvent(id, sessionToken);
+    UserResponse unregisterResponse = await _userActionService.unregisterUserEvent(id, sessionToken);
 
     switch (unregisterResponse.status) {
       case ApiUserResponseStatus.COMPLETED:
       case ApiUserResponseStatus.AUTHORIZED:
         await getUserEvents(status, login, logOut, sessionToken, false);
+        if (isClosed) {
+          return;
+        }
         emit(state.copyWith(registerUnregisterStatus: RegisterUnregisterStatus.INITIAL));
         break;
       case ApiUserResponseStatus.UNAUTHORIZED:
@@ -110,12 +137,18 @@ class UserEventCubit extends Cubit<UserEventState> {
         }
         break;
       case ApiUserResponseStatus.ERROR:
+        if (isClosed) {
+          return;
+        }
         emit(state.copyWith(
             registerUnregisterStatus: RegisterUnregisterStatus.INITIAL,
             userEventListStatus: UserOverviewStatus.ERROR,
             errorMessage: RuntimeErrorType.failedExamSignUp()));
         break;
       default:
+        if (isClosed) {
+          return;
+        }
         emit(state.copyWith(
             registerUnregisterStatus: RegisterUnregisterStatus.INITIAL,
             userEventListStatus: UserOverviewStatus.ERROR,
@@ -125,10 +158,16 @@ class UserEventCubit extends Cubit<UserEventState> {
 
   Future<void> autoSignupToggle(bool value) async {
     _preferenceService.setAutoSignup(value);
+    if (isClosed) {
+      return;
+    }
     emit(state.copyWith(autoSignup: value));
   }
 
   void changeCurrentTabIndex(int newIndex) {
+    if (isClosed) {
+      return;
+    }
     emit(state.copyWith(currentTabIndex: newIndex));
   }
 }

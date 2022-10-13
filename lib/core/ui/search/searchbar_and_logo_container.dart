@@ -42,65 +42,70 @@ class _SearchBarAndLogoContainerState extends State<SearchBarAndLogoContainer> {
               child: const ScheduleSearchBar(),
             ),
           ),
-          if (context.read<SearchPageCubit>().hasBookMarkedSchedules)
-            Expanded(
-              child: BlocBuilder<SearchPageCubit, SearchPageState>(
-                builder: (context, state) {
-                  if (state.focused) {
-                    return Container();
-                  }
-                  return Container(
-                    padding: const EdgeInsets.only(top: 185),
-                    child: Stack(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(top: 1),
-                          child: MaterialButton(
-                            height: 159,
-                            padding: const EdgeInsets.only(top: 15),
-                            focusElevation: 0,
-                            highlightElevation: 0,
-                            color: Theme.of(context).colorScheme.primary,
-                            onPressed: () => context.read<NavigationCubit>().getNavBarItem(NavbarItem.LIST),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
+          BlocBuilder<SearchPageCubit, SearchPageState>(
+            builder: (context, state) {
+              return state.hasBookmarkedSchedules
+                  ? Expanded(
+                      child: BlocBuilder<SearchPageCubit, SearchPageState>(
+                        builder: (context, state) {
+                          if (state.focused) {
+                            return Container();
+                          }
+                          return Container(
+                            padding: const EdgeInsets.only(top: 185),
+                            child: Stack(
                               children: [
-                                Text(
-                                  S.searchPage.toScheduleView(),
-                                  style: TextStyle(
-                                    color: Theme.of(context).colorScheme.onPrimary.withOpacity(.9),
-                                    fontSize: 14,
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 1),
+                                  child: MaterialButton(
+                                    height: 159,
+                                    padding: const EdgeInsets.only(top: 15),
+                                    focusElevation: 0,
+                                    highlightElevation: 0,
+                                    color: Theme.of(context).colorScheme.primary,
+                                    onPressed: () => context.read<NavigationCubit>().getNavBarItem(NavbarItem.LIST),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          S.searchPage.toScheduleView(),
+                                          style: TextStyle(
+                                            color: Theme.of(context).colorScheme.onPrimary.withOpacity(.9),
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          width: 10,
+                                        ),
+                                        Icon(
+                                          CupertinoIcons.arrow_right,
+                                          size: 15,
+                                          color: Theme.of(context).colorScheme.onPrimary.withOpacity(.9),
+                                        )
+                                      ],
+                                    ),
                                   ),
                                 ),
-                                const SizedBox(
-                                  width: 10,
+                                Align(
+                                  alignment: Alignment.topCenter,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: Theme.of(context).colorScheme.background,
+                                      borderRadius: const BorderRadius.only(
+                                          bottomLeft: Radius.circular(20), bottomRight: Radius.circular(20)),
+                                    ),
+                                    height: 25,
+                                  ),
                                 ),
-                                Icon(
-                                  CupertinoIcons.arrow_right,
-                                  size: 15,
-                                  color: Theme.of(context).colorScheme.onPrimary.withOpacity(.9),
-                                )
                               ],
                             ),
-                          ),
-                        ),
-                        Align(
-                          alignment: Alignment.topCenter,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).colorScheme.background,
-                              borderRadius: const BorderRadius.only(
-                                  bottomLeft: Radius.circular(20), bottomRight: Radius.circular(20)),
-                            ),
-                            height: 25,
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              ),
-            )
+                          );
+                        },
+                      ),
+                    )
+                  : Container();
+            },
+          )
         ],
       ),
     );

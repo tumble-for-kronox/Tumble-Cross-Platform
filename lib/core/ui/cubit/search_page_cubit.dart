@@ -31,7 +31,7 @@ part 'search_page_state.dart';
 
 class SearchPageCubit extends Cubit<SearchPageState> {
   SearchPageCubit()
-      : super(const SearchPageState(
+      : super(SearchPageState(
             focused: false,
             searchPageStatus: SearchPageStatus.INITIAL,
             previewFetchStatus: PreviewFetchStatus.INITIAL,
@@ -43,7 +43,8 @@ class SearchPageCubit extends Cubit<SearchPageState> {
             previewListOfDays: null,
             previewToggledFavorite: false,
             previewCurrentScheduleId: null,
-            errorDescription: null)) {
+            errorDescription: null,
+            hasBookmarkedSchedules: getIt<PreferenceRepository>().bookmarkIds!.isNotEmpty)) {
     _init();
   }
 
@@ -233,7 +234,8 @@ class SearchPageCubit extends Cubit<SearchPageState> {
     _notificationService.initialize();
 
     _textEditingControllerSearch.clear();
-    emit(state.copyWith(previewToggledFavorite: true));
+    emit(state.copyWith(
+        previewToggledFavorite: true, hasBookmarkedSchedules: getIt<PreferenceRepository>().bookmarkIds!.isNotEmpty));
     log(name: 'search_page_cubit', 'Finished executing bookmark SAVE');
   }
 
@@ -247,7 +249,8 @@ class SearchPageCubit extends Cubit<SearchPageState> {
 
     _notificationService.removeChannel(state.previewCurrentScheduleId!);
 
-    emit(state.copyWith(previewToggledFavorite: false));
+    emit(state.copyWith(
+        previewToggledFavorite: false, hasBookmarkedSchedules: getIt<PreferenceRepository>().bookmarkIds!.isNotEmpty));
     log(name: 'search_page_cubit', 'Finished executing bookmark REMOVE');
   }
 }

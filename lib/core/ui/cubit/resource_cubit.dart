@@ -32,11 +32,17 @@ class ResourceCubit extends Cubit<ResourceState> {
 
   Future<void> getSchoolResources(String sessionToken, Function login, Function logOut,
       {bool loginLooped = false}) async {
+    if (isClosed) {
+      return;
+    }
     emit(state.copyWith(status: ResourceStatus.LOADING));
     BookingResponse schoolResources = await _userService.schoolResources(sessionToken);
 
     switch (schoolResources.status) {
       case ApiBookingResponseStatus.SUCCESS:
+        if (isClosed) {
+          return;
+        }
         emit(state.copyWith(status: ResourceStatus.LOADED, schoolResources: schoolResources.data));
         break;
       case ApiBookingResponseStatus.ERROR:
@@ -120,6 +126,9 @@ class ResourceCubit extends Cubit<ResourceState> {
         }
 
         List<bool> falseFilledLoadingList = List<bool>.filled((userBookings.data as List<Booking>).length, false);
+        if (isClosed) {
+          return;
+        }
         emit(state.copyWith(
           userBookingsStatus: UserBookingsStatus.LOADED,
           userBookings: userBookings.data,

@@ -57,10 +57,10 @@ class LoginCubit extends Cubit<LoginState> {
         break;
       case ApiUserResponseStatus.UNAUTHORIZED:
         log("UNAUTHORIZED: ${userRes.data}");
-        emit(state.copyWith(status: LoginStatus.FAIL, errorMessage: userRes.data));
+        emit(state.copyWith(status: LoginStatus.FAIL, errorMessage: userRes.data ?? 'Unauthorized'));
         break;
       case ApiUserResponseStatus.ERROR:
-        emit(state.copyWith(status: LoginStatus.FAIL, errorMessage: userRes.data));
+        emit(state.copyWith(status: LoginStatus.FAIL, errorMessage: userRes.data ?? 'Unauthorized'));
         break;
       default:
     }

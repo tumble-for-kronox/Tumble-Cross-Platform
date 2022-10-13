@@ -39,80 +39,81 @@ class _TumbleSearchPageState extends State<TumbleSearchPage> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 mainAxisSize: MainAxisSize.max,
                 children: [
-                  Expanded(
-                      child: AnimatedSwitcher(
-                          duration: const Duration(milliseconds: 200),
-                          child: Builder(builder: (context) {
-                            switch (state.searchPageStatus) {
-                              case SearchPageStatus.FOUND:
-                                return Container(
-                                  padding: const EdgeInsets.only(top: 70),
-                                  child: SingleChildScrollView(
-                                    physics: const ScrollPhysics(),
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Container(
-                                          padding: const EdgeInsets.only(left: 25, bottom: 10),
-                                          child: Text(
-                                            S.searchPage.results(state.programList!.length),
-                                            style: TextStyle(
-                                                fontSize: 15,
-                                                color: Theme.of(context).colorScheme.onSurface.withOpacity(.8)),
-                                          ),
+                  Flexible(
+                    child: AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 200),
+                        child: Builder(builder: (context) {
+                          switch (state.searchPageStatus) {
+                            case SearchPageStatus.FOUND:
+                              return Container(
+                                padding: const EdgeInsets.only(top: 70),
+                                child: SingleChildScrollView(
+                                  physics: const ScrollPhysics(),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                        padding: const EdgeInsets.only(left: 25, bottom: 10),
+                                        child: Text(
+                                          S.searchPage.results(state.programList!.length),
+                                          style: TextStyle(
+                                              fontSize: 15,
+                                              color: Theme.of(context).colorScheme.onSurface.withOpacity(.8)),
                                         ),
-                                        Divider(
-                                          indent: 10,
-                                          endIndent: 10,
-                                          height: 10,
-                                          color: Theme.of(context).colorScheme.onBackground,
-                                        ),
-                                        ListView.builder(
-                                          physics: const NeverScrollableScrollPhysics(),
-                                          scrollDirection: Axis.vertical,
-                                          shrinkWrap: true,
-                                          itemCount: state.programList!.length,
-                                          itemBuilder: (BuildContext context, int index) => ProgramCard(
-                                              programName: state.programList![index].title,
-                                              programSubtitle: state.programList![index].subtitle,
-                                              schoolName: context.read<SearchPageCubit>().defaultSchool,
-                                              onTap: () async {
-                                                context.read<SearchPageCubit>().setPreviewLoading();
-                                                context.read<SearchPageCubit>().displayPreview();
-                                                await BlocProvider.of<SearchPageCubit>(context)
-                                                    .openSchedule(state.programList![index].id);
-                                              }),
-                                        )
-                                      ],
-                                    ),
+                                      ),
+                                      Divider(
+                                        indent: 10,
+                                        endIndent: 10,
+                                        height: 10,
+                                        color: Theme.of(context).colorScheme.onBackground,
+                                      ),
+                                      ListView.builder(
+                                        physics: const NeverScrollableScrollPhysics(),
+                                        scrollDirection: Axis.vertical,
+                                        shrinkWrap: true,
+                                        itemCount: state.programList!.length,
+                                        itemBuilder: (BuildContext context, int index) => ProgramCard(
+                                            programName: state.programList![index].title,
+                                            programSubtitle: state.programList![index].subtitle,
+                                            schoolName: context.read<SearchPageCubit>().defaultSchool,
+                                            onTap: () async {
+                                              context.read<SearchPageCubit>().setPreviewLoading();
+                                              context.read<SearchPageCubit>().displayPreview();
+                                              await BlocProvider.of<SearchPageCubit>(context)
+                                                  .openSchedule(state.programList![index].id);
+                                            }),
+                                      )
+                                    ],
                                   ),
-                                );
-                              case SearchPageStatus.LOADING:
-                                return const TumbleLoading();
-                              case SearchPageStatus.ERROR:
-                                return Container(
-                                  padding: const EdgeInsets.only(top: 40, left: 7),
-                                  child: DynamicErrorPage(
+                                ),
+                              );
+                            case SearchPageStatus.LOADING:
+                              return const TumbleLoading();
+                            case SearchPageStatus.ERROR:
+                              return Container(
+                                padding: const EdgeInsets.only(top: 40, left: 7),
+                                child: DynamicErrorPage(
+                                  toSearch: false,
+                                  errorType: state.errorMessage!,
+                                  description: state.errorDescription,
+                                ),
+                              );
+                            case SearchPageStatus.INITIAL:
+                              return Container();
+                            case SearchPageStatus.NO_SCHEDULES:
+                              return Container(
+                                padding: const EdgeInsets.only(top: 40),
+                                child: DynamicErrorPage(
                                     toSearch: false,
                                     errorType: state.errorMessage!,
-                                    description: state.errorDescription,
-                                  ),
-                                );
-                              case SearchPageStatus.INITIAL:
-                                return Container();
-                              case SearchPageStatus.NO_SCHEDULES:
-                                return Container(
-                                  padding: const EdgeInsets.only(top: 40),
-                                  child: DynamicErrorPage(
-                                      toSearch: false,
-                                      errorType: state.errorMessage!,
-                                      description: S.popUps.scheduleIsEmptyBody()),
-                                );
-                              case SearchPageStatus.DISPLAY_PREVIEW:
-                                return const SchedulePreview();
-                            }
-                          }))),
+                                    description: S.popUps.scheduleIsEmptyBody()),
+                              );
+                            case SearchPageStatus.DISPLAY_PREVIEW:
+                              return const SchedulePreview();
+                          }
+                        })),
+                  ),
                 ],
               ),
             ),

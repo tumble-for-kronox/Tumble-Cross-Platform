@@ -31,11 +31,16 @@ class _NavigationRootPageState extends State<NavigationRootPage> {
   late NavigationCubit _navigationCubit;
   late ScheduleViewCubit _scheduleViewCubit;
   late SearchPageCubit _searchPageCubit;
+  late UserEventCubit _userEventCubit;
+  late ResourceCubit _resourceCubit;
+  bool calledThisBuild = false;
   @override
   void initState() {
     _navigationCubit = NavigationCubit();
     _scheduleViewCubit = ScheduleViewCubit();
     _searchPageCubit = SearchPageCubit();
+    _userEventCubit = UserEventCubit();
+    _resourceCubit = ResourceCubit();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       if (context.read<AppSwitchCubit>().notificationCheck) {
         showDialog(
@@ -61,8 +66,18 @@ class _NavigationRootPageState extends State<NavigationRootPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider.value(
-      value: _navigationCubit,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider.value(
+          value: _navigationCubit,
+        ),
+        BlocProvider.value(
+          value: _resourceCubit,
+        ),
+        BlocProvider.value(
+          value: _userEventCubit,
+        ),
+      ],
       child: BlocBuilder<NavigationCubit, NavigationState>(
         builder: (context, navState) {
           //_getEventsAndResources(context);
@@ -88,9 +103,9 @@ class _NavigationRootPageState extends State<NavigationRootPage> {
               ),
               body: BlocListener<AuthCubit, AuthState>(
                 listener: (context, state) {
-                  /* if (context.read<UserEventCubit>().state.autoSignup) {
+                  if (context.read<UserEventCubit>().state.autoSignup) {
                     context.read<AuthCubit>().runAutoSignup();
-                  } */
+                  }
                 },
                 child: MultiBlocProvider(
                   providers: [
@@ -121,7 +136,29 @@ class _NavigationRootPageState extends State<NavigationRootPage> {
                           case NavbarItem.CALENDAR:
                             return const TumbleCalendarView();
                           case NavbarItem.USER_OVERVIEW:
-                            return const TumbleUserOverviewPageSwitch();
+                            return BlocProvider.value(
+                              value: BlocProvider.of<AuthCubit>(context),
+                              child: Builder(builder: (context) {
+                                if (!calledThisBuild) {
+                                  context.read<UserEventCubit>().getUserEvents(
+                                      context.read<AuthCubit>().state.status,
+                                      context.read<AuthCubit>().login,
+                                      context.read<AuthCubit>().logout,
+                                      context.read<AuthCubit>().state.userSession!.sessionToken,
+                                      true);
+                                  context.read<ResourceCubit>().getSchoolResources(
+                                      context.read<AuthCubit>().state.userSession!.sessionToken,
+                                      context.read<AuthCubit>().login,
+                                      context.read<AuthCubit>().logout);
+                                  context.read<ResourceCubit>().getUserBookings(
+                                      context.read<AuthCubit>().state.userSession!.sessionToken,
+                                      context.read<AuthCubit>().login,
+                                      context.read<AuthCubit>().logout);
+                                  calledThisBuild = true;
+                                }
+                                return const TumbleUserOverviewPageSwitch();
+                              }),
+                            );
                         }
                       }(),
                     ),
