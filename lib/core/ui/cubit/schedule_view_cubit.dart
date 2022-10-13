@@ -232,10 +232,10 @@ class ScheduleViewCubit extends Cubit<ScheduleViewState> {
     });
   }
 
-  Future<bool> checkIfNotificationIsSetForEvent(Event event) async => _notificationService.eventHasNotification(event);
+  Future<bool> checkIfNotificationIsSetForEvent(Event event) => _notificationService.eventHasNotification(event);
 
   /// Returns true if course id is found in current list of notifications
-  Future<bool> checkIfNotificationIsSetForCourse(Event event) async =>
+  Future<bool> checkIfNotificationIsSetForCourse(Event event) =>
       _notificationService.courseHasNotifications(event);
 
   Future<bool> cancelEventNotification(Event event) async {

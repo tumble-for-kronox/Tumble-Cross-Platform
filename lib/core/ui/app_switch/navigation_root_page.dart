@@ -61,6 +61,8 @@ class _NavigationRootPageState extends State<NavigationRootPage> {
     _navigationCubit.close();
     _scheduleViewCubit.close();
     _searchPageCubit.close();
+    _userEventCubit.close();
+    _resourceCubit.close();
     super.dispose();
   }
 
@@ -115,6 +117,12 @@ class _NavigationRootPageState extends State<NavigationRootPage> {
                     BlocProvider.value(
                       value: _scheduleViewCubit,
                     ),
+                    BlocProvider.value(
+                      value: BlocProvider.of<AuthCubit>(context),
+                    ),
+                    BlocProvider.value(
+                      value: BlocProvider.of<AppSwitchCubit>(context),
+                    )
                   ],
                   child: BlocListener<SearchPageCubit, SearchPageState>(
                     listenWhen: (previous, current) =>
@@ -136,30 +144,27 @@ class _NavigationRootPageState extends State<NavigationRootPage> {
                           case NavbarItem.CALENDAR:
                             return const TumbleCalendarView();
                           case NavbarItem.USER_OVERVIEW:
-                            return BlocProvider.value(
-                              value: BlocProvider.of<AuthCubit>(context),
-                              child: Builder(builder: (context) {
-                                if (!calledThisBuild &&
-                                    context.read<AuthCubit>().state.status == AuthStatus.AUTHENTICATED) {
-                                  context.read<UserEventCubit>().getUserEvents(
-                                      context.read<AuthCubit>().state.status,
-                                      context.read<AuthCubit>().login,
-                                      context.read<AuthCubit>().logout,
-                                      context.read<AuthCubit>().state.userSession!.sessionToken,
-                                      true);
-                                  context.read<ResourceCubit>().getSchoolResources(
-                                      context.read<AuthCubit>().state.userSession!.sessionToken,
-                                      context.read<AuthCubit>().login,
-                                      context.read<AuthCubit>().logout);
-                                  context.read<ResourceCubit>().getUserBookings(
-                                      context.read<AuthCubit>().state.userSession!.sessionToken,
-                                      context.read<AuthCubit>().login,
-                                      context.read<AuthCubit>().logout);
-                                  calledThisBuild = true;
-                                }
-                                return const TumbleUserOverviewPageSwitch();
-                              }),
-                            );
+                            return Builder(builder: (context) {
+                              if (!calledThisBuild &&
+                                  context.read<AuthCubit>().state.status == AuthStatus.AUTHENTICATED) {
+                                context.read<UserEventCubit>().getUserEvents(
+                                    context.read<AuthCubit>().state.status,
+                                    context.read<AuthCubit>().login,
+                                    context.read<AuthCubit>().logout,
+                                    context.read<AuthCubit>().state.userSession!.sessionToken,
+                                    true);
+                                context.read<ResourceCubit>().getSchoolResources(
+                                    context.read<AuthCubit>().state.userSession!.sessionToken,
+                                    context.read<AuthCubit>().login,
+                                    context.read<AuthCubit>().logout);
+                                context.read<ResourceCubit>().getUserBookings(
+                                    context.read<AuthCubit>().state.userSession!.sessionToken,
+                                    context.read<AuthCubit>().login,
+                                    context.read<AuthCubit>().logout);
+                                calledThisBuild = true;
+                              }
+                              return const TumbleUserOverviewPageSwitch();
+                            });
                         }
                       }(),
                     ),
