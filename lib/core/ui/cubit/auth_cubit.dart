@@ -1,9 +1,7 @@
 import 'dart:developer';
-
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tumble/core/api/backend/response_types/user_response.dart';
 import 'package:tumble/core/api/backend/response_types/runtime_error_type.dart';
 import 'package:tumble/core/api/backend/repository/user_action_repository.dart';
@@ -12,7 +10,6 @@ import 'package:tumble/core/api/preferences/repository/preference_repository.dar
 import 'package:tumble/core/models/backend_models/kronox_user_model.dart';
 import 'package:tumble/core/models/backend_models/multi_registration_result_model.dart';
 import 'package:tumble/core/models/ui_models/school_model.dart';
-import 'package:tumble/core/shared/preference_types.dart';
 import 'package:tumble/core/api/dependency_injection/get_it.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
 
@@ -27,7 +24,6 @@ class AuthCubit extends Cubit<AuthState> {
             passwordHidden: true,
             loginSuccess: false,
             focused: false)) {
-    _init();
     login();
   }
   final _userRepo = getIt<UserActionRepository>();
@@ -39,83 +35,6 @@ class AuthCubit extends Cubit<AuthState> {
   FocusNode get focusNodeUsername => _focusNodeUsername;
 
   String get defaultSchool => getIt<PreferenceRepository>().defaultSchool!;
-
-  void _init() {
-    _focusNodePassword.addListener(setFocusNodePassword);
-    _focusNodeUsername.addListener(setFocusNodeUsername);
-  }
-
-  @override
-  Future<void> close() async {
-    _focusNodePassword.dispose();
-    _focusNodeUsername.dispose();
-    super.close();
-  }
-
-  void setFocusNodePassword() {
-    if (_focusNodePassword.hasFocus) {
-      emit(state.copyWith(focused: true));
-    } else if (!_focusNodePassword.hasFocus) {
-      emit(state.copyWith(focused: false));
-    }
-  }
-
-  void setFocusNodeUsername() {
-    if (_focusNodeUsername.hasFocus) {
-      emit(state.copyWith(focused: true));
-    } else if (!_focusNodeUsername.hasFocus) {
-      emit(state.copyWith(focused: false));
-    }
-  }
-
-  void submitLogin(BuildContext context, String school) async {
-    final username = state.usernameController.text;
-    final password = state.passwordController.text;
-    if (!formValidated()) {
-      emit(state.copyWith(status: AuthStatus.INITIAL, errorMessage: RuntimeErrorType.invalidInputFields()));
-      return;
-    }
-    emit(state.copyWith(status: AuthStatus.LOADING));
-    UserResponse userRes = await _userRepo.userLogin(username, password, school);
-
-    state.passwordController.clear();
-    switch (userRes.status) {
-      case ApiUserResponseStatus.AUTHORIZED:
-        storeUserCreds((userRes.data! as KronoxUserModel).refreshToken);
-        getIt<PreferenceRepository>().setSchool(school);
-        emit(state.copyWith(loginSuccess: true));
-        state.usernameController.clear();
-        await Future.delayed(const Duration(seconds: 2));
-        emit(state.copyWith(status: AuthStatus.AUTHENTICATED, userSession: userRes.data!));
-        break;
-      case ApiUserResponseStatus.UNAUTHORIZED:
-        log("UNAUTHORIZED: ${userRes.data}");
-        emit(state.copyWith(status: AuthStatus.ERROR, errorMessage: userRes.data));
-        break;
-      case ApiUserResponseStatus.ERROR:
-        emit(state.copyWith(status: AuthStatus.ERROR, errorMessage: userRes.data));
-        break;
-      default:
-    }
-  }
-
-  bool formValidated() {
-    final password = state.passwordController.text;
-    final username = state.usernameController.text;
-    return password != "" && username != "";
-  }
-
-  void setSchool(School? school) {
-    emit(state.copyWith(school: school));
-  }
-
-  void storeUserCreds(String token) {
-    _secureStorage.setRefreshToken(token);
-  }
-
-  void togglePasswordVisibility() {
-    emit(state.copyWith(passwordHidden: !state.passwordHidden));
-  }
 
   void setUserLoggedIn() {
     emit(state.copyWith(status: AuthStatus.AUTHENTICATED));
@@ -179,7 +98,4 @@ class AuthCubit extends Cubit<AuthState> {
 
   bool get authenticated => state.status == AuthStatus.AUTHENTICATED;
 
-  void setFocusFalse() {
-    emit(state.copyWith(focused: false));
-  }
 }

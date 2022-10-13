@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:tumble/core/models/backend_models/resource_model.dart';
+import 'package:tumble/core/ui/cubit/resource_cubit.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
 import 'package:tumble/core/ui/tumble_button_small.dart';
-import 'package:tumble/core/ui/user/resources/cubit/resource_cubit.dart';
 
 class UserBooking extends StatelessWidget {
   final Booking booking;

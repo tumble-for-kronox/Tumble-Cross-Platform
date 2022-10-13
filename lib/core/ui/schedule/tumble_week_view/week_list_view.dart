@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:tumble/core/models/ui_models/week_model.dart';
-import 'package:tumble/core/ui/app_switch/cubit/app_switch_cubit.dart';
 import 'package:tumble/core/ui/schedule/tumble_week_view/week_mapper.dart';
 import 'package:tumble/core/ui/schedule/tumble_week_view/week_number.dart';
 
-class TumbleWeekPageContainer extends StatelessWidget {
+class TumbleWeekPageContainer extends StatefulWidget {
   final Week week;
-  final AppSwitchCubit cubit;
-  late int _currentYear;
 
-  TumbleWeekPageContainer({Key? key, required this.week, required this.cubit}) : super(key: key) {
-    _currentYear = week.days.first.isoString.year;
+  const TumbleWeekPageContainer({Key? key, required this.week}) : super(key: key);
+
+  @override
+  State<TumbleWeekPageContainer> createState() => _TumbleWeekPageContainerState();
+}
+
+class _TumbleWeekPageContainerState extends State<TumbleWeekPageContainer> {
+  @override
+  void initState() {
+    super.initState();
   }
 
   @override
@@ -18,11 +23,10 @@ class TumbleWeekPageContainer extends StatelessWidget {
     return Stack(
       children: [
         WeekMapper(
-          week: week,
-          cubit: cubit,
+          week: widget.week,
         ),
         WeekNumber(
-          week: week,
+          week: widget.week,
         )
       ],
     );

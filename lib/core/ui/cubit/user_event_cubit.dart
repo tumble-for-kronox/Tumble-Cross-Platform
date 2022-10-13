@@ -1,8 +1,5 @@
-import 'dart:developer';
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tumble/core/api/backend/response_types/user_response.dart';
 import 'package:tumble/core/api/backend/response_types/runtime_error_type.dart';
 import 'package:tumble/core/api/backend/repository/user_action_repository.dart';
@@ -10,8 +7,7 @@ import 'package:tumble/core/api/dependency_injection/get_it.dart';
 import 'package:tumble/core/api/preferences/repository/preference_repository.dart';
 import 'package:tumble/core/models/backend_models/kronox_user_model.dart';
 import 'package:tumble/core/models/backend_models/user_event_collection_model.dart';
-import 'package:tumble/core/shared/preference_types.dart';
-import 'package:tumble/core/ui/login/cubit/auth_cubit.dart';
+import 'package:tumble/core/ui/cubit/auth_cubit.dart';
 
 part 'user_event_state.dart';
 
@@ -27,30 +23,40 @@ class UserEventCubit extends Cubit<UserEventState> {
   final _userActionService = getIt<UserActionRepository>();
   final _preferenceService = getIt<PreferenceRepository>();
 
-  Future<void> getUserEvents(AuthCubit authCubit, bool showLoding, {bool loginLooped = false}) async {
-    switch (authCubit.state.status) {
+  Future<void> getUserEvents(AuthStatus status, Function login, Function logOut, String sessionToken, bool showLoading,
+      {bool loginLooped = false}) async {
+    switch (status) {
       case AuthStatus.AUTHENTICATED:
-        if (showLoding) emit(state.copyWith(userEventListStatus: UserOverviewStatus.LOADING));
-        UserResponse userEventResponse = await _userActionService.userEvents(authCubit.state.userSession!.sessionToken);
+        if (showLoading) emit(state.copyWith(userEventListStatus: UserOverviewStatus.LOADING));
+        UserResponse userEventResponse = await _userActionService.userEvents(sessionToken);
         switch (userEventResponse.status) {
           case ApiUserResponseStatus.COMPLETED:
+            if (isClosed) {
+              return;
+            }
             emit(state.copyWith(
               userEventListStatus: UserOverviewStatus.LOADED,
               userEvents: userEventResponse.data!,
             ));
             break;
           case ApiUserResponseStatus.ERROR:
+            if (isClosed) {
+              return;
+            }
             emit(state);
             break;
           case ApiUserResponseStatus.UNAUTHORIZED:
             if (!loginLooped) {
-              await authCubit.login();
-              await getUserEvents(authCubit, true, loginLooped: true);
+              await login();
+              await getUserEvents(status, login, logOut, sessionToken, true, loginLooped: true);
             } else {
-              authCubit.logout();
+              logOut();
             }
             break;
           default:
+            if (isClosed) {
+              return;
+            }
             emit(state.copyWith(
               userEventListStatus: UserOverviewStatus.ERROR,
             ));
@@ -61,31 +67,43 @@ class UserEventCubit extends Cubit<UserEventState> {
     }
   }
 
-  Future<void> registerUserEvent(String id, AuthCubit authCubit, {bool loginLooped = false}) async {
+  Future<void> registerUserEvent(AuthStatus status, String id, Function logOut, Function login, String sessionToken,
+      {bool loginLooped = false}) async {
+    if (isClosed) {
+      return;
+    }
     emit(state.copyWith(registerUnregisterStatus: RegisterUnregisterStatus.LOADING));
-    UserResponse registerResponse =
-        await _userActionService.registerUserEvent(id, authCubit.state.userSession!.sessionToken);
+    UserResponse registerResponse = await _userActionService.registerUserEvent(id, sessionToken);
     switch (registerResponse.status) {
       case ApiUserResponseStatus.COMPLETED:
       case ApiUserResponseStatus.AUTHORIZED:
-        await getUserEvents(authCubit, false);
+        await getUserEvents(status, login, logOut, sessionToken, false);
+        if (isClosed) {
+          return;
+        }
         emit(state.copyWith(registerUnregisterStatus: RegisterUnregisterStatus.INITIAL));
         break;
       case ApiUserResponseStatus.UNAUTHORIZED:
         if (!loginLooped) {
-          await authCubit.login();
-          await registerUserEvent(id, authCubit, loginLooped: true);
+          await login();
+          await registerUserEvent(status, id, logOut, login, sessionToken, loginLooped: true);
         } else {
-          authCubit.logout();
+          logOut();
         }
         break;
       case ApiUserResponseStatus.ERROR:
+        if (isClosed) {
+          return;
+        }
         emit(state.copyWith(
             registerUnregisterStatus: RegisterUnregisterStatus.INITIAL,
             userEventListStatus: UserOverviewStatus.ERROR,
             errorMessage: RuntimeErrorType.failedExamSignUp()));
         break;
       default:
+        if (isClosed) {
+          return;
+        }
         emit(state.copyWith(
             registerUnregisterStatus: RegisterUnregisterStatus.INITIAL,
             userEventListStatus: UserOverviewStatus.ERROR,
@@ -93,32 +111,44 @@ class UserEventCubit extends Cubit<UserEventState> {
     }
   }
 
-  Future<void> unregisterUserEvent(String id, AuthCubit authCubit, {bool loginLooped = false}) async {
+  Future<void> unregisterUserEvent(String id, AuthStatus status, Function login, String sessionToken, Function logOut,
+      {bool loginLooped = false}) async {
+    if (isClosed) {
+      return;
+    }
     emit(state.copyWith(registerUnregisterStatus: RegisterUnregisterStatus.LOADING));
-    UserResponse unregisterResponse =
-        await _userActionService.unregisterUserEvent(id, authCubit.state.userSession!.sessionToken);
+    UserResponse unregisterResponse = await _userActionService.unregisterUserEvent(id, sessionToken);
 
     switch (unregisterResponse.status) {
       case ApiUserResponseStatus.COMPLETED:
       case ApiUserResponseStatus.AUTHORIZED:
-        await getUserEvents(authCubit, false);
+        await getUserEvents(status, login, logOut, sessionToken, false);
+        if (isClosed) {
+          return;
+        }
         emit(state.copyWith(registerUnregisterStatus: RegisterUnregisterStatus.INITIAL));
         break;
       case ApiUserResponseStatus.UNAUTHORIZED:
         if (!loginLooped) {
-          await authCubit.login();
-          await unregisterUserEvent(id, authCubit, loginLooped: true);
+          await login();
+          await unregisterUserEvent(id, status, login, sessionToken, logOut, loginLooped: true);
         } else {
-          authCubit.logout();
+          logOut();
         }
         break;
       case ApiUserResponseStatus.ERROR:
+        if (isClosed) {
+          return;
+        }
         emit(state.copyWith(
             registerUnregisterStatus: RegisterUnregisterStatus.INITIAL,
             userEventListStatus: UserOverviewStatus.ERROR,
             errorMessage: RuntimeErrorType.failedExamSignUp()));
         break;
       default:
+        if (isClosed) {
+          return;
+        }
         emit(state.copyWith(
             registerUnregisterStatus: RegisterUnregisterStatus.INITIAL,
             userEventListStatus: UserOverviewStatus.ERROR,
@@ -128,10 +158,16 @@ class UserEventCubit extends Cubit<UserEventState> {
 
   Future<void> autoSignupToggle(bool value) async {
     _preferenceService.setAutoSignup(value);
+    if (isClosed) {
+      return;
+    }
     emit(state.copyWith(autoSignup: value));
   }
 
   void changeCurrentTabIndex(int newIndex) {
+    if (isClosed) {
+      return;
+    }
     emit(state.copyWith(currentTabIndex: newIndex));
   }
 }

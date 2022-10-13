@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tumble/core/ui/bottom_nav_bar/cubit/bottom_nav_cubit.dart';
 import 'package:tumble/core/ui/bottom_nav_bar/data/nav_bar_items.dart';
+import 'package:tumble/core/ui/cubit/bottom_nav_cubit.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
 
 class DynamicErrorPage extends StatefulWidget {
@@ -92,7 +92,7 @@ class _DynamicErrorPageState extends State<DynamicErrorPage> with TickerProvider
                   Align(
                     alignment: Alignment.topRight,
                     child: TextButton.icon(
-                        onPressed: () => context.read<MainAppNavigationCubit>().getNavBarItem(NavbarItem.SEARCH),
+                        onPressed: () => context.read<NavigationCubit>().getNavBarItem(NavbarItem.SEARCH),
                         icon: const Icon(CupertinoIcons.chevron_left),
                         label: Text(S.general.toSearch())),
                   )

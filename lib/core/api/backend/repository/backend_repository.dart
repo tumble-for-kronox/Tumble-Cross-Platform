@@ -38,7 +38,7 @@ class BackendRepository implements IBackendService {
           Endpoints.school: school.toString(),
         }.map((key, value) => MapEntry(key, value.toString())));
 
-    return await _dioHandle.getUri(uri, options: Options(validateStatus: (_) => true)).then((response) {
+    return await _dioHandle.getUri(uri, options: Options(validateStatus: (context) => true)).then((response) {
       return response.parseSchedule();
     }).onError((error, stackTrace) {
       log(name: 'backend_repository', error: error, '$error.message in [getRequestSchedule]');

@@ -1,20 +1,19 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tumble/core/api/backend/response_types/runtime_error_type.dart';
-import 'package:tumble/core/navigation/app_navigator.dart';
+import 'package:tumble/core/ui/cubit/search_page_cubit.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
+import 'package:tumble/core/ui/scaffold_message.dart';
 import 'package:tumble/core/ui/schedule/dynamic_error_page.dart';
-import 'package:tumble/core/ui/schedule/tumble_list_view/data/custom_alerts.dart';
 import 'package:tumble/core/ui/schedule/tumble_list_view/data/to_top_button.dart';
-import 'package:tumble/core/ui/search/cubit/search_page_cubit.dart';
-import 'package:tumble/core/ui/search/search/preview_list_view_day_container.dart';
+import 'package:tumble/core/ui/search/preview_list_view_day_container.dart';
 import 'package:tumble/core/ui/tumble_loading.dart';
 
 typedef ToggleBookmark = Function(bool value);
 
 class SchedulePreview extends StatefulWidget {
-  final ToggleBookmark toggleBookmark;
-  const SchedulePreview({Key? key, required this.toggleBookmark}) : super(key: key);
+  const SchedulePreview({Key? key}) : super(key: key);
 
   @override
   State<SchedulePreview> createState() => _SchedulePreviewState();
@@ -24,7 +23,6 @@ class SchedulePreview extends StatefulWidget {
 class _SchedulePreviewState extends State<SchedulePreview> {
   @override
   Widget build(BuildContext context) {
-    final AppNavigator navigator = BlocProvider.of<AppNavigator>(context);
     return BlocBuilder<SearchPageCubit, SearchPageState>(
       builder: (context, state) {
         switch (state.previewFetchStatus) {
@@ -59,14 +57,17 @@ class _SchedulePreviewState extends State<SchedulePreview> {
                                 ),
                               ),
                               Padding(
-                                padding: const EdgeInsets.only(top: 40),
-                                child: PreviewListViewDayContainer(day: dayList[index]),
-                              )
+                                  padding: const EdgeInsets.only(top: 40),
+                                  child: PreviewListViewDayContainer(
+                                    day: dayList[index],
+                                    searchPageCubit: context.read<SearchPageCubit>(),
+                                  ))
                             ],
                           );
                         }
 
-                        return PreviewListViewDayContainer(day: dayList[index]);
+                        return PreviewListViewDayContainer(
+                            day: dayList[index], searchPageCubit: context.read<SearchPageCubit>());
                       }),
                 ),
                 AnimatedPositioned(
@@ -74,6 +75,41 @@ class _SchedulePreviewState extends State<SchedulePreview> {
                   right: state.previewToTopButtonVisible! ? 35 : -60,
                   duration: const Duration(milliseconds: 200),
                   child: ToTopButton(scrollToTop: () => context.read<SearchPageCubit>().scrollToTop()),
+                ),
+                Container(
+                  padding: const EdgeInsets.only(left: 25, bottom: 25),
+                  child: Align(
+                    alignment: Alignment.bottomLeft,
+                    child: !context.read<SearchPageCubit>().scheduleInBookmarks
+                        ? ElevatedButton.icon(
+                            onPressed: () {
+                              context.read<SearchPageCubit>().bookmarkSchedule();
+                              showScaffoldMessage(
+                                  context, S.scaffoldMessages.addedBookmark(state.previewCurrentScheduleId!));
+                            },
+                            icon: const Icon(
+                              CupertinoIcons.bookmark,
+                              size: 23,
+                            ),
+                            label: const Text(
+                              'Save schedule',
+                              style: TextStyle(fontSize: 17, fontWeight: FontWeight.w400),
+                            ))
+                        : ElevatedButton.icon(
+                            onPressed: () {
+                              context.read<SearchPageCubit>().unBookmarkSchedule();
+                              showScaffoldMessage(
+                                  context, S.scaffoldMessages.removedBookmark(state.previewCurrentScheduleId!));
+                            },
+                            icon: const Icon(
+                              CupertinoIcons.bookmark_fill,
+                              size: 23,
+                            ),
+                            label: const Text(
+                              'Schedule saved',
+                              style: TextStyle(fontSize: 17, fontWeight: FontWeight.w400),
+                            )),
+                  ),
                 ),
               ],
             );

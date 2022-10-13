@@ -2,11 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:tumble/core/ui/login/cubit/auth_cubit.dart';
+import 'package:tumble/core/ui/cubit/auth_cubit.dart';
+import 'package:tumble/core/ui/cubit/resource_cubit.dart';
 import 'package:tumble/core/ui/scaffold_message.dart';
 import 'package:tumble/core/ui/tumble_button.dart';
-
-import 'cubit/resource_cubit.dart';
 
 class ConfirmBooking extends StatelessWidget {
   final ResourceState state;
@@ -44,7 +43,9 @@ class ConfirmBooking extends StatelessWidget {
                       : context
                           .read<ResourceCubit>()
                           .bookResource(
-                              context.read<AuthCubit>(),
+                              context.read<AuthCubit>().state.userSession!.sessionToken,
+                              context.read<AuthCubit>().login,
+                              context.read<AuthCubit>().logout,
                               state.currentLoadedResource!.id,
                               state.chosenDate,
                               state.currentLoadedResource!

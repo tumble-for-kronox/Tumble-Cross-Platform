@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tumble/core/models/backend_models/resource_model.dart';
-import 'package:tumble/core/ui/login/cubit/auth_cubit.dart';
-import 'package:tumble/core/ui/user/resources/cubit/resource_cubit.dart';
+import 'package:tumble/core/ui/cubit/auth_cubit.dart';
+import 'package:tumble/core/ui/cubit/resource_cubit.dart';
 
 class ResourceCard extends StatelessWidget {
   final ResourceModel resource;
@@ -22,7 +22,11 @@ class ResourceCard extends StatelessWidget {
       child: MaterialButton(
         onPressed: () {
           context.read<ResourceCubit>().getResourceAvailabilities(
-              context.read<AuthCubit>(), resource.id, context.read<ResourceCubit>().state.chosenDate);
+              context.read<AuthCubit>().state.userSession!.sessionToken,
+              context.read<AuthCubit>().login,
+              context.read<AuthCubit>().logout,
+              resource.id,
+              context.read<ResourceCubit>().state.chosenDate);
           context.read<ResourceCubit>().setLoadedResource(resource);
           Navigator.of(context).pushNamed('/chosenResource');
         },

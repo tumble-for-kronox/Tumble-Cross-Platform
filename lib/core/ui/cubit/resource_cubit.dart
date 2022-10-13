@@ -3,7 +3,6 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tumble/core/api/backend/repository/user_action_repository.dart';
 import 'package:tumble/core/api/backend/response_types/booking_response.dart';
 import 'package:tumble/core/api/dependency_injection/get_it.dart';
@@ -13,9 +12,7 @@ import 'package:tumble/core/models/backend_models/resource_model.dart';
 import 'package:tumble/core/notifications/builders/notification_service_builder.dart';
 import 'package:tumble/core/notifications/repository/notification_repository.dart';
 import 'package:tumble/core/notifications/data/notification_channels.dart';
-import 'package:tumble/core/shared/preference_types.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
-import 'package:tumble/core/ui/login/cubit/auth_cubit.dart';
 
 part 'resource_state.dart';
 
@@ -33,21 +30,28 @@ class ResourceCubit extends Cubit<ResourceState> {
           chosenDate: DateTime.now(),
         ));
 
-  Future<void> getSchoolResources(AuthCubit authCubit, {bool loginLooped = false}) async {
+  Future<void> getSchoolResources(String sessionToken, Function login, Function logOut,
+      {bool loginLooped = false}) async {
+    if (isClosed) {
+      return;
+    }
     emit(state.copyWith(status: ResourceStatus.LOADING));
-    BookingResponse schoolResources = await _userService.schoolResources(authCubit.state.userSession!.sessionToken);
+    BookingResponse schoolResources = await _userService.schoolResources(sessionToken);
 
     switch (schoolResources.status) {
       case ApiBookingResponseStatus.SUCCESS:
+        if (isClosed) {
+          return;
+        }
         emit(state.copyWith(status: ResourceStatus.LOADED, schoolResources: schoolResources.data));
         break;
       case ApiBookingResponseStatus.ERROR:
       case ApiBookingResponseStatus.UNAUTHORIZED:
         if (!loginLooped) {
-          await authCubit.login();
-          await getSchoolResources(authCubit, loginLooped: true);
+          await login();
+          await getSchoolResources(sessionToken, login, logOut, loginLooped: true);
         } else {
-          authCubit.logout();
+          logOut();
         }
         break;
       case ApiBookingResponseStatus.NOT_FOUND:
@@ -56,11 +60,11 @@ class ResourceCubit extends Cubit<ResourceState> {
     }
   }
 
-  Future<void> getResourceAvailabilities(AuthCubit authCubit, String resourceId, DateTime date,
+  Future<void> getResourceAvailabilities(
+      String sessionToken, Function login, Function logOut, String resourceId, DateTime date,
       {bool loginLooped = false}) async {
     emit(state.copyWithoutSelections(status: ResourceStatus.LOADING));
-    BookingResponse currentSelectedResource =
-        await _userService.resourceAvailabilities(resourceId, date, authCubit.state.userSession!.sessionToken);
+    BookingResponse currentSelectedResource = await _userService.resourceAvailabilities(resourceId, date, sessionToken);
     switch (currentSelectedResource.status) {
       case ApiBookingResponseStatus.SUCCESS:
         parseResourceAvailabilities(currentSelectedResource.data);
@@ -69,10 +73,10 @@ class ResourceCubit extends Cubit<ResourceState> {
       case ApiBookingResponseStatus.ERROR:
       case ApiBookingResponseStatus.UNAUTHORIZED:
         if (!loginLooped) {
-          await authCubit.login();
-          await getResourceAvailabilities(authCubit, resourceId, date);
+          await login();
+          await getResourceAvailabilities(sessionToken, login, logOut, resourceId, date);
         } else {
-          authCubit.logout();
+          logOut();
         }
         break;
       case ApiBookingResponseStatus.NOT_FOUND:
@@ -109,10 +113,10 @@ class ResourceCubit extends Cubit<ResourceState> {
         availableTimeSlots: availableTimeSlots, availableLocationsForTimeSlots: availableLocationsForTimeSlots));
   }
 
-  Future<void> getUserBookings(AuthCubit authCubit, {bool loginLooped = false}) async {
+  Future<void> getUserBookings(String sessionToken, Function login, Function logOut, {bool loginLooped = false}) async {
     log(name: 'resource_cubit', 'Retrieving user bookings ..');
     emit(state.copyWith(userBookingsStatus: UserBookingsStatus.LOADING));
-    BookingResponse userBookings = await _userService.userBookings(authCubit.state.userSession!.sessionToken);
+    BookingResponse userBookings = await _userService.userBookings(sessionToken);
 
     switch (userBookings.status) {
       case ApiBookingResponseStatus.SUCCESS:
@@ -122,6 +126,9 @@ class ResourceCubit extends Cubit<ResourceState> {
         }
 
         List<bool> falseFilledLoadingList = List<bool>.filled((userBookings.data as List<Booking>).length, false);
+        if (isClosed) {
+          return;
+        }
         emit(state.copyWith(
           userBookingsStatus: UserBookingsStatus.LOADED,
           userBookings: userBookings.data,
@@ -132,10 +139,10 @@ class ResourceCubit extends Cubit<ResourceState> {
       case ApiBookingResponseStatus.ERROR:
       case ApiBookingResponseStatus.UNAUTHORIZED:
         if (!loginLooped) {
-          await authCubit.login();
-          await getUserBookings(authCubit);
+          await login();
+          await getUserBookings(sessionToken, login, logOut);
         } else {
-          authCubit.logout();
+          logOut();
         }
         break;
       case ApiBookingResponseStatus.NOT_FOUND:
@@ -144,22 +151,23 @@ class ResourceCubit extends Cubit<ResourceState> {
     }
   }
 
-  Future<String> bookResource(AuthCubit authCubit, String resourceId, DateTime date, AvailabilityValue bookingSlot,
+  Future<String> bookResource(String sessionToken, Function login, Function logOut, String resourceId, DateTime date,
+      AvailabilityValue bookingSlot,
       {bool loginLooped = false}) async {
     emit(state.copyWith(bookUnbookStatus: BookUnbookStatus.LOADING));
-    BookingResponse bookResource =
-        await _userService.bookResources(resourceId, date, bookingSlot, authCubit.state.userSession!.sessionToken);
+    BookingResponse bookResource = await _userService.bookResources(resourceId, date, bookingSlot, sessionToken);
 
     switch (bookResource.status) {
       case ApiBookingResponseStatus.SUCCESS:
-        getResourceAvailabilities(authCubit, resourceId, date);
+        getResourceAvailabilities(sessionToken, login, logOut, resourceId, date);
+        getUserBookings(sessionToken, login, logOut);
         break;
       case ApiBookingResponseStatus.UNAUTHORIZED:
         if (!loginLooped) {
-          await authCubit.login();
-          bookResource.data = await this.bookResource(authCubit, resourceId, date, bookingSlot);
+          await login();
+          bookResource.data = await this.bookResource(sessionToken, login, logOut, resourceId, date, bookingSlot);
         } else {
-          authCubit.logout();
+          logOut();
         }
         break;
       default:
@@ -169,23 +177,23 @@ class ResourceCubit extends Cubit<ResourceState> {
     return bookResource.data as String;
   }
 
-  Future<String> unbookResource(AuthCubit authCubit, String bookingId, unbookLoadingIndex,
+  Future<String> unbookResource(
+      String sessionToken, Function login, Function logOut, String bookingId, unbookLoadingIndex,
       {bool loginLooped = false}) async {
     emit(state.copyWith(unbookLoading: state.unbookLoading!.copyAndUpdate(unbookLoadingIndex, true)));
-    BookingResponse bookResource =
-        await _userService.unbookResources(authCubit.state.userSession!.sessionToken, bookingId);
+    BookingResponse bookResource = await _userService.unbookResources(sessionToken, bookingId);
 
     switch (bookResource.status) {
       case ApiBookingResponseStatus.SUCCESS:
         cancelNotificationForBooking(bookingId);
-        getUserBookings(authCubit);
+        getUserBookings(sessionToken, login, logOut);
         break;
       case ApiBookingResponseStatus.UNAUTHORIZED:
         if (!loginLooped) {
-          await authCubit.login();
-          bookResource.data = await unbookResource(authCubit, bookingId, unbookLoadingIndex);
+          await login();
+          bookResource.data = await unbookResource(sessionToken, login, logOut, bookingId, unbookLoadingIndex);
         } else {
-          authCubit.logout();
+          logOut();
         }
         break;
       default:
@@ -196,23 +204,24 @@ class ResourceCubit extends Cubit<ResourceState> {
     return bookResource.data as String;
   }
 
-  Future<String> confirmBooking(AuthCubit authCubit, String resourceId, String bookingId, int confirmLoadingIndex,
+  Future<String> confirmBooking(String sessionToken, Function login, Function logOut, String resourceId,
+      String bookingId, int confirmLoadingIndex,
       {bool loginLooped = false}) async {
     emit(state.copyWith(confirmationLoading: state.confirmationLoading!.copyAndUpdate(confirmLoadingIndex, true)));
 
-    BookingResponse confirmBooking =
-        await _userService.confirmBooking(authCubit.state.userSession!.sessionToken, resourceId, bookingId);
+    BookingResponse confirmBooking = await _userService.confirmBooking(sessionToken, resourceId, bookingId);
 
     switch (confirmBooking.status) {
       case ApiBookingResponseStatus.SUCCESS:
-        getUserBookings(authCubit);
+        getUserBookings(sessionToken, login, logOut);
         break;
       case ApiBookingResponseStatus.UNAUTHORIZED:
         if (!loginLooped) {
-          await authCubit.login();
-          confirmBooking.data = await this.confirmBooking(authCubit, resourceId, bookingId, confirmLoadingIndex);
+          await login();
+          confirmBooking.data =
+              await this.confirmBooking(sessionToken, login, logOut, resourceId, bookingId, confirmLoadingIndex);
         } else {
-          authCubit.logout();
+          logOut();
         }
         break;
       default:

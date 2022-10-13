@@ -19,6 +19,7 @@ class SearchPageState extends Equatable {
   final List<Day>? previewListOfDays;
   final bool? previewToggledFavorite;
   final String? previewCurrentScheduleId;
+  final bool hasBookmarkedSchedules;
 
   const SearchPageState(
       {required this.focused,
@@ -32,7 +33,8 @@ class SearchPageState extends Equatable {
       required this.previewListOfDays,
       required this.previewToggledFavorite,
       required this.previewCurrentScheduleId,
-      required this.errorDescription});
+      required this.errorDescription,
+      required this.hasBookmarkedSchedules});
 
   SearchPageState copyWith(
           {bool? focused,
@@ -47,7 +49,8 @@ class SearchPageState extends Equatable {
           List<Week>? previewListOfWeeks,
           bool? previewToggledFavorite,
           String? previewCurrentScheduleId,
-          String? errorDescription}) =>
+          String? errorDescription,
+          bool? hasBookmarkedSchedules}) =>
       SearchPageState(
           focused: focused ?? this.focused,
           searchPageStatus: searchPageStatus ?? this.searchPageStatus,
@@ -60,7 +63,8 @@ class SearchPageState extends Equatable {
           previewListOfDays: previewListOfDays ?? this.previewListOfDays,
           previewToggledFavorite: previewToggledFavorite ?? this.previewToggledFavorite,
           previewCurrentScheduleId: previewCurrentScheduleId ?? this.previewCurrentScheduleId,
-          errorDescription: errorDescription ?? this.errorDescription);
+          errorDescription: errorDescription ?? this.errorDescription,
+          hasBookmarkedSchedules: hasBookmarkedSchedules ?? this.hasBookmarkedSchedules);
 
   @override
   List<Object?> get props => [
@@ -75,6 +79,7 @@ class SearchPageState extends Equatable {
         previewListOfDays,
         previewToggledFavorite,
         previewCurrentScheduleId,
-        errorDescription
+        errorDescription,
+        hasBookmarkedSchedules
       ];
 }

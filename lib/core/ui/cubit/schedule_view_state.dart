@@ -1,17 +1,16 @@
-// ignore_for_file: constant_identifier_names
+part of 'schedule_view_cubit.dart';
 
-part of 'app_switch_cubit.dart';
+// ignore: constant_identifier_names
+enum ScheduleViewStatus { NO_VIEW, EMPTY_SCHEDULE, FETCH_ERROR, INITIAL, LOADING, POPULATED_VIEW }
 
-enum AppScheduleViewStatus { INITIAL, LOADING, POPULATED_VIEW, FETCH_ERROR, NO_VIEW, EMPTY_SCHEDULE }
-
-class AppSwitchState extends Equatable {
-  final AppScheduleViewStatus status;
+class ScheduleViewState extends Equatable {
+  final ScheduleViewStatus status;
   final bool listViewToTopButtonVisible;
   final List<Day>? listOfDays;
   final List<Week>? listOfWeeks;
   final String? message;
   final List<ScheduleModelAndCourses?>? scheduleModelAndCourses;
-  const AppSwitchState({
+  const ScheduleViewState({
     required this.status,
     required this.scheduleModelAndCourses,
     required this.listOfDays,
@@ -20,8 +19,8 @@ class AppSwitchState extends Equatable {
     required this.message,
   });
 
-  AppSwitchState copyWith(
-          {AppScheduleViewStatus? status,
+  ScheduleViewState copyWith(
+          {ScheduleViewStatus? status,
           bool? toggledFavorite,
           bool? listViewToTopButtonVisible,
           List<Day>? listOfDays,
@@ -30,7 +29,7 @@ class AppSwitchState extends Equatable {
           List<ScheduleModelAndCourses?>? scheduleModelAndCourses,
           List<Day>? displayedListItems,
           bool? isLoadingListItems}) =>
-      AppSwitchState(
+      ScheduleViewState(
         status: status ?? this.status,
         listViewToTopButtonVisible: listViewToTopButtonVisible ?? this.listViewToTopButtonVisible,
         listOfDays: listOfDays ?? this.listOfDays,

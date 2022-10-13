@@ -5,14 +5,10 @@ import 'package:shimmer_animation/shimmer_animation.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:tumble/core/api/backend/response_types/runtime_error_type.dart';
 import 'package:tumble/core/extensions/extensions.dart';
-import 'package:tumble/core/navigation/app_navigator.dart';
-import 'package:tumble/core/ui/bottom_nav_bar/cubit/bottom_nav_cubit.dart';
-import 'package:tumble/core/ui/bottom_nav_bar/data/nav_bar_items.dart';
-import 'package:tumble/core/ui/app_switch/cubit/app_switch_cubit.dart';
+import 'package:tumble/core/ui/cubit/schedule_view_cubit.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
 import 'package:tumble/core/ui/schedule/dynamic_error_page.dart';
 import 'package:tumble/core/ui/schedule/tumble_calendar_view/data/calendar_data_source.dart';
-import 'package:tumble/core/ui/schedule/tumble_list_view/data/custom_alerts.dart';
 import 'package:tumble/core/ui/tumble_loading.dart';
 
 import '../../../models/backend_models/schedule_model.dart';
@@ -29,22 +25,22 @@ class TumbleCalendarView extends StatefulWidget {
 class _TumbleCalendarViewState extends State<TumbleCalendarView> {
   @override
   Widget build(BuildContext context) {
-    final AppNavigator navigator = BlocProvider.of<AppNavigator>(context);
-    return BlocBuilder<AppSwitchCubit, AppSwitchState>(
+    return BlocBuilder<ScheduleViewCubit, ScheduleViewState>(
       builder: (context, state) {
         switch (state.status) {
-          case AppScheduleViewStatus.INITIAL:
+          case ScheduleViewStatus.INITIAL:
             return DynamicErrorPage(
               toSearch: true,
               errorType: RuntimeErrorType.noCachedSchedule(),
               description: S.popUps.scheduleHelpFirstLine(),
             );
-          case AppScheduleViewStatus.LOADING:
+          case ScheduleViewStatus.LOADING:
             return const TumbleLoading();
 
-          case AppScheduleViewStatus.POPULATED_VIEW:
+          case ScheduleViewStatus.POPULATED_VIEW:
             return FutureBuilder(
-                future: getCalendarDataSource(state.listOfDays!, BlocProvider.of<AppSwitchCubit>(context)),
+                future: getCalendarDataSource(
+                    state.listOfDays!, BlocProvider.of<ScheduleViewCubit>(context).getColorForCourse),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     return SfCalendar(
@@ -52,7 +48,7 @@ class _TumbleCalendarViewState extends State<TumbleCalendarView> {
                       dataSource: snapshot.data as EventsDataSource,
                       appointmentBuilder: (context, details) {
                         final Event event = details.appointments.first;
-                        final Color eventColor = BlocProvider.of<AppSwitchCubit>(context).getColorForCourse(event);
+                        final Color eventColor = BlocProvider.of<ScheduleViewCubit>(context).getColorForCourse(event);
                         return ClipPath(
                             clipper: ShapeBorderClipper(
                                 shape: RoundedRectangleBorder(
@@ -149,26 +145,26 @@ class _TumbleCalendarViewState extends State<TumbleCalendarView> {
                         TumbleEventModal.showBookmarkEventModal(
                           context,
                           event,
-                          BlocProvider.of<AppSwitchCubit>(context).getColorForCourse(event),
+                          BlocProvider.of<ScheduleViewCubit>(context).getColorForCourse(event),
                         );
                       },
                     );
                   }
                   return const TumbleLoading();
                 });
-          case AppScheduleViewStatus.FETCH_ERROR:
+          case ScheduleViewStatus.FETCH_ERROR:
             return DynamicErrorPage(
               toSearch: false,
               errorType: state.message!,
               description: S.popUps.scheduleFetchError(),
             );
-          case AppScheduleViewStatus.EMPTY_SCHEDULE:
+          case ScheduleViewStatus.EMPTY_SCHEDULE:
             return DynamicErrorPage(
               toSearch: false,
               errorType: RuntimeErrorType.emptyScheduleError(),
               description: S.popUps.scheduleIsEmptyBody(),
             );
-          case AppScheduleViewStatus.NO_VIEW:
+          case ScheduleViewStatus.NO_VIEW:
             return DynamicErrorPage(
               toSearch: true,
               errorType: RuntimeErrorType.noBookmarks(),

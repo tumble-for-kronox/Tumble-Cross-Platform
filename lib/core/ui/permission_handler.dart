@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tumble/core/ui/cubit/app_switch_cubit.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
-import 'package:tumble/core/ui/app_switch/cubit/app_switch_cubit.dart';
 
 class PermissionHandler extends StatelessWidget {
   const PermissionHandler({Key? key}) : super(key: key);

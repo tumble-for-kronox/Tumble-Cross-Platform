@@ -31,5 +31,8 @@ class DependencyInjection {
     getIt.registerLazySingleton(() => NotificationRepository());
     getIt.registerLazySingleton(() => AwesomeNotifications());
     getIt.registerLazySingleton(() => PreferenceRepository());
+
+    /// Blocs/Cubits
+    /* getIt.registerFactory(() => AuthCubit()); */
   }
 }

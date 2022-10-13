@@ -2,15 +2,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tumble/core/api/backend/response_types/runtime_error_type.dart';
-import 'package:tumble/core/navigation/app_navigator.dart';
+import 'package:tumble/core/ui/cubit/user_event_cubit.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
-import 'package:tumble/core/ui/user/cubit/user_event_cubit.dart';
 
 typedef NavigateToSearchFromView = void Function();
 
 class CustomAlertDialog {
   static AlertDialog noBookMarkedSchedules(
-      BuildContext context, NavigateToSearchFromView navigateToSearchFromView, AppNavigator navigator) {
+    BuildContext context,
+    NavigateToSearchFromView navigateToSearchFromView,
+  ) {
     return AlertDialog(
       contentPadding: const EdgeInsets.all(25),
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
@@ -60,7 +61,9 @@ class CustomAlertDialog {
   }
 
   static AlertDialog previewContainsNoViews(
-      BuildContext context, NavigateToSearchFromView navigateToSearchFromView, AppNavigator navigator) {
+    BuildContext context,
+    NavigateToSearchFromView navigateToSearchFromView,
+  ) {
     return AlertDialog(
       contentPadding: const EdgeInsets.all(25),
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
@@ -92,7 +95,9 @@ class CustomAlertDialog {
   }
 
   static AlertDialog programFetchError(
-      BuildContext context, NavigateToSearchFromView navigateToSearchFromView, AppNavigator navigator) {
+    BuildContext context,
+    NavigateToSearchFromView navigateToSearchFromView,
+  ) {
     return AlertDialog(
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
       contentPadding: const EdgeInsets.all(25),
@@ -125,7 +130,9 @@ class CustomAlertDialog {
   }
 
   static AlertDialog scheduleCacheFetchError(
-      BuildContext context, NavigateToSearchFromView navigateToSearchFromView, AppNavigator navigator) {
+    BuildContext context,
+    NavigateToSearchFromView navigateToSearchFromView,
+  ) {
     return AlertDialog(
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
       contentPadding: const EdgeInsets.all(25),

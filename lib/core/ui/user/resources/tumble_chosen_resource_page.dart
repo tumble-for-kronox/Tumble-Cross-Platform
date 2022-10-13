@@ -2,8 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:tumble/core/ui/cubit/auth_cubit.dart';
+import 'package:tumble/core/ui/cubit/resource_cubit.dart';
+import 'package:tumble/core/ui/data/string_constants.dart';
 import 'package:tumble/core/ui/schedule/dynamic_error_page.dart';
-import 'package:tumble/core/ui/schedule/tumble_list_view/data/custom_alerts.dart';
 import 'package:tumble/core/ui/tumble_loading.dart';
 import 'package:tumble/core/ui/user/resources/confirm_booking.dart';
 import 'package:tumble/core/ui/user/resources/location_card_containers.dart';
@@ -11,9 +13,6 @@ import 'package:tumble/core/ui/user/resources/resource_room_card.dart';
 import 'package:tumble/core/ui/user/resources/time_stamp_containers.dart';
 import 'package:tumble/core/ui/user/resources/resource_time_stamp_card.dart';
 
-import '../../data/string_constants.dart';
-import '../../login/cubit/auth_cubit.dart';
-import 'cubit/resource_cubit.dart';
 
 class TumbleChosenResourcePage extends StatelessWidget {
   const TumbleChosenResourcePage({Key? key}) : super(key: key);
@@ -143,9 +142,12 @@ class TumbleChosenResourcePage extends StatelessWidget {
               onPressed: () async {
                 await context.read<ResourceCubit>().userUpdateActiveDate(context).then((value) {
                   if (value == null) return;
-                  context
-                      .read<ResourceCubit>()
-                      .getResourceAvailabilities(context.read<AuthCubit>(), state.currentLoadedResource!.id, value);
+                  context.read<ResourceCubit>().getResourceAvailabilities(
+                      context.read<AuthCubit>().state.userSession!.sessionToken,
+                      context.read<AuthCubit>().login,
+                      context.read<AuthCubit>().logout,
+                      state.currentLoadedResource!.id,
+                      value);
                 });
               },
             ),
