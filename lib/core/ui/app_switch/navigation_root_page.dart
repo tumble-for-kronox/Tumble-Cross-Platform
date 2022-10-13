@@ -61,6 +61,8 @@ class _NavigationRootPageState extends State<NavigationRootPage> {
     _navigationCubit.close();
     _scheduleViewCubit.close();
     _searchPageCubit.close();
+    _userEventCubit.close();
+    _resourceCubit.close();
     super.dispose();
   }
 
@@ -118,6 +120,9 @@ class _NavigationRootPageState extends State<NavigationRootPage> {
                     BlocProvider.value(
                       value: BlocProvider.of<AuthCubit>(context),
                     ),
+                    BlocProvider.value(
+                      value: BlocProvider.of<AppSwitchCubit>(context),
+                    )
                   ],
                   child: BlocListener<SearchPageCubit, SearchPageState>(
                     listenWhen: (previous, current) =>

@@ -4,6 +4,7 @@ import 'package:tumble/core/api/backend/response_types/runtime_error_type.dart';
 import 'package:tumble/core/ui/cubit/schedule_view_cubit.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
 import 'package:tumble/core/ui/schedule/dynamic_error_page.dart';
+import 'package:tumble/core/ui/schedule/event_options.dart';
 import 'package:tumble/core/ui/schedule/tumble_list_view/data/to_top_button.dart';
 import 'package:tumble/core/ui/tumble_loading.dart';
 import 'tumble_list_view_day_container.dart';
@@ -61,7 +62,10 @@ class _TumbleListViewState extends State<TumbleListView> with TickerProviderStat
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.only(top: 40),
-                                  child: TumbleListViewDayContainer(day: dayList[index]),
+                                  child: BlocProvider.value(
+                                    value: BlocProvider.of<ScheduleViewCubit>(context),
+                                    child: TumbleListViewDayContainer(day: dayList[index]),
+                                  ),
                                 )
                               ],
                             );

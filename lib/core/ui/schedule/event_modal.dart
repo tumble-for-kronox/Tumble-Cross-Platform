@@ -1,9 +1,12 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:tumble/core/extensions/extensions.dart';
 import 'package:tumble/core/models/backend_models/schedule_model.dart';
+import 'package:tumble/core/ui/cubit/app_switch_cubit.dart';
+import 'package:tumble/core/ui/cubit/schedule_view_cubit.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
 import 'package:tumble/core/ui/app_switch/misc/tumble_details_modal_base.dart';
 import 'package:tumble/core/ui/schedule/event_options.dart';
@@ -26,10 +29,20 @@ class TumbleEventModal extends StatelessWidget {
         enableDrag: true,
         isDismissible: true,
         context: context,
-        builder: (context) => TumbleEventModal(
-              event: event,
-              color: event.isSpecial ? Colors.redAccent : color,
-              showSettings: true,
+        builder: (_) => MultiBlocProvider(
+              providers: [
+                BlocProvider.value(
+                  value: BlocProvider.of<ScheduleViewCubit>(context),
+                ),
+                BlocProvider.value(
+                  value: BlocProvider.of<AppSwitchCubit>(context),
+                ),
+              ],
+              child: TumbleEventModal(
+                event: event,
+                color: event.isSpecial ? Colors.redAccent : color,
+                showSettings: true,
+              ),
             ));
   }
 
@@ -39,7 +52,7 @@ class TumbleEventModal extends StatelessWidget {
         enableDrag: true,
         isDismissible: true,
         context: context,
-        builder: (context) => TumbleEventModal(
+        builder: (_) => TumbleEventModal(
               event: event,
               color: color,
               showSettings: false,

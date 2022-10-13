@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:tumble/core/extensions/extensions.dart';
+import 'package:tumble/core/ui/cubit/app_switch_cubit.dart';
 import 'package:tumble/core/ui/cubit/schedule_view_cubit.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
 import 'package:tumble/core/ui/schedule/cancel_button.dart';
@@ -17,12 +18,15 @@ class EventOptions extends StatelessWidget {
 
   const EventOptions({Key? key, required this.event, required this.context}) : super(key: key);
 
+  /// The order in which this widget receives the build context is important,
+  /// as it needs the context of the previous widget that called it that has
+  /// a ScheduleViewCubit provider
   static void showEventOptions(BuildContext context, Event event) {
     showModalBottomSheet(context: context, builder: (_) => EventOptions(event: event, context: context));
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext _) {
     return Align(
       alignment: Alignment.bottomCenter,
       child: Column(
@@ -45,7 +49,7 @@ class EventOptions extends StatelessWidget {
                   context.read<ScheduleViewCubit>().checkIfNotificationIsSetForEvent(event),
                   context.read<ScheduleViewCubit>().checkIfNotificationIsSetForCourse(event),
                 ]),
-                builder: (context, snapshot) {
+                builder: (_, snapshot) {
                   if (snapshot.connectionState == ConnectionState.done) {
                     bool notificationIsSetForEvent = (snapshot.data! as List<bool>)[0];
                     bool notificationIsSetForCourse = (snapshot.data! as List<bool>)[1];
@@ -80,7 +84,10 @@ class EventOptions extends StatelessWidget {
                                 await showDialog(
                                     useRootNavigator: false,
                                     context: context,
-                                    builder: (_) => const PermissionHandler());
+                                    builder: (_) => BlocProvider.value(
+                                          value: BlocProvider.of<AppSwitchCubit>(context),
+                                          child: const PermissionHandler(),
+                                        ));
                               }
                             }
                           },
@@ -179,7 +186,13 @@ class EventOptions extends StatelessWidget {
             bool sucessfullyCreatedNotifications =
                 await context.read<ScheduleViewCubit>().createNotificationForEvent(event, context);
             if (!sucessfullyCreatedNotifications) {
-              await showDialog(useRootNavigator: false, context: context, builder: (_) => const PermissionHandler());
+              await showDialog(
+                  useRootNavigator: false,
+                  context: context,
+                  builder: (_) => BlocProvider.value(
+                        value: BlocProvider.of<AppSwitchCubit>(context),
+                        child: const PermissionHandler(),
+                      ));
             }
           }
         },
