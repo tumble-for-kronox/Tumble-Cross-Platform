@@ -1,10 +1,9 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tumble/core/api/dependency_injection/get_it.dart';
 import 'package:tumble/core/api/preferences/repository/preference_repository.dart';
+import 'package:tumble/core/extensions/extensions.dart';
 import 'package:tumble/core/notifications/interface/inotification_service_builder.dart';
-import 'package:tumble/core/shared/preference_types.dart';
 import 'package:tumble/core/theme/data/colors.dart';
 
 ///
@@ -45,7 +44,7 @@ class NotificationServiceBuilder implements INotificationServiceBuilder {
               id: id,
               channelKey: channelKey, // Schedule id
               groupKey: groupkey, //Schedule course
-              title: title,
+              title: title.capitalize(),
               icon: defaultIcon,
               color: defaultColor,
               body: body,
@@ -56,7 +55,10 @@ class NotificationServiceBuilder implements INotificationServiceBuilder {
             NotificationActionButton(key: 'VIEW', label: 'View'),
           ],
           schedule: NotificationCalendar.fromDate(
-              date: date.subtract(Duration(minutes: _preferenceService.notificationOffset!)).toUtc(),
+              date: date
+                  .subtract(
+                      Duration(minutes: _preferenceService.notificationOffset!))
+                  .toUtc(),
               allowWhileIdle: true,
               preciseAlarm: true));
 
@@ -73,7 +75,7 @@ class NotificationServiceBuilder implements INotificationServiceBuilder {
               id: id,
               channelKey: channelKey, // Schedule id
               groupKey: groupkey, //Schedule course
-              title: title,
+              title: title.capitalize(),
               icon: defaultIcon,
               color: defaultColor,
               body: body,
@@ -83,5 +85,6 @@ class NotificationServiceBuilder implements INotificationServiceBuilder {
           actionButtons: [
             NotificationActionButton(key: 'VIEW', label: 'View'),
           ],
-          schedule: NotificationCalendar.fromDate(date: date, allowWhileIdle: true, preciseAlarm: true));
+          schedule: NotificationCalendar.fromDate(
+              date: date, allowWhileIdle: true, preciseAlarm: true));
 }
