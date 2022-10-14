@@ -17,7 +17,7 @@
 *** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
 *** https://www.markdownguide.org/basic-syntax/#reference-style-links
 -->
-<div align="center"><a href=contributors-url>Contributors</a>&emsp;&emsp;<a href=forks-url>Forks</a>&emsp;&emsp;<a href=stars-url>Stargazers</a>&emsp;&emsp;<a href=issues-url>Issues</a>&emsp;&emsp;<a href=license-url>MIT License</a></div>
+<div align="center"><a href=contributors-url>Contributors</a>&emsp;&emsp;<a href=forks-url>Forks</a>&emsp;&emsp;<a href=stars-url>Stargazers</a>&emsp;&emsp;<a href=issues-url>Issues</a>&emsp;&emsp;<a href=license-url>GPL License</a></div>
 
 
 <!-- PROJECT LOGO -->
