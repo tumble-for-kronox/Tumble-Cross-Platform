@@ -17,7 +17,7 @@
 *** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
 *** https://www.markdownguide.org/basic-syntax/#reference-style-links
 -->
-<div align="center"><a href=contributors-url>Contributors</a>&emsp;&emsp;<a href=https://github.com/adisve/tumble-for-kronox/network/members>Forks</a>&emsp;&emsp;<a href=stars-url>Stargazers</a>&emsp;&emsp;<a href=https://github.com/adisve/tumble-for-kronox/issues>Issues</a>&emsp;&emsp;<a href=#license>GPL License</a></div>
+<div align="center"><a href=https://github.com/adisve/tumble-for-kronox/graphs/contributors>Contributors</a>&emsp;&emsp;<a href=https://github.com/adisve/tumble-for-kronox/network/members>Forks</a>&emsp;&emsp;<a href=https://github.com/adisve/tumble-for-kronox/stargazers>Stargazers</a>&emsp;&emsp;<a href=https://github.com/adisve/tumble-for-kronox/issues>Issues</a>&emsp;&emsp;<a href=#license>GPL License</a></div>
 
 
 <!-- PROJECT LOGO -->
