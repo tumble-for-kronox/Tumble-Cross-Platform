@@ -91,7 +91,7 @@ class ScheduleCard extends StatelessWidget {
                                             child: event.isSpecial
                                                 ? const Icon(
                                                     CupertinoIcons.exclamationmark_square,
-                                                    size: 20,
+                                                    size: 24,
                                                   )
                                                 : null,
                                           )

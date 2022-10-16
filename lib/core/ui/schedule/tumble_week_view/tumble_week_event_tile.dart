@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -16,7 +17,7 @@ class TumbleWeekEventTile extends StatelessWidget {
     final courseColor = context.read<ScheduleViewCubit>().getColorForCourse(event);
     return Container(
       height: 35,
-      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 7),
+      margin: const EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 5),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(2.5),
@@ -75,8 +76,8 @@ class TumbleWeekEventTile extends StatelessWidget {
                 Expanded(
                   child: Container(
                     padding: const EdgeInsets.only(
-                      left: 5,
-                      right: 7,
+                      left: 2.5,
+                      right: 10,
                     ),
                     child: Text(
                       event.title.capitalize(),
@@ -90,6 +91,15 @@ class TumbleWeekEventTile extends StatelessWidget {
                     ),
                   ),
                 ),
+                event.isSpecial
+                    ? Container(
+                        padding: const EdgeInsets.only(right: 5),
+                        child: const Icon(
+                          CupertinoIcons.exclamationmark_square,
+                          size: 20,
+                        ),
+                      )
+                    : Container(),
               ],
             ),
           ),

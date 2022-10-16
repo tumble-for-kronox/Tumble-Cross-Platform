@@ -22,11 +22,12 @@ class PreviewListViewDayContainer extends StatelessWidget {
             children: [
               Text("${day.name} ${day.date}",
                   style: TextStyle(
-                      color: Theme.of(context).colorScheme.onBackground, fontSize: 17, fontWeight: FontWeight.w400)),
+                      color: Theme.of(context).colorScheme.onBackground, fontSize: 18, fontWeight: FontWeight.w400)),
               Expanded(
                   child: Divider(
                 color: Theme.of(context).colorScheme.onBackground,
-                indent: 6,
+                indent: 10,
+                endIndent: 10,
                 thickness: 1,
               ))
             ],

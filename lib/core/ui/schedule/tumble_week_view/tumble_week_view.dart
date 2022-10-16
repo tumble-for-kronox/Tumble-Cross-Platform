@@ -47,7 +47,7 @@ class _TumbleWeekViewState extends State<TumbleWeekView> {
                                       style: TextStyle(
                                         color: Theme.of(context).colorScheme.onBackground,
                                         fontSize: 40,
-                                        fontWeight: FontWeight.w500,
+                                        fontWeight: FontWeight.w400,
                                       )),
                                 ),
                               ],
