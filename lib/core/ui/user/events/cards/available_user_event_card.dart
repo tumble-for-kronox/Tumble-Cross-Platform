@@ -49,28 +49,39 @@ class AvailableUserEventCard extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Container(
-                            padding: const EdgeInsets.only(left: 2),
+                            padding: const EdgeInsets.only(left: 2, right: 15),
                             child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Container(
-                                  width: 5,
-                                  height: 5,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: Theme.of(context).colorScheme.primary,
-                                  ),
+                                Row(
+                                  children: [
+                                    Container(
+                                      width: 5,
+                                      height: 5,
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: Theme.of(context).colorScheme.primary,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 6),
+                                    Text(
+                                      '${DateFormat.Hm(Localizations.localeOf(context).languageCode).format(userEvent.eventStart)} - ${DateFormat.Hm(Localizations.localeOf(context).languageCode).format(userEvent.eventEnd)}',
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w400,
+                                          color: Theme.of(context).colorScheme.onSecondary,
+                                          letterSpacing: .5),
+                                    ),
+                                  ],
                                 ),
-                                const SizedBox(width: 6),
-                                Container(
-                                  padding: const EdgeInsets.only(top: 1),
-                                  child: Text(
-                                    '${DateFormat('dd/MM/yy', Localizations.localeOf(context).languageCode).format(userEvent.eventStart)}, ${DateFormat.Hm(Localizations.localeOf(context).languageCode).format(userEvent.eventStart)} - ${DateFormat.Hm(Localizations.localeOf(context).languageCode).format(userEvent.eventEnd)}',
-                                    style: TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.w400,
-                                        color: Theme.of(context).colorScheme.onSecondary,
-                                        letterSpacing: .5),
-                                  ),
+                                Text(
+                                  DateFormat('dd-MM-yyyy', Localizations.localeOf(context).languageCode)
+                                      .format(userEvent.eventStart),
+                                  style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w500,
+                                      color: Theme.of(context).colorScheme.onSecondary,
+                                      letterSpacing: .5),
                                 ),
                               ],
                             ),

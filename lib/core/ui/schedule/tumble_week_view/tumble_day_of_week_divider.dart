@@ -42,7 +42,12 @@ class DayOfWeekDivider extends StatelessWidget {
                         color: Theme.of(context).colorScheme.onBackground,
                       ),
                     ),
-                    Container(padding: const EdgeInsets.only(right: 3), child: Text(S.weekViewPage.todayLabel()))
+                    Container(
+                        padding: const EdgeInsets.only(right: 3),
+                        child: Text(
+                          S.weekViewPage.todayLabel(),
+                          style: TextStyle(fontSize: 16),
+                        ))
                   ]),
                 )
               : Container(),

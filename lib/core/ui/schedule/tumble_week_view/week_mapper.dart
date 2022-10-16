@@ -18,7 +18,7 @@ class WeekMapper extends StatelessWidget {
               end: Alignment.topCenter,
               begin: Alignment.bottomCenter,
               colors: [Colors.white, Colors.white.withOpacity(0.05)],
-              stops: [
+              stops: const [
                 .95,
                 1,
               ],

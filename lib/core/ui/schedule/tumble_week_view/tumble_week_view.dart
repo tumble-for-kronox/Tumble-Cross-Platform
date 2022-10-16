@@ -45,7 +45,7 @@ class _TumbleWeekViewState extends State<TumbleWeekView> {
                                   padding: const EdgeInsets.only(left: 20),
                                   child: Text(currentYear.toString(),
                                       style: TextStyle(
-                                        color: Theme.of(context).colorScheme.onBackground.withOpacity(0.9),
+                                        color: Theme.of(context).colorScheme.onBackground,
                                         fontSize: 40,
                                         fontWeight: FontWeight.w500,
                                       )),

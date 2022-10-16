@@ -78,7 +78,7 @@ class ScheduleCard extends StatelessWidget {
                                                 child: Text(
                                                   '${DateFormat.Hm(Localizations.localeOf(context).languageCode).format(event.from)} - ${DateFormat.Hm(Localizations.localeOf(context).languageCode).format(event.to)}',
                                                   style: TextStyle(
-                                                      fontSize: 14.5,
+                                                      fontSize: 15,
                                                       fontWeight: FontWeight.w400,
                                                       color: Theme.of(context).colorScheme.onSecondary,
                                                       letterSpacing: .5),

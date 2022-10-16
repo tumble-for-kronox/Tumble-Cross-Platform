@@ -7,7 +7,7 @@ class TumbleEmptyWeekEventTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 32.5,
+      height: 35,
       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 2.5),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,

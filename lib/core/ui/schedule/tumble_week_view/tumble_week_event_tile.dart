@@ -15,7 +15,7 @@ class TumbleWeekEventTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final courseColor = context.read<ScheduleViewCubit>().getColorForCourse(event);
     return Container(
-      height: 32.5,
+      height: 35,
       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 7),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
@@ -44,7 +44,7 @@ class TumbleWeekEventTile extends StatelessWidget {
                   width: 5,
                   decoration: BoxDecoration(
                     borderRadius: const BorderRadius.only(topLeft: Radius.circular(2), bottomLeft: Radius.circular(2)),
-                    color: courseColor,
+                    color: event.isSpecial ? Colors.redAccent : courseColor,
                   ),
                 ),
                 Container(
@@ -52,24 +52,22 @@ class TumbleWeekEventTile extends StatelessWidget {
                   child: Row(
                     children: [
                       Container(
+                        padding: const EdgeInsets.only(top: 10),
                         width: 5,
                         height: 5,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: courseColor,
+                          color: event.isSpecial ? Colors.redAccent : courseColor,
                         ),
                       ),
                       const SizedBox(width: 6),
-                      Container(
-                        padding: const EdgeInsets.only(top: 1),
-                        child: Text(
-                          '${DateFormat.Hm(Localizations.localeOf(context).languageCode).format(event.from)} - ${DateFormat.Hm(Localizations.localeOf(context).languageCode).format(event.to)}',
-                          style: TextStyle(
-                              fontSize: 15.5,
-                              fontWeight: FontWeight.w400,
-                              color: Theme.of(context).colorScheme.onBackground,
-                              letterSpacing: .5),
-                        ),
+                      Text(
+                        '${DateFormat.Hm(Localizations.localeOf(context).languageCode).format(event.from)} - ${DateFormat.Hm(Localizations.localeOf(context).languageCode).format(event.to)}',
+                        style: TextStyle(
+                            fontSize: 15.5,
+                            fontWeight: FontWeight.w400,
+                            color: Theme.of(context).colorScheme.onSecondary,
+                            letterSpacing: .5),
                       ),
                     ],
                   ),

@@ -43,7 +43,7 @@ class RegisteredPassedUserEventCard extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Container(
-                            padding: const EdgeInsets.only(left: 2, right: 10),
+                            padding: const EdgeInsets.only(left: 2, right: 15),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -61,7 +61,7 @@ class RegisteredPassedUserEventCard extends StatelessWidget {
                                     Text(
                                       '${DateFormat.Hm(Localizations.localeOf(context).languageCode).format(userEvent.eventStart)} - ${DateFormat.Hm(Localizations.localeOf(context).languageCode).format(userEvent.eventEnd)}',
                                       style: TextStyle(
-                                          fontSize: 15,
+                                          fontSize: 16,
                                           fontWeight: FontWeight.w400,
                                           color: Theme.of(context).colorScheme.onSecondary,
                                           letterSpacing: .5),

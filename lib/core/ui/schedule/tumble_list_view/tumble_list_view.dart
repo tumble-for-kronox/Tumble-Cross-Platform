@@ -55,7 +55,7 @@ class _TumbleListViewState extends State<TumbleListView> with TickerProviderStat
                                   child: Text(
                                     dayList[index].isoString.year.toString(),
                                     style: TextStyle(
-                                      color: Theme.of(context).colorScheme.onBackground.withOpacity(0.9),
+                                      color: Theme.of(context).colorScheme.onBackground,
                                       fontSize: 40,
                                       fontWeight: FontWeight.w500,
                                     ),
