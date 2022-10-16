@@ -67,7 +67,7 @@ class _AppState extends State<App> {
                 // NavigationRouteLabels.tumbleWeekView: (context) => const TumbleWeekView(),
                 // NavigationRouteLabels.tumbleSearchPage: (context) => const TumbleSearchPage()
               },
-              supportedLocales: AppLocalizations.supportedLocales,
+              supportedLocales: const [Locale('en')],
               locale: state.locale,
               localeResolutionCallback: (locale, supportedLocales) =>
                   supportedLocales.contains(locale) ? locale : const Locale('en'),
