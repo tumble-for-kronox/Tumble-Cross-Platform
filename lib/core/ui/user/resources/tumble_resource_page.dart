@@ -6,7 +6,6 @@ import 'package:tumble/core/ui/data/string_constants.dart';
 import 'package:tumble/core/ui/user/resources/resource_card.dart';
 import 'package:tumble/core/ui/user/resources/tumble_chosen_resource_page.dart';
 
-
 class ResourcePage extends StatelessWidget {
   final Future<void> Function()? onSchoolResourcesRefresh;
 
@@ -52,7 +51,7 @@ class ResourcePage extends StatelessWidget {
                 color: Theme.of(context).colorScheme.onBackground,
               ),
               const SizedBox(
-                width: 10,
+                width: 15,
               ),
               Text(
                 S.userBookings.resourcesListTitle(),

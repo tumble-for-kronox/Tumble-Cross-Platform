@@ -26,7 +26,7 @@ class ScheduleCardLocationContainer extends StatelessWidget {
                 style: TextStyle(
                   color: textColor,
                   fontSize: locations.isEmpty ? 16 : 19,
-                  fontWeight: FontWeight.w300,
+                  fontWeight: FontWeight.w400,
                 ),
               ),
               Padding(

@@ -17,49 +17,52 @@ class AppNotificationOffsetPicker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisSize: MainAxisSize.max,
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        Container(
-          height: 270,
-          margin: const EdgeInsets.only(bottom: 20, left: 12, right: 12),
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.surface,
-            borderRadius: BorderRadius.circular(20),
+    return SizedBox(
+      height: 400,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Container(
+            height: 270,
+            margin: const EdgeInsets.only(bottom: 20, left: 12, right: 12),
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.surface,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Stack(
+              children: [
+                SizedBox.expand(
+                    child: Card(
+                  elevation: 0,
+                  color: Theme.of(context).colorScheme.surface,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+                  child: Column(
+                      children: (parameterMap.keys)
+                          .map((key) => Container(
+                                padding: const EdgeInsets.only(top: 7),
+                                child: ListTile(
+                                    trailing: parameterMap[key] == currentNotificationTime
+                                        ? const Icon(CupertinoIcons.smallcircle_fill_circle)
+                                        : null,
+                                    shape: const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(Radius.circular(20))),
+                                    title: Text(
+                                      key,
+                                      style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+                                    ),
+                                    onTap: () => setNotificationTime(parameterMap[key]!)),
+                              ))
+                          .toList()),
+                )),
+                TumbleDragPill(barColor: Theme.of(context).colorScheme.background.contrastColor())
+              ],
+            ),
           ),
-          child: Stack(
-            children: [
-              SizedBox.expand(
-                  child: Card(
-                elevation: 0,
-                color: Theme.of(context).colorScheme.surface,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-                child: Column(
-                    children: (parameterMap.keys)
-                        .map((key) => Container(
-                              padding: const EdgeInsets.only(top: 7),
-                              child: ListTile(
-                                  trailing: parameterMap[key] == currentNotificationTime
-                                      ? const Icon(CupertinoIcons.smallcircle_fill_circle)
-                                      : null,
-                                  shape:
-                                      const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
-                                  title: Text(
-                                    key,
-                                    style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
-                                  ),
-                                  onTap: () => setNotificationTime(parameterMap[key]!)),
-                            ))
-                        .toList()),
-              )),
-              TumbleDragPill(barColor: Theme.of(context).colorScheme.background.contrastColor())
-            ],
-          ),
-        ),
-        const CancelButton()
-      ],
+          const CancelButton()
+        ],
+      ),
     );
   }
 }

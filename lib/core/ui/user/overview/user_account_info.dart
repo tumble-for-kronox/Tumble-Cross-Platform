@@ -39,7 +39,7 @@ class _UserAccountInfo extends State<UserAccountInfo> {
                         decoration: BoxDecoration(
                           boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 2, offset: Offset(0, 1))],
                           color: Theme.of(context).colorScheme.surface,
-                          borderRadius: BorderRadius.circular(15),
+                          borderRadius: BorderRadius.circular(5),
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -91,7 +91,7 @@ class _UserAccountInfo extends State<UserAccountInfo> {
                                 child: Align(
                                   alignment: Alignment.topRight,
                                   child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(14),
+                                    borderRadius: BorderRadius.circular(5),
                                     child: Image.asset(
                                       Schools.schools
                                           .where(
@@ -122,7 +122,7 @@ class _UserAccountInfo extends State<UserAccountInfo> {
                       const SizedBox(
                         height: 40,
                       ),
-                      _sectionDivider(context, S.authorizedPage.userBookingsTitle(), Icons.other_houses_outlined),
+                      _sectionDivider(context, S.authorizedPage.userBookingsTitle(), CupertinoIcons.building_2_fill),
                       const SizedBox(
                         height: 10,
                       ),

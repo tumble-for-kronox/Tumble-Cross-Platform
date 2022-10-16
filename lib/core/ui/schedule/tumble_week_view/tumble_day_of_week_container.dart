@@ -12,20 +12,23 @@ class TumbleDayOfWeekContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return day.events.isEmpty
-        ? Column(
-            children: [
-              DayOfWeekDivider(day: day),
-              const TumbleEmptyWeekEventTile(),
-            ],
-          )
-        : Column(
-            children: <Widget>[DayOfWeekDivider(day: day)] +
-                day.events
-                    .map((Event event) => GestureDetector(
-                        onLongPress: () => EventOptions.showEventOptions(context, event),
-                        child: TumbleWeekEventTile(event: event)))
-                    .toList(),
-          );
+    return Container(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: day.events.isEmpty
+          ? Column(
+              children: [
+                DayOfWeekDivider(day: day),
+                const TumbleEmptyWeekEventTile(),
+              ],
+            )
+          : Column(
+              children: <Widget>[DayOfWeekDivider(day: day)] +
+                  day.events
+                      .map((Event event) => GestureDetector(
+                          onLongPress: () => EventOptions.showEventOptions(context, event),
+                          child: TumbleWeekEventTile(event: event)))
+                      .toList(),
+            ),
+    );
   }
 }

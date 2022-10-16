@@ -18,7 +18,6 @@ class AppSwitch extends StatefulWidget {
 class _AppSwitchState extends State<AppSwitch> {
   late AppSwitchCubit _appSwitchCubit;
 
-  /// Global Cubit instances
   @override
   void initState() {
     _appSwitchCubit = AppSwitchCubit();

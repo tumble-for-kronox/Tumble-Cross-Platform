@@ -27,11 +27,12 @@ class EventOptions extends StatelessWidget {
 
   @override
   Widget build(BuildContext _) {
-    return Align(
+    return Container(
+      height: 300,
       alignment: Alignment.bottomCenter,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisSize: MainAxisSize.max,
+        mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           Container(

@@ -29,11 +29,12 @@ class _TumbleListViewDayContainerState extends State<TumbleListViewDayContainer>
               Text(
                   "${DateFormat.EEEE(Localizations.localeOf(context).languageCode).format(widget.day.isoString).capitalize()} ${DateFormat("d/M", Localizations.localeOf(context).languageCode).format(widget.day.isoString)}",
                   style: TextStyle(
-                      color: Theme.of(context).colorScheme.onBackground, fontSize: 17, fontWeight: FontWeight.w400)),
+                      color: Theme.of(context).colorScheme.onBackground, fontSize: 18, fontWeight: FontWeight.w400)),
               Expanded(
                   child: Divider(
                 color: Theme.of(context).colorScheme.onBackground,
-                indent: 6,
+                indent: 10,
+                endIndent: 10,
                 thickness: 1,
               ))
             ],

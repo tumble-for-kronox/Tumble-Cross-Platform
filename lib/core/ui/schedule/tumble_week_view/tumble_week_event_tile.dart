@@ -15,24 +15,20 @@ class TumbleWeekEventTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final courseColor = context.read<ScheduleViewCubit>().getColorForCourse(event);
     return Container(
-      height: 23,
-      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+      height: 32.5,
+      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 7),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
-        borderRadius: BorderRadius.circular(5),
+        borderRadius: BorderRadius.circular(2.5),
         boxShadow: const <BoxShadow>[
           BoxShadow(
             color: Colors.black26,
-            blurRadius: 1,
-            offset: Offset(0, 1),
+            blurRadius: .5,
+            offset: Offset(0, .5),
           )
         ],
       ),
       child: ClipPath(
-        clipper: ShapeBorderClipper(
-            shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(5),
-        )),
         child: Shimmer(
           color: Colors.redAccent,
           colorOpacity: 0.2,
@@ -42,41 +38,47 @@ class TumbleWeekEventTile extends StatelessWidget {
             onPressed: () => TumbleEventModal.showBookmarkEventModal(
                 context, event, context.read<ScheduleViewCubit>().getColorForCourse(event)),
             child: Row(
-              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Container(
                   width: 5,
                   decoration: BoxDecoration(
-                      borderRadius:
-                          const BorderRadius.only(topLeft: Radius.circular(5), bottomLeft: Radius.circular(5)),
-                      color: event.isSpecial ? Colors.redAccent : courseColor),
+                    borderRadius: const BorderRadius.only(topLeft: Radius.circular(2), bottomLeft: Radius.circular(2)),
+                    color: courseColor,
+                  ),
                 ),
-                Stack(
-                  alignment: Alignment.centerLeft,
-                  children: [
-                    Container(
-                      width: 100,
-                      color: event.isSpecial ? Colors.redAccent.withOpacity(0.35) : courseColor.withOpacity(0.35),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 5),
-                      child: Text(
-                        "${DateFormat.Hm(Localizations.localeOf(context).languageCode).format(event.from)} - ${DateFormat.Hm(Localizations.localeOf(context).languageCode).format(event.to)}",
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.onSurface,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w300,
+                Container(
+                  padding: const EdgeInsets.only(left: 8),
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 5,
+                        height: 5,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: courseColor,
                         ),
                       ),
-                    ),
-                  ],
+                      const SizedBox(width: 6),
+                      Container(
+                        padding: const EdgeInsets.only(top: 1),
+                        child: Text(
+                          '${DateFormat.Hm(Localizations.localeOf(context).languageCode).format(event.from)} - ${DateFormat.Hm(Localizations.localeOf(context).languageCode).format(event.to)}',
+                          style: TextStyle(
+                              fontSize: 15.5,
+                              fontWeight: FontWeight.w400,
+                              color: Theme.of(context).colorScheme.onBackground,
+                              letterSpacing: .5),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
                 Expanded(
                   child: Container(
-                    alignment: Alignment.centerRight,
                     padding: const EdgeInsets.only(
                       left: 5,
-                      right: 5,
+                      right: 7,
                     ),
                     child: Text(
                       event.title.capitalize(),
@@ -84,7 +86,7 @@ class TumbleWeekEventTile extends StatelessWidget {
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.onSurface,
                         fontSize: 16,
-                        fontWeight: FontWeight.w300,
+                        fontWeight: FontWeight.w400,
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),

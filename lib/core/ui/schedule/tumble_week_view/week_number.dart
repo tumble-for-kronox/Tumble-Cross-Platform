@@ -10,11 +10,11 @@ class WeekNumber extends StatelessWidget {
   Widget build(BuildContext context) {
     return Positioned(
         right: 20,
-        top: 20,
+        top: 15,
         child: Text(
           S.weekViewPage.weekNumber(week.weekNumber.toString()),
           style:
-              TextStyle(color: Theme.of(context).colorScheme.onBackground, fontSize: 20, fontWeight: FontWeight.w300),
+              TextStyle(color: Theme.of(context).colorScheme.onBackground, fontSize: 20, fontWeight: FontWeight.w400),
         ));
   }
 }

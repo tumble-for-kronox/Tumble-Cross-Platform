@@ -29,38 +29,35 @@ class _TumbleWeekViewState extends State<TumbleWeekView> {
           case ScheduleViewStatus.LOADING:
             return const TumbleLoading();
           case ScheduleViewStatus.POPULATED_VIEW:
-            return Stack(children: [
-              SizedBox(
-                  child: PageView.builder(
-                      itemCount: state.listOfWeeks!.length,
-                      itemBuilder: (context, index) {
-                        int currentYear = 0;
+            return SizedBox(
+                child: PageView.builder(
+                    itemCount: state.listOfWeeks!.length,
+                    itemBuilder: (context, index) {
+                      int currentYear = 0;
+                      return state.listOfWeeks!.map(
+                        (week) {
+                          if (week.days.first.isoString.year != currentYear) {
+                            currentYear = week.days.first.isoString.year;
+                            return Stack(
+                              children: [
+                                TumbleWeekPageContainer(week: week),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 20),
+                                  child: Text(currentYear.toString(),
+                                      style: TextStyle(
+                                        color: Theme.of(context).colorScheme.onBackground.withOpacity(0.9),
+                                        fontSize: 40,
+                                        fontWeight: FontWeight.w500,
+                                      )),
+                                ),
+                              ],
+                            );
+                          }
 
-                        return state.listOfWeeks!.map(
-                          (week) {
-                            if (week.days.first.isoString.year != currentYear) {
-                              currentYear = week.days.first.isoString.year;
-                              return Stack(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
-                                    child: Text(currentYear.toString(),
-                                        style: TextStyle(
-                                          color: Theme.of(context).colorScheme.onBackground.withOpacity(0.3),
-                                          fontSize: 54,
-                                          fontWeight: FontWeight.w600,
-                                        )),
-                                  ),
-                                  TumbleWeekPageContainer(week: week)
-                                ],
-                              );
-                            }
-
-                            return TumbleWeekPageContainer(week: week);
-                          },
-                        ).toList()[index];
-                      }))
-            ]);
+                          return TumbleWeekPageContainer(week: week);
+                        },
+                      ).toList()[index];
+                    }));
           case ScheduleViewStatus.FETCH_ERROR:
             return DynamicErrorPage(
                 toSearch: false, errorType: state.message!, description: S.popUps.scheduleFetchError());

@@ -22,13 +22,13 @@ class UpcomingUserEventCard extends StatelessWidget {
               alignment: Alignment.topLeft,
               decoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.surface,
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 2, offset: Offset(0, 1))]),
+                  borderRadius: BorderRadius.circular(5),
+                  boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 1, offset: Offset(0, .5))]),
               child: MaterialButton(
                 padding: const EdgeInsets.all(0),
                 onPressed: onTap,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(5),
                 ),
                 child: Container(
                   padding: const EdgeInsets.only(left: 24, top: 15),
@@ -92,8 +92,7 @@ class UpcomingUserEventCard extends StatelessWidget {
                 child: Container(
                   decoration: BoxDecoration(
                     color: Theme.of(context).colorScheme.primary,
-                    borderRadius:
-                        const BorderRadius.only(topLeft: Radius.circular(10), bottomLeft: Radius.circular(10)),
+                    borderRadius: const BorderRadius.only(topLeft: Radius.circular(5), bottomLeft: Radius.circular(5)),
                   ),
                   width: 8,
                   height: 80,

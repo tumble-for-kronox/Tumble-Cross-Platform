@@ -55,14 +55,14 @@ class _TumbleListViewState extends State<TumbleListView> with TickerProviderStat
                                   child: Text(
                                     dayList[index].isoString.year.toString(),
                                     style: TextStyle(
-                                      color: Theme.of(context).colorScheme.onBackground.withOpacity(0.3),
-                                      fontSize: 72,
-                                      fontWeight: FontWeight.w600,
+                                      color: Theme.of(context).colorScheme.onBackground.withOpacity(0.9),
+                                      fontSize: 40,
+                                      fontWeight: FontWeight.w500,
                                     ),
                                   ),
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.only(top: 60),
+                                  padding: const EdgeInsets.only(top: 50),
                                   child: BlocProvider.value(
                                     value: BlocProvider.of<ScheduleViewCubit>(context),
                                     child: TumbleListViewDayContainer(day: dayList[index]),

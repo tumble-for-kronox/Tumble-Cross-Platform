@@ -142,7 +142,9 @@ class _NavigationRootPageState extends State<NavigationRootPage> {
                       ),
                       BlocListener<AuthCubit, AuthState>(
                         listenWhen: (previous, current) =>
-                            (previous.status == AuthStatus.INITIAL && current.status == AuthStatus.AUTHENTICATED),
+                            ((previous.status == AuthStatus.INITIAL && current.status == AuthStatus.AUTHENTICATED) ||
+                                (previous.status == AuthStatus.UNAUTHENTICATED &&
+                                    current.status == AuthStatus.AUTHENTICATED)),
                         listener: (context, state) {
                           _initialiseUserData(context);
                         },
@@ -182,24 +184,23 @@ class _NavigationRootPageState extends State<NavigationRootPage> {
   }
 
   void _initialiseUserData(BuildContext context) {
-    if (context.read<AuthCubit>().state.status == AuthStatus.AUTHENTICATED) {
-      context.read<UserEventCubit>().getUserEvents(
-            context.read<AuthCubit>().state.status,
-            context.read<AuthCubit>().setUserSession,
-            context.read<AuthCubit>().logout,
-            context.read<AuthCubit>().state.userSession!,
-            true,
-          );
-      context.read<ResourceCubit>().getSchoolResources(
-            context.read<AuthCubit>().state.userSession!,
-            context.read<AuthCubit>().setUserSession,
-            context.read<AuthCubit>().logout,
-          );
-      context.read<ResourceCubit>().getUserBookings(
-            context.read<AuthCubit>().state.userSession!,
-            context.read<AuthCubit>().setUserSession,
-            context.read<AuthCubit>().logout,
-          );
-    }
+    log(name: 'navigation_root_page', 'Updating user resources, events and bookings ..');
+    context.read<UserEventCubit>().getUserEvents(
+          context.read<AuthCubit>().state.status,
+          context.read<AuthCubit>().setUserSession,
+          context.read<AuthCubit>().logout,
+          context.read<AuthCubit>().state.userSession!,
+          true,
+        );
+    context.read<ResourceCubit>().getSchoolResources(
+          context.read<AuthCubit>().state.userSession!,
+          context.read<AuthCubit>().setUserSession,
+          context.read<AuthCubit>().logout,
+        );
+    context.read<ResourceCubit>().getUserBookings(
+          context.read<AuthCubit>().state.userSession!,
+          context.read<AuthCubit>().setUserSession,
+          context.read<AuthCubit>().logout,
+        );
   }
 }

@@ -32,21 +32,21 @@ class _AuthenticatedPage extends State<AuthenticatedOverviewPage> with TickerPro
               tabs: [
                 Tab(
                   icon: Icon(
-                    CupertinoIcons.person,
+                    CupertinoIcons.person_circle,
                     color: Theme.of(context).colorScheme.onBackground,
                     size: 25,
                   ),
                 ),
                 Tab(
                   icon: Icon(
-                    CupertinoIcons.news,
+                    CupertinoIcons.calendar_badge_plus,
                     color: Theme.of(context).colorScheme.onBackground,
                     size: 25,
                   ),
                 ),
                 Tab(
                   icon: Icon(
-                    CupertinoIcons.house,
+                    CupertinoIcons.building_2_fill,
                     color: Theme.of(context).colorScheme.onBackground,
                     size: 25,
                   ),

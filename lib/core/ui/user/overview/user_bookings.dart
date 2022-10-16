@@ -91,7 +91,7 @@ class UserBookingsContainer extends StatelessWidget {
                   )),
             );
           case UserBookingsStatus.INITIAL:
-            return Container();
+            return Container(child: Text('This is default'),);
         }
       }),
     );

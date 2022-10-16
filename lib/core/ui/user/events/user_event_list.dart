@@ -37,7 +37,7 @@ class _EventsState extends State<Events> {
                           color: Theme.of(context).colorScheme.onBackground,
                         ),
                         const SizedBox(
-                          width: 10,
+                          width: 15,
                         ),
                         Text(
                           S.userEvents.availableEvents(),

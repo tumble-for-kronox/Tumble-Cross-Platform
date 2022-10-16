@@ -119,6 +119,7 @@ class ResourceCubit extends Cubit<ResourceState> {
     RefreshResponse<BookingResponse> refreshResponse = await _userService.userBookings(session);
     BookingResponse userBookings = refreshResponse.data;
 
+    log(name: 'resource_cubit', 'ApiBookingResponseStatus is: ${userBookings.status}');
     switch (userBookings.status) {
       case ApiBookingResponseStatus.SUCCESS:
         log(name: 'resource_cubit', 'Successfully retrieved user bookings ..');
