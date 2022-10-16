@@ -62,7 +62,7 @@ class _TumbleListViewState extends State<TumbleListView> with TickerProviderStat
                                   ),
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.only(top: 50),
+                                  padding: const EdgeInsets.only(top: 40),
                                   child: BlocProvider.value(
                                     value: BlocProvider.of<ScheduleViewCubit>(context),
                                     child: TumbleListViewDayContainer(day: dayList[index]),

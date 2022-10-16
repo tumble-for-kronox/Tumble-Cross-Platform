@@ -11,7 +11,7 @@ class WeekMapper extends StatelessWidget {
   Widget build(BuildContext context) {
     return Positioned.fill(
       child: Container(
-        padding: const EdgeInsets.only(top: 35),
+        padding: const EdgeInsets.only(top: 30),
         child: ShaderMask(
           shaderCallback: (Rect bounds) {
             return LinearGradient(

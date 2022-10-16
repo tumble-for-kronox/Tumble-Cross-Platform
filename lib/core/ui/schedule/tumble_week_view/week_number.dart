@@ -10,7 +10,7 @@ class WeekNumber extends StatelessWidget {
   Widget build(BuildContext context) {
     return Positioned(
         right: 20,
-        top: 15,
+        top: 18,
         child: Text(
           S.weekViewPage.weekNumber(week.weekNumber.toString()),
           style:
