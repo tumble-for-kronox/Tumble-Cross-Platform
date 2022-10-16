@@ -116,13 +116,13 @@ class _TumbleAppDrawerState extends State<TumbleAppDrawer> {
                         eventType: EventType.THEME,
                         drawerEvent: (eventType) => _handleDrawerEvent(eventType, context),
                       ),
-                      TumbleAppDrawerTile(
+                      /* TumbleAppDrawerTile(
                         drawerTileTitle: S.settingsPage.languageTitle(),
                         subtitle: S.settingsPage.languageSubtitle(),
                         suffixIcon: CupertinoIcons.textformat_abc_dottedunderline,
                         eventType: EventType.LANGUAGE,
                         drawerEvent: (eventType) => _handleDrawerEvent(eventType, context),
-                      ),
+                      ), */
                     ], title: S.settingsPage.commonTitle()),
                     Divider(
                       height: 40.0,

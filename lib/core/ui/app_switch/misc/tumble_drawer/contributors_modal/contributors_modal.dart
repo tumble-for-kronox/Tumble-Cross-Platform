@@ -48,7 +48,7 @@ class ContributorsModal extends StatelessWidget {
                 thickness: 0.2,
                 color: Theme.of(context).colorScheme.onSurface,
               ),
-              ContributorsSection(
+              /* ContributorsSection(
                 sessionTitle: S.contributorsModal.translation(),
                 contributors: const [
                   "Tom Welter (German, French)",
@@ -62,7 +62,7 @@ class ContributorsModal extends StatelessWidget {
                 height: 30,
                 thickness: 0.2,
                 color: Theme.of(context).colorScheme.onSurface,
-              ),
+              ), */
               ContributorsSection(
                 sessionTitle: S.contributorsModal.specialThanks(),
                 contributors: const [
