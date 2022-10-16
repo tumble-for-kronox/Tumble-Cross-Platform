@@ -9,6 +9,8 @@ import 'package:tumble/core/models/backend_models/kronox_user_model.dart';
 import 'package:tumble/core/models/backend_models/user_event_collection_model.dart';
 import 'package:tumble/core/ui/cubit/auth_cubit.dart';
 
+import '../../api/backend/response_types/refresh_response.dart';
+
 part 'user_event_state.dart';
 
 /// Handles user events and resource booking
@@ -23,17 +25,20 @@ class UserEventCubit extends Cubit<UserEventState> {
   final _userActionService = getIt<UserActionRepository>();
   final _preferenceService = getIt<PreferenceRepository>();
 
-  Future<void> getUserEvents(AuthStatus status, Function login, Function logOut, String sessionToken, bool showLoading,
-      {bool loginLooped = false}) async {
+  Future<void> getUserEvents(AuthStatus status, void Function(KronoxUserModel) setAuthSession, Function logOut,
+      KronoxUserModel session, bool showLoading) async {
     switch (status) {
       case AuthStatus.AUTHENTICATED:
         if (showLoading) emit(state.copyWith(userEventListStatus: UserOverviewStatus.LOADING));
-        UserResponse userEventResponse = await _userActionService.userEvents(sessionToken);
+        RefreshResponse<UserResponse> refreshResponse = await _userActionService.userEvents(session);
+        UserResponse userEventResponse = refreshResponse.data;
+
         switch (userEventResponse.status) {
           case ApiUserResponseStatus.COMPLETED:
             if (isClosed) {
               return;
             }
+            setAuthSession(refreshResponse.refreshResp.data as KronoxUserModel);
             emit(state.copyWith(
               userEventListStatus: UserOverviewStatus.LOADED,
               userEvents: userEventResponse.data!,
@@ -46,12 +51,7 @@ class UserEventCubit extends Cubit<UserEventState> {
             emit(state);
             break;
           case ApiUserResponseStatus.UNAUTHORIZED:
-            if (!loginLooped) {
-              await login();
-              await getUserEvents(status, login, logOut, sessionToken, true, loginLooped: true);
-            } else {
-              logOut();
-            }
+            logOut();
             break;
           default:
             if (isClosed) {
@@ -67,29 +67,26 @@ class UserEventCubit extends Cubit<UserEventState> {
     }
   }
 
-  Future<void> registerUserEvent(AuthStatus status, String id, Function logOut, Function login, String sessionToken,
-      {bool loginLooped = false}) async {
+  Future<void> registerUserEvent(AuthStatus status, String id, void Function(KronoxUserModel) setAuthSession,
+      Function logOut, KronoxUserModel session) async {
     if (isClosed) {
       return;
     }
     emit(state.copyWith(registerUnregisterStatus: RegisterUnregisterStatus.LOADING));
-    UserResponse registerResponse = await _userActionService.registerUserEvent(id, sessionToken);
+    RefreshResponse<UserResponse> refreshResponse = await _userActionService.registerUserEvent(id, session);
+    UserResponse registerResponse = refreshResponse.data;
+
     switch (registerResponse.status) {
       case ApiUserResponseStatus.COMPLETED:
       case ApiUserResponseStatus.AUTHORIZED:
-        await getUserEvents(status, login, logOut, sessionToken, false);
+        await getUserEvents(status, setAuthSession, logOut, session, false);
         if (isClosed) {
           return;
         }
         emit(state.copyWith(registerUnregisterStatus: RegisterUnregisterStatus.INITIAL));
         break;
       case ApiUserResponseStatus.UNAUTHORIZED:
-        if (!loginLooped) {
-          await login();
-          await registerUserEvent(status, id, logOut, login, sessionToken, loginLooped: true);
-        } else {
-          logOut();
-        }
+        logOut();
         break;
       case ApiUserResponseStatus.ERROR:
         if (isClosed) {
@@ -111,30 +108,26 @@ class UserEventCubit extends Cubit<UserEventState> {
     }
   }
 
-  Future<void> unregisterUserEvent(String id, AuthStatus status, Function login, String sessionToken, Function logOut,
-      {bool loginLooped = false}) async {
+  Future<void> unregisterUserEvent(String id, AuthStatus status, void Function(KronoxUserModel) setAuthSession,
+      Function logOut, KronoxUserModel session) async {
     if (isClosed) {
       return;
     }
     emit(state.copyWith(registerUnregisterStatus: RegisterUnregisterStatus.LOADING));
-    UserResponse unregisterResponse = await _userActionService.unregisterUserEvent(id, sessionToken);
+    RefreshResponse<UserResponse> refreshResponse = await _userActionService.unregisterUserEvent(id, session);
+    UserResponse unregisterResponse = refreshResponse.data;
 
     switch (unregisterResponse.status) {
       case ApiUserResponseStatus.COMPLETED:
       case ApiUserResponseStatus.AUTHORIZED:
-        await getUserEvents(status, login, logOut, sessionToken, false);
+        await getUserEvents(status, setAuthSession, logOut, session, false);
         if (isClosed) {
           return;
         }
         emit(state.copyWith(registerUnregisterStatus: RegisterUnregisterStatus.INITIAL));
         break;
       case ApiUserResponseStatus.UNAUTHORIZED:
-        if (!loginLooped) {
-          await login();
-          await unregisterUserEvent(id, status, login, sessionToken, logOut, loginLooped: true);
-        } else {
-          logOut();
-        }
+        logOut();
         break;
       case ApiUserResponseStatus.ERROR:
         if (isClosed) {

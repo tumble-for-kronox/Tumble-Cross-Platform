@@ -16,17 +16,22 @@ class ResourceCard extends StatelessWidget {
       height: 100,
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
-        borderRadius: BorderRadius.circular(10),
-        boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 2, offset: Offset(0, 1))],
+        borderRadius: BorderRadius.circular(5),
+        boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 1, offset: Offset(0, 1))],
       ),
       child: MaterialButton(
         onPressed: () {
+          // This will update the current loaded resource to the full one once it's fetched
           context.read<ResourceCubit>().getResourceAvailabilities(
-              context.read<AuthCubit>().state.userSession!.sessionToken,
-              context.read<AuthCubit>().login,
-              context.read<AuthCubit>().logout,
-              resource.id,
-              context.read<ResourceCubit>().state.chosenDate);
+                context.read<AuthCubit>().state.userSession!,
+                context.read<AuthCubit>().setUserSession,
+                context.read<AuthCubit>().logout,
+                resource.id,
+                context.read<ResourceCubit>().state.chosenDate,
+              );
+
+          /// Set the current loaded resource to the resource with just name
+          /// as it's accessed in chosenResource page in the top section.
           context.read<ResourceCubit>().setLoadedResource(resource);
           Navigator.of(context).pushNamed('/chosenResource');
         },
@@ -35,7 +40,7 @@ class ResourceCard extends StatelessWidget {
         ),
         child: Text(
           resource.name.trim(),
-          style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+          style: TextStyle(color: Theme.of(context).colorScheme.onSurface, fontSize: 17),
         ),
       ),
     );

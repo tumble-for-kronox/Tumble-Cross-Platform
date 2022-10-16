@@ -13,6 +13,8 @@ import 'package:tumble/core/models/ui_models/school_model.dart';
 import 'package:tumble/core/api/dependency_injection/get_it.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
 
+import '../../api/backend/response_types/refresh_response.dart';
+
 part 'auth_state.dart';
 
 class AuthCubit extends Cubit<AuthState> {
@@ -41,11 +43,12 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   Future<String?> runAutoSignup() async {
-    UserResponse<dynamic> resp = await _userRepo.registerAllAvailableUserEvents(state.userSession!.sessionToken);
+    RefreshResponse<UserResponse> refreshResponse = await _userRepo.registerAllAvailableUserEvents(state.userSession!);
+    UserResponse autoSignup = refreshResponse.data;
 
-    switch (resp.status) {
+    switch (autoSignup.status) {
       case ApiUserResponseStatus.COMPLETED:
-        MultiRegistrationResultModel results = resp.data as MultiRegistrationResultModel;
+        MultiRegistrationResultModel results = autoSignup.data as MultiRegistrationResultModel;
         if (results.failedRegistrations.isEmpty && results.successfulRegistrations.isEmpty) {
           return null;
         }
@@ -63,7 +66,7 @@ class AuthCubit extends Cubit<AuthState> {
       default:
         break;
     }
-    return resp.data;
+    return autoSignup.data;
   }
 
   Future<void> login() async {
@@ -88,6 +91,8 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   void setUserSession(KronoxUserModel user) {
+    if (user == state.userSession) return;
+    log(name: 'auth_cubit', 'New user session being set...');
     emit(state.copyWith(status: AuthStatus.AUTHENTICATED, userSession: user));
   }
 
@@ -97,5 +102,4 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   bool get authenticated => state.status == AuthStatus.AUTHENTICATED;
-
 }

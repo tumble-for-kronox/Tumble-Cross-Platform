@@ -64,7 +64,7 @@ class TumbleEventModal extends StatelessWidget {
     final locations = event.locations;
     return TumbleDetailsModalBase(
       body: Container(
-        height: MediaQuery.of(context).size.height - 260,
+        height: MediaQuery.of(context).size.height - 280,
         padding: const EdgeInsets.only(left: 20, right: 20, top: 50),
         decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.background,

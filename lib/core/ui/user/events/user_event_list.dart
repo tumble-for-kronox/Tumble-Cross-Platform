@@ -27,27 +27,17 @@ class _EventsState extends State<Events> {
             child: SingleChildScrollView(
               physics: const AlwaysScrollableScrollPhysics(),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
                     padding: const EdgeInsets.only(top: 20, left: 20, right: 20, bottom: 10),
-                    child: Row(
-                      children: [
-                        Icon(
-                          CupertinoIcons.calendar_badge_plus,
-                          color: Theme.of(context).colorScheme.onBackground,
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          S.userEvents.availableEvents(),
-                          style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              letterSpacing: 1,
-                              fontSize: 24,
-                              color: Theme.of(context).colorScheme.onBackground),
-                        ),
-                      ],
+                    child: Text(
+                      S.userEvents.availableEvents(),
+                      style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          letterSpacing: 1,
+                          fontSize: 24,
+                          color: Theme.of(context).colorScheme.onBackground),
                     ),
                   ),
                   Container(

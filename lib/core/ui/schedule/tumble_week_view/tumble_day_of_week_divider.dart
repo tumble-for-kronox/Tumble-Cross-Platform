@@ -25,8 +25,8 @@ class DayOfWeekDivider extends StatelessWidget {
             "${DateFormat.EEEE(Localizations.localeOf(context).languageCode).format(day.isoString).capitalize()} ${DateFormat("d/M", Localizations.localeOf(context).languageCode).format(day.isoString)}",
             style: TextStyle(
               color: Theme.of(context).colorScheme.onBackground,
-              fontSize: 20,
-              fontWeight: FontWeight.w500,
+              fontSize: 19.5,
+              fontWeight: FontWeight.w400,
             ),
           ),
           DateTime.now().day.toString() == day.date.split('/')[0] &&
@@ -42,7 +42,12 @@ class DayOfWeekDivider extends StatelessWidget {
                         color: Theme.of(context).colorScheme.onBackground,
                       ),
                     ),
-                    Text(S.weekViewPage.todayLabel())
+                    Container(
+                        padding: const EdgeInsets.only(right: 3),
+                        child: Text(
+                          S.weekViewPage.todayLabel(),
+                          style: TextStyle(fontSize: 16),
+                        ))
                   ]),
                 )
               : Container(),

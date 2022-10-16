@@ -44,6 +44,7 @@ class _TumbleCalendarViewState extends State<TumbleCalendarView> {
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     return SfCalendar(
+                      firstDayOfWeek: 1,
                       view: CalendarView.month,
                       dataSource: snapshot.data as EventsDataSource,
                       appointmentBuilder: (context, details) {

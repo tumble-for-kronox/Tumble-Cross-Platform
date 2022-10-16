@@ -74,31 +74,35 @@ class _DynamicErrorPageState extends State<DynamicErrorPage> with TickerProvider
                 style: TextStyle(
                     color: Theme.of(context).colorScheme.onBackground, fontSize: 30, fontWeight: FontWeight.w500)),
           ),
-          const SizedBox(
-            height: 80,
-          ),
-          FadeTransition(
-            opacity: _infoAnimation,
-            child: Column(
-              children: [
-                Text(widget.description!,
-                    textAlign: TextAlign.left,
-                    style: TextStyle(
-                        color: Theme.of(context).colorScheme.onBackground, fontSize: 18, fontWeight: FontWeight.w500)),
-                const SizedBox(
-                  height: 20,
-                ),
-                if (widget.toSearch)
-                  Align(
-                    alignment: Alignment.topRight,
-                    child: TextButton.icon(
-                        onPressed: () => context.read<NavigationCubit>().getNavBarItem(NavbarItem.SEARCH),
-                        icon: const Icon(CupertinoIcons.chevron_left),
-                        label: Text(S.general.toSearch())),
-                  )
-              ],
+          if (widget.description != null)
+            const SizedBox(
+              height: 80,
             ),
-          ),
+          if (widget.description != null)
+            FadeTransition(
+              opacity: _infoAnimation,
+              child: Column(
+                children: [
+                  Text(widget.description!,
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.onBackground,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500)),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  if (widget.toSearch)
+                    Align(
+                      alignment: Alignment.topRight,
+                      child: TextButton.icon(
+                          onPressed: () => context.read<NavigationCubit>().getNavBarItem(NavbarItem.SEARCH),
+                          icon: const Icon(CupertinoIcons.chevron_left),
+                          label: Text(S.general.toSearch())),
+                    )
+                ],
+              ),
+            ),
         ],
       ),
     );

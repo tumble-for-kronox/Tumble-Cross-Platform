@@ -28,8 +28,9 @@ class ModalInfoRow extends StatelessWidget {
           Text(
             title.capitalize(),
             style: TextStyle(
-              fontWeight: FontWeight.w400,
-              color: Theme.of(context).colorScheme.onSecondary.withOpacity(.8),
+              fontSize: 15,
+              fontWeight: FontWeight.w500,
+              color: Theme.of(context).colorScheme.onSecondary.withOpacity(.9),
             ),
           ),
           const SizedBox(height: 10),
@@ -54,7 +55,7 @@ class ModalInfoRow extends StatelessWidget {
                     }
                     return subtitle!;
                   })(),
-                  style: TextStyle(color: Theme.of(context).colorScheme.onBackground, fontSize: 16),
+                  style: TextStyle(color: Theme.of(context).colorScheme.onBackground, fontSize: 18),
                 ),
               ),
             ],

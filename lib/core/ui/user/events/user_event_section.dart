@@ -10,7 +10,6 @@ import 'package:tumble/core/ui/user/events/modals/available_user_event_modal.dar
 import 'package:tumble/core/ui/user/events/modals/registered_passed_user_event_modal.dart';
 import 'package:tumble/core/ui/user/events/modals/upcoming_user_event_modal.dart';
 
-
 class UserEventSection extends StatelessWidget {
   final String sectionTitle;
   final List<AvailableUserEventModel>? availableEvents;
@@ -74,7 +73,7 @@ Widget _eventsDivider(BuildContext context, String title) {
   return Row(
     children: [
       Padding(
-        padding: const EdgeInsets.only(right: 12),
+        padding: const EdgeInsets.only(right: 12, left: 5),
         child: Text(
           title,
           style: TextStyle(
