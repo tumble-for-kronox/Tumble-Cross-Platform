@@ -15,7 +15,7 @@ class UserEventUnregisterButton extends StatelessWidget {
       height: 40,
       child: TextButton.icon(
         style: ButtonStyle(
-            shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+            shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(5))),
             backgroundColor: MaterialStateColor.resolveWith((Set<MaterialState> states) =>
                 states.contains(MaterialState.disabled)
                     ? Theme.of(context).colorScheme.primary.withOpacity(0.5)
