@@ -1,8 +1,11 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import "package:collection/collection.dart";
+import 'package:tumble/core/api/backend/response_types/booking_response.dart';
 import 'package:tumble/core/api/database/repository/database_repository.dart';
 import 'package:tumble/core/api/dependency_injection/get_it.dart';
+import 'package:tumble/core/models/backend_models/kronox_user_model.dart';
 import 'package:tumble/core/theme/color_picker.dart';
 import 'package:tumble/core/models/backend_models/schedule_model.dart';
 import 'package:tumble/core/models/ui_models/course_ui_model.dart';
@@ -11,6 +14,8 @@ import 'package:tumble/core/models/ui_models/week_model.dart';
 import 'package:tumble/core/ui/bottom_nav_bar/data/nav_bar_items.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
 import 'package:tumble/core/ui/app_switch/data/schools.dart';
+
+import '../api/backend/response_types/user_response.dart';
 
 extension ScheduleParsing on ScheduleModel {
   Future<List<CourseUiModel?>> findNewCourses(String scheduleId) async {
@@ -104,5 +109,29 @@ extension ListCopyAndUpdate on List<bool> {
     List<bool> tempCopyList = [...this];
     tempCopyList[index] = value;
     return tempCopyList;
+  }
+}
+
+extension AutoRefreshSessionUserResp on UserResponse {
+  Future<UserResponse> autoRefreshSession(
+      Future<UserResponse> Function(String refreshToken) refreshSession, KronoxUserModel session) async {
+    if (status != ApiUserResponseStatus.COMPLETED || status != ApiUserResponseStatus.AUTHORIZED) {
+      log(name: 'auto_refresh', 'Logging user in again...');
+      return await refreshSession(session.refreshToken);
+    }
+
+    return UserResponse.authorized(session);
+  }
+}
+
+extension AutoRefreshSessionBookingResp on BookingResponse {
+  Future<UserResponse> autoRefreshSession(
+      Future<UserResponse> Function(String refreshToken) refreshSession, KronoxUserModel session) async {
+    if (status != ApiBookingResponseStatus.SUCCESS) {
+      log(name: 'auto_refresh', 'Logging user in again...');
+      return await refreshSession(session.refreshToken);
+    }
+
+    return UserResponse.authorized(session);
   }
 }

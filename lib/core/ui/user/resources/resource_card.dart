@@ -21,12 +21,17 @@ class ResourceCard extends StatelessWidget {
       ),
       child: MaterialButton(
         onPressed: () {
+          // This will update the current loaded resource to the full one once it's fetched
           context.read<ResourceCubit>().getResourceAvailabilities(
-              context.read<AuthCubit>().state.userSession!.sessionToken,
-              context.read<AuthCubit>().login,
-              context.read<AuthCubit>().logout,
-              resource.id,
-              context.read<ResourceCubit>().state.chosenDate);
+                context.read<AuthCubit>().state.userSession!,
+                context.read<AuthCubit>().setUserSession,
+                context.read<AuthCubit>().logout,
+                resource.id,
+                context.read<ResourceCubit>().state.chosenDate,
+              );
+
+          /// Set the current loaded resource to the resource with just name
+          /// as it's accessed in chosenResource page in the top section.
           context.read<ResourceCubit>().setLoadedResource(resource);
           Navigator.of(context).pushNamed('/chosenResource');
         },

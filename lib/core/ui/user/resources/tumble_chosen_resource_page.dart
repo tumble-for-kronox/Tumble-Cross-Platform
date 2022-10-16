@@ -13,7 +13,6 @@ import 'package:tumble/core/ui/user/resources/resource_room_card.dart';
 import 'package:tumble/core/ui/user/resources/time_stamp_containers.dart';
 import 'package:tumble/core/ui/user/resources/resource_time_stamp_card.dart';
 
-
 class TumbleChosenResourcePage extends StatelessWidget {
   const TumbleChosenResourcePage({Key? key}) : super(key: key);
 
@@ -86,15 +85,9 @@ class TumbleChosenResourcePage extends StatelessWidget {
         return const TumbleLoading();
       case ResourceStatus.LOADED:
         return state.availableTimeSlots!.isEmpty
-            ? Padding(
-                padding: const EdgeInsets.all(20),
-                child: Center(
-                  child: Text(
-                    S.userBookings.noAvailableTimeSlots(),
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(fontSize: 17),
-                  ),
-                ),
+            ? DynamicErrorPage(
+                errorType: S.userBookings.noAvailableTimeSlots(),
+                toSearch: false,
               )
             : _lowerSectionLoaded(context, state);
       case ResourceStatus.ERROR:
@@ -143,11 +136,12 @@ class TumbleChosenResourcePage extends StatelessWidget {
                 await context.read<ResourceCubit>().userUpdateActiveDate(context).then((value) {
                   if (value == null) return;
                   context.read<ResourceCubit>().getResourceAvailabilities(
-                      context.read<AuthCubit>().state.userSession!.sessionToken,
-                      context.read<AuthCubit>().login,
-                      context.read<AuthCubit>().logout,
-                      state.currentLoadedResource!.id,
-                      value);
+                        context.read<AuthCubit>().state.userSession!,
+                        context.read<AuthCubit>().setUserSession,
+                        context.read<AuthCubit>().logout,
+                        state.currentLoadedResource!.id,
+                        value,
+                      );
                 });
               },
             ),

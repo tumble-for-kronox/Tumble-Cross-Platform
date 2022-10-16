@@ -60,9 +60,10 @@ class _AuthenticatedPage extends State<AuthenticatedOverviewPage> with TickerPro
                   value: BlocProvider.of<AuthCubit>(context),
                   child: UserAccountInfo(
                     onRefresh: () async => await context.read<ResourceCubit>().getUserBookings(
-                        context.read<AuthCubit>().state.userSession!.sessionToken,
-                        context.read<AuthCubit>().login,
-                        context.read<AuthCubit>().logout),
+                          context.read<AuthCubit>().state.userSession!,
+                          context.read<AuthCubit>().setUserSession,
+                          context.read<AuthCubit>().logout,
+                        ),
                   ),
                 ),
                 BlocProvider.value(
@@ -70,9 +71,9 @@ class _AuthenticatedPage extends State<AuthenticatedOverviewPage> with TickerPro
                   child: Events(
                     onRefresh: () async => await context.read<UserEventCubit>().getUserEvents(
                         context.read<AuthCubit>().state.status,
-                        context.read<AuthCubit>().login,
+                        context.read<AuthCubit>().setUserSession,
                         context.read<AuthCubit>().logout,
-                        context.read<AuthCubit>().state.userSession!.sessionToken,
+                        context.read<AuthCubit>().state.userSession!,
                         true),
                   ),
                 ),
@@ -80,8 +81,8 @@ class _AuthenticatedPage extends State<AuthenticatedOverviewPage> with TickerPro
                   value: BlocProvider.of<AuthCubit>(context),
                   child: ResourcePage(
                     onSchoolResourcesRefresh: () async => await context.read<ResourceCubit>().getSchoolResources(
-                          context.read<AuthCubit>().state.userSession!.sessionToken,
-                          context.read<AuthCubit>().login,
+                          context.read<AuthCubit>().state.userSession!,
+                          context.read<AuthCubit>().setUserSession,
                           context.read<AuthCubit>().logout,
                         ),
                   ),

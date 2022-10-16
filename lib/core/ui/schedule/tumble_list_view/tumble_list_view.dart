@@ -49,19 +49,20 @@ class _TumbleListViewState extends State<TumbleListView> with TickerProviderStat
                           if (index == 0 || dayList[index].isoString.year != dayList[index - 1].isoString.year) {
                             return Stack(
                               children: [
-                                Align(
+                                Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
                                   alignment: Alignment.topRight,
                                   child: Text(
                                     dayList[index].isoString.year.toString(),
                                     style: TextStyle(
                                       color: Theme.of(context).colorScheme.onBackground.withOpacity(0.3),
-                                      fontSize: 110,
+                                      fontSize: 72,
                                       fontWeight: FontWeight.w600,
                                     ),
                                   ),
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.only(top: 40),
+                                  padding: const EdgeInsets.only(top: 60),
                                   child: BlocProvider.value(
                                     value: BlocProvider.of<ScheduleViewCubit>(context),
                                     child: TumbleListViewDayContainer(day: dayList[index]),

@@ -43,8 +43,8 @@ class ConfirmBooking extends StatelessWidget {
                       : context
                           .read<ResourceCubit>()
                           .bookResource(
-                              context.read<AuthCubit>().state.userSession!.sessionToken,
-                              context.read<AuthCubit>().login,
+                              context.read<AuthCubit>().state.userSession!,
+                              context.read<AuthCubit>().setUserSession,
                               context.read<AuthCubit>().logout,
                               state.currentLoadedResource!.id,
                               state.chosenDate,

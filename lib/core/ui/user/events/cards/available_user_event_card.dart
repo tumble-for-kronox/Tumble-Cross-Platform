@@ -129,11 +129,12 @@ class AvailableUserEventCard extends StatelessWidget {
                                             loading: state.registerUnregisterStatus == RegisterUnregisterStatus.LOADING,
                                             onPressed: () {
                                               BlocProvider.of<UserEventCubit>(context).unregisterUserEvent(
-                                                  userEvent.id,
-                                                  context.read<AuthCubit>().state.status,
-                                                  context.read<AuthCubit>().login,
-                                                  context.read<AuthCubit>().state.userSession!.sessionToken,
-                                                  context.read<AuthCubit>().logout);
+                                                userEvent.id,
+                                                context.read<AuthCubit>().state.status,
+                                                context.read<AuthCubit>().setUserSession,
+                                                context.read<AuthCubit>().logout,
+                                                context.read<AuthCubit>().state.userSession!,
+                                              );
                                             },
                                           )
                                         : UserEventRegisterButton(
@@ -143,9 +144,9 @@ class AvailableUserEventCard extends StatelessWidget {
                                               BlocProvider.of<UserEventCubit>(context).registerUserEvent(
                                                 context.read<AuthCubit>().state.status,
                                                 userEvent.id,
+                                                context.read<AuthCubit>().setUserSession,
                                                 context.read<AuthCubit>().logout,
-                                                context.read<AuthCubit>().login,
-                                                context.read<AuthCubit>().state.userSession!.sessionToken,
+                                                context.read<AuthCubit>().state.userSession!,
                                               );
                                             });
                                   },

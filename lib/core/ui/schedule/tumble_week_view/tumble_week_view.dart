@@ -42,12 +42,15 @@ class _TumbleWeekViewState extends State<TumbleWeekView> {
                               currentYear = week.days.first.isoString.year;
                               return Stack(
                                 children: [
-                                  Text(currentYear.toString(),
-                                      style: TextStyle(
-                                        color: Theme.of(context).colorScheme.onBackground.withOpacity(0.3),
-                                        fontSize: 110,
-                                        fontWeight: FontWeight.w600,
-                                      )),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+                                    child: Text(currentYear.toString(),
+                                        style: TextStyle(
+                                          color: Theme.of(context).colorScheme.onBackground.withOpacity(0.3),
+                                          fontSize: 54,
+                                          fontWeight: FontWeight.w600,
+                                        )),
+                                  ),
                                   TumbleWeekPageContainer(week: week)
                                 ],
                               );

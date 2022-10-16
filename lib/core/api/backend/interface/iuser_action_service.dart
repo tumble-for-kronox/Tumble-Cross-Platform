@@ -1,32 +1,35 @@
 import 'package:flutter/foundation.dart';
 import 'package:tumble/core/api/backend/response_types/booking_response.dart';
 import 'package:tumble/core/api/backend/response_types/user_response.dart';
+import 'package:tumble/core/models/backend_models/kronox_user_model.dart';
 import 'package:tumble/core/models/backend_models/resource_model.dart';
+
+import '../response_types/refresh_response.dart';
 
 @immutable
 abstract class IUserActionService {
-  Future<UserResponse> userEvents(String sessionToken);
+  Future<RefreshResponse<UserResponse>> userEvents(KronoxUserModel session);
 
   Future<UserResponse> userLogin(String username, String password, String school);
 
   Future<UserResponse> refreshSession(String refreshToken);
 
-  Future<UserResponse> registerAllAvailableUserEvents(String sessionToken);
+  Future<RefreshResponse> registerAllAvailableUserEvents(KronoxUserModel session);
 
-  Future<UserResponse> registerUserEvent(String eventId, String sessionToken);
+  Future<RefreshResponse> registerUserEvent(String eventId, KronoxUserModel session);
 
-  Future<UserResponse> unregisterUserEvent(String eventId, String sessionToken);
+  Future<RefreshResponse> unregisterUserEvent(String eventId, KronoxUserModel session);
 
-  Future<BookingResponse> schoolResources(String sessionToken);
+  Future<RefreshResponse> schoolResources(KronoxUserModel session);
 
-  Future<BookingResponse> resourceAvailabilities(String resourceId, DateTime date, String sessionToken);
+  Future<RefreshResponse> resourceAvailabilities(String resourceId, DateTime date, KronoxUserModel session);
 
-  Future<BookingResponse> userBookings(String sessionToken);
+  Future<RefreshResponse> userBookings(KronoxUserModel session);
 
-  Future<BookingResponse> bookResources(
-      String resourceId, DateTime date, AvailabilityValue bookingSlot, String sessionToken);
+  Future<RefreshResponse> bookResources(
+      String resourceId, DateTime date, AvailabilityValue bookingSlot, KronoxUserModel session);
 
-  Future<BookingResponse> unbookResources(String bookingId, String sessionToken);
+  Future<RefreshResponse> unbookResources(String bookingId, KronoxUserModel session);
 
-  Future<BookingResponse> confirmBooking(String sessionToken, String resourceId, String bookingId);
+  Future<RefreshResponse> confirmBooking(String resourceId, String bookingId, KronoxUserModel session);
 }
