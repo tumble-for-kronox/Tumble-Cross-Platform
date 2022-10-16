@@ -220,6 +220,7 @@ class ResourceCubit extends Cubit<ResourceState> {
     DateTime? newDate = await showDatePicker(
         context: context,
         initialDate: state.chosenDate,
+        locale: const Locale('en', 'GB'),
         firstDate: DateTime.now(),
         lastDate: DateTime.now().add(const Duration(days: 28)),
         currentDate: state.chosenDate);
