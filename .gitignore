@@ -66,3 +66,7 @@ log/log.txt
 analysis_options.yaml
 .vs/
 lib/locale/untranslated-message.json
+windows
+web
+macos
+linux
