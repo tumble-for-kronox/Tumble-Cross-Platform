@@ -48,21 +48,22 @@ class ContributorsModal extends StatelessWidget {
                 thickness: 0.2,
                 color: Theme.of(context).colorScheme.onSurface,
               ),
-              /* ContributorsSection(
+              ContributorsSection(
                 sessionTitle: S.contributorsModal.translation(),
                 contributors: const [
                   "Tom Welter (German, French)",
                   "Anne-Claire (French)",
                   "Moritz Held (German)",
                   "Tian (Chinese)",
-                  "Quang Minh Nguyen (Vietnamese)",
+                  "Adis Veletanlic (Swedish)",
+                  // "Quang Minh Nguyen (Vietnamese)",
                 ],
               ),
               Divider(
                 height: 30,
                 thickness: 0.2,
                 color: Theme.of(context).colorScheme.onSurface,
-              ), */
+              ),
               ContributorsSection(
                 sessionTitle: S.contributorsModal.specialThanks(),
                 contributors: const [

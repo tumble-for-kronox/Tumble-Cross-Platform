@@ -98,9 +98,17 @@ class DrawerCubit extends Cubit<DrawerState> {
       "System Language": null,
     };
 
-    localeMap.addAll(
-        {for (var item in AppLocalizations.supportedLocales) LocaleNames.getDisplayLanguage(item.languageCode): item});
-
+    localeMap.addAll({
+      for (var item in const [
+        Locale('en'),
+        Locale('sv'),
+        Locale('fr'),
+        Locale('de'),
+        Locale('zh'),
+      ])
+        LocaleNames.getDisplayLanguage(item.languageCode): item
+    });
+    //  AppLocalizations.supportedLocales
     return localeMap;
   }
 
