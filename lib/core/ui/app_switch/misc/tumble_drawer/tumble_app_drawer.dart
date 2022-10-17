@@ -33,7 +33,8 @@ typedef HandleDrawerEvent = void Function(
 
 class TumbleAppDrawer extends StatefulWidget {
   final VoidCallback reloadViews;
-  const TumbleAppDrawer({Key? key, required this.reloadViews}) : super(key: key);
+  const TumbleAppDrawer({Key? key, required this.reloadViews})
+      : super(key: key);
 
   @override
   State<TumbleAppDrawer> createState() => _TumbleAppDrawerState();
@@ -71,7 +72,9 @@ class _TumbleAppDrawerState extends State<TumbleAppDrawer> {
       child: BlocBuilder<DrawerCubit, DrawerState>(
         builder: (context, state) {
           return ClipRRect(
-            borderRadius: const BorderRadius.only(topLeft: Radius.circular(20.0), bottomLeft: Radius.circular(20.0)),
+            borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(20.0),
+                bottomLeft: Radius.circular(20.0)),
             child: SizedBox(
               height: double.infinity,
               child: Drawer(
@@ -89,7 +92,10 @@ class _TumbleAppDrawerState extends State<TumbleAppDrawer> {
                             child: Align(
                               alignment: Alignment.centerRight,
                               child: Text(S.settingsPage.title(),
-                                  style: const TextStyle(letterSpacing: 2, fontSize: 26, fontWeight: FontWeight.w500)),
+                                  style: const TextStyle(
+                                      letterSpacing: 2,
+                                      fontSize: 26,
+                                      fontWeight: FontWeight.w500)),
                             )),
                       ),
                     ),
@@ -99,22 +105,29 @@ class _TumbleAppDrawerState extends State<TumbleAppDrawer> {
                     TumbleSettingsSection(tiles: [
                       TumbleAppDrawerTile(
                         drawerTileTitle: S.settingsPage.changeSchoolTitle(),
-                        subtitle: S.settingsPage.changeSchoolSubtitle((Schools.schools
-                                .firstWhere((school) => school.schoolName == context.read<DrawerCubit>().state.school))
-                            .schoolId
-                            .name
-                            .toUpperCase()),
+                        subtitle: S.settingsPage.changeSchoolSubtitle(
+                            (Schools.schools.firstWhere((school) =>
+                                    school.schoolName ==
+                                    context.read<DrawerCubit>().state.school))
+                                .schoolId
+                                .name
+                                .toUpperCase()),
                         suffixIcon: CupertinoIcons.arrow_right_arrow_left,
                         eventType: EventType.SCHOOL,
-                        drawerEvent: (eventType) => _handleDrawerEvent(eventType, context),
+                        drawerEvent: (eventType) =>
+                            _handleDrawerEvent(eventType, context),
                       ),
                       TumbleAppDrawerTile(
                         drawerTileTitle: S.settingsPage.changeThemeTitle(),
-                        subtitle:
-                            S.settingsPage.changeThemeSubtitle(context.read<DrawerCubit>().state.theme!.capitalize()),
+                        subtitle: S.settingsPage.changeThemeSubtitle(context
+                            .read<DrawerCubit>()
+                            .state
+                            .theme!
+                            .capitalize()),
                         suffixIcon: CupertinoIcons.device_phone_portrait,
                         eventType: EventType.THEME,
-                        drawerEvent: (eventType) => _handleDrawerEvent(eventType, context),
+                        drawerEvent: (eventType) =>
+                            _handleDrawerEvent(eventType, context),
                       ),
                       /* TumbleAppDrawerTile(
                         drawerTileTitle: S.settingsPage.languageTitle(),
@@ -134,11 +147,13 @@ class _TumbleAppDrawerState extends State<TumbleAppDrawer> {
                     /// Schedule
                     TumbleSettingsSection(tiles: [
                       TumbleAppDrawerTile(
-                          drawerTileTitle: S.settingsPage.defaultScheduleTitle(),
+                          drawerTileTitle:
+                              S.settingsPage.defaultScheduleTitle(),
                           subtitle: S.settingsPage.defaultScheduleSubtitle(),
                           suffixIcon: CupertinoIcons.bookmark,
                           eventType: EventType.BOOKMARKS,
-                          drawerEvent: (eventType) => _handleDrawerEvent(eventType, context)),
+                          drawerEvent: (eventType) =>
+                              _handleDrawerEvent(eventType, context)),
                     ], title: S.settingsPage.scheduleTitle()),
                     Divider(
                       height: 40.0,
@@ -152,13 +167,16 @@ class _TumbleAppDrawerState extends State<TumbleAppDrawer> {
                           drawerTileTitle: S.settingsPage.clearAllTitle(),
                           subtitle: S.settingsPage.clearAllSubtitle(),
                           eventType: EventType.NOTIFICATIONS_CANCEL,
-                          drawerEvent: (eventType) => _handleDrawerEvent(eventType, context)),
+                          drawerEvent: (eventType) =>
+                              _handleDrawerEvent(eventType, context)),
                       TumbleAppDrawerTile(
                         suffixIcon: CupertinoIcons.clock,
                         drawerTileTitle: S.settingsPage.offsetTitle(),
-                        subtitle: S.settingsPage.offsetSubtitle(context.read<DrawerCubit>().notificationOffset),
+                        subtitle: S.settingsPage.offsetSubtitle(
+                            context.read<DrawerCubit>().notificationOffset),
                         eventType: EventType.NOTIFICATIONS_OFFSET,
-                        drawerEvent: (eventType) => _handleDrawerEvent(eventType, context),
+                        drawerEvent: (eventType) =>
+                            _handleDrawerEvent(eventType, context),
                       )
                     ], title: S.settingsPage.notificationTitle()),
                     Divider(
@@ -171,24 +189,20 @@ class _TumbleAppDrawerState extends State<TumbleAppDrawer> {
                     /// Misc
                     TumbleSettingsSection(tiles: [
                       TumbleAppDrawerTile(
-                          suffixIcon: CupertinoIcons.chevron_left_slash_chevron_right,
-                          drawerTileTitle: 'Tumble on GitHub',
-                          subtitle: 'Source code for Tumble',
-                          eventType: EventType.SOURCE_CODE,
-                          drawerEvent: (eventType) => _handleDrawerEvent(eventType, context)),
-                      TumbleAppDrawerTile(
                         drawerTileTitle: S.settingsPage.reportBugTitle(),
                         subtitle: S.settingsPage.reportBugSubtitle(),
                         suffixIcon: CupertinoIcons.ant,
                         eventType: EventType.BUG,
-                        drawerEvent: (eventType) => _handleDrawerEvent(eventType, context),
+                        drawerEvent: (eventType) =>
+                            _handleDrawerEvent(eventType, context),
                       ),
                       TumbleAppDrawerTile(
                         suffixIcon: CupertinoIcons.group,
                         drawerTileTitle: "Contributors",
                         subtitle: "See who helped out",
                         eventType: EventType.CONTRIBUTORS,
-                        drawerEvent: (eventType) => _handleDrawerEvent(eventType, context),
+                        drawerEvent: (eventType) =>
+                            _handleDrawerEvent(eventType, context),
                       ),
                     ], title: S.settingsPage.miscTitle()),
                   ],
@@ -241,7 +255,8 @@ class _TumbleAppDrawerState extends State<TumbleAppDrawer> {
         break;
       case EventType.BOOKMARKS:
         if (context.read<DrawerCubit>().state.bookmarks!.isNotEmpty) {
-          List<BookmarkedScheduleModel> tempBookmarks = context.read<DrawerCubit>().state.bookmarks!;
+          List<BookmarkedScheduleModel> tempBookmarks =
+              context.read<DrawerCubit>().state.bookmarks!;
           showModalBottomSheet(
               context: context,
               builder: (_) => BlocProvider.value(
@@ -258,14 +273,17 @@ class _TumbleAppDrawerState extends State<TumbleAppDrawer> {
         break;
       case EventType.NOTIFICATIONS_CANCEL:
         context.read<ScheduleViewCubit>().cancelAllNotifications();
-        showScaffoldMessage(context, S.scaffoldMessages.cancelledAllSetNotifications());
+        showScaffoldMessage(
+            context, S.scaffoldMessages.cancelledAllSetNotifications());
         break;
       case EventType.NOTIFICATIONS_OFFSET:
         showModalBottomSheet(
             context: context,
             builder: (_) => AppNotificationOffsetPicker(
-                  parameterMap: context.read<DrawerCubit>().getNotificationTimes(context),
-                  currentNotificationTime: context.read<DrawerCubit>().state.notificationTime!,
+                  parameterMap:
+                      context.read<DrawerCubit>().getNotificationTimes(context),
+                  currentNotificationTime:
+                      context.read<DrawerCubit>().state.notificationTime!,
                   setNotificationTime: (time) {
                     context.read<DrawerCubit>().setNotificationTime(time);
                     Navigator.of(context).pop();
@@ -283,7 +301,8 @@ class _TumbleAppDrawerState extends State<TumbleAppDrawer> {
         await launchUrlString(uri);
         break;
       case EventType.CONTRIBUTORS:
-        showModalBottomSheet(context: context, builder: (_) => const ContributorsModal());
+        showModalBottomSheet(
+            context: context, builder: (_) => const ContributorsModal());
         break;
     }
   }
