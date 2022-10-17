@@ -17,7 +17,7 @@
 *** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
 *** https://www.markdownguide.org/basic-syntax/#reference-style-links
 -->
-<div align="center"><a href=https://github.com/adisve/tumble-for-kronox/graphs/contributors>Contributors</a>&emsp;&emsp;<a href=https://github.com/adisve/tumble-for-kronox/network/members>Forks</a>&emsp;&emsp;<a href=https://github.com/adisve/tumble-for-kronox/stargazers>Stargazers</a>&emsp;&emsp;<a href=https://github.com/adisve/tumble-for-kronox/issues>Issues</a>&emsp;&emsp;<a href=#license>GPL License</a></div>
+<div align="center"><a href=https://github.com/adisve/tumble-for-kronox/graphs/contributors>Contributors</a>&emsp;&emsp;<a href=https://github.com/adisve/tumble-for-kronox/network/members>Forks</a>&emsp;&emsp;<a href=https://github.com/adisve/tumble-for-kronox/stargazers>Stargazers</a>&emsp;&emsp;<a href=https://github.com/adisve/tumble-for-kronox/issues>Issues</a>&emsp;&emsp;</div>
 
 
 <!-- PROJECT LOGO -->
@@ -156,27 +156,6 @@ Project Link: [https://github.com/adisve/tumble-for-kronox](https://github.com/a
 [forks-url]: https://github.com/adisve/tumble-for-kronox/network/members
 [stars-url]: https://github.com/adisve/tumble-for-kronox/stargazers
 [issues-url]: https://github.com/adisve/tumble-for-kronox/issues
-[license-url]: https://github.com/adisve/tumble-for-kronox/blob/master/LICENSE.txt
-
-
-<!-- LICENSE -->
-## License
-
-```
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero General Public License as
-published by the Free Software Foundation, either version 3 of the
-License, or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Affero General Public License for more details.
-
-You should have received a copy of the GNU Affero General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-```
-<p align="right">(<a href="#top">back to top</a>)</p>
 
 
 <!-- LINKS -->
