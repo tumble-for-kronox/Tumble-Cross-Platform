@@ -164,5 +164,13 @@
     "userBookingsBookingCardRoomTitle": "房间",
     "userBookingsBookingCardOngoingTitle": "进行中",
     "userBookingsNotificationConfirmReminderTitle": "确认您的预订！",
-    "userBookingsNotificationConfirmReminderBody": "您有一个预订即将到来，请务必确认预订，以免丢失！"
+    "userBookingsNotificationConfirmReminderBody": "您有一个预订即将到来，请务必确认预订，以免丢失！",
+    "searchPageToScheduleViewButton": "查看你的日程",
+    "searchPageResults": "{numOfResults} 结果",
+    "userEventsAvailableEvents": "可用事件",
+    "runtimeErrorMissingTitle": "标题缺失",
+    "popUpProgramFetchErrorDescription": "检查您的拼写或者尝试其他关键字",
+    "popUpTimeoutErrorDescription": "似乎问题出现在我们这边",
+    "back": "回去",
+    "userBookingsResourcesListTitle": "预定"
 }

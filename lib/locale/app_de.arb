@@ -138,7 +138,7 @@
     "supportModalSendSuccess": "Fehlerbericht gesendet!",
     "supportModalSendFail": "Bei Ihrer Anfrage ist ein Fehler aufgetreten!\nBitte versuchen Sie es zu einem späteren Zeitpunkt erneut",
     "searchPageToScheduleViewButton": "Zeitpläne anzeigen",
-    "searchPageResults: "{numOfResults} Suchtreffer",
+    "searchPageResults": "{numOfResults} Suchtreffer",
     "authorizedPageUserBookingsTitle": "Ihre Buchungen",
     "userEventsAvailableEvents": "Verfügbare Events",
     "settingsMiscChangeLanguageTitle": "Sprache ändern",
