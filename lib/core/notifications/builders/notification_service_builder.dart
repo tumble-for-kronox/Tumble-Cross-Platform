@@ -46,7 +46,9 @@ class NotificationServiceBuilder implements INotificationServiceBuilder {
               groupKey: groupkey, //Schedule course
               title: title.capitalize(),
               icon: defaultIcon,
+              roundedLargeIcon: true,
               color: defaultColor,
+              backgroundColor: Colors.transparent,
               body: body,
               wakeUpScreen: true,
               notificationLayout: NotificationLayout.Default,

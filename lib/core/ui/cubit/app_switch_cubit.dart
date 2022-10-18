@@ -46,7 +46,7 @@ class AppSwitchCubit extends Cubit<AppSwitchState> {
     await _notificationService.initialize();
 
     /// Uncomment for testing purposes
-    /// _notificationService.initialize().then((_) async => await _notificationService.testNotification());
+    _notificationService.initialize().then((_) async => await _notificationService.testNotification());
   }
 
   Future<void> changeSchool(String schoolName) async {
