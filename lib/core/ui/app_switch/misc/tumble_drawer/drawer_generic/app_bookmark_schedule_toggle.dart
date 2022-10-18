@@ -113,7 +113,7 @@ class _ApplicationBookmarkPickerState extends State<ApplicationBookmarkPicker> {
               child: ListTile(
                 onTap: () => Navigator.pop(context),
                 title: Text(
-                  'Cancel',
+                  S.general.cancel(),
                   textAlign: TextAlign.center,
                   style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
                 ),

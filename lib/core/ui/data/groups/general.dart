@@ -18,4 +18,5 @@ class GeneralStrings extends StringConstantGroup {
   String back() => localizedStrings.back;
   String room() => localizedStrings.room;
   String time() => localizedStrings.time;
+  String unauthorized() => localizedStrings.unauthorized;
 }

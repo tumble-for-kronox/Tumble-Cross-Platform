@@ -398,6 +398,7 @@
     "confirm": "Confirm",
     "room": "Room",
     "time": "Time",
+    "unauthorized": "Unauthorized",
     "eventOptionsRemoveEventNotification": "Remove notification for event",
     "eventOptionsRemoveCourseNotifications": "Remove all nofitications for course",
     "eventOptionsAddEventNotification": "Set notification for event",
