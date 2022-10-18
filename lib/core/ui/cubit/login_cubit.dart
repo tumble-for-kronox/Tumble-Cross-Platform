@@ -11,6 +11,7 @@ import 'package:tumble/core/api/database/repository/secure_storage_repository.da
 import 'package:tumble/core/api/dependency_injection/get_it.dart';
 import 'package:tumble/core/api/preferences/repository/preference_repository.dart';
 import 'package:tumble/core/models/backend_models/kronox_user_model.dart';
+import 'package:tumble/core/ui/data/string_constants.dart';
 
 part 'login_state.dart';
 
@@ -57,10 +58,10 @@ class LoginCubit extends Cubit<LoginState> {
         break;
       case ApiUserResponseStatus.UNAUTHORIZED:
         log("UNAUTHORIZED: ${userRes.data}");
-        emit(state.copyWith(status: LoginStatus.FAIL, errorMessage: userRes.data ?? 'Unauthorized'));
+        emit(state.copyWith(status: LoginStatus.FAIL, errorMessage: userRes.data ?? S.general.unauthorized()));
         break;
       case ApiUserResponseStatus.ERROR:
-        emit(state.copyWith(status: LoginStatus.FAIL, errorMessage: userRes.data ?? 'Unauthorized'));
+        emit(state.copyWith(status: LoginStatus.FAIL, errorMessage: userRes.data ?? S.general.unauthorized()));
         break;
       default:
     }
