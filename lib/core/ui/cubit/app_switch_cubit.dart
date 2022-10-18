@@ -1,9 +1,12 @@
+import 'dart:developer';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tumble/core/api/database/shared_preference_response.dart';
 import 'package:tumble/core/api/preferences/repository/preference_repository.dart';
 import 'package:tumble/core/api/backend/repository/cache_repository.dart';
 import 'package:tumble/core/api/database/repository/database_repository.dart';
+import 'package:tumble/core/notifications/builders/notification_service_builder.dart';
 import 'package:tumble/core/notifications/repository/notification_repository.dart';
 import 'package:tumble/core/api/dependency_injection/get_it.dart';
 import 'package:tumble/core/shared/app_dependencies.dart';
@@ -40,6 +43,10 @@ class AppSwitchCubit extends Cubit<AppSwitchState> {
       await _notificationService.getPermission();
     }
     await _preferenceService.setNotificationAllowed(value);
+    await _notificationService.initialize();
+
+    /// Uncomment for testing purposes
+    _notificationService.initialize().then((_) async => await _notificationService.testNotification());
   }
 
   Future<void> changeSchool(String schoolName) async {

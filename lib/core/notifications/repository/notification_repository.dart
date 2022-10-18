@@ -107,6 +107,12 @@ class NotificationRepository implements INotificationService {
         channelName: "Resources",
         channelDescription: "A notification channel for the school resources and user bookings systems",
       ),
+
+      /// Uncomment for testing purposes
+      _notificationServiceBuilder.buildNotificationChannel(
+          channelKey: 'TEST_CHANNEL',
+          channelName: 'TEST_GROUP',
+          channelDescription: 'NOTIFICATION CHANNEL FOR TESTING ONLY')
     ]);
   }
 
@@ -149,4 +155,6 @@ class NotificationRepository implements INotificationService {
       (await _awesomeNotifications.listScheduledNotifications())
           .where((element) => element.content!.channelKey == NotificationChannels.resources)
           .toList();
+
+  Future<void> testNotification() async => _notificationServiceBuilder.buildTestNotification();
 }
