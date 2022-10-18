@@ -92,9 +92,9 @@ class _SchedulePreviewState extends State<SchedulePreview> {
                               CupertinoIcons.bookmark,
                               size: 23,
                             ),
-                            label: const Text(
-                              'Save schedule',
-                              style: TextStyle(fontSize: 17, fontWeight: FontWeight.w400),
+                            label: Text(
+                              S.searchPage.saveSchedule(),
+                              style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w400),
                             ))
                         : ElevatedButton.icon(
                             onPressed: () {
@@ -106,9 +106,9 @@ class _SchedulePreviewState extends State<SchedulePreview> {
                               CupertinoIcons.bookmark_fill,
                               size: 23,
                             ),
-                            label: const Text(
-                              'Schedule saved',
-                              style: TextStyle(fontSize: 17, fontWeight: FontWeight.w400),
+                            label: Text(
+                              S.searchPage.scheduleIsSaved(),
+                              style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w400),
                             )),
                   ),
                 ),

@@ -16,4 +16,6 @@ class GeneralStrings extends StringConstantGroup {
   String unknown() => localizedStrings.unknown;
   String confirm() => localizedStrings.confirm;
   String back() => localizedStrings.back;
+  String room() => localizedStrings.room;
+  String time() => localizedStrings.time;
 }

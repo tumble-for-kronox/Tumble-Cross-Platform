@@ -44,7 +44,11 @@ class AppNotificationOffsetPicker extends StatelessWidget {
                                 padding: const EdgeInsets.only(top: 7),
                                 child: ListTile(
                                     trailing: parameterMap[key] == currentNotificationTime
-                                        ? const Icon(CupertinoIcons.smallcircle_fill_circle)
+                                        ? Icon(
+                                            CupertinoIcons.smallcircle_fill_circle,
+                                            color: Theme.of(context).colorScheme.onBackground,
+                                            size: 20,
+                                          )
                                         : null,
                                     shape: const RoundedRectangleBorder(
                                         borderRadius: BorderRadius.all(Radius.circular(20))),

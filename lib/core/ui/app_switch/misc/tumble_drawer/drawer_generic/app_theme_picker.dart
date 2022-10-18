@@ -48,8 +48,9 @@ class ApplicationThemePicker extends StatelessWidget {
                                             borderRadius: BorderRadius.all(Radius.circular(20))),
                                         leading: IconAndTitleSet.themes[key],
                                         trailing: cubit.isCurrentTheme(key.split(" ")[0].toLowerCase())
-                                            ? const Icon(
+                                            ? Icon(
                                                 CupertinoIcons.smallcircle_fill_circle,
+                                                color: Theme.of(context).colorScheme.onBackground,
                                                 size: 20,
                                               )
                                             : null,

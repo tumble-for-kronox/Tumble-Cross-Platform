@@ -45,7 +45,8 @@ class ApplicationLanguagePicker extends StatelessWidget {
                                   padding: const EdgeInsets.only(top: 7),
                                   child: ListTile(
                                       trailing: parameterMap[key] == currentLocale
-                                          ? const Icon(
+                                          ? Icon(
+                                              color: Theme.of(context).colorScheme.onBackground,
                                               CupertinoIcons.smallcircle_fill_circle,
                                               size: 20,
                                             )
