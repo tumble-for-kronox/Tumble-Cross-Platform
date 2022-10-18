@@ -168,7 +168,7 @@ class CustomAlertDialog {
     return AlertDialog(
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
       content: SizedBox(
-        height: 210,
+        height: 300,
         child: Column(children: [
           Text(S.popUps.autoSignupTitle(),
               style: TextStyle(

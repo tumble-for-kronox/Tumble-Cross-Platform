@@ -171,12 +171,6 @@ class _TumbleAppDrawerState extends State<TumbleAppDrawer> {
                     /// Misc
                     TumbleSettingsSection(tiles: [
                       TumbleAppDrawerTile(
-                          suffixIcon: CupertinoIcons.chevron_left_slash_chevron_right,
-                          drawerTileTitle: 'Tumble on GitHub',
-                          subtitle: 'Source code for Tumble',
-                          eventType: EventType.SOURCE_CODE,
-                          drawerEvent: (eventType) => _handleDrawerEvent(eventType, context)),
-                      TumbleAppDrawerTile(
                         drawerTileTitle: S.settingsPage.reportBugTitle(),
                         subtitle: S.settingsPage.reportBugSubtitle(),
                         suffixIcon: CupertinoIcons.ant,
@@ -185,8 +179,8 @@ class _TumbleAppDrawerState extends State<TumbleAppDrawer> {
                       ),
                       TumbleAppDrawerTile(
                         suffixIcon: CupertinoIcons.group,
-                        drawerTileTitle: "Contributors",
-                        subtitle: "See who helped out",
+                        drawerTileTitle: S.settingsPage.contributorsTitle(),
+                        subtitle: S.settingsPage.contributorsSubtitle(),
                         eventType: EventType.CONTRIBUTORS,
                         drawerEvent: (eventType) => _handleDrawerEvent(eventType, context),
                       ),

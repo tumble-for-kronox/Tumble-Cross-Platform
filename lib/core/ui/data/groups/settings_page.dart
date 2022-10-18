@@ -40,4 +40,6 @@ class SettingsPageStrings extends StringConstantGroup {
   String rateSubtitle(String storeName) => localizedStrings.settingsMiscRateSubtitle(storeName);
   String languageTitle() => localizedStrings.settingsMiscChangeLanguageTitle;
   String languageSubtitle() => localizedStrings.settingsMiscChangeLanguageSubtitle;
+  String contributorsTitle() => localizedStrings.settingsMiscContributorsTitle;
+  String contributorsSubtitle() => localizedStrings.settingsMiscCotributorsSubtitle;
 }

@@ -4,6 +4,8 @@
     "searchPageTitle": "Search",
     "searchPageToScheduleViewButton": "View your schedules",
     "searchPageResults": "{numOfResults} results",
+    "searchPageSaveSchedule": "Save schedule",
+    "searchPageScheduleIsSaved": "Schedule is saved",
     "@searchPageResults": {
         "description": "Text describing the number of results found when searching",
         "placeholders": {
@@ -165,6 +167,8 @@
     },
     "settingsMiscChangeLanguageTitle": "Change language",
     "settingsMiscChangeLanguageSubtitle": "Change language in the app",
+    "settingsMiscContributorsTitle": "Contributors",
+    "settingsMiscCotributorsSubtitle": "See who helped out",
     "scaffoldMessageCreatedNotificationForCourse": "Successfully created {eventCount} notifications for {courseName}",
     "@scaffoldMessageCreatedNotificationForCourse": {
         "description": "Message including the number of notifications created and the name of a course.",
@@ -392,6 +396,8 @@
     "send": "Send",
     "unknown": "Unknown",
     "confirm": "Confirm",
+    "room": "Room",
+    "time": "Time",
     "eventOptionsRemoveEventNotification": "Remove notification for event",
     "eventOptionsRemoveCourseNotifications": "Remove all nofitications for course",
     "eventOptionsAddEventNotification": "Set notification for event",

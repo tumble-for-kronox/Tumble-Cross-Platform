@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:tumble/core/ui/cubit/auth_cubit.dart';
 import 'package:tumble/core/ui/cubit/resource_cubit.dart';
+import 'package:tumble/core/ui/data/string_constants.dart';
 import 'package:tumble/core/ui/scaffold_message.dart';
 import 'package:tumble/core/ui/tumble_button.dart';
 
@@ -30,9 +31,9 @@ class ConfirmBooking extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("Room: ${state.selectedLocationId}"),
+                    Text("${S.general.room()}: ${state.selectedLocationId}"),
                     Text(
-                        "Time:  ${DateFormat.Hm().format(state.selectedTimeSlot!.from)} - ${DateFormat.Hm().format(state.selectedTimeSlot!.to)}"),
+                        "${S.general.time()}:  ${DateFormat.Hm().format(state.selectedTimeSlot!.from)} - ${DateFormat.Hm().format(state.selectedTimeSlot!.to)}"),
                   ],
                 ),
               ),
@@ -52,7 +53,7 @@ class ConfirmBooking extends StatelessWidget {
                                   .availabilities![state.selectedLocationId!]![state.selectedTimeSlot!.id]!)
                           .then((value) => showScaffoldMessage(context, value)),
                   prefixIcon: CupertinoIcons.check_mark,
-                  text: "Confirm",
+                  text: S.general.confirm(),
                   loading: state.bookUnbookStatus == BookUnbookStatus.LOADING,
                 ),
               ),

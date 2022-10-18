@@ -23,7 +23,7 @@ class TumbleChosenResourcePage extends StatelessWidget {
         return Scaffold(
           extendBodyBehindAppBar: true,
           appBar: AppBar(
-            leadingWidth: 100,
+            leadingWidth: 120,
             leading: ElevatedButton.icon(
               icon: Icon(
                 CupertinoIcons.chevron_back,
@@ -115,7 +115,8 @@ class TumbleChosenResourcePage extends StatelessWidget {
                 ),
               ),
               Text(
-                DateFormat("MMMM d, y").format(context.read<ResourceCubit>().state.chosenDate),
+                DateFormat("MMMM d, y", context.read<ResourceCubit>().locale)
+                    .format(context.read<ResourceCubit>().state.chosenDate),
                 style: TextStyle(
                   fontSize: 30,
                   fontWeight: FontWeight.w500,
