@@ -55,10 +55,7 @@ class NotificationServiceBuilder implements INotificationServiceBuilder {
             NotificationActionButton(key: 'VIEW', label: 'View'),
           ],
           schedule: NotificationCalendar.fromDate(
-              date: date
-                  .subtract(
-                      Duration(minutes: _preferenceService.notificationOffset!))
-                  .toUtc(),
+              date: date.subtract(Duration(minutes: _preferenceService.notificationOffset!)).toUtc(),
               allowWhileIdle: true,
               preciseAlarm: true));
 
@@ -85,6 +82,23 @@ class NotificationServiceBuilder implements INotificationServiceBuilder {
           actionButtons: [
             NotificationActionButton(key: 'VIEW', label: 'View'),
           ],
-          schedule: NotificationCalendar.fromDate(
-              date: date, allowWhileIdle: true, preciseAlarm: true));
+          schedule: NotificationCalendar.fromDate(date: date, allowWhileIdle: true, preciseAlarm: true));
+
+  Future<bool> buildTestNotification() => _awesomeNotifications.createNotification(
+      content: NotificationContent(
+          id: 1,
+          channelKey: 'TEST_CHANNEL',
+          groupKey: 'TEST_GROUP', //Schedule course
+          title: 'TEST NOTIFICATION',
+          icon: defaultIcon,
+          color: defaultColor,
+          body: 'THIS IS A TEST NOTIFICATION',
+          wakeUpScreen: true,
+          notificationLayout: NotificationLayout.Default,
+          category: NotificationCategory.Reminder),
+      actionButtons: [
+        NotificationActionButton(key: 'VIEW', label: 'View'),
+      ],
+      schedule: NotificationCalendar.fromDate(
+          date: DateTime.now().add(const Duration(seconds: 30)), allowWhileIdle: true, preciseAlarm: true));
 }

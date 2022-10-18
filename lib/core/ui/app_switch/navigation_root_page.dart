@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tumble/core/ui/bottom_nav_bar/data/nav_bar_items.dart';
@@ -43,7 +44,7 @@ class _NavigationRootPageState extends State<NavigationRootPage> {
     _resourceCubit = ResourceCubit();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       if (context.read<AppSwitchCubit>().notificationCheck) {
-        showDialog(
+        showCupertinoDialog(
             barrierDismissible: false,
             useRootNavigator: false,
             context: context,
