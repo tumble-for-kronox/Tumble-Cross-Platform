@@ -12,11 +12,7 @@ import 'package:tumble/core/ui/app_switch/school_selection_page.dart';
 import 'package:tumble/core/ui/cubit/auth_cubit.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
 import 'package:tumble/core/ui/login/login_page_root.dart';
-import 'package:tumble/core/ui/schedule/tumble_calendar_view/tumble_calendar_view.dart';
-import 'package:tumble/core/ui/schedule/tumble_list_view/tumble_list_view.dart';
-import 'package:tumble/core/ui/schedule/tumble_week_view/tumble_week_view.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:tumble/core/ui/search/tumble_search_page.dart';
 
 class App extends StatefulWidget {
   const App({Key? key}) : super(key: key);
@@ -58,10 +54,13 @@ class _AppState extends State<App> {
                 SfGlobalLocalizations.delegate
               ],
               routes: {
-                NavigationRouteLabels.appSwitchPage: (context) => const AppSwitch(),
+                NavigationRouteLabels.appSwitchPage: (context) =>
+                    const AppSwitch(),
                 // NavigationRouteLabels.appTopRootBuilder: (context) => const App(),
-                NavigationRouteLabels.loginPageRoot: (context) => const LoginPageRoot(),
-                NavigationRouteLabels.schoolSelectionPage: (context) => const SchoolSelectionPage(),
+                NavigationRouteLabels.loginPageRoot: (context) =>
+                    const LoginPageRoot(),
+                NavigationRouteLabels.schoolSelectionPage: (context) =>
+                    const SchoolSelectionPage(),
                 // NavigationRouteLabels.tumbleCalendarView: (context) => const TumbleCalendarView(),
                 // NavigationRouteLabels.tumbleListView: (context) => const TumbleListView(),
                 // NavigationRouteLabels.tumbleWeekView: (context) => const TumbleWeekView(),
@@ -76,14 +75,18 @@ class _AppState extends State<App> {
               ],
               locale: state.locale,
               localeResolutionCallback: (locale, supportedLocales) =>
-                  supportedLocales.contains(locale) ? locale : const Locale('en'),
+                  supportedLocales.contains(locale)
+                      ? locale
+                      : const Locale('en'),
               theme: ThemeData(
-                bottomSheetTheme: const BottomSheetThemeData(backgroundColor: Colors.transparent),
+                bottomSheetTheme: const BottomSheetThemeData(
+                    backgroundColor: Colors.transparent),
                 colorScheme: CustomColors.lightColors,
                 fontFamily: 'Roboto',
               ),
               darkTheme: ThemeData(
-                bottomSheetTheme: const BottomSheetThemeData(backgroundColor: Colors.transparent),
+                bottomSheetTheme: const BottomSheetThemeData(
+                    backgroundColor: Colors.transparent),
                 colorScheme: CustomColors.darkColors,
                 bottomNavigationBarTheme: BottomNavigationBarThemeData(
                   selectedItemColor: CustomColors.darkColors.primary,
