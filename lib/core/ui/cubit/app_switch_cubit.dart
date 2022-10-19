@@ -14,7 +14,8 @@ import 'package:tumble/core/shared/app_dependencies.dart';
 part 'app_switch_state.dart';
 
 class AppSwitchCubit extends Cubit<AppSwitchState> {
-  AppSwitchCubit() : super(const AppSwitchState(status: AppSwitchStatus.INITIAL)) {
+  AppSwitchCubit()
+      : super(const AppSwitchState(status: AppSwitchStatus.INITIAL)) {
     _init();
   }
 
@@ -27,7 +28,8 @@ class AppSwitchCubit extends Cubit<AppSwitchState> {
   bool get schoolNotNull => _preferenceService.defaultSchool != null;
 
   Future<void> _init() async {
-    SharedPreferenceResponse sharedPreferenceResponse = await _cacheAndInteractionService.hasSchool();
+    SharedPreferenceResponse sharedPreferenceResponse =
+        await _cacheAndInteractionService.hasSchool();
     switch (sharedPreferenceResponse.status) {
       case SharedPreferenceSchoolStatus.NO_SCHOOL:
         emit(state.copyWith(status: AppSwitchStatus.UNINITIALIZED));
@@ -42,11 +44,11 @@ class AppSwitchCubit extends Cubit<AppSwitchState> {
     if (value) {
       await _notificationService.getPermission();
     }
-    await _preferenceService.setNotificationAllowed(value);
-    await _notificationService.initialize();
-
-    /// Uncomment for testing purposes
-    _notificationService.initialize().then((_) async => await _notificationService.testNotification());
+    await _preferenceService.setNotificationAllowed(value).then((_) async {
+      if (value) {
+        await _notificationService.initialize();
+      }
+    });
   }
 
   Future<void> changeSchool(String schoolName) async {
@@ -64,5 +66,6 @@ class AppSwitchCubit extends Cubit<AppSwitchState> {
     }
   }
 
-  bool get notificationCheck => getIt<PreferenceRepository>().allowedNotifications == null;
+  bool get notificationCheck =>
+      getIt<PreferenceRepository>().allowedNotifications == null;
 }
