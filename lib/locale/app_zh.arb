@@ -125,6 +125,9 @@
     "send": "发送",
     "unknown": "无知",
     "confirm": "确认",
+    "room": "房间",
+    "time": "时间",
+    "unauthorized": "未授权",
     "eventOptionsRemoveEventNotification": "取消事件提示",
     "eventOptionsRemoveCourseNotifications": "取消此课程的所有提示",
     "eventOptionsAddEventNotification": "为此事件设置提示",
@@ -172,5 +175,9 @@
     "popUpProgramFetchErrorDescription": "检查您的拼写或者尝试其他关键字",
     "popUpTimeoutErrorDescription": "似乎问题出现在我们这边",
     "back": "回去",
-    "userBookingsResourcesListTitle": "预定"
+    "userBookingsResourcesListTitle": "预定",
+    "searchPageSaveSchedule": "保存日程",
+    "searchPageScheduleIsSaved": "日程已被保存",
+    "settingsMiscContributorsTitle": "贡献者",
+    "settingsMiscCotributorsSubtitle": "看看谁做了贡献"
 }
