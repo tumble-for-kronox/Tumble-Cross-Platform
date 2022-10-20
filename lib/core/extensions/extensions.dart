@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import "package:collection/collection.dart";
 import 'package:tumble/core/api/backend/response_types/booking_response.dart';
@@ -133,5 +134,19 @@ extension AutoRefreshSessionBookingResp on BookingResponse {
     }
 
     return UserResponse.authorized(session);
+  }
+}
+
+extension FilterSetNotifications on AwesomeNotifications {
+  Future<List<NotificationModel>> getAllNotificationsFromChannels(List<String> channels) async {
+    return (await listScheduledNotifications())
+        .where((notification) => channels.contains(notification.content!.channelKey!))
+        .toList();
+  }
+
+  Future<List<NotificationModel>> getAllNotificationsExceptFromChannels(List<String> channels) async {
+    return (await listScheduledNotifications())
+        .where((notification) => !channels.contains(notification.content!.channelKey!))
+        .toList();
   }
 }

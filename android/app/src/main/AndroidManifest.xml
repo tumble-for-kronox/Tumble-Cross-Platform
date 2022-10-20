@@ -11,7 +11,7 @@
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
-            android:showWhenLocked="true"
+            android:showWhenLocked="false"
             android:turnScreenOn="true"
             android:screenOrientation="portrait"
             android:name=".MainActivity"

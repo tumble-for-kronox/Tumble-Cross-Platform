@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:collection/collection.dart';
 import 'package:darq/darq.dart';
@@ -18,42 +20,68 @@ class NotificationRepository implements INotificationService {
   final String _defaultIcon = "resource://drawable/res_tumble_app_logo";
 
   @override
-  void assignAllNotificationsWithNewDuration(Duration newDuration) async {
-    List<NotificationModel> currentNotifications = await _awesomeNotifications.listScheduledNotifications();
-
+  void assignAllNotificationsWithNewDuration(Duration oldOffset, Duration newOffset) async {
     final List<String>? bookmarkedScheduleIds = _preferenceService.bookmarkIds;
+    if (bookmarkedScheduleIds == null) return;
 
-    List<String?> notificationChannelKeys = currentNotifications
-        .map((NotificationModel notificationModel) => notificationModel.content!.id.toString())
-        .toList();
+    List<NotificationModel> currentNotifications = await _awesomeNotifications.listScheduledNotifications();
+    // await _awesomeNotifications.getAllNotificationsFromChannels(bookmarkedScheduleIds);
 
-    final List<ScheduleModel?> bookmarkedUserSchedules = [];
+    for (NotificationModel notification in currentNotifications) {
+      Map<String, dynamic> notificationSchedule = notification.schedule!.toMap();
 
-    if (bookmarkedScheduleIds != null && bookmarkedScheduleIds.isNotEmpty) {
-      for (String scheduleId in bookmarkedScheduleIds) {
-        bookmarkedUserSchedules.add(await _databaseService.getOneSchedule(scheduleId));
-      }
-
-      for (ScheduleModel? bookmarkedSchedule in bookmarkedUserSchedules) {
-        if (bookmarkedSchedule != null) {
-          if (currentNotifications.isNotEmpty) {
-            final List<Event> eventsThatNeedReassign = bookmarkedSchedule.days
-                .expand((Day day) => day.events) // Flatten nested list
-                .where((Event event) => notificationChannelKeys.contains(event.id.encodeUniqueIdentifier().toString()))
-                .toList();
-            for (Event event in eventsThatNeedReassign) {
-              _notificationServiceBuilder.buildOffsetNotification(
-                  id: event.id.encodeUniqueIdentifier(),
-                  channelKey: bookmarkedSchedule.id,
-                  groupkey: event.course.id,
-                  title: event.title.capitalize(),
-                  body: event.course.englishName,
-                  date: event.from);
-            }
-          }
-        }
-      }
+      await _notificationServiceBuilder.buildExactNotification(
+        id: notification.content!.id!,
+        channelKey: notification.content!.channelKey!,
+        groupkey: notification.content!.groupKey!,
+        title: notification.content!.title!,
+        body: notification.content!.body!,
+        date: DateTime(
+          notificationSchedule['year'],
+          notificationSchedule['month'],
+          notificationSchedule['day'],
+          notificationSchedule['hour'],
+          notificationSchedule['minute'],
+          notificationSchedule['second'],
+        ).add(oldOffset).subtract(newOffset),
+      );
     }
+
+    // List<String?> notificationChannelKeys = currentNotifications
+    //     .map((NotificationModel notificationModel) => notificationModel.content!.id.toString())
+    //     .toList();
+
+    // final List<ScheduleModel?> bookmarkedUserSchedules = [];
+
+    // if (bookmarkedScheduleIds != null && bookmarkedScheduleIds.isNotEmpty) {
+    //   for (String scheduleId in bookmarkedScheduleIds) {
+    //     bookmarkedUserSchedules.add(await _databaseService.getOneSchedule(scheduleId));
+    //   }
+
+    //   for (ScheduleModel? bookmarkedSchedule in bookmarkedUserSchedules) {
+    //     if (bookmarkedSchedule != null) {
+    //       if (currentNotifications.isNotEmpty) {
+    //         final List<Event> eventsThatNeedReassign = bookmarkedSchedule.days
+    //             .expand((Day day) => day.events) // Flatten nested list
+    //             .where((Event event) => notificationChannelKeys.contains(event.id.encodeUniqueIdentifier().toString()))
+    //             .toList();
+    //         for (Event event in eventsThatNeedReassign) {
+    //           _notificationServiceBuilder.buildOffsetNotification(
+    //               id: event.id.encodeUniqueIdentifier(),
+    //               channelKey: bookmarkedSchedule.id,
+    //               groupkey: event.course.id,
+    //               title: event.title.capitalize(),
+    //               body: event.course.englishName,
+    //               date: event.from);
+    //         }
+    //       }
+    //     }
+    //   }
+    // }
+
+    List<NotificationModel> newNotifications = await _awesomeNotifications.listScheduledNotifications();
+    // await _awesomeNotifications.getAllNotificationsFromChannels(bookmarkedScheduleIds);
+    log(newNotifications.toString());
   }
 
   @override
@@ -109,10 +137,10 @@ class NotificationRepository implements INotificationService {
       ),
 
       /// Uncomment for testing purposes
-      /* _notificationServiceBuilder.buildNotificationChannel(
+      _notificationServiceBuilder.buildNotificationChannel(
           channelKey: 'TEST_CHANNEL',
           channelName: 'TEST_GROUP',
-          channelDescription: 'NOTIFICATION CHANNEL FOR TESTING ONLY') */
+          channelDescription: 'NOTIFICATION CHANNEL FOR TESTING ONLY')
     ]);
   }
 

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:tumble/core/api/dependency_injection/get_it.dart';
@@ -33,33 +35,35 @@ class NotificationServiceBuilder implements INotificationServiceBuilder {
 
   @override
   Future<bool> buildOffsetNotification(
-          {required int id,
-          required String channelKey,
-          required String groupkey,
-          required String title,
-          required String body,
-          required DateTime date}) =>
-      _awesomeNotifications.createNotification(
-          content: NotificationContent(
-              id: id,
-              channelKey: channelKey, // Schedule id
-              groupKey: groupkey, //Schedule course
-              title: title.capitalize(),
-              icon: defaultIcon,
-              roundedLargeIcon: true,
-              color: defaultColor,
-              backgroundColor: Colors.transparent,
-              body: body,
-              wakeUpScreen: true,
-              notificationLayout: NotificationLayout.Default,
-              category: NotificationCategory.Reminder),
-          actionButtons: [
-            NotificationActionButton(key: 'VIEW', label: 'View'),
-          ],
-          schedule: NotificationCalendar.fromDate(
-              date: date.subtract(Duration(minutes: _preferenceService.notificationOffset!)).toUtc(),
-              allowWhileIdle: true,
-              preciseAlarm: true));
+      {required int id,
+      required String channelKey,
+      required String groupkey,
+      required String title,
+      required String body,
+      required DateTime date}) {
+    log(_preferenceService.notificationOffset!.toString());
+    return _awesomeNotifications.createNotification(
+        content: NotificationContent(
+            id: id,
+            channelKey: channelKey, // Schedule id
+            groupKey: groupkey, //Schedule course
+            title: title.capitalize(),
+            icon: defaultIcon,
+            roundedLargeIcon: true,
+            color: defaultColor,
+            backgroundColor: Colors.transparent,
+            body: body,
+            wakeUpScreen: true,
+            notificationLayout: NotificationLayout.Default,
+            category: NotificationCategory.Reminder),
+        actionButtons: [
+          NotificationActionButton(key: 'VIEW', label: 'View'),
+        ],
+        schedule: NotificationCalendar.fromDate(
+            date: date.subtract(Duration(minutes: _preferenceService.notificationOffset!)).toUtc(),
+            allowWhileIdle: true,
+            preciseAlarm: true));
+  }
 
   @override
   Future<bool> buildExactNotification(
@@ -102,5 +106,7 @@ class NotificationServiceBuilder implements INotificationServiceBuilder {
         NotificationActionButton(key: 'VIEW', label: 'View'),
       ],
       schedule: NotificationCalendar.fromDate(
-          date: DateTime.now().add(const Duration(seconds: 30)), allowWhileIdle: true, preciseAlarm: true));
+          date: DateTime.now().add(const Duration(hours: 2, seconds: 30)).toUtc(),
+          allowWhileIdle: true,
+          preciseAlarm: true));
 }
