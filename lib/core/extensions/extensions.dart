@@ -60,8 +60,9 @@ extension StringParse on String {
 
   /// Used to give notifications unique id's based on event id
   int encodeUniqueIdentifier() {
-    List<int> byteArray = utf8.encode(this);
-    return int.parse(byteArray.sublist(byteArray.length - 4, byteArray.length).join(''));
+    return hashCode;
+    // List<int> byteArray = utf8.encode(this);
+    // return int.parse(byteArray.sublist(byteArray.length - 4, byteArray.length).join(''));
   }
 }
 

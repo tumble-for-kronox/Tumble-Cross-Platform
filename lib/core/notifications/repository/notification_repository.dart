@@ -1,11 +1,8 @@
-import 'dart:developer';
-
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:collection/collection.dart';
 import 'package:darq/darq.dart';
 import 'package:tumble/core/api/preferences/repository/preference_repository.dart';
 import 'package:tumble/core/notifications/builders/notification_service_builder.dart';
-import 'package:tumble/core/api/database/repository/database_repository.dart';
 import 'package:tumble/core/extensions/extensions.dart';
 import 'package:tumble/core/models/backend_models/schedule_model.dart';
 import 'package:tumble/core/notifications/interface/inotification_service.dart';
@@ -14,21 +11,29 @@ import 'package:tumble/core/api/dependency_injection/get_it.dart';
 
 class NotificationRepository implements INotificationService {
   final _notificationServiceBuilder = NotificationServiceBuilder();
-  final _databaseService = getIt<DatabaseRepository>();
   final _awesomeNotifications = getIt<AwesomeNotifications>();
   final _preferenceService = getIt<PreferenceRepository>();
   final String _defaultIcon = "resource://drawable/res_tumble_app_logo";
 
   @override
-  void assignAllNotificationsWithNewDuration(Duration oldOffset, Duration newOffset) async {
+  Future<void> assignAllNotificationsWithNewDuration(Duration oldOffset, Duration newOffset) async {
     final List<String>? bookmarkedScheduleIds = _preferenceService.bookmarkIds;
     if (bookmarkedScheduleIds == null) return;
 
-    List<NotificationModel> currentNotifications = await _awesomeNotifications.listScheduledNotifications();
-    // await _awesomeNotifications.getAllNotificationsFromChannels(bookmarkedScheduleIds);
+    List<NotificationModel> currentNotifications =
+        await _awesomeNotifications.getAllNotificationsFromChannels(bookmarkedScheduleIds);
 
     for (NotificationModel notification in currentNotifications) {
       Map<String, dynamic> notificationSchedule = notification.schedule!.toMap();
+
+      DateTime newNotificationDateTime = DateTime(
+        notificationSchedule['year'],
+        notificationSchedule['month'],
+        notificationSchedule['day'],
+        notificationSchedule['hour'],
+        notificationSchedule['minute'],
+        notificationSchedule['second'],
+      ).add(oldOffset).subtract(newOffset).toUtc();
 
       await _notificationServiceBuilder.buildExactNotification(
         id: notification.content!.id!,
@@ -36,52 +41,47 @@ class NotificationRepository implements INotificationService {
         groupkey: notification.content!.groupKey!,
         title: notification.content!.title!,
         body: notification.content!.body!,
-        date: DateTime(
-          notificationSchedule['year'],
-          notificationSchedule['month'],
-          notificationSchedule['day'],
-          notificationSchedule['hour'],
-          notificationSchedule['minute'],
-          notificationSchedule['second'],
-        ).add(oldOffset).subtract(newOffset),
+        date: newNotificationDateTime,
       );
     }
 
-    // List<String?> notificationChannelKeys = currentNotifications
-    //     .map((NotificationModel notificationModel) => notificationModel.content!.id.toString())
-    //     .toList();
+    // THIS IS ALL DEBUGGING LOGS FOR TESTING THE CHANGE IN NOTIFICATION TIMES!!
+    // List<NotificationModel> newNotifications =
+    //     await _awesomeNotifications.getAllNotificationsFromChannels(bookmarkedScheduleIds);
 
-    // final List<ScheduleModel?> bookmarkedUserSchedules = [];
+    // for (NotificationModel newNotification in newNotifications) {
+    //   log('POST TEST =============================================');
 
-    // if (bookmarkedScheduleIds != null && bookmarkedScheduleIds.isNotEmpty) {
-    //   for (String scheduleId in bookmarkedScheduleIds) {
-    //     bookmarkedUserSchedules.add(await _databaseService.getOneSchedule(scheduleId));
-    //   }
+    //   log('${newNotification.content!.id!} ===========');
 
-    //   for (ScheduleModel? bookmarkedSchedule in bookmarkedUserSchedules) {
-    //     if (bookmarkedSchedule != null) {
-    //       if (currentNotifications.isNotEmpty) {
-    //         final List<Event> eventsThatNeedReassign = bookmarkedSchedule.days
-    //             .expand((Day day) => day.events) // Flatten nested list
-    //             .where((Event event) => notificationChannelKeys.contains(event.id.encodeUniqueIdentifier().toString()))
-    //             .toList();
-    //         for (Event event in eventsThatNeedReassign) {
-    //           _notificationServiceBuilder.buildOffsetNotification(
-    //               id: event.id.encodeUniqueIdentifier(),
-    //               channelKey: bookmarkedSchedule.id,
-    //               groupkey: event.course.id,
-    //               title: event.title.capitalize(),
-    //               body: event.course.englishName,
-    //               date: event.from);
-    //         }
-    //       }
-    //     }
-    //   }
+    //   Map<String, dynamic> newNotificationSchedule = newNotification.schedule!.toMap();
+
+    //   NotificationModel oldNotification =
+    //       currentNotifications.firstWhere((notification) => notification.content!.id! == newNotification.content!.id!);
+    //   Map<String, dynamic> oldNotificationSchedule = oldNotification.schedule!.toMap();
+
+    //   DateTime newNotificationDateTime = DateTime(
+    //     newNotificationSchedule['year'],
+    //     newNotificationSchedule['month'],
+    //     newNotificationSchedule['day'],
+    //     newNotificationSchedule['hour'],
+    //     newNotificationSchedule['minute'],
+    //     newNotificationSchedule['second'],
+    //   );
+
+    //   DateTime oldNotificationDateTime = DateTime(
+    //     oldNotificationSchedule['year'],
+    //     oldNotificationSchedule['month'],
+    //     oldNotificationSchedule['day'],
+    //     oldNotificationSchedule['hour'],
+    //     oldNotificationSchedule['minute'],
+    //     oldNotificationSchedule['second'],
+    //   );
+
+    //   log('Old Notification time: $oldNotificationDateTime');
+    //   log('New Notification time: $newNotificationDateTime');
+    //   log('Difference: ${oldNotificationDateTime.difference(newNotificationDateTime).toString()}\n');
     // }
-
-    List<NotificationModel> newNotifications = await _awesomeNotifications.listScheduledNotifications();
-    // await _awesomeNotifications.getAllNotificationsFromChannels(bookmarkedScheduleIds);
-    log(newNotifications.toString());
   }
 
   @override
@@ -137,17 +137,17 @@ class NotificationRepository implements INotificationService {
       ),
 
       /// Uncomment for testing purposes
-      _notificationServiceBuilder.buildNotificationChannel(
-          channelKey: 'TEST_CHANNEL',
-          channelName: 'TEST_GROUP',
-          channelDescription: 'NOTIFICATION CHANNEL FOR TESTING ONLY')
+      // _notificationServiceBuilder.buildNotificationChannel(
+      //     channelKey: 'TEST_CHANNEL',
+      //     channelName: 'TEST_GROUP',
+      //     channelDescription: 'NOTIFICATION CHANNEL FOR TESTING ONLY')
     ]);
   }
 
   @override
   Future<bool> eventHasNotification(Event event) async =>
       (((await _awesomeNotifications.listScheduledNotifications()).singleWhereOrNull(
-            (notificationModel) => notificationModel.content!.id == event.id.encodeUniqueIdentifier(),
+            (notificationModel) => notificationModel.content!.id! == event.id.encodeUniqueIdentifier(),
           )) !=
           null);
 

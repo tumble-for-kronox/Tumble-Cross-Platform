@@ -44,7 +44,7 @@ class AppSwitchCubit extends Cubit<AppSwitchState> {
       await _notificationService.getPermission().then((_) async {
         await _notificationService.initialize();
         // Test notification trigger
-        await _notificationService.testNotification();
+        // await _notificationService.testNotification();
       });
     }
   }

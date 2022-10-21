@@ -77,7 +77,7 @@ class EventOptions extends StatelessWidget {
                                       ? showScaffoldMessage(context,
                                           S.scaffoldMessages.cancelledCourseNotifications(event.course.englishName))
                                       : showScaffoldMessage(context,
-                                          S.scaffoldMessages.cancelNotificationsFailed(event.title.capitalize())));
+                                          S.scaffoldMessages.cancelNotificationsFailed(event.course.englishName)));
                             } else {
                               bool sucessfullyCreatedNotifications =
                                   await context.read<ScheduleViewCubit>().createNotificationForCourse(event, context);

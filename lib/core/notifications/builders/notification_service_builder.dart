@@ -41,7 +41,6 @@ class NotificationServiceBuilder implements INotificationServiceBuilder {
       required String title,
       required String body,
       required DateTime date}) {
-    log(_preferenceService.notificationOffset!.toString());
     return _awesomeNotifications.createNotification(
         content: NotificationContent(
             id: id,
@@ -72,8 +71,8 @@ class NotificationServiceBuilder implements INotificationServiceBuilder {
           required String groupkey,
           required String title,
           required String body,
-          required DateTime date}) =>
-      _awesomeNotifications.createNotification(
+          required DateTime date}) async =>
+      await _awesomeNotifications.createNotification(
           content: NotificationContent(
               id: id,
               channelKey: channelKey, // Schedule id
@@ -88,7 +87,7 @@ class NotificationServiceBuilder implements INotificationServiceBuilder {
           actionButtons: [
             NotificationActionButton(key: 'VIEW', label: 'View'),
           ],
-          schedule: NotificationCalendar.fromDate(date: date, allowWhileIdle: true, preciseAlarm: true));
+          schedule: NotificationCalendar.fromDate(date: date.toUtc(), allowWhileIdle: true, preciseAlarm: true));
 
   Future<bool> buildTestNotification() => _awesomeNotifications.createNotification(
       content: NotificationContent(

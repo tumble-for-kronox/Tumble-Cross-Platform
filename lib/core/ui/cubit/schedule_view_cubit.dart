@@ -205,6 +205,7 @@ class ScheduleViewCubit extends Cubit<ScheduleViewState> {
 
         event.id.encodeUniqueIdentifier();
 
+        int successfullyCreatedNotifications = 0;
         for (Event event in events) {
           if (event.from.isAfter(DateTime.now())) {
             _notificationBuilder.buildOffsetNotification(
@@ -218,12 +219,17 @@ class ScheduleViewCubit extends Cubit<ScheduleViewState> {
                 title: event.title,
                 body: event.course.englishName,
                 date: event.from);
+            successfullyCreatedNotifications++;
           }
         }
-        log(name: 'schedule_view_cubit', 'Created ${events.length} new notifications for ${event.course}');
+        log(
+            name: 'schedule_view_cubit',
+            'Created $successfullyCreatedNotifications new notifications for ${event.course}');
 
         showScaffoldMessage(
-            context, S.scaffoldMessages.createdNotificationForCourse(event.course.englishName, events.length));
+            context,
+            S.scaffoldMessages
+                .createdNotificationForCourse(event.course.englishName, successfullyCreatedNotifications));
 
         return true;
       }
