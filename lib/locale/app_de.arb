@@ -172,5 +172,12 @@
     "userBookingsBookingCardOngoingTitle": "Angehend",
     "userBookingsNotificationConfirmReminderTitle": "Bestätigen Sie die Buchung!",
     "userBookingsNotificationConfirmReminderBody": "Sie haben eine bevorstehende Buchung, stellen Sie sicher, dass Sie die Buchung bestätigen, damit Sie sie nicht verlieren!",
-    "userBookingsResourcesListTitle": "Buchung"
+    "userBookingsResourcesListTitle": "Buchung",
+    "searchPageSaveSchedule": "Studenplan speichern",
+    "searchPageScheduleIsSaved": "Studenplan gespeichert",
+    "settingsMiscContributorsTitle": "Mitwirkende",
+    "settingsMiscCotributorsSubtitle": "Helfer anzeigen",
+    "room": "Raum",
+    "time": "Zeit",
+    "unauthorized": "Kein Zugang" 
 }

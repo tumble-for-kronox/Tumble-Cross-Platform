@@ -172,5 +172,12 @@
     "userBookingsBookingCardOngoingTitle": "En cours",
     "userBookingsNotificationConfirmReminderTitle": "Confirmez votre réservation!",
     "userBookingsNotificationConfirmReminderBody": "Vous avez une réservation à venir, assurez-vous de confirmer la réservation afin de ne pas la perdre!",
-    "userBookingsResourcesListTitle": "Réservation"
+    "userBookingsResourcesListTitle": "Réservation",
+    "searchPageSaveSchedule": "Sauvegarder horaire",
+    "searchPageScheduleIsSaved" : "Horaire sauvegardé",
+    "settingsMiscContributorsTitle": "Contributeurs",
+    "settingsMiscCotributorsSubtitle": "Voir qui a contribué",
+    "room": "Aalle",
+    "time": "Temps",
+    "unauthorized": "Accès réfusé" 
 }
