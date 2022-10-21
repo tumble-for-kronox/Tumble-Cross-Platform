@@ -6,7 +6,7 @@ import 'package:tumble/core/models/backend_models/schedule_model.dart';
 abstract class INotificationService {
   void updateDispatcher(ScheduleModel newScheduleModel, ScheduleModel oldScheduleModel);
 
-  void assignAllNotificationsWithNewDuration(Duration oldOffset, Duration newOffset);
+  void assignAllNotificationsWithNewDuration(Duration newDuration);
 
   void cancelAllNotifications();
 

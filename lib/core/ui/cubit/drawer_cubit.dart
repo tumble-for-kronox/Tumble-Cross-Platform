@@ -78,8 +78,10 @@ class DrawerCubit extends Cubit<DrawerState> {
   }
 
   void setNotificationTime(int time) async {
-    _preferenceService.setNotificationOffset(time);
-    _notificationService.assignAllNotificationsWithNewDuration(Duration(minutes: time));
+    int oldOffset = _preferenceService.notificationOffset!;
+    await _notificationService.assignAllNotificationsWithNewDuration(
+        Duration(minutes: oldOffset), Duration(minutes: time));
+    await _preferenceService.setNotificationOffset(time);
 
     emit(state.copyWith(notificationTime: _preferenceService.notificationOffset));
   }

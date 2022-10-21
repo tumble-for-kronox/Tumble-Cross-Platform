@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import "package:collection/collection.dart";
 import 'package:tumble/core/api/backend/response_types/booking_response.dart';
@@ -59,8 +60,9 @@ extension StringParse on String {
 
   /// Used to give notifications unique id's based on event id
   int encodeUniqueIdentifier() {
-    List<int> byteArray = utf8.encode(this);
-    return int.parse(byteArray.sublist(byteArray.length - 4, byteArray.length).join(''));
+    return hashCode;
+    // List<int> byteArray = utf8.encode(this);
+    // return int.parse(byteArray.sublist(byteArray.length - 4, byteArray.length).join(''));
   }
 }
 
@@ -133,5 +135,19 @@ extension AutoRefreshSessionBookingResp on BookingResponse {
     }
 
     return UserResponse.authorized(session);
+  }
+}
+
+extension FilterSetNotifications on AwesomeNotifications {
+  Future<List<NotificationModel>> getAllNotificationsFromChannels(List<String> channels) async {
+    return (await listScheduledNotifications())
+        .where((notification) => channels.contains(notification.content!.channelKey!))
+        .toList();
+  }
+
+  Future<List<NotificationModel>> getAllNotificationsExceptFromChannels(List<String> channels) async {
+    return (await listScheduledNotifications())
+        .where((notification) => !channels.contains(notification.content!.channelKey!))
+        .toList();
   }
 }
