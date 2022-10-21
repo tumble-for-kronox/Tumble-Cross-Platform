@@ -20,6 +20,17 @@ class ScheduleCardLocationContainer extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.end,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              Padding(
+                padding: const EdgeInsets.only(bottom: 2, left: 10),
+                child: Icon(
+                  CupertinoIcons.location_solid,
+                  size: 20,
+                  color: textColor,
+                ),
+              ),
+              const SizedBox(
+                width: 2.5,
+              ),
               Text(
                 locations.isEmpty ? S.general.unknown() : locations.first.id,
                 softWrap: true,
@@ -27,14 +38,6 @@ class ScheduleCardLocationContainer extends StatelessWidget {
                   color: textColor,
                   fontSize: locations.isEmpty ? 16 : 19,
                   fontWeight: FontWeight.w400,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 2, left: 10),
-                child: Icon(
-                  CupertinoIcons.location,
-                  size: 20,
-                  color: textColor,
                 ),
               ),
             ],
