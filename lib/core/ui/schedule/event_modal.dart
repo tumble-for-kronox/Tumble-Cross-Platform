@@ -114,7 +114,7 @@ class TumbleEventModal extends StatelessWidget {
                   ),
                   ModalInfoRow(
                     title: S.detailsModal.location(),
-                    icon: const Icon(CupertinoIcons.location),
+                    icon: const Icon(CupertinoIcons.location_solid),
                     locations: locations,
                   ),
                   const SizedBox(
