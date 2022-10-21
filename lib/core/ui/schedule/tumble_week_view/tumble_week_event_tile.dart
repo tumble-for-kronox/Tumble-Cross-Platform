@@ -76,7 +76,7 @@ class TumbleWeekEventTile extends StatelessWidget {
                 Expanded(
                   child: Container(
                     padding: const EdgeInsets.only(
-                      left: 2.5,
+                      left: 7,
                       right: 10,
                     ),
                     child: Text(
@@ -85,7 +85,7 @@ class TumbleWeekEventTile extends StatelessWidget {
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.onSurface,
                         fontSize: 16,
-                        fontWeight: FontWeight.w400,
+                        fontWeight: FontWeight.w500,
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
