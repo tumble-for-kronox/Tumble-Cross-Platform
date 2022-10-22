@@ -186,7 +186,7 @@ Widget _initialState(BuildContext context, String school) {
 PreferredSizeWidget _appBar(BuildContext context) {
   return AppBar(
       backgroundColor: Theme.of(context).colorScheme.background,
-      leadingWidth: 100,
+      leadingWidth: 120,
       leading: BlocBuilder<LoginCubit, LoginState>(
         builder: (context, state) {
           return ElevatedButton.icon(
