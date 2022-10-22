@@ -374,7 +374,7 @@
     "popUpScheduleIsEmptyBody": "Kronox lagrar scheman även om de inte innehåller någon data, så våra sökningar kan tyvärr hitta tomma scheman ibland",
     "popUpScheduleFetchError": "Något gick fel när detta schema skulle hämtas",
     "popUpResourceFetchErrorTitle": "Det gick inte att hämta resursen",
-    "popUpResourceFetchErrorBody": "Detta sker oftast när det valda datimet inte är tillgängligt för resursen. Om det inte går att ändra datumet, var vänlig anmäl ett fel genom inställningarna",
+    "popUpResourceFetchErrorBody": "Detta sker oftast när det valda datumet inte är tillgängligt för resursen. Om det inte går att ändra datumet, var vänlig anmäl ett fel genom inställningarna",
     "popUpTimeoutErrorDescription": "Ser ut som att något gick fel på vår ände",
     "no": "Nej",
     "yes": "Ja",
@@ -430,6 +430,6 @@
     "userBookingsBookingCardRoomTitle": "Rum",
     "userBookingsBookingCardOngoingTitle": "Pågående",
     "userBookingsNotificationConfirmReminderTitle": "Bekräfta din bokning!",
-    "userBookingsNotificationConfirmReminderBody": "Du har en bokning som snart behöver bekräftas! Bekräfta den så du inte förlorar bokningen!",
+    "userBookingsNotificationConfirmReminderBody": "Du har en bokning som snart behöver bekräftas. Bekräfta den så du inte förlorar bokningen!",
     "userBookingsResourcesListTitle": "Bokning"
 }
