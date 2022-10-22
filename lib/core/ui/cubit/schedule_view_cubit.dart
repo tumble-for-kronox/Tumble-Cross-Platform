@@ -10,14 +10,14 @@ import 'package:tumble/core/api/backend/repository/cache_repository.dart';
 import 'package:tumble/core/api/backend/response_types/schedule_or_programme_response.dart';
 import 'package:tumble/core/api/database/repository/database_repository.dart';
 import 'package:tumble/core/api/dependency_injection/get_it.dart';
+import 'package:tumble/core/api/notifications/builders/notification_service_builder.dart';
+import 'package:tumble/core/api/notifications/repository/notification_repository.dart';
 import 'package:tumble/core/api/preferences/repository/preference_repository.dart';
 import 'package:tumble/core/extensions/extensions.dart';
 import 'package:tumble/core/models/backend_models/schedule_model.dart';
 import 'package:tumble/core/models/ui_models/course_ui_model.dart';
 import 'package:tumble/core/models/ui_models/schedule_model_and_courses.dart';
 import 'package:tumble/core/models/ui_models/week_model.dart';
-import 'package:tumble/core/notifications/builders/notification_service_builder.dart';
-import 'package:tumble/core/notifications/repository/notification_repository.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
 import 'package:tumble/core/ui/scaffold_message.dart';
 

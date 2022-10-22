@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tumble/core/api/preferences/repository/preference_repository.dart';
-import 'package:tumble/core/notifications/repository/notification_repository.dart';
 import 'package:tumble/core/api/database/data/access_stores.dart';
 import 'package:tumble/core/api/database/repository/database_repository.dart';
 import 'package:tumble/core/models/backend_models/bookmarked_schedule_model.dart';
@@ -16,6 +15,8 @@ import 'package:tumble/core/theme/repository/theme_repository.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:tumble/core/ui/app_switch/data/locale_names.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
+
+import '../../api/notifications/repository/notification_repository.dart';
 
 part 'drawer_cubit.dart';
 

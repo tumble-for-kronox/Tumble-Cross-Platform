@@ -55,10 +55,7 @@ class NotificationServiceBuilder implements INotificationServiceBuilder {
             NotificationActionButton(key: 'VIEW', label: 'View'),
           ],
           schedule: NotificationCalendar.fromDate(
-              date: date
-                  .subtract(
-                      Duration(minutes: _preferenceService.notificationOffset!))
-                  .toUtc(),
+              date: date.subtract(Duration(minutes: _preferenceService.notificationOffset!)).toLocal(),
               allowWhileIdle: true,
               preciseAlarm: true));
 
@@ -85,6 +82,5 @@ class NotificationServiceBuilder implements INotificationServiceBuilder {
           actionButtons: [
             NotificationActionButton(key: 'VIEW', label: 'View'),
           ],
-          schedule: NotificationCalendar.fromDate(
-              date: date, allowWhileIdle: true, preciseAlarm: true));
+          schedule: NotificationCalendar.fromDate(date: date.toLocal(), allowWhileIdle: true, preciseAlarm: true));
 }

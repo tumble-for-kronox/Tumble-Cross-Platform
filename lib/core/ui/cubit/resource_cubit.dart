@@ -7,13 +7,13 @@ import 'package:tumble/core/api/backend/repository/user_action_repository.dart';
 import 'package:tumble/core/api/backend/response_types/booking_response.dart';
 import 'package:tumble/core/api/backend/response_types/refresh_response.dart';
 import 'package:tumble/core/api/dependency_injection/get_it.dart';
+import 'package:tumble/core/api/notifications/builders/notification_service_builder.dart';
+import 'package:tumble/core/api/notifications/data/notification_channels.dart';
+import 'package:tumble/core/api/notifications/repository/notification_repository.dart';
 import 'package:tumble/core/api/preferences/repository/preference_repository.dart';
 import 'package:tumble/core/extensions/extensions.dart';
 import 'package:tumble/core/models/backend_models/kronox_user_model.dart';
 import 'package:tumble/core/models/backend_models/resource_model.dart';
-import 'package:tumble/core/notifications/builders/notification_service_builder.dart';
-import 'package:tumble/core/notifications/repository/notification_repository.dart';
-import 'package:tumble/core/notifications/data/notification_channels.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
 
 part 'resource_state.dart';
