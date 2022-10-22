@@ -6,10 +6,10 @@ import 'package:tumble/core/api/database/shared_preference_response.dart';
 import 'package:tumble/core/api/preferences/repository/preference_repository.dart';
 import 'package:tumble/core/api/backend/repository/cache_repository.dart';
 import 'package:tumble/core/api/database/repository/database_repository.dart';
-import 'package:tumble/core/notifications/builders/notification_service_builder.dart';
-import 'package:tumble/core/notifications/repository/notification_repository.dart';
 import 'package:tumble/core/api/dependency_injection/get_it.dart';
 import 'package:tumble/core/shared/app_dependencies.dart';
+
+import '../../api/notifications/repository/notification_repository.dart';
 
 part 'app_switch_state.dart';
 

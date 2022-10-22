@@ -20,42 +20,71 @@ class NotificationRepository implements INotificationService {
   final String _defaultIcon = "resource://drawable/res_tumble_app_logo";
 
   @override
-  Future<void> assignAllNotificationsWithNewDuration(Duration newDuration) async {
-    List<NotificationModel> currentNotifications = await _awesomeNotifications.listScheduledNotifications();
-
+  Future<void> assignAllNotificationsWithNewDuration(Duration oldOffset, Duration newOffset) async {
     final List<String>? bookmarkedScheduleIds = _preferenceService.bookmarkIds;
+    if (bookmarkedScheduleIds == null) return;
 
-    List<String?> notificationChannelKeys = currentNotifications
-        .map((NotificationModel notificationModel) => notificationModel.content!.id.toString())
-        .toList();
+    List<NotificationModel> currentNotifications =
+        await _awesomeNotifications.getAllNotificationsFromChannels(bookmarkedScheduleIds);
 
-    final List<ScheduleModel?> bookmarkedUserSchedules = [];
+    for (NotificationModel notification in currentNotifications) {
+      Map<String, dynamic> notificationSchedule = notification.schedule!.toMap();
 
-    if (bookmarkedScheduleIds != null && bookmarkedScheduleIds.isNotEmpty) {
-      for (String scheduleId in bookmarkedScheduleIds) {
-        bookmarkedUserSchedules.add(await _databaseService.getOneSchedule(scheduleId));
-      }
+      DateTime newNotificationDateTime = DateTime(
+        notificationSchedule['year'],
+        notificationSchedule['month'],
+        notificationSchedule['day'],
+        notificationSchedule['hour'],
+        notificationSchedule['minute'],
+        notificationSchedule['second'],
+      ).add(oldOffset).subtract(newOffset).toUtc();
 
-      for (ScheduleModel? bookmarkedSchedule in bookmarkedUserSchedules) {
-        if (bookmarkedSchedule != null) {
-          if (currentNotifications.isNotEmpty) {
-            final List<Event> eventsThatNeedReassign = bookmarkedSchedule.days
-                .expand((Day day) => day.events) // Flatten nested list
-                .where((Event event) => notificationChannelKeys.contains(event.id.encodeUniqueIdentifier().toString()))
-                .toList();
+      await _notificationServiceBuilder.buildExactNotification(
+        id: notification.content!.id!,
+        channelKey: notification.content!.channelKey!,
+        groupkey: notification.content!.groupKey!,
+        title: notification.content!.title!,
+        body: notification.content!.body!,
+        date: newNotificationDateTime,
+      );
+    }
 
-            for (Event event in eventsThatNeedReassign) {
-              await _notificationServiceBuilder.buildOffsetNotification(
-                  id: event.id.encodeUniqueIdentifier(),
-                  channelKey: bookmarkedSchedule.id,
-                  groupkey: event.course.id,
-                  title: event.title.capitalize(),
-                  body: event.course.englishName,
-                  date: event.from);
-            }
-          }
-        }
-      }
+    // THIS IS ALL DEBUGGING LOGS FOR TESTING THE CHANGE IN NOTIFICATION TIMES!!
+    List<NotificationModel> newNotifications =
+        await _awesomeNotifications.getAllNotificationsFromChannels(bookmarkedScheduleIds);
+
+    for (NotificationModel newNotification in newNotifications) {
+      log('POST TEST =============================================');
+
+      log('${newNotification.content!.id!} ===========');
+
+      Map<String, dynamic> newNotificationSchedule = newNotification.schedule!.toMap();
+
+      NotificationModel oldNotification =
+          currentNotifications.firstWhere((notification) => notification.content!.id! == newNotification.content!.id!);
+      Map<String, dynamic> oldNotificationSchedule = oldNotification.schedule!.toMap();
+
+      DateTime newNotificationDateTime = DateTime(
+        newNotificationSchedule['year'],
+        newNotificationSchedule['month'],
+        newNotificationSchedule['day'],
+        newNotificationSchedule['hour'],
+        newNotificationSchedule['minute'],
+        newNotificationSchedule['second'],
+      );
+
+      DateTime oldNotificationDateTime = DateTime(
+        oldNotificationSchedule['year'],
+        oldNotificationSchedule['month'],
+        oldNotificationSchedule['day'],
+        oldNotificationSchedule['hour'],
+        oldNotificationSchedule['minute'],
+        oldNotificationSchedule['second'],
+      );
+
+      log('Old Notification time: $oldNotificationDateTime');
+      log('New Notification time: $newNotificationDateTime');
+      log('Difference: ${oldNotificationDateTime.difference(newNotificationDateTime).toString()}\n');
     }
   }
 

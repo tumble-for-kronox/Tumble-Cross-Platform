@@ -5,12 +5,13 @@ import 'package:tumble/core/api/backend/response_types/schedule_or_programme_res
 import 'package:tumble/core/api/backend/data/constants.dart';
 import 'package:tumble/core/api/backend/repository/backend_repository.dart';
 import 'package:tumble/core/api/preferences/repository/preference_repository.dart';
-import 'package:tumble/core/notifications/repository/notification_repository.dart';
 import 'package:tumble/core/api/database/repository/database_repository.dart';
 import 'package:tumble/core/models/backend_models/bookmarked_schedule_model.dart';
 import 'package:tumble/core/models/backend_models/schedule_model.dart';
 import 'package:tumble/core/shared/preference_types.dart';
 import 'package:tumble/core/api/dependency_injection/get_it.dart';
+
+import '../../notifications/repository/notification_repository.dart';
 
 class BackgroundTask {
   ///
