@@ -368,7 +368,7 @@
     "popUpNotificationPermissionDescription": "Denna appen skulle vilja skicka notifikationer",
     "popUpExamAutoSignupTitle": "Automatisk registrering på examinationstillfällen bör användas med försiktighet!",
     "popUpExamAutoSignupBody": "Saker kan gå fel så därför är det fortfarande ditt eget ansvar att se till att du är anmäld till dina examinationstillfällen. Om en examination kräver att du väljer en plats så kan du inte bli registrerad automatiskt, samma sak om du kräver extra stöd.",
-    "popUpScheduleHelpFirstLine": "Spara scheman from söksidan genom att öppna ett schema och trycka på 'Spara schema'",
+    "popUpScheduleHelpFirstLine": "Spara scheman på söksidan genom att öppna ett schema och trycka på 'Spara schema'",
     "popUpScheduleHelpSecondLine": "Den visas i övre vänstra hörnet när du sökt efter och valt ett schema",
     "popUpScheduleIsEmptyTitle": "Detta schemat verkar vara tomt men är fortfarande kvar i Kronox databas",
     "popUpScheduleIsEmptyBody": "Kronox lagrar scheman även om de inte innehåller någon data, så våra sökningar kan tyvärr hitta tomma scheman ibland",
