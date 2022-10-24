@@ -32,7 +32,7 @@ class ResourceCubit extends Cubit<ResourceState> {
           chosenDate: DateTime.now(),
         ));
 
-  String get locale => _preferenceService.locale!;
+  String? get locale => _preferenceService.locale;
 
   Future<void> getSchoolResources(
       KronoxUserModel session, void Function(KronoxUserModel) setAuthSession, Function logOut) async {
@@ -222,7 +222,7 @@ class ResourceCubit extends Cubit<ResourceState> {
     DateTime? newDate = await showDatePicker(
         context: context,
         initialDate: state.chosenDate,
-        locale: Locale(context.read<ResourceCubit>().locale),
+        locale: context.read<ResourceCubit>().locale != null ? Locale(context.read<ResourceCubit>().locale!) : null,
         firstDate: DateTime.now(),
         lastDate: DateTime.now().add(const Duration(days: 28)),
         currentDate: state.chosenDate);

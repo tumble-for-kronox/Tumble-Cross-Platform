@@ -115,7 +115,8 @@ class TumbleChosenResourcePage extends StatelessWidget {
                 ),
               ),
               Text(
-                DateFormat("MMMM d, y", context.read<ResourceCubit>().locale)
+                DateFormat("MMMM d, y",
+                        context.read<ResourceCubit>().locale != null ? context.read<ResourceCubit>().locale! : null)
                     .format(context.read<ResourceCubit>().state.chosenDate),
                 style: TextStyle(
                   fontSize: 30,

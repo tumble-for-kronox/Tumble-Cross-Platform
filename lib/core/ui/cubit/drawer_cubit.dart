@@ -44,6 +44,7 @@ class DrawerCubit extends Cubit<DrawerState> {
   }
 
   Future<void> changeLocale(Locale? locale) async {
+    log('${locale?.languageCode}');
     await _themeRepository.saveLocale(locale);
     emit(state.copyWith(locale: locale));
   }
