@@ -16,13 +16,16 @@ class EventOptions extends StatelessWidget {
   final Event event;
   final BuildContext context;
 
-  const EventOptions({Key? key, required this.event, required this.context}) : super(key: key);
+  const EventOptions({Key? key, required this.event, required this.context})
+      : super(key: key);
 
   /// The order in which this widget receives the build context is important,
   /// as it needs the context of the previous widget that called it that has
   /// a ScheduleViewCubit provider
   static void showEventOptions(BuildContext context, Event event) {
-    showModalBottomSheet(context: context, builder: (_) => EventOptions(event: event, context: context));
+    showModalBottomSheet(
+        context: context,
+        builder: (_) => EventOptions(event: event, context: context));
   }
 
   @override
@@ -44,52 +47,87 @@ class EventOptions extends StatelessWidget {
             child: Card(
               elevation: 0,
               color: Theme.of(context).colorScheme.surface,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0)),
               child: FutureBuilder(
                 future: Future.wait([
-                  context.read<ScheduleViewCubit>().checkIfNotificationIsSetForEvent(event),
-                  context.read<ScheduleViewCubit>().checkIfNotificationIsSetForCourse(event),
+                  context
+                      .read<ScheduleViewCubit>()
+                      .checkIfNotificationIsSetForEvent(event),
+                  context
+                      .read<ScheduleViewCubit>()
+                      .checkIfNotificationIsSetForCourse(event),
                 ]),
                 builder: (_, snapshot) {
                   if (snapshot.connectionState == ConnectionState.done) {
-                    bool notificationIsSetForEvent = (snapshot.data! as List<bool>)[0];
-                    bool notificationIsSetForCourse = (snapshot.data! as List<bool>)[1];
+                    bool notificationIsSetForEvent =
+                        (snapshot.data! as List<bool>)[0];
+                    bool notificationIsSetForCourse =
+                        (snapshot.data! as List<bool>)[1];
                     return Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        if (event.from.isAfter(DateTime.now())) _buildNotificationEventTiles(notificationIsSetForEvent),
+                        if (event.from.isAfter(DateTime.now()))
+                          _buildNotificationEventTiles(
+                              notificationIsSetForEvent),
                         ListTile(
                           leading: Icon(
-                              notificationIsSetForCourse ? CupertinoIcons.slash_circle : CupertinoIcons.bell_circle,
+                              notificationIsSetForCourse
+                                  ? CupertinoIcons.slash_circle
+                                  : CupertinoIcons.bell_circle,
                               color: Theme.of(context).colorScheme.onSurface),
                           title: Text(
                             notificationIsSetForCourse
                                 ? S.eventOptions.removeCourseNotifications()
                                 : S.eventOptions.addCourseNotifications(),
-                            style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+                            style: TextStyle(
+                                color: Theme.of(context).colorScheme.onSurface),
                           ),
                           onTap: () async {
                             Navigator.of(context).pop();
 
                             if (notificationIsSetForCourse) {
-                              context.read<ScheduleViewCubit>().cancelCourseNotifications(event).then(
-                                  (notificationCancelled) => notificationCancelled
-                                      ? showScaffoldMessage(context,
-                                          S.scaffoldMessages.cancelledCourseNotifications(event.course.englishName))
-                                      : showScaffoldMessage(context,
-                                          S.scaffoldMessages.cancelNotificationsFailed(event.course.englishName)));
+                              context
+                                  .read<ScheduleViewCubit>()
+                                  .cancelCourseNotifications(event)
+                                  .then((notificationCancelled) =>
+                                      notificationCancelled
+                                          ? showScaffoldMessage(
+                                              context,
+                                              S
+                                                  .scaffoldMessages
+                                                  .cancelNotificationsFailed(
+                                                      event.course.englishName))
+                                          : showScaffoldMessage(
+                                              context,
+                                              S.scaffoldMessages
+                                                  .cancelledCourseNotifications(
+                                                      event.course
+                                                          .englishName)));
                             } else {
-                              bool sucessfullyCreatedNotifications =
-                                  await context.read<ScheduleViewCubit>().createNotificationForCourse(event, context);
-                              if (!sucessfullyCreatedNotifications) {
-                                await showDialog(
-                                    useRootNavigator: false,
-                                    context: context,
-                                    builder: (_) => BlocProvider.value(
-                                          value: BlocProvider.of<AppSwitchCubit>(context),
-                                          child: const PermissionHandler(),
-                                        ));
-                              }
+                              await context
+                                  .read<ScheduleViewCubit>()
+                                  .createNotificationForCourse(event, context)
+                                  .then((allowedAndAmount) async {
+                                if ((allowedAndAmount[1] as int) != 0) {
+                                  showScaffoldMessage(
+                                      context,
+                                      S.scaffoldMessages
+                                          .createdNotificationForCourse(
+                                              event.course.englishName,
+                                              (allowedAndAmount[1] as int)));
+                                } else if (!(allowedAndAmount[0] as bool)) {
+                                  await showDialog(
+                                      useRootNavigator: false,
+                                      context: context,
+                                      builder: (_) => BlocProvider.value(
+                                            value:
+                                                BlocProvider.of<AppSwitchCubit>(
+                                                    context),
+                                            child: const PermissionHandler(),
+                                          ));
+                                }
+                              });
                             }
                           },
                         ),
@@ -97,10 +135,12 @@ class EventOptions extends StatelessWidget {
                           height: 1,
                         ),
                         ListTile(
-                          leading: Icon(CupertinoIcons.color_filter, color: Theme.of(context).colorScheme.onSurface),
+                          leading: Icon(CupertinoIcons.color_filter,
+                              color: Theme.of(context).colorScheme.onSurface),
                           title: Text(
                             S.eventOptions.changeCourseColor(),
-                            style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+                            style: TextStyle(
+                                color: Theme.of(context).colorScheme.onSurface),
                           ),
                           shape: const RoundedRectangleBorder(
                             borderRadius: BorderRadius.only(
@@ -112,13 +152,16 @@ class EventOptions extends StatelessWidget {
                             showDialog(
                               context: context,
                               builder: (_) {
-                                Color pickerColor = context.read<ScheduleViewCubit>().getColorForCourse(event);
+                                Color pickerColor =
+                                    Color(event.course.courseColor!);
                                 return AlertDialog(
-                                  title: Text(S.eventOptions.colorPickerTitle()),
+                                  title:
+                                      Text(S.eventOptions.colorPickerTitle()),
                                   content: SingleChildScrollView(
                                     child: HueRingPicker(
                                       pickerColor: pickerColor,
-                                      onColorChanged: (Color newColor) => pickerColor = newColor,
+                                      onColorChanged: (Color newColor) =>
+                                          pickerColor = newColor,
                                     ),
                                   ),
                                   actions: [
@@ -130,10 +173,16 @@ class EventOptions extends StatelessWidget {
                                       onPressed: () {
                                         context
                                             .read<ScheduleViewCubit>()
-                                            .changeCourseColor(context, event.course, pickerColor);
-                                        context.read<ScheduleViewCubit>().setLoading();
+                                            .changeCourseColor(context,
+                                                event.course, pickerColor);
+                                        context
+                                            .read<ScheduleViewCubit>()
+                                            .setLoading();
                                         showScaffoldMessage(
-                                            context, S.scaffoldMessages.updatedCourseColor(event.course.englishName));
+                                            context,
+                                            S.scaffoldMessages
+                                                .updatedCourseColor(
+                                                    event.course.englishName));
                                         Navigator.pop(context);
                                       },
                                       child: Text(S.general.done()),
@@ -163,10 +212,15 @@ class EventOptions extends StatelessWidget {
   Column _buildNotificationEventTiles(bool notificationIsSetForEvent) {
     return Column(children: [
       ListTile(
-        leading: Icon(notificationIsSetForEvent ? CupertinoIcons.bell_slash : CupertinoIcons.bell,
+        leading: Icon(
+            notificationIsSetForEvent
+                ? CupertinoIcons.bell_slash
+                : CupertinoIcons.bell,
             color: Theme.of(context).colorScheme.onSurface),
         title: Text(
-          notificationIsSetForEvent ? S.eventOptions.removeEventNotification() : S.eventOptions.addEventNotification(),
+          notificationIsSetForEvent
+              ? S.eventOptions.removeEventNotification()
+              : S.eventOptions.addEventNotification(),
           style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
         ),
         shape: const RoundedRectangleBorder(
@@ -179,24 +233,38 @@ class EventOptions extends StatelessWidget {
           Navigator.of(context).pop();
 
           if (notificationIsSetForEvent) {
-            context.read<ScheduleViewCubit>().cancelEventNotification(event).then((notificationCancelled) =>
-                notificationCancelled
+            context
+                .read<ScheduleViewCubit>()
+                .cancelEventNotification(event)
+                .then((notificationCancelled) => notificationCancelled
                     ? showScaffoldMessage(
-                        context, S.scaffoldMessages.cancelledEventNotification(event.title.capitalize()))
+                        context,
+                        S.scaffoldMessages.cancelledEventNotification(
+                            event.title.capitalize()))
                     : showScaffoldMessage(
-                        context, S.scaffoldMessages.cancelNotificationsFailed(event.title.capitalize())));
+                        context,
+                        S.scaffoldMessages.cancelNotificationsFailed(
+                            event.title.capitalize())));
           } else {
-            bool sucessfullyCreatedNotifications =
-                await context.read<ScheduleViewCubit>().createNotificationForEvent(event, context);
-            if (!sucessfullyCreatedNotifications) {
-              await showDialog(
-                  useRootNavigator: false,
-                  context: context,
-                  builder: (_) => BlocProvider.value(
-                        value: BlocProvider.of<AppSwitchCubit>(context),
-                        child: const PermissionHandler(),
-                      ));
-            }
+            await context
+                .read<ScheduleViewCubit>()
+                .createNotificationForEvent(event, context)
+                .then((successfullyCreatedNotification) async {
+              if (!successfullyCreatedNotification) {
+                await showDialog(
+                    useRootNavigator: false,
+                    context: context,
+                    builder: (_) => BlocProvider.value(
+                          value: BlocProvider.of<AppSwitchCubit>(context),
+                          child: const PermissionHandler(),
+                        ));
+              } else {
+                showScaffoldMessage(
+                    context,
+                    S.scaffoldMessages
+                        .createdNotificationForEvent(event.title.capitalize()));
+              }
+            });
           }
         },
       ),

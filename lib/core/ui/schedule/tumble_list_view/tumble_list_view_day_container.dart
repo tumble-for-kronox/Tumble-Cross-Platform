@@ -10,13 +10,16 @@ import 'package:tumble/core/ui/schedule/tumble_list_view/tumble_list_view_schedu
 
 class TumbleListViewDayContainer extends StatefulWidget {
   final Day day;
-  const TumbleListViewDayContainer({Key? key, required this.day}) : super(key: key);
+  const TumbleListViewDayContainer({Key? key, required this.day})
+      : super(key: key);
 
   @override
-  State<TumbleListViewDayContainer> createState() => _TumbleListViewDayContainerState();
+  State<TumbleListViewDayContainer> createState() =>
+      _TumbleListViewDayContainerState();
 }
 
-class _TumbleListViewDayContainerState extends State<TumbleListViewDayContainer> {
+class _TumbleListViewDayContainerState
+    extends State<TumbleListViewDayContainer> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -29,7 +32,9 @@ class _TumbleListViewDayContainerState extends State<TumbleListViewDayContainer>
               Text(
                   "${DateFormat.EEEE(Localizations.localeOf(context).languageCode).format(widget.day.isoString).capitalize()} ${DateFormat("d/M", Localizations.localeOf(context).languageCode).format(widget.day.isoString)}",
                   style: TextStyle(
-                      color: Theme.of(context).colorScheme.onBackground, fontSize: 18, fontWeight: FontWeight.w400)),
+                      color: Theme.of(context).colorScheme.onBackground,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w400)),
               Expanded(
                   child: Divider(
                 color: Theme.of(context).colorScheme.onBackground,
@@ -44,14 +49,16 @@ class _TumbleListViewDayContainerState extends State<TumbleListViewDayContainer>
             child: Column(
               children: widget.day.events
                   .map((event) => GestureDetector(
-                        onLongPress: () => EventOptions.showEventOptions(context, event),
+                        onLongPress: () =>
+                            EventOptions.showEventOptions(context, event),
                         child: ScheduleCard(
                             event: event,
                             color: event.isSpecial
                                 ? Colors.redAccent
-                                : context.read<ScheduleViewCubit>().getColorForCourse(event),
-                            onTap: () => TumbleEventModal.showBookmarkEventModal(
-                                context, event, context.read<ScheduleViewCubit>().getColorForCourse(event))),
+                                : Color(event.course.courseColor!),
+                            onTap: () =>
+                                TumbleEventModal.showBookmarkEventModal(context,
+                                    event, Color(event.course.courseColor!))),
                       ))
                   .toList(),
             ),

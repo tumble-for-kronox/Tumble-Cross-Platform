@@ -56,7 +56,6 @@ class AppSwitchCubit extends Cubit<AppSwitchState> {
     if (state.status == AppSwitchStatus.INITIALIZED) {
       /// Clear local db
       _databaseService.removeAll();
-      _databaseService.removeAllCachedCourseColors();
       _notificationService.cancelAllNotifications();
       return;
     } else if (state.status == AppSwitchStatus.UNINITIALIZED) {

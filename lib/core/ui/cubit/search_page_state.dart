@@ -2,9 +2,23 @@
 
 part of 'search_page_cubit.dart';
 
-enum SearchPageStatus { INITIAL, LOADING, FOUND, NO_SCHEDULES, ERROR, DISPLAY_PREVIEW }
+enum SearchPageStatus {
+  INITIAL,
+  LOADING,
+  FOUND,
+  NO_SCHEDULES,
+  ERROR,
+  DISPLAY_PREVIEW
+}
 
-enum PreviewFetchStatus { INITIAL, LOADING, CACHED_SCHEDULE, FETCHED_SCHEDULE, FETCH_ERROR, EMPTY_SCHEDULE }
+enum PreviewFetchStatus {
+  INITIAL,
+  LOADING,
+  CACHED_SCHEDULE,
+  FETCHED_SCHEDULE,
+  FETCH_ERROR,
+  EMPTY_SCHEDULE
+}
 
 class SearchPageState extends Equatable {
   final SearchPageStatus searchPageStatus;
@@ -15,11 +29,11 @@ class SearchPageState extends Equatable {
   final String? errorDescription;
   final List<Item>? programList;
   final bool? previewToTopButtonVisible;
-  final ScheduleModelAndCourses? previewScheduleModelAndCourses;
   final List<Day>? previewListOfDays;
   final bool? previewToggledFavorite;
   final String? previewCurrentScheduleId;
   final bool hasBookmarkedSchedules;
+  final ScheduleModel? scheduleModel;
 
   const SearchPageState(
       {required this.focused,
@@ -29,12 +43,12 @@ class SearchPageState extends Equatable {
       required this.errorMessage,
       required this.programList,
       required this.previewToTopButtonVisible,
-      required this.previewScheduleModelAndCourses,
       required this.previewListOfDays,
       required this.previewToggledFavorite,
       required this.previewCurrentScheduleId,
       required this.errorDescription,
-      required this.hasBookmarkedSchedules});
+      required this.hasBookmarkedSchedules,
+      required this.scheduleModel});
 
   SearchPageState copyWith(
           {bool? focused,
@@ -44,13 +58,13 @@ class SearchPageState extends Equatable {
           String? errorMessage,
           List<Item>? programList,
           bool? previewToTopButtonVisible,
-          ScheduleModelAndCourses? previewScheduleModelAndCourses,
           List<Day>? previewListOfDays,
           List<Week>? previewListOfWeeks,
           bool? previewToggledFavorite,
           String? previewCurrentScheduleId,
           String? errorDescription,
-          bool? hasBookmarkedSchedules}) =>
+          bool? hasBookmarkedSchedules,
+          ScheduleModel? scheduleModel}) =>
       SearchPageState(
           focused: focused ?? this.focused,
           searchPageStatus: searchPageStatus ?? this.searchPageStatus,
@@ -58,13 +72,17 @@ class SearchPageState extends Equatable {
           clearButtonVisible: clearButtonVisible ?? this.clearButtonVisible,
           errorMessage: errorMessage ?? this.errorMessage,
           programList: programList ?? this.programList,
-          previewToTopButtonVisible: previewToTopButtonVisible ?? this.previewToTopButtonVisible,
-          previewScheduleModelAndCourses: previewScheduleModelAndCourses ?? this.previewScheduleModelAndCourses,
+          previewToTopButtonVisible:
+              previewToTopButtonVisible ?? this.previewToTopButtonVisible,
           previewListOfDays: previewListOfDays ?? this.previewListOfDays,
-          previewToggledFavorite: previewToggledFavorite ?? this.previewToggledFavorite,
-          previewCurrentScheduleId: previewCurrentScheduleId ?? this.previewCurrentScheduleId,
+          previewToggledFavorite:
+              previewToggledFavorite ?? this.previewToggledFavorite,
+          previewCurrentScheduleId:
+              previewCurrentScheduleId ?? this.previewCurrentScheduleId,
           errorDescription: errorDescription ?? this.errorDescription,
-          hasBookmarkedSchedules: hasBookmarkedSchedules ?? this.hasBookmarkedSchedules);
+          hasBookmarkedSchedules:
+              hasBookmarkedSchedules ?? this.hasBookmarkedSchedules,
+          scheduleModel: scheduleModel ?? this.scheduleModel);
 
   @override
   List<Object?> get props => [
@@ -75,11 +93,11 @@ class SearchPageState extends Equatable {
         searchPageStatus,
         previewFetchStatus,
         previewToTopButtonVisible,
-        previewScheduleModelAndCourses,
         previewListOfDays,
         previewToggledFavorite,
         previewCurrentScheduleId,
         errorDescription,
-        hasBookmarkedSchedules
+        hasBookmarkedSchedules,
+        scheduleModel
       ];
 }

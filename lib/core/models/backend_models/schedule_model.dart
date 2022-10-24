@@ -1,9 +1,13 @@
 // To parse this JSON data, do
 //
 //     final scheduleModel = scheduleModelFromJson(jsonString);
+import 'dart:ui';
+
 import 'package:html_unescape/html_unescape.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'dart:convert';
+
+import 'package:tumble/core/theme/color_picker.dart';
 
 part 'schedule_model.freezed.dart';
 part 'schedule_model.g.dart';
@@ -14,7 +18,7 @@ ScheduleModel scheduleModelFromJson(String str) =>
 Map<String, dynamic> scheduleModelToJson(ScheduleModel data) => data.toJson();
 
 @freezed
-abstract class ScheduleModel with _$ScheduleModel {
+class ScheduleModel with _$ScheduleModel {
   const factory ScheduleModel({
     required DateTime cachedAt,
     required String id,
@@ -26,7 +30,7 @@ abstract class ScheduleModel with _$ScheduleModel {
 }
 
 @freezed
-abstract class Day with _$Day {
+class Day with _$Day {
   const factory Day({
     required String name,
     required String date,
@@ -47,7 +51,7 @@ abstract class Day with _$Day {
 }
 
 @freezed
-abstract class Event with _$Event {
+class Event with _$Event {
   const factory Event({
     required String id,
     required String title,
@@ -78,18 +82,23 @@ abstract class Event with _$Event {
 }
 
 @freezed
-abstract class Course with _$Course {
+class Course with _$Course {
   factory Course({
     required String id,
     required String swedishName,
     required String englishName,
+    int? courseColor,
   }) = _Course;
 
-  factory Course.fromJson(Map<String, dynamic> json) => _$CourseFromJson(json);
+  factory Course.fromJson(Map<String, dynamic> json) => _$_Course(
+      id: json['id'] as String,
+      swedishName: json['swedishName'] as String,
+      englishName: json['englishName'] as String,
+      courseColor: json['courseColor']);
 }
 
 @freezed
-abstract class Location with _$Location {
+class Location with _$Location {
   const factory Location({
     required String id,
     required String name,
@@ -103,7 +112,7 @@ abstract class Location with _$Location {
 }
 
 @freezed
-abstract class Teacher with _$Teacher {
+class Teacher with _$Teacher {
   const factory Teacher({
     required String id,
     required String firstName,

@@ -2,20 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:tumble/core/models/backend_models/schedule_model.dart';
 
-Future<EventsDataSource> getCalendarDataSource(List<Day> days, Function getColorForCourse) async {
+Future<EventsDataSource> getCalendarDataSource(
+    List<Day> days) async {
   List<Event> appointments = <Event>[];
   for (Day day in days) {
     for (Event event in day.events) {
       appointments.add(event);
     }
   }
-  return EventsDataSource(appointments, getColorForCourse);
+  return EventsDataSource(appointments);
 }
 
 class EventsDataSource extends CalendarDataSource {
-  Function getColorForCourse;
-
-  EventsDataSource(List<Event> source, this.getColorForCourse) {
+  EventsDataSource(List<Event> source) {
     appointments = source;
   }
 
@@ -41,6 +40,8 @@ class EventsDataSource extends CalendarDataSource {
 
   @override
   Color getColor(int index) {
-    return appointments![index].isSpecial ? Colors.redAccent : getColorForCourse(appointments![index]);
+    return appointments![index].isSpecial
+        ? Colors.redAccent
+        : Color(appointments![index].course.courseColor);
   }
 }
