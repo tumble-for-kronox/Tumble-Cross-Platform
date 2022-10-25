@@ -11,7 +11,6 @@ import 'package:tumble/core/api/dependency_injection/get_it.dart';
 class DatabaseRepository implements IDatabaseService {
   final _scheduleStore = intMapStoreFactory.store(AccessStores.SCHEDULE_STORE);
   final _userStore = intMapStoreFactory.store(AccessStores.USER_STORE);
-  final _courseColorStore = intMapStoreFactory.store(AccessStores.COURSE_COLOR_STORE);
 
   Future<Database> get _db async => await getIt<AppDatabase>().database;
 
@@ -26,10 +25,6 @@ class DatabaseRepository implements IDatabaseService {
       case AccessStores.USER_STORE:
         final finder = Finder(filter: Filter.equals('id', id));
         await _userStore.delete(await _db, finder: finder);
-        break;
-      case AccessStores.COURSE_COLOR_STORE:
-        final finder = Finder(filter: Filter.equals('scheduleId', id));
-        await _courseColorStore.delete(await _db, finder: finder);
         break;
       case AccessStores.SCHEDULE_STORE:
         final finder = Finder(filter: Filter.equals('id', id));
@@ -55,8 +50,6 @@ class DatabaseRepository implements IDatabaseService {
     final recordSnapshots = await _scheduleStore.find(await _db);
     return recordSnapshots.map((snapshot) => ScheduleModel.fromJson(snapshot.value)).toList();
   }
-
-  /* ------------------- Repository specific methods ---------------------- */
 
   @override
   Future<ScheduleModel?> getOneSchedule(String id) async {
