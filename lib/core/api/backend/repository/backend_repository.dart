@@ -301,7 +301,6 @@ class BackendRepository implements IBackendService {
     final Map<String, dynamic> data = {Endpoints.username: username, Endpoints.password: password};
     Uri uri = Uri.https(Endpoints.baseUrl, Endpoints.postUserLogin,
         {Endpoints.school: school}.map((key, value) => MapEntry(key, value.toString())));
-    log(uri.toString());
     return await _dioHandle
         .postUri(uri, data: jsonEncode(data), options: Options(validateStatus: (_) => true))
         .then((response) {

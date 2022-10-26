@@ -14,7 +14,6 @@ class TumbleWeekEventTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final courseColor = context.read<ScheduleViewCubit>().getColorForCourse(event);
     return Container(
       height: 35,
       margin: const EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 5),
@@ -37,15 +36,19 @@ class TumbleWeekEventTile extends StatelessWidget {
           child: MaterialButton(
             padding: const EdgeInsets.all(0),
             onPressed: () => TumbleEventModal.showBookmarkEventModal(
-                context, event, context.read<ScheduleViewCubit>().getColorForCourse(event)),
+                context, event, Color(event.course.courseColor!)),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Container(
                   width: 5,
                   decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.only(topLeft: Radius.circular(2), bottomLeft: Radius.circular(2)),
-                    color: event.isSpecial ? Colors.redAccent : courseColor,
+                    borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(2),
+                        bottomLeft: Radius.circular(2)),
+                    color: event.isSpecial
+                        ? Colors.redAccent
+                        : Color(event.course.courseColor!),
                   ),
                 ),
                 Container(
@@ -58,7 +61,9 @@ class TumbleWeekEventTile extends StatelessWidget {
                         height: 5,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: event.isSpecial ? Colors.redAccent : courseColor,
+                          color: event.isSpecial
+                              ? Colors.redAccent
+                              : Color(event.course.courseColor!),
                         ),
                       ),
                       const SizedBox(width: 6),

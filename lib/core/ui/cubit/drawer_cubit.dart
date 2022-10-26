@@ -71,7 +71,6 @@ class DrawerCubit extends Cubit<DrawerState> {
     _preferenceService.setBookmarks(bookmarkScheduleModels.map((bookmark) => jsonEncode(bookmark)).toList());
 
     await _databaseService.remove(id, AccessStores.SCHEDULE_STORE);
-    await _databaseService.remove(id, AccessStores.COURSE_COLOR_STORE);
 
     emit(state.copyWith(bookmarks: bookmarkScheduleModels, mapOfIdToggles: {
       for (var bookmark in _preferenceService.bookmarkScheduleModels) bookmark.scheduleId: bookmark.toggledValue

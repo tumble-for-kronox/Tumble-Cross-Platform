@@ -9,7 +9,6 @@ import 'package:tumble/core/api/dependency_injection/get_it.dart';
 import 'package:tumble/core/models/backend_models/kronox_user_model.dart';
 import 'package:tumble/core/theme/color_picker.dart';
 import 'package:tumble/core/models/backend_models/schedule_model.dart';
-import 'package:tumble/core/models/ui_models/course_ui_model.dart';
 import 'package:tumble/core/models/ui_models/school_model.dart';
 import 'package:tumble/core/models/ui_models/week_model.dart';
 import 'package:tumble/core/ui/bottom_nav_bar/data/nav_bar_items.dart';
@@ -19,23 +18,7 @@ import 'package:tumble/core/ui/app_switch/data/schools.dart';
 import '../api/backend/response_types/user_response.dart';
 
 extension ScheduleParsing on ScheduleModel {
-  Future<List<CourseUiModel?>> findNewCourses(String scheduleId) async {
-    DatabaseRepository databaseService = getIt<DatabaseRepository>();
-
-    List<String> seen = [];
-    seen.addAll((await databaseService.getCachedCoursesFromId(scheduleId)).map((e) => e.courseId));
-    List<CourseUiModel?> courseUiModels = (days.expand((element) => element.events).toList())
-        .map((event) {
-          final courseId = event.course.id;
-          if (!seen.contains(courseId)) {
-            seen.add(courseId);
-            return CourseUiModel(scheduleId: id, courseId: courseId, color: ColorPicker().getRandomHexColor());
-          }
-        })
-        .whereType<CourseUiModel>()
-        .toList();
-    return courseUiModels;
-  }
+  
 
   bool isNotPhonySchedule() {
     return days.any((element) => element.events.isNotEmpty);
@@ -67,7 +50,8 @@ extension StringParse on String {
 }
 
 extension GetSchoolFromString on Schools {
-  School fromString(String s) => Schools.schools.where((school) => school.schoolName == s).single;
+  School fromString(String s) =>
+      Schools.schools.where((school) => school.schoolName == s).single;
 }
 
 extension GetContrastColor on Color {
@@ -84,7 +68,9 @@ extension SplitToWeek on List<Day> {
   List<Week> splitToWeek() {
     return groupBy(this, (Day day) => day.weekNumber)
         .entries
-        .map((weekNumberToDayList) => Week(weekNumber: weekNumberToDayList.key, days: weekNumberToDayList.value))
+        .map((weekNumberToDayList) => Week(
+            weekNumber: weekNumberToDayList.key,
+            days: weekNumberToDayList.value))
         .toList();
   }
 }
@@ -116,8 +102,10 @@ extension ListCopyAndUpdate on List<bool> {
 
 extension AutoRefreshSessionUserResp on UserResponse {
   Future<UserResponse> autoRefreshSession(
-      Future<UserResponse> Function(String refreshToken) refreshSession, KronoxUserModel session) async {
-    if (status != ApiUserResponseStatus.COMPLETED || status != ApiUserResponseStatus.AUTHORIZED) {
+      Future<UserResponse> Function(String refreshToken) refreshSession,
+      KronoxUserModel session) async {
+    if (status != ApiUserResponseStatus.COMPLETED ||
+        status != ApiUserResponseStatus.AUTHORIZED) {
       log(name: 'auto_refresh', 'Logging user in again...');
       return await refreshSession(session.refreshToken);
     }
@@ -128,7 +116,8 @@ extension AutoRefreshSessionUserResp on UserResponse {
 
 extension AutoRefreshSessionBookingResp on BookingResponse {
   Future<UserResponse> autoRefreshSession(
-      Future<UserResponse> Function(String refreshToken) refreshSession, KronoxUserModel session) async {
+      Future<UserResponse> Function(String refreshToken) refreshSession,
+      KronoxUserModel session) async {
     if (status != ApiBookingResponseStatus.SUCCESS) {
       log(name: 'auto_refresh', 'Logging user in again...');
       return await refreshSession(session.refreshToken);
@@ -139,15 +128,19 @@ extension AutoRefreshSessionBookingResp on BookingResponse {
 }
 
 extension FilterSetNotifications on AwesomeNotifications {
-  Future<List<NotificationModel>> getAllNotificationsFromChannels(List<String> channels) async {
+  Future<List<NotificationModel>> getAllNotificationsFromChannels(
+      List<String> channels) async {
     return (await listScheduledNotifications())
-        .where((notification) => channels.contains(notification.content!.channelKey!))
+        .where((notification) =>
+            channels.contains(notification.content!.channelKey!))
         .toList();
   }
 
-  Future<List<NotificationModel>> getAllNotificationsExceptFromChannels(List<String> channels) async {
+  Future<List<NotificationModel>> getAllNotificationsExceptFromChannels(
+      List<String> channels) async {
     return (await listScheduledNotifications())
-        .where((notification) => !channels.contains(notification.content!.channelKey!))
+        .where((notification) =>
+            !channels.contains(notification.content!.channelKey!))
         .toList();
   }
 }
