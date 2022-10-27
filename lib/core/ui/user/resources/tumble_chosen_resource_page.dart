@@ -164,7 +164,7 @@ class TumbleChosenResourcePage extends StatelessWidget {
   Widget _lowerSectionLoaded(BuildContext context, ResourceState state) {
     return SingleChildScrollView(
       child: Column(
-        mainAxisSize: MainAxisSize.min,
+        mainAxisSize: MainAxisSize.max,
         children: [
           TimeStampContainer(
             cards: (state.availableTimeSlots!

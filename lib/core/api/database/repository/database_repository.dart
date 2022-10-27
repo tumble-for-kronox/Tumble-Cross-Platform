@@ -11,6 +11,7 @@ import 'package:tumble/core/api/dependency_injection/get_it.dart';
 class DatabaseRepository implements IDatabaseService {
   final _scheduleStore = intMapStoreFactory.store(AccessStores.SCHEDULE_STORE);
   final _userStore = intMapStoreFactory.store(AccessStores.USER_STORE);
+  final String _id = 'id';
 
   Future<Database> get _db async => await getIt<AppDatabase>().database;
 
@@ -23,11 +24,11 @@ class DatabaseRepository implements IDatabaseService {
   Future<void> remove(String id, String accessStores) async {
     switch (accessStores) {
       case AccessStores.USER_STORE:
-        final finder = Finder(filter: Filter.equals('id', id));
+        final finder = Finder(filter: Filter.equals(_id, id));
         await _userStore.delete(await _db, finder: finder);
         break;
       case AccessStores.SCHEDULE_STORE:
-        final finder = Finder(filter: Filter.equals('id', id));
+        final finder = Finder(filter: Filter.equals(_id, id));
         await _scheduleStore.delete(await _db, finder: finder);
         break;
     }
@@ -35,7 +36,7 @@ class DatabaseRepository implements IDatabaseService {
 
   @override
   Future<void> update(dynamic scheduleModel) async {
-    final finder = Finder(filter: Filter.equals("id", scheduleModel.id));
+    final finder = Finder(filter: Filter.equals(_id, scheduleModel.id));
     (await _scheduleStore.update(await _db, scheduleModel.toJson(), finder: finder));
   }
 
@@ -53,7 +54,7 @@ class DatabaseRepository implements IDatabaseService {
 
   @override
   Future<ScheduleModel?> getOneSchedule(String id) async {
-    final finder = Finder(filter: Filter.equals('id', id));
+    final finder = Finder(filter: Filter.equals(_id, id));
     final recordSnapshot = await _scheduleStore.findFirst(await _db, finder: finder);
     if (recordSnapshot != null) {
       return ScheduleModel.fromJson(recordSnapshot.value);
