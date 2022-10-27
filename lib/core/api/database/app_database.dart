@@ -89,6 +89,10 @@ class AppDatabase {
           log(name: 'app_database', 'Udpated database on version change to version $newVersion');
         }
       }
+      await intMapStoreFactory
+          .store('course_colors')
+          .delete(db)
+          .then((value) => log(name: 'app_database', 'Deleted old course color system'));
     }
   }
 }
