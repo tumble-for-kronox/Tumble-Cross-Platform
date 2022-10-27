@@ -69,6 +69,7 @@ class DrawerCubit extends Cubit<DrawerState> {
     bookmarkScheduleModels.removeWhere((bookmark) => bookmark.scheduleId == id);
 
     _preferenceService.setBookmarks(bookmarkScheduleModels.map((bookmark) => jsonEncode(bookmark)).toList());
+    _notificationService.removeChannel(id);
 
     await _databaseService.remove(id, AccessStores.SCHEDULE_STORE);
 
