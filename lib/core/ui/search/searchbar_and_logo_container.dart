@@ -52,7 +52,7 @@ class _SearchBarAndLogoContainerState extends State<SearchBarAndLogoContainer> {
                             return Container();
                           }
                           return Container(
-                            padding: const EdgeInsets.only(top: 185),
+                            padding: EdgeInsets.only(top: MediaQuery.of(context).size.height - 680),
                             child: Stack(
                               children: [
                                 Padding(

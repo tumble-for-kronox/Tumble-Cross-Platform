@@ -2,8 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
-import 'package:tumble/core/api/backend/response_types/schedule_or_programme_response.dart'
-    as api;
+import 'package:tumble/core/api/backend/response_types/schedule_or_programme_response.dart' as api;
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -37,8 +36,7 @@ class SearchPageCubit extends Cubit<SearchPageState> {
             previewToggledFavorite: false,
             previewCurrentScheduleId: null,
             errorDescription: null,
-            hasBookmarkedSchedules:
-                getIt<PreferenceRepository>().bookmarkIds!.isNotEmpty,
+            hasBookmarkedSchedules: getIt<PreferenceRepository>().bookmarkIds!.isNotEmpty,
             scheduleModel: null)) {
     _init();
   }
@@ -52,14 +50,11 @@ class SearchPageCubit extends Cubit<SearchPageState> {
   final _preferenceService = getIt<PreferenceRepository>();
 
   ScrollController get controller => _listViewScrollController;
-  TextEditingController get textEditingControllerSearch =>
-      _textEditingControllerSearch;
+  TextEditingController get textEditingControllerSearch => _textEditingControllerSearch;
   FocusNode get focusNode => _focusNode;
-  bool get scheduleInBookmarks => _preferenceService
-      .bookmarksContainSchedule(state.previewCurrentScheduleId!);
+  bool get scheduleInBookmarks => _preferenceService.bookmarksContainSchedule(state.previewCurrentScheduleId!);
   String get defaultSchool => _preferenceService.defaultSchool!;
-  bool get hasBookMarkedSchedules =>
-      getIt<PreferenceRepository>().bookmarkIds!.isNotEmpty;
+  bool get hasBookMarkedSchedules => getIt<PreferenceRepository>().bookmarkIds!.isNotEmpty;
 
   Future<void> _init() async {
     _focusNode.addListener((setSearchBarFocused));
@@ -97,8 +92,7 @@ class SearchPageCubit extends Cubit<SearchPageState> {
                     course: () {
                       /// Dynamically assign course colors
                       if (!courses.containsKey(event.course.id)) {
-                        courses[event.course.id] =
-                            ColorPicker().getRandomHexColor();
+                        courses[event.course.id] = ColorPicker().getRandomHexColor();
                         return Course(
                             id: event.course.id,
                             swedishName: event.course.swedishName,
@@ -144,12 +138,9 @@ class SearchPageCubit extends Cubit<SearchPageState> {
 
               /// Store schedule model with colors assigned in state
               scheduleModel: ScheduleModel(
-                  cachedAt: currentScheduleModel.cachedAt,
-                  id: currentScheduleModel.id,
-                  days: listOfDays)));
+                  cachedAt: currentScheduleModel.cachedAt, id: currentScheduleModel.id, days: listOfDays)));
         } else {
-          emit(state.copyWith(
-              previewFetchStatus: PreviewFetchStatus.EMPTY_SCHEDULE));
+          emit(state.copyWith(previewFetchStatus: PreviewFetchStatus.EMPTY_SCHEDULE));
         }
         break;
 
@@ -174,8 +165,7 @@ class SearchPageCubit extends Cubit<SearchPageState> {
         }
         break;
       case api.ScheduleOrProgrammeStatus.ERROR:
-        emit(
-            state.copyWith(previewFetchStatus: PreviewFetchStatus.FETCH_ERROR));
+        emit(state.copyWith(previewFetchStatus: PreviewFetchStatus.FETCH_ERROR));
         break;
       default:
         emit(state);
@@ -185,16 +175,13 @@ class SearchPageCubit extends Cubit<SearchPageState> {
 
   Future<void> searchSchedule() async {
     String query = textEditingControllerSearch.text;
-    ScheduleOrProgrammeResponse apiResponse =
-        await _cacheService.searchProgram(query);
+    ScheduleOrProgrammeResponse apiResponse = await _cacheService.searchProgram(query);
 
     if (state.focused) {
       switch (apiResponse.status) {
         case ScheduleOrProgrammeStatus.FETCHED:
           ProgramModel program = apiResponse.data as ProgramModel;
-          emit(state.copyWith(
-              searchPageStatus: SearchPageStatus.FOUND,
-              programList: program.items));
+          emit(state.copyWith(searchPageStatus: SearchPageStatus.FOUND, programList: program.items));
           break;
         case ScheduleOrProgrammeStatus.ERROR:
           emit(state.copyWith(
@@ -236,8 +223,7 @@ class SearchPageCubit extends Cubit<SearchPageState> {
   setSearchBarFocused() {
     if (_focusNode.hasFocus) {
       emit(state.copyWith(clearButtonVisible: true, focused: true));
-    } else if (!_focusNode.hasFocus &&
-        _textEditingControllerSearch.text.trim().isEmpty) {
+    } else if (!_focusNode.hasFocus && _textEditingControllerSearch.text.trim().isEmpty) {
       emit(state.copyWith(
           clearButtonVisible: false,
           focused: false,
@@ -247,8 +233,7 @@ class SearchPageCubit extends Cubit<SearchPageState> {
   }
 
   void scrollToTop() {
-    _listViewScrollController.animateTo(0,
-        duration: const Duration(seconds: 1), curve: Curves.easeInOut);
+    _listViewScrollController.animateTo(0, duration: const Duration(seconds: 1), curve: Curves.easeInOut);
   }
 
   void displayPreview() {
@@ -260,51 +245,37 @@ class SearchPageCubit extends Cubit<SearchPageState> {
     /// to courseColor parameter of each Course in Schedule Model
     _databaseService.add(state.scheduleModel!);
 
-    List<BookmarkedScheduleModel> bookmarkScheduleModels =
-        _preferenceService.bookmarkScheduleModels;
-    bookmarkScheduleModels.add(BookmarkedScheduleModel(
-        scheduleId: state.previewCurrentScheduleId!, toggledValue: true));
-    await _preferenceService.setBookmarks(bookmarkScheduleModels
-        .map((bookmark) => jsonEncode(bookmark))
-        .toList());
+    List<BookmarkedScheduleModel> bookmarkScheduleModels = _preferenceService.bookmarkScheduleModels;
+    bookmarkScheduleModels
+        .add(BookmarkedScheduleModel(scheduleId: state.previewCurrentScheduleId!, toggledValue: true));
+    await _preferenceService.setBookmarks(bookmarkScheduleModels.map((bookmark) => jsonEncode(bookmark)).toList());
 
     /// Rebuild notification channels
     _notificationService.initialize();
 
     emit(state.copyWith(
-        previewToggledFavorite: true,
-        hasBookmarkedSchedules:
-            getIt<PreferenceRepository>().bookmarkIds!.isNotEmpty));
+        previewToggledFavorite: true, hasBookmarkedSchedules: getIt<PreferenceRepository>().bookmarkIds!.isNotEmpty));
     log(name: 'search_page_cubit', 'Finished executing bookmark SAVE');
   }
 
   unBookmarkSchedule() async {
-    final List<BookmarkedScheduleModel> bookmarkScheduleModels =
-        _preferenceService.bookmarkScheduleModels;
+    final List<BookmarkedScheduleModel> bookmarkScheduleModels = _preferenceService.bookmarkScheduleModels;
 
-    bookmarkScheduleModels.removeWhere(
-        (bookmark) => bookmark.scheduleId == state.previewCurrentScheduleId);
-    await _preferenceService.setBookmarks(bookmarkScheduleModels
-        .map((bookmark) => jsonEncode(bookmark))
-        .toList());
-    await _databaseService.remove(
-        state.previewCurrentScheduleId!, AccessStores.SCHEDULE_STORE);
+    bookmarkScheduleModels.removeWhere((bookmark) => bookmark.scheduleId == state.previewCurrentScheduleId);
+    await _preferenceService.setBookmarks(bookmarkScheduleModels.map((bookmark) => jsonEncode(bookmark)).toList());
+    await _databaseService.remove(state.previewCurrentScheduleId!, AccessStores.SCHEDULE_STORE);
 
     _notificationService.removeChannel(state.previewCurrentScheduleId!);
 
     emit(state.copyWith(
-        previewToggledFavorite: false,
-        hasBookmarkedSchedules:
-            getIt<PreferenceRepository>().bookmarkIds!.isNotEmpty));
+        previewToggledFavorite: false, hasBookmarkedSchedules: getIt<PreferenceRepository>().bookmarkIds!.isNotEmpty));
     log(name: 'search_page_cubit', 'Finished executing bookmark REMOVE');
   }
 
   List<String> updateBookmarkView() {
-    emit(state.copyWith(
-        hasBookmarkedSchedules: _preferenceService.bookmarkIds!.isNotEmpty));
+    emit(state.copyWith(hasBookmarkedSchedules: _preferenceService.bookmarkIds!.isNotEmpty));
     return _preferenceService.bookmarkIds!;
   }
 
-  void resetPreviewButton() =>
-      emit(state.copyWith(previewToggledFavorite: false));
+  void resetPreviewButton() => emit(state.copyWith(previewToggledFavorite: false));
 }
