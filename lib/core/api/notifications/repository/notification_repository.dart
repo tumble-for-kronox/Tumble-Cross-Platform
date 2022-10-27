@@ -14,7 +14,6 @@ import 'package:tumble/core/api/dependency_injection/get_it.dart';
 
 class NotificationRepository implements INotificationService {
   final _notificationServiceBuilder = NotificationServiceBuilder();
-  final _databaseService = getIt<DatabaseRepository>();
   final _awesomeNotifications = getIt<AwesomeNotifications>();
   final _preferenceService = getIt<PreferenceRepository>();
   final String _defaultIcon = "resource://drawable/res_tumble_app_logo";
@@ -171,7 +170,9 @@ class NotificationRepository implements INotificationService {
   Future<bool> allowedNotifications() async => _awesomeNotifications.isNotificationAllowed();
 
   @override
-  Future<void> removeChannel(String channel) async => await _awesomeNotifications.removeChannel(channel);
+  Future<void> removeChannel(String channel) async => await _awesomeNotifications
+      .removeChannel(channel)
+      .then((value) => _awesomeNotifications.cancelNotificationsByChannelKey(channel));
 
   @override
   Future<void> cancelBookingNotification(int bookingId) async => await _awesomeNotifications.cancel(bookingId);

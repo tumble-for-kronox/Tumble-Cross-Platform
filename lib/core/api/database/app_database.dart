@@ -40,6 +40,7 @@ class AppDatabase {
   }
 
   Future<void> _updateDatabase(db, oldVersion, newVersion) async {
+    log(oldVersion.toString());
     Map<String, int> courses = {};
     if (oldVersion < 2) {
       List<String>? bookmarks = getIt<PreferenceRepository>().bookmarkIds;
@@ -47,45 +48,48 @@ class AppDatabase {
         for (String id in bookmarks) {
           final finder = Finder(filter: Filter.equals("id", id));
           final recordSnapshot = await _scheduleStore.findFirst(db, finder: finder);
-          final ScheduleModel scheduleModel = ScheduleModel.fromJson(recordSnapshot!.value);
-          final ScheduleModel newScheduleModel = ScheduleModel(
-              cachedAt: scheduleModel.cachedAt,
-              id: scheduleModel.id,
-              days: scheduleModel.days
-                  .map((day) => Day(
-                      name: day.name,
-                      date: day.date,
-                      isoString: day.isoString,
-                      weekNumber: day.weekNumber,
-                      events: day.events
-                          .map((event) => Event(
-                              id: event.id,
-                              title: event.title,
-                              course: () {
-                                /// Dynamically assign course colors
-                                if (!courses.containsKey(event.course.id)) {
-                                  courses[event.course.id] = ColorPicker().getRandomHexColor();
+          if (recordSnapshot != null) {
+            final ScheduleModel scheduleModel = ScheduleModel.fromJson(recordSnapshot.value);
+            final ScheduleModel newScheduleModel = ScheduleModel(
+                cachedAt: scheduleModel.cachedAt,
+                id: scheduleModel.id,
+                days: scheduleModel.days
+                    .map((day) => Day(
+                        name: day.name,
+                        date: day.date,
+                        isoString: day.isoString,
+                        weekNumber: day.weekNumber,
+                        events: day.events
+                            .map((event) => Event(
+                                id: event.id,
+                                title: event.title,
+                                course: () {
+                                  /// Dynamically assign course colors
+                                  if (!courses.containsKey(event.course.id)) {
+                                    courses[event.course.id] = ColorPicker().getRandomHexColor();
+                                    return Course(
+                                        id: event.course.id,
+                                        swedishName: event.course.swedishName,
+                                        englishName: event.course.englishName,
+                                        courseColor: courses[event.course.id]);
+                                  }
                                   return Course(
                                       id: event.course.id,
                                       swedishName: event.course.swedishName,
                                       englishName: event.course.englishName,
                                       courseColor: courses[event.course.id]);
-                                }
-                                return Course(
-                                    id: event.course.id,
-                                    swedishName: event.course.swedishName,
-                                    englishName: event.course.englishName,
-                                    courseColor: courses[event.course.id]);
-                              }(),
-                              from: event.from,
-                              to: event.to,
-                              locations: event.locations,
-                              teachers: event.teachers,
-                              isSpecial: event.isSpecial,
-                              lastModified: event.lastModified))
-                          .toList()))
-                  .toList());
-          (await _scheduleStore.update(db, newScheduleModel.toJson(), finder: finder));
+                                }(),
+                                from: event.from,
+                                to: event.to,
+                                locations: event.locations,
+                                teachers: event.teachers,
+                                isSpecial: event.isSpecial,
+                                lastModified: event.lastModified))
+                            .toList()))
+                    .toList());
+            (await _scheduleStore.update(db, newScheduleModel.toJson(), finder: finder));
+          }
+
           log(name: 'app_database', 'Udpated database on version change to version $newVersion');
         }
       }

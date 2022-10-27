@@ -39,26 +39,34 @@ class CacheRepository implements ICacheService {
     if (bookmarksContainsThisScheduleId) {
       final ScheduleModel? userCachedSchedule = await _getCachedSchedule(scheduleId);
 
-      /// If the schedule for some reason is not found in the database,
-      /// or if the schedule is more than 30 minutes old
-      if (userCachedSchedule == null ||
-          DateTime.now().subtract(Constants.updateOffset).isAfter(userCachedSchedule.cachedAt.toLocal())) {
+      if (userCachedSchedule == null) {
+        /// Try to fetch new version of schedule if the cache is empty
+        final ScheduleOrProgrammeResponse apiResponse = await updateSchedule(scheduleId);
+        if (apiResponse.data == null) {
+          return ScheduleOrProgrammeResponse.error(
+              RuntimeErrorType.scheduleFetchError(), S.popUps.scheduleFetchError());
+        }
+        return apiResponse;
+      }
+
+      /// If the schedule is more than 30 minutes old
+      if (DateTime.now().subtract(Constants.updateOffset).isAfter(userCachedSchedule.cachedAt.toLocal())) {
         /// Make sure that only if the user has an internet connection and the
         /// schedule is 'outdated', the app will display the new schedule.
         /// Otherwise it returns [ApiResponse.cached(userCachedSchedule)]
         ScheduleOrProgrammeResponse apiResponse = await updateSchedule(scheduleId);
         if (apiResponse.data != null) {
           return apiResponse;
-        } else if (userCachedSchedule != null) {
-          return ScheduleOrProgrammeResponse.cached(userCachedSchedule);
         }
-        return ScheduleOrProgrammeResponse.error(RuntimeErrorType.scheduleFetchError(), S.popUps.scheduleFetchError());
       }
 
+      /// If the userCachedSchedule is not null and the schedule does not
+      /// need to be updated, return the cache
       return ScheduleOrProgrammeResponse.cached(userCachedSchedule);
     }
 
-    /// fetch from backend
+    /// Fetch from backend if the bookmark is not available in
+    /// preferences.
     return await updateSchedule(scheduleId);
   }
 
