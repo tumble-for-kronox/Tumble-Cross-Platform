@@ -19,6 +19,7 @@ import 'package:tumble/core/models/ui_models/week_model.dart';
 import 'package:tumble/core/theme/color_picker.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
 import 'package:tumble/core/ui/scaffold_message.dart';
+import 'package:tumble/core/ui/schedule/utils/day_list_builder.dart';
 
 part 'schedule_view_state.dart';
 
@@ -78,9 +79,7 @@ class ScheduleViewCubit extends Cubit<ScheduleViewState> {
               case ScheduleOrProgrammeStatus.FETCHED:
                 ScheduleModel newScheduleModel = apiResponse.data;
                 if (newScheduleModel.isNotPhonySchedule()) {
-                  final oldScheduleModel = await _databaseService.getOneSchedule(scheduleId);
-
-                  List<Day> newListOfDays = _buildListOfDays(oldScheduleModel!, newScheduleModel);
+                  List<Day> newListOfDays = await DayListBuilder.buildListOfDays(newScheduleModel, _databaseService);
                   matrixListOfDays.add(newListOfDays);
                   _databaseService.update(
                       ScheduleModel(cachedAt: newScheduleModel.cachedAt, id: newScheduleModel.id, days: newListOfDays));
@@ -298,7 +297,6 @@ class ScheduleViewCubit extends Cubit<ScheduleViewState> {
     final visibleBookmarks = _preferenceService.visibleBookmarkIds;
 
     for (var bookmark in visibleBookmarks) {
-      final oldScheduleModel = await _databaseService.getOneSchedule(bookmark.scheduleId);
       final ScheduleOrProgrammeResponse apiResponse =
           await _cacheAndInteractionService.updateSchedule(bookmark.scheduleId);
 
@@ -312,7 +310,7 @@ class ScheduleViewCubit extends Cubit<ScheduleViewState> {
           await _databaseService.update(ScheduleModel(
               cachedAt: newScheduleModel.cachedAt,
               id: newScheduleModel.id,
-              days: _buildListOfDays(oldScheduleModel!, newScheduleModel)));
+              days: await DayListBuilder.buildListOfDays(newScheduleModel, _databaseService)));
           break;
         default:
           break;
@@ -322,57 +320,4 @@ class ScheduleViewCubit extends Cubit<ScheduleViewState> {
   }
 
   void cancelAllNotifications() => _notificationService.cancelAllNotifications();
-
-  List<Day> _buildListOfDays(ScheduleModel oldScheduleModel, ScheduleModel newScheduleModel) {
-    /// Create map of course id's and colors associated with course,
-    /// due to the course being previously saved in the database we need
-    /// to retrieve the colors and assign them to the incoming one
-    Map<String, int> coursesAndColors = {};
-    oldScheduleModel.days.map((day) => day.events).expand((listOfEvents) => listOfEvents).forEach((event) => {
-          if (coursesAndColors[event.course.id] == null) {coursesAndColors[event.course.id] = event.course.courseColor!}
-        });
-    return newScheduleModel.days
-        .map((day) => Day(
-            name: day.name,
-            date: day.date,
-            isoString: day.isoString,
-            weekNumber: day.weekNumber,
-            events: day.events
-                .map((event) => Event(
-                    id: event.id,
-                    title: event.title,
-                    course: () {
-                      /// Checks if incoming schedule course colors
-                      /// are null, if they are then assign new random
-                      /// colors.
-                      if (event.course.courseColor == null) {
-                        if (!coursesAndColors.containsKey(event.course.id)) {
-                          coursesAndColors[event.course.id] = ColorPicker().getRandomHexColor();
-
-                          /// If new course was added to incoming schedule it
-                          ///  has to be accounted for dynamically
-                          return Course(
-                              id: event.course.id,
-                              swedishName: event.course.swedishName,
-                              englishName: event.course.englishName,
-                              courseColor: coursesAndColors[event.course.id]);
-                        }
-
-                        return Course(
-                            id: event.course.id,
-                            swedishName: event.course.swedishName,
-                            englishName: event.course.englishName,
-                            courseColor: coursesAndColors[event.course.id]);
-                      }
-                      return event.course;
-                    }(),
-                    from: event.from,
-                    to: event.to,
-                    locations: event.locations,
-                    teachers: event.teachers,
-                    isSpecial: event.isSpecial,
-                    lastModified: event.lastModified))
-                .toList()))
-        .toList();
-  }
 }

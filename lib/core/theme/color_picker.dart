@@ -1,5 +1,7 @@
 import 'dart:math';
 
+import 'package:flutter/animation.dart';
+
 class ColorPicker {
   final List<int> _colors = [
     // Shades of blue
@@ -81,5 +83,9 @@ class ColorPicker {
 
   int getRandomHexColor() {
     return _colors[Random().nextInt(_colors.length)];
+  }
+
+  Color getRandomColor() {
+    return Color(getRandomHexColor());
   }
 }

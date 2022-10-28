@@ -1,6 +1,8 @@
 import 'dart:developer';
+import 'dart:ffi';
 import 'dart:ui';
 import 'package:sembast/sembast.dart';
+import 'package:sembast/utils/value_utils.dart';
 import 'package:tumble/core/api/database/app_database.dart';
 import 'package:tumble/core/api/database/data/access_stores.dart';
 import 'package:tumble/core/api/database/interface/idatabase_service.dart';
@@ -11,6 +13,7 @@ import 'package:tumble/core/api/dependency_injection/get_it.dart';
 class DatabaseRepository implements IDatabaseService {
   final _scheduleStore = intMapStoreFactory.store(AccessStores.SCHEDULE_STORE);
   final _userStore = intMapStoreFactory.store(AccessStores.USER_STORE);
+  final _colorStore = intMapStoreFactory.store(AccessStores.COLOR_STORE);
   final String _id = 'id';
 
   Future<Database> get _db async => await getIt<AppDatabase>().database;
@@ -21,17 +24,10 @@ class DatabaseRepository implements IDatabaseService {
   }
 
   @override
-  Future<void> remove(String id, String accessStores) async {
-    switch (accessStores) {
-      case AccessStores.USER_STORE:
-        final finder = Finder(filter: Filter.equals(_id, id));
-        await _userStore.delete(await _db, finder: finder);
-        break;
-      case AccessStores.SCHEDULE_STORE:
-        final finder = Finder(filter: Filter.equals(_id, id));
-        await _scheduleStore.delete(await _db, finder: finder);
-        break;
-    }
+  Future<void> remove(String id, String accessStore) async {
+    final store = intMapStoreFactory.store(accessStore);
+    final finder = Finder(filter: Filter.equals(_id, id));
+    await store.delete(await _db, finder: finder);
   }
 
   @override
@@ -85,5 +81,26 @@ class DatabaseRepository implements IDatabaseService {
       return null;
     }
     return KronoxUserModel.fromJson(sessionSnapshot.value);
+  }
+
+  Future<Color?> getCourseColor(String courseId) async {
+    final courseColors = await _colorStore.findFirst(await _db) as Map<String, int>?;
+    if (courseColors == null) return null;
+    return Color(courseColors[courseId]!);
+  }
+
+  Future<Map<String, int>> getCourseColors() async {
+    var courseColors = (await _colorStore.findFirst(await _db))?.value;
+    if (courseColors == null) return <String, int>{};
+
+    return cloneMap(courseColors).cast<String, int>();
+  }
+
+  Future<Map<String, int>> updateCourseColor(String courseId, int color) async {
+    Map<String, int> courseColors = await getCourseColors();
+    courseColors[courseId] = color;
+    await _colorStore.delete(await _db);
+    await _colorStore.add(await _db, courseColors);
+    return courseColors;
   }
 }

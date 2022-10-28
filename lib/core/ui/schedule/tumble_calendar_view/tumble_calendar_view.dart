@@ -62,33 +62,23 @@ class _TumbleCalendarViewState extends State<TumbleCalendarView> {
                                   Container(
                                     width: double.maxFinite,
                                     decoration: BoxDecoration(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .surface,
+                                        color: Theme.of(context).colorScheme.surface,
                                         borderRadius: const BorderRadius.all(
                                           Radius.circular(10),
                                         ),
                                         boxShadow: const [
-                                          BoxShadow(
-                                              color: Colors.black26,
-                                              blurRadius: 2,
-                                              offset: Offset(0, 1))
+                                          BoxShadow(color: Colors.black26, blurRadius: 2, offset: Offset(0, 1))
                                         ]),
-                                    padding: const EdgeInsets.only(
-                                        left: 18, top: 8, right: 8, bottom: 8),
+                                    padding: const EdgeInsets.only(left: 18, top: 8, right: 8, bottom: 8),
                                     child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         Text(
                                           event.title.capitalize(),
                                           style: TextStyle(
                                             fontSize: 13,
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .onSurface,
+                                            color: Theme.of(context).colorScheme.onSurface,
                                           ),
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
@@ -97,9 +87,7 @@ class _TumbleCalendarViewState extends State<TumbleCalendarView> {
                                           "${DateFormat.Hm(Localizations.localeOf(context).languageCode).format(event.from)} - ${DateFormat.Hm(Localizations.localeOf(context).languageCode).format(event.to)}",
                                           style: TextStyle(
                                             fontSize: 13,
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .onSurface,
+                                            color: Theme.of(context).colorScheme.onSurface,
                                           ),
                                         )
                                       ],
@@ -109,9 +97,7 @@ class _TumbleCalendarViewState extends State<TumbleCalendarView> {
                                     width: 10,
                                     alignment: Alignment.centerLeft,
                                     decoration: BoxDecoration(
-                                      color: event.isSpecial
-                                          ? Colors.redAccent
-                                          : Color(event.course.courseColor!),
+                                      color: event.isSpecial ? Colors.redAccent : Color(event.course.courseColor!),
                                       borderRadius: const BorderRadius.only(
                                         topLeft: Radius.circular(10),
                                         bottomLeft: Radius.circular(10),
@@ -125,8 +111,7 @@ class _TumbleCalendarViewState extends State<TumbleCalendarView> {
                       headerDateFormat: "MMMM yyyy",
                       headerStyle: CalendarHeaderStyle(
                           textAlign: TextAlign.center,
-                          backgroundColor:
-                              Theme.of(context).colorScheme.primary,
+                          backgroundColor: Theme.of(context).colorScheme.primary,
                           textStyle: TextStyle(
                               fontSize: 20,
                               fontStyle: FontStyle.normal,
@@ -135,34 +120,24 @@ class _TumbleCalendarViewState extends State<TumbleCalendarView> {
                               fontWeight: FontWeight.w500)),
                       monthViewSettings: MonthViewSettings(
                           showAgenda: true,
-                          navigationDirection:
-                              MonthNavigationDirection.vertical,
+                          navigationDirection: MonthNavigationDirection.vertical,
                           agendaViewHeight: 200,
-                          appointmentDisplayMode:
-                              MonthAppointmentDisplayMode.indicator,
+                          appointmentDisplayMode: MonthAppointmentDisplayMode.indicator,
                           monthCellStyle: MonthCellStyle(
-                            backgroundColor:
-                                Theme.of(context).colorScheme.background,
-                            trailingDatesBackgroundColor:
-                                Theme.of(context).colorScheme.background,
-                            leadingDatesBackgroundColor:
-                                Theme.of(context).colorScheme.background,
-                            textStyle: TextStyle(
-                                fontSize: 12,
-                                color:
-                                    Theme.of(context).colorScheme.onBackground),
+                            backgroundColor: Theme.of(context).colorScheme.background,
+                            trailingDatesBackgroundColor: Theme.of(context).colorScheme.background,
+                            leadingDatesBackgroundColor: Theme.of(context).colorScheme.background,
+                            textStyle: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.onBackground),
                           )),
                       onLongPress: (calendarLongPressDetails) {
-                        if (calendarLongPressDetails.targetElement !=
-                            CalendarElement.appointment) {
+                        if (calendarLongPressDetails.targetElement != CalendarElement.appointment) {
                           return;
                         }
                         Event event = calendarLongPressDetails.appointments![0];
                         EventOptions.showEventOptions(context, event);
                       },
                       onTap: (calendarTapDetails) {
-                        if (calendarTapDetails.targetElement !=
-                            CalendarElement.appointment) {
+                        if (calendarTapDetails.targetElement != CalendarElement.appointment) {
                           return;
                         }
                         Event event = calendarTapDetails.appointments![0];
