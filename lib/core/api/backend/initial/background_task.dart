@@ -10,6 +10,7 @@ import 'package:tumble/core/models/backend_models/bookmarked_schedule_model.dart
 import 'package:tumble/core/models/backend_models/schedule_model.dart';
 import 'package:tumble/core/shared/preference_types.dart';
 import 'package:tumble/core/api/dependency_injection/get_it.dart';
+import 'package:tumble/core/theme/color_picker.dart';
 
 import '../../notifications/repository/notification_repository.dart';
 
@@ -52,8 +53,11 @@ class BackgroundTask {
           case ScheduleOrProgrammeStatus.FETCHED:
             ScheduleModel newScheduleModel = apiResponseOfNewScheduleModel.data!;
 
-            if (newScheduleModel != cachedScheduleModel) {
-              databaseService.update(newScheduleModel);
+            if (newScheduleModel.days != cachedScheduleModel.days) {
+              databaseService.update(ScheduleModel(
+                  cachedAt: newScheduleModel.cachedAt,
+                  id: newScheduleModel.id,
+                  days: _buildListOfDays(newScheduleModel, cachedScheduleModel)));
 
               notificationService.updateDispatcher(newScheduleModel, cachedScheduleModel);
             }
@@ -69,5 +73,58 @@ class BackgroundTask {
         }
       }
     }
+  }
+
+  static List<Day> _buildListOfDays(ScheduleModel oldScheduleModel, ScheduleModel newScheduleModel) {
+    /// Create map of course id's and colors associated with course,
+    /// due to the course being previously saved in the database we need
+    /// to retrieve the colors and assign them to the incoming one
+    Map<String, int> coursesAndColors = {};
+    oldScheduleModel.days.map((day) => day.events).expand((listOfEvents) => listOfEvents).forEach((event) => {
+          if (coursesAndColors[event.course.id] == null) {coursesAndColors[event.course.id] = event.course.courseColor!}
+        });
+    return newScheduleModel.days
+        .map((day) => Day(
+            name: day.name,
+            date: day.date,
+            isoString: day.isoString,
+            weekNumber: day.weekNumber,
+            events: day.events
+                .map((event) => Event(
+                    id: event.id,
+                    title: event.title,
+                    course: () {
+                      /// Checks if incoming schedule course colors
+                      /// are null, if they are then assign new random
+                      /// colors.
+                      if (event.course.courseColor == null) {
+                        if (!coursesAndColors.containsKey(event.course.id)) {
+                          coursesAndColors[event.course.id] = ColorPicker().getRandomHexColor();
+
+                          /// If new course was added to incoming schedule it
+                          ///  has to be accounted for dynamically
+                          return Course(
+                              id: event.course.id,
+                              swedishName: event.course.swedishName,
+                              englishName: event.course.englishName,
+                              courseColor: coursesAndColors[event.course.id]);
+                        }
+
+                        return Course(
+                            id: event.course.id,
+                            swedishName: event.course.swedishName,
+                            englishName: event.course.englishName,
+                            courseColor: coursesAndColors[event.course.id]);
+                      }
+                      return event.course;
+                    }(),
+                    from: event.from,
+                    to: event.to,
+                    locations: event.locations,
+                    teachers: event.teachers,
+                    isSpecial: event.isSpecial,
+                    lastModified: event.lastModified))
+                .toList()))
+        .toList();
   }
 }

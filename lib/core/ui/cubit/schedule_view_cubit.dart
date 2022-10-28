@@ -63,7 +63,6 @@ class ScheduleViewCubit extends Cubit<ScheduleViewState> {
     final currentScheduleIds = _preferenceService.bookmarkIds;
     List<List<Day>> matrixListOfDays = [];
     List<ScheduleModel> listOfScheduleModels = [];
-    emit(state.copyWith(displayedListItems: [], listOfDays: []));
     if (currentScheduleIds != null) {
       for (String? scheduleId in currentScheduleIds) {
         final bool userHasBookmarks = _preferenceService.userHasBookmarks;
@@ -72,6 +71,7 @@ class ScheduleViewCubit extends Cubit<ScheduleViewState> {
 
         if (scheduleId != null && userHasBookmarks) {
           if (toggledToBeVisible != null && toggledToBeVisible) {
+            log('Updating schedule');
             final ScheduleOrProgrammeResponse apiResponse = await _cacheAndInteractionService.findSchedule(scheduleId);
 
             switch (apiResponse.status) {
@@ -82,6 +82,8 @@ class ScheduleViewCubit extends Cubit<ScheduleViewState> {
 
                   List<Day> newListOfDays = _buildListOfDays(oldScheduleModel!, newScheduleModel);
                   matrixListOfDays.add(newListOfDays);
+                  _databaseService.update(
+                      ScheduleModel(cachedAt: newScheduleModel.cachedAt, id: newScheduleModel.id, days: newListOfDays));
                   listOfScheduleModels.add(
                       ScheduleModel(cachedAt: newScheduleModel.cachedAt, id: newScheduleModel.id, days: newListOfDays));
                 }
@@ -100,7 +102,7 @@ class ScheduleViewCubit extends Cubit<ScheduleViewState> {
 
                 /// If an error occurs here, the schedule is empty currently
                 /// and can be temporarily removed from the database for this session.
-                await _databaseService.remove(scheduleId, AccessStores.SCHEDULE_STORE);
+                //await _databaseService.remove(scheduleId, AccessStores.SCHEDULE_STORE);
                 log(
                     name: 'schedule_view_cubit',
                     'Error in retrieveing schedule cache ..\nError on schedule: [$scheduleId');
@@ -244,10 +246,11 @@ class ScheduleViewCubit extends Cubit<ScheduleViewState> {
     return await checkIfNotificationIsSetForCourse(event);
   }
 
-  void changeCourseColor(BuildContext context, Course course, Color color) {
+  void changeCourseColor(BuildContext context, Course course, Color color) async {
     ScheduleModel scheduleModel = state.listOfScheduleModels!.firstWhere((scheduleModel) =>
         scheduleModel.days.expand((days) => days.events).map((event) => event.course.id).contains(course.id));
-    _databaseService
+    log(scheduleModel.days.toString());
+    await _databaseService
         .update(ScheduleModel(
             cachedAt: scheduleModel.cachedAt,
             id: scheduleModel.id,
@@ -261,13 +264,18 @@ class ScheduleViewCubit extends Cubit<ScheduleViewState> {
                         .map((event) => Event(
                             id: event.id,
                             title: event.title,
-                            course: event.course.id == course.id
-                                ? Course(
+                            course: () {
+                              if (event.course.id == course.id) {
+                                log('Old course color: ${event.course.courseColor}');
+                                log('Input course color ${color.value}');
+                                return Course(
                                     id: event.course.id,
                                     swedishName: event.course.swedishName,
                                     englishName: event.course.englishName,
-                                    courseColor: color.value)
-                                : event.course,
+                                    courseColor: color.value);
+                              }
+                              return event.course;
+                            }(),
                             from: event.from,
                             to: event.to,
                             locations: event.locations,
@@ -276,7 +284,7 @@ class ScheduleViewCubit extends Cubit<ScheduleViewState> {
                             lastModified: event.lastModified))
                         .toList()))
                 .toList()))
-        .then((_) => getCachedSchedules());
+        .then((_) async => await getCachedSchedules());
   }
 
   Future<void> permissionRequest(bool value) async {
@@ -349,6 +357,7 @@ class ScheduleViewCubit extends Cubit<ScheduleViewState> {
                               englishName: event.course.englishName,
                               courseColor: coursesAndColors[event.course.id]);
                         }
+
                         return Course(
                             id: event.course.id,
                             swedishName: event.course.swedishName,
