@@ -53,7 +53,7 @@ class AppDatabase {
             final ScheduleModel newScheduleModel = ScheduleModel(
                 cachedAt: scheduleModel.cachedAt,
                 id: scheduleModel.id,
-                days: await DayListBuilder.buildListOfDays(newVersion, getIt<DatabaseRepository>()));
+                days: await DayListBuilder.buildListOfDays(scheduleModel, getIt<DatabaseRepository>()));
             (await _scheduleStore.update(db, newScheduleModel.toJson(), finder: finder));
           }
 
