@@ -29,7 +29,6 @@ class AuthCubit extends Cubit<AuthState> {
     login();
   }
   final _userRepo = getIt<UserActionRepository>();
-  final _secureStorage = getIt<SecureStorageRepository>();
   final _focusNodePassword = FocusNode();
   final _focusNodeUsername = FocusNode();
 
