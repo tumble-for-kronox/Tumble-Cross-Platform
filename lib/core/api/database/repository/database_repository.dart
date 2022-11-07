@@ -90,8 +90,11 @@ class DatabaseRepository implements IDatabaseService {
   }
 
   Future<Map<String, int>> getCourseColors() async {
-    var courseColors = (await _colorStore.findFirst(await _db))?.value;
-    return courseColors == null ? <String, int>{} : cloneMap(courseColors).cast<String, int>();
+    final snapshot = (await _colorStore.find(await _db));
+    if (snapshot.isEmpty) {
+      return <String, int>{};
+    }
+    return cloneMap(snapshot.first.value).cast<String, int>();
   }
 
   Future<Map<String, int>> updateCourseColor(String courseId, int color) async {

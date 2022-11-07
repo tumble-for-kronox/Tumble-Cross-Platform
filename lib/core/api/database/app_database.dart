@@ -18,8 +18,6 @@ class AppDatabase {
   // Completer is used for transforming synchronous code into asynchronous code.
   Completer<Database>? _dbOpenCompleter;
 
-  final _scheduleStore = intMapStoreFactory.store(AccessStores.SCHEDULE_STORE);
-
   // Database object accessor
   Future<Database> get database async {
     if (_dbOpenCompleter == null) {
@@ -41,25 +39,8 @@ class AppDatabase {
   }
 
   Future<void> _updateDatabase(db, oldVersion, newVersion) async {
-    log(oldVersion.toString());
     if (oldVersion < 2) {
-      List<String>? bookmarks = getIt<PreferenceRepository>().bookmarkIds;
-      if (bookmarks != null) {
-        for (String id in bookmarks) {
-          final finder = Finder(filter: Filter.equals("id", id));
-          final recordSnapshot = await _scheduleStore.findFirst(db, finder: finder);
-          if (recordSnapshot != null) {
-            final ScheduleModel scheduleModel = ScheduleModel.fromJson(recordSnapshot.value);
-            final ScheduleModel newScheduleModel = ScheduleModel(
-                cachedAt: scheduleModel.cachedAt,
-                id: scheduleModel.id,
-                days: await DayListBuilder.buildListOfDays(scheduleModel, getIt<DatabaseRepository>()));
-            (await _scheduleStore.update(db, newScheduleModel.toJson(), finder: finder));
-          }
-
-          log(name: 'app_database', 'Udpated database on version change to version $newVersion');
-        }
-      }
+      await intMapStoreFactory.store(AccessStores.SCHEDULE_STORE).delete(db);
       await intMapStoreFactory
           .store('course_colors')
           .delete(db)
