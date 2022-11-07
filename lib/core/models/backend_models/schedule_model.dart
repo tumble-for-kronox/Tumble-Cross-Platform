@@ -78,14 +78,13 @@ class Course with _$Course {
     required String id,
     required String swedishName,
     required String englishName,
-    int? courseColor,
   }) = _Course;
 
   factory Course.fromJson(Map<String, dynamic> json) => _$_Course(
       id: json['id'] as String,
       swedishName: json['swedishName'] as String,
       englishName: json['englishName'] as String,
-      courseColor: json['courseColor']);
+      );
 }
 
 @freezed

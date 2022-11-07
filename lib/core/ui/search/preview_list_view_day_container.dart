@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:tumble/core/extensions/extensions.dart';
 import 'package:tumble/core/models/backend_models/schedule_model.dart';
+import 'package:tumble/core/ui/cubit/schedule_view_cubit.dart';
 import 'package:tumble/core/ui/cubit/search_page_cubit.dart';
 import 'package:tumble/core/ui/schedule/event_modal.dart';
 import 'package:tumble/core/ui/schedule/tumble_list_view/tumble_list_view_schedule_card.dart';
@@ -37,15 +38,19 @@ class PreviewListViewDayContainer extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.only(bottom: 10, top: 2),
-            child: Column(
-              children: day.events
-                  .map((event) => ScheduleCard(
-                      event: event,
-                      color: event.isSpecial ? Colors.redAccent : Color(event.course.courseColor!),
-                      onTap: () =>
-                          TumbleEventModal.showPreviewEventModal(context, event, Color(event.course.courseColor!))))
-                  .toList(),
-            ),
+            child: StreamBuilder<Map<String, int>>(
+                stream: context.read<ScheduleViewCubit>().courseColorStream,
+                builder: (context, snapshot) {
+                  return Column(
+                    children: day.events
+                        .map((event) => ScheduleCard(
+                            event: event,
+                            color: event.isSpecial ? Colors.redAccent : Color(snapshot.data![event.course.id]!),
+                            onTap: () => TumbleEventModal.showPreviewEventModal(
+                                context, event, Color(snapshot.data![event.course.id]!))))
+                        .toList(),
+                  );
+                }),
           )
         ],
       ),

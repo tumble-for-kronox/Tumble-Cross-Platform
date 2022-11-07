@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 import 'dart:ui';
 
@@ -5,9 +6,9 @@ import 'package:bloc/bloc.dart';
 import 'package:collection/collection.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:sembast/utils/value_utils.dart';
 import 'package:tumble/core/api/backend/repository/cache_repository.dart';
 import 'package:tumble/core/api/backend/response_types/schedule_or_programme_response.dart';
-import 'package:tumble/core/api/database/data/access_stores.dart';
 import 'package:tumble/core/api/database/repository/database_repository.dart';
 import 'package:tumble/core/api/dependency_injection/get_it.dart';
 import 'package:tumble/core/api/notifications/builders/notification_service_builder.dart';
@@ -16,9 +17,6 @@ import 'package:tumble/core/api/preferences/repository/preference_repository.dar
 import 'package:tumble/core/extensions/extensions.dart';
 import 'package:tumble/core/models/backend_models/schedule_model.dart';
 import 'package:tumble/core/models/ui_models/week_model.dart';
-import 'package:tumble/core/theme/color_picker.dart';
-import 'package:tumble/core/ui/data/string_constants.dart';
-import 'package:tumble/core/ui/scaffold_message.dart';
 import 'package:tumble/core/ui/schedule/utils/day_list_builder.dart';
 
 part 'schedule_view_state.dart';
@@ -41,7 +39,9 @@ class ScheduleViewCubit extends Cubit<ScheduleViewState> {
   final _databaseService = getIt<DatabaseRepository>();
   final _preferenceService = getIt<PreferenceRepository>();
   final ScrollController _listViewScrollController = ScrollController();
+  Stream<Map<String, int>>? _courseColorStream;
 
+  Stream<Map<String, int>>? get courseColorStream => _courseColorStream;
   ScrollController get controller => _listViewScrollController;
   bool get hasBookMarkedSchedules => getIt<PreferenceRepository>().bookmarkIds!.isNotEmpty;
   bool get notificationCheck => getIt<PreferenceRepository>().allowedNotifications == null;
@@ -50,6 +50,7 @@ class ScheduleViewCubit extends Cubit<ScheduleViewState> {
 
   Future<void> _init() async {
     log(name: 'schedule_view_cubit', 'Fetching cache ...');
+    _courseColorStream = await _databaseService.getColorStream();
     await getCachedSchedules();
     _listViewScrollController.addListener((setScrollController));
   }
@@ -79,14 +80,13 @@ class ScheduleViewCubit extends Cubit<ScheduleViewState> {
               case ScheduleOrProgrammeStatus.FETCHED:
                 ScheduleModel newScheduleModel = apiResponse.data;
                 if (newScheduleModel.isNotPhonySchedule()) {
-                  final courseColors = await DayListBuilder.updateCourseColorStorage(
+                  await DayListBuilder.updateCourseColorStorage(
                       newScheduleModel, await _databaseService.getCourseColors(), _databaseService.updateCourseColor);
-                  List<Day> newListOfDays = DayListBuilder.buildListOfDays(newScheduleModel, courseColors);
-                  matrixListOfDays.add(newListOfDays);
-                  _databaseService.update(
-                      ScheduleModel(cachedAt: newScheduleModel.cachedAt, id: newScheduleModel.id, days: newListOfDays));
-                  listOfScheduleModels.add(
-                      ScheduleModel(cachedAt: newScheduleModel.cachedAt, id: newScheduleModel.id, days: newListOfDays));
+                  matrixListOfDays.add(newScheduleModel.days);
+                  _databaseService.update(ScheduleModel(
+                      cachedAt: newScheduleModel.cachedAt, id: newScheduleModel.id, days: newScheduleModel.days));
+                  listOfScheduleModels.add(ScheduleModel(
+                      cachedAt: newScheduleModel.cachedAt, id: newScheduleModel.id, days: newScheduleModel.days));
                 }
                 break;
               case ScheduleOrProgrammeStatus.CACHED:
@@ -248,19 +248,8 @@ class ScheduleViewCubit extends Cubit<ScheduleViewState> {
   }
 
   void changeCourseColor(BuildContext context, Course course, Color color) async {
-    List<ScheduleModel> scheduleModels = state.listOfScheduleModels!
-        .where((scheduleModel) =>
-            scheduleModel.days.expand((days) => days.events).map((event) => event.course.id).contains(course.id))
-        .toList();
-    final Map<String, int> courseColors = await _databaseService.updateCourseColor(course.id, color.value);
-    for (ScheduleModel scheduleModel in scheduleModels) {
-      await _databaseService
-          .update(ScheduleModel(
-              cachedAt: scheduleModel.cachedAt,
-              id: scheduleModel.id,
-              days: DayListBuilder.buildListOfDays(scheduleModel, courseColors)))
-          .then((_) async => await getCachedSchedules());
-    }
+    await _databaseService.updateCourseColor(course.id, color.value);
+    await getCachedSchedules();
   }
 
   Future<void> permissionRequest(bool value) async {
@@ -281,16 +270,14 @@ class ScheduleViewCubit extends Cubit<ScheduleViewState> {
         case ScheduleOrProgrammeStatus.FETCHED:
           final newScheduleModel = apiResponse.data as ScheduleModel;
 
-          final courseColors = await DayListBuilder.updateCourseColorStorage(
+          await DayListBuilder.updateCourseColorStorage(
               newScheduleModel, await _databaseService.getCourseColors(), _databaseService.updateCourseColor);
 
           /// Update database with new information, except for the
           /// course colors in [.days]. So when we do getCachedSchedules()
           /// afterwards, it will have the same colors as before refreshing
-          await _databaseService.update(ScheduleModel(
-              cachedAt: newScheduleModel.cachedAt,
-              id: newScheduleModel.id,
-              days: DayListBuilder.buildListOfDays(newScheduleModel, courseColors)));
+          await _databaseService.update(
+              ScheduleModel(cachedAt: newScheduleModel.cachedAt, id: newScheduleModel.id, days: newScheduleModel.days));
           break;
         default:
           break;

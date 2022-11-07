@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 import 'dart:ffi';
 import 'dart:ui';
@@ -101,7 +102,15 @@ class DatabaseRepository implements IDatabaseService {
     Map<String, int> courseColors = await getCourseColors();
     courseColors[courseId] = color;
     await _colorStore.delete(await _db);
-    await _colorStore.add(await _db, courseColors);
+    await _colorStore.record(AccessStores.COLOR_ENTRY_KEY).add(await _db, courseColors);
     return courseColors;
+  }
+
+  @override
+  Future<Stream<Map<String, int>>> getColorStream() {
+    return _db.then((db) => _colorStore
+        .record(AccessStores.COLOR_ENTRY_KEY)
+        .onSnapshot(db)
+        .map((snapshot) => cloneMap(snapshot!.value).cast<String, int>()).asBroadcastStream());
   }
 }

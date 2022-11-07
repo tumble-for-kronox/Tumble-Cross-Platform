@@ -6,7 +6,7 @@ import 'package:tumble/core/models/backend_models/schedule_model.dart';
 import 'package:tumble/core/theme/color_picker.dart';
 
 class DayListBuilder {
-  static List<Day> buildListOfDays(
+  /* static List<Day> buildListOfDays(
     ScheduleModel newScheduleModel,
     Map<String, int> courseColors,
   ) {
@@ -34,18 +34,18 @@ class DayListBuilder {
                     lastModified: event.lastModified))
                 .toList()))
         .toList();
-  }
+  } */
 
-  static Course getCourseWithColor(Event event, Map<String, int> courseColors) {
+  /* static Course getCourseWithColor(Event event, Map<String, int> courseColors) {
     /// Checks if incoming schedule course colors
     /// are null, if they are then assign new random
     /// colors.
     return Course(
-        id: event.course.id,
-        swedishName: event.course.swedishName,
-        englishName: event.course.englishName,
-        courseColor: courseColors[event.course.id]);
-  }
+      id: event.course.id,
+      swedishName: event.course.swedishName,
+      englishName: event.course.englishName,
+    );
+  } */
 
   static Future<Map<String, int>> updateCourseColorStorage(ScheduleModel newScheduleModel,
       Map<String, int> courseColors, Function(String courseName, int courseColor) updateCourseColorsCallback) async {

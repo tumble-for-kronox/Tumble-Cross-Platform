@@ -2,14 +2,7 @@
 
 part of 'schedule_view_cubit.dart';
 
-enum ScheduleViewStatus {
-  NO_VIEW,
-  EMPTY_SCHEDULE,
-  FETCH_ERROR,
-  INITIAL,
-  LOADING,
-  POPULATED_VIEW
-}
+enum ScheduleViewStatus { NO_VIEW, EMPTY_SCHEDULE, FETCH_ERROR, INITIAL, LOADING, POPULATED_VIEW }
 
 class ScheduleViewState extends Equatable {
   final ScheduleViewStatus status;
@@ -38,21 +31,13 @@ class ScheduleViewState extends Equatable {
           List<ScheduleModel>? listOfScheduleModels}) =>
       ScheduleViewState(
           status: status ?? this.status,
-          listViewToTopButtonVisible:
-              listViewToTopButtonVisible ?? this.listViewToTopButtonVisible,
+          listViewToTopButtonVisible: listViewToTopButtonVisible ?? this.listViewToTopButtonVisible,
           listOfDays: listOfDays ?? this.listOfDays,
           listOfWeeks: listOfWeeks ?? this.listOfWeeks,
           message: message ?? this.message,
-          listOfScheduleModels:
-              listOfScheduleModels ?? this.listOfScheduleModels);
+          listOfScheduleModels: listOfScheduleModels ?? this.listOfScheduleModels);
 
   @override
-  List<Object?> get props => [
-        status,
-        listOfDays,
-        listOfWeeks,
-        listViewToTopButtonVisible,
-        message,
-        listOfScheduleModels
-      ];
+  List<Object?> get props =>
+      [status, listOfDays, listOfWeeks, listViewToTopButtonVisible, message, listOfScheduleModels];
 }

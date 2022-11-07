@@ -89,22 +89,23 @@ class SearchPageCubit extends Cubit<SearchPageState> {
             scheduleFavorited = true;
           }
 
-          final courseColors = await DayListBuilder.updateCourseColorStorage(
+          await DayListBuilder.updateCourseColorStorage(
               currentScheduleModel, await _databaseService.getCourseColors(), _databaseService.updateCourseColor);
 
           /// Dynamically assign colors to list of incoming days in this
           /// not-cached schedule model
-          List<Day> listOfDays = await DayListBuilder.buildListOfDays(currentScheduleModel, courseColors);
           emit(state.copyWith(
               previewFetchStatus: PreviewFetchStatus.FETCHED_SCHEDULE,
               previewCurrentScheduleId: currentScheduleModel.id,
-              previewListOfDays: listOfDays,
+              previewListOfDays: currentScheduleModel.days,
               previewToggledFavorite: scheduleFavorited,
               previewToTopButtonVisible: false,
 
               /// Store schedule model with colors assigned in state
               scheduleModel: ScheduleModel(
-                  cachedAt: currentScheduleModel.cachedAt, id: currentScheduleModel.id, days: listOfDays)));
+                  cachedAt: currentScheduleModel.cachedAt,
+                  id: currentScheduleModel.id,
+                  days: currentScheduleModel.days)));
         } else {
           emit(state.copyWith(previewFetchStatus: PreviewFetchStatus.EMPTY_SCHEDULE));
         }

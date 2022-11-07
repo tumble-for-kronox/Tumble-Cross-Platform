@@ -42,112 +42,118 @@ class _TumbleCalendarViewState extends State<TumbleCalendarView> {
                 future: getCalendarDataSource(state.listOfDays!),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
-                    return SfCalendar(
-                      firstDayOfWeek: 1,
-                      view: CalendarView.month,
-                      dataSource: snapshot.data as EventsDataSource,
-                      appointmentBuilder: (context, details) {
-                        final Event event = details.appointments.first;
-                        return ClipPath(
-                            clipper: ShapeBorderClipper(
-                                shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            )),
-                            child: Shimmer(
-                              color: Colors.redAccent,
-                              colorOpacity: 0.2,
-                              enabled: event.isSpecial,
-                              child: Stack(
-                                children: [
-                                  Container(
-                                    width: double.maxFinite,
-                                    decoration: BoxDecoration(
-                                        color: Theme.of(context).colorScheme.surface,
-                                        borderRadius: const BorderRadius.all(
-                                          Radius.circular(10),
-                                        ),
-                                        boxShadow: const [
-                                          BoxShadow(color: Colors.black26, blurRadius: 2, offset: Offset(0, 1))
-                                        ]),
-                                    padding: const EdgeInsets.only(left: 18, top: 8, right: 8, bottom: 8),
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                    return StreamBuilder<Map<String, int>>(
+                        stream: context.read<ScheduleViewCubit>().courseColorStream,
+                        builder: (context, snapshot) {
+                          return SfCalendar(
+                            firstDayOfWeek: 1,
+                            view: CalendarView.month,
+                            dataSource: snapshot.data as EventsDataSource,
+                            appointmentBuilder: (context, details) {
+                              final Event event = details.appointments.first;
+                              return ClipPath(
+                                  clipper: ShapeBorderClipper(
+                                      shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  )),
+                                  child: Shimmer(
+                                    color: Colors.redAccent,
+                                    colorOpacity: 0.2,
+                                    enabled: event.isSpecial,
+                                    child: Stack(
                                       children: [
-                                        Text(
-                                          event.title.capitalize(),
-                                          style: TextStyle(
-                                            fontSize: 13,
-                                            color: Theme.of(context).colorScheme.onSurface,
+                                        Container(
+                                          width: double.maxFinite,
+                                          decoration: BoxDecoration(
+                                              color: Theme.of(context).colorScheme.surface,
+                                              borderRadius: const BorderRadius.all(
+                                                Radius.circular(10),
+                                              ),
+                                              boxShadow: const [
+                                                BoxShadow(color: Colors.black26, blurRadius: 2, offset: Offset(0, 1))
+                                              ]),
+                                          padding: const EdgeInsets.only(left: 18, top: 8, right: 8, bottom: 8),
+                                          child: Column(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                event.title.capitalize(),
+                                                style: TextStyle(
+                                                  fontSize: 13,
+                                                  color: Theme.of(context).colorScheme.onSurface,
+                                                ),
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                              Text(
+                                                "${DateFormat.Hm(Localizations.localeOf(context).languageCode).format(event.from)} - ${DateFormat.Hm(Localizations.localeOf(context).languageCode).format(event.to)}",
+                                                style: TextStyle(
+                                                  fontSize: 13,
+                                                  color: Theme.of(context).colorScheme.onSurface,
+                                                ),
+                                              )
+                                            ],
                                           ),
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
                                         ),
-                                        Text(
-                                          "${DateFormat.Hm(Localizations.localeOf(context).languageCode).format(event.from)} - ${DateFormat.Hm(Localizations.localeOf(context).languageCode).format(event.to)}",
-                                          style: TextStyle(
-                                            fontSize: 13,
-                                            color: Theme.of(context).colorScheme.onSurface,
+                                        Container(
+                                          width: 10,
+                                          alignment: Alignment.centerLeft,
+                                          decoration: BoxDecoration(
+                                            color: event.isSpecial
+                                                ? Colors.redAccent
+                                                : Color(snapshot.data![event.course.id]!),
+                                            borderRadius: const BorderRadius.only(
+                                              topLeft: Radius.circular(10),
+                                              bottomLeft: Radius.circular(10),
+                                            ),
                                           ),
                                         )
                                       ],
                                     ),
-                                  ),
-                                  Container(
-                                    width: 10,
-                                    alignment: Alignment.centerLeft,
-                                    decoration: BoxDecoration(
-                                      color: event.isSpecial ? Colors.redAccent : Color(event.course.courseColor!),
-                                      borderRadius: const BorderRadius.only(
-                                        topLeft: Radius.circular(10),
-                                        bottomLeft: Radius.circular(10),
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ));
-                      },
-                      headerDateFormat: "MMMM yyyy",
-                      headerStyle: CalendarHeaderStyle(
-                          textAlign: TextAlign.center,
-                          backgroundColor: Theme.of(context).colorScheme.primary,
-                          textStyle: TextStyle(
-                              fontSize: 20,
-                              fontStyle: FontStyle.normal,
-                              letterSpacing: 5,
-                              color: Theme.of(context).colorScheme.onPrimary,
-                              fontWeight: FontWeight.w500)),
-                      monthViewSettings: MonthViewSettings(
-                          showAgenda: true,
-                          navigationDirection: MonthNavigationDirection.vertical,
-                          agendaViewHeight: 200,
-                          appointmentDisplayMode: MonthAppointmentDisplayMode.indicator,
-                          monthCellStyle: MonthCellStyle(
-                            backgroundColor: Theme.of(context).colorScheme.background,
-                            trailingDatesBackgroundColor: Theme.of(context).colorScheme.background,
-                            leadingDatesBackgroundColor: Theme.of(context).colorScheme.background,
-                            textStyle: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.onBackground),
-                          )),
-                      onLongPress: (calendarLongPressDetails) {
-                        if (calendarLongPressDetails.targetElement != CalendarElement.appointment) {
-                          return;
-                        }
-                        Event event = calendarLongPressDetails.appointments![0];
-                        EventOptions.showEventOptions(context, event);
-                      },
-                      onTap: (calendarTapDetails) {
-                        if (calendarTapDetails.targetElement != CalendarElement.appointment) {
-                          return;
-                        }
-                        Event event = calendarTapDetails.appointments![0];
-                        TumbleEventModal.showBookmarkEventModal(
-                          context,
-                          event,
-                          Color(event.course.courseColor!),
-                        );
-                      },
-                    );
+                                  ));
+                            },
+                            headerDateFormat: "MMMM yyyy",
+                            headerStyle: CalendarHeaderStyle(
+                                textAlign: TextAlign.center,
+                                backgroundColor: Theme.of(context).colorScheme.primary,
+                                textStyle: TextStyle(
+                                    fontSize: 20,
+                                    fontStyle: FontStyle.normal,
+                                    letterSpacing: 5,
+                                    color: Theme.of(context).colorScheme.onPrimary,
+                                    fontWeight: FontWeight.w500)),
+                            monthViewSettings: MonthViewSettings(
+                                showAgenda: true,
+                                navigationDirection: MonthNavigationDirection.vertical,
+                                agendaViewHeight: 200,
+                                appointmentDisplayMode: MonthAppointmentDisplayMode.indicator,
+                                monthCellStyle: MonthCellStyle(
+                                  backgroundColor: Theme.of(context).colorScheme.background,
+                                  trailingDatesBackgroundColor: Theme.of(context).colorScheme.background,
+                                  leadingDatesBackgroundColor: Theme.of(context).colorScheme.background,
+                                  textStyle: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.onBackground),
+                                )),
+                            onLongPress: (calendarLongPressDetails) {
+                              if (calendarLongPressDetails.targetElement != CalendarElement.appointment) {
+                                return;
+                              }
+                              Event event = calendarLongPressDetails.appointments![0];
+                              EventOptions.showEventOptions(context, event);
+                            },
+                            onTap: (calendarTapDetails) {
+                              if (calendarTapDetails.targetElement != CalendarElement.appointment) {
+                                return;
+                              }
+                              Event event = calendarTapDetails.appointments![0];
+                              TumbleEventModal.showBookmarkEventModal(
+                                context,
+                                event,
+                                Color(snapshot.data![event.course.id]!),
+                              );
+                            },
+                          );
+                        });
                   }
                   return const TumbleLoading();
                 });

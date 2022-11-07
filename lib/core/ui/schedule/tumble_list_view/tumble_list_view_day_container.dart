@@ -41,18 +41,25 @@ class _TumbleListViewDayContainerState extends State<TumbleListViewDayContainer>
           ),
           Padding(
             padding: const EdgeInsets.only(bottom: 10, top: 2),
-            child: Column(
-              children: widget.day.events
-                  .map((event) => GestureDetector(
-                        onLongPress: () => EventOptions.showEventOptions(context, event),
-                        child: ScheduleCard(
-                            event: event,
-                            color: event.isSpecial ? Colors.redAccent : Color(event.course.courseColor!),
-                            onTap: () => TumbleEventModal.showBookmarkEventModal(
-                                context, event, Color(event.course.courseColor!))),
-                      ))
-                  .toList(),
-            ),
+            child: StreamBuilder<Map<String, int>>(
+                stream: context.read<ScheduleViewCubit>().courseColorStream,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return Column(
+                      children: widget.day.events
+                          .map((event) => GestureDetector(
+                                onLongPress: () => EventOptions.showEventOptions(context, event),
+                                child: ScheduleCard(
+                                    event: event,
+                                    color: event.isSpecial ? Colors.redAccent : Color(snapshot.data![event.course.id]!),
+                                    onTap: () => TumbleEventModal.showBookmarkEventModal(
+                                        context, event, Color(snapshot.data![event.course.id]!))),
+                              ))
+                          .toList(),
+                    );
+                  }
+                  return Container();
+                }),
           )
         ],
       ),
