@@ -104,59 +104,55 @@ class EventOptions extends StatelessWidget {
                         const Divider(
                           height: 1,
                         ),
-                        StreamBuilder<Map<String, int>>(
-                            stream: context.read<ScheduleViewCubit>().courseColorStream,
-                            builder: (context, snapshot) {
-                              return ListTile(
-                                leading:
-                                    Icon(CupertinoIcons.color_filter, color: Theme.of(context).colorScheme.onSurface),
-                                title: Text(
-                                  S.eventOptions.changeCourseColor(),
-                                  style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
-                                ),
-                                shape: const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.only(
-                                    bottomLeft: Radius.circular(20),
-                                    bottomRight: Radius.circular(20),
+                        ListTile(
+                          leading: Icon(CupertinoIcons.color_filter, color: Theme.of(context).colorScheme.onSurface),
+                          title: Text(
+                            S.eventOptions.changeCourseColor(),
+                            style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+                          ),
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(20),
+                              bottomRight: Radius.circular(20),
+                            ),
+                          ),
+                          onTap: () async {
+                            showDialog(
+                              context: context,
+                              builder: (_) {
+                                Color pickerColor =
+                                    Color(context.read<ScheduleViewCubit>().state.courseColors![event.course.id]!);
+                                return AlertDialog(
+                                  title: Text(S.eventOptions.colorPickerTitle()),
+                                  content: SingleChildScrollView(
+                                    child: HueRingPicker(
+                                      pickerColor: pickerColor,
+                                      onColorChanged: (Color newColor) => pickerColor = newColor,
+                                    ),
                                   ),
-                                ),
-                                onTap: () async {
-                                  showDialog(
-                                    context: context,
-                                    builder: (_) {
-                                      Color pickerColor = Color(snapshot.data![event.course.id]!);
-                                      return AlertDialog(
-                                        title: Text(S.eventOptions.colorPickerTitle()),
-                                        content: SingleChildScrollView(
-                                          child: HueRingPicker(
-                                            pickerColor: pickerColor,
-                                            onColorChanged: (Color newColor) => pickerColor = newColor,
-                                          ),
-                                        ),
-                                        actions: [
-                                          TextButton(
-                                            onPressed: () => Navigator.pop(context),
-                                            child: Text(S.general.cancel()),
-                                          ),
-                                          TextButton(
-                                            onPressed: () {
-                                              context
-                                                  .read<ScheduleViewCubit>()
-                                                  .changeCourseColor(context, event.course, pickerColor);
-                                              context.read<ScheduleViewCubit>().setLoading();
-                                              showScaffoldMessage(context,
-                                                  S.scaffoldMessages.updatedCourseColor(event.course.englishName));
-                                              Navigator.pop(context);
-                                            },
-                                            child: Text(S.general.done()),
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                  );
-                                },
-                              );
-                            })
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () => Navigator.pop(context),
+                                      child: Text(S.general.cancel()),
+                                    ),
+                                    TextButton(
+                                      onPressed: () {
+                                        context
+                                            .read<ScheduleViewCubit>()
+                                            .changeCourseColor(context, event.course, pickerColor);
+                                        context.read<ScheduleViewCubit>().setLoading();
+                                        showScaffoldMessage(
+                                            context, S.scaffoldMessages.updatedCourseColor(event.course.englishName));
+                                        Navigator.pop(context);
+                                      },
+                                      child: Text(S.general.done()),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          },
+                        ),
                       ],
                     );
                   }

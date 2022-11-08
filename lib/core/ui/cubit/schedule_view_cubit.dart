@@ -39,9 +39,7 @@ class ScheduleViewCubit extends Cubit<ScheduleViewState> {
   final _databaseService = getIt<DatabaseRepository>();
   final _preferenceService = getIt<PreferenceRepository>();
   final ScrollController _listViewScrollController = ScrollController();
-  Stream<Map<String, int>>? _courseColorStream;
 
-  Stream<Map<String, int>>? get courseColorStream => _courseColorStream;
   ScrollController get controller => _listViewScrollController;
   bool get hasBookMarkedSchedules => getIt<PreferenceRepository>().bookmarkIds!.isNotEmpty;
   bool get notificationCheck => getIt<PreferenceRepository>().allowedNotifications == null;
@@ -50,7 +48,6 @@ class ScheduleViewCubit extends Cubit<ScheduleViewState> {
 
   Future<void> _init() async {
     log(name: 'schedule_view_cubit', 'Fetching cache ...');
-    _courseColorStream = await _databaseService.getColorStream();
     await getCachedSchedules();
     _listViewScrollController.addListener((setScrollController));
   }
@@ -77,28 +74,18 @@ class ScheduleViewCubit extends Cubit<ScheduleViewState> {
             final ScheduleOrProgrammeResponse apiResponse = await _cacheAndInteractionService.findSchedule(scheduleId);
 
             switch (apiResponse.status) {
+              case ScheduleOrProgrammeStatus.CACHED:
               case ScheduleOrProgrammeStatus.FETCHED:
                 ScheduleModel newScheduleModel = apiResponse.data;
                 if (newScheduleModel.isNotPhonySchedule()) {
                   await DayListBuilder.updateCourseColorStorage(
                       newScheduleModel, await _databaseService.getCourseColors(), _databaseService.updateCourseColor);
                   matrixListOfDays.add(newScheduleModel.days);
-                  _databaseService.update(ScheduleModel(
-                      cachedAt: newScheduleModel.cachedAt, id: newScheduleModel.id, days: newScheduleModel.days));
                   listOfScheduleModels.add(ScheduleModel(
                       cachedAt: newScheduleModel.cachedAt, id: newScheduleModel.id, days: newScheduleModel.days));
                 }
                 break;
-              case ScheduleOrProgrammeStatus.CACHED:
 
-                /// If schedule is retrieved from cache then all course
-                /// colors will be available and no mapping will be done
-                ScheduleModel currentScheduleModel = apiResponse.data;
-                if (currentScheduleModel.isNotPhonySchedule()) {
-                  matrixListOfDays.add(currentScheduleModel.days);
-                  listOfScheduleModels.add(currentScheduleModel);
-                }
-                break;
               case ScheduleOrProgrammeStatus.ERROR:
 
                 /// If an error occurs here, the schedule is empty currently
@@ -117,12 +104,14 @@ class ScheduleViewCubit extends Cubit<ScheduleViewState> {
           emit(state.copyWith(status: ScheduleViewStatus.NO_VIEW));
         }
       }
-      _setScheduleView(matrixListOfDays, listOfScheduleModels);
+      await _setScheduleView(matrixListOfDays, listOfScheduleModels);
     }
   }
 
-  void _setScheduleView(List<List<Day>> matrixListOfDays, List<ScheduleModel> listOfScheduleModels) {
+  Future _setScheduleView(List<List<Day>> matrixListOfDays, List<ScheduleModel> listOfScheduleModels) async {
     if (listOfScheduleModels.isNotEmpty) {
+      Map<String, int> courseColors = await _databaseService.getCourseColors();
+
       final flattened = matrixListOfDays.expand((listOfDays) => listOfDays).toList();
       flattened.sort((prevDay, nextDay) => prevDay.isoString.compareTo(nextDay.isoString));
 
@@ -140,10 +129,12 @@ class ScheduleViewCubit extends Cubit<ScheduleViewState> {
           .toList();
 
       emit(state.copyWith(
-          status: ScheduleViewStatus.POPULATED_VIEW,
-          listOfDays: listOfDays,
-          listOfWeeks: listOfDays.splitToWeek(),
-          listOfScheduleModels: listOfScheduleModels));
+        status: ScheduleViewStatus.POPULATED_VIEW,
+        listOfDays: listOfDays,
+        listOfWeeks: listOfDays.splitToWeek(),
+        listOfScheduleModels: listOfScheduleModels,
+        courseColors: courseColors,
+      ));
       log(name: 'schedule_view_cubit', 'Successfully updated entire schedule view. Exiting ..');
     } else {
       emit(state.copyWith(status: ScheduleViewStatus.NO_VIEW));

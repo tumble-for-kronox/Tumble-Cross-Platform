@@ -38,19 +38,17 @@ class PreviewListViewDayContainer extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.only(bottom: 10, top: 2),
-            child: StreamBuilder<Map<String, int>>(
-                stream: context.read<ScheduleViewCubit>().courseColorStream,
-                builder: (context, snapshot) {
-                  return Column(
-                    children: day.events
-                        .map((event) => ScheduleCard(
-                            event: event,
-                            color: event.isSpecial ? Colors.redAccent : Color(snapshot.data![event.course.id]!),
-                            onTap: () => TumbleEventModal.showPreviewEventModal(
-                                context, event, Color(snapshot.data![event.course.id]!))))
-                        .toList(),
-                  );
-                }),
+            child: Column(
+              children: day.events
+                  .map((event) => ScheduleCard(
+                      event: event,
+                      color: event.isSpecial
+                          ? Colors.redAccent
+                          : Color(searchPageCubit.state.courseColors![event.course.id]!),
+                      onTap: () => TumbleEventModal.showPreviewEventModal(
+                          context, event, Color(searchPageCubit.state.courseColors![event.course.id]!))))
+                  .toList(),
+            ),
           )
         ],
       ),

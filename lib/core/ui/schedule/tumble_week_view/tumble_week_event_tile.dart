@@ -33,80 +33,79 @@ class TumbleWeekEventTile extends StatelessWidget {
           color: Colors.redAccent,
           colorOpacity: 0.2,
           enabled: event.isSpecial,
-          child: StreamBuilder<Map<String, int>>(
-              stream: context.read<ScheduleViewCubit>().courseColorStream,
-              builder: (context, snapshot) {
-                return MaterialButton(
-                  padding: const EdgeInsets.all(0),
-                  onPressed: () =>
-                      TumbleEventModal.showBookmarkEventModal(context, event, Color(snapshot.data![event.course.id]!)),
+          child: MaterialButton(
+            padding: const EdgeInsets.all(0),
+            onPressed: () => TumbleEventModal.showBookmarkEventModal(
+                context, event, Color(context.read<ScheduleViewCubit>().state.courseColors![event.course.id]!)),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  width: 5,
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.only(topLeft: Radius.circular(2), bottomLeft: Radius.circular(2)),
+                    color: event.isSpecial
+                        ? Colors.redAccent
+                        : Color(context.read<ScheduleViewCubit>().state.courseColors![event.course.id]!),
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.only(left: 8),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Container(
+                        padding: const EdgeInsets.only(top: 10),
                         width: 5,
+                        height: 5,
                         decoration: BoxDecoration(
-                          borderRadius:
-                              const BorderRadius.only(topLeft: Radius.circular(2), bottomLeft: Radius.circular(2)),
-                          color: event.isSpecial ? Colors.redAccent : Color(snapshot.data![event.course.id]!),
+                          shape: BoxShape.circle,
+                          color: event.isSpecial
+                              ? Colors.redAccent
+                              : Color(context.read<ScheduleViewCubit>().state.courseColors![event.course.id]!),
                         ),
                       ),
-                      Container(
-                        padding: const EdgeInsets.only(left: 8),
-                        child: Row(
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.only(top: 10),
-                              width: 5,
-                              height: 5,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: event.isSpecial ? Colors.redAccent : Color(snapshot.data![event.course.id]!),
-                              ),
-                            ),
-                            const SizedBox(width: 6),
-                            Text(
-                              '${DateFormat.Hm(Localizations.localeOf(context).languageCode).format(event.from)} - ${DateFormat.Hm(Localizations.localeOf(context).languageCode).format(event.to)}',
-                              style: TextStyle(
-                                  fontSize: 15.5,
-                                  fontWeight: FontWeight.w400,
-                                  color: Theme.of(context).colorScheme.onSecondary,
-                                  letterSpacing: .5),
-                            ),
-                          ],
-                        ),
+                      const SizedBox(width: 6),
+                      Text(
+                        '${DateFormat.Hm(Localizations.localeOf(context).languageCode).format(event.from)} - ${DateFormat.Hm(Localizations.localeOf(context).languageCode).format(event.to)}',
+                        style: TextStyle(
+                            fontSize: 15.5,
+                            fontWeight: FontWeight.w400,
+                            color: Theme.of(context).colorScheme.onSecondary,
+                            letterSpacing: .5),
                       ),
-                      Expanded(
-                        child: Container(
-                          padding: const EdgeInsets.only(
-                            left: 7,
-                            right: 10,
-                          ),
-                          child: Text(
-                            event.title.capitalize(),
-                            textAlign: TextAlign.end,
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.onSurface,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                        ),
-                      ),
-                      event.isSpecial
-                          ? Container(
-                              padding: const EdgeInsets.only(right: 5),
-                              child: const Icon(
-                                CupertinoIcons.exclamationmark_square,
-                                size: 20,
-                              ),
-                            )
-                          : Container(),
                     ],
                   ),
-                );
-              }),
+                ),
+                Expanded(
+                  child: Container(
+                    padding: const EdgeInsets.only(
+                      left: 7,
+                      right: 10,
+                    ),
+                    child: Text(
+                      event.title.capitalize(),
+                      textAlign: TextAlign.end,
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onSurface,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ),
+                ),
+                event.isSpecial
+                    ? Container(
+                        padding: const EdgeInsets.only(right: 5),
+                        child: const Icon(
+                          CupertinoIcons.exclamationmark_square,
+                          size: 20,
+                        ),
+                      )
+                    : Container(),
+              ],
+            ),
+          ),
         ),
       ),
     );
