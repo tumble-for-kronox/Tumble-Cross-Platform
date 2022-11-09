@@ -41,7 +41,8 @@ class DatabaseRepository implements IDatabaseService {
   @override
   Future removeAll() async {
     await _scheduleStore.delete(await _db);
-    log('Removed all cached schedules');
+    await _colorStore.delete(await _db);
+    log('Removed all cached schedules and course colors');
   }
 
   @override

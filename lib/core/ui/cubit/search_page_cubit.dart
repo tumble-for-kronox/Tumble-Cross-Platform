@@ -114,6 +114,7 @@ class SearchPageCubit extends Cubit<SearchPageState> {
       /// If schedule is cached we do not need to assign new colors, so we can
       /// just do currentScheduleModel.days and currentScheduleModel
       case api.ScheduleOrProgrammeStatus.CACHED:
+        Map<String, int> courseColors = await _databaseService.getCourseColors();
         ScheduleModel currentScheduleModel = apiResponse.data!;
         if (currentScheduleModel.isNotPhonySchedule()) {
           emit(state.copyWith(
@@ -124,7 +125,8 @@ class SearchPageCubit extends Cubit<SearchPageState> {
               previewListOfDays: currentScheduleModel.days,
               previewToggledFavorite: true,
               previewToTopButtonVisible: false,
-              scheduleModel: currentScheduleModel));
+              scheduleModel: currentScheduleModel,
+              courseColors: courseColors));
         } else {
           emit(state.copyWith(
             previewFetchStatus: PreviewFetchStatus.EMPTY_SCHEDULE,
