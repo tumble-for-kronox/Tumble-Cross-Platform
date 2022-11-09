@@ -28,7 +28,8 @@ class DatabaseRepository implements IDatabaseService {
   Future<void> remove(String id, String accessStore) async {
     final store = intMapStoreFactory.store(accessStore);
     final finder = Finder(filter: Filter.equals(_id, id));
-    await store.delete(await _db, finder: finder);
+    int res = await store.delete(await _db, finder: finder);
+    log(res.toString());
   }
 
   @override
@@ -84,12 +85,14 @@ class DatabaseRepository implements IDatabaseService {
     return KronoxUserModel.fromJson(sessionSnapshot.value);
   }
 
+  @override
   Future<Color?> getCourseColor(String courseId) async {
     final courseColors = await _colorStore.findFirst(await _db) as Map<String, int>?;
     if (courseColors == null) return null;
     return Color(courseColors[courseId]!);
   }
 
+  @override
   Future<Map<String, int>> getCourseColors() async {
     final snapshot = (await _colorStore.find(await _db));
     if (snapshot.isEmpty) {
@@ -98,6 +101,7 @@ class DatabaseRepository implements IDatabaseService {
     return cloneMap(snapshot.first.value).cast<String, int>();
   }
 
+  @override
   Future<Map<String, int>> updateCourseColor(String courseId, int color) async {
     Map<String, int> courseColors = await getCourseColors();
     courseColors[courseId] = color;
@@ -107,10 +111,13 @@ class DatabaseRepository implements IDatabaseService {
   }
 
   @override
-  Future<Stream<Map<String, int>>> getColorStream() {
-    return _db.then((db) => _colorStore
-        .record(AccessStores.COLOR_ENTRY_KEY)
-        .onSnapshot(db)
-        .map((snapshot) => cloneMap(snapshot!.value).cast<String, int>()).asBroadcastStream());
+  Future<void> removeCourseColors(List<String> courseIds) async {
+    Map<String, int> courseColors = await getCourseColors();
+    await _colorStore.delete(await _db);
+    for (String id in courseIds) {
+      courseColors.remove(id);
+      log("Removed color for course with id: $id");
+    }
+    await _colorStore.record(AccessStores.COLOR_ENTRY_KEY).add(await _db, courseColors);
   }
 }

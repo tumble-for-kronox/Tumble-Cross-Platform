@@ -229,8 +229,17 @@ class SearchPageCubit extends Cubit<SearchPageState> {
     final List<BookmarkedScheduleModel> bookmarkScheduleModels = _preferenceService.bookmarkScheduleModels;
 
     bookmarkScheduleModels.removeWhere((bookmark) => bookmark.scheduleId == state.previewCurrentScheduleId);
+
+    ScheduleModel? schedule = await _databaseService.getOneSchedule(state.previewCurrentScheduleId!);
+    List<String> courseIds = schedule!.days
+        .expand((day) => day.events)
+        .map((event) => event.course)
+        .map((course) => course.id)
+        .toSet()
+        .toList();
     await _preferenceService.setBookmarks(bookmarkScheduleModels.map((bookmark) => jsonEncode(bookmark)).toList());
     await _databaseService.remove(state.previewCurrentScheduleId!, AccessStores.SCHEDULE_STORE);
+    await _databaseService.removeCourseColors(courseIds);
 
     _notificationService.removeChannel(state.previewCurrentScheduleId!);
 

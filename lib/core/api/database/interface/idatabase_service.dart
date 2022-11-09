@@ -18,5 +18,11 @@ abstract class IDatabaseService implements IService {
 
   Future<KronoxUserModel?> getUserSession();
 
-  Future<Stream<Map<String, int>>> getColorStream();
+  Future<Color?> getCourseColor(String courseId);
+
+  Future<Map<String, int>> getCourseColors();
+
+  Future<Map<String, int>> updateCourseColor(String courseId, int color);
+
+  Future<void> removeCourseColors(List<String> courseIds);
 }
