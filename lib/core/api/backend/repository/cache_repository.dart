@@ -35,7 +35,6 @@ class CacheRepository implements ICacheService {
   @override
   Future<ScheduleOrProgrammeResponse> findSchedule(String scheduleId) async {
     final bool bookmarksContainsThisScheduleId = _preferenceService.bookmarksHasId(scheduleId);
-
     if (bookmarksContainsThisScheduleId) {
       final ScheduleModel? userCachedSchedule = await _getCachedSchedule(scheduleId);
 
@@ -49,7 +48,7 @@ class CacheRepository implements ICacheService {
         return apiResponse;
       }
 
-      /// If the schedule is more than 30 minutes old
+      /// If the schedule is more than 2 hours
       if (DateTime.now().subtract(Constants.updateOffset).isAfter(userCachedSchedule.cachedAt.toLocal())) {
         /// Make sure that only if the user has an internet connection and the
         /// schedule is 'outdated', the app will display the new schedule.

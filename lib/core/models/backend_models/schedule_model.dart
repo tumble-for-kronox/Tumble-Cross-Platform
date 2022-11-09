@@ -7,13 +7,10 @@ import 'package:html_unescape/html_unescape.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'dart:convert';
 
-import 'package:tumble/core/theme/color_picker.dart';
-
 part 'schedule_model.freezed.dart';
 part 'schedule_model.g.dart';
 
-ScheduleModel scheduleModelFromJson(String str) =>
-    ScheduleModel.fromJson(json.decode(str));
+ScheduleModel scheduleModelFromJson(String str) => ScheduleModel.fromJson(json.decode(str));
 
 Map<String, dynamic> scheduleModelToJson(ScheduleModel data) => data.toJson();
 
@@ -25,8 +22,7 @@ class ScheduleModel with _$ScheduleModel {
     required List<Day> days,
   }) = _ScheduleModel;
 
-  factory ScheduleModel.fromJson(Map<String, dynamic> json) =>
-      _$ScheduleModelFromJson(json);
+  factory ScheduleModel.fromJson(Map<String, dynamic> json) => _$ScheduleModelFromJson(json);
 }
 
 @freezed
@@ -44,9 +40,7 @@ class Day with _$Day {
         date: json['date'] as String,
         isoString: DateTime.parse(json['isoString'] as String).toLocal(),
         weekNumber: json['weekNumber'] as int,
-        events: (json['events'] as List<dynamic>)
-            .map((e) => Event.fromJson(e as Map<String, dynamic>))
-            .toList(),
+        events: (json['events'] as List<dynamic>).map((e) => Event.fromJson(e as Map<String, dynamic>)).toList(),
       );
 }
 
@@ -70,12 +64,9 @@ class Event with _$Event {
         course: Course.fromJson(json['course'] as Map<String, dynamic>),
         from: DateTime.parse(json['from'] as String).toLocal(),
         to: DateTime.parse(json['to'] as String).toLocal(),
-        locations: (json['locations'] as List<dynamic>)
-            .map((e) => Location.fromJson(e as Map<String, dynamic>))
-            .toList(),
-        teachers: (json['teachers'] as List<dynamic>)
-            .map((e) => Teacher.fromJson(e as Map<String, dynamic>))
-            .toList(),
+        locations:
+            (json['locations'] as List<dynamic>).map((e) => Location.fromJson(e as Map<String, dynamic>)).toList(),
+        teachers: (json['teachers'] as List<dynamic>).map((e) => Teacher.fromJson(e as Map<String, dynamic>)).toList(),
         isSpecial: json['isSpecial'] as bool,
         lastModified: DateTime.parse(json['lastModified'] as String),
       );
@@ -87,14 +78,13 @@ class Course with _$Course {
     required String id,
     required String swedishName,
     required String englishName,
-    int? courseColor,
   }) = _Course;
 
   factory Course.fromJson(Map<String, dynamic> json) => _$_Course(
       id: json['id'] as String,
       swedishName: json['swedishName'] as String,
       englishName: json['englishName'] as String,
-      courseColor: json['courseColor']);
+      );
 }
 
 @freezed
@@ -107,8 +97,7 @@ class Location with _$Location {
     required int maxSeats,
   }) = _Location;
 
-  factory Location.fromJson(Map<String, dynamic> json) =>
-      _$LocationFromJson(json);
+  factory Location.fromJson(Map<String, dynamic> json) => _$LocationFromJson(json);
 }
 
 @freezed
@@ -119,6 +108,5 @@ class Teacher with _$Teacher {
     required String lastName,
   }) = _Teacher;
 
-  factory Teacher.fromJson(Map<String, dynamic> json) =>
-      _$TeacherFromJson(json);
+  factory Teacher.fromJson(Map<String, dynamic> json) => _$TeacherFromJson(json);
 }

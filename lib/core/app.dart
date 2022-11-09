@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:syncfusion_localizations/syncfusion_localizations.dart';
-import 'package:tumble/core/api/backend/initial/background_task.dart';
 import 'package:tumble/core/navigation/navigation_route_labels.dart';
 import 'package:tumble/core/theme/cubit/theme_cubit.dart';
 import 'package:tumble/core/theme/cubit/theme_state.dart';
@@ -22,14 +21,6 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
-  @override
-  void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await BackgroundTask.callbackDispatcher();
-    });
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
@@ -54,13 +45,10 @@ class _AppState extends State<App> {
                 SfGlobalLocalizations.delegate
               ],
               routes: {
-                NavigationRouteLabels.appSwitchPage: (context) =>
-                    const AppSwitch(),
+                NavigationRouteLabels.appSwitchPage: (context) => const AppSwitch(),
                 // NavigationRouteLabels.appTopRootBuilder: (context) => const App(),
-                NavigationRouteLabels.loginPageRoot: (context) =>
-                    const LoginPageRoot(),
-                NavigationRouteLabels.schoolSelectionPage: (context) =>
-                    const SchoolSelectionPage(),
+                NavigationRouteLabels.loginPageRoot: (context) => const LoginPageRoot(),
+                NavigationRouteLabels.schoolSelectionPage: (context) => const SchoolSelectionPage(),
                 // NavigationRouteLabels.tumbleCalendarView: (context) => const TumbleCalendarView(),
                 // NavigationRouteLabels.tumbleListView: (context) => const TumbleListView(),
                 // NavigationRouteLabels.tumbleWeekView: (context) => const TumbleWeekView(),
@@ -75,18 +63,14 @@ class _AppState extends State<App> {
               ],
               locale: state.locale,
               localeResolutionCallback: (locale, supportedLocales) =>
-                  supportedLocales.contains(locale)
-                      ? locale
-                      : const Locale('en'),
+                  supportedLocales.contains(locale) ? locale : const Locale('en'),
               theme: ThemeData(
-                bottomSheetTheme: const BottomSheetThemeData(
-                    backgroundColor: Colors.transparent),
+                bottomSheetTheme: const BottomSheetThemeData(backgroundColor: Colors.transparent),
                 colorScheme: CustomColors.lightColors,
                 fontFamily: 'Roboto',
               ),
               darkTheme: ThemeData(
-                bottomSheetTheme: const BottomSheetThemeData(
-                    backgroundColor: Colors.transparent),
+                bottomSheetTheme: const BottomSheetThemeData(backgroundColor: Colors.transparent),
                 colorScheme: CustomColors.darkColors,
                 bottomNavigationBarTheme: BottomNavigationBarThemeData(
                   selectedItemColor: CustomColors.darkColors.primary,

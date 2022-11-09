@@ -19,6 +19,7 @@ import 'package:tumble/core/models/backend_models/program_model.dart';
 import 'package:tumble/core/models/backend_models/schedule_model.dart';
 import 'package:tumble/core/models/ui_models/week_model.dart';
 import 'package:tumble/core/theme/color_picker.dart';
+import 'package:tumble/core/ui/schedule/utils/day_list_builder.dart';
 
 part 'search_page_state.dart';
 
@@ -77,44 +78,6 @@ class SearchPageCubit extends Cubit<SearchPageState> {
     return super.close();
   }
 
-  List<Day> _buildListOfDays(ScheduleModel currentScheduleModel) {
-    Map<String, int> courses = {};
-    return currentScheduleModel.days
-        .map((day) => Day(
-            name: day.name,
-            date: day.date,
-            isoString: day.isoString,
-            weekNumber: day.weekNumber,
-            events: day.events
-                .map((event) => Event(
-                    id: event.id,
-                    title: event.title,
-                    course: () {
-                      /// Dynamically assign course colors
-                      if (!courses.containsKey(event.course.id)) {
-                        courses[event.course.id] = ColorPicker().getRandomHexColor();
-                        return Course(
-                            id: event.course.id,
-                            swedishName: event.course.swedishName,
-                            englishName: event.course.englishName,
-                            courseColor: courses[event.course.id]);
-                      }
-                      return Course(
-                          id: event.course.id,
-                          swedishName: event.course.swedishName,
-                          englishName: event.course.englishName,
-                          courseColor: courses[event.course.id]);
-                    }(),
-                    from: event.from,
-                    to: event.to,
-                    locations: event.locations,
-                    teachers: event.teachers,
-                    isSpecial: event.isSpecial,
-                    lastModified: event.lastModified))
-                .toList()))
-        .toList();
-  }
-
   Future<void> openSchedule(String id) async {
     final apiResponse = await _cacheService.findSchedule(id);
     switch (apiResponse.status) {
@@ -126,19 +89,23 @@ class SearchPageCubit extends Cubit<SearchPageState> {
             scheduleFavorited = true;
           }
 
+          Map<String, int> courseColors = await DayListBuilder.updateCourseColorStorage(
+              currentScheduleModel, await _databaseService.getCourseColors(), _databaseService.updateCourseColor);
+
           /// Dynamically assign colors to list of incoming days in this
           /// not-cached schedule model
-          List<Day> listOfDays = _buildListOfDays(currentScheduleModel);
           emit(state.copyWith(
-              previewFetchStatus: PreviewFetchStatus.FETCHED_SCHEDULE,
-              previewCurrentScheduleId: currentScheduleModel.id,
-              previewListOfDays: listOfDays,
-              previewToggledFavorite: scheduleFavorited,
-              previewToTopButtonVisible: false,
+            previewFetchStatus: PreviewFetchStatus.FETCHED_SCHEDULE,
+            previewCurrentScheduleId: currentScheduleModel.id,
+            previewListOfDays: currentScheduleModel.days,
+            previewToggledFavorite: scheduleFavorited,
+            previewToTopButtonVisible: false,
 
-              /// Store schedule model with colors assigned in state
-              scheduleModel: ScheduleModel(
-                  cachedAt: currentScheduleModel.cachedAt, id: currentScheduleModel.id, days: listOfDays)));
+            /// Store schedule model with colors assigned in state
+            scheduleModel: ScheduleModel(
+                cachedAt: currentScheduleModel.cachedAt, id: currentScheduleModel.id, days: currentScheduleModel.days),
+            courseColors: courseColors,
+          ));
         } else {
           emit(state.copyWith(previewFetchStatus: PreviewFetchStatus.EMPTY_SCHEDULE));
         }
@@ -147,6 +114,7 @@ class SearchPageCubit extends Cubit<SearchPageState> {
       /// If schedule is cached we do not need to assign new colors, so we can
       /// just do currentScheduleModel.days and currentScheduleModel
       case api.ScheduleOrProgrammeStatus.CACHED:
+        Map<String, int> courseColors = await _databaseService.getCourseColors();
         ScheduleModel currentScheduleModel = apiResponse.data!;
         if (currentScheduleModel.isNotPhonySchedule()) {
           emit(state.copyWith(
@@ -157,7 +125,8 @@ class SearchPageCubit extends Cubit<SearchPageState> {
               previewListOfDays: currentScheduleModel.days,
               previewToggledFavorite: true,
               previewToTopButtonVisible: false,
-              scheduleModel: currentScheduleModel));
+              scheduleModel: currentScheduleModel,
+              courseColors: courseColors));
         } else {
           emit(state.copyWith(
             previewFetchStatus: PreviewFetchStatus.EMPTY_SCHEDULE,
@@ -262,8 +231,17 @@ class SearchPageCubit extends Cubit<SearchPageState> {
     final List<BookmarkedScheduleModel> bookmarkScheduleModels = _preferenceService.bookmarkScheduleModels;
 
     bookmarkScheduleModels.removeWhere((bookmark) => bookmark.scheduleId == state.previewCurrentScheduleId);
+
+    ScheduleModel? schedule = await _databaseService.getOneSchedule(state.previewCurrentScheduleId!);
+    List<String> courseIds = schedule!.days
+        .expand((day) => day.events)
+        .map((event) => event.course)
+        .map((course) => course.id)
+        .toSet()
+        .toList();
     await _preferenceService.setBookmarks(bookmarkScheduleModels.map((bookmark) => jsonEncode(bookmark)).toList());
     await _databaseService.remove(state.previewCurrentScheduleId!, AccessStores.SCHEDULE_STORE);
+    await _databaseService.removeCourseColors(courseIds);
 
     _notificationService.removeChannel(state.previewCurrentScheduleId!);
 

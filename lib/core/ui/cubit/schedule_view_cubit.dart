@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 import 'dart:ui';
 
@@ -5,9 +6,9 @@ import 'package:bloc/bloc.dart';
 import 'package:collection/collection.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:sembast/utils/value_utils.dart';
 import 'package:tumble/core/api/backend/repository/cache_repository.dart';
 import 'package:tumble/core/api/backend/response_types/schedule_or_programme_response.dart';
-import 'package:tumble/core/api/database/data/access_stores.dart';
 import 'package:tumble/core/api/database/repository/database_repository.dart';
 import 'package:tumble/core/api/dependency_injection/get_it.dart';
 import 'package:tumble/core/api/notifications/builders/notification_service_builder.dart';
@@ -16,9 +17,7 @@ import 'package:tumble/core/api/preferences/repository/preference_repository.dar
 import 'package:tumble/core/extensions/extensions.dart';
 import 'package:tumble/core/models/backend_models/schedule_model.dart';
 import 'package:tumble/core/models/ui_models/week_model.dart';
-import 'package:tumble/core/theme/color_picker.dart';
-import 'package:tumble/core/ui/data/string_constants.dart';
-import 'package:tumble/core/ui/scaffold_message.dart';
+import 'package:tumble/core/ui/schedule/utils/day_list_builder.dart';
 
 part 'schedule_view_state.dart';
 
@@ -63,7 +62,6 @@ class ScheduleViewCubit extends Cubit<ScheduleViewState> {
     final currentScheduleIds = _preferenceService.bookmarkIds;
     List<List<Day>> matrixListOfDays = [];
     List<ScheduleModel> listOfScheduleModels = [];
-    emit(state.copyWith(displayedListItems: [], listOfDays: []));
     if (currentScheduleIds != null) {
       for (String? scheduleId in currentScheduleIds) {
         final bool userHasBookmarks = _preferenceService.userHasBookmarks;
@@ -72,35 +70,27 @@ class ScheduleViewCubit extends Cubit<ScheduleViewState> {
 
         if (scheduleId != null && userHasBookmarks) {
           if (toggledToBeVisible != null && toggledToBeVisible) {
+            log('Updating schedule');
             final ScheduleOrProgrammeResponse apiResponse = await _cacheAndInteractionService.findSchedule(scheduleId);
 
             switch (apiResponse.status) {
+              case ScheduleOrProgrammeStatus.CACHED:
               case ScheduleOrProgrammeStatus.FETCHED:
                 ScheduleModel newScheduleModel = apiResponse.data;
                 if (newScheduleModel.isNotPhonySchedule()) {
-                  final oldScheduleModel = await _databaseService.getOneSchedule(scheduleId);
-
-                  List<Day> newListOfDays = _buildListOfDays(oldScheduleModel!, newScheduleModel);
-                  matrixListOfDays.add(newListOfDays);
-                  listOfScheduleModels.add(
-                      ScheduleModel(cachedAt: newScheduleModel.cachedAt, id: newScheduleModel.id, days: newListOfDays));
+                  await DayListBuilder.updateCourseColorStorage(
+                      newScheduleModel, await _databaseService.getCourseColors(), _databaseService.updateCourseColor);
+                  matrixListOfDays.add(newScheduleModel.days);
+                  listOfScheduleModels.add(ScheduleModel(
+                      cachedAt: newScheduleModel.cachedAt, id: newScheduleModel.id, days: newScheduleModel.days));
                 }
                 break;
-              case ScheduleOrProgrammeStatus.CACHED:
 
-                /// If schedule is retrieved from cache then all course
-                /// colors will be available and no mapping will be done
-                ScheduleModel currentScheduleModel = apiResponse.data;
-                if (currentScheduleModel.isNotPhonySchedule()) {
-                  matrixListOfDays.add(currentScheduleModel.days);
-                  listOfScheduleModels.add(currentScheduleModel);
-                }
-                break;
               case ScheduleOrProgrammeStatus.ERROR:
 
                 /// If an error occurs here, the schedule is empty currently
                 /// and can be temporarily removed from the database for this session.
-                await _databaseService.remove(scheduleId, AccessStores.SCHEDULE_STORE);
+                //await _databaseService.remove(scheduleId, AccessStores.SCHEDULE_STORE);
                 log(
                     name: 'schedule_view_cubit',
                     'Error in retrieveing schedule cache ..\nError on schedule: [$scheduleId');
@@ -114,12 +104,14 @@ class ScheduleViewCubit extends Cubit<ScheduleViewState> {
           emit(state.copyWith(status: ScheduleViewStatus.NO_VIEW));
         }
       }
-      _setScheduleView(matrixListOfDays, listOfScheduleModels);
+      await _setScheduleView(matrixListOfDays, listOfScheduleModels);
     }
   }
 
-  void _setScheduleView(List<List<Day>> matrixListOfDays, List<ScheduleModel> listOfScheduleModels) {
+  Future _setScheduleView(List<List<Day>> matrixListOfDays, List<ScheduleModel> listOfScheduleModels) async {
     if (listOfScheduleModels.isNotEmpty) {
+      Map<String, int> courseColors = await _databaseService.getCourseColors();
+
       final flattened = matrixListOfDays.expand((listOfDays) => listOfDays).toList();
       flattened.sort((prevDay, nextDay) => prevDay.isoString.compareTo(nextDay.isoString));
 
@@ -137,10 +129,12 @@ class ScheduleViewCubit extends Cubit<ScheduleViewState> {
           .toList();
 
       emit(state.copyWith(
-          status: ScheduleViewStatus.POPULATED_VIEW,
-          listOfDays: listOfDays,
-          listOfWeeks: listOfDays.splitToWeek(),
-          listOfScheduleModels: listOfScheduleModels));
+        status: ScheduleViewStatus.POPULATED_VIEW,
+        listOfDays: listOfDays,
+        listOfWeeks: listOfDays.splitToWeek(),
+        listOfScheduleModels: listOfScheduleModels,
+        courseColors: courseColors,
+      ));
       log(name: 'schedule_view_cubit', 'Successfully updated entire schedule view. Exiting ..');
     } else {
       emit(state.copyWith(status: ScheduleViewStatus.NO_VIEW));
@@ -244,39 +238,9 @@ class ScheduleViewCubit extends Cubit<ScheduleViewState> {
     return await checkIfNotificationIsSetForCourse(event);
   }
 
-  void changeCourseColor(BuildContext context, Course course, Color color) {
-    ScheduleModel scheduleModel = state.listOfScheduleModels!.firstWhere((scheduleModel) =>
-        scheduleModel.days.expand((days) => days.events).map((event) => event.course.id).contains(course.id));
-    _databaseService
-        .update(ScheduleModel(
-            cachedAt: scheduleModel.cachedAt,
-            id: scheduleModel.id,
-            days: scheduleModel.days
-                .map((day) => Day(
-                    name: day.name,
-                    date: day.date,
-                    isoString: day.isoString,
-                    weekNumber: day.weekNumber,
-                    events: day.events
-                        .map((event) => Event(
-                            id: event.id,
-                            title: event.title,
-                            course: event.course.id == course.id
-                                ? Course(
-                                    id: event.course.id,
-                                    swedishName: event.course.swedishName,
-                                    englishName: event.course.englishName,
-                                    courseColor: color.value)
-                                : event.course,
-                            from: event.from,
-                            to: event.to,
-                            locations: event.locations,
-                            teachers: event.teachers,
-                            isSpecial: event.isSpecial,
-                            lastModified: event.lastModified))
-                        .toList()))
-                .toList()))
-        .then((_) => getCachedSchedules());
+  void changeCourseColor(BuildContext context, Course course, Color color) async {
+    await _databaseService.updateCourseColor(course.id, color.value);
+    await getCachedSchedules();
   }
 
   Future<void> permissionRequest(bool value) async {
@@ -290,7 +254,6 @@ class ScheduleViewCubit extends Cubit<ScheduleViewState> {
     final visibleBookmarks = _preferenceService.visibleBookmarkIds;
 
     for (var bookmark in visibleBookmarks) {
-      final oldScheduleModel = await _databaseService.getOneSchedule(bookmark.scheduleId);
       final ScheduleOrProgrammeResponse apiResponse =
           await _cacheAndInteractionService.updateSchedule(bookmark.scheduleId);
 
@@ -298,13 +261,14 @@ class ScheduleViewCubit extends Cubit<ScheduleViewState> {
         case ScheduleOrProgrammeStatus.FETCHED:
           final newScheduleModel = apiResponse.data as ScheduleModel;
 
+          await DayListBuilder.updateCourseColorStorage(
+              newScheduleModel, await _databaseService.getCourseColors(), _databaseService.updateCourseColor);
+
           /// Update database with new information, except for the
           /// course colors in [.days]. So when we do getCachedSchedules()
           /// afterwards, it will have the same colors as before refreshing
-          await _databaseService.update(ScheduleModel(
-              cachedAt: newScheduleModel.cachedAt,
-              id: newScheduleModel.id,
-              days: _buildListOfDays(oldScheduleModel!, newScheduleModel)));
+          await _databaseService.update(
+              ScheduleModel(cachedAt: newScheduleModel.cachedAt, id: newScheduleModel.id, days: newScheduleModel.days));
           break;
         default:
           break;
@@ -314,56 +278,4 @@ class ScheduleViewCubit extends Cubit<ScheduleViewState> {
   }
 
   void cancelAllNotifications() => _notificationService.cancelAllNotifications();
-
-  List<Day> _buildListOfDays(ScheduleModel oldScheduleModel, ScheduleModel newScheduleModel) {
-    /// Create map of course id's and colors associated with course,
-    /// due to the course being previously saved in the database we need
-    /// to retrieve the colors and assign them to the incoming one
-    Map<String, int> coursesAndColors = {};
-    oldScheduleModel.days.map((day) => day.events).expand((listOfEvents) => listOfEvents).forEach((event) => {
-          if (coursesAndColors[event.course.id] == null) {coursesAndColors[event.course.id] = event.course.courseColor!}
-        });
-    return newScheduleModel.days
-        .map((day) => Day(
-            name: day.name,
-            date: day.date,
-            isoString: day.isoString,
-            weekNumber: day.weekNumber,
-            events: day.events
-                .map((event) => Event(
-                    id: event.id,
-                    title: event.title,
-                    course: () {
-                      /// Checks if incoming schedule course colors
-                      /// are null, if they are then assign new random
-                      /// colors.
-                      if (event.course.courseColor == null) {
-                        if (!coursesAndColors.containsKey(event.course.id)) {
-                          coursesAndColors[event.course.id] = ColorPicker().getRandomHexColor();
-
-                          /// If new course was added to incoming schedule it
-                          ///  has to be accounted for dynamically
-                          return Course(
-                              id: event.course.id,
-                              swedishName: event.course.swedishName,
-                              englishName: event.course.englishName,
-                              courseColor: coursesAndColors[event.course.id]);
-                        }
-                        return Course(
-                            id: event.course.id,
-                            swedishName: event.course.swedishName,
-                            englishName: event.course.englishName,
-                            courseColor: coursesAndColors[event.course.id]);
-                      }
-                      return event.course;
-                    }(),
-                    from: event.from,
-                    to: event.to,
-                    locations: event.locations,
-                    teachers: event.teachers,
-                    isSpecial: event.isSpecial,
-                    lastModified: event.lastModified))
-                .toList()))
-        .toList();
-  }
 }

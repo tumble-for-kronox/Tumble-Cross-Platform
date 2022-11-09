@@ -5,4 +5,6 @@ import 'package:flutter/foundation.dart';
 class AccessStores {
   static const SCHEDULE_STORE = 'schedules';
   static const USER_STORE = 'user';
+  static const COLOR_STORE = 'colors';
+  static const COLOR_ENTRY_KEY = 0;
 }

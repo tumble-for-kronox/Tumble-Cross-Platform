@@ -8,7 +8,7 @@ abstract class IService<T> {
 
   Future<void> update(T data);
 
-  Future<void> remove(String id, String accessStores);
+  Future<void> remove(String id, String accessStore);
 
   Future<void> removeAll();
 

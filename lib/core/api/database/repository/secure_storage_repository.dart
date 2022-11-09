@@ -8,7 +8,11 @@ class SecureStorageRepository implements ISecureStorage {
 
   @override
   Future<String?> getRefreshToken() async {
-    return await secureStorage.read(key: SecureStorageKeys.refreshToken, aOptions: aOptions);
+    try {
+      return await secureStorage.read(key: SecureStorageKeys.refreshToken, aOptions: aOptions);
+    } catch (e) {
+      clear();
+    }
   }
 
   @override

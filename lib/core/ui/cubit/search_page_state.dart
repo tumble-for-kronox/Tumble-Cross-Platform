@@ -2,23 +2,9 @@
 
 part of 'search_page_cubit.dart';
 
-enum SearchPageStatus {
-  INITIAL,
-  LOADING,
-  FOUND,
-  NO_SCHEDULES,
-  ERROR,
-  DISPLAY_PREVIEW
-}
+enum SearchPageStatus { INITIAL, LOADING, FOUND, NO_SCHEDULES, ERROR, DISPLAY_PREVIEW }
 
-enum PreviewFetchStatus {
-  INITIAL,
-  LOADING,
-  CACHED_SCHEDULE,
-  FETCHED_SCHEDULE,
-  FETCH_ERROR,
-  EMPTY_SCHEDULE
-}
+enum PreviewFetchStatus { INITIAL, LOADING, CACHED_SCHEDULE, FETCHED_SCHEDULE, FETCH_ERROR, EMPTY_SCHEDULE }
 
 class SearchPageState extends Equatable {
   final SearchPageStatus searchPageStatus;
@@ -34,55 +20,58 @@ class SearchPageState extends Equatable {
   final String? previewCurrentScheduleId;
   final bool hasBookmarkedSchedules;
   final ScheduleModel? scheduleModel;
+  final Map<String, int>? courseColors;
 
-  const SearchPageState(
-      {required this.focused,
-      required this.searchPageStatus,
-      required this.previewFetchStatus,
-      required this.clearButtonVisible,
-      required this.errorMessage,
-      required this.programList,
-      required this.previewToTopButtonVisible,
-      required this.previewListOfDays,
-      required this.previewToggledFavorite,
-      required this.previewCurrentScheduleId,
-      required this.errorDescription,
-      required this.hasBookmarkedSchedules,
-      required this.scheduleModel});
+  const SearchPageState({
+    required this.focused,
+    required this.searchPageStatus,
+    required this.previewFetchStatus,
+    required this.clearButtonVisible,
+    required this.errorMessage,
+    required this.programList,
+    required this.previewToTopButtonVisible,
+    required this.previewListOfDays,
+    required this.previewToggledFavorite,
+    required this.previewCurrentScheduleId,
+    required this.errorDescription,
+    required this.hasBookmarkedSchedules,
+    required this.scheduleModel,
+    this.courseColors,
+  });
 
-  SearchPageState copyWith(
-          {bool? focused,
-          SearchPageStatus? searchPageStatus,
-          PreviewFetchStatus? previewFetchStatus,
-          bool? clearButtonVisible,
-          String? errorMessage,
-          List<Item>? programList,
-          bool? previewToTopButtonVisible,
-          List<Day>? previewListOfDays,
-          List<Week>? previewListOfWeeks,
-          bool? previewToggledFavorite,
-          String? previewCurrentScheduleId,
-          String? errorDescription,
-          bool? hasBookmarkedSchedules,
-          ScheduleModel? scheduleModel}) =>
+  SearchPageState copyWith({
+    bool? focused,
+    SearchPageStatus? searchPageStatus,
+    PreviewFetchStatus? previewFetchStatus,
+    bool? clearButtonVisible,
+    String? errorMessage,
+    List<Item>? programList,
+    bool? previewToTopButtonVisible,
+    List<Day>? previewListOfDays,
+    List<Week>? previewListOfWeeks,
+    bool? previewToggledFavorite,
+    String? previewCurrentScheduleId,
+    String? errorDescription,
+    bool? hasBookmarkedSchedules,
+    ScheduleModel? scheduleModel,
+    Map<String, int>? courseColors,
+  }) =>
       SearchPageState(
-          focused: focused ?? this.focused,
-          searchPageStatus: searchPageStatus ?? this.searchPageStatus,
-          previewFetchStatus: previewFetchStatus ?? this.previewFetchStatus,
-          clearButtonVisible: clearButtonVisible ?? this.clearButtonVisible,
-          errorMessage: errorMessage ?? this.errorMessage,
-          programList: programList ?? this.programList,
-          previewToTopButtonVisible:
-              previewToTopButtonVisible ?? this.previewToTopButtonVisible,
-          previewListOfDays: previewListOfDays ?? this.previewListOfDays,
-          previewToggledFavorite:
-              previewToggledFavorite ?? this.previewToggledFavorite,
-          previewCurrentScheduleId:
-              previewCurrentScheduleId ?? this.previewCurrentScheduleId,
-          errorDescription: errorDescription ?? this.errorDescription,
-          hasBookmarkedSchedules:
-              hasBookmarkedSchedules ?? this.hasBookmarkedSchedules,
-          scheduleModel: scheduleModel ?? this.scheduleModel);
+        focused: focused ?? this.focused,
+        searchPageStatus: searchPageStatus ?? this.searchPageStatus,
+        previewFetchStatus: previewFetchStatus ?? this.previewFetchStatus,
+        clearButtonVisible: clearButtonVisible ?? this.clearButtonVisible,
+        errorMessage: errorMessage ?? this.errorMessage,
+        programList: programList ?? this.programList,
+        previewToTopButtonVisible: previewToTopButtonVisible ?? this.previewToTopButtonVisible,
+        previewListOfDays: previewListOfDays ?? this.previewListOfDays,
+        previewToggledFavorite: previewToggledFavorite ?? this.previewToggledFavorite,
+        previewCurrentScheduleId: previewCurrentScheduleId ?? this.previewCurrentScheduleId,
+        errorDescription: errorDescription ?? this.errorDescription,
+        hasBookmarkedSchedules: hasBookmarkedSchedules ?? this.hasBookmarkedSchedules,
+        scheduleModel: scheduleModel ?? this.scheduleModel,
+        courseColors: courseColors ?? this.courseColors,
+      );
 
   @override
   List<Object?> get props => [
@@ -98,6 +87,7 @@ class SearchPageState extends Equatable {
         previewCurrentScheduleId,
         errorDescription,
         hasBookmarkedSchedules,
-        scheduleModel
+        scheduleModel,
+        courseColors,
       ];
 }

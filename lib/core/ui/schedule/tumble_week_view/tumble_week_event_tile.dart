@@ -36,19 +36,17 @@ class TumbleWeekEventTile extends StatelessWidget {
           child: MaterialButton(
             padding: const EdgeInsets.all(0),
             onPressed: () => TumbleEventModal.showBookmarkEventModal(
-                context, event, Color(event.course.courseColor!)),
+                context, event, Color(context.read<ScheduleViewCubit>().state.courseColors![event.course.id]!)),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Container(
                   width: 5,
                   decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(2),
-                        bottomLeft: Radius.circular(2)),
+                    borderRadius: const BorderRadius.only(topLeft: Radius.circular(2), bottomLeft: Radius.circular(2)),
                     color: event.isSpecial
                         ? Colors.redAccent
-                        : Color(event.course.courseColor!),
+                        : Color(context.read<ScheduleViewCubit>().state.courseColors![event.course.id]!),
                   ),
                 ),
                 Container(
@@ -63,7 +61,7 @@ class TumbleWeekEventTile extends StatelessWidget {
                           shape: BoxShape.circle,
                           color: event.isSpecial
                               ? Colors.redAccent
-                              : Color(event.course.courseColor!),
+                              : Color(context.read<ScheduleViewCubit>().state.courseColors![event.course.id]!),
                         ),
                       ),
                       const SizedBox(width: 6),
