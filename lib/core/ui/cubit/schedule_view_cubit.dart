@@ -104,8 +104,8 @@ class ScheduleViewCubit extends Cubit<ScheduleViewState> {
           emit(state.copyWith(status: ScheduleViewStatus.NO_VIEW));
         }
       }
-      await _setScheduleView(matrixListOfDays, listOfScheduleModels);
     }
+    await _setScheduleView(matrixListOfDays, listOfScheduleModels);
   }
 
   Future _setScheduleView(List<List<Day>> matrixListOfDays, List<ScheduleModel> listOfScheduleModels) async {
@@ -240,7 +240,8 @@ class ScheduleViewCubit extends Cubit<ScheduleViewState> {
 
   void changeCourseColor(BuildContext context, Course course, Color color) async {
     await _databaseService.updateCourseColor(course.id, color.value);
-    await getCachedSchedules();
+    Map<String, int> courseColors = await _databaseService.getCourseColors();
+    emit(state.copyWith(status: ScheduleViewStatus.POPULATED_VIEW, courseColors: courseColors));
   }
 
   Future<void> permissionRequest(bool value) async {
