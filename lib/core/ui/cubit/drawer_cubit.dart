@@ -67,10 +67,18 @@ class DrawerCubit extends Cubit<DrawerState> {
   Future<void> removeBookmark(String id) async {
     final bookmarkScheduleModels = _preferenceService.bookmarkScheduleModels;
     bookmarkScheduleModels.removeWhere((bookmark) => bookmark.scheduleId == id);
+    ScheduleModel? schedule = await _databaseService.getOneSchedule(id);
+    List<String> courseIds = schedule!.days
+        .expand((day) => day.events)
+        .map((event) => event.course)
+        .map((course) => course.id)
+        .toSet()
+        .toList();
 
     _preferenceService.setBookmarks(bookmarkScheduleModels.map((bookmark) => jsonEncode(bookmark)).toList());
     _notificationService.removeChannel(id);
 
+    await _databaseService.removeCourseColors(courseIds);
     await _databaseService.remove(id, AccessStores.SCHEDULE_STORE);
 
     emit(state.copyWith(bookmarks: bookmarkScheduleModels, mapOfIdToggles: {

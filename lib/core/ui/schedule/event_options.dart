@@ -7,6 +7,7 @@ import 'package:tumble/core/ui/cubit/app_switch_cubit.dart';
 import 'package:tumble/core/ui/cubit/schedule_view_cubit.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
 import 'package:tumble/core/ui/schedule/cancel_button.dart';
+import 'package:tumble/core/ui/tumble_loading.dart';
 
 import '../../models/backend_models/schedule_model.dart';
 import '../permission_handler.dart';
@@ -157,7 +158,8 @@ class EventOptions extends StatelessWidget {
                     );
                   }
                   return const SizedBox(
-                    height: 200,
+                    height: 325,
+                    child: TumbleLoading(),
                   );
                 },
               ),
