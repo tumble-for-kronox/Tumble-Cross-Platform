@@ -5,9 +5,11 @@ class SharedPreferenceResponse<T> {
   T? data;
   String? message;
 
-  SharedPreferenceResponse.noSchool(this.message) : status = SharedPreferenceSchoolStatus.NO_SCHOOL;
+  SharedPreferenceResponse.firstBoot(this.message)
+      : status = SharedPreferenceSchoolStatus.INITIAL;
 
-  SharedPreferenceResponse.schoolAvailable(this.data) : status = SharedPreferenceSchoolStatus.SCHOOL_AVAILABLE;
+  SharedPreferenceResponse.notFirstBoot(this.data)
+      : status = SharedPreferenceSchoolStatus.SCHOOL_AVAILABLE;
 
   @override
   String toString() {
@@ -15,4 +17,4 @@ class SharedPreferenceResponse<T> {
   }
 }
 
-enum SharedPreferenceSchoolStatus { NO_SCHOOL, SCHOOL_AVAILABLE }
+enum SharedPreferenceSchoolStatus { INITIAL, SCHOOL_AVAILABLE }

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tumble/core/models/ui_models/school_model.dart';
@@ -32,7 +34,8 @@ class _SchoolSelectionPageState extends State<SchoolSelectionPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(top: 80, right: 20, left: 20, bottom: 20),
+                    padding: const EdgeInsets.only(
+                        top: 80, right: 20, left: 20, bottom: 20),
                     child: Text(
                       S.settingsPage.chooseUniversity(),
                       style: TextStyle(
@@ -58,16 +61,15 @@ class _SchoolSelectionPageState extends State<SchoolSelectionPage> {
 
 void onPressSchool(School school, BuildContext context) {
   if (school.loginRequired) {
-    Navigator.of(context).pushNamed(NavigationRouteLabels.loginPageRoot, arguments: {'schoolName': school.schoolName});
-    return;
-  } else if (context.read<AppSwitchCubit>().schoolNotNull) {
-    BlocProvider.of<AppSwitchCubit>(context).changeSchool(school.schoolName).then((_) {
-      BlocProvider.of<AuthCubit>(context).logout();
-      Navigator.pushNamedAndRemoveUntil(context, NavigationRouteLabels.appSwitchPage, (route) => false);
-    });
+    Navigator.of(context).pushNamed(NavigationRouteLabels.loginPageRoot,
+        arguments: {'schoolName': school.schoolName});
+    Navigator.pop(context);
   } else {
-    BlocProvider.of<AppSwitchCubit>(context).changeSchool(school.schoolName).then((_) {
+    BlocProvider.of<AppSwitchCubit>(context)
+        .changeSchool(school.schoolName)
+        .then((_) {
       BlocProvider.of<AuthCubit>(context).logout();
+      Navigator.pop(context);
     });
   }
 }

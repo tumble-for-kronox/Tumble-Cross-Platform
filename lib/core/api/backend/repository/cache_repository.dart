@@ -21,39 +21,48 @@ class CacheRepository implements ICacheService {
   @override
   Future<ScheduleOrProgrammeResponse> searchProgram(String searchQuery) async {
     String defaultSchool = _preferenceService.defaultSchool!;
-    ScheduleOrProgrammeResponse response = await _backendService.getPrograms(searchQuery, defaultSchool);
+    ScheduleOrProgrammeResponse response =
+        await _backendService.getPrograms(searchQuery, defaultSchool);
     return response;
   }
 
   @override
   Future<ScheduleOrProgrammeResponse> updateSchedule(scheduleId) async {
     String defaultSchool = _preferenceService.defaultSchool!;
-    ScheduleOrProgrammeResponse response = await _backendService.getSchedule(scheduleId, defaultSchool);
+    ScheduleOrProgrammeResponse response =
+        await _backendService.getSchedule(scheduleId, defaultSchool);
     return response;
   }
 
   @override
   Future<ScheduleOrProgrammeResponse> findSchedule(String scheduleId) async {
-    final bool bookmarksContainsThisScheduleId = _preferenceService.bookmarksHasId(scheduleId);
+    final bool bookmarksContainsThisScheduleId =
+        _preferenceService.bookmarksHasId(scheduleId);
     if (bookmarksContainsThisScheduleId) {
-      final ScheduleModel? userCachedSchedule = await _getCachedSchedule(scheduleId);
+      final ScheduleModel? userCachedSchedule =
+          await _getCachedSchedule(scheduleId);
 
       if (userCachedSchedule == null) {
         /// Try to fetch new version of schedule if the cache is empty
-        final ScheduleOrProgrammeResponse apiResponse = await updateSchedule(scheduleId);
+        final ScheduleOrProgrammeResponse apiResponse =
+            await updateSchedule(scheduleId);
         if (apiResponse.data == null) {
           return ScheduleOrProgrammeResponse.error(
-              RuntimeErrorType.scheduleFetchError(), S.popUps.scheduleFetchError());
+              RuntimeErrorType.scheduleFetchError(),
+              S.popUps.scheduleFetchError());
         }
         return apiResponse;
       }
 
       /// If the schedule is more than 2 hours
-      if (DateTime.now().subtract(Constants.updateOffset).isAfter(userCachedSchedule.cachedAt.toLocal())) {
+      if (DateTime.now()
+          .subtract(Constants.updateOffset)
+          .isAfter(userCachedSchedule.cachedAt.toLocal())) {
         /// Make sure that only if the user has an internet connection and the
         /// schedule is 'outdated', the app will display the new schedule.
         /// Otherwise it returns [ApiResponse.cached(userCachedSchedule)]
-        ScheduleOrProgrammeResponse apiResponse = await updateSchedule(scheduleId);
+        ScheduleOrProgrammeResponse apiResponse =
+            await updateSchedule(scheduleId);
         if (apiResponse.data != null) {
           return apiResponse;
         }
@@ -78,9 +87,9 @@ class CacheRepository implements ICacheService {
     final String? defaultSchool = _preferenceService.defaultSchool;
 
     if (defaultSchool != null) {
-      return SharedPreferenceResponse.schoolAvailable(defaultSchool);
+      return SharedPreferenceResponse.notFirstBoot(defaultSchool);
     } else {
-      return SharedPreferenceResponse.noSchool("School unavailable");
+      return SharedPreferenceResponse.firstBoot("School unavailable");
     }
   }
 

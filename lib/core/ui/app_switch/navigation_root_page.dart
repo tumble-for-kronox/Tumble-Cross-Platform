@@ -35,6 +35,7 @@ class _NavigationRootPageState extends State<NavigationRootPage> {
   late UserEventCubit _userEventCubit;
   late ResourceCubit _resourceCubit;
   bool calledThisBuild = false;
+
   @override
   void initState() {
     _navigationCubit = NavigationCubit();
@@ -100,7 +101,8 @@ class _NavigationRootPageState extends State<NavigationRootPage> {
                 ],
                 child: TumbleAppDrawer(reloadViews: () async {
                   final bookmarks = _searchPageCubit.updateBookmarkView();
-                  if (!bookmarks.contains(_searchPageCubit.state.previewCurrentScheduleId)) {
+                  if (!bookmarks.contains(
+                      _searchPageCubit.state.previewCurrentScheduleId)) {
                     _searchPageCubit.resetPreviewButton();
                   }
                 }),
@@ -134,18 +136,19 @@ class _NavigationRootPageState extends State<NavigationRootPage> {
                     listeners: [
                       BlocListener<SearchPageCubit, SearchPageState>(
                         listenWhen: (previous, current) =>
-                            previous.previewToggledFavorite != current.previewToggledFavorite,
+                            previous.previewToggledFavorite !=
+                            current.previewToggledFavorite,
                         listener: (context, state) {
-                          log(name: 'navigation_root_page', 'Fetching new schedules ..');
                           _scheduleViewCubit.setLoading();
                           _scheduleViewCubit.getCachedSchedules();
                         },
                       ),
                       BlocListener<AuthCubit, AuthState>(
-                        listenWhen: (previous, current) =>
-                            ((previous.status == AuthStatus.INITIAL && current.status == AuthStatus.AUTHENTICATED) ||
-                                (previous.status == AuthStatus.UNAUTHENTICATED &&
-                                    current.status == AuthStatus.AUTHENTICATED)),
+                        listenWhen: (previous, current) => ((previous.status ==
+                                    AuthStatus.INITIAL &&
+                                current.status == AuthStatus.AUTHENTICATED) ||
+                            (previous.status == AuthStatus.UNAUTHENTICATED &&
+                                current.status == AuthStatus.AUTHENTICATED)),
                         listener: (context, state) {
                           _initialiseUserData(context);
                         },
@@ -154,7 +157,8 @@ class _NavigationRootPageState extends State<NavigationRootPage> {
                     child: AnimatedSwitcher(
                       duration: const Duration(milliseconds: 200),
                       child: () {
-                        switch (context.read<NavigationCubit>().state.navbarItem) {
+                        switch (
+                            context.read<NavigationCubit>().state.navbarItem) {
                           case NavbarItem.SEARCH:
                             return const TumbleSearchPage();
                           case NavbarItem.LIST:
@@ -177,7 +181,9 @@ class _NavigationRootPageState extends State<NavigationRootPage> {
                 ),
               ),
               bottomNavigationBar: TumbleNavigationBar(onTap: (index) {
-                context.read<NavigationCubit>().getNavBarItem(NavbarItem.values[index]);
+                context
+                    .read<NavigationCubit>()
+                    .getNavBarItem(NavbarItem.values[index]);
               }));
         },
       ),
@@ -185,7 +191,9 @@ class _NavigationRootPageState extends State<NavigationRootPage> {
   }
 
   void _initialiseUserData(BuildContext context) {
-    log(name: 'navigation_root_page', 'Updating user resources, events and bookings ..');
+    log(
+        name: 'navigation_root_page',
+        'Updating user resources, events and bookings ..');
     context.read<UserEventCubit>().getUserEvents(
           context.read<AuthCubit>().state.status,
           context.read<AuthCubit>().setUserSession,

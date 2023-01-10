@@ -1,5 +1,8 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tumble/core/models/ui_models/school_model.dart';
 import 'package:tumble/core/theme/cubit/theme_cubit.dart';
 import 'package:tumble/core/theme/cubit/theme_state.dart';
 import 'package:tumble/core/ui/app_switch/navigation_root_page.dart';
@@ -21,6 +24,7 @@ class _AppSwitchState extends State<AppSwitch> {
   @override
   void initState() {
     _appSwitchCubit = AppSwitchCubit();
+    WidgetsBinding.instance.addPostFrameCallback((_) => runFirstTime());
     super.initState();
   }
 
@@ -37,29 +41,27 @@ class _AppSwitchState extends State<AppSwitch> {
               value: _appSwitchCubit,
               child: BlocBuilder<AppSwitchCubit, AppSwitchState>(
                 builder: (context, state) {
-                  switch (state.status) {
-                    case AppSwitchStatus.UNINITIALIZED:
-                      return MultiBlocProvider(
-                        providers: [
-                          BlocProvider.value(
-                            value: context.read<AuthCubit>(),
-                          ),
-                          BlocProvider.value(
-                            value: _appSwitchCubit,
-                          ),
-                        ],
-                        child: const SchoolSelectionPage(),
-                      );
-                    case AppSwitchStatus.INITIALIZED:
-                      return BlocProvider.value(
-                        value: context.read<AuthCubit>(),
-                        child: const NavigationRootPage(),
-                      );
-                    default:
-                      return const TumbleLoading();
-                  }
+                  return BlocProvider.value(
+                    value: context.read<AuthCubit>(),
+                    child: const NavigationRootPage(),
+                  );
                 },
               ),
             )));
+  }
+
+  Future<dynamic> runFirstTime() async {
+    final hasRun = _appSwitchCubit.checkFirstTimeLaunch();
+    if (!hasRun) {
+      showModalBottomSheet(
+          isScrollControlled: true,
+          isDismissible: false,
+          context: context,
+          builder: (context) => BlocProvider.value(
+                value: _appSwitchCubit,
+                child: const SchoolSelectionPage(),
+              ));
+      //_appSwitchCubit.setFirstTimeLaunched(true);
+    }
   }
 }

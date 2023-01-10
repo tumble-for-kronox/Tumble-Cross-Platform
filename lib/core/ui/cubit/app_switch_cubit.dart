@@ -14,7 +14,8 @@ import '../../api/notifications/repository/notification_repository.dart';
 part 'app_switch_state.dart';
 
 class AppSwitchCubit extends Cubit<AppSwitchState> {
-  AppSwitchCubit() : super(const AppSwitchState(status: AppSwitchStatus.INITIAL)) {
+  AppSwitchCubit()
+      : super(const AppSwitchState(status: AppSwitchStatus.INITIAL)) {
     _init();
   }
 
@@ -27,9 +28,10 @@ class AppSwitchCubit extends Cubit<AppSwitchState> {
   bool get schoolNotNull => _preferenceService.defaultSchool != null;
 
   Future<void> _init() async {
-    SharedPreferenceResponse sharedPreferenceResponse = await _cacheAndInteractionService.hasSchool();
+    SharedPreferenceResponse sharedPreferenceResponse =
+        await _cacheAndInteractionService.hasSchool();
     switch (sharedPreferenceResponse.status) {
-      case SharedPreferenceSchoolStatus.NO_SCHOOL:
+      case SharedPreferenceSchoolStatus.INITIAL:
         emit(state.copyWith(status: AppSwitchStatus.UNINITIALIZED));
         break;
       case SharedPreferenceSchoolStatus.SCHOOL_AVAILABLE:
@@ -49,19 +51,20 @@ class AppSwitchCubit extends Cubit<AppSwitchState> {
     }
   }
 
+  bool checkFirstTimeLaunch() => _preferenceService.hasRun;
+
+  Future<void> setFirstTimeLaunched(bool hasRun) =>
+      _preferenceService.setHasRun(hasRun);
+
   Future<void> changeSchool(String schoolName) async {
     /// Renew items in shared preferences
     await _appDependencies.updateDependencies(schoolName);
 
-    if (state.status == AppSwitchStatus.INITIALIZED) {
-      /// Clear local db
-      _databaseService.removeAll();
-      _notificationService.cancelAllNotifications();
-      return;
-    } else if (state.status == AppSwitchStatus.UNINITIALIZED) {
-      emit(state.copyWith(status: AppSwitchStatus.INITIALIZED));
-    }
+    /// Clear local db
+    _databaseService.removeAll();
+    _notificationService.cancelAllNotifications();
   }
 
-  bool get notificationCheck => getIt<PreferenceRepository>().allowedNotifications == null;
+  bool get notificationCheck =>
+      getIt<PreferenceRepository>().allowedNotifications == null;
 }
