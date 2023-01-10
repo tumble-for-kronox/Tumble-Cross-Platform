@@ -61,7 +61,7 @@ class _AppSwitchState extends State<AppSwitch> {
                 value: _appSwitchCubit,
                 child: const SchoolSelectionPage(),
               ));
-      //_appSwitchCubit.setFirstTimeLaunched(true);
+      _appSwitchCubit.setFirstTimeLaunched(true);
     }
   }
 }
