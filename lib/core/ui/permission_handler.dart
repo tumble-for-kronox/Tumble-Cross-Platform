@@ -1,11 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tumble/core/ui/cubit/app_switch_cubit.dart';
+import 'package:tumble/core/api/backend/repository/cache_repository.dart';
+import 'package:tumble/core/api/dependency_injection/get_it.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
 
 class PermissionHandler extends StatelessWidget {
-  const PermissionHandler({Key? key}) : super(key: key);
+  final _cacheAndInteractionService = getIt<CacheRepository>();
+
+  PermissionHandler({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +18,7 @@ class PermissionHandler extends StatelessWidget {
             child: TextButton(
                 onPressed: () async {
                   Navigator.pop(context);
-                  await context.read<AppSwitchCubit>().permissionRequest(false);
+                  await _cacheAndInteractionService.permissionRequest(false);
                 },
                 child: Text(S.general.no(),
                     style: const TextStyle(
@@ -26,7 +29,7 @@ class PermissionHandler extends StatelessWidget {
           child: TextButton(
               onPressed: () async {
                 Navigator.of(context).pop();
-                await context.read<AppSwitchCubit>().permissionRequest(true);
+                await _cacheAndInteractionService.permissionRequest(true);
               },
               child: Text(S.general.yes(),
                   style: const TextStyle(

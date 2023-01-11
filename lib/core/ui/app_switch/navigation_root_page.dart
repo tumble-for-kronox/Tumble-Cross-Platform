@@ -3,9 +3,10 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tumble/core/api/backend/repository/cache_repository.dart';
+import 'package:tumble/core/api/dependency_injection/get_it.dart';
 import 'package:tumble/core/ui/bottom_nav_bar/data/nav_bar_items.dart';
 import 'package:tumble/core/ui/bottom_nav_bar/tumble_navigation_bar.dart';
-import 'package:tumble/core/ui/cubit/app_switch_cubit.dart';
 import 'package:tumble/core/ui/app_switch/misc/tumble_app_bar.dart';
 import 'package:tumble/core/ui/app_switch/misc/tumble_drawer/tumble_app_drawer.dart';
 import 'package:tumble/core/ui/cubit/auth_cubit.dart';
@@ -36,6 +37,8 @@ class _NavigationRootPageState extends State<NavigationRootPage> {
   late ResourceCubit _resourceCubit;
   bool calledThisBuild = false;
 
+  final _cacheAndInteractionService = getIt<CacheRepository>();
+
   @override
   void initState() {
     _navigationCubit = NavigationCubit();
@@ -43,18 +46,8 @@ class _NavigationRootPageState extends State<NavigationRootPage> {
     _searchPageCubit = SearchPageCubit();
     _userEventCubit = UserEventCubit();
     _resourceCubit = ResourceCubit();
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      if (context.read<AppSwitchCubit>().notificationCheck) {
-        showCupertinoDialog(
-            barrierDismissible: false,
-            useRootNavigator: false,
-            context: context,
-            builder: (_) => BlocProvider.value(
-                  value: BlocProvider.of<AppSwitchCubit>(context),
-                  child: const PermissionHandler(),
-                ));
-      }
-    });
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) async => permissionRequest());
     super.initState();
   }
 
@@ -93,9 +86,6 @@ class _NavigationRootPageState extends State<NavigationRootPage> {
                     value: _scheduleViewCubit,
                   ),
                   BlocProvider.value(
-                    value: context.read<AppSwitchCubit>(),
-                  ),
-                  BlocProvider.value(
                     value: context.read<AuthCubit>(),
                   ),
                 ],
@@ -128,9 +118,6 @@ class _NavigationRootPageState extends State<NavigationRootPage> {
                     BlocProvider.value(
                       value: BlocProvider.of<AuthCubit>(context),
                     ),
-                    BlocProvider.value(
-                      value: BlocProvider.of<AppSwitchCubit>(context),
-                    )
                   ],
                   child: MultiBlocListener(
                     listeners: [
@@ -211,5 +198,15 @@ class _NavigationRootPageState extends State<NavigationRootPage> {
           context.read<AuthCubit>().setUserSession,
           context.read<AuthCubit>().logout,
         );
+  }
+
+  Future<void> permissionRequest() async {
+    if (_cacheAndInteractionService.notificationCheck) {
+      showCupertinoDialog(
+          barrierDismissible: false,
+          useRootNavigator: false,
+          context: context,
+          builder: (_) => PermissionHandler());
+    }
   }
 }
