@@ -22,11 +22,12 @@ class TumbleNavigationBar extends StatelessWidget {
           ),
           child: BottomNavigationBar(
             type: BottomNavigationBarType.fixed,
-            selectedIconTheme: const IconThemeData(size: 24),
-            unselectedIconTheme: IconThemeData(size: 22, color: Theme.of(context).colorScheme.onBackground),
+            selectedIconTheme: const IconThemeData(size: 26),
+            unselectedIconTheme: IconThemeData(
+                size: 24, color: Theme.of(context).colorScheme.onBackground),
             onTap: onTap,
-            selectedFontSize: 12.5,
-            unselectedFontSize: 11,
+            selectedFontSize: 14,
+            unselectedFontSize: 13,
             currentIndex: mainappstate.index,
             backgroundColor: Theme.of(context).colorScheme.background,
             elevation: 0,
@@ -41,10 +42,14 @@ class TumbleNavigationBar extends StatelessWidget {
                 label: S.listViewPage.title(),
               ),
               BottomNavigationBarItem(
-                  icon: const Icon(CupertinoIcons.list_bullet_indent), label: S.weekViewPage.title()),
+                  icon: const Icon(CupertinoIcons.list_bullet_indent),
+                  label: S.weekViewPage.title()),
               BottomNavigationBarItem(
-                  icon: const Icon(CupertinoIcons.calendar_today), label: S.calendarViewPage.title()),
-              BottomNavigationBarItem(icon: const Icon(CupertinoIcons.person), label: S.authorizedPage.title()),
+                  icon: const Icon(CupertinoIcons.calendar_today),
+                  label: S.calendarViewPage.title()),
+              BottomNavigationBarItem(
+                  icon: const Icon(CupertinoIcons.person),
+                  label: S.authorizedPage.title()),
             ],
           ),
         );

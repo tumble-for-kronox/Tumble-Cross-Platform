@@ -6,4 +6,5 @@ class PreferenceTypes {
   static const autoSignup = 'AUTOSIGNUP';
   static const locale = 'LANG';
   static const notificationAllowed = 'NOTIFICATION_ALLOWED';
+  static const hasRun = 'HAS_RUN';
 }

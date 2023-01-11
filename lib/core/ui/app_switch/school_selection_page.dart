@@ -1,8 +1,11 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tumble/core/api/backend/repository/cache_repository.dart';
+import 'package:tumble/core/api/dependency_injection/get_it.dart';
 import 'package:tumble/core/models/ui_models/school_model.dart';
 import 'package:tumble/core/navigation/navigation_route_labels.dart';
-import 'package:tumble/core/ui/cubit/app_switch_cubit.dart';
 import 'package:tumble/core/ui/cubit/auth_cubit.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
 import 'package:tumble/core/ui/app_switch/data/schools.dart';
@@ -18,6 +21,8 @@ class SchoolSelectionPage extends StatefulWidget {
 }
 
 class _SchoolSelectionPageState extends State<SchoolSelectionPage> {
+  final _cacheAndInteractionService = getIt<CacheRepository>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,7 +37,8 @@ class _SchoolSelectionPageState extends State<SchoolSelectionPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(top: 80, right: 20, left: 20, bottom: 20),
+                    padding: const EdgeInsets.only(
+                        top: 80, right: 20, left: 20, bottom: 20),
                     child: Text(
                       S.settingsPage.chooseUniversity(),
                       style: TextStyle(
@@ -54,20 +60,21 @@ class _SchoolSelectionPageState extends State<SchoolSelectionPage> {
               ),
             )));
   }
-}
 
-void onPressSchool(School school, BuildContext context) {
-  if (school.loginRequired) {
-    Navigator.of(context).pushNamed(NavigationRouteLabels.loginPageRoot, arguments: {'schoolName': school.schoolName});
-    return;
-  } else if (context.read<AppSwitchCubit>().schoolNotNull) {
-    BlocProvider.of<AppSwitchCubit>(context).changeSchool(school.schoolName).then((_) {
-      BlocProvider.of<AuthCubit>(context).logout();
-      Navigator.pushNamedAndRemoveUntil(context, NavigationRouteLabels.appSwitchPage, (route) => false);
-    });
-  } else {
-    BlocProvider.of<AppSwitchCubit>(context).changeSchool(school.schoolName).then((_) {
-      BlocProvider.of<AuthCubit>(context).logout();
-    });
+  void onPressSchool(School school, BuildContext context) {
+    if (school.loginRequired) {
+      Navigator.of(context).pushNamed(NavigationRouteLabels.loginPageRoot,
+          arguments: {'schoolName': school.schoolName});
+      Navigator.pop(context);
+    } else {
+      log(
+          name: 'school_selection_page',
+          'Setting ${school.schoolName} as default');
+      _cacheAndInteractionService.changeSchool(school.schoolName).then((_) {
+        _cacheAndInteractionService.setFirstTimeLaunched(true);
+        BlocProvider.of<AuthCubit>(context).logout();
+        Navigator.pop(context);
+      });
+    }
   }
 }

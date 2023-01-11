@@ -9,6 +9,7 @@ abstract class IPreferenceService {
   String? get theme;
   bool? get autoSignup;
   String? get locale;
+  bool get hasRun;
   bool bookmarksHasId(String scheduleId);
   Future<void> setBookmarks(List<String> bookmarks);
   Future<void> setSchool(String schoolName);
@@ -17,6 +18,7 @@ abstract class IPreferenceService {
   Future<void> setAutoSignup(bool autoSignup);
   Future<void> setNotificationAllowed(bool allowed);
   Future<void> setLocale(String locale);
+  Future<void> setHasRun(bool hasRun);
   Future<void> remove(String type);
   bool? bookmarkVisible(String? id);
   bool bookmarksContainSchedule(String id);

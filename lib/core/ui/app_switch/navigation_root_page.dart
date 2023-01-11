@@ -3,9 +3,10 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tumble/core/api/backend/repository/cache_repository.dart';
+import 'package:tumble/core/api/dependency_injection/get_it.dart';
 import 'package:tumble/core/ui/bottom_nav_bar/data/nav_bar_items.dart';
 import 'package:tumble/core/ui/bottom_nav_bar/tumble_navigation_bar.dart';
-import 'package:tumble/core/ui/cubit/app_switch_cubit.dart';
 import 'package:tumble/core/ui/app_switch/misc/tumble_app_bar.dart';
 import 'package:tumble/core/ui/app_switch/misc/tumble_drawer/tumble_app_drawer.dart';
 import 'package:tumble/core/ui/cubit/auth_cubit.dart';
@@ -35,6 +36,9 @@ class _NavigationRootPageState extends State<NavigationRootPage> {
   late UserEventCubit _userEventCubit;
   late ResourceCubit _resourceCubit;
   bool calledThisBuild = false;
+
+  final _cacheAndInteractionService = getIt<CacheRepository>();
+
   @override
   void initState() {
     _navigationCubit = NavigationCubit();
@@ -42,18 +46,8 @@ class _NavigationRootPageState extends State<NavigationRootPage> {
     _searchPageCubit = SearchPageCubit();
     _userEventCubit = UserEventCubit();
     _resourceCubit = ResourceCubit();
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      if (context.read<AppSwitchCubit>().notificationCheck) {
-        showCupertinoDialog(
-            barrierDismissible: false,
-            useRootNavigator: false,
-            context: context,
-            builder: (_) => BlocProvider.value(
-                  value: BlocProvider.of<AppSwitchCubit>(context),
-                  child: const PermissionHandler(),
-                ));
-      }
-    });
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) async => permissionRequest());
     super.initState();
   }
 
@@ -92,15 +86,13 @@ class _NavigationRootPageState extends State<NavigationRootPage> {
                     value: _scheduleViewCubit,
                   ),
                   BlocProvider.value(
-                    value: context.read<AppSwitchCubit>(),
-                  ),
-                  BlocProvider.value(
                     value: context.read<AuthCubit>(),
                   ),
                 ],
                 child: TumbleAppDrawer(reloadViews: () async {
                   final bookmarks = _searchPageCubit.updateBookmarkView();
-                  if (!bookmarks.contains(_searchPageCubit.state.previewCurrentScheduleId)) {
+                  if (!bookmarks.contains(
+                      _searchPageCubit.state.previewCurrentScheduleId)) {
                     _searchPageCubit.resetPreviewButton();
                   }
                 }),
@@ -126,26 +118,24 @@ class _NavigationRootPageState extends State<NavigationRootPage> {
                     BlocProvider.value(
                       value: BlocProvider.of<AuthCubit>(context),
                     ),
-                    BlocProvider.value(
-                      value: BlocProvider.of<AppSwitchCubit>(context),
-                    )
                   ],
                   child: MultiBlocListener(
                     listeners: [
                       BlocListener<SearchPageCubit, SearchPageState>(
                         listenWhen: (previous, current) =>
-                            previous.previewToggledFavorite != current.previewToggledFavorite,
+                            previous.previewToggledFavorite !=
+                            current.previewToggledFavorite,
                         listener: (context, state) {
-                          log(name: 'navigation_root_page', 'Fetching new schedules ..');
                           _scheduleViewCubit.setLoading();
                           _scheduleViewCubit.getCachedSchedules();
                         },
                       ),
                       BlocListener<AuthCubit, AuthState>(
-                        listenWhen: (previous, current) =>
-                            ((previous.status == AuthStatus.INITIAL && current.status == AuthStatus.AUTHENTICATED) ||
-                                (previous.status == AuthStatus.UNAUTHENTICATED &&
-                                    current.status == AuthStatus.AUTHENTICATED)),
+                        listenWhen: (previous, current) => ((previous.status ==
+                                    AuthStatus.INITIAL &&
+                                current.status == AuthStatus.AUTHENTICATED) ||
+                            (previous.status == AuthStatus.UNAUTHENTICATED &&
+                                current.status == AuthStatus.AUTHENTICATED)),
                         listener: (context, state) {
                           _initialiseUserData(context);
                         },
@@ -154,7 +144,8 @@ class _NavigationRootPageState extends State<NavigationRootPage> {
                     child: AnimatedSwitcher(
                       duration: const Duration(milliseconds: 200),
                       child: () {
-                        switch (context.read<NavigationCubit>().state.navbarItem) {
+                        switch (
+                            context.read<NavigationCubit>().state.navbarItem) {
                           case NavbarItem.SEARCH:
                             return const TumbleSearchPage();
                           case NavbarItem.LIST:
@@ -177,7 +168,9 @@ class _NavigationRootPageState extends State<NavigationRootPage> {
                 ),
               ),
               bottomNavigationBar: TumbleNavigationBar(onTap: (index) {
-                context.read<NavigationCubit>().getNavBarItem(NavbarItem.values[index]);
+                context
+                    .read<NavigationCubit>()
+                    .getNavBarItem(NavbarItem.values[index]);
               }));
         },
       ),
@@ -185,7 +178,9 @@ class _NavigationRootPageState extends State<NavigationRootPage> {
   }
 
   void _initialiseUserData(BuildContext context) {
-    log(name: 'navigation_root_page', 'Updating user resources, events and bookings ..');
+    log(
+        name: 'navigation_root_page',
+        'Updating user resources, events and bookings ..');
     context.read<UserEventCubit>().getUserEvents(
           context.read<AuthCubit>().state.status,
           context.read<AuthCubit>().setUserSession,
@@ -203,5 +198,15 @@ class _NavigationRootPageState extends State<NavigationRootPage> {
           context.read<AuthCubit>().setUserSession,
           context.read<AuthCubit>().logout,
         );
+  }
+
+  Future<void> permissionRequest() async {
+    if (_cacheAndInteractionService.notificationCheck) {
+      showCupertinoDialog(
+          barrierDismissible: false,
+          useRootNavigator: false,
+          context: context,
+          builder: (_) => PermissionHandler());
+    }
   }
 }

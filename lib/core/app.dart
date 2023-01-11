@@ -45,14 +45,12 @@ class _AppState extends State<App> {
                 SfGlobalLocalizations.delegate
               ],
               routes: {
-                NavigationRouteLabels.appSwitchPage: (context) => const AppSwitch(),
-                // NavigationRouteLabels.appTopRootBuilder: (context) => const App(),
-                NavigationRouteLabels.loginPageRoot: (context) => const LoginPageRoot(),
-                NavigationRouteLabels.schoolSelectionPage: (context) => const SchoolSelectionPage(),
-                // NavigationRouteLabels.tumbleCalendarView: (context) => const TumbleCalendarView(),
-                // NavigationRouteLabels.tumbleListView: (context) => const TumbleListView(),
-                // NavigationRouteLabels.tumbleWeekView: (context) => const TumbleWeekView(),
-                // NavigationRouteLabels.tumbleSearchPage: (context) => const TumbleSearchPage()
+                NavigationRouteLabels.appSwitchPage: (context) =>
+                    const AppSwitch(),
+                NavigationRouteLabels.loginPageRoot: (context) =>
+                    const LoginPageRoot(),
+                NavigationRouteLabels.schoolSelectionPage: (context) =>
+                    const SchoolSelectionPage(),
               },
               supportedLocales: const [
                 Locale('en'),
@@ -63,14 +61,18 @@ class _AppState extends State<App> {
               ],
               locale: state.locale,
               localeResolutionCallback: (locale, supportedLocales) =>
-                  supportedLocales.contains(locale) ? locale : const Locale('en'),
+                  supportedLocales.contains(locale)
+                      ? locale
+                      : const Locale('en'),
               theme: ThemeData(
-                bottomSheetTheme: const BottomSheetThemeData(backgroundColor: Colors.transparent),
+                bottomSheetTheme: const BottomSheetThemeData(
+                    backgroundColor: Colors.transparent),
                 colorScheme: CustomColors.lightColors,
                 fontFamily: 'Roboto',
               ),
               darkTheme: ThemeData(
-                bottomSheetTheme: const BottomSheetThemeData(backgroundColor: Colors.transparent),
+                bottomSheetTheme: const BottomSheetThemeData(
+                    backgroundColor: Colors.transparent),
                 colorScheme: CustomColors.darkColors,
                 bottomNavigationBarTheme: BottomNavigationBarThemeData(
                   selectedItemColor: CustomColors.darkColors.primary,
