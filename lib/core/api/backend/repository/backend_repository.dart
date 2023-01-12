@@ -8,7 +8,6 @@ import 'package:tumble/core/api/backend/data/endpoint_uri.dart';
 import 'package:tumble/core/api/backend/response_types/api_response.dart';
 import 'package:tumble/core/api/backend/data/endpoints.dart';
 import 'package:tumble/core/api/backend/response_types/runtime_error_types.dart';
-import 'package:tumble/core/api/backend/interface/ibackend_service.dart';
 import 'package:tumble/core/extensions/response_extensions/booking_parser.dart';
 import 'package:tumble/core/extensions/response_extensions/misc_parser.dart';
 import 'package:tumble/core/extensions/response_extensions/schedule_and_programme_parser.dart';
@@ -22,7 +21,7 @@ import 'package:tumble/core/ui/data/string_constants.dart';
 /// IBackendService interface and it handles making HTTP requests
 /// to Tumbles backend server. It uses the Dio library for making the
 /// requests and handling responses.
-class BackendRepository extends AuthInterceptor implements IBackendService {
+class BackendRepository extends AuthInterceptor {
   final _dioHandle = Dio(BaseOptions(
     baseUrl: Endpoints.baseUrl,
     connectTimeout: Constants.connectionTimeout,
@@ -39,7 +38,7 @@ class BackendRepository extends AuthInterceptor implements IBackendService {
   /// for getting one schedule and the scheduleId, and the school index,
   /// it then makes a GET request to that URI and returns the response
   /// after parsing it using the parseSchedule method.
-  @override
+
   Future<ApiResponse> getSchedule(
       String scheduleId, String defaultSchool) async {
     final schoolIndex = _schools.fromString(defaultSchool).schoolId.index;
@@ -58,7 +57,7 @@ class BackendRepository extends AuthInterceptor implements IBackendService {
   /// creates a URI using the endpoint for getting schedules, the search
   /// query and the school index, it then makes a GET request to that URI and
   /// returns the response after parsing it using the parsePrograms method.
-  @override
+
   Future<ApiResponse> getPrograms(
       String searchQuery, String defaultSchool) async {
     final schoolIndex = _schools.fromString(defaultSchool).schoolId.index;
@@ -79,7 +78,7 @@ class BackendRepository extends AuthInterceptor implements IBackendService {
   /// method. If an error occurs during the request, a log is written with
   /// the error message and a UserResponse.error object is returned with a
   /// RuntimeErrorType.timeoutError.
-  @override
+
   Future<ApiResponse> getUserEvents(String defaultSchool) async {
     final schoolId = _schools.fromString(defaultSchool).schoolId;
 
@@ -99,7 +98,7 @@ class BackendRepository extends AuthInterceptor implements IBackendService {
   ///
   /// This function is used for refreshing the session token
   /// for the authenticated user.
-  /* @override
+  /* 
   Future<UserResponse> getRefreshSession(
       String refreshToken, String defaultSchool) async {
     final school = _schools.fromString(defaultSchool).schoolId.index;
@@ -131,7 +130,7 @@ class BackendRepository extends AuthInterceptor implements IBackendService {
   /// the response to a BookingResponse object. In case of an error, the
   /// method logs the error message and returns a BookingResponse.error
   /// object with a RuntimeErrorType.timeoutError().
-  @override
+
   Future<ApiResponse> getSchoolResources(String defaultSchool) async {
     final schoolIndex = _schools.fromString(defaultSchool).schoolId.index;
 
@@ -142,7 +141,7 @@ class BackendRepository extends AuthInterceptor implements IBackendService {
   }
 
   /// [HttpGet]
-  @override
+
   Future<ApiResponse> getResourceAvailabilities(
       String defaultSchool, String resourceId, DateTime date) async {
     final schoolIndex = _schools.fromString(defaultSchool).schoolId.index;
@@ -152,7 +151,7 @@ class BackendRepository extends AuthInterceptor implements IBackendService {
   }
 
   /// [HttpGet]
-  @override
+
   Future<ApiResponse> getUserBookings(String defaultSchool) async {
     final schoolIndex = _schools.fromString(defaultSchool).schoolId.index;
 
@@ -165,7 +164,7 @@ class BackendRepository extends AuthInterceptor implements IBackendService {
   }
 
   /// [HttpPut]
-  @override
+
   Future<ApiResponse> putRegisterUserEvent(
       String eventId, String defaultSchool) async {
     final schoolIndex = _schools.fromString(defaultSchool).schoolId.index;
@@ -178,7 +177,7 @@ class BackendRepository extends AuthInterceptor implements IBackendService {
   }
 
   /// [HttpPut]
-  @override
+
   Future<ApiResponse> putUnregisterUserEvent(
       String eventId, String defaultSchool) async {
     final schoolIndex = _schools.fromString(defaultSchool).schoolId.index;
@@ -191,7 +190,7 @@ class BackendRepository extends AuthInterceptor implements IBackendService {
   }
 
   /// [HttpPut]
-  @override
+
   Future<ApiResponse> putRegisterAll(String defaultSchool) async {
     final schoolIndex = _schools.fromString(defaultSchool).schoolId.index;
 
@@ -203,7 +202,7 @@ class BackendRepository extends AuthInterceptor implements IBackendService {
   }
 
   /// [HttpPut]
-  @override
+
   Future<ApiResponse> putBookResource(String defaultSchool, String resourceId,
       DateTime date, AvailabilityValue bookingSlot) async {
     final schoolIndex = _schools.fromString(defaultSchool).schoolId.index;
@@ -221,7 +220,7 @@ class BackendRepository extends AuthInterceptor implements IBackendService {
   }
 
   /// [HttpPut]
-  @override
+
   Future<ApiResponse> putUnbookResource(
       String defaultSchool, String bookingId) async {
     final schoolIndex = _schools.fromString(defaultSchool).schoolId.index;
@@ -234,7 +233,7 @@ class BackendRepository extends AuthInterceptor implements IBackendService {
   }
 
   /// [HttpPut]
-  @override
+
   Future<ApiResponse> putConfirmBooking(
       String defaultSchool, String resourceId, String bookingId) async {
     final schoolIndex = _schools.fromString(defaultSchool).schoolId.index;
@@ -251,7 +250,7 @@ class BackendRepository extends AuthInterceptor implements IBackendService {
   }
 
   /// [HttpPost]
-  @override
+
   Future<ApiResponse> postUserLogin(
       String username, String password, String defaultSchool) async {
     final schoolIndex = _schools.fromString(defaultSchool).schoolId.index;
@@ -267,7 +266,7 @@ class BackendRepository extends AuthInterceptor implements IBackendService {
   }
 
   /// [HttpPost]
-  @override
+
   Future<ApiResponse> postSubmitIssue(
       String issueSubject, String issueBody) async {
     final Map<String, String> data = {

@@ -1,5 +1,4 @@
 import 'package:tumble/core/api/backend/response_types/api_response.dart';
-import 'package:tumble/core/api/backend/interface/iuser_action_service.dart';
 import 'package:tumble/core/api/backend/repository/backend_repository.dart';
 import 'package:tumble/core/api/preferences/repository/preference_repository.dart';
 import 'package:tumble/core/models/backend_models/kronox_user_model.dart';

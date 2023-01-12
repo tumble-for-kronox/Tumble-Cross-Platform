@@ -2,7 +2,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tumble/core/api/backend/response_types/api_response.dart';
 import 'package:tumble/core/api/backend/response_types/runtime_error_types.dart';
 import 'package:tumble/core/api/backend/data/constants.dart';
-import 'package:tumble/core/api/backend/interface/icache_service.dart';
 import 'package:tumble/core/api/backend/repository/backend_repository.dart';
 import 'package:tumble/core/api/database/repository/database_repository.dart';
 import 'package:tumble/core/api/notifications/repository/notification_repository.dart';
@@ -14,14 +13,14 @@ import 'package:tumble/core/shared/preference_types.dart';
 import 'package:tumble/core/api/dependency_injection/get_it.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
 
-class CacheRepository implements ICacheService {
+class CacheRepository {
   final _backendService = getIt<BackendRepository>();
   final _preferenceService = getIt<PreferenceRepository>();
   final _databaseService = getIt<DatabaseRepository>();
   final _appDependencies = getIt<AppDependencies>();
   final _notificationService = getIt<NotificationRepository>();
 
-  @override
+  
   Future<ApiResponse> searchProgram(String searchQuery) async {
     String defaultSchool = _preferenceService.defaultSchool!;
     ApiResponse response =
@@ -29,7 +28,7 @@ class CacheRepository implements ICacheService {
     return response;
   }
 
-  @override
+  
   Future<ApiResponse> updateSchedule(scheduleId) async {
     String defaultSchool = _preferenceService.defaultSchool!;
     ApiResponse response =
@@ -37,7 +36,7 @@ class CacheRepository implements ICacheService {
     return response;
   }
 
-  @override
+  
   Future<ApiResponse> findSchedule(String scheduleId) async {
     final bool bookmarksContainsThisScheduleId =
         _preferenceService.bookmarksHasId(scheduleId);
@@ -82,10 +81,10 @@ class CacheRepository implements ICacheService {
     return (await _databaseService.getOneSchedule(scheduleId));
   }
 
-  @override
+  
   bool get schoolNotNull => _preferenceService.defaultSchool != null;
 
-  @override
+  
   Future<void> permissionRequest(bool value) async {
     await _preferenceService.setNotificationAllowed(value);
     if (value) {
@@ -97,14 +96,14 @@ class CacheRepository implements ICacheService {
     }
   }
 
-  @override
+  
   bool checkFirstTimeLaunch() => _preferenceService.hasRun;
 
-  @override
+  
   Future<void> setFirstTimeLaunched(bool hasRun) =>
       _preferenceService.setHasRun(hasRun);
 
-  @override
+  
   Future<void> changeSchool(String schoolName) async {
     /// Renew items in shared preferences
     await _appDependencies.updateDependencies(schoolName);
@@ -114,7 +113,7 @@ class CacheRepository implements ICacheService {
     _notificationService.cancelAllNotifications();
   }
 
-  @override
+  
   bool get notificationCheck =>
       getIt<PreferenceRepository>().allowedNotifications == null;
 }
