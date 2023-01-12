@@ -9,7 +9,8 @@ import 'package:flutter/foundation.dart';
 @immutable
 class Endpoints {
   // Endpoints
-  static String debugBaseUrl = Platform.isAndroid ? 'tumble.hkr.se:443' : '192.168.1.178:80';
+  static String debugBaseUrl =
+      Platform.isAndroid ? 'tumble.hkr.se:443' : '192.168.1.178:80';
   static const String baseUrl = 'tumble.hkr.se';
   static const String getSchedules = '/schedules/search';
   static const String getOneSchedule = '/schedules/';
@@ -43,6 +44,7 @@ class Endpoints {
   static const String username = 'username';
   static const String date = 'date';
   static const String bookingSlot = 'slot';
+  static const String user = 'users';
 
   // Issue parameters
   static const String issueSubject = 'title';

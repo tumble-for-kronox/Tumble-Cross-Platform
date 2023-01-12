@@ -74,12 +74,8 @@ class _AuthenticatedPage extends State<AuthenticatedOverviewPage>
                   child: Events(
                     onRefresh: () async => await context
                         .read<UserEventCubit>()
-                        .getUserEvents(
-                            context.read<AuthCubit>().state.status,
-                            context.read<AuthCubit>().setUserSession,
-                            context.read<AuthCubit>().logout,
-                            context.read<AuthCubit>().state.userSession!,
-                            true),
+                        .getUserEvents(context.read<AuthCubit>().state.status,
+                            context.read<AuthCubit>().logout, true),
                   ),
                 ),
                 BlocProvider.value(
@@ -87,8 +83,6 @@ class _AuthenticatedPage extends State<AuthenticatedOverviewPage>
                   child: ResourcePage(
                     onSchoolResourcesRefresh: () async =>
                         await context.read<ResourceCubit>().getSchoolResources(
-                              context.read<AuthCubit>().state.userSession!,
-                              context.read<AuthCubit>().setUserSession,
                               context.read<AuthCubit>().logout,
                             ),
                   ),

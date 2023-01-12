@@ -219,9 +219,7 @@ class _AvailableUserEventCard extends State<AvailableUserEventCard> {
     BlocProvider.of<UserEventCubit>(context).unregisterUserEvent(
       widget.userEvent.id,
       context.read<AuthCubit>().state.status,
-      context.read<AuthCubit>().setUserSession,
       context.read<AuthCubit>().logout,
-      context.read<AuthCubit>().state.userSession!,
     );
   }
 
@@ -229,9 +227,7 @@ class _AvailableUserEventCard extends State<AvailableUserEventCard> {
     BlocProvider.of<UserEventCubit>(context).registerUserEvent(
       context.read<AuthCubit>().state.status,
       widget.userEvent.id,
-      context.read<AuthCubit>().setUserSession,
       context.read<AuthCubit>().logout,
-      context.read<AuthCubit>().state.userSession!,
     );
   }
 }

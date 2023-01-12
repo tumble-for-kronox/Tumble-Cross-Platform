@@ -72,4 +72,6 @@ class EndpointUri {
         Endpoints.baseUrl,
         Endpoints.postSubmitIssue,
       );
+
+  static Uri getUser() => Uri.https(Endpoints.baseUrl, Endpoints.user);
 }

@@ -108,11 +108,7 @@ class UserEventCubit extends Cubit<UserEventState> {
   }
 
   Future<void> unregisterUserEvent(
-      String id,
-      AuthStatus status,
-      void Function(KronoxUserModel) setAuthSession,
-      Function logOut,
-      KronoxUserModel session) async {
+      String id, AuthStatus status, Function logOut) async {
     if (isClosed) {
       return;
     }

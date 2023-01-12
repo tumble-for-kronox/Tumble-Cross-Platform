@@ -89,39 +89,6 @@ class BackendRepository extends AuthInterceptor {
   }
 
   /// [HttpGet]
-  /// This function performs a GET request to the specified endpoint
-  /// using the refresh token and the school index as parameters in the
-  /// headers and query string respectively. If the request is successful,
-  /// it will parse the response and return a UserResponse object.
-  /// If an error occurs, it will log the error and return an error
-  /// UserResponse object with a timeout error.
-  ///
-  /// This function is used for refreshing the session token
-  /// for the authenticated user.
-  /* 
-  Future<UserResponse> getRefreshSession(
-      String refreshToken, String defaultSchool) async {
-    final school = _schools.fromString(defaultSchool).schoolId.index;
-    Map<String, String> headers = {"Authorization": refreshToken};
-
-    Uri uri = Uri.https(
-      Endpoints.baseUrl,
-      Endpoints.getRefreshSession,
-      {Endpoints.school: school}
-          .map((key, value) => MapEntry(key, value.toString())),
-    );
-    return await _dioHandle
-        .getUri(uri,
-            options: Options(
-              headers: headers,
-              validateStatus: (_) => true,
-            ))
-        .then((response) {
-      return response.parseUser();
-    });
-  } */
-
-  /// [HttpGet]
   /// The method takes in a sessionToken and defaultSchool as parameters
   /// and returns a Future<BookingResponse>. The defaultSchool parameter
   /// is used to identify the school for which resources are being requested,
@@ -145,9 +112,11 @@ class BackendRepository extends AuthInterceptor {
   Future<ApiResponse> getResourceAvailabilities(
       String defaultSchool, String resourceId, DateTime date) async {
     final schoolIndex = _schools.fromString(defaultSchool).schoolId.index;
-    final response = await _dioHandle.getUri(
-        EndpointUri.getResourceAvailabilities(resourceId, schoolIndex, date));
-    return response.parseSchoolResource();
+    return await _dioHandle
+        .getUri(EndpointUri.getResourceAvailabilities(
+            resourceId, schoolIndex, date))
+        .then((response) => response.parseSchoolResource())
+        .onError((error, stackTrace) => _error());
   }
 
   /// [HttpGet]
@@ -171,9 +140,8 @@ class BackendRepository extends AuthInterceptor {
 
     return await _dioHandle
         .putUri(EndpointUri.putRegisterUserEvent(eventId, schoolIndex))
-        .then((response) {
-      return response.parseRegisterOrUnregister();
-    });
+        .then((response) => response.parseRegisterOrUnregister())
+        .onError((error, stackTrace) => _error());
   }
 
   /// [HttpPut]
@@ -184,9 +152,8 @@ class BackendRepository extends AuthInterceptor {
 
     return await _dioHandle
         .putUri(EndpointUri.putUnregisterUserEvent(eventId, schoolIndex))
-        .then((response) {
-      return response.parseRegisterOrUnregister();
-    });
+        .then((response) => response.parseRegisterOrUnregister())
+        .onError((error, stackTrace) => _error());
   }
 
   /// [HttpPut]
@@ -196,9 +163,8 @@ class BackendRepository extends AuthInterceptor {
 
     return await _dioHandle
         .putUri(EndpointUri.putRegisterAll(schoolIndex))
-        .then((response) {
-      return response.parseMultiRegistrationResult();
-    });
+        .then((response) => response.parseMultiRegistrationResult())
+        .onError((error, stackTrace) => _error());
   }
 
   /// [HttpPut]
@@ -214,9 +180,8 @@ class BackendRepository extends AuthInterceptor {
     return await _dioHandle
         .putUri(EndpointUri.putBookResource(schoolIndex),
             data: jsonEncode(data))
-        .then((response) {
-      return response.parseBookResource();
-    });
+        .then((response) => response.parseBookResource())
+        .onError((error, stackTrace) => _error());
   }
 
   /// [HttpPut]
@@ -227,9 +192,8 @@ class BackendRepository extends AuthInterceptor {
 
     return await _dioHandle
         .putUri(EndpointUri.putUnbookResource(schoolIndex, bookingId))
-        .then((response) {
-      return response.parseUnbookResource();
-    });
+        .then((response) => response.parseUnbookResource())
+        .onError((error, stackTrace) => _error());
   }
 
   /// [HttpPut]
@@ -244,9 +208,8 @@ class BackendRepository extends AuthInterceptor {
     return await _dioHandle
         .putUri(EndpointUri.putConfirmBooking(schoolIndex),
             data: jsonEncode(data))
-        .then((response) {
-      return response.parseConfirmBooking();
-    });
+        .then((response) => response.parseConfirmBooking())
+        .onError((error, stackTrace) => _error());
   }
 
   /// [HttpPost]
@@ -260,9 +223,8 @@ class BackendRepository extends AuthInterceptor {
     };
     return await _dioHandle
         .postUri(EndpointUri.postUserLogin(schoolIndex), data: jsonEncode(data))
-        .then((response) {
-      return response.parseUser();
-    });
+        .then((response) => response.parseUser())
+        .onError((error, stackTrace) => _error());
   }
 
   /// [HttpPost]
@@ -275,10 +237,15 @@ class BackendRepository extends AuthInterceptor {
     };
     return await _dioHandle
         .postUri(EndpointUri.postSubmitIssue(), data: jsonEncode(data))
-        .then((response) {
-      return response.parseIssue();
-    });
+        .then((response) => response.parseIssue())
+        .onError((error, stackTrace) => _error());
   }
+
+  /// [HttpGet]
+  Future<ApiResponse> getUser() async => await _dioHandle
+      .getUri(EndpointUri.getUser())
+      .then((response) => response.parseUser())
+      .onError((error, stackTrace) => _error());
 
   ApiResponse _error() => ApiResponse.error(
       RuntimeErrorType.timeoutError(), S.popUps.timeOutDecsription());

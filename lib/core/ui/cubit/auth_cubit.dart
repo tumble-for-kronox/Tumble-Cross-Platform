@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tumble/core/api/backend/repository/backend_repository.dart';
 import 'package:tumble/core/api/backend/response_types/api_response.dart';
 import 'package:tumble/core/api/backend/repository/user_action_repository.dart';
 import 'package:tumble/core/api/database/repository/secure_storage_repository.dart';
@@ -26,8 +27,7 @@ class AuthCubit extends Cubit<AuthState> {
     login();
   }
   final _userRepo = getIt<UserActionRepository>();
-  final _secureStorage = getIt<SecureStorageRepository>();
-  final _userRepository = getIt<UserActionRepository>();
+  final _backendRepository = getIt<BackendRepository>();
   final _focusNodePassword = FocusNode();
   final _focusNodeUsername = FocusNode();
 
@@ -74,24 +74,17 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   Future<void> login() async {
-    final refreshToken = await _secureStorage.loadRefreshToken();
-    if (refreshToken != null) {
-      switch (loggedInUser.status) {
-        case ApiUserResponseStatus.SUCCESS:
-          log(
-              name: 'auth_cubit',
-              "Successfully refreshed user session with token ..");
-          emit(state.copyWith(
-              status: AuthStatus.AUTHENTICATED,
-              userSession: loggedInUser.data!));
-
-          return;
-        default:
-          emit(state.copyWith(status: AuthStatus.UNAUTHENTICATED));
-          return;
-      }
+    ApiResponse apiResponse = await _backendRepository.getUser();
+    switch (apiResponse.status) {
+      case ApiResponseStatus.success:
+        log(name: 'auth_cubit', "Successfully retrieved user ..");
+        emit(state.copyWith(
+            status: AuthStatus.AUTHENTICATED, userSession: apiResponse.data!));
+        return;
+      default:
+        emit(state.copyWith(status: AuthStatus.UNAUTHENTICATED));
+        return;
     }
-    emit(state.copyWith(status: AuthStatus.UNAUTHENTICATED));
   }
 
   void setUserSession(KronoxUserModel user) {
