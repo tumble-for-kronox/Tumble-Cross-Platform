@@ -3,7 +3,7 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tumble/core/api/backend/repository/user_action_repository.dart';
+import 'package:tumble/core/api/backend/repository/backend_repository.dart';
 import 'package:tumble/core/api/backend/response_types/api_response.dart';
 import 'package:tumble/core/api/dependency_injection/get_it.dart';
 import 'package:tumble/core/api/notifications/builders/notification_service_builder.dart';
@@ -19,7 +19,6 @@ part 'resource_state.dart';
 
 class ResourceCubit extends Cubit<ResourceState> {
   final _notificationBuilder = NotificationServiceBuilder();
-  final _userService = getIt<UserActionRepository>();
   final _preferenceService = getIt<PreferenceRepository>();
   final _notificationService = getIt<NotificationRepository>();
 
@@ -32,13 +31,16 @@ class ResourceCubit extends Cubit<ResourceState> {
         ));
 
   String? get locale => _preferenceService.locale;
+  String get defaultSchool => getIt<PreferenceRepository>().defaultSchool!;
+  final _backendRepository = getIt<BackendRepository>();
 
   Future<void> getSchoolResources(Function logOut) async {
     if (isClosed) {
       return;
     }
     emit(state.copyWith(status: ResourceStatus.LOADING));
-    ApiResponse apiResponse = await _userService.schoolResources();
+    ApiResponse apiResponse =
+        await _backendRepository.getSchoolResources(defaultSchool);
 
     switch (apiResponse.status) {
       case ApiResponseStatus.success:
@@ -70,8 +72,8 @@ class ResourceCubit extends Cubit<ResourceState> {
       DateTime date) async {
     log(name: 'resource_cubit', 'Fetching resource availabilities...');
     emit(state.copyWithoutSelections(status: ResourceStatus.LOADING));
-    ApiResponse currentSelectedResource =
-        await _userService.resourceAvailabilities(resourceId, date);
+    ApiResponse currentSelectedResource = await _backendRepository
+        .getResourceAvailabilities(defaultSchool, resourceId, date);
 
     switch (currentSelectedResource.status) {
       case ApiResponseStatus.success:
@@ -130,7 +132,8 @@ class ResourceCubit extends Cubit<ResourceState> {
   Future<void> getUserBookings(Function logOut) async {
     log(name: 'resource_cubit', 'Retrieving user bookings ..');
     emit(state.copyWith(userBookingsStatus: UserBookingsStatus.LOADING));
-    ApiResponse apiResponse = await _userService.userBookings();
+    ApiResponse apiResponse =
+        await _backendRepository.getUserBookings(defaultSchool);
 
     log(
         name: 'resource_cubit',
@@ -161,8 +164,8 @@ class ResourceCubit extends Cubit<ResourceState> {
       DateTime date,
       AvailabilityValue bookingSlot) async {
     emit(state.copyWith(bookUnbookStatus: BookUnbookStatus.LOADING));
-    ApiResponse apiResponse =
-        await _userService.bookResources(resourceId, date, bookingSlot);
+    ApiResponse apiResponse = await _backendRepository.putBookResource(
+        defaultSchool, resourceId, date, bookingSlot);
 
     switch (apiResponse.status) {
       case ApiResponseStatus.success:
@@ -190,7 +193,7 @@ class ResourceCubit extends Cubit<ResourceState> {
         unbookLoading:
             state.unbookLoading!.copyAndUpdate(unbookLoadingIndex, true)));
     ApiResponse apiResponse =
-        await _userService.unbookResources(bookingId, session);
+        await _backendRepository.putUnbookResource(defaultSchool, bookingId);
 
     switch (apiResponse.status) {
       case ApiResponseStatus.success:
@@ -221,8 +224,8 @@ class ResourceCubit extends Cubit<ResourceState> {
         confirmationLoading: state.confirmationLoading!
             .copyAndUpdate(confirmLoadingIndex, true)));
 
-    ApiResponse apiResponse =
-        await _userService.confirmBooking(resourceId, bookingId);
+    ApiResponse apiResponse = await _backendRepository.putConfirmBooking(
+        defaultSchool, resourceId, bookingId);
 
     switch (apiResponse.status) {
       case ApiResponseStatus.success:

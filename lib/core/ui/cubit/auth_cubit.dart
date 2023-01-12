@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tumble/core/api/backend/repository/backend_repository.dart';
 import 'package:tumble/core/api/backend/response_types/api_response.dart';
-import 'package:tumble/core/api/backend/repository/user_action_repository.dart';
 import 'package:tumble/core/api/database/repository/secure_storage_repository.dart';
 import 'package:tumble/core/api/preferences/repository/preference_repository.dart';
 import 'package:tumble/core/models/backend_models/kronox_user_model.dart';
@@ -26,7 +25,6 @@ class AuthCubit extends Cubit<AuthState> {
             focused: false)) {
     login();
   }
-  final _userRepo = getIt<UserActionRepository>();
   final _backendRepository = getIt<BackendRepository>();
   final _focusNodePassword = FocusNode();
   final _focusNodeUsername = FocusNode();
@@ -41,7 +39,8 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   Future<String?> runAutoSignup() async {
-    ApiResponse autoSignup = await _userRepo.registerAllAvailableUserEvents();
+    ApiResponse autoSignup =
+        await _backendRepository.putRegisterAll(defaultSchool);
 
     switch (autoSignup.status) {
       case ApiResponseStatus.completed:

@@ -4,7 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:tumble/core/api/backend/repository/user_action_repository.dart';
+import 'package:tumble/core/api/backend/repository/backend_repository.dart';
 import 'package:tumble/core/api/backend/response_types/api_response.dart';
 import 'package:tumble/core/api/backend/response_types/runtime_error_types.dart';
 import 'package:tumble/core/api/database/repository/secure_storage_repository.dart';
@@ -27,7 +27,7 @@ class LoginCubit extends Cubit<LoginState> {
     _init();
   }
 
-  final _userRepo = getIt<UserActionRepository>();
+  final _backendRepository = getIt<BackendRepository>();
   final _secureStorage = getIt<SecureStorageRepository>();
   final _focusNodePassword = FocusNode();
   final _focusNodeUsername = FocusNode();
@@ -47,7 +47,7 @@ class LoginCubit extends Cubit<LoginState> {
       return;
     }
     emit(state.copyWith(status: LoginStatus.LOADING));
-    ApiResponse userRes = await _userRepo.userLogin(username, password, school);
+    ApiResponse userRes = await _backendRepository.postUserLogin(username, password, school);
 
     state.passwordController.clear();
     switch (userRes.status) {

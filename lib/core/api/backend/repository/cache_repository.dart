@@ -6,10 +6,8 @@ import 'package:tumble/core/api/backend/repository/backend_repository.dart';
 import 'package:tumble/core/api/database/repository/database_repository.dart';
 import 'package:tumble/core/api/notifications/repository/notification_repository.dart';
 import 'package:tumble/core/api/preferences/repository/preference_repository.dart';
-import 'package:tumble/core/models/backend_models/bookmarked_schedule_model.dart';
 import 'package:tumble/core/models/backend_models/schedule_model.dart';
 import 'package:tumble/core/shared/app_dependencies.dart';
-import 'package:tumble/core/shared/preference_types.dart';
 import 'package:tumble/core/api/dependency_injection/get_it.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
 
@@ -20,7 +18,6 @@ class CacheRepository {
   final _appDependencies = getIt<AppDependencies>();
   final _notificationService = getIt<NotificationRepository>();
 
-  
   Future<ApiResponse> searchProgram(String searchQuery) async {
     String defaultSchool = _preferenceService.defaultSchool!;
     ApiResponse response =
@@ -28,7 +25,6 @@ class CacheRepository {
     return response;
   }
 
-  
   Future<ApiResponse> updateSchedule(scheduleId) async {
     String defaultSchool = _preferenceService.defaultSchool!;
     ApiResponse response =
@@ -36,7 +32,6 @@ class CacheRepository {
     return response;
   }
 
-  
   Future<ApiResponse> findSchedule(String scheduleId) async {
     final bool bookmarksContainsThisScheduleId =
         _preferenceService.bookmarksHasId(scheduleId);
@@ -81,10 +76,8 @@ class CacheRepository {
     return (await _databaseService.getOneSchedule(scheduleId));
   }
 
-  
   bool get schoolNotNull => _preferenceService.defaultSchool != null;
 
-  
   Future<void> permissionRequest(bool value) async {
     await _preferenceService.setNotificationAllowed(value);
     if (value) {
@@ -96,14 +89,11 @@ class CacheRepository {
     }
   }
 
-  
   bool checkFirstTimeLaunch() => _preferenceService.hasRun;
 
-  
   Future<void> setFirstTimeLaunched(bool hasRun) =>
       _preferenceService.setHasRun(hasRun);
 
-  
   Future<void> changeSchool(String schoolName) async {
     /// Renew items in shared preferences
     await _appDependencies.updateDependencies(schoolName);
@@ -113,7 +103,6 @@ class CacheRepository {
     _notificationService.cancelAllNotifications();
   }
 
-  
   bool get notificationCheck =>
       getIt<PreferenceRepository>().allowedNotifications == null;
 }

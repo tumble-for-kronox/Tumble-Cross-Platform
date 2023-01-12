@@ -1,8 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:tumble/core/api/backend/repository/backend_repository.dart';
 import 'package:tumble/core/api/backend/response_types/api_response.dart';
 import 'package:tumble/core/api/backend/response_types/runtime_error_types.dart';
-import 'package:tumble/core/api/backend/repository/user_action_repository.dart';
 import 'package:tumble/core/api/dependency_injection/get_it.dart';
 import 'package:tumble/core/api/preferences/repository/preference_repository.dart';
 import 'package:tumble/core/models/backend_models/kronox_user_model.dart';
@@ -20,8 +20,10 @@ class UserEventCubit extends Cubit<UserEventState> {
           autoSignup: getIt<PreferenceRepository>().autoSignup!,
         ));
 
-  final _userActionService = getIt<UserActionRepository>();
   final _preferenceService = getIt<PreferenceRepository>();
+  final _backendRepository = getIt<BackendRepository>();
+
+  String get defaultSchool => getIt<PreferenceRepository>().defaultSchool!;
 
   Future<void> getUserEvents(
       AuthStatus status, Function logOut, bool showLoading) async {
@@ -30,7 +32,8 @@ class UserEventCubit extends Cubit<UserEventState> {
         if (showLoading) {
           emit(state.copyWith(userEventListStatus: UserOverviewStatus.LOADING));
         }
-        ApiResponse apiResponse = await _userActionService.userEvents();
+        ApiResponse apiResponse =
+            await _backendRepository.getUserEvents(defaultSchool);
 
         switch (apiResponse.status) {
           case ApiResponseStatus.completed:
@@ -72,7 +75,8 @@ class UserEventCubit extends Cubit<UserEventState> {
     }
     emit(state.copyWith(
         registerUnregisterStatus: RegisterUnregisterStatus.LOADING));
-    ApiResponse apiResponse = await _userActionService.registerUserEvent(id);
+    ApiResponse apiResponse =
+        await _backendRepository.putRegisterUserEvent(defaultSchool, id);
 
     switch (apiResponse.status) {
       case ApiResponseStatus.completed:
@@ -114,7 +118,8 @@ class UserEventCubit extends Cubit<UserEventState> {
     }
     emit(state.copyWith(
         registerUnregisterStatus: RegisterUnregisterStatus.LOADING));
-    ApiResponse apiResponse = await _userActionService.unregisterUserEvent(id);
+    ApiResponse apiResponse =
+        await _backendRepository.putUnregisterUserEvent(defaultSchool, id);
 
     switch (apiResponse.status) {
       case ApiResponseStatus.completed:
