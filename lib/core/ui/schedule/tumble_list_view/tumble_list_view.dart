@@ -22,15 +22,15 @@ class _TumbleListViewState extends State<TumbleListView>
     return BlocBuilder<ScheduleViewCubit, ScheduleViewState>(
       builder: (context, state) {
         switch (state.status) {
-          case ScheduleViewStatus.INITIAL:
+          case ScheduleViewStatus.initial:
             return DynamicErrorPage(
               toSearch: true,
               description: S.popUps.scheduleHelpFirstLine(),
               errorType: RuntimeErrorType.noCachedSchedule(),
             );
-          case ScheduleViewStatus.LOADING:
+          case ScheduleViewStatus.loading:
             return const TumbleLoading();
-          case ScheduleViewStatus.POPULATED_VIEW:
+          case ScheduleViewStatus.populated:
             final dayList = state.listOfDays!
                 .where((day) =>
                     day.events.isNotEmpty &&
@@ -97,21 +97,21 @@ class _TumbleListViewState extends State<TumbleListView>
                 ),
               ],
             );
-          case ScheduleViewStatus.FETCH_ERROR:
+          case ScheduleViewStatus.error:
             return DynamicErrorPage(
               toSearch: false,
               errorType: RuntimeErrorType.scheduleFetchError(),
               description: S.popUps.scheduleIsEmptyTitle(),
             );
 
-          case ScheduleViewStatus.EMPTY_SCHEDULE:
+          case ScheduleViewStatus.empty:
             return DynamicErrorPage(
               toSearch: false,
               errorType: RuntimeErrorType.emptyScheduleError(),
               description: S.popUps.scheduleIsEmptyBody(),
             );
 
-          case ScheduleViewStatus.NO_VIEW:
+          case ScheduleViewStatus.missing:
             return DynamicErrorPage(
               toSearch: true,
               errorType: RuntimeErrorType.noBookmarks(),

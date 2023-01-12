@@ -3,13 +3,13 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tumble/core/api/backend/repository/backend_repository.dart';
+import 'package:tumble/core/api/backend/repository/backend_service.dart';
 import 'package:tumble/core/api/backend/response_types/api_response.dart';
 import 'package:tumble/core/api/dependency_injection/get_it.dart';
 import 'package:tumble/core/api/notifications/builders/notification_service_builder.dart';
 import 'package:tumble/core/api/notifications/data/notification_channels.dart';
 import 'package:tumble/core/api/notifications/repository/notification_repository.dart';
-import 'package:tumble/core/api/preferences/repository/preference_repository.dart';
+import 'package:tumble/core/api/shared_preferences/shared_preference_service.dart';
 import 'package:tumble/core/extensions/extensions.dart';
 import 'package:tumble/core/models/backend_models/kronox_user_model.dart';
 import 'package:tumble/core/models/backend_models/resource_model.dart';
@@ -19,26 +19,26 @@ part 'resource_state.dart';
 
 class ResourceCubit extends Cubit<ResourceState> {
   final _notificationBuilder = NotificationServiceBuilder();
-  final _preferenceService = getIt<PreferenceRepository>();
-  final _notificationService = getIt<NotificationRepository>();
+  final _preferenceService = getIt<SharedPreferenceService>();
+  final _notificationService = getIt<NotificationService>();
 
   ResourceCubit()
       : super(ResourceState(
-          status: ResourceStatus.INITIAL,
-          userBookingsStatus: UserBookingsStatus.INITIAL,
-          bookUnbookStatus: BookUnbookStatus.INITIAL,
+          status: ResourceStatus.initial,
+          userBookingsStatus: UserBookingsStatus.initial,
+          bookUnbookStatus: BookUnbookStatus.initial,
           chosenDate: DateTime.now(),
         ));
 
   String? get locale => _preferenceService.locale;
-  String get defaultSchool => getIt<PreferenceRepository>().defaultSchool!;
-  final _backendRepository = getIt<BackendRepository>();
+  String get defaultSchool => getIt<SharedPreferenceService>().defaultSchool!;
+  final _backendRepository = getIt<BackendService>();
 
   Future<void> getSchoolResources(Function logOut) async {
     if (isClosed) {
       return;
     }
-    emit(state.copyWith(status: ResourceStatus.LOADING));
+    emit(state.copyWith(status: ResourceStatus.loading));
     ApiResponse apiResponse =
         await _backendRepository.getSchoolResources(defaultSchool);
 
@@ -48,7 +48,7 @@ class ResourceCubit extends Cubit<ResourceState> {
           return;
         }
         emit(state.copyWith(
-            status: ResourceStatus.LOADED, schoolResources: apiResponse.data));
+            status: ResourceStatus.loaded, schoolResources: apiResponse.data));
         break;
       case ApiResponseStatus.error:
       case ApiResponseStatus.unauthorized:
@@ -56,7 +56,7 @@ class ResourceCubit extends Cubit<ResourceState> {
         break;
       case ApiResponseStatus.missing:
         emit(state.copyWith(
-            status: ResourceStatus.ERROR,
+            status: ResourceStatus.error,
             resourcePageErrorMessage: apiResponse.data));
         break;
       default:
@@ -71,31 +71,26 @@ class ResourceCubit extends Cubit<ResourceState> {
       String resourceId,
       DateTime date) async {
     log(name: 'resource_cubit', 'Fetching resource availabilities...');
-    emit(state.copyWithoutSelections(status: ResourceStatus.LOADING));
+    emit(state.copyWithoutSelections(status: ResourceStatus.loading));
     ApiResponse currentSelectedResource = await _backendRepository
         .getResourceAvailabilities(defaultSchool, resourceId, date);
 
-    switch (currentSelectedResource.status) {
-      case ApiResponseStatus.success:
-        parseResourceAvailabilities(currentSelectedResource.data);
-        emit(state.copyWith(
-            status: ResourceStatus.LOADED,
-            currentLoadedResource: currentSelectedResource.data));
-        log(
-            name: 'resource_cubit',
-            'Successfully fetched and updated resource availabilities');
-        break;
-      case ApiResponseStatus.unauthorized:
-        logOut();
-        break;
-      case ApiResponseStatus.error:
-      case ApiResponseStatus.missing:
-        emit(state.copyWith(
-            status: ResourceStatus.ERROR,
-            resourcePageErrorMessage: currentSelectedResource.data));
-        break;
-      default:
-        break;
+    if (currentSelectedResource.status == ApiResponseStatus.success) {
+      parseResourceAvailabilities(currentSelectedResource.data);
+      emit(state.copyWith(
+          status: ResourceStatus.loaded,
+          currentLoadedResource: currentSelectedResource.data));
+      log(
+          name: 'resource_cubit',
+          'Successfully fetched and updated resource availabilities');
+    } else if (currentSelectedResource.status ==
+        ApiResponseStatus.unauthorized) {
+      logOut();
+    } else {
+      emit(state.copyWith(
+          status: ResourceStatus.error,
+          resourcePageErrorMessage:
+              currentSelectedResource.data ?? S.general.unknown()));
     }
   }
 
@@ -131,15 +126,18 @@ class ResourceCubit extends Cubit<ResourceState> {
 
   Future<void> getUserBookings(Function logOut) async {
     log(name: 'resource_cubit', 'Retrieving user bookings ..');
-    emit(state.copyWith(userBookingsStatus: UserBookingsStatus.LOADING));
-    ApiResponse apiResponse =
-        await _backendRepository.getUserBookings(defaultSchool);
+    emit(state.copyWith(userBookingsStatus: UserBookingsStatus.loading));
+    final apiResponse = await _backendRepository.getUserBookings(defaultSchool);
 
     log(
         name: 'resource_cubit',
         'ApiBookingResponseStatus is: ${apiResponse.status}');
     switch (apiResponse.status) {
       case ApiResponseStatus.success:
+        if (apiResponse.data == null) {
+          emit(state.copyWith(userBookingsStatus: UserBookingsStatus.initial));
+          break;
+        }
         _updateBookingInformation(apiResponse);
         break;
       case ApiResponseStatus.unauthorized:
@@ -148,8 +146,9 @@ class ResourceCubit extends Cubit<ResourceState> {
       case ApiResponseStatus.error:
       case ApiResponseStatus.missing:
         emit(state.copyWith(
-            userBookingsStatus: UserBookingsStatus.ERROR,
-            userBookingsErrorMessage: apiResponse.data));
+            userBookingsStatus: UserBookingsStatus.error,
+            userBookingsErrorMessage:
+                apiResponse.data ?? "Error while retrieving bookings"));
         break;
       default:
         break;
@@ -163,7 +162,7 @@ class ResourceCubit extends Cubit<ResourceState> {
       String resourceId,
       DateTime date,
       AvailabilityValue bookingSlot) async {
-    emit(state.copyWith(bookUnbookStatus: BookUnbookStatus.LOADING));
+    emit(state.copyWith(bookUnbookStatus: BookUnbookStatus.loading));
     ApiResponse apiResponse = await _backendRepository.putBookResource(
         defaultSchool, resourceId, date, bookingSlot);
 
@@ -179,7 +178,7 @@ class ResourceCubit extends Cubit<ResourceState> {
       default:
         break;
     }
-    emit(state.copyWith(bookUnbookStatus: BookUnbookStatus.INITIAL));
+    emit(state.copyWith(bookUnbookStatus: BookUnbookStatus.initial));
     return apiResponse.data as String;
   }
 
@@ -330,7 +329,7 @@ class ResourceCubit extends Cubit<ResourceState> {
       return;
     }
     emit(state.copyWith(
-      userBookingsStatus: UserBookingsStatus.LOADED,
+      userBookingsStatus: UserBookingsStatus.loaded,
       userBookings: apiResponse.data,
       confirmationLoading: falseFilledLoadingList,
       unbookLoading: falseFilledLoadingList,

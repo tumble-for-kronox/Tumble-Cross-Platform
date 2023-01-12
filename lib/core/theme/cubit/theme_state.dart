@@ -1,12 +1,15 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tumble/core/api/preferences/repository/preference_repository.dart';
+import 'package:tumble/core/api/shared_preferences/shared_preference_service.dart';
 import 'package:tumble/core/shared/preference_types.dart';
 import 'package:tumble/core/api/dependency_injection/get_it.dart';
 
 class ThemeState extends Equatable {
-  const ThemeState({required this.themeString, required this.locale, required this.themeMode});
+  const ThemeState(
+      {required this.themeString,
+      required this.locale,
+      required this.themeMode});
 
   final ThemeMode themeMode;
   final String themeString;
@@ -15,13 +18,14 @@ class ThemeState extends Equatable {
   ThemeState copyWith({ThemeMode? themeMode, Locale? locale}) => ThemeState(
         locale: locale ?? this.locale,
         themeMode: themeMode ?? this.themeMode,
-        themeString: getIt<PreferenceRepository>().theme!,
+        themeString: getIt<SharedPreferenceService>().theme!,
       );
 
-  ThemeState copyWithAllowNullLocale({ThemeMode? themeMode, Locale? locale}) => ThemeState(
+  ThemeState copyWithAllowNullLocale({ThemeMode? themeMode, Locale? locale}) =>
+      ThemeState(
         locale: locale,
         themeMode: themeMode ?? this.themeMode,
-        themeString: getIt<PreferenceRepository>().theme!,
+        themeString: getIt<SharedPreferenceService>().theme!,
       );
 
   @override

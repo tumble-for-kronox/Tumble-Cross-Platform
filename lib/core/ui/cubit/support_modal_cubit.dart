@@ -10,7 +10,7 @@ class SupportModalCubit extends Cubit<SupportModalState> {
     _init();
   }
 
-  final _backendService = getIt<BackendRepository>();
+  final _backendService = getIt<BackendService>();
   final _textEditingControllerSubject = TextEditingController();
   final _textEditingControllerBody = TextEditingController();
   final _focusNodeSubject = FocusNode();

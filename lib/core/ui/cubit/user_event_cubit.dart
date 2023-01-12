@@ -1,10 +1,10 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:tumble/core/api/backend/repository/backend_repository.dart';
+import 'package:tumble/core/api/backend/repository/backend_service.dart';
 import 'package:tumble/core/api/backend/response_types/api_response.dart';
 import 'package:tumble/core/api/backend/response_types/runtime_error_types.dart';
 import 'package:tumble/core/api/dependency_injection/get_it.dart';
-import 'package:tumble/core/api/preferences/repository/preference_repository.dart';
+import 'package:tumble/core/api/shared_preferences/shared_preference_service.dart';
 import 'package:tumble/core/models/backend_models/kronox_user_model.dart';
 import 'package:tumble/core/models/backend_models/user_event_collection_model.dart';
 import 'package:tumble/core/ui/cubit/auth_cubit.dart';
@@ -15,22 +15,22 @@ part 'user_event_state.dart';
 class UserEventCubit extends Cubit<UserEventState> {
   UserEventCubit()
       : super(UserEventState(
-          userEventListStatus: UserOverviewStatus.INITIAL,
-          registerUnregisterStatus: RegisterUnregisterStatus.INITIAL,
-          autoSignup: getIt<PreferenceRepository>().autoSignup!,
+          userEventListStatus: UserOverviewStatus.initial,
+          registerUnregisterStatus: RegistrationStatus.initial,
+          autoSignup: getIt<SharedPreferenceService>().autoSignup!,
         ));
 
-  final _preferenceService = getIt<PreferenceRepository>();
-  final _backendRepository = getIt<BackendRepository>();
+  final _preferenceService = getIt<SharedPreferenceService>();
+  final _backendRepository = getIt<BackendService>();
 
-  String get defaultSchool => getIt<PreferenceRepository>().defaultSchool!;
+  String get defaultSchool => getIt<SharedPreferenceService>().defaultSchool!;
 
   Future<void> getUserEvents(
       AuthStatus status, Function logOut, bool showLoading) async {
     switch (status) {
-      case AuthStatus.AUTHENTICATED:
+      case AuthStatus.authenticated:
         if (showLoading) {
-          emit(state.copyWith(userEventListStatus: UserOverviewStatus.LOADING));
+          emit(state.copyWith(userEventListStatus: UserOverviewStatus.loading));
         }
         ApiResponse apiResponse =
             await _backendRepository.getUserEvents(defaultSchool);
@@ -41,7 +41,7 @@ class UserEventCubit extends Cubit<UserEventState> {
               return;
             }
             emit(state.copyWith(
-              userEventListStatus: UserOverviewStatus.LOADED,
+              userEventListStatus: UserOverviewStatus.loaded,
               userEvents: apiResponse.data!,
             ));
             break;
@@ -59,7 +59,7 @@ class UserEventCubit extends Cubit<UserEventState> {
               return;
             }
             emit(state.copyWith(
-              userEventListStatus: UserOverviewStatus.ERROR,
+              userEventListStatus: UserOverviewStatus.error,
             ));
         }
         break;
@@ -73,8 +73,7 @@ class UserEventCubit extends Cubit<UserEventState> {
     if (isClosed) {
       return;
     }
-    emit(state.copyWith(
-        registerUnregisterStatus: RegisterUnregisterStatus.LOADING));
+    emit(state.copyWith(registerUnregisterStatus: RegistrationStatus.loading));
     ApiResponse apiResponse =
         await _backendRepository.putRegisterUserEvent(defaultSchool, id);
 
@@ -86,7 +85,7 @@ class UserEventCubit extends Cubit<UserEventState> {
           return;
         }
         emit(state.copyWith(
-            registerUnregisterStatus: RegisterUnregisterStatus.INITIAL));
+            registerUnregisterStatus: RegistrationStatus.initial));
         break;
       case ApiResponseStatus.unauthorized:
         logOut();
@@ -96,8 +95,8 @@ class UserEventCubit extends Cubit<UserEventState> {
           return;
         }
         emit(state.copyWith(
-            registerUnregisterStatus: RegisterUnregisterStatus.INITIAL,
-            userEventListStatus: UserOverviewStatus.ERROR,
+            registerUnregisterStatus: RegistrationStatus.initial,
+            userEventListStatus: UserOverviewStatus.error,
             errorMessage: RuntimeErrorType.failedExamSignUp()));
         break;
       default:
@@ -105,8 +104,8 @@ class UserEventCubit extends Cubit<UserEventState> {
           return;
         }
         emit(state.copyWith(
-            registerUnregisterStatus: RegisterUnregisterStatus.INITIAL,
-            userEventListStatus: UserOverviewStatus.ERROR,
+            registerUnregisterStatus: RegistrationStatus.initial,
+            userEventListStatus: UserOverviewStatus.error,
             errorMessage: RuntimeErrorType.failedExamSignUp()));
     }
   }
@@ -116,40 +115,28 @@ class UserEventCubit extends Cubit<UserEventState> {
     if (isClosed) {
       return;
     }
-    emit(state.copyWith(
-        registerUnregisterStatus: RegisterUnregisterStatus.LOADING));
+    emit(state.copyWith(registerUnregisterStatus: RegistrationStatus.loading));
     ApiResponse apiResponse =
         await _backendRepository.putUnregisterUserEvent(defaultSchool, id);
+
+    if (isClosed) {
+      return;
+    }
 
     switch (apiResponse.status) {
       case ApiResponseStatus.completed:
       case ApiResponseStatus.success:
         await getUserEvents(status, logOut, false);
-        if (isClosed) {
-          return;
-        }
         emit(state.copyWith(
-            registerUnregisterStatus: RegisterUnregisterStatus.INITIAL));
+            registerUnregisterStatus: RegistrationStatus.initial));
         break;
       case ApiResponseStatus.unauthorized:
         logOut();
         break;
-      case ApiResponseStatus.error:
-        if (isClosed) {
-          return;
-        }
-        emit(state.copyWith(
-            registerUnregisterStatus: RegisterUnregisterStatus.INITIAL,
-            userEventListStatus: UserOverviewStatus.ERROR,
-            errorMessage: RuntimeErrorType.failedExamSignUp()));
-        break;
       default:
-        if (isClosed) {
-          return;
-        }
         emit(state.copyWith(
-            registerUnregisterStatus: RegisterUnregisterStatus.INITIAL,
-            userEventListStatus: UserOverviewStatus.ERROR,
+            registerUnregisterStatus: RegistrationStatus.initial,
+            userEventListStatus: UserOverviewStatus.error,
             errorMessage: RuntimeErrorType.failedExamSignUp()));
     }
   }

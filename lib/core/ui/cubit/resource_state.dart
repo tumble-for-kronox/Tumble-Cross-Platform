@@ -2,11 +2,11 @@
 
 part of 'resource_cubit.dart';
 
-enum ResourceStatus { LOADING, LOADED, ERROR, INITIAL }
+enum ResourceStatus { loading, loaded, error, initial }
 
-enum UserBookingsStatus { LOADING, LOADED, ERROR, INITIAL }
+enum UserBookingsStatus { loading, loaded, error, initial }
 
-enum BookUnbookStatus { LOADING, INITIAL }
+enum BookUnbookStatus { loading, initial, error }
 
 class ResourceState extends Equatable {
   final ResourceStatus status;
@@ -66,14 +66,18 @@ class ResourceState extends Equatable {
         bookUnbookStatus: bookUnbookStatus ?? this.bookUnbookStatus,
         chosenDate: chosenDate ?? this.chosenDate,
         schoolResources: schoolResources ?? this.schoolResources,
-        currentLoadedResource: currentLoadedResource ?? this.currentLoadedResource,
+        currentLoadedResource:
+            currentLoadedResource ?? this.currentLoadedResource,
         userBookings: userBookings ?? this.userBookings,
         confirmationLoading: confirmationLoading ?? this.confirmationLoading,
         unbookLoading: unbookLoading ?? this.unbookLoading,
-        userBookingsErrorMessage: userBookingsErrorMessage ?? this.userBookingsErrorMessage,
-        resourcePageErrorMessage: resourcePageErrorMessage ?? this.resourcePageErrorMessage,
+        userBookingsErrorMessage:
+            userBookingsErrorMessage ?? this.userBookingsErrorMessage,
+        resourcePageErrorMessage:
+            resourcePageErrorMessage ?? this.resourcePageErrorMessage,
         availableTimeSlots: availableTimeSlots ?? this.availableTimeSlots,
-        availableLocationsForTimeSlots: availableLocationsForTimeSlots ?? this.availableLocationsForTimeSlots,
+        availableLocationsForTimeSlots: availableLocationsForTimeSlots ??
+            this.availableLocationsForTimeSlots,
         selectedLocationId: selectedLocationId ?? this.selectedLocationId,
         selectedTimeSlot: selectedTimeSlot ?? this.selectedTimeSlot,
       );
@@ -99,14 +103,18 @@ class ResourceState extends Equatable {
         bookUnbookStatus: bookUnbookStatus ?? this.bookUnbookStatus,
         chosenDate: chosenDate ?? this.chosenDate,
         schoolResources: schoolResources ?? this.schoolResources,
-        currentLoadedResource: currentLoadedResource ?? this.currentLoadedResource,
+        currentLoadedResource:
+            currentLoadedResource ?? this.currentLoadedResource,
         userBookings: userBookings ?? this.userBookings,
         confirmationLoading: confirmationLoading ?? this.confirmationLoading,
         unbookLoading: unbookLoading ?? this.unbookLoading,
-        userBookingsErrorMessage: userBookingsErrorMessage ?? this.userBookingsErrorMessage,
-        resourcePageErrorMessage: resourcePageErrorMessage ?? this.resourcePageErrorMessage,
+        userBookingsErrorMessage:
+            userBookingsErrorMessage ?? this.userBookingsErrorMessage,
+        resourcePageErrorMessage:
+            resourcePageErrorMessage ?? this.resourcePageErrorMessage,
         availableTimeSlots: availableTimeSlots ?? this.availableTimeSlots,
-        availableLocationsForTimeSlots: availableLocationsForTimeSlots ?? this.availableLocationsForTimeSlots,
+        availableLocationsForTimeSlots: availableLocationsForTimeSlots ??
+            this.availableLocationsForTimeSlots,
         selectedLocationId: null,
         selectedTimeSlot: null,
       );

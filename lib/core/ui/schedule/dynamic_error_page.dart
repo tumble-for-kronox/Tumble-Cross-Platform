@@ -9,14 +9,19 @@ class DynamicErrorPage extends StatefulWidget {
   final String errorType;
   final bool toSearch;
   final String? description;
-  const DynamicErrorPage({Key? key, required this.errorType, this.description, required this.toSearch})
+  const DynamicErrorPage(
+      {Key? key,
+      required this.errorType,
+      this.description,
+      required this.toSearch})
       : super(key: key);
 
   @override
   State<DynamicErrorPage> createState() => _DynamicErrorPageState();
 }
 
-class _DynamicErrorPageState extends State<DynamicErrorPage> with TickerProviderStateMixin {
+class _DynamicErrorPageState extends State<DynamicErrorPage>
+    with TickerProviderStateMixin {
   late final AnimationController _controllerFirst = AnimationController(
     duration: const Duration(seconds: 2),
     vsync: this,
@@ -72,7 +77,9 @@ class _DynamicErrorPageState extends State<DynamicErrorPage> with TickerProvider
             child: Text(widget.errorType,
                 textAlign: TextAlign.left,
                 style: TextStyle(
-                    color: Theme.of(context).colorScheme.onBackground, fontSize: 30, fontWeight: FontWeight.w500)),
+                    color: Theme.of(context).colorScheme.onBackground,
+                    fontSize: 30,
+                    fontWeight: FontWeight.w500)),
           ),
           if (widget.description != null)
             const SizedBox(
@@ -96,7 +103,9 @@ class _DynamicErrorPageState extends State<DynamicErrorPage> with TickerProvider
                     Align(
                       alignment: Alignment.topRight,
                       child: TextButton.icon(
-                          onPressed: () => context.read<NavigationCubit>().getNavBarItem(NavbarItem.SEARCH),
+                          onPressed: () => context
+                              .read<NavigationCubit>()
+                              .getNavBarItem(NavbarItem.search),
                           icon: const Icon(CupertinoIcons.chevron_left),
                           label: Text(S.general.toSearch())),
                     )

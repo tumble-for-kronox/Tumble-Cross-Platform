@@ -2,13 +2,13 @@
 
 part of 'user_event_cubit.dart';
 
-enum UserOverviewStatus { LOADING, LOADED, ERROR, INITIAL }
+enum UserOverviewStatus { loading, loaded, error, initial }
 
-enum RegisterUnregisterStatus { LOADING, INITIAL }
+enum RegistrationStatus { loading, initial }
 
 class UserEventState extends Equatable {
   final UserOverviewStatus userEventListStatus;
-  final RegisterUnregisterStatus registerUnregisterStatus;
+  final RegistrationStatus registerUnregisterStatus;
   final UserEventCollectionModel? userEvents;
   final int? currentTabIndex;
   final bool autoSignup;
@@ -25,7 +25,7 @@ class UserEventState extends Equatable {
 
   UserEventState copyWith({
     UserOverviewStatus? userEventListStatus,
-    RegisterUnregisterStatus? registerUnregisterStatus,
+    RegistrationStatus? registerUnregisterStatus,
     KronoxUserModel? userSession,
     bool? autoSignup,
     UserEventCollectionModel? userEvents,
@@ -34,7 +34,8 @@ class UserEventState extends Equatable {
   }) =>
       UserEventState(
         userEventListStatus: userEventListStatus ?? this.userEventListStatus,
-        registerUnregisterStatus: registerUnregisterStatus ?? this.registerUnregisterStatus,
+        registerUnregisterStatus:
+            registerUnregisterStatus ?? this.registerUnregisterStatus,
         autoSignup: autoSignup ?? this.autoSignup,
         userEvents: userEvents ?? this.userEvents,
         errorMessage: errorMessage ?? this.errorMessage,

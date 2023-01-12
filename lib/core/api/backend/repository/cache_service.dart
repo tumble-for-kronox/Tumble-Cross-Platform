@@ -2,21 +2,21 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tumble/core/api/backend/response_types/api_response.dart';
 import 'package:tumble/core/api/backend/response_types/runtime_error_types.dart';
 import 'package:tumble/core/api/backend/data/constants.dart';
-import 'package:tumble/core/api/backend/repository/backend_repository.dart';
-import 'package:tumble/core/api/database/repository/database_repository.dart';
+import 'package:tumble/core/api/backend/repository/backend_service.dart';
+import 'package:tumble/core/api/database/repository/database_service.dart';
 import 'package:tumble/core/api/notifications/repository/notification_repository.dart';
-import 'package:tumble/core/api/preferences/repository/preference_repository.dart';
+import 'package:tumble/core/api/shared_preferences/shared_preference_service.dart';
 import 'package:tumble/core/models/backend_models/schedule_model.dart';
 import 'package:tumble/core/shared/app_dependencies.dart';
 import 'package:tumble/core/api/dependency_injection/get_it.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
 
-class CacheRepository {
-  final _backendService = getIt<BackendRepository>();
-  final _preferenceService = getIt<PreferenceRepository>();
-  final _databaseService = getIt<DatabaseRepository>();
+class CacheService {
+  final _backendService = getIt<BackendService>();
+  final _preferenceService = getIt<SharedPreferenceService>();
+  final _databaseService = getIt<DatabaseService>();
   final _appDependencies = getIt<AppDependencies>();
-  final _notificationService = getIt<NotificationRepository>();
+  final _notificationService = getIt<NotificationService>();
 
   Future<ApiResponse> searchProgram(String searchQuery) async {
     String defaultSchool = _preferenceService.defaultSchool!;
@@ -33,14 +33,16 @@ class CacheRepository {
   }
 
   Future<ApiResponse> findSchedule(String scheduleId) async {
+    // Check if the schedule is in the user's bookmarks
     final bool bookmarksContainsThisScheduleId =
         _preferenceService.bookmarksHasId(scheduleId);
     if (bookmarksContainsThisScheduleId) {
+      // Get the cached version of the schedule
       final ScheduleModel? userCachedSchedule =
           await _getCachedSchedule(scheduleId);
 
       if (userCachedSchedule == null) {
-        /// Try to fetch new version of schedule if the cache is empty
+        // Try to fetch new version of schedule if the cache is empty
         final ApiResponse apiResponse = await updateSchedule(scheduleId);
         if (apiResponse.data == null) {
           return ApiResponse.error(RuntimeErrorType.scheduleFetchError(),
@@ -49,26 +51,22 @@ class CacheRepository {
         return apiResponse;
       }
 
-      /// If the schedule is more than 2 hours
+      // Check if the cached schedule is more than 2 hours old
       if (DateTime.now()
-          .subtract(Constants.updateOffset)
+          .subtract(const Duration(hours: 2))
           .isAfter(userCachedSchedule.cachedAt.toLocal())) {
-        /// Make sure that only if the user has an internet connection and the
-        /// schedule is 'outdated', the app will display the new schedule.
-        /// Otherwise it returns [ApiResponse.cached(userCachedSchedule)]
+        // Try to fetch new version of schedule if it is outdated
         ApiResponse apiResponse = await updateSchedule(scheduleId);
         if (apiResponse.data != null) {
           return apiResponse;
         }
       }
 
-      /// If the userCachedSchedule is not null and the schedule does not
-      /// need to be updated, return the cache
+      // Return the cached schedule if it is still valid
       return ApiResponse.cached(userCachedSchedule);
     }
 
-    /// Fetch from backend if the bookmark is not available in
-    /// preferences.
+    // Fetch the schedule from the backend if it is not in the user's bookmarks
     return await updateSchedule(scheduleId);
   }
 
@@ -104,5 +102,5 @@ class CacheRepository {
   }
 
   bool get notificationCheck =>
-      getIt<PreferenceRepository>().allowedNotifications == null;
+      getIt<SharedPreferenceService>().allowedNotifications == null;
 }

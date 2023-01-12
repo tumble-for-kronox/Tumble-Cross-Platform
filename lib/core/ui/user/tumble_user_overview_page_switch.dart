@@ -5,27 +5,26 @@ import 'package:tumble/core/ui/tumble_loading.dart';
 import 'package:tumble/core/ui/user/overview/authenticated_overview_page.dart';
 import 'package:tumble/core/ui/user/overview/unauthenticated_overview_page.dart';
 
-import '../cubit/resource_cubit.dart';
-import '../cubit/user_event_cubit.dart';
-
 class TumbleUserOverviewPageSwitch extends StatefulWidget {
   const TumbleUserOverviewPageSwitch({Key? key}) : super(key: key);
 
   @override
-  State<TumbleUserOverviewPageSwitch> createState() => _TumbleUserOverviewPageSwitchState();
+  State<TumbleUserOverviewPageSwitch> createState() =>
+      _TumbleUserOverviewPageSwitchState();
 }
 
-class _TumbleUserOverviewPageSwitchState extends State<TumbleUserOverviewPageSwitch> {
+class _TumbleUserOverviewPageSwitchState
+    extends State<TumbleUserOverviewPageSwitch> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AuthCubit, AuthState>(
       builder: (context, state) {
         switch (state.status) {
-          case AuthStatus.AUTHENTICATED:
+          case AuthStatus.authenticated:
             return const AuthenticatedOverviewPage();
-          case AuthStatus.INITIAL:
-          case AuthStatus.ERROR:
-          case AuthStatus.UNAUTHENTICATED:
+          case AuthStatus.initial:
+          case AuthStatus.error:
+          case AuthStatus.unauthenticated:
             return const UnauthenticatedOverviewPage();
           default:
             return const TumbleLoading();

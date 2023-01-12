@@ -7,29 +7,14 @@ part 'navigation_state.dart';
 class NavigationCubit extends Cubit<NavigationState> {
   NavigationCubit()
       : super(const NavigationState(
-          navbarItem: NavbarItem.SEARCH,
+          navbarItem: NavbarItem.search,
           index: 0,
           previewToggle: false,
         ));
 
   void getNavBarItem(NavbarItem navbarItem) {
-    switch (navbarItem) {
-      case NavbarItem.SEARCH:
-        emit(const NavigationState(navbarItem: NavbarItem.SEARCH, index: 0, previewToggle: false));
-        break;
-      case NavbarItem.LIST:
-        emit(const NavigationState(navbarItem: NavbarItem.LIST, index: 1, previewToggle: false));
-        break;
-      case NavbarItem.WEEK:
-        emit(const NavigationState(navbarItem: NavbarItem.WEEK, index: 2, previewToggle: false));
-        break;
-      case NavbarItem.CALENDAR:
-        emit(const NavigationState(navbarItem: NavbarItem.CALENDAR, index: 3, previewToggle: false));
-        break;
-      case NavbarItem.USER_OVERVIEW:
-        emit(const NavigationState(navbarItem: NavbarItem.USER_OVERVIEW, index: 4, previewToggle: false));
-        break;
-    }
+    emit(NavigationState(
+        navbarItem: navbarItem, index: navbarItem.index, previewToggle: false));
   }
 
   void setPreviewToggle() {

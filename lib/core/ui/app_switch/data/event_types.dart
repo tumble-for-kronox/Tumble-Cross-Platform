@@ -1,15 +1,15 @@
 // ignore_for_file: constant_identifier_names
 
 enum EventType {
-  SCHOOL,
-  THEME,
-  BOOKMARKS,
-  NOTIFICATIONS_CANCEL,
-  CANCEL_NOTIFICATIONS_FOR_PROGRAM,
-  NOTIFICATIONS_OFFSET,
-  BUG,
-  OPEN_REVIEW,
-  LANGUAGE,
-  CONTRIBUTORS,
-  SOURCE_CODE
+  school,
+  theme,
+  bookmarks,
+  cancelNotifications,
+  cancelNotificationsForProgram,
+  notificationOffset,
+  bugReport,
+  openPreview,
+  language,
+  contributors,
+  sourceCode
 }

@@ -1,9 +1,8 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:tumble/core/api/dependency_injection/get_it.dart';
-import 'package:tumble/core/api/preferences/repository/preference_repository.dart';
+import 'package:tumble/core/api/shared_preferences/shared_preference_service.dart';
 import 'package:tumble/core/extensions/extensions.dart';
-import 'package:tumble/core/api/notifications/interface/inotification_service_builder.dart';
 import 'package:tumble/core/theme/data/colors.dart';
 
 ///
@@ -12,13 +11,12 @@ import 'package:tumble/core/theme/data/colors.dart';
 /// at a scheduled time, as well as dynamically allocate channels for
 /// invoking any notifications.
 ///
-class NotificationServiceBuilder implements INotificationServiceBuilder {
+class NotificationServiceBuilder {
   final Color defaultColor = CustomColors.orangePrimary;
   final String defaultIcon = "resource://drawable/res_tumble_app_logo";
   final _awesomeNotifications = getIt<AwesomeNotifications>();
-  final _preferenceService = getIt<PreferenceRepository>();
+  final _preferenceService = getIt<SharedPreferenceService>();
 
-  @override
   NotificationChannel buildNotificationChannel({
     required String channelKey, // Schedule ID
     required String channelName, // name of schedule in readable text
@@ -31,7 +29,6 @@ class NotificationServiceBuilder implements INotificationServiceBuilder {
         defaultColor: defaultColor,
       );
 
-  @override
   Future<bool> buildOffsetNotification(
           {required int id,
           required String channelKey,
@@ -55,11 +52,13 @@ class NotificationServiceBuilder implements INotificationServiceBuilder {
             NotificationActionButton(key: 'VIEW', label: 'View'),
           ],
           schedule: NotificationCalendar.fromDate(
-              date: date.subtract(Duration(minutes: _preferenceService.notificationOffset!)).toLocal(),
+              date: date
+                  .subtract(
+                      Duration(minutes: _preferenceService.notificationOffset!))
+                  .toLocal(),
               allowWhileIdle: true,
               preciseAlarm: true));
 
-  @override
   Future<bool> buildExactNotification(
           {required int id,
           required String channelKey,
@@ -82,5 +81,6 @@ class NotificationServiceBuilder implements INotificationServiceBuilder {
           actionButtons: [
             NotificationActionButton(key: 'VIEW', label: 'View'),
           ],
-          schedule: NotificationCalendar.fromDate(date: date.toLocal(), allowWhileIdle: true, preciseAlarm: true));
+          schedule: NotificationCalendar.fromDate(
+              date: date.toLocal(), allowWhileIdle: true, preciseAlarm: true));
 }

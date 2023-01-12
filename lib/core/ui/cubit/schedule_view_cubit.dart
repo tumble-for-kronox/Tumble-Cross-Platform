@@ -7,13 +7,13 @@ import 'package:collection/collection.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:sembast/utils/value_utils.dart';
-import 'package:tumble/core/api/backend/repository/cache_repository.dart';
+import 'package:tumble/core/api/backend/repository/cache_service.dart';
 import 'package:tumble/core/api/backend/response_types/api_response.dart';
-import 'package:tumble/core/api/database/repository/database_repository.dart';
+import 'package:tumble/core/api/database/repository/database_service.dart';
 import 'package:tumble/core/api/dependency_injection/get_it.dart';
 import 'package:tumble/core/api/notifications/builders/notification_service_builder.dart';
 import 'package:tumble/core/api/notifications/repository/notification_repository.dart';
-import 'package:tumble/core/api/preferences/repository/preference_repository.dart';
+import 'package:tumble/core/api/shared_preferences/shared_preference_service.dart';
 import 'package:tumble/core/extensions/extensions.dart';
 import 'package:tumble/core/models/backend_models/schedule_model.dart';
 import 'package:tumble/core/models/ui_models/week_model.dart';
@@ -24,7 +24,7 @@ part 'schedule_view_state.dart';
 class ScheduleViewCubit extends Cubit<ScheduleViewState> {
   ScheduleViewCubit()
       : super(const ScheduleViewState(
-            status: ScheduleViewStatus.LOADING,
+            status: ScheduleViewStatus.loading,
             listOfDays: null,
             listOfWeeks: null,
             listViewToTopButtonVisible: false,
@@ -33,18 +33,18 @@ class ScheduleViewCubit extends Cubit<ScheduleViewState> {
     _init();
   }
 
-  final _cacheAndInteractionService = getIt<CacheRepository>();
+  final _cacheAndInteractionService = getIt<CacheService>();
   final _notificationBuilder = NotificationServiceBuilder();
-  final _notificationService = getIt<NotificationRepository>();
-  final _databaseService = getIt<DatabaseRepository>();
-  final _preferenceService = getIt<PreferenceRepository>();
+  final _notificationService = getIt<NotificationService>();
+  final _databaseService = getIt<DatabaseService>();
+  final _preferenceService = getIt<SharedPreferenceService>();
   final ScrollController _listViewScrollController = ScrollController();
 
   ScrollController get controller => _listViewScrollController;
   bool get hasBookMarkedSchedules =>
-      getIt<PreferenceRepository>().bookmarkIds!.isNotEmpty;
+      getIt<SharedPreferenceService>().bookmarkIds!.isNotEmpty;
   bool get notificationCheck =>
-      getIt<PreferenceRepository>().allowedNotifications == null;
+      getIt<SharedPreferenceService>().allowedNotifications == null;
   bool get toTopButtonVisible => _listViewScrollController.hasClients
       ? _listViewScrollController.offset >= 1000
       : false;
@@ -65,15 +65,19 @@ class ScheduleViewCubit extends Cubit<ScheduleViewState> {
     final currentScheduleIds = _preferenceService.bookmarkIds;
     List<List<Day>> matrixListOfDays = [];
     List<ScheduleModel> listOfScheduleModels = [];
+
     if (currentScheduleIds != null) {
       for (String? scheduleId in currentScheduleIds) {
+        // check if user has bookmarks
         final bool userHasBookmarks = _preferenceService.userHasBookmarks;
 
+        // check if the schedule is set to be visible by the user
         final bool? toggledToBeVisible =
             _preferenceService.bookmarkVisible(scheduleId);
 
         if (scheduleId != null && userHasBookmarks) {
           if (toggledToBeVisible != null && toggledToBeVisible) {
+            // log that the schedule is being updated
             log('Updating schedule');
             final ApiResponse apiResponse =
                 await _cacheAndInteractionService.findSchedule(scheduleId);
@@ -82,7 +86,9 @@ class ScheduleViewCubit extends Cubit<ScheduleViewState> {
               case ApiResponseStatus.cached:
               case ApiResponseStatus.fetched:
                 ScheduleModel newScheduleModel = apiResponse.data;
+                // check if the schedule is valid
                 if (newScheduleModel.isNotPhonySchedule()) {
+                  // update the course color storage
                   await DayListBuilder.updateCourseColorStorage(
                       newScheduleModel,
                       await _databaseService.getCourseColors(),
@@ -96,10 +102,6 @@ class ScheduleViewCubit extends Cubit<ScheduleViewState> {
                 break;
 
               case ApiResponseStatus.error:
-
-                /// If an error occurs here, the schedule is empty currently
-                /// and can be temporarily removed from the database for this session.
-                //await _databaseService.remove(scheduleId, AccessStores.SCHEDULE_STORE);
                 log(
                     name: 'schedule_view_cubit',
                     'Error in retrieveing schedule cache ..\nError on schedule: [$scheduleId');
@@ -112,10 +114,11 @@ class ScheduleViewCubit extends Cubit<ScheduleViewState> {
             }
           }
         } else {
-          emit(state.copyWith(status: ScheduleViewStatus.NO_VIEW));
+          emit(state.copyWith(status: ScheduleViewStatus.missing));
         }
       }
     }
+    // set the schedule view
     await _setScheduleView(matrixListOfDays, listOfScheduleModels);
   }
 
@@ -124,13 +127,13 @@ class ScheduleViewCubit extends Cubit<ScheduleViewState> {
     if (listOfScheduleModels.isNotEmpty) {
       Map<String, int> courseColors = await _databaseService.getCourseColors();
 
+      // flatten the matrix of days and sort them by date
       final flattened =
           matrixListOfDays.expand((listOfDays) => listOfDays).toList();
       flattened.sort(
           (prevDay, nextDay) => prevDay.isoString.compareTo(nextDay.isoString));
 
-      var seen = <String>{};
-
+      // group the days by date
       final listOfDays = groupBy(flattened, (Day day) => day.date)
           .entries
           .map((dayGrouper) => Day(
@@ -138,25 +141,20 @@ class ScheduleViewCubit extends Cubit<ScheduleViewState> {
               date: dayGrouper.value[0].date,
               isoString: dayGrouper.value[0].isoString,
               weekNumber: dayGrouper.value[0].weekNumber,
-              events: dayGrouper.value
-                  .expand((day) => day.events)
-                  .where((event) => seen.add(event.id))
-                  .toList()
+              events: dayGrouper.value.expand((day) => day.events).toList()
                 ..sort(((a, b) => a.from.compareTo(b.from)))))
           .toList();
 
       emit(state.copyWith(
-        status: ScheduleViewStatus.POPULATED_VIEW,
+        status: ScheduleViewStatus.populated,
         listOfDays: listOfDays,
         listOfWeeks: listOfDays.splitToWeek(),
         listOfScheduleModels: listOfScheduleModels,
         courseColors: courseColors,
       ));
-      log(
-          name: 'schedule_view_cubit',
-          'Successfully updated entire schedule view. Exiting ..');
+      log(name: 'schedule_view_cubit', 'Schedule view cubit updated');
     } else {
-      emit(state.copyWith(status: ScheduleViewStatus.NO_VIEW));
+      emit(state.copyWith(status: ScheduleViewStatus.missing));
     }
   }
 
@@ -174,7 +172,7 @@ class ScheduleViewCubit extends Cubit<ScheduleViewState> {
   }
 
   setLoading() {
-    emit(state.copyWith(status: ScheduleViewStatus.LOADING));
+    emit(state.copyWith(status: ScheduleViewStatus.loading));
   }
 
   Future<bool> createNotificationForEvent(
@@ -277,7 +275,7 @@ class ScheduleViewCubit extends Cubit<ScheduleViewState> {
     await _databaseService.updateCourseColor(course.id, color.value);
     Map<String, int> courseColors = await _databaseService.getCourseColors();
     emit(state.copyWith(
-        status: ScheduleViewStatus.POPULATED_VIEW, courseColors: courseColors));
+        status: ScheduleViewStatus.populated, courseColors: courseColors));
   }
 
   Future<void> permissionRequest(bool value) async {

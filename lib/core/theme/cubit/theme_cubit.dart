@@ -1,10 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tumble/core/api/dependency_injection/get_it.dart';
-import 'package:tumble/core/api/preferences/repository/preference_repository.dart';
-import 'package:tumble/core/shared/preference_types.dart';
+import 'package:tumble/core/api/shared_preferences/shared_preference_service.dart';
 import 'package:tumble/core/theme/cubit/theme_state.dart';
 import 'package:tumble/core/theme/data/theme_strings.dart';
 import 'package:tumble/core/theme/repository/theme_repository.dart';
@@ -12,9 +10,12 @@ import 'package:tumble/core/theme/repository/theme_repository.dart';
 class ThemeCubit extends Cubit<ThemeState> {
   ThemeCubit()
       : super(ThemeState(
-            themeString: getIt<PreferenceRepository>().theme!,
-            locale: getIt<PreferenceRepository>().locale == null ? null : Locale(getIt<PreferenceRepository>().locale!),
-            themeMode: ThemeMode.values.firstWhere((theme) => theme.name == getIt<PreferenceRepository>().theme)));
+            themeString: getIt<SharedPreferenceService>().theme!,
+            locale: getIt<SharedPreferenceService>().locale == null
+                ? null
+                : Locale(getIt<SharedPreferenceService>().locale!),
+            themeMode: ThemeMode.values.firstWhere((theme) =>
+                theme.name == getIt<SharedPreferenceService>().theme)));
 
   final ThemePersistence themeRepository = getIt<ThemeRepository>();
   late StreamSubscription<String> _themeSubscription;
@@ -29,20 +30,22 @@ class ThemeCubit extends Cubit<ThemeState> {
   }
 
   void updateTheme(String theme) {
+    ThemeMode themeMode;
     switch (theme) {
       case ThemeType.light:
-        emit(state.copyWith(themeMode: ThemeMode.light));
+        themeMode = ThemeMode.light;
         break;
       case ThemeType.dark:
-        emit(state.copyWith(themeMode: ThemeMode.dark));
+        themeMode = ThemeMode.dark;
         break;
       case ThemeType.system:
-        emit(state.copyWith(themeMode: ThemeMode.system));
+        themeMode = ThemeMode.system;
         break;
       default:
-        emit(state.copyWith(themeMode: ThemeMode.light));
+        themeMode = ThemeMode.light;
         break;
     }
+    emit(state.copyWith(themeMode: themeMode));
   }
 
   void updateLocale(Locale? locale) {

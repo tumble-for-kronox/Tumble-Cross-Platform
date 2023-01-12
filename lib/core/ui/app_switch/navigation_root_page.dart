@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tumble/core/api/backend/repository/cache_repository.dart';
+import 'package:tumble/core/api/backend/repository/cache_service.dart';
 import 'package:tumble/core/api/dependency_injection/get_it.dart';
 import 'package:tumble/core/ui/bottom_nav_bar/data/nav_bar_items.dart';
 import 'package:tumble/core/ui/bottom_nav_bar/tumble_navigation_bar.dart';
@@ -37,7 +37,7 @@ class _NavigationRootPageState extends State<NavigationRootPage> {
   late ResourceCubit _resourceCubit;
   bool calledThisBuild = false;
 
-  final _cacheAndInteractionService = getIt<CacheRepository>();
+  final _cacheAndInteractionService = getIt<CacheService>();
 
   @override
   void initState() {
@@ -132,10 +132,10 @@ class _NavigationRootPageState extends State<NavigationRootPage> {
                       ),
                       BlocListener<AuthCubit, AuthState>(
                         listenWhen: (previous, current) => ((previous.status ==
-                                    AuthStatus.INITIAL &&
-                                current.status == AuthStatus.AUTHENTICATED) ||
-                            (previous.status == AuthStatus.UNAUTHENTICATED &&
-                                current.status == AuthStatus.AUTHENTICATED)),
+                                    AuthStatus.initial &&
+                                current.status == AuthStatus.authenticated) ||
+                            (previous.status == AuthStatus.unauthenticated &&
+                                current.status == AuthStatus.authenticated)),
                         listener: (context, state) {
                           _initialiseUserData(context);
                         },
@@ -146,15 +146,15 @@ class _NavigationRootPageState extends State<NavigationRootPage> {
                       child: () {
                         switch (
                             context.read<NavigationCubit>().state.navbarItem) {
-                          case NavbarItem.SEARCH:
+                          case NavbarItem.search:
                             return const TumbleSearchPage();
-                          case NavbarItem.LIST:
+                          case NavbarItem.list:
                             return const TumbleListView();
-                          case NavbarItem.WEEK:
+                          case NavbarItem.week:
                             return const TumbleWeekView();
-                          case NavbarItem.CALENDAR:
+                          case NavbarItem.calendar:
                             return const TumbleCalendarView();
-                          case NavbarItem.USER_OVERVIEW:
+                          case NavbarItem.overview:
                             return BlocProvider.value(
                               value: BlocProvider.of<AuthCubit>(context),
                               child: Builder(builder: (context) {

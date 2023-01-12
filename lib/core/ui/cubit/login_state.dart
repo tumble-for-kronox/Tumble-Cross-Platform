@@ -2,7 +2,7 @@
 
 part of 'login_cubit.dart';
 
-enum LoginStatus { INITIAL, SUCCESS, FAIL, LOADING }
+enum LoginStatus { initial, success, fail, loading }
 
 @freezed
 class LoginState extends Equatable {

@@ -2,10 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 
-///
 /// Stores all endpoints used for interacting with the .NET backend,
 /// as well as the query parameters for different endpoints.
-///
 @immutable
 class Endpoints {
   // Endpoints

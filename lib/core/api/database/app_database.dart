@@ -7,9 +7,9 @@ import 'package:sembast/sembast.dart';
 import 'package:sembast/sembast_io.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tumble/core/api/database/data/access_stores.dart';
-import 'package:tumble/core/api/database/repository/database_repository.dart';
+import 'package:tumble/core/api/database/repository/database_service.dart';
 import 'package:tumble/core/api/dependency_injection/get_it.dart';
-import 'package:tumble/core/api/preferences/repository/preference_repository.dart';
+import 'package:tumble/core/api/shared_preferences/shared_preference_service.dart';
 import 'package:tumble/core/models/backend_models/schedule_model.dart';
 import 'package:tumble/core/theme/color_picker.dart';
 import 'package:tumble/core/ui/schedule/utils/day_list_builder.dart';
@@ -40,7 +40,7 @@ class AppDatabase {
 
   Future<void> _updateDatabase(db, oldVersion, newVersion) async {
     if (oldVersion < 2) {
-      await intMapStoreFactory.store(AccessStores.SCHEDULE_STORE).delete(db);
+      await intMapStoreFactory.store(AccessStores.schedule_store).delete(db);
       await intMapStoreFactory
           .store('course_colors')
           .delete(db)

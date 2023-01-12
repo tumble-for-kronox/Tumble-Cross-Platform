@@ -69,7 +69,7 @@ class _SearchBarAndLogoContainerState extends State<SearchBarAndLogoContainer> {
                                         Theme.of(context).colorScheme.primary,
                                     onPressed: () => context
                                         .read<NavigationCubit>()
-                                        .getNavBarItem(NavbarItem.LIST),
+                                        .getNavBarItem(NavbarItem.list),
                                     child: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,

@@ -2,9 +2,9 @@
 
 part of 'search_page_cubit.dart';
 
-enum SearchPageStatus { INITIAL, LOADING, FOUND, NO_SCHEDULES, ERROR, DISPLAY_PREVIEW }
+enum SearchPageStatus { initial, loading, found, empty, error, preview }
 
-enum PreviewFetchStatus { INITIAL, LOADING, CACHED_SCHEDULE, FETCHED_SCHEDULE, FETCH_ERROR, EMPTY_SCHEDULE }
+enum PreviewFetchStatus { initial, loading, cached, fetched, error, empty }
 
 class SearchPageState extends Equatable {
   final SearchPageStatus searchPageStatus;
@@ -63,12 +63,16 @@ class SearchPageState extends Equatable {
         clearButtonVisible: clearButtonVisible ?? this.clearButtonVisible,
         errorMessage: errorMessage ?? this.errorMessage,
         programList: programList ?? this.programList,
-        previewToTopButtonVisible: previewToTopButtonVisible ?? this.previewToTopButtonVisible,
+        previewToTopButtonVisible:
+            previewToTopButtonVisible ?? this.previewToTopButtonVisible,
         previewListOfDays: previewListOfDays ?? this.previewListOfDays,
-        previewToggledFavorite: previewToggledFavorite ?? this.previewToggledFavorite,
-        previewCurrentScheduleId: previewCurrentScheduleId ?? this.previewCurrentScheduleId,
+        previewToggledFavorite:
+            previewToggledFavorite ?? this.previewToggledFavorite,
+        previewCurrentScheduleId:
+            previewCurrentScheduleId ?? this.previewCurrentScheduleId,
         errorDescription: errorDescription ?? this.errorDescription,
-        hasBookmarkedSchedules: hasBookmarkedSchedules ?? this.hasBookmarkedSchedules,
+        hasBookmarkedSchedules:
+            hasBookmarkedSchedules ?? this.hasBookmarkedSchedules,
         scheduleModel: scheduleModel ?? this.scheduleModel,
         courseColors: courseColors ?? this.courseColors,
       );

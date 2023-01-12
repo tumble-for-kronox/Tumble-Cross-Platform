@@ -48,17 +48,17 @@ class _EventsState extends State<Events> {
                     child: Builder(
                       builder: (context) {
                         switch (state.userEventListStatus) {
-                          case UserOverviewStatus.LOADING:
+                          case UserOverviewStatus.loading:
                             return const Center(child: TumbleLoading());
-                          case UserOverviewStatus.LOADED:
+                          case UserOverviewStatus.loaded:
                             return _loaded(context, state);
-                          case UserOverviewStatus.ERROR:
+                          case UserOverviewStatus.error:
                             return DynamicErrorPage(
                               errorType: S.userEvents.failedToLoad(),
                               toSearch: false,
                               description: '',
                             );
-                          case UserOverviewStatus.INITIAL:
+                          case UserOverviewStatus.initial:
                             return DynamicErrorPage(
                               errorType: S.userEvents.empty(),
                               toSearch: false,

@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tumble/core/api/backend/repository/cache_repository.dart';
+import 'package:tumble/core/api/backend/repository/cache_service.dart';
 import 'package:tumble/core/api/dependency_injection/get_it.dart';
 import 'package:tumble/core/models/ui_models/school_model.dart';
 import 'package:tumble/core/navigation/navigation_route_labels.dart';
@@ -21,7 +21,7 @@ class SchoolSelectionPage extends StatefulWidget {
 }
 
 class _SchoolSelectionPageState extends State<SchoolSelectionPage> {
-  final _cacheAndInteractionService = getIt<CacheRepository>();
+  final _cacheAndInteractionService = getIt<CacheService>();
 
   @override
   Widget build(BuildContext context) {

@@ -2,10 +2,10 @@ import 'dart:developer';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tumble/core/api/backend/repository/backend_repository.dart';
+import 'package:tumble/core/api/backend/repository/backend_service.dart';
 import 'package:tumble/core/api/backend/response_types/api_response.dart';
-import 'package:tumble/core/api/database/repository/secure_storage_repository.dart';
-import 'package:tumble/core/api/preferences/repository/preference_repository.dart';
+import 'package:tumble/core/api/database/repository/secure_storage_service.dart';
+import 'package:tumble/core/api/shared_preferences/shared_preference_service.dart';
 import 'package:tumble/core/models/backend_models/kronox_user_model.dart';
 import 'package:tumble/core/models/backend_models/multi_registration_result_model.dart';
 import 'package:tumble/core/models/ui_models/school_model.dart';
@@ -17,7 +17,7 @@ part 'auth_state.dart';
 class AuthCubit extends Cubit<AuthState> {
   AuthCubit()
       : super(AuthState(
-            status: AuthStatus.INITIAL,
+            status: AuthStatus.initial,
             usernameController: TextEditingController(),
             passwordController: TextEditingController(),
             passwordHidden: true,
@@ -25,80 +25,74 @@ class AuthCubit extends Cubit<AuthState> {
             focused: false)) {
     login();
   }
-  final _backendRepository = getIt<BackendRepository>();
+  final _backendRepository = getIt<BackendService>();
   final _focusNodePassword = FocusNode();
   final _focusNodeUsername = FocusNode();
 
   FocusNode get focusNodePassword => _focusNodePassword;
   FocusNode get focusNodeUsername => _focusNodeUsername;
 
-  String get defaultSchool => getIt<PreferenceRepository>().defaultSchool!;
+  String get defaultSchool => getIt<SharedPreferenceService>().defaultSchool!;
 
   void setUserLoggedIn() {
-    emit(state.copyWith(status: AuthStatus.AUTHENTICATED));
+    emit(state.copyWith(status: AuthStatus.authenticated));
   }
 
   Future<String?> runAutoSignup() async {
     ApiResponse autoSignup =
         await _backendRepository.putRegisterAll(defaultSchool);
 
-    switch (autoSignup.status) {
-      case ApiResponseStatus.completed:
-        MultiRegistrationResultModel results =
-            autoSignup.data as MultiRegistrationResultModel;
-        if (results.failedRegistrations.isEmpty &&
-            results.successfulRegistrations.isEmpty) {
-          return null;
-        }
-
-        if (results.failedRegistrations.isNotEmpty &&
-            results.successfulRegistrations.isEmpty) {
-          return S.scaffoldMessages
-              .autoSignupFailed(results.failedRegistrations.length);
-        }
-
-        if (results.failedRegistrations.isEmpty &&
-            results.successfulRegistrations.isNotEmpty) {
-          return S.scaffoldMessages
-              .autoSignupCompleted(results.successfulRegistrations.length);
-        }
-
-        return S.scaffoldMessages.autoSignupCompleteAndFail(
-            results.successfulRegistrations.length,
-            results.failedRegistrations.length);
-      default:
-        break;
+    if (autoSignup.status != ApiResponseStatus.completed) {
+      return autoSignup.data;
     }
-    return autoSignup.data;
+    MultiRegistrationResultModel results =
+        autoSignup.data as MultiRegistrationResultModel;
+    if (results.failedRegistrations.isEmpty &&
+        results.successfulRegistrations.isEmpty) {
+      return null;
+    }
+
+    if (results.failedRegistrations.isNotEmpty &&
+        results.successfulRegistrations.isEmpty) {
+      return S.scaffoldMessages
+          .autoSignupFailed(results.failedRegistrations.length);
+    }
+
+    if (results.failedRegistrations.isEmpty &&
+        results.successfulRegistrations.isNotEmpty) {
+      return S.scaffoldMessages
+          .autoSignupCompleted(results.successfulRegistrations.length);
+    }
+
+    return S.scaffoldMessages.autoSignupCompleteAndFail(
+        results.successfulRegistrations.length,
+        results.failedRegistrations.length);
   }
 
   Future<void> login() async {
     ApiResponse apiResponse = await _backendRepository.getUser();
-    switch (apiResponse.status) {
-      case ApiResponseStatus.success:
-        log(name: 'auth_cubit', "Successfully retrieved user ..");
-        emit(state.copyWith(
-            status: AuthStatus.AUTHENTICATED, userSession: apiResponse.data!));
-        return;
-      default:
-        emit(state.copyWith(status: AuthStatus.UNAUTHENTICATED));
-        return;
+    if (apiResponse.status == ApiResponseStatus.success) {
+      log(name: 'auth_cubit', "Successfully retrieved user ..");
+      emit(state.copyWith(
+          status: AuthStatus.authenticated, userSession: apiResponse.data!));
+    } else {
+      emit(state.copyWith(status: AuthStatus.unauthenticated));
     }
   }
 
   void setUserSession(KronoxUserModel user) {
     if (user == state.userSession) return;
     log(name: 'auth_cubit', 'New user session being set...');
-    emit(state.copyWith(status: AuthStatus.AUTHENTICATED, userSession: user));
+    emit(state.copyWith(status: AuthStatus.authenticated, userSession: user));
   }
 
   void logout() {
-    getIt<SecureStorageRepository>().clear();
+    getIt<SecureStorageService>().clear();
     emit(state.copyWith(
-        status: AuthStatus.UNAUTHENTICATED,
+        status: AuthStatus.unauthenticated,
         userSession: null,
         loginSuccess: false));
   }
 
-  bool get authenticated => state.status == AuthStatus.AUTHENTICATED;
+  bool get authenticated => state.status == AuthStatus.authenticated;
 }

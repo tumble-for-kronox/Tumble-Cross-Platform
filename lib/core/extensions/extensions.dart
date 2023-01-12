@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import "package:collection/collection.dart";
 import 'package:tumble/core/api/backend/data/endpoints.dart';
 import 'package:tumble/core/api/backend/response_types/api_response.dart';
-import 'package:tumble/core/api/database/repository/database_repository.dart';
+import 'package:tumble/core/api/database/repository/database_service.dart';
 import 'package:tumble/core/api/dependency_injection/get_it.dart';
 import 'package:tumble/core/models/backend_models/kronox_user_model.dart';
 import 'package:tumble/core/theme/color_picker.dart';
@@ -39,11 +39,7 @@ extension StringParse on String {
   }
 
   /// Used to give notifications unique id's based on event id
-  int encodeUniqueIdentifier() {
-    return hashCode;
-    // List<int> byteArray = utf8.encode(this);
-    // return int.parse(byteArray.sublist(byteArray.length - 4, byteArray.length).join(''));
-  }
+  int encodeUniqueIdentifier() => hashCode;
 }
 
 extension GetSchoolFromString on Schools {
@@ -75,15 +71,15 @@ extension SplitToWeek on List<Day> {
 extension StringParsing on NavbarItem {
   String toStringTitle() {
     switch (this) {
-      case NavbarItem.SEARCH:
+      case NavbarItem.search:
         return S.searchPage.title().toUpperCase();
-      case NavbarItem.LIST:
+      case NavbarItem.list:
         return S.listViewPage.title().toUpperCase();
-      case NavbarItem.WEEK:
+      case NavbarItem.week:
         return S.weekViewPage.title().toUpperCase();
-      case NavbarItem.CALENDAR:
+      case NavbarItem.calendar:
         return S.calendarViewPage.title().toUpperCase();
-      case NavbarItem.USER_OVERVIEW:
+      case NavbarItem.overview:
         return S.authorizedPage.title().toUpperCase();
     }
   }

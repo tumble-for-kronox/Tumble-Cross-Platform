@@ -112,7 +112,7 @@ class _TumbleAppDrawerState extends State<TumbleAppDrawer> {
                                 .name
                                 .toUpperCase()),
                         suffixIcon: CupertinoIcons.arrow_right_arrow_left,
-                        eventType: EventType.SCHOOL,
+                        eventType: EventType.school,
                         drawerEvent: (eventType) =>
                             _handleDrawerEvent(eventType, context),
                       ),
@@ -124,7 +124,7 @@ class _TumbleAppDrawerState extends State<TumbleAppDrawer> {
                             .theme!
                             .capitalize()),
                         suffixIcon: CupertinoIcons.device_phone_portrait,
-                        eventType: EventType.THEME,
+                        eventType: EventType.theme,
                         drawerEvent: (eventType) =>
                             _handleDrawerEvent(eventType, context),
                       ),
@@ -133,7 +133,7 @@ class _TumbleAppDrawerState extends State<TumbleAppDrawer> {
                         subtitle: S.settingsPage.languageSubtitle(),
                         suffixIcon:
                             CupertinoIcons.textformat_abc_dottedunderline,
-                        eventType: EventType.LANGUAGE,
+                        eventType: EventType.language,
                         drawerEvent: (eventType) =>
                             _handleDrawerEvent(eventType, context),
                       ),
@@ -152,7 +152,7 @@ class _TumbleAppDrawerState extends State<TumbleAppDrawer> {
                               S.settingsPage.defaultScheduleTitle(),
                           subtitle: S.settingsPage.defaultScheduleSubtitle(),
                           suffixIcon: CupertinoIcons.bookmark,
-                          eventType: EventType.BOOKMARKS,
+                          eventType: EventType.bookmarks,
                           drawerEvent: (eventType) =>
                               _handleDrawerEvent(eventType, context)),
                     ], title: S.settingsPage.scheduleTitle()),
@@ -167,7 +167,7 @@ class _TumbleAppDrawerState extends State<TumbleAppDrawer> {
                           suffixIcon: CupertinoIcons.bell_slash,
                           drawerTileTitle: S.settingsPage.clearAllTitle(),
                           subtitle: S.settingsPage.clearAllSubtitle(),
-                          eventType: EventType.NOTIFICATIONS_CANCEL,
+                          eventType: EventType.cancelNotifications,
                           drawerEvent: (eventType) =>
                               _handleDrawerEvent(eventType, context)),
                       TumbleAppDrawerTile(
@@ -175,7 +175,7 @@ class _TumbleAppDrawerState extends State<TumbleAppDrawer> {
                         drawerTileTitle: S.settingsPage.offsetTitle(),
                         subtitle: S.settingsPage.offsetSubtitle(
                             context.read<DrawerCubit>().notificationOffset),
-                        eventType: EventType.NOTIFICATIONS_OFFSET,
+                        eventType: EventType.notificationOffset,
                         drawerEvent: (eventType) =>
                             _handleDrawerEvent(eventType, context),
                       )
@@ -193,7 +193,7 @@ class _TumbleAppDrawerState extends State<TumbleAppDrawer> {
                         drawerTileTitle: S.settingsPage.reportBugTitle(),
                         subtitle: S.settingsPage.reportBugSubtitle(),
                         suffixIcon: CupertinoIcons.ant,
-                        eventType: EventType.BUG,
+                        eventType: EventType.bugReport,
                         drawerEvent: (eventType) =>
                             _handleDrawerEvent(eventType, context),
                       ),
@@ -201,7 +201,7 @@ class _TumbleAppDrawerState extends State<TumbleAppDrawer> {
                         suffixIcon: CupertinoIcons.group,
                         drawerTileTitle: S.settingsPage.contributorsTitle(),
                         subtitle: S.settingsPage.contributorsSubtitle(),
-                        eventType: EventType.CONTRIBUTORS,
+                        eventType: EventType.contributors,
                         drawerEvent: (eventType) =>
                             _handleDrawerEvent(eventType, context),
                       ),
@@ -218,14 +218,14 @@ class _TumbleAppDrawerState extends State<TumbleAppDrawer> {
 
   void _handleDrawerEvent(Enum eventType, BuildContext context) async {
     switch (eventType) {
-      case EventType.SCHOOL:
+      case EventType.school:
         Navigator.of(context).push(CupertinoPageRoute(
             builder: (_) => BlocProvider(
                   create: (_) => context.read<AuthCubit>(),
                   child: const SchoolSelectionPage(),
                 )));
         break;
-      case EventType.THEME:
+      case EventType.theme:
         showModalBottomSheet(
             context: context,
             builder: (_) => ApplicationThemePicker(
@@ -235,7 +235,7 @@ class _TumbleAppDrawerState extends State<TumbleAppDrawer> {
                 },
                 cubit: context.read<DrawerCubit>()));
         break;
-      case EventType.LANGUAGE:
+      case EventType.language:
         showModalBottomSheet(
           context: context,
           builder: (_) => ApplicationLanguagePicker(
@@ -247,7 +247,7 @@ class _TumbleAppDrawerState extends State<TumbleAppDrawer> {
               }),
         );
         break;
-      case EventType.BOOKMARKS:
+      case EventType.bookmarks:
         if (context.read<DrawerCubit>().state.bookmarks!.isNotEmpty) {
           List<BookmarkedScheduleModel> tempBookmarks =
               context.read<DrawerCubit>().state.bookmarks!;
@@ -265,12 +265,12 @@ class _TumbleAppDrawerState extends State<TumbleAppDrawer> {
           });
         }
         break;
-      case EventType.NOTIFICATIONS_CANCEL:
+      case EventType.cancelNotifications:
         context.read<ScheduleViewCubit>().cancelAllNotifications();
         showScaffoldMessage(
             context, S.scaffoldMessages.cancelledAllSetNotifications());
         break;
-      case EventType.NOTIFICATIONS_OFFSET:
+      case EventType.notificationOffset:
         showModalBottomSheet(
             context: context,
             builder: (_) => AppNotificationOffsetPicker(
@@ -284,17 +284,17 @@ class _TumbleAppDrawerState extends State<TumbleAppDrawer> {
                   },
                 ));
         break;
-      case EventType.SOURCE_CODE:
+      case EventType.sourceCode:
         await launchUrlString(Constants.gitHub);
         break;
-      case EventType.BUG:
+      case EventType.bugReport:
         BugReportModal.showBugReportModal(context, context.read<DrawerCubit>());
         break;
-      case EventType.OPEN_REVIEW:
+      case EventType.openPreview:
         final uri = Platform.isIOS ? Constants.ios : Constants.android;
         await launchUrlString(uri);
         break;
-      case EventType.CONTRIBUTORS:
+      case EventType.contributors:
         showModalBottomSheet(
             context: context, builder: (_) => const ContributorsModal());
         break;

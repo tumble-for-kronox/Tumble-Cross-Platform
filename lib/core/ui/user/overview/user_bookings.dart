@@ -21,15 +21,20 @@ class UserBookingsContainer extends StatelessWidget {
         maxHeight: 500,
         maxWidth: double.maxFinite,
       ),
-      child: BlocBuilder<ResourceCubit, ResourceState>(builder: (context, state) {
+      child:
+          BlocBuilder<ResourceCubit, ResourceState>(builder: (context, state) {
         switch (state.userBookingsStatus) {
-          case UserBookingsStatus.LOADING:
+          case UserBookingsStatus.loading:
             return Center(
               heightFactor: 0.1,
-              child: TumbleLoading(color: Theme.of(context).colorScheme.primary),
+              child:
+                  TumbleLoading(color: Theme.of(context).colorScheme.primary),
             );
-          case UserBookingsStatus.LOADED:
-            return state.userBookings!.where((booking) => booking.timeSlot.to.isAfter(DateTime.now())).isEmpty
+          case UserBookingsStatus.loaded:
+            return state.userBookings!
+                    .where((booking) =>
+                        booking.timeSlot.to.isAfter(DateTime.now()))
+                    .isEmpty
                 ? Center(
                     heightFactor: 0.1,
                     child: Text(S.userBookings.noBookings(),
@@ -47,42 +52,59 @@ class UserBookingsContainer extends StatelessWidget {
                       children: state.userBookings!
                           .asMap()
                           .entries
-                          .where((entry) => entry.value.timeSlot.to.isAfter(DateTime.now()))
+                          .where((entry) =>
+                              entry.value.timeSlot.to.isAfter(DateTime.now()))
                           .map((entry) => Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 0, vertical: 10),
                                 child: UserBooking(
                                   onConfirm: () => context
                                       .read<ResourceCubit>()
                                       .confirmBooking(
-                                          context.read<AuthCubit>().state.userSession!,
-                                          context.read<AuthCubit>().setUserSession,
+                                          context
+                                              .read<AuthCubit>()
+                                              .state
+                                              .userSession!,
+                                          context
+                                              .read<AuthCubit>()
+                                              .setUserSession,
                                           context.read<AuthCubit>().logout,
                                           entry.value.resourceId,
                                           entry.value.id,
                                           entry.key)
-                                      .then((value) => showScaffoldMessage(context, value)),
+                                      .then((value) =>
+                                          showScaffoldMessage(context, value)),
                                   onUnbook: () => context
                                       .read<ResourceCubit>()
                                       .unbookResource(
-                                        context.read<AuthCubit>().state.userSession!,
-                                        context.read<AuthCubit>().setUserSession,
+                                        context
+                                            .read<AuthCubit>()
+                                            .state
+                                            .userSession!,
+                                        context
+                                            .read<AuthCubit>()
+                                            .setUserSession,
                                         context.read<AuthCubit>().logout,
                                         entry.value.id,
                                         entry.key,
                                       )
-                                      .then((value) => showScaffoldMessage(context, value)),
+                                      .then((value) =>
+                                          showScaffoldMessage(context, value)),
                                   booking: entry.value,
-                                  confirmLoading: state.confirmationLoading![entry.key],
-                                  unbookLoading: state.unbookLoading![entry.key],
+                                  confirmLoading:
+                                      state.confirmationLoading![entry.key],
+                                  unbookLoading:
+                                      state.unbookLoading![entry.key],
                                 ),
                               ))
                           .toList(),
                     ),
                   );
-          case UserBookingsStatus.ERROR:
+          case UserBookingsStatus.error:
             return Center(
               heightFactor: 0.1,
-              child: Text(context.read<ResourceCubit>().state.userBookingsErrorMessage!,
+              child: Text(
+                  context.read<ResourceCubit>().state.userBookingsErrorMessage!,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Theme.of(context).colorScheme.onBackground,
@@ -90,8 +112,10 @@ class UserBookingsContainer extends StatelessWidget {
                     fontWeight: FontWeight.w400,
                   )),
             );
-          case UserBookingsStatus.INITIAL:
-            return Container(child: Text('This is default'),);
+          case UserBookingsStatus.initial:
+            return Container(
+              child: Text('This is default'),
+            );
         }
       }),
     );

@@ -20,15 +20,15 @@ class _TumbleWeekViewState extends State<TumbleWeekView> {
     return BlocBuilder<ScheduleViewCubit, ScheduleViewState>(
       builder: (context, state) {
         switch (state.status) {
-          case ScheduleViewStatus.INITIAL:
+          case ScheduleViewStatus.initial:
             return DynamicErrorPage(
               toSearch: true,
               errorType: RuntimeErrorType.noCachedSchedule(),
               description: S.popUps.scheduleHelpFirstLine(),
             );
-          case ScheduleViewStatus.LOADING:
+          case ScheduleViewStatus.loading:
             return const TumbleLoading();
-          case ScheduleViewStatus.POPULATED_VIEW:
+          case ScheduleViewStatus.populated:
             return SizedBox(
                 child: PageView.builder(
                     itemCount: state.listOfWeeks!.length,
@@ -60,18 +60,18 @@ class _TumbleWeekViewState extends State<TumbleWeekView> {
                         },
                       ).toList()[index];
                     }));
-          case ScheduleViewStatus.FETCH_ERROR:
+          case ScheduleViewStatus.error:
             return DynamicErrorPage(
                 toSearch: false,
                 errorType: state.message!,
                 description: S.popUps.scheduleFetchError());
-          case ScheduleViewStatus.EMPTY_SCHEDULE:
+          case ScheduleViewStatus.empty:
             return DynamicErrorPage(
               toSearch: false,
               errorType: RuntimeErrorType.emptyScheduleError(),
               description: S.popUps.scheduleIsEmptyBody(),
             );
-          case ScheduleViewStatus.NO_VIEW:
+          case ScheduleViewStatus.missing:
             return DynamicErrorPage(
               toSearch: true,
               errorType: RuntimeErrorType.noBookmarks(),

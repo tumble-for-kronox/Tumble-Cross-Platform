@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tumble/core/api/backend/repository/cache_repository.dart';
+import 'package:tumble/core/api/backend/repository/cache_service.dart';
 import 'package:tumble/core/api/dependency_injection/get_it.dart';
 import 'package:tumble/core/theme/cubit/theme_cubit.dart';
 import 'package:tumble/core/theme/cubit/theme_state.dart';
@@ -15,7 +15,7 @@ class AppSwitch extends StatefulWidget {
 }
 
 class _AppSwitchState extends State<AppSwitch> {
-  final _cacheAndInteractionService = getIt<CacheRepository>();
+  final _cacheAndInteractionService = getIt<CacheService>();
 
   @override
   void initState() {

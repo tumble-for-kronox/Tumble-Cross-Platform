@@ -2,11 +2,11 @@ import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
-import 'package:tumble/core/api/database/repository/secure_storage_repository.dart';
+import 'package:tumble/core/api/database/repository/secure_storage_service.dart';
 import 'package:tumble/core/api/dependency_injection/get_it.dart';
 
 class AuthInterceptor extends Interceptor {
-  final _secureStorage = getIt<SecureStorageRepository>();
+  final _secureStorage = getIt<SecureStorageService>();
 
   @override
   void onRequest(
@@ -15,7 +15,7 @@ class AuthInterceptor extends Interceptor {
 
     /// Attach refresh token to request if present.
     if (refreshToken != null && !JwtDecoder.isExpired(refreshToken)) {
-      options.headers['X-auth-token'] = 'Bearer $refreshToken';
+      options.headers['X-Auth-Token'] = 'Bearer $refreshToken';
     }
     return handler.next(options);
   }

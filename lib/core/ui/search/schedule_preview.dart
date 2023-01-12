@@ -26,10 +26,10 @@ class _SchedulePreviewState extends State<SchedulePreview> {
     return BlocBuilder<SearchPageCubit, SearchPageState>(
       builder: (context, state) {
         switch (state.previewFetchStatus) {
-          case PreviewFetchStatus.LOADING:
+          case PreviewFetchStatus.loading:
             return const TumbleLoading();
-          case PreviewFetchStatus.FETCHED_SCHEDULE:
-          case PreviewFetchStatus.CACHED_SCHEDULE:
+          case PreviewFetchStatus.fetched:
+          case PreviewFetchStatus.cached:
             final dayList = state.previewListOfDays!
                 .where((day) =>
                     day.events.isNotEmpty &&
@@ -135,7 +135,7 @@ class _SchedulePreviewState extends State<SchedulePreview> {
                 ),
               ],
             );
-          case PreviewFetchStatus.FETCH_ERROR:
+          case PreviewFetchStatus.error:
             return Container(
               padding: const EdgeInsets.only(top: 40, left: 7),
               child: DynamicErrorPage(
@@ -144,7 +144,7 @@ class _SchedulePreviewState extends State<SchedulePreview> {
                 description: S.popUps.scheduleFetchError(),
               ),
             );
-          case PreviewFetchStatus.EMPTY_SCHEDULE:
+          case PreviewFetchStatus.empty:
             return Container(
               padding: const EdgeInsets.only(top: 40, left: 7),
               child: DynamicErrorPage(
@@ -153,7 +153,7 @@ class _SchedulePreviewState extends State<SchedulePreview> {
                 description: S.popUps.scheduleIsEmptyBody(),
               ),
             );
-          case PreviewFetchStatus.INITIAL:
+          case PreviewFetchStatus.initial:
             return Container();
         }
       },

@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tumble/core/api/preferences/repository/preference_repository.dart';
+import 'package:tumble/core/api/shared_preferences/shared_preference_service.dart';
 import 'package:tumble/core/shared/preference_types.dart';
 import 'package:tumble/core/api/dependency_injection/get_it.dart';
 import 'package:tumble/core/theme/data/theme_strings.dart';
@@ -19,7 +19,8 @@ class ThemeRepository implements ThemePersistence {
     _init();
   }
 
-  final PreferenceRepository _preferenceService = getIt<PreferenceRepository>();
+  final SharedPreferenceService _preferenceService =
+      getIt<SharedPreferenceService>();
 
   final _themeController = StreamController<String>.broadcast();
   final _langController = StreamController<Locale?>.broadcast();

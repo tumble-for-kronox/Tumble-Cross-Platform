@@ -21,7 +21,7 @@ import 'package:tumble/core/ui/data/string_constants.dart';
 /// IBackendService interface and it handles making HTTP requests
 /// to Tumbles backend server. It uses the Dio library for making the
 /// requests and handling responses.
-class BackendRepository extends AuthInterceptor {
+class BackendService extends AuthInterceptor {
   final _dioHandle = Dio(BaseOptions(
     baseUrl: Endpoints.baseUrl,
     connectTimeout: Constants.connectionTimeout,
@@ -108,7 +108,14 @@ class BackendRepository extends AuthInterceptor {
   }
 
   /// [HttpGet]
-
+  /// This function makes a GET request to the /resources endpoint
+  /// and returns the ApiResponse of the resource availability based on
+  /// the input defaultSchool, resourceId, and date. It first converts the
+  /// defaultSchool string to the corresponding SchoolIndex object, and then
+  /// makes the GET request to the /resources endpoint. If the request is
+  /// successful, it processes the response by calling response.parseSchoolResource()
+  /// and returns the result. In case of error, it handles it by
+  /// calling the _error() function.
   Future<ApiResponse> getResourceAvailabilities(
       String defaultSchool, String resourceId, DateTime date) async {
     final schoolIndex = _schools.fromString(defaultSchool).schoolId.index;
@@ -145,7 +152,6 @@ class BackendRepository extends AuthInterceptor {
   }
 
   /// [HttpPut]
-
   Future<ApiResponse> putUnregisterUserEvent(
       String eventId, String defaultSchool) async {
     final schoolIndex = _schools.fromString(defaultSchool).schoolId.index;
@@ -157,7 +163,6 @@ class BackendRepository extends AuthInterceptor {
   }
 
   /// [HttpPut]
-
   Future<ApiResponse> putRegisterAll(String defaultSchool) async {
     final schoolIndex = _schools.fromString(defaultSchool).schoolId.index;
 
@@ -168,7 +173,6 @@ class BackendRepository extends AuthInterceptor {
   }
 
   /// [HttpPut]
-
   Future<ApiResponse> putBookResource(String defaultSchool, String resourceId,
       DateTime date, AvailabilityValue bookingSlot) async {
     final schoolIndex = _schools.fromString(defaultSchool).schoolId.index;
@@ -185,7 +189,6 @@ class BackendRepository extends AuthInterceptor {
   }
 
   /// [HttpPut]
-
   Future<ApiResponse> putUnbookResource(
       String defaultSchool, String bookingId) async {
     final schoolIndex = _schools.fromString(defaultSchool).schoolId.index;
@@ -197,7 +200,6 @@ class BackendRepository extends AuthInterceptor {
   }
 
   /// [HttpPut]
-
   Future<ApiResponse> putConfirmBooking(
       String defaultSchool, String resourceId, String bookingId) async {
     final schoolIndex = _schools.fromString(defaultSchool).schoolId.index;
@@ -213,7 +215,6 @@ class BackendRepository extends AuthInterceptor {
   }
 
   /// [HttpPost]
-
   Future<ApiResponse> postUserLogin(
       String username, String password, String defaultSchool) async {
     final schoolIndex = _schools.fromString(defaultSchool).schoolId.index;
@@ -228,7 +229,6 @@ class BackendRepository extends AuthInterceptor {
   }
 
   /// [HttpPost]
-
   Future<ApiResponse> postSubmitIssue(
       String issueSubject, String issueBody) async {
     final Map<String, String> data = {

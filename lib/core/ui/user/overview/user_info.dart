@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tumble/core/api/preferences/repository/preference_repository.dart';
+import 'package:tumble/core/api/shared_preferences/shared_preference_service.dart';
 import 'package:tumble/core/shared/preference_types.dart';
 import 'package:tumble/core/api/dependency_injection/get_it.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
@@ -9,7 +9,9 @@ import 'package:tumble/core/ui/app_switch/data/schools.dart';
 import 'package:tumble/core/ui/tumble_button.dart';
 
 class UserInfo extends StatelessWidget {
-  const UserInfo({Key? key, this.name, required this.loggedIn, required this.onPressed}) : super(key: key);
+  const UserInfo(
+      {Key? key, this.name, required this.loggedIn, required this.onPressed})
+      : super(key: key);
 
   final String? name;
   final bool loggedIn;
@@ -26,7 +28,9 @@ class UserInfo extends StatelessWidget {
               radius: 50.0,
               backgroundColor: Theme.of(context).colorScheme.onSecondary,
               child: Image.asset(Schools.schools
-                  .where((school) => school.schoolName == getIt<PreferenceRepository>().defaultSchool)
+                  .where((school) =>
+                      school.schoolName ==
+                      getIt<SharedPreferenceService>().defaultSchool)
                   .first
                   .schoolLogo)),
           const SizedBox(
@@ -35,8 +39,10 @@ class UserInfo extends StatelessWidget {
           Text(
             S.unauthorizedPage.description(),
             textAlign: TextAlign.center,
-            style:
-                TextStyle(fontSize: 16, fontWeight: FontWeight.w400, color: Theme.of(context).colorScheme.onBackground),
+            style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w400,
+                color: Theme.of(context).colorScheme.onBackground),
           ),
           FractionallySizedBox(
             widthFactor: 0.6,

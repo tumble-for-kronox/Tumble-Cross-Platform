@@ -36,7 +36,9 @@ class TumbleChosenResourcePage extends StatelessWidget {
               onPressed: () => Navigator.of(context).pop(),
               label: Text(
                 S.general.back(),
-                style: TextStyle(fontSize: 16, color: Theme.of(context).colorScheme.onPrimary),
+                style: TextStyle(
+                    fontSize: 16,
+                    color: Theme.of(context).colorScheme.onPrimary),
               ),
             ),
             elevation: 0,
@@ -70,28 +72,28 @@ class TumbleChosenResourcePage extends StatelessWidget {
 
   Widget _upperSection(BuildContext context, ResourceState state) {
     switch (state.status) {
-      case ResourceStatus.LOADING:
+      case ResourceStatus.loading:
         return Container();
-      case ResourceStatus.LOADED:
-      case ResourceStatus.ERROR:
-      case ResourceStatus.INITIAL:
+      case ResourceStatus.loaded:
+      case ResourceStatus.error:
+      case ResourceStatus.initial:
         return _upperSectionLoaded(context, state);
     }
   }
 
   Widget _lowerSection(BuildContext context, ResourceState state) {
     switch (state.status) {
-      case ResourceStatus.LOADING:
+      case ResourceStatus.loading:
         return const TumbleLoading();
-      case ResourceStatus.LOADED:
+      case ResourceStatus.loaded:
         return state.availableTimeSlots!.isEmpty
             ? DynamicErrorPage(
                 errorType: S.userBookings.noAvailableTimeSlots(),
                 toSearch: false,
               )
             : _lowerSectionLoaded(context, state);
-      case ResourceStatus.ERROR:
-      case ResourceStatus.INITIAL:
+      case ResourceStatus.error:
+      case ResourceStatus.initial:
         return _lowerSectionError(context, state);
     }
   }
@@ -115,8 +117,11 @@ class TumbleChosenResourcePage extends StatelessWidget {
                 ),
               ),
               Text(
-                DateFormat("MMMM d, y",
-                        context.read<ResourceCubit>().locale != null ? context.read<ResourceCubit>().locale! : null)
+                DateFormat(
+                        "MMMM d, y",
+                        context.read<ResourceCubit>().locale != null
+                            ? context.read<ResourceCubit>().locale!
+                            : null)
                     .format(context.read<ResourceCubit>().state.chosenDate),
                 style: TextStyle(
                   fontSize: 30,
@@ -135,7 +140,10 @@ class TumbleChosenResourcePage extends StatelessWidget {
                 color: Theme.of(context).colorScheme.onPrimary,
               ),
               onPressed: () async {
-                await context.read<ResourceCubit>().userUpdateActiveDate(context).then((value) {
+                await context
+                    .read<ResourceCubit>()
+                    .userUpdateActiveDate(context)
+                    .then((value) {
                   if (value == null) return;
                   context.read<ResourceCubit>().getResourceAvailabilities(
                         context.read<AuthCubit>().state.userSession!,
@@ -171,7 +179,8 @@ class TumbleChosenResourcePage extends StatelessWidget {
                   ..sort(
                     (a, b) => a.from.isAfter(b.from) ? 1 : 0,
                   ))
-                .map((e) => TimeStampCard(timeSlot: e, selectedTimeSlot: state.selectedTimeSlot))
+                .map((e) => TimeStampCard(
+                    timeSlot: e, selectedTimeSlot: state.selectedTimeSlot))
                 .toList(),
             maxRowItems: 3,
           ),
@@ -179,7 +188,8 @@ class TumbleChosenResourcePage extends StatelessWidget {
               ? Container()
               : LocationCardContainer(
                   key: Key(state.selectedTimeSlot.toString()),
-                  cards: state.availableLocationsForTimeSlots![state.selectedTimeSlot!.id]!
+                  cards: state.availableLocationsForTimeSlots![
+                          state.selectedTimeSlot!.id]!
                       .map((e) => RoomCard(
                             roomId: e,
                             selectedRoomId: state.selectedLocationId,
@@ -188,13 +198,16 @@ class TumbleChosenResourcePage extends StatelessWidget {
                   maxRowItems: 4,
                 ),
           BlocBuilder<ResourceCubit, ResourceState>(
-            builder: (context, nestState) => nestState.selectedLocationId == null || nestState.selectedTimeSlot == null
-                ? Container()
-                : Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
-                    child: ConfirmBooking(
-                      state: nestState,
-                    )),
+            builder: (context, nestState) =>
+                nestState.selectedLocationId == null ||
+                        nestState.selectedTimeSlot == null
+                    ? Container()
+                    : Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 40),
+                        child: ConfirmBooking(
+                          state: nestState,
+                        )),
           )
         ],
       ),

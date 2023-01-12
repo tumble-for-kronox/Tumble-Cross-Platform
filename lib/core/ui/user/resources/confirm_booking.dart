@@ -39,7 +39,8 @@ class ConfirmBooking extends StatelessWidget {
               ),
               Expanded(
                 child: TumbleButton(
-                  onPressed: () => state.bookUnbookStatus == BookUnbookStatus.LOADING
+                  onPressed: () => state.bookUnbookStatus ==
+                          BookUnbookStatus.loading
                       ? null
                       : context
                           .read<ResourceCubit>()
@@ -49,12 +50,13 @@ class ConfirmBooking extends StatelessWidget {
                               context.read<AuthCubit>().logout,
                               state.currentLoadedResource!.id,
                               state.chosenDate,
-                              state.currentLoadedResource!
-                                  .availabilities![state.selectedLocationId!]![state.selectedTimeSlot!.id]!)
+                              state.currentLoadedResource!.availabilities![
+                                      state.selectedLocationId!]![
+                                  state.selectedTimeSlot!.id]!)
                           .then((value) => showScaffoldMessage(context, value)),
                   prefixIcon: CupertinoIcons.check_mark,
                   text: S.general.confirm(),
-                  loading: state.bookUnbookStatus == BookUnbookStatus.LOADING,
+                  loading: state.bookUnbookStatus == BookUnbookStatus.loading,
                 ),
               ),
             ],

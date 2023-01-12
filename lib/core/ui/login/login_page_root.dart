@@ -10,9 +10,6 @@ import 'package:tumble/core/ui/data/string_constants.dart';
 import 'package:tumble/core/ui/scaffold_message.dart';
 import 'package:tumble/core/ui/tumble_loading.dart';
 
-import '../cubit/resource_cubit.dart';
-import '../cubit/user_event_cubit.dart';
-
 class LoginPageRoot extends StatefulWidget {
   const LoginPageRoot({Key? key}) : super(key: key);
 
@@ -46,7 +43,7 @@ class _LoginPageRootState extends State<LoginPageRoot> {
       child: BlocListener<LoginCubit, LoginState>(
           listener: ((_, state) async {
             switch (state.status) {
-              case LoginStatus.SUCCESS:
+              case LoginStatus.success:
                 showScaffoldMessage(context, RuntimeErrorType.loginSuccess());
                 context.read<AuthCubit>().login().then((value) {
                   Future.delayed(const Duration(seconds: 1))
@@ -173,7 +170,7 @@ Widget _initialState(BuildContext context, String school) {
                         );
                       }
                       switch (state.status) {
-                        case LoginStatus.LOADING:
+                        case LoginStatus.loading:
                           if (state.loginSuccess) {
                             return SizedBox(
                               height: double.infinity,
@@ -255,7 +252,7 @@ Widget _form(BuildContext context, String school) {
                     height: 35,
                   ),
                   _formPasswordField(context, school),
-                  if (state.status == LoginStatus.FAIL)
+                  if (state.status == LoginStatus.fail)
                     Container(
                       padding: const EdgeInsets.only(top: 40),
                       child: Text(
