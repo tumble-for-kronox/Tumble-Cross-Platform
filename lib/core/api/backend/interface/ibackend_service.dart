@@ -1,57 +1,58 @@
 import 'package:flutter/foundation.dart';
-import 'package:tumble/core/api/backend/response_types/booking_response.dart';
-import 'package:tumble/core/api/backend/response_types/bug_report_response.dart';
-import 'package:tumble/core/api/backend/response_types/schedule_or_programme_response.dart';
-import 'package:tumble/core/api/backend/response_types/user_response.dart';
+import 'package:tumble/core/api/backend/response_types/api_response.dart';
 import 'package:tumble/core/models/backend_models/resource_model.dart';
 
 @immutable
 abstract class IBackendService {
   /// [HttpGet]
-  Future<ScheduleOrProgrammeResponse> getSchedule(String scheduleId, String defaultSchool);
+  Future<ApiResponse> getSchedule(String scheduleId, String defaultSchool);
 
   /// [HttpGet]
-  Future<ScheduleOrProgrammeResponse> getPrograms(String searchQuery, String defaultSchool);
+  Future<ApiResponse> getPrograms(String searchQuery, String defaultSchool);
 
   /// [HttpGet]
-  Future<UserResponse> getUserEvents(String sessionToken, String defaultSchool);
+  Future<ApiResponse> getUserEvents(String defaultSchool);
 
   /// [HttpGet]
-  Future<UserResponse> getRefreshSession(String refreshToken, String defaultSchool);
+  /* Future<ApiResponse> getRefreshSession(
+      String refreshToken, String defaultSchool); */
 
   /// [HttpPost]
-  Future<UserResponse> postUserLogin(String username, String password, String defaultSchool);
+  Future<ApiResponse> postUserLogin(
+      String username, String password, String defaultSchool);
 
   /// [HttpPut]
-  Future<UserResponse> putRegisterUserEvent(String eventId, String sessionToken, String defaultSchool);
+  Future<ApiResponse> putRegisterUserEvent(
+      String eventId, String defaultSchool);
 
   /// [HttpPut]
-  Future<UserResponse> putUnregisterUserEvent(String eventId, String sessionToken, String defaultSchool);
+  Future<ApiResponse> putUnregisterUserEvent(
+      String eventId, String defaultSchool);
 
   /// [HttpPut]
-  Future<UserResponse> putRegisterAllAvailableUserEvents(String sessionToken, String defaultSchool);
+  Future<ApiResponse> putRegisterAll(String defaultSchool);
 
   /// [HttpPost]
-  Future<BugReportResponse> postSubmitIssue(String issueSubject, String issueBody);
+  Future<ApiResponse> postSubmitIssue(String issueSubject, String issueBody);
 
   /// [HttpGet]
-  Future<BookingResponse> getSchoolResources(String sessionToken, String defaultSchool);
+  Future<ApiResponse> getSchoolResources(String defaultSchool);
 
   /// [HttpGet]
-  Future<BookingResponse> getResourceAvailabilities(
-      String sessionToken, String defaultSchool, String resourceId, DateTime date);
+  Future<ApiResponse> getResourceAvailabilities(
+      String defaultSchool, String resourceId, DateTime date);
 
   /// [HttpGet]
-  Future<BookingResponse> getUserBookings(String sessionToken, String defaultSchool);
+  Future<ApiResponse> getUserBookings(String defaultSchool);
 
   /// [HttpPut]
-  Future<BookingResponse> putBookResource(
-      String sessionToken, String defaultSchool, String resourceId, DateTime date, AvailabilityValue bookingSlot);
+  Future<ApiResponse> putBookResource(String defaultSchool, String resourceId,
+      DateTime date, AvailabilityValue bookingSlot);
 
   /// [HttpPut]
-  Future<BookingResponse> putUnbookResource(String sessionToken, String defaultSchool, String bookingId);
+  Future<ApiResponse> putUnbookResource(String defaultSchool, String bookingId);
 
   /// [HttpPut]
-  Future<BookingResponse> putConfirmBooking(
-      String sessionToken, String defaultSchool, String resourceId, String bookingId);
+  Future<ApiResponse> putConfirmBooking(
+      String defaultSchool, String resourceId, String bookingId);
 }

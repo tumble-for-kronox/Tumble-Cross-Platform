@@ -3,7 +3,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tumble/core/api/backend/response_types/bug_report_response.dart';
+import 'package:tumble/core/api/backend/response_types/api_response.dart';
 import 'package:tumble/core/api/backend/repository/backend_repository.dart';
 import 'package:tumble/core/api/dependency_injection/get_it.dart';
 
@@ -22,7 +22,11 @@ class SupportModalState extends Equatable {
     required this.focused,
   });
 
-  SupportModalState copyWith({bool? isSubjectValid, bool? isBodyValid, SupportModalStatus? status, bool? focused}) =>
+  SupportModalState copyWith(
+          {bool? isSubjectValid,
+          bool? isBodyValid,
+          SupportModalStatus? status,
+          bool? focused}) =>
       SupportModalState(
           isSubjectValid: isSubjectValid ?? this.isSubjectValid,
           isBodyValid: isBodyValid ?? this.isBodyValid,

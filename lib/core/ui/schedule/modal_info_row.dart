@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tumble/core/api/backend/response_types/runtime_error_type.dart';
+import 'package:tumble/core/api/backend/response_types/runtime_error_types.dart';
 import 'package:tumble/core/extensions/extensions.dart';
 import 'package:tumble/core/models/backend_models/schedule_model.dart';
 

@@ -59,12 +59,10 @@ class _EventsState extends State<Events> {
                               description: '',
                             );
                           case UserOverviewStatus.INITIAL:
-                            return Center(
-                              child: Text(
-                                S.userEvents.empty(),
-                                textAlign: TextAlign.center,
-                                style: const TextStyle(fontSize: 17),
-                              ),
+                            return DynamicErrorPage(
+                              errorType: S.userEvents.empty(),
+                              toSearch: false,
+                              description: '',
                             );
                         }
                       },

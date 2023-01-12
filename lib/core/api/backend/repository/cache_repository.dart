@@ -1,6 +1,6 @@
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tumble/core/api/backend/response_types/schedule_or_programme_response.dart';
-import 'package:tumble/core/api/backend/response_types/runtime_error_type.dart';
+import 'package:tumble/core/api/backend/response_types/api_response.dart';
+import 'package:tumble/core/api/backend/response_types/runtime_error_types.dart';
 import 'package:tumble/core/api/backend/data/constants.dart';
 import 'package:tumble/core/api/backend/interface/icache_service.dart';
 import 'package:tumble/core/api/backend/repository/backend_repository.dart';
@@ -22,23 +22,23 @@ class CacheRepository implements ICacheService {
   final _notificationService = getIt<NotificationRepository>();
 
   @override
-  Future<ScheduleOrProgrammeResponse> searchProgram(String searchQuery) async {
+  Future<ApiResponse> searchProgram(String searchQuery) async {
     String defaultSchool = _preferenceService.defaultSchool!;
-    ScheduleOrProgrammeResponse response =
+    ApiResponse response =
         await _backendService.getPrograms(searchQuery, defaultSchool);
     return response;
   }
 
   @override
-  Future<ScheduleOrProgrammeResponse> updateSchedule(scheduleId) async {
+  Future<ApiResponse> updateSchedule(scheduleId) async {
     String defaultSchool = _preferenceService.defaultSchool!;
-    ScheduleOrProgrammeResponse response =
+    ApiResponse response =
         await _backendService.getSchedule(scheduleId, defaultSchool);
     return response;
   }
 
   @override
-  Future<ScheduleOrProgrammeResponse> findSchedule(String scheduleId) async {
+  Future<ApiResponse> findSchedule(String scheduleId) async {
     final bool bookmarksContainsThisScheduleId =
         _preferenceService.bookmarksHasId(scheduleId);
     if (bookmarksContainsThisScheduleId) {
@@ -47,11 +47,9 @@ class CacheRepository implements ICacheService {
 
       if (userCachedSchedule == null) {
         /// Try to fetch new version of schedule if the cache is empty
-        final ScheduleOrProgrammeResponse apiResponse =
-            await updateSchedule(scheduleId);
+        final ApiResponse apiResponse = await updateSchedule(scheduleId);
         if (apiResponse.data == null) {
-          return ScheduleOrProgrammeResponse.error(
-              RuntimeErrorType.scheduleFetchError(),
+          return ApiResponse.error(RuntimeErrorType.scheduleFetchError(),
               S.popUps.scheduleFetchError());
         }
         return apiResponse;
@@ -64,8 +62,7 @@ class CacheRepository implements ICacheService {
         /// Make sure that only if the user has an internet connection and the
         /// schedule is 'outdated', the app will display the new schedule.
         /// Otherwise it returns [ApiResponse.cached(userCachedSchedule)]
-        ScheduleOrProgrammeResponse apiResponse =
-            await updateSchedule(scheduleId);
+        ApiResponse apiResponse = await updateSchedule(scheduleId);
         if (apiResponse.data != null) {
           return apiResponse;
         }
@@ -73,7 +70,7 @@ class CacheRepository implements ICacheService {
 
       /// If the userCachedSchedule is not null and the schedule does not
       /// need to be updated, return the cache
-      return ScheduleOrProgrammeResponse.cached(userCachedSchedule);
+      return ApiResponse.cached(userCachedSchedule);
     }
 
     /// Fetch from backend if the bookmark is not available in

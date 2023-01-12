@@ -4,8 +4,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tumble/core/api/backend/repository/user_action_repository.dart';
-import 'package:tumble/core/api/backend/response_types/booking_response.dart';
-import 'package:tumble/core/api/backend/response_types/refresh_response.dart';
+import 'package:tumble/core/api/backend/response_types/api_response.dart';
 import 'package:tumble/core/api/dependency_injection/get_it.dart';
 import 'package:tumble/core/api/notifications/builders/notification_service_builder.dart';
 import 'package:tumble/core/api/notifications/data/notification_channels.dart';
@@ -34,54 +33,66 @@ class ResourceCubit extends Cubit<ResourceState> {
 
   String? get locale => _preferenceService.locale;
 
-  Future<void> getSchoolResources(
-      KronoxUserModel session, void Function(KronoxUserModel) setAuthSession, Function logOut) async {
+  Future<void> getSchoolResources(Function logOut) async {
     if (isClosed) {
       return;
     }
     emit(state.copyWith(status: ResourceStatus.LOADING));
-    RefreshResponse<BookingResponse> refreshResponse = await _userService.schoolResources(session);
-    BookingResponse schoolResources = refreshResponse.data;
+    ApiResponse apiResponse = await _userService.schoolResources();
 
-    switch (schoolResources.status) {
-      case ApiBookingResponseStatus.SUCCESS:
+    switch (apiResponse.status) {
+      case ApiResponseStatus.success:
         if (isClosed) {
           return;
         }
-        setAuthSession(refreshResponse.refreshResp.data as KronoxUserModel);
-        emit(state.copyWith(status: ResourceStatus.LOADED, schoolResources: schoolResources.data));
+        emit(state.copyWith(
+            status: ResourceStatus.LOADED, schoolResources: apiResponse.data));
         break;
-      case ApiBookingResponseStatus.ERROR:
-      case ApiBookingResponseStatus.UNAUTHORIZED:
+      case ApiResponseStatus.error:
+      case ApiResponseStatus.unauthorized:
         logOut();
         break;
-      case ApiBookingResponseStatus.NOT_FOUND:
-        emit(state.copyWith(status: ResourceStatus.ERROR, resourcePageErrorMessage: schoolResources.data));
+      case ApiResponseStatus.missing:
+        emit(state.copyWith(
+            status: ResourceStatus.ERROR,
+            resourcePageErrorMessage: apiResponse.data));
+        break;
+      default:
         break;
     }
   }
 
-  Future<void> getResourceAvailabilities(KronoxUserModel session, void Function(KronoxUserModel) setAuthSession,
-      Function logOut, String resourceId, DateTime date) async {
+  Future<void> getResourceAvailabilities(
+      KronoxUserModel session,
+      void Function(KronoxUserModel) setAuthSession,
+      Function logOut,
+      String resourceId,
+      DateTime date) async {
     log(name: 'resource_cubit', 'Fetching resource availabilities...');
     emit(state.copyWithoutSelections(status: ResourceStatus.LOADING));
-    RefreshResponse<BookingResponse> refreshResponse =
-        await _userService.resourceAvailabilities(resourceId, date, session);
-    BookingResponse currentSelectedResource = refreshResponse.data;
+    ApiResponse currentSelectedResource =
+        await _userService.resourceAvailabilities(resourceId, date);
 
     switch (currentSelectedResource.status) {
-      case ApiBookingResponseStatus.SUCCESS:
+      case ApiResponseStatus.success:
         parseResourceAvailabilities(currentSelectedResource.data);
-        setAuthSession(refreshResponse.refreshResp.data as KronoxUserModel);
-        emit(state.copyWith(status: ResourceStatus.LOADED, currentLoadedResource: currentSelectedResource.data));
-        log(name: 'resource_cubit', 'Successfully fetched and updated resource availabilities');
+        emit(state.copyWith(
+            status: ResourceStatus.LOADED,
+            currentLoadedResource: currentSelectedResource.data));
+        log(
+            name: 'resource_cubit',
+            'Successfully fetched and updated resource availabilities');
         break;
-      case ApiBookingResponseStatus.UNAUTHORIZED:
+      case ApiResponseStatus.unauthorized:
         logOut();
         break;
-      case ApiBookingResponseStatus.ERROR:
-      case ApiBookingResponseStatus.NOT_FOUND:
-        emit(state.copyWith(status: ResourceStatus.ERROR, resourcePageErrorMessage: currentSelectedResource.data));
+      case ApiResponseStatus.error:
+      case ApiResponseStatus.missing:
+        emit(state.copyWith(
+            status: ResourceStatus.ERROR,
+            resourcePageErrorMessage: currentSelectedResource.data));
+        break;
+      default:
         break;
     }
   }
@@ -100,7 +111,8 @@ class ResourceCubit extends Cubit<ResourceState> {
           availableLocationsForTimeSlots[timeSlot.id!] = [];
         }
 
-        if (resource.availabilities![locationId]![timeSlot.id]!.availability == AvailabilityEnum.AVAILABLE) {
+        if (resource.availabilities![locationId]![timeSlot.id]!.availability ==
+            AvailabilityEnum.AVAILABLE) {
           availableLocationsForTimeSlots[timeSlot.id]!.add(locationId);
 
           if (!availableTimeSlots.any((element) => element.id == timeSlot.id)) {
@@ -111,118 +123,131 @@ class ResourceCubit extends Cubit<ResourceState> {
     }
     log(name: 'resource_cubit', 'Parsed Resource Availabilities');
     emit(state.copyWith(
-        availableTimeSlots: availableTimeSlots, availableLocationsForTimeSlots: availableLocationsForTimeSlots));
+        availableTimeSlots: availableTimeSlots,
+        availableLocationsForTimeSlots: availableLocationsForTimeSlots));
   }
 
-  Future<void> getUserBookings(
-      KronoxUserModel session, void Function(KronoxUserModel) setAuthSession, Function logOut) async {
+  Future<void> getUserBookings(Function logOut) async {
     log(name: 'resource_cubit', 'Retrieving user bookings ..');
     emit(state.copyWith(userBookingsStatus: UserBookingsStatus.LOADING));
-    RefreshResponse<BookingResponse> refreshResponse = await _userService.userBookings(session);
-    BookingResponse userBookings = refreshResponse.data;
+    ApiResponse apiResponse = await _userService.userBookings();
 
-    log(name: 'resource_cubit', 'ApiBookingResponseStatus is: ${userBookings.status}');
-    switch (userBookings.status) {
-      case ApiBookingResponseStatus.SUCCESS:
-        log(name: 'resource_cubit', 'Successfully retrieved user bookings ..');
-        if (_preferenceService.allowedNotifications != null && _preferenceService.allowedNotifications!) {
-          updateNotificationsForIncomingBookings(userBookings.data);
-        }
-
-        List<bool> falseFilledLoadingList = List<bool>.filled((userBookings.data as List<Booking>).length, false);
-        if (isClosed) {
-          return;
-        }
-        setAuthSession(refreshResponse.refreshResp.data as KronoxUserModel);
-        emit(state.copyWith(
-          userBookingsStatus: UserBookingsStatus.LOADED,
-          userBookings: userBookings.data,
-          confirmationLoading: falseFilledLoadingList,
-          unbookLoading: falseFilledLoadingList,
-        ));
+    log(
+        name: 'resource_cubit',
+        'ApiBookingResponseStatus is: ${apiResponse.status}');
+    switch (apiResponse.status) {
+      case ApiResponseStatus.success:
+        _updateBookingInformation(apiResponse);
         break;
-      case ApiBookingResponseStatus.UNAUTHORIZED:
+      case ApiResponseStatus.unauthorized:
         logOut();
         break;
-      case ApiBookingResponseStatus.ERROR:
-      case ApiBookingResponseStatus.NOT_FOUND:
-        emit(state.copyWith(userBookingsStatus: UserBookingsStatus.ERROR, userBookingsErrorMessage: userBookings.data));
+      case ApiResponseStatus.error:
+      case ApiResponseStatus.missing:
+        emit(state.copyWith(
+            userBookingsStatus: UserBookingsStatus.ERROR,
+            userBookingsErrorMessage: apiResponse.data));
+        break;
+      default:
         break;
     }
   }
 
-  Future<String> bookResource(KronoxUserModel session, void Function(KronoxUserModel) setAuthSession, Function logOut,
-      String resourceId, DateTime date, AvailabilityValue bookingSlot) async {
+  Future<String> bookResource(
+      KronoxUserModel session,
+      void Function(KronoxUserModel) setAuthSession,
+      Function logOut,
+      String resourceId,
+      DateTime date,
+      AvailabilityValue bookingSlot) async {
     emit(state.copyWith(bookUnbookStatus: BookUnbookStatus.LOADING));
-    RefreshResponse<BookingResponse> refreshResponse =
-        await _userService.bookResources(resourceId, date, bookingSlot, session);
-    BookingResponse bookResource = refreshResponse.data;
+    ApiResponse apiResponse =
+        await _userService.bookResources(resourceId, date, bookingSlot);
 
-    switch (bookResource.status) {
-      case ApiBookingResponseStatus.SUCCESS:
-        getResourceAvailabilities(session, setAuthSession, logOut, resourceId, date);
-        getUserBookings(session, setAuthSession, logOut);
+    switch (apiResponse.status) {
+      case ApiResponseStatus.success:
+        getResourceAvailabilities(
+            session, setAuthSession, logOut, resourceId, date);
+        getUserBookings(logOut);
         break;
-      case ApiBookingResponseStatus.UNAUTHORIZED:
+      case ApiResponseStatus.unauthorized:
         logOut();
         break;
       default:
         break;
     }
     emit(state.copyWith(bookUnbookStatus: BookUnbookStatus.INITIAL));
-    return bookResource.data as String;
+    return apiResponse.data as String;
   }
 
-  Future<String> unbookResource(KronoxUserModel session, void Function(KronoxUserModel) setAuthSession, Function logOut,
-      String bookingId, unbookLoadingIndex) async {
-    emit(state.copyWith(unbookLoading: state.unbookLoading!.copyAndUpdate(unbookLoadingIndex, true)));
-    RefreshResponse<BookingResponse> refreshResponse = await _userService.unbookResources(bookingId, session);
-    BookingResponse bookResource = refreshResponse.data;
+  Future<String> unbookResource(
+      KronoxUserModel session,
+      void Function(KronoxUserModel) setAuthSession,
+      Function logOut,
+      String bookingId,
+      unbookLoadingIndex) async {
+    emit(state.copyWith(
+        unbookLoading:
+            state.unbookLoading!.copyAndUpdate(unbookLoadingIndex, true)));
+    ApiResponse apiResponse =
+        await _userService.unbookResources(bookingId, session);
 
-    switch (bookResource.status) {
-      case ApiBookingResponseStatus.SUCCESS:
+    switch (apiResponse.status) {
+      case ApiResponseStatus.success:
         cancelNotificationForBooking(bookingId);
-        getUserBookings(session, setAuthSession, logOut);
+        getUserBookings(logOut);
         break;
-      case ApiBookingResponseStatus.UNAUTHORIZED:
+      case ApiResponseStatus.unauthorized:
         logOut();
         break;
       default:
         break;
     }
 
-    emit(state.copyWith(unbookLoading: state.unbookLoading!.copyAndUpdate(unbookLoadingIndex, false)));
-    return bookResource.data as String;
+    emit(state.copyWith(
+        unbookLoading:
+            state.unbookLoading!.copyAndUpdate(unbookLoadingIndex, false)));
+    return apiResponse.data as String;
   }
 
-  Future<String> confirmBooking(KronoxUserModel session, void Function(KronoxUserModel) setAuthSession, Function logOut,
-      String resourceId, String bookingId, int confirmLoadingIndex) async {
-    emit(state.copyWith(confirmationLoading: state.confirmationLoading!.copyAndUpdate(confirmLoadingIndex, true)));
+  Future<String> confirmBooking(
+      KronoxUserModel session,
+      void Function(KronoxUserModel) setAuthSession,
+      Function logOut,
+      String resourceId,
+      String bookingId,
+      int confirmLoadingIndex) async {
+    emit(state.copyWith(
+        confirmationLoading: state.confirmationLoading!
+            .copyAndUpdate(confirmLoadingIndex, true)));
 
-    RefreshResponse<BookingResponse> refreshResponse =
-        await _userService.confirmBooking(resourceId, bookingId, session);
-    BookingResponse confirmBooking = refreshResponse.data;
+    ApiResponse apiResponse =
+        await _userService.confirmBooking(resourceId, bookingId);
 
-    switch (confirmBooking.status) {
-      case ApiBookingResponseStatus.SUCCESS:
-        getUserBookings(session, setAuthSession, logOut);
+    switch (apiResponse.status) {
+      case ApiResponseStatus.success:
+        getUserBookings(logOut);
         break;
-      case ApiBookingResponseStatus.UNAUTHORIZED:
+      case ApiResponseStatus.unauthorized:
         logOut();
         break;
       default:
         break;
     }
 
-    emit(state.copyWith(confirmationLoading: state.confirmationLoading!.copyAndUpdate(confirmLoadingIndex, false)));
-    return confirmBooking.data;
+    emit(state.copyWith(
+        confirmationLoading: state.confirmationLoading!
+            .copyAndUpdate(confirmLoadingIndex, false)));
+    return apiResponse.data;
   }
 
   Future<DateTime?> userUpdateActiveDate(BuildContext context) async {
     DateTime? newDate = await showDatePicker(
         context: context,
         initialDate: state.chosenDate,
-        locale: context.read<ResourceCubit>().locale != null ? Locale(context.read<ResourceCubit>().locale!) : null,
+        locale: context.read<ResourceCubit>().locale != null
+            ? Locale(context.read<ResourceCubit>().locale!)
+            : null,
         firstDate: DateTime.now(),
         lastDate: DateTime.now().add(const Duration(days: 28)),
         currentDate: state.chosenDate);
@@ -246,11 +271,14 @@ class ResourceCubit extends Cubit<ResourceState> {
   }
 
   bool userBookingOngoing(Booking booking) {
-    return booking.timeSlot.from.isBefore(DateTime.now()) && booking.timeSlot.to.isAfter(DateTime.now());
+    return booking.timeSlot.from.isBefore(DateTime.now()) &&
+        booking.timeSlot.to.isAfter(DateTime.now());
   }
 
-  Future<void> updateNotificationsForIncomingBookings(List<Booking> bookings) async {
-    List<NotificationModel> setBookingNotifications = await _notificationService.getBookingNotifications();
+  Future<void> updateNotificationsForIncomingBookings(
+      List<Booking> bookings) async {
+    List<NotificationModel> setBookingNotifications =
+        await _notificationService.getBookingNotifications();
 
     for (Booking booking in bookings) {
       if (booking.confirmationOpen == null) continue;
@@ -284,5 +312,25 @@ class ResourceCubit extends Cubit<ResourceState> {
   void cancelNotificationForBooking(String bookingId) {
     _notificationService.cancelBookingNotification(bookingId.hashCode);
     log(name: 'resource_cubit', "Cancelled notification for $bookingId");
+  }
+
+  void _updateBookingInformation(ApiResponse apiResponse) {
+    log(name: 'resource_cubit', 'Successfully retrieved user bookings ..');
+    if (_preferenceService.allowedNotifications != null &&
+        _preferenceService.allowedNotifications!) {
+      updateNotificationsForIncomingBookings(apiResponse.data);
+    }
+
+    List<bool> falseFilledLoadingList =
+        List<bool>.filled((apiResponse.data as List<Booking>).length, false);
+    if (isClosed) {
+      return;
+    }
+    emit(state.copyWith(
+      userBookingsStatus: UserBookingsStatus.LOADED,
+      userBookings: apiResponse.data,
+      confirmationLoading: falseFilledLoadingList,
+      unbookLoading: falseFilledLoadingList,
+    ));
   }
 }

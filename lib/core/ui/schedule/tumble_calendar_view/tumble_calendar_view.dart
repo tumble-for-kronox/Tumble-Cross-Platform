@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
-import 'package:tumble/core/api/backend/response_types/runtime_error_type.dart';
+import 'package:tumble/core/api/backend/response_types/runtime_error_types.dart';
 import 'package:tumble/core/extensions/extensions.dart';
 import 'package:tumble/core/ui/cubit/schedule_view_cubit.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';

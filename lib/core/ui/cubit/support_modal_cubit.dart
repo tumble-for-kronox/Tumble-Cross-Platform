@@ -3,7 +3,10 @@ part of 'support_modal_state.dart';
 class SupportModalCubit extends Cubit<SupportModalState> {
   SupportModalCubit()
       : super(const SupportModalState(
-            isSubjectValid: false, isBodyValid: false, status: SupportModalStatus.INITIAL, focused: false)) {
+            isSubjectValid: false,
+            isBodyValid: false,
+            status: SupportModalStatus.INITIAL,
+            focused: false)) {
     _init();
   }
 
@@ -51,8 +54,9 @@ class SupportModalCubit extends Cubit<SupportModalState> {
   Future<void> sendBugReport() async {
     final String subject = _textEditingControllerSubject.text;
     final String body = _textEditingControllerBody.text;
-    final BugReportResponse response = await _backendService.postSubmitIssue(subject, body);
-    if (response.status == ApiBugReportResponseStatus.SUCCESS) {
+    final ApiResponse response =
+        await _backendService.postSubmitIssue(subject, body);
+    if (response.status == ApiResponseStatus.success) {
       emit(state.copyWith(status: SupportModalStatus.SENT));
     } else {
       emit(state.copyWith(status: SupportModalStatus.ERROR));

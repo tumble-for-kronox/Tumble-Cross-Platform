@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tumble/core/api/backend/response_types/runtime_error_type.dart';
+import 'package:tumble/core/api/backend/response_types/runtime_error_types.dart';
 import 'package:tumble/core/ui/cubit/schedule_view_cubit.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
 import 'package:tumble/core/ui/schedule/dynamic_error_page.dart';
@@ -45,7 +45,9 @@ class _TumbleWeekViewState extends State<TumbleWeekView> {
                                   padding: const EdgeInsets.only(left: 20),
                                   child: Text(currentYear.toString(),
                                       style: TextStyle(
-                                        color: Theme.of(context).colorScheme.onBackground,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onBackground,
                                         fontSize: 40,
                                         fontWeight: FontWeight.w400,
                                       )),
@@ -60,7 +62,9 @@ class _TumbleWeekViewState extends State<TumbleWeekView> {
                     }));
           case ScheduleViewStatus.FETCH_ERROR:
             return DynamicErrorPage(
-                toSearch: false, errorType: state.message!, description: S.popUps.scheduleFetchError());
+                toSearch: false,
+                errorType: state.message!,
+                description: S.popUps.scheduleFetchError());
           case ScheduleViewStatus.EMPTY_SCHEDULE:
             return DynamicErrorPage(
               toSearch: false,

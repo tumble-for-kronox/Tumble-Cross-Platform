@@ -183,19 +183,13 @@ class _NavigationRootPageState extends State<NavigationRootPage> {
         'Updating user resources, events and bookings ..');
     context.read<UserEventCubit>().getUserEvents(
           context.read<AuthCubit>().state.status,
-          context.read<AuthCubit>().setUserSession,
           context.read<AuthCubit>().logout,
-          context.read<AuthCubit>().state.userSession!,
           true,
         );
     context.read<ResourceCubit>().getSchoolResources(
-          context.read<AuthCubit>().state.userSession!,
-          context.read<AuthCubit>().setUserSession,
           context.read<AuthCubit>().logout,
         );
     context.read<ResourceCubit>().getUserBookings(
-          context.read<AuthCubit>().state.userSession!,
-          context.read<AuthCubit>().setUserSession,
           context.read<AuthCubit>().logout,
         );
   }

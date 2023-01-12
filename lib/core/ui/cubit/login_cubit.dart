@@ -5,8 +5,8 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:tumble/core/api/backend/repository/user_action_repository.dart';
-import 'package:tumble/core/api/backend/response_types/runtime_error_type.dart';
-import 'package:tumble/core/api/backend/response_types/user_response.dart';
+import 'package:tumble/core/api/backend/response_types/api_response.dart';
+import 'package:tumble/core/api/backend/response_types/runtime_error_types.dart';
 import 'package:tumble/core/api/database/repository/secure_storage_repository.dart';
 import 'package:tumble/core/api/dependency_injection/get_it.dart';
 import 'package:tumble/core/api/preferences/repository/preference_repository.dart';
@@ -41,27 +41,33 @@ class LoginCubit extends Cubit<LoginState> {
     final username = state.usernameController.text;
     final password = state.passwordController.text;
     if (!formValidated()) {
-      emit(state.copyWith(status: LoginStatus.INITIAL, errorMessage: RuntimeErrorType.invalidInputFields()));
+      emit(state.copyWith(
+          status: LoginStatus.INITIAL,
+          errorMessage: RuntimeErrorType.invalidInputFields()));
       return;
     }
     emit(state.copyWith(status: LoginStatus.LOADING));
-    UserResponse userRes = await _userRepo.userLogin(username, password, school);
+    ApiResponse userRes = await _userRepo.userLogin(username, password, school);
 
     state.passwordController.clear();
     switch (userRes.status) {
-      case ApiUserResponseStatus.AUTHORIZED:
+      case ApiResponseStatus.success:
         storeUserCreds((userRes.data! as KronoxUserModel).refreshToken);
         getIt<PreferenceRepository>().setSchool(school);
         emit(state.copyWith(loginSuccess: true));
         state.usernameController.clear();
         emit(state.copyWith(status: LoginStatus.SUCCESS));
         break;
-      case ApiUserResponseStatus.UNAUTHORIZED:
+      case ApiResponseStatus.unauthorized:
         log("UNAUTHORIZED: ${userRes.data}");
-        emit(state.copyWith(status: LoginStatus.FAIL, errorMessage: userRes.data ?? S.general.unauthorized()));
+        emit(state.copyWith(
+            status: LoginStatus.FAIL,
+            errorMessage: userRes.data ?? S.general.unauthorized()));
         break;
-      case ApiUserResponseStatus.ERROR:
-        emit(state.copyWith(status: LoginStatus.FAIL, errorMessage: userRes.data ?? S.general.unauthorized()));
+      case ApiResponseStatus.error:
+        emit(state.copyWith(
+            status: LoginStatus.FAIL,
+            errorMessage: userRes.data ?? S.general.unauthorized()));
         break;
       default:
     }

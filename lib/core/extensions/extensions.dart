@@ -3,7 +3,8 @@ import 'dart:developer';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import "package:collection/collection.dart";
-import 'package:tumble/core/api/backend/response_types/booking_response.dart';
+import 'package:tumble/core/api/backend/data/endpoints.dart';
+import 'package:tumble/core/api/backend/response_types/api_response.dart';
 import 'package:tumble/core/api/database/repository/database_repository.dart';
 import 'package:tumble/core/api/dependency_injection/get_it.dart';
 import 'package:tumble/core/models/backend_models/kronox_user_model.dart';
@@ -15,11 +16,7 @@ import 'package:tumble/core/ui/bottom_nav_bar/data/nav_bar_items.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
 import 'package:tumble/core/ui/app_switch/data/schools.dart';
 
-import '../api/backend/response_types/user_response.dart';
-
 extension ScheduleParsing on ScheduleModel {
-  
-
   bool isNotPhonySchedule() {
     return days.any((element) => element.events.isNotEmpty);
   }
@@ -100,30 +97,30 @@ extension ListCopyAndUpdate on List<bool> {
   }
 }
 
-extension AutoRefreshSessionUserResp on UserResponse {
-  Future<UserResponse> autoRefreshSession(
-      Future<UserResponse> Function(String refreshToken) refreshSession,
+extension AutoRefreshSessionUserResp on ApiResponse {
+  Future<ApiResponse> autoRefreshSession(
+      Future<ApiResponse> Function(String refreshToken) refreshSession,
       KronoxUserModel session) async {
-    if (status != ApiUserResponseStatus.COMPLETED ||
-        status != ApiUserResponseStatus.AUTHORIZED) {
+    if (status != ApiResponseStatus.completed ||
+        status != ApiResponseStatus.success) {
       log(name: 'auto_refresh', 'Logging user in again...');
       return await refreshSession(session.refreshToken);
     }
 
-    return UserResponse.authorized(session);
+    return ApiResponse.authorized(session);
   }
 }
 
-extension AutoRefreshSessionBookingResp on BookingResponse {
-  Future<UserResponse> autoRefreshSession(
-      Future<UserResponse> Function(String refreshToken) refreshSession,
+extension AutoRefreshSessionBookingResp on ApiResponse {
+  Future<ApiResponse> autoRefreshSession(
+      Future<ApiResponse> Function(String refreshToken) refreshSession,
       KronoxUserModel session) async {
-    if (status != ApiBookingResponseStatus.SUCCESS) {
+    if (status != ApiResponseStatus.success) {
       log(name: 'auto_refresh', 'Logging user in again...');
       return await refreshSession(session.refreshToken);
     }
 
-    return UserResponse.authorized(session);
+    return ApiResponse.authorized(session);
   }
 }
 

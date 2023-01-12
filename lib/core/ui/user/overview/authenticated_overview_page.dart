@@ -16,12 +16,16 @@ class AuthenticatedOverviewPage extends StatefulWidget {
   State<StatefulWidget> createState() => _AuthenticatedPage();
 }
 
-class _AuthenticatedPage extends State<AuthenticatedOverviewPage> with TickerProviderStateMixin {
+class _AuthenticatedPage extends State<AuthenticatedOverviewPage>
+    with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Builder(builder: (context) {
       final tabController = TabController(
-          initialIndex: BlocProvider.of<UserEventCubit>(context).state.currentTabIndex!, length: 3, vsync: this);
+          initialIndex:
+              BlocProvider.of<UserEventCubit>(context).state.currentTabIndex!,
+          length: 3,
+          vsync: this);
       return Column(
         children: [
           TabBar(
@@ -59,32 +63,34 @@ class _AuthenticatedPage extends State<AuthenticatedOverviewPage> with TickerPro
                 BlocProvider.value(
                   value: BlocProvider.of<AuthCubit>(context),
                   child: UserAccountInfo(
-                    onRefresh: () async => await context.read<ResourceCubit>().getUserBookings(
-                          context.read<AuthCubit>().state.userSession!,
-                          context.read<AuthCubit>().setUserSession,
-                          context.read<AuthCubit>().logout,
-                        ),
+                    onRefresh: () async =>
+                        await context.read<ResourceCubit>().getUserBookings(
+                              context.read<AuthCubit>().logout,
+                            ),
                   ),
                 ),
                 BlocProvider.value(
                   value: BlocProvider.of<AuthCubit>(context),
                   child: Events(
-                    onRefresh: () async => await context.read<UserEventCubit>().getUserEvents(
-                        context.read<AuthCubit>().state.status,
-                        context.read<AuthCubit>().setUserSession,
-                        context.read<AuthCubit>().logout,
-                        context.read<AuthCubit>().state.userSession!,
-                        true),
+                    onRefresh: () async => await context
+                        .read<UserEventCubit>()
+                        .getUserEvents(
+                            context.read<AuthCubit>().state.status,
+                            context.read<AuthCubit>().setUserSession,
+                            context.read<AuthCubit>().logout,
+                            context.read<AuthCubit>().state.userSession!,
+                            true),
                   ),
                 ),
                 BlocProvider.value(
                   value: BlocProvider.of<AuthCubit>(context),
                   child: ResourcePage(
-                    onSchoolResourcesRefresh: () async => await context.read<ResourceCubit>().getSchoolResources(
-                          context.read<AuthCubit>().state.userSession!,
-                          context.read<AuthCubit>().setUserSession,
-                          context.read<AuthCubit>().logout,
-                        ),
+                    onSchoolResourcesRefresh: () async =>
+                        await context.read<ResourceCubit>().getSchoolResources(
+                              context.read<AuthCubit>().state.userSession!,
+                              context.read<AuthCubit>().setUserSession,
+                              context.read<AuthCubit>().logout,
+                            ),
                   ),
                 )
               ]),
