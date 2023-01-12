@@ -28,11 +28,11 @@ class SlideableLogo extends StatelessWidget {
                     width: 10,
                   ),
                   Text(
-                    "TUMBLE",
+                    "Tumble",
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.onBackground,
                       fontSize: 32,
-                      letterSpacing: 3,
+                      letterSpacing: 1.5,
                       fontWeight: FontWeight.w500,
                     ),
                   )

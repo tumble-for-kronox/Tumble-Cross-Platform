@@ -10,11 +10,22 @@ import 'package:tumble/core/ui/user/events/user_event_register_button.dart';
 
 import '../user_event_unregister_button.dart';
 
-class AvailableUserEventCard extends StatelessWidget {
+class AvailableUserEventCard extends StatefulWidget {
   final AvailableUserEventModel userEvent;
   final Null Function() onTap;
 
-  const AvailableUserEventCard({Key? key, required this.userEvent, required this.onTap}) : super(key: key);
+  const AvailableUserEventCard({
+    Key? key,
+    required this.userEvent,
+    required this.onTap,
+  }) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() => _AvailableUserEventCard();
+}
+
+class _AvailableUserEventCard extends State<AvailableUserEventCard> {
+  bool loadingCard = false;
 
   @override
   Widget build(BuildContext context) {
@@ -29,13 +40,18 @@ class AvailableUserEventCard extends StatelessWidget {
               alignment: Alignment.topLeft,
               decoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.surface,
-                  borderRadius: BorderRadius.circular(5),
-                  boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 1, offset: Offset(0, .5))]),
+                  borderRadius: BorderRadius.circular(7.5),
+                  boxShadow: const [
+                    BoxShadow(
+                        color: Colors.black26,
+                        blurRadius: 1,
+                        offset: Offset(0, .5))
+                  ]),
               child: MaterialButton(
                 padding: const EdgeInsets.all(0),
-                onPressed: onTap,
+                onPressed: widget.onTap,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5),
+                  borderRadius: BorderRadius.circular(7.5),
                 ),
                 child: Container(
                   padding: const EdgeInsets.only(left: 24, top: 15),
@@ -60,27 +76,36 @@ class AvailableUserEventCard extends StatelessWidget {
                                       height: 5,
                                       decoration: BoxDecoration(
                                         shape: BoxShape.circle,
-                                        color: Theme.of(context).colorScheme.primary,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
                                       ),
                                     ),
                                     const SizedBox(width: 6),
                                     Text(
-                                      '${DateFormat.Hm(Localizations.localeOf(context).languageCode).format(userEvent.eventStart)} - ${DateFormat.Hm(Localizations.localeOf(context).languageCode).format(userEvent.eventEnd)}',
+                                      '${DateFormat.Hm(Localizations.localeOf(context).languageCode).format(widget.userEvent.eventStart)} - ${DateFormat.Hm(Localizations.localeOf(context).languageCode).format(widget.userEvent.eventEnd)}',
                                       style: TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.w400,
-                                          color: Theme.of(context).colorScheme.onSecondary,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onSecondary,
                                           letterSpacing: .5),
                                     ),
                                   ],
                                 ),
                                 Text(
-                                  DateFormat('dd-MM-yyyy', Localizations.localeOf(context).languageCode)
-                                      .format(userEvent.eventStart),
+                                  DateFormat(
+                                          'dd-MM-yyyy',
+                                          Localizations.localeOf(context)
+                                              .languageCode)
+                                      .format(widget.userEvent.eventStart),
                                   style: TextStyle(
                                       fontSize: 15,
                                       fontWeight: FontWeight.w500,
-                                      color: Theme.of(context).colorScheme.onSecondary,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onSecondary,
                                       letterSpacing: .5),
                                 ),
                               ],
@@ -89,10 +114,11 @@ class AvailableUserEventCard extends StatelessWidget {
                           const SizedBox(
                             height: 7.5,
                           ),
-                          Text(userEvent.title.capitalize(),
+                          Text(widget.userEvent.title.capitalize(),
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
-                                color: Theme.of(context).colorScheme.onBackground,
+                                color:
+                                    Theme.of(context).colorScheme.onBackground,
                                 fontSize: 19,
                                 letterSpacing: .5,
                                 fontWeight: FontWeight.w400,
@@ -109,19 +135,26 @@ class AvailableUserEventCard extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  userEvent.isRegistered
+                                  widget.userEvent.isRegistered
                                       ? S.userEvents.unregisterUntil()
                                       : S.userEvents.registerBefore(),
                                   style: TextStyle(
-                                      color: Theme.of(context).colorScheme.onSurface,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onSurface,
                                       fontWeight: FontWeight.w500,
                                       letterSpacing: 0.5),
                                 ),
                                 Text(
-                                  DateFormat("dd-MM-yyyy", Localizations.localeOf(context).languageCode)
-                                      .format(userEvent.lastSignupDate),
+                                  DateFormat(
+                                          "dd-MM-yyyy",
+                                          Localizations.localeOf(context)
+                                              .languageCode)
+                                      .format(widget.userEvent.lastSignupDate),
                                   style: TextStyle(
-                                    color: Theme.of(context).colorScheme.onBackground,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onBackground,
                                     fontWeight: FontWeight.w500,
                                     letterSpacing: 0.5,
                                   ),
@@ -132,33 +165,26 @@ class AvailableUserEventCard extends StatelessWidget {
                           Expanded(
                             child: Container(
                                 alignment: Alignment.centerRight,
-                                padding: const EdgeInsets.only(right: 10, bottom: 10),
-                                child: BlocBuilder<UserEventCubit, UserEventState>(
+                                padding: const EdgeInsets.only(
+                                    right: 10, bottom: 10),
+                                child:
+                                    BlocBuilder<UserEventCubit, UserEventState>(
                                   builder: (context, state) {
-                                    return userEvent.isRegistered
+                                    return widget.userEvent.isRegistered
                                         ? UserEventUnregisterButton(
-                                            loading: state.registerUnregisterStatus == RegisterUnregisterStatus.LOADING,
+                                            loading: loadingCard,
                                             onPressed: () {
-                                              BlocProvider.of<UserEventCubit>(context).unregisterUserEvent(
-                                                userEvent.id,
-                                                context.read<AuthCubit>().state.status,
-                                                context.read<AuthCubit>().setUserSession,
-                                                context.read<AuthCubit>().logout,
-                                                context.read<AuthCubit>().state.userSession!,
-                                              );
+                                              setLoading();
+                                              unregisterUserEvent();
                                             },
                                           )
                                         : UserEventRegisterButton(
-                                            loading: state.registerUnregisterStatus == RegisterUnregisterStatus.LOADING,
-                                            linkToKronox: userEvent.requiresChoosingLocation,
+                                            loading: loadingCard,
+                                            linkToKronox: widget.userEvent
+                                                .requiresChoosingLocation,
                                             onPressed: () {
-                                              BlocProvider.of<UserEventCubit>(context).registerUserEvent(
-                                                context.read<AuthCubit>().state.status,
-                                                userEvent.id,
-                                                context.read<AuthCubit>().setUserSession,
-                                                context.read<AuthCubit>().logout,
-                                                context.read<AuthCubit>().state.userSession!,
-                                              );
+                                              setLoading();
+                                              registerUserEvent();
                                             });
                                   },
                                 )),
@@ -176,12 +202,36 @@ class AvailableUserEventCard extends StatelessWidget {
                 child: Container(
                   decoration: BoxDecoration(
                     color: Theme.of(context).colorScheme.primary,
-                    borderRadius: const BorderRadius.only(topLeft: Radius.circular(5), bottomLeft: Radius.circular(5)),
+                    borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(5),
+                        bottomLeft: Radius.circular(5)),
                   ),
                   width: 8,
                   height: 140,
                 )),
           ],
         ));
+  }
+
+  void setLoading() => loadingCard = true;
+
+  void unregisterUserEvent() {
+    BlocProvider.of<UserEventCubit>(context).unregisterUserEvent(
+      widget.userEvent.id,
+      context.read<AuthCubit>().state.status,
+      context.read<AuthCubit>().setUserSession,
+      context.read<AuthCubit>().logout,
+      context.read<AuthCubit>().state.userSession!,
+    );
+  }
+
+  void registerUserEvent() {
+    BlocProvider.of<UserEventCubit>(context).registerUserEvent(
+      context.read<AuthCubit>().state.status,
+      widget.userEvent.id,
+      context.read<AuthCubit>().setUserSession,
+      context.read<AuthCubit>().logout,
+      context.read<AuthCubit>().state.userSession!,
+    );
   }
 }

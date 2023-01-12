@@ -16,7 +16,10 @@ class UserEventSection extends StatelessWidget {
   final List<UpcomingUserEventModel>? upcomingEvents;
 
   const UserEventSection(
-      {Key? key, required this.sectionTitle, required this.availableEvents, required this.upcomingEvents})
+      {Key? key,
+      required this.sectionTitle,
+      required this.availableEvents,
+      required this.upcomingEvents})
       : super(key: key);
 
   @override
@@ -30,36 +33,40 @@ class UserEventSection extends StatelessWidget {
               ] +
               (availableEvents == null
                   ? upcomingEvents!
-                      .map((e) => UpcomingUserEventCard(
-                            userEvent: e,
+                      .map((upcomingUserEvent) => UpcomingUserEventCard(
+                            userEvent: upcomingUserEvent,
                             onTap: () {
                               showModalBottomSheet(
                                   isScrollControlled: true,
                                   context: context,
                                   builder: (context) => UpcomingUserEventModal(
-                                        userEvent: e,
+                                        userEvent: upcomingUserEvent,
                                       ));
                             },
                           ))
                       .toList()
-                  : availableEvents!.map((e) {
-                      return e.lastSignupDate.isBefore(DateTime.now())
+                  : availableEvents!.map((userEvent) {
+                      return userEvent.lastSignupDate.isBefore(DateTime.now())
                           ? RegisteredPassedUserEventCard(
-                              userEvent: e,
+                              userEvent: userEvent,
                               onTap: () {
                                 showModalBottomSheet(
                                     isScrollControlled: true,
                                     context: context,
-                                    builder: (context) => RegisteredPassedUserEventModal(userEvent: e));
+                                    builder: (context) =>
+                                        RegisteredPassedUserEventModal(
+                                            userEvent: userEvent));
                               },
                             )
                           : AvailableUserEventCard(
-                              userEvent: e,
+                              userEvent: userEvent,
                               onTap: () {
                                 showModalBottomSheet(
                                     isScrollControlled: true,
                                     context: context,
-                                    builder: (context) => AvailableUserEventModal(userEvent: e));
+                                    builder: (context) =>
+                                        AvailableUserEventModal(
+                                            userEvent: userEvent));
                               },
                             );
                     }).toList()),

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tumble/core/ui/cubit/user_event_cubit.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
+import 'package:tumble/core/ui/schedule/dynamic_error_page.dart';
 import 'package:tumble/core/ui/tumble_loading.dart';
 import 'package:tumble/core/ui/user/events/user_event_section.dart';
 
@@ -30,7 +31,8 @@ class _EventsState extends State<Events> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    padding: const EdgeInsets.only(top: 20, left: 20, right: 20, bottom: 10),
+                    padding: const EdgeInsets.only(
+                        top: 20, left: 20, right: 20, bottom: 10),
                     child: Text(
                       S.userEvents.availableEvents(),
                       style: TextStyle(
@@ -51,12 +53,10 @@ class _EventsState extends State<Events> {
                           case UserOverviewStatus.LOADED:
                             return _loaded(context, state);
                           case UserOverviewStatus.ERROR:
-                            return Center(
-                              child: Text(
-                                S.userEvents.failedToLoad(),
-                                textAlign: TextAlign.center,
-                                style: const TextStyle(fontSize: 17),
-                              ),
+                            return DynamicErrorPage(
+                              errorType: S.userEvents.failedToLoad(),
+                              toSearch: false,
+                              description: '',
                             );
                           case UserOverviewStatus.INITIAL:
                             return Center(

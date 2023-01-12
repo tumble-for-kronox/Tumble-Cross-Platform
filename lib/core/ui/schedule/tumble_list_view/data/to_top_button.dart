@@ -13,12 +13,12 @@ class ToTopButton extends StatelessWidget {
         width: 50,
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.background,
-          borderRadius: BorderRadius.circular(5),
+          borderRadius: BorderRadius.circular(7.5),
           boxShadow: const <BoxShadow>[BoxShadow(color: Colors.black26, blurRadius: 3, offset: Offset(0, 2))],
         ),
         child: MaterialButton(
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(5),
+            borderRadius: BorderRadius.circular(7.5),
           ),
           onPressed: scrollToTop,
           visualDensity: VisualDensity.compact,
