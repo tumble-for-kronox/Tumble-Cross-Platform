@@ -22,9 +22,11 @@ class TumbleButtonSmall extends StatelessWidget {
         child: TextButton.icon(
           onPressed: loading ? null : onPressed,
           style: ButtonStyle(
-              shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
-              backgroundColor: MaterialStateColor.resolveWith((Set<MaterialState> states) =>
-                  states.contains(MaterialState.disabled)
+              shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(7.5))),
+              backgroundColor: MaterialStateColor.resolveWith(
+                  (Set<MaterialState> states) => states
+                          .contains(MaterialState.disabled)
                       ? Theme.of(context).colorScheme.primary.withOpacity(0.5)
                       : Theme.of(context).colorScheme.primary)),
           icon: loading

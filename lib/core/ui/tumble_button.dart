@@ -22,7 +22,7 @@ class TumbleButton extends StatelessWidget {
       child: MaterialButton(
         onPressed: onPressed,
         highlightElevation: 2,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7.5)),
         color: Theme.of(context).colorScheme.primary,
         child: Row(
           mainAxisSize: MainAxisSize.min,

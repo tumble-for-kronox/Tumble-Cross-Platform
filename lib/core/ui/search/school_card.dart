@@ -23,7 +23,7 @@ class SchoolCard extends StatelessWidget {
       margin: const EdgeInsets.only(top: 20, left: 20, right: 20, bottom: 20),
       decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.surface,
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(7.5),
           boxShadow: const <BoxShadow>[
             BoxShadow(
               color: Colors.black26,
@@ -43,7 +43,7 @@ class SchoolCard extends StatelessWidget {
             Container(
               padding: const EdgeInsets.only(left: 10),
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(5),
+                borderRadius: BorderRadius.circular(7.5),
                 child: Image(
                   width: 60,
                   image: AssetImage(schoolLogo),

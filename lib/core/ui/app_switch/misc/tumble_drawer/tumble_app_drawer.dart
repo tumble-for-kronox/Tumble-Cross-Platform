@@ -84,14 +84,17 @@ class _TumbleAppDrawerState extends State<TumbleAppDrawer> {
                         margin: const EdgeInsets.all(0.0),
                         padding: const EdgeInsets.all(0.0),
                         child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            padding: const EdgeInsets.symmetric(horizontal: 5),
                             child: Align(
-                              alignment: Alignment.centerRight,
-                              child: Text(S.settingsPage.title(),
-                                  style: const TextStyle(
-                                      letterSpacing: 2,
-                                      fontSize: 26,
-                                      fontWeight: FontWeight.w500)),
+                              alignment: Alignment.centerLeft,
+                              child: IconButton(
+                                iconSize: 30,
+                                icon: Icon(CupertinoIcons.clear,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onBackground),
+                                onPressed: () => Navigator.pop(context),
+                              ),
                             )),
                       ),
                     ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher_string.dart';
+import 'dart:math' as math;
 
 class UserAccountExternalLink extends StatelessWidget {
   final String title;
@@ -18,13 +19,13 @@ class UserAccountExternalLink extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 60,
+      height: 80,
       width: 100,
       child: MaterialButton(
         padding: EdgeInsets.zero,
         color: color,
         shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
+          borderRadius: BorderRadius.all(Radius.circular(7.5)),
         ),
         highlightElevation: 2,
         onPressed: () async {
@@ -34,14 +35,22 @@ class UserAccountExternalLink extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              icon,
-              color: Colors.white,
+            Transform.rotate(
+              angle: 180 * math.pi / 180,
+              child: IconButton(
+                icon: Icon(
+                  icon,
+                  color: Colors.white,
+                ),
+                onPressed: null,
+              ),
             ),
-            Text(
-              title,
-              style: const TextStyle(color: Colors.white),
-            )
+            Container(
+                padding: const EdgeInsets.only(bottom: 7.5),
+                child: Text(
+                  title,
+                  style: const TextStyle(color: Colors.white),
+                ))
           ],
         ),
       ),
