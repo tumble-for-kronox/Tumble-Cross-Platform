@@ -29,12 +29,9 @@ class UserBooking extends StatelessWidget {
       padding: const EdgeInsets.all(10),
       width: double.maxFinite,
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(7.5),
+          borderRadius: BorderRadius.circular(10),
           color: Theme.of(context).colorScheme.surface,
-          boxShadow: const [
-            BoxShadow(
-                color: Colors.black26, blurRadius: 2, offset: Offset(0, 1))
-          ]),
+          boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 2, offset: Offset(0, 1))]),
       child: Column(
         children: [
           Row(
@@ -73,10 +70,7 @@ class UserBooking extends StatelessWidget {
                 children: [
                   Text(
                     S.userBookings.roomTitle(),
-                    style: TextStyle(
-                        color: Theme.of(context).colorScheme.onSurface,
-                        fontSize: 12,
-                        letterSpacing: 0.5),
+                    style: TextStyle(color: Theme.of(context).colorScheme.onSurface, fontSize: 12, letterSpacing: 0.5),
                   ),
                   Text(
                     booking.locationId,
@@ -110,8 +104,7 @@ class UserBooking extends StatelessWidget {
                           ),
                         )
                       : Container(),
-                  context.read<ResourceCubit>().userBookingOngoing(booking) &&
-                          !booking.showConfirmButton
+                  context.read<ResourceCubit>().userBookingOngoing(booking) && !booking.showConfirmButton
                       ? Text(
                           S.userBookings.ongoingTitle(),
                           style: TextStyle(

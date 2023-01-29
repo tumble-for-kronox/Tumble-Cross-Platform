@@ -50,8 +50,7 @@ class _LoginPageRootState extends State<LoginPageRoot> {
               case LoginStatus.SUCCESS:
                 showScaffoldMessage(context, RuntimeErrorType.loginSuccess());
                 context.read<AuthCubit>().login().then((value) {
-                  Future.delayed(const Duration(seconds: 1))
-                      .then((value) => Navigator.of(context).pop());
+                  Future.delayed(const Duration(seconds: 1)).then((value) => Navigator.of(context).pop());
                 });
                 break;
               default:
@@ -91,23 +90,16 @@ Widget _initialState(BuildContext context, String school) {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   CircleAvatar(
-                                    backgroundColor:
-                                        CustomColors.lightColors.background,
-                                    child: const Image(
-                                        image: AssetImage(
-                                            'assets/images/ic_launcher.png')),
+                                    backgroundColor: CustomColors.lightColors.background,
+                                    child: const Image(image: AssetImage('assets/images/ic_launcher.png')),
                                   ),
                                   const SizedBox(
                                     width: 15,
                                   ),
                                   Text(
-                                    state.loginSuccess
-                                        ? S.loginPage.loginSuccessTitle()
-                                        : S.loginPage.title(),
+                                    state.loginSuccess ? S.loginPage.loginSuccessTitle() : S.loginPage.title(),
                                     style: TextStyle(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onPrimary,
+                                      color: Theme.of(context).colorScheme.onPrimary,
                                       fontWeight: FontWeight.w500,
                                       fontSize: 31,
                                     ),
@@ -119,13 +111,11 @@ Widget _initialState(BuildContext context, String school) {
                               ),
                               Text(
                                 state.loginSuccess
-                                    ? S.loginPage
-                                        .loginSuccessDescription(school)
+                                    ? S.loginPage.loginSuccessDescription(school)
                                     : S.loginPage.description(school),
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
-                                  color:
-                                      Theme.of(context).colorScheme.onPrimary,
+                                  color: Theme.of(context).colorScheme.onPrimary,
                                   fontWeight: FontWeight.w400,
                                   fontSize: 15,
                                 ),
@@ -165,11 +155,8 @@ Widget _initialState(BuildContext context, String school) {
                           height: double.infinity,
                           child: Padding(
                             padding: const EdgeInsets.all(60.0),
-                            child: Lottie.asset(
-                                'assets/animations/lottie_success_burst.json',
-                                width: 50,
-                                height: 50,
-                                repeat: false),
+                            child: Lottie.asset('assets/animations/lottie_success_burst.json',
+                                width: 50, height: 50, repeat: false),
                           ),
                         );
                       }
@@ -178,11 +165,8 @@ Widget _initialState(BuildContext context, String school) {
                           if (state.loginSuccess) {
                             return SizedBox(
                               height: double.infinity,
-                              child: Lottie.asset(
-                                  'assets/animations/lottie_success_burst.json',
-                                  width: 50,
-                                  height: 50,
-                                  repeat: false),
+                              child: Lottie.asset('assets/animations/lottie_success_burst.json',
+                                  width: 50, height: 50, repeat: false),
                             );
                           }
                           return const TumbleLoading();
@@ -221,9 +205,7 @@ PreferredSizeWidget _appBar(BuildContext context) {
             },
             label: Text(
               S.general.back(),
-              style: TextStyle(
-                  fontSize: 16,
-                  color: Theme.of(context).colorScheme.onBackground),
+              style: TextStyle(fontSize: 16, color: Theme.of(context).colorScheme.onBackground),
             ),
           );
         },
@@ -286,10 +268,8 @@ Widget _formSubmitButton(BuildContext context, String school) {
         BlocProvider.of<LoginCubit>(context).submitLogin(context, school);
       },
       style: ButtonStyle(
-        backgroundColor:
-            MaterialStateProperty.all<Color>(CustomColors.orangePrimary),
-        shape: MaterialStateProperty.all(
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0))),
+        backgroundColor: MaterialStateProperty.all<Color>(CustomColors.orangePrimary),
+        shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0))),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -330,34 +310,23 @@ Widget _formUsernameField(BuildContext context, String school) {
               ),
               labelText: S.loginPage.usernamePlaceholder(),
               enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                    width: 1,
-                    color: CustomColors.orangePrimary.withOpacity(.5)),
-                borderRadius: BorderRadius.circular(7.5),
+                borderSide: BorderSide(width: 1, color: CustomColors.orangePrimary.withOpacity(.5)),
+                borderRadius: BorderRadius.circular(20),
               ),
               focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                    width: 1,
-                    color: CustomColors.orangePrimary.withOpacity(.5)),
-                borderRadius: BorderRadius.circular(7.5),
+                borderSide: BorderSide(width: 1, color: CustomColors.orangePrimary.withOpacity(.5)),
+                borderRadius: BorderRadius.circular(20),
               ),
               errorBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                    width: 1,
-                    color:
-                        const Color.fromARGB(255, 235, 36, 5).withOpacity(.5)),
-                borderRadius: BorderRadius.circular(7.5),
+                borderSide: BorderSide(width: 1, color: const Color.fromARGB(255, 235, 36, 5).withOpacity(.5)),
+                borderRadius: BorderRadius.circular(20),
               ),
               focusedErrorBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                      width: 1,
-                      color: const Color.fromARGB(255, 235, 36, 5)
-                          .withOpacity(.5)),
-                  borderRadius: BorderRadius.circular(7.5))),
+                  borderSide: BorderSide(width: 1, color: const Color.fromARGB(255, 235, 36, 5).withOpacity(.5)),
+                  borderRadius: BorderRadius.circular(20))),
           keyboardType: TextInputType.emailAddress,
           textInputAction: TextInputAction.done,
-          onFieldSubmitted: (String s) =>
-              BlocProvider.of<LoginCubit>(context).submitLogin(context, school),
+          onFieldSubmitted: (String s) => BlocProvider.of<LoginCubit>(context).submitLogin(context, school),
           autovalidateMode: AutovalidateMode.onUserInteraction,
           validator: (String? text) {
             return text == "" ? S.loginPage.emailValidationError() : null;
@@ -383,48 +352,30 @@ Widget _formPasswordField(BuildContext context, String school) {
           obscureText: state.passwordHidden,
           decoration: InputDecoration(
               suffixIcon: IconButton(
-                  onPressed: () => BlocProvider.of<LoginCubit>(context)
-                      .togglePasswordVisibility(),
+                  onPressed: () => BlocProvider.of<LoginCubit>(context).togglePasswordVisibility(),
                   icon: Icon(
-                    !state.passwordHidden
-                        ? CupertinoIcons.eye
-                        : CupertinoIcons.eye_slash,
-                    color: Theme.of(context)
-                        .colorScheme
-                        .onBackground
-                        .withOpacity(.9),
+                    !state.passwordHidden ? CupertinoIcons.eye : CupertinoIcons.eye_slash,
+                    color: Theme.of(context).colorScheme.onBackground.withOpacity(.9),
                   )),
-              icon: Icon(CupertinoIcons.lock,
-                  color: Theme.of(context).colorScheme.onBackground),
+              icon: Icon(CupertinoIcons.lock, color: Theme.of(context).colorScheme.onBackground),
               labelText: S.loginPage.passwordPlaceholder(),
               enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                    width: 1,
-                    color: CustomColors.orangePrimary.withOpacity(.5)),
-                borderRadius: BorderRadius.circular(7.5),
+                borderSide: BorderSide(width: 1, color: CustomColors.orangePrimary.withOpacity(.5)),
+                borderRadius: BorderRadius.circular(20),
               ),
               focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                    width: 1,
-                    color: CustomColors.orangePrimary.withOpacity(.5)),
-                borderRadius: BorderRadius.circular(7.5),
+                borderSide: BorderSide(width: 1, color: CustomColors.orangePrimary.withOpacity(.5)),
+                borderRadius: BorderRadius.circular(20),
               ),
               errorBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                    width: 1,
-                    color:
-                        const Color.fromARGB(255, 235, 36, 5).withOpacity(.5)),
-                borderRadius: BorderRadius.circular(7.5),
+                borderSide: BorderSide(width: 1, color: const Color.fromARGB(255, 235, 36, 5).withOpacity(.5)),
+                borderRadius: BorderRadius.circular(20),
               ),
               focusedErrorBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                      width: 1,
-                      color: const Color.fromARGB(255, 235, 36, 5)
-                          .withOpacity(.5)),
-                  borderRadius: BorderRadius.circular(7.5))),
+                  borderSide: BorderSide(width: 1, color: const Color.fromARGB(255, 235, 36, 5).withOpacity(.5)),
+                  borderRadius: BorderRadius.circular(20))),
           textInputAction: TextInputAction.done,
-          onFieldSubmitted: (String s) =>
-              BlocProvider.of<LoginCubit>(context).submitLogin(
+          onFieldSubmitted: (String s) => BlocProvider.of<LoginCubit>(context).submitLogin(
             context,
             school,
           ),

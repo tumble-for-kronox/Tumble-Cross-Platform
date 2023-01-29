@@ -41,10 +41,7 @@ class _TumbleAppBarState extends State<TumbleAppBar> {
             case ThemeMode.light:
               return Brightness.dark;
             case ThemeMode.system:
-              return MediaQuery.of(context).platformBrightness ==
-                      Brightness.light
-                  ? Brightness.dark
-                  : Brightness.light;
+              return MediaQuery.of(context).platformBrightness == Brightness.light ? Brightness.dark : Brightness.light;
           }
         }(),
         statusBarColor: Colors.transparent,
@@ -55,13 +52,21 @@ class _TumbleAppBarState extends State<TumbleAppBar> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               const Spacer(),
+              Container(
+                padding: const EdgeInsets.only(top: 10, left: 57),
+                child: BlocBuilder<NavigationCubit, NavigationState>(
+                    builder: ((context, state) => Text(
+                          state.navbarItem.toStringTitle(),
+                          style: TextStyle(
+                              fontSize: 14, letterSpacing: 2, color: Theme.of(context).colorScheme.onBackground),
+                        ))),
+              ),
               const Spacer(),
               Padding(
                 padding: const EdgeInsets.only(top: 5, right: 5),
                 child: IconButton(
                   iconSize: 30,
-                  icon: Icon(CupertinoIcons.line_horizontal_3_decrease,
-                      color: Theme.of(context).colorScheme.onBackground),
+                  icon: Icon(CupertinoIcons.gear, color: Theme.of(context).colorScheme.onBackground),
                   onPressed: () => Scaffold.of(context).openEndDrawer(),
                 ),
               ),

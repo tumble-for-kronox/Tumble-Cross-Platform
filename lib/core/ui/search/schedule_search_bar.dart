@@ -23,7 +23,7 @@ class _ScheduleSearchBarState extends State<ScheduleSearchBar> {
             height: 45,
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.surface,
-              borderRadius: BorderRadius.circular(7.5),
+              borderRadius: BorderRadius.circular(10),
               boxShadow: const <BoxShadow>[
                 BoxShadow(
                     color: Colors.black26, blurRadius: 3, offset: Offset(0, 2))
