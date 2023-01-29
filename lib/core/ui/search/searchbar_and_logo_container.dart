@@ -14,8 +14,7 @@ class SearchBarAndLogoContainer extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<SearchBarAndLogoContainer> createState() =>
-      _SearchBarAndLogoContainerState();
+  State<SearchBarAndLogoContainer> createState() => _SearchBarAndLogoContainerState();
 }
 
 class _SearchBarAndLogoContainerState extends State<SearchBarAndLogoContainer> {
@@ -29,8 +28,7 @@ class _SearchBarAndLogoContainerState extends State<SearchBarAndLogoContainer> {
         children: [
           Container(
             padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
-            child: BlocBuilder<SearchPageCubit, SearchPageState>(
-                builder: (context, state) {
+            child: BlocBuilder<SearchPageCubit, SearchPageState>(builder: (context, state) {
               return SlideableLogo(
                 focused: state.focused,
               );
@@ -54,8 +52,7 @@ class _SearchBarAndLogoContainerState extends State<SearchBarAndLogoContainer> {
                             return Container();
                           }
                           return Container(
-                            padding: EdgeInsets.only(
-                                top: MediaQuery.of(context).size.height - 680),
+                            padding: EdgeInsets.only(top: MediaQuery.of(context).size.height - 680),
                             child: Stack(
                               children: [
                                 Padding(
@@ -65,22 +62,15 @@ class _SearchBarAndLogoContainerState extends State<SearchBarAndLogoContainer> {
                                     padding: const EdgeInsets.only(top: 15),
                                     focusElevation: 0,
                                     highlightElevation: 0,
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
-                                    onPressed: () => context
-                                        .read<NavigationCubit>()
-                                        .getNavBarItem(NavbarItem.LIST),
+                                    color: Theme.of(context).colorScheme.primary,
+                                    onPressed: () => context.read<NavigationCubit>().getNavBarItem(NavbarItem.LIST),
                                     child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
+                                      mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
                                         Text(
                                           S.searchPage.toScheduleView(),
                                           style: TextStyle(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .onPrimary
-                                                .withOpacity(.9),
+                                            color: Theme.of(context).colorScheme.onPrimary.withOpacity(.9),
                                             fontSize: 14,
                                           ),
                                         ),
@@ -90,10 +80,7 @@ class _SearchBarAndLogoContainerState extends State<SearchBarAndLogoContainer> {
                                         Icon(
                                           CupertinoIcons.arrow_right,
                                           size: 15,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .onPrimary
-                                              .withOpacity(.9),
+                                          color: Theme.of(context).colorScheme.onPrimary.withOpacity(.9),
                                         )
                                       ],
                                     ),
@@ -103,12 +90,9 @@ class _SearchBarAndLogoContainerState extends State<SearchBarAndLogoContainer> {
                                   alignment: Alignment.topCenter,
                                   child: Container(
                                     decoration: BoxDecoration(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .background,
+                                      color: Theme.of(context).colorScheme.background,
                                       borderRadius: const BorderRadius.only(
-                                          bottomLeft: Radius.circular(20),
-                                          bottomRight: Radius.circular(20)),
+                                          bottomLeft: Radius.circular(20), bottomRight: Radius.circular(20)),
                                     ),
                                     height: 25,
                                   ),

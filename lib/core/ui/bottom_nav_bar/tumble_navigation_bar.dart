@@ -22,12 +22,12 @@ class TumbleNavigationBar extends StatelessWidget {
           ),
           child: BottomNavigationBar(
             type: BottomNavigationBarType.fixed,
-            selectedIconTheme: const IconThemeData(size: 24),
+            selectedIconTheme: const IconThemeData(size: 26),
             unselectedIconTheme: IconThemeData(
-                size: 22, color: Theme.of(context).colorScheme.onBackground),
+                size: 24, color: Theme.of(context).colorScheme.onBackground),
             onTap: onTap,
-            selectedFontSize: 12.5,
-            unselectedFontSize: 11,
+            selectedFontSize: 14,
+            unselectedFontSize: 13,
             currentIndex: mainappstate.index,
             backgroundColor: Theme.of(context).colorScheme.background,
             elevation: 0,

@@ -8,9 +8,7 @@ class RegisteredPassedUserEventCard extends StatelessWidget {
   final AvailableUserEventModel userEvent;
   final Null Function() onTap;
 
-  const RegisteredPassedUserEventCard(
-      {Key? key, required this.userEvent, required this.onTap})
-      : super(key: key);
+  const RegisteredPassedUserEventCard({Key? key, required this.userEvent, required this.onTap}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,18 +23,13 @@ class RegisteredPassedUserEventCard extends StatelessWidget {
               alignment: Alignment.topLeft,
               decoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.surface,
-                  borderRadius: BorderRadius.circular(7.5),
-                  boxShadow: const [
-                    BoxShadow(
-                        color: Colors.black26,
-                        blurRadius: 1,
-                        offset: Offset(0, .5))
-                  ]),
+                  borderRadius: BorderRadius.circular(5),
+                  boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 1, offset: Offset(0, .5))]),
               child: MaterialButton(
                 padding: const EdgeInsets.all(0),
                 onPressed: onTap,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(7.5),
+                  borderRadius: BorderRadius.circular(5),
                 ),
                 child: Container(
                   padding: const EdgeInsets.only(left: 24, top: 15),
@@ -61,9 +54,7 @@ class RegisteredPassedUserEventCard extends StatelessWidget {
                                       height: 5,
                                       decoration: BoxDecoration(
                                         shape: BoxShape.circle,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary,
+                                        color: Theme.of(context).colorScheme.primary,
                                       ),
                                     ),
                                     const SizedBox(width: 6),
@@ -72,25 +63,18 @@ class RegisteredPassedUserEventCard extends StatelessWidget {
                                       style: TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.w400,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .onSecondary,
+                                          color: Theme.of(context).colorScheme.onSecondary,
                                           letterSpacing: .5),
                                     ),
                                   ],
                                 ),
                                 Text(
-                                  DateFormat(
-                                          'dd-MM-yyyy',
-                                          Localizations.localeOf(context)
-                                              .languageCode)
+                                  DateFormat('dd-MM-yyyy', Localizations.localeOf(context).languageCode)
                                       .format(userEvent.eventStart),
                                   style: TextStyle(
                                       fontSize: 15,
                                       fontWeight: FontWeight.w500,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onSecondary,
+                                      color: Theme.of(context).colorScheme.onSecondary,
                                       letterSpacing: .5),
                                 ),
                               ],
@@ -104,9 +88,7 @@ class RegisteredPassedUserEventCard extends StatelessWidget {
                             child: Text(userEvent.title.capitalize(),
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onBackground,
+                                  color: Theme.of(context).colorScheme.onBackground,
                                   fontSize: 19,
                                   letterSpacing: .5,
                                   fontWeight: FontWeight.w400,
@@ -118,8 +100,7 @@ class RegisteredPassedUserEventCard extends StatelessWidget {
                           ? Container(
                               padding: const EdgeInsets.only(right: 10),
                               alignment: Alignment.centerRight,
-                              child: const UserEventRegisterButton(
-                                  loading: false, linkToKronox: true),
+                              child: const UserEventRegisterButton(loading: false, linkToKronox: true),
                             )
                           : Container(),
                     ],
@@ -133,9 +114,7 @@ class RegisteredPassedUserEventCard extends StatelessWidget {
                 child: Container(
                   decoration: BoxDecoration(
                     color: Theme.of(context).colorScheme.primary,
-                    borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(5),
-                        bottomLeft: Radius.circular(5)),
+                    borderRadius: const BorderRadius.only(topLeft: Radius.circular(5), bottomLeft: Radius.circular(5)),
                   ),
                   width: 8,
                   height: userEvent.supportAvailable ? 140 : 80,

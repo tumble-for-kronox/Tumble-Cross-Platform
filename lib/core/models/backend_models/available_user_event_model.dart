@@ -11,8 +11,7 @@ part 'available_user_event_model.g.dart';
 AvailableUserEventModel availableUserEventModelFromJson(String str) =>
     AvailableUserEventModel.fromJson(json.decode(str));
 
-String availableUserEventModelToJson(AvailableUserEventModel data) =>
-    json.encode(data.toJson());
+String availableUserEventModelToJson(AvailableUserEventModel data) => json.encode(data.toJson());
 
 @freezed
 abstract class AvailableUserEventModel with _$AvailableUserEventModel {
@@ -31,6 +30,5 @@ abstract class AvailableUserEventModel with _$AvailableUserEventModel {
     required bool requiresChoosingLocation,
   }) = _AvailableUserEventModel;
 
-  factory AvailableUserEventModel.fromJson(Map<String, dynamic> json) =>
-      _$AvailableUserEventModelFromJson(json);
+  factory AvailableUserEventModel.fromJson(Map<String, dynamic> json) => _$AvailableUserEventModelFromJson(json);
 }

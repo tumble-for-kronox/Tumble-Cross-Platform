@@ -62,7 +62,7 @@ class Schools {
     ),
     School(
       schoolId: SchoolEnum.mdh,
-      schoolUrl: "schema.mdu.se",
+      schoolUrl: "schema.mdh.se",
       schoolName: 'Mälardalen Högskola',
       schoolLogo: 'assets/school_logos/mdh_logo.png',
       loginRequired: true,

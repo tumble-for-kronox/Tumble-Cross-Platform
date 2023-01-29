@@ -7,8 +7,6 @@ import 'package:tumble/core/ui/app_switch/data/schools.dart';
 import 'package:tumble/core/ui/tumble_button.dart';
 import 'package:tumble/core/ui/user/misc/auto_signup_option.dart';
 import 'package:tumble/core/ui/user/misc/user_account_info_external_link.dart';
-import 'package:tumble/core/ui/user/overview/external_link_container.dart';
-import 'package:tumble/core/ui/user/overview/user_account_container.dart';
 import 'package:tumble/core/ui/user/overview/user_bookings.dart';
 
 class UserAccountInfo extends StatefulWidget {
@@ -36,14 +34,84 @@ class _UserAccountInfo extends State<UserAccountInfo> {
                   padding: const EdgeInsets.only(top: 20, left: 10, right: 10),
                   child: Column(
                     children: [
-                      const UserAccountContainer(),
+                      Container(
+                        width: MediaQuery.of(context).size.width - 40,
+                        decoration: BoxDecoration(
+                          boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 2, offset: Offset(0, 1))],
+                          color: Theme.of(context).colorScheme.surface,
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Expanded(
+                              flex: 2,
+                              child: Container(
+                                padding: const EdgeInsets.all(20),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      S.authorizedPage.hello(),
+                                      style: TextStyle(fontSize: 16, color: Theme.of(context).colorScheme.onSecondary),
+                                    ),
+                                    const SizedBox(height: 5),
+                                    Text(
+                                      maxLines: 2,
+                                      softWrap: true,
+                                      BlocProvider.of<AuthCubit>(context).state.userSession!.name,
+                                      style: TextStyle(fontSize: 22, color: Theme.of(context).colorScheme.onBackground),
+                                    ),
+                                    const SizedBox(height: 15),
+                                    Row(
+                                      children: [
+                                        Icon(
+                                          CupertinoIcons.book,
+                                          color: Theme.of(context).colorScheme.onSecondary,
+                                          size: 18,
+                                        ),
+                                        const SizedBox(
+                                          width: 10,
+                                        ),
+                                        Text(
+                                          context.read<AuthCubit>().defaultSchool,
+                                          style:
+                                              TextStyle(fontSize: 15, color: Theme.of(context).colorScheme.onSecondary),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: 10, right: 10, bottom: 10),
+                                child: Align(
+                                  alignment: Alignment.topRight,
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(5),
+                                    child: Image.asset(
+                                      Schools.schools
+                                          .where(
+                                              (school) => school.schoolName == context.read<AuthCubit>().defaultSchool)
+                                          .first
+                                          .schoolLogo,
+                                      height: 100,
+                                      width: 100,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                       const SizedBox(
                         height: 40,
                       ),
-                      _sectionDivider(
-                          context,
-                          S.authorizedPage.userOptionsTitle(),
-                          CupertinoIcons.gear),
+                      _sectionDivider(context, S.authorizedPage.userOptionsTitle(), CupertinoIcons.gear),
                       const SizedBox(
                         height: 10,
                       ),
@@ -54,10 +122,7 @@ class _UserAccountInfo extends State<UserAccountInfo> {
                       const SizedBox(
                         height: 40,
                       ),
-                      _sectionDivider(
-                          context,
-                          S.authorizedPage.userBookingsTitle(),
-                          CupertinoIcons.building_2_fill),
+                      _sectionDivider(context, S.authorizedPage.userBookingsTitle(), CupertinoIcons.building_2_fill),
                       const SizedBox(
                         height: 10,
                       ),
@@ -65,16 +130,43 @@ class _UserAccountInfo extends State<UserAccountInfo> {
                       const SizedBox(
                         height: 40,
                       ),
-                      _sectionDivider(
-                          context,
-                          S.authorizedPage.externalLinksTitle(),
-                          CupertinoIcons.link),
+                      _sectionDivider(context, S.authorizedPage.externalLinksTitle(), CupertinoIcons.link),
                       const SizedBox(
                         height: 20,
                       ),
-                      const ExternalLinkContainer(),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          UserAccountExternalLink(
+                            title: "Canvas",
+                            color: const Color(0xFFe23e29),
+                            icon: CupertinoIcons.link,
+                            link:
+                                "https://${Schools.schools.firstWhere((school) => school.schoolName == context.read<AuthCubit>().defaultSchool).schoolId.name}.instructure.com",
+                          ),
+                          const SizedBox(
+                            width: 20,
+                          ),
+                          const UserAccountExternalLink(
+                            title: "Ladok",
+                            color: Color(0xFF3c9a00),
+                            icon: CupertinoIcons.link,
+                            link: "https://www.student.ladok.se/student/app/studentwebb/",
+                          ),
+                          const SizedBox(
+                            width: 20,
+                          ),
+                          UserAccountExternalLink(
+                            title: "Kronox",
+                            color: const Color(0xFF0089da),
+                            icon: CupertinoIcons.link,
+                            link:
+                                "https://${Schools.schools.firstWhere((school) => school.schoolName == context.read<AuthCubit>().defaultSchool).schoolUrl}",
+                          ),
+                        ],
+                      ),
                       const SizedBox(
-                        height: 40,
+                        height: 80,
                       ),
                       FractionallySizedBox(
                           widthFactor: 0.6,
