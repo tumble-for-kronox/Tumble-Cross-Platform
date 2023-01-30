@@ -19,17 +19,8 @@ class UserActionRepository implements IUserActionService {
   }
 
   @override
-  Future<RefreshResponse<UserResponse>> userEvents(KronoxUserModel session) async {
-    UserResponse resp = await _backendRepository.getUserEvents(session.sessionToken, _getDefaultSchool()!);
-
-    UserResponse sessionRefresh = await resp.autoRefreshSession(refreshSession, session);
-
-    if (_checkUserResponseStatus(resp, sessionRefresh)) {
-      resp = await _backendRepository.getUserEvents(
-          (sessionRefresh.data as KronoxUserModel).sessionToken, _getDefaultSchool()!);
-    }
-
-    return RefreshResponse(resp, sessionRefresh);
+  Future<UserResponse> userEvents() async {
+    return await _backendRepository.getUserEvents(_getDefaultSchool()!);
   }
 
   @override
@@ -38,157 +29,56 @@ class UserActionRepository implements IUserActionService {
   }
 
   @override
-  Future<RefreshResponse<UserResponse>> registerUserEvent(String eventId, KronoxUserModel session) async {
-    UserResponse resp =
-        await _backendRepository.putRegisterUserEvent(eventId, session.sessionToken, _getDefaultSchool()!);
-
-    UserResponse sessionRefresh = await resp.autoRefreshSession(refreshSession, session);
-
-    if (_checkUserResponseStatus(resp, sessionRefresh)) {
-      resp = await _backendRepository.putRegisterUserEvent(
-          eventId, (sessionRefresh.data as KronoxUserModel).sessionToken, _getDefaultSchool()!);
-    }
-
-    return RefreshResponse(resp, sessionRefresh);
+  Future<UserResponse> registerUserEvent(String eventId) async {
+    return await _backendRepository.putRegisterUserEvent(eventId, _getDefaultSchool()!);
   }
 
   @override
-  Future<RefreshResponse<UserResponse>> unregisterUserEvent(String eventId, KronoxUserModel session) async {
-    UserResponse resp =
-        await _backendRepository.putUnregisterUserEvent(eventId, session.sessionToken, _getDefaultSchool()!);
-
-    UserResponse sessionRefresh = await resp.autoRefreshSession(refreshSession, session);
-
-    if (_checkUserResponseStatus(resp, sessionRefresh)) {
-      resp = await _backendRepository.putUnregisterUserEvent(
-          eventId, (sessionRefresh.data as KronoxUserModel).sessionToken, _getDefaultSchool()!);
-    }
-
-    return RefreshResponse(resp, sessionRefresh);
+  Future<UserResponse> unregisterUserEvent(String eventId) async {
+    return await _backendRepository.putUnregisterUserEvent(eventId, _getDefaultSchool()!);
   }
 
   @override
-  Future<RefreshResponse<UserResponse>> registerAllAvailableUserEvents(KronoxUserModel session) async {
-    UserResponse resp =
-        await _backendRepository.putRegisterAllAvailableUserEvents(session.sessionToken, _getDefaultSchool()!);
-
-    UserResponse sessionRefresh = await resp.autoRefreshSession(refreshSession, session);
-
-    if (_checkUserResponseStatus(resp, sessionRefresh)) {
-      resp = await _backendRepository.putRegisterAllAvailableUserEvents(
-          (sessionRefresh.data as KronoxUserModel).sessionToken, _getDefaultSchool()!);
-    }
-
-    return RefreshResponse(resp, sessionRefresh);
+  Future<UserResponse> registerAllAvailableUserEvents() async {
+    return await _backendRepository.putRegisterAllAvailableUserEvents(_getDefaultSchool()!);
   }
 
   @override
-  Future<UserResponse> refreshSession(String refreshToken) async {
+  Future<UserResponse> refreshSession() async {
     String? school = _getDefaultSchool();
     if (school != null) {
-      return await _backendRepository.getRefreshSession(refreshToken, school);
+      return await _backendRepository.getRefreshSession(school);
     }
     return UserResponse.error('No school');
   }
 
   @override
-  Future<RefreshResponse<BookingResponse>> resourceAvailabilities(
-      String resourceId, DateTime date, KronoxUserModel session) async {
-    BookingResponse resp = await _backendRepository.getResourceAvailabilities(
-        session.sessionToken, _getDefaultSchool()!, resourceId, date);
-
-    UserResponse sessionRefresh = await resp.autoRefreshSession(refreshSession, session);
-
-    if (_checkBookingResponseStatus(resp, sessionRefresh)) {
-      resp = await _backendRepository.getResourceAvailabilities(
-          (sessionRefresh.data as KronoxUserModel).sessionToken, _getDefaultSchool()!, resourceId, date);
-    }
-
-    return RefreshResponse(resp, sessionRefresh);
+  Future<BookingResponse> resourceAvailabilities(String resourceId, DateTime date) async {
+    return await _backendRepository.getResourceAvailabilities(_getDefaultSchool()!, resourceId, date);
   }
 
   @override
-  Future<RefreshResponse<BookingResponse>> schoolResources(KronoxUserModel session) async {
-    BookingResponse resp = await _backendRepository.getSchoolResources(session.sessionToken, _getDefaultSchool()!);
-
-    UserResponse sessionRefresh = await resp.autoRefreshSession(refreshSession, session);
-
-    if (_checkBookingResponseStatus(resp, sessionRefresh)) {
-      resp = await _backendRepository.getSchoolResources(
-          (sessionRefresh.data as KronoxUserModel).sessionToken, _getDefaultSchool()!);
-    }
-
-    return RefreshResponse(resp, sessionRefresh);
+  Future<BookingResponse> schoolResources() async {
+    return await _backendRepository.getSchoolResources(_getDefaultSchool()!);
   }
 
   @override
-  Future<RefreshResponse<BookingResponse>> userBookings(KronoxUserModel session) async {
-    BookingResponse resp = await _backendRepository.getUserBookings(session.sessionToken, _getDefaultSchool()!);
-
-    UserResponse sessionRefresh = await resp.autoRefreshSession(refreshSession, session);
-
-    if (_checkBookingResponseStatus(resp, sessionRefresh)) {
-      resp = await _backendRepository.getUserBookings(
-          (sessionRefresh.data as KronoxUserModel).sessionToken, _getDefaultSchool()!);
-    }
-
-    return RefreshResponse(resp, sessionRefresh);
+  Future<BookingResponse> userBookings() async {
+    return await _backendRepository.getUserBookings(_getDefaultSchool()!);
   }
 
   @override
-  Future<RefreshResponse<BookingResponse>> bookResources(
-      String resourceId, DateTime date, AvailabilityValue bookingSlot, KronoxUserModel session) async {
-    BookingResponse resp = await _backendRepository.putBookResource(
-        session.sessionToken, _getDefaultSchool()!, resourceId, date, bookingSlot);
-
-    UserResponse sessionRefresh = await resp.autoRefreshSession(refreshSession, session);
-
-    if (_checkBookingResponseStatus(resp, sessionRefresh)) {
-      resp = await _backendRepository.putBookResource(
-          (sessionRefresh.data as KronoxUserModel).sessionToken, _getDefaultSchool()!, resourceId, date, bookingSlot);
-    }
-
-    return RefreshResponse(resp, sessionRefresh);
+  Future<BookingResponse> bookResources(String resourceId, DateTime date, AvailabilityValue bookingSlot) async {
+    return await _backendRepository.putBookResource(_getDefaultSchool()!, resourceId, date, bookingSlot);
   }
 
   @override
-  Future<RefreshResponse<BookingResponse>> unbookResources(String bookingId, KronoxUserModel session) async {
-    BookingResponse resp =
-        await _backendRepository.putUnbookResource(session.sessionToken, _getDefaultSchool()!, bookingId);
-
-    UserResponse sessionRefresh = await resp.autoRefreshSession(refreshSession, session);
-
-    if (_checkBookingResponseStatus(resp, sessionRefresh)) {
-      resp = await _backendRepository.putUnbookResource(
-          (sessionRefresh.data as KronoxUserModel).sessionToken, _getDefaultSchool()!, bookingId);
-    }
-
-    return RefreshResponse(resp, sessionRefresh);
+  Future<BookingResponse> unbookResources(String bookingId) async {
+    return await _backendRepository.putUnbookResource(_getDefaultSchool()!, bookingId);
   }
 
   @override
-  Future<RefreshResponse<BookingResponse>> confirmBooking(
-      String resourceId, String bookingId, KronoxUserModel session) async {
-    BookingResponse resp =
-        await _backendRepository.putConfirmBooking(session.sessionToken, _getDefaultSchool()!, resourceId, bookingId);
-
-    UserResponse sessionRefresh = await resp.autoRefreshSession(refreshSession, session);
-
-    if (_checkBookingResponseStatus(resp, sessionRefresh)) {
-      resp = await _backendRepository.putConfirmBooking(
-          (sessionRefresh.data as KronoxUserModel).sessionToken, _getDefaultSchool()!, resourceId, bookingId);
-    }
-
-    return RefreshResponse(resp, sessionRefresh);
-  }
-
-  bool _checkUserResponseStatus(UserResponse resp, UserResponse sessionRefresh) {
-    return (resp.status != ApiUserResponseStatus.COMPLETED || resp.status != ApiUserResponseStatus.AUTHORIZED) &&
-        sessionRefresh.status == ApiUserResponseStatus.AUTHORIZED;
-  }
-
-  bool _checkBookingResponseStatus(BookingResponse resp, UserResponse sessionRefresh) {
-    return (resp.status != ApiBookingResponseStatus.SUCCESS) &&
-        sessionRefresh.status == ApiUserResponseStatus.AUTHORIZED;
+  Future<BookingResponse> confirmBooking(String resourceId, String bookingId) async {
+    return await _backendRepository.putConfirmBooking(_getDefaultSchool()!, resourceId, bookingId);
   }
 }

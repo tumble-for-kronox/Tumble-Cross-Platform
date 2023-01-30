@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tumble/core/api/backend/response_types/runtime_error_type.dart';
+import 'package:tumble/core/ui/cubit/auth_cubit.dart';
 import 'package:tumble/core/ui/cubit/schedule_view_cubit.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
 import 'package:tumble/core/ui/schedule/dynamic_error_page.dart';
@@ -40,7 +41,9 @@ class _TumbleListViewState extends State<TumbleListView> with TickerProviderStat
                 RefreshIndicator(
                     onRefresh: () async {
                       context.read<ScheduleViewCubit>().setLoading();
-                      await context.read<ScheduleViewCubit>().forceRefreshAll();
+                      await context
+                          .read<ScheduleViewCubit>()
+                          .forceRefreshAll(context.read<AuthCubit>().state.userSession);
                     },
                     child: ListView.builder(
                         controller: context.read<ScheduleViewCubit>().controller,

@@ -62,6 +62,7 @@ class _SearchBarAndLogoContainerState extends State<SearchBarAndLogoContainer> {
                                     padding: const EdgeInsets.only(top: 15),
                                     focusElevation: 0,
                                     highlightElevation: 0,
+                                    elevation: 0,
                                     color: Theme.of(context).colorScheme.primary,
                                     onPressed: () => context.read<NavigationCubit>().getNavBarItem(NavbarItem.LIST),
                                     child: Row(

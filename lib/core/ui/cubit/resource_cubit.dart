@@ -40,15 +40,13 @@ class ResourceCubit extends Cubit<ResourceState> {
       return;
     }
     emit(state.copyWith(status: ResourceStatus.LOADING));
-    RefreshResponse<BookingResponse> refreshResponse = await _userService.schoolResources(session);
-    BookingResponse schoolResources = refreshResponse.data;
+    BookingResponse schoolResources = await _userService.schoolResources();
 
     switch (schoolResources.status) {
       case ApiBookingResponseStatus.SUCCESS:
         if (isClosed) {
           return;
         }
-        setAuthSession(refreshResponse.refreshResp.data as KronoxUserModel);
         emit(state.copyWith(status: ResourceStatus.LOADED, schoolResources: schoolResources.data));
         break;
       case ApiBookingResponseStatus.ERROR:
@@ -65,14 +63,11 @@ class ResourceCubit extends Cubit<ResourceState> {
       Function logOut, String resourceId, DateTime date) async {
     log(name: 'resource_cubit', 'Fetching resource availabilities...');
     emit(state.copyWithoutSelections(status: ResourceStatus.LOADING));
-    RefreshResponse<BookingResponse> refreshResponse =
-        await _userService.resourceAvailabilities(resourceId, date, session);
-    BookingResponse currentSelectedResource = refreshResponse.data;
+    BookingResponse currentSelectedResource = await _userService.resourceAvailabilities(resourceId, date);
 
     switch (currentSelectedResource.status) {
       case ApiBookingResponseStatus.SUCCESS:
         parseResourceAvailabilities(currentSelectedResource.data);
-        setAuthSession(refreshResponse.refreshResp.data as KronoxUserModel);
         emit(state.copyWith(status: ResourceStatus.LOADED, currentLoadedResource: currentSelectedResource.data));
         log(name: 'resource_cubit', 'Successfully fetched and updated resource availabilities');
         break;
@@ -118,8 +113,7 @@ class ResourceCubit extends Cubit<ResourceState> {
       KronoxUserModel session, void Function(KronoxUserModel) setAuthSession, Function logOut) async {
     log(name: 'resource_cubit', 'Retrieving user bookings ..');
     emit(state.copyWith(userBookingsStatus: UserBookingsStatus.LOADING));
-    RefreshResponse<BookingResponse> refreshResponse = await _userService.userBookings(session);
-    BookingResponse userBookings = refreshResponse.data;
+    BookingResponse userBookings = await _userService.userBookings();
 
     log(name: 'resource_cubit', 'ApiBookingResponseStatus is: ${userBookings.status}');
     switch (userBookings.status) {
@@ -133,7 +127,6 @@ class ResourceCubit extends Cubit<ResourceState> {
         if (isClosed) {
           return;
         }
-        setAuthSession(refreshResponse.refreshResp.data as KronoxUserModel);
         emit(state.copyWith(
           userBookingsStatus: UserBookingsStatus.LOADED,
           userBookings: userBookings.data,
@@ -154,9 +147,7 @@ class ResourceCubit extends Cubit<ResourceState> {
   Future<String> bookResource(KronoxUserModel session, void Function(KronoxUserModel) setAuthSession, Function logOut,
       String resourceId, DateTime date, AvailabilityValue bookingSlot) async {
     emit(state.copyWith(bookUnbookStatus: BookUnbookStatus.LOADING));
-    RefreshResponse<BookingResponse> refreshResponse =
-        await _userService.bookResources(resourceId, date, bookingSlot, session);
-    BookingResponse bookResource = refreshResponse.data;
+    BookingResponse bookResource = await _userService.bookResources(resourceId, date, bookingSlot);
 
     switch (bookResource.status) {
       case ApiBookingResponseStatus.SUCCESS:
@@ -176,8 +167,7 @@ class ResourceCubit extends Cubit<ResourceState> {
   Future<String> unbookResource(KronoxUserModel session, void Function(KronoxUserModel) setAuthSession, Function logOut,
       String bookingId, unbookLoadingIndex) async {
     emit(state.copyWith(unbookLoading: state.unbookLoading!.copyAndUpdate(unbookLoadingIndex, true)));
-    RefreshResponse<BookingResponse> refreshResponse = await _userService.unbookResources(bookingId, session);
-    BookingResponse bookResource = refreshResponse.data;
+    BookingResponse bookResource = await _userService.unbookResources(bookingId);
 
     switch (bookResource.status) {
       case ApiBookingResponseStatus.SUCCESS:
@@ -199,9 +189,7 @@ class ResourceCubit extends Cubit<ResourceState> {
       String resourceId, String bookingId, int confirmLoadingIndex) async {
     emit(state.copyWith(confirmationLoading: state.confirmationLoading!.copyAndUpdate(confirmLoadingIndex, true)));
 
-    RefreshResponse<BookingResponse> refreshResponse =
-        await _userService.confirmBooking(resourceId, bookingId, session);
-    BookingResponse confirmBooking = refreshResponse.data;
+    BookingResponse confirmBooking = await _userService.confirmBooking(resourceId, bookingId);
 
     switch (confirmBooking.status) {
       case ApiBookingResponseStatus.SUCCESS:

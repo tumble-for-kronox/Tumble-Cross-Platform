@@ -8,28 +8,27 @@ import '../response_types/refresh_response.dart';
 
 @immutable
 abstract class IUserActionService {
-  Future<RefreshResponse<UserResponse>> userEvents(KronoxUserModel session);
+  Future<UserResponse> userEvents();
 
   Future<UserResponse> userLogin(String username, String password, String school);
 
-  Future<UserResponse> refreshSession(String refreshToken);
+  Future<UserResponse> refreshSession();
 
-  Future<RefreshResponse> registerAllAvailableUserEvents(KronoxUserModel session);
+  Future<UserResponse> registerAllAvailableUserEvents();
 
-  Future<RefreshResponse> registerUserEvent(String eventId, KronoxUserModel session);
+  Future<UserResponse> registerUserEvent(String eventId);
 
-  Future<RefreshResponse> unregisterUserEvent(String eventId, KronoxUserModel session);
+  Future<UserResponse> unregisterUserEvent(String eventId);
 
-  Future<RefreshResponse> schoolResources(KronoxUserModel session);
+  Future<BookingResponse> schoolResources();
 
-  Future<RefreshResponse> resourceAvailabilities(String resourceId, DateTime date, KronoxUserModel session);
+  Future<BookingResponse> resourceAvailabilities(String resourceId, DateTime date);
 
-  Future<RefreshResponse> userBookings(KronoxUserModel session);
+  Future<BookingResponse> userBookings();
 
-  Future<RefreshResponse> bookResources(
-      String resourceId, DateTime date, AvailabilityValue bookingSlot, KronoxUserModel session);
+  Future<BookingResponse> bookResources(String resourceId, DateTime date, AvailabilityValue bookingSlot);
 
-  Future<RefreshResponse> unbookResources(String bookingId, KronoxUserModel session);
+  Future<BookingResponse> unbookResources(String bookingId);
 
-  Future<RefreshResponse> confirmBooking(String resourceId, String bookingId, KronoxUserModel session);
+  Future<BookingResponse> confirmBooking(String resourceId, String bookingId);
 }

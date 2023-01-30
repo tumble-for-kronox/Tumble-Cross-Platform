@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:tumble/core/api/backend/data/constants.dart';
+import 'package:tumble/core/api/backend/interceptors/auth_interceptor.dart';
 import 'package:tumble/core/api/backend/response_types/booking_response.dart';
 import 'package:tumble/core/api/backend/response_types/bug_report_response.dart';
 import 'package:tumble/core/api/backend/data/endpoints.dart';
@@ -23,7 +24,8 @@ class BackendRepository implements IBackendService {
   final _dioHandle = Dio(BaseOptions(
     connectTimeout: Constants.connectionTimeout,
     receiveTimeout: Constants.receiveTimeout,
-  ));
+  ))
+    ..interceptors.add(AuthInterceptor());
   final _schools = Schools();
 
   /// [HttpGet]
@@ -67,14 +69,11 @@ class BackendRepository implements IBackendService {
 
   /// [HttpGet]
   @override
-  Future<UserResponse> getUserEvents(String sessionToken, String defaultSchool) async {
+  Future<UserResponse> getUserEvents(String defaultSchool) async {
     final school = _schools.fromString(defaultSchool).schoolId.index;
 
-    Uri uri = Uri.https(
-        Endpoints.baseUrl,
-        Endpoints.getUserEvents,
-        {Endpoints.sessionToken: sessionToken, Endpoints.school: school.toString()}
-            .map((key, value) => MapEntry(key, value.toString())));
+    Uri uri = Uri.https(Endpoints.baseUrl, Endpoints.getUserEvents,
+        {Endpoints.school: school.toString()}.map((key, value) => MapEntry(key, value.toString())));
 
     return await _dioHandle.getUri(uri, options: Options(validateStatus: (_) => true)).then((response) {
       return response.parseUserEvents();
@@ -86,9 +85,8 @@ class BackendRepository implements IBackendService {
 
   /// [HttpGet]
   @override
-  Future<UserResponse> getRefreshSession(String refreshToken, String defaultSchool) async {
+  Future<UserResponse> getRefreshSession(String defaultSchool) async {
     final school = _schools.fromString(defaultSchool).schoolId.index;
-    Map<String, String> headers = {"Authorization": refreshToken};
 
     Uri uri = Uri.https(
       Endpoints.baseUrl,
@@ -98,7 +96,6 @@ class BackendRepository implements IBackendService {
     return await _dioHandle
         .getUri(uri,
             options: Options(
-              headers: headers,
               validateStatus: (_) => true,
             ))
         .then((response) {
@@ -112,14 +109,11 @@ class BackendRepository implements IBackendService {
 
   /// [HttpGet]
   @override
-  Future<BookingResponse> getSchoolResources(String sessionToken, String defaultSchool) async {
+  Future<BookingResponse> getSchoolResources(String defaultSchool) async {
     final school = _schools.fromString(defaultSchool).schoolId.index;
 
-    var uri = Uri.https(
-        Endpoints.baseUrl,
-        Endpoints.getSchoolResources,
-        {Endpoints.school: school.toString(), Endpoints.sessionToken: sessionToken}
-            .map((key, value) => MapEntry(key, value.toString())));
+    var uri = Uri.https(Endpoints.baseUrl, Endpoints.getSchoolResources,
+        {Endpoints.school: school.toString()}.map((key, value) => MapEntry(key, value.toString())));
 
     return await _dioHandle.getUri(uri, options: Options(validateStatus: (_) => true)).then((response) {
       return response.parseSchoolResources();
@@ -131,8 +125,7 @@ class BackendRepository implements IBackendService {
 
   /// [HttpGet]
   @override
-  Future<BookingResponse> getResourceAvailabilities(
-      String sessionToken, String defaultSchool, String resourceId, DateTime date) async {
+  Future<BookingResponse> getResourceAvailabilities(String defaultSchool, String resourceId, DateTime date) async {
     final school = _schools.fromString(defaultSchool).schoolId.index;
 
     Uri uri = Uri.https(
@@ -140,7 +133,6 @@ class BackendRepository implements IBackendService {
         Endpoints.getResourceAvailability + resourceId,
         {
           Endpoints.school: school.toString(),
-          Endpoints.sessionToken: sessionToken,
           Endpoints.date: date,
         }.map((key, value) => MapEntry(key, value.toString())));
     return await _dioHandle.getUri(uri, options: Options(validateStatus: (_) => true)).then((response) {
@@ -153,7 +145,7 @@ class BackendRepository implements IBackendService {
 
   /// [HttpGet]
   @override
-  Future<BookingResponse> getUserBookings(String sessionToken, String defaultSchool) async {
+  Future<BookingResponse> getUserBookings(String defaultSchool) async {
     final school = _schools.fromString(defaultSchool).schoolId.index;
 
     Uri uri = Uri.https(
@@ -161,7 +153,6 @@ class BackendRepository implements IBackendService {
         Endpoints.getUserBookings,
         {
           Endpoints.school: school.toString(),
-          Endpoints.sessionToken: sessionToken,
         }.map((key, value) => MapEntry(key, value.toString())));
     return await _dioHandle.getUri(uri, options: Options(validateStatus: (_) => true)).then((response) {
       return response.parseUserBookings();
@@ -173,14 +164,11 @@ class BackendRepository implements IBackendService {
 
   /// [HttpPut]
   @override
-  Future<UserResponse> putRegisterUserEvent(String eventId, String sessionToken, String defaultSchool) async {
+  Future<UserResponse> putRegisterUserEvent(String eventId, String defaultSchool) async {
     final school = _schools.fromString(defaultSchool).schoolId.index;
 
-    Uri uri = Uri.https(
-        Endpoints.baseUrl,
-        Endpoints.putRegisterEvent + eventId,
-        {Endpoints.school: school.toString(), Endpoints.sessionToken: sessionToken}
-            .map((key, value) => MapEntry(key, value.toString())));
+    Uri uri = Uri.https(Endpoints.baseUrl, Endpoints.putRegisterEvent + eventId,
+        {Endpoints.school: school.toString()}.map((key, value) => MapEntry(key, value.toString())));
     return await _dioHandle.putUri(uri, options: Options(validateStatus: (_) => true)).then((response) {
       return response.parseRegisterOrUnregister();
     }).onError((error, stackTrace) {
@@ -191,14 +179,11 @@ class BackendRepository implements IBackendService {
 
   /// [HttpPut]
   @override
-  Future<UserResponse> putUnregisterUserEvent(String eventId, String sessionToken, String defaultSchool) async {
+  Future<UserResponse> putUnregisterUserEvent(String eventId, String defaultSchool) async {
     final school = _schools.fromString(defaultSchool).schoolId.index;
 
-    Uri uri = Uri.https(
-        Endpoints.baseUrl,
-        Endpoints.getSchedules + eventId,
-        {Endpoints.school: school.toString(), Endpoints.sessionToken: sessionToken}
-            .map((key, value) => MapEntry(key, value.toString())));
+    Uri uri = Uri.https(Endpoints.baseUrl, Endpoints.putUnregisterEvent + eventId,
+        {Endpoints.school: school.toString()}.map((key, value) => MapEntry(key, value.toString())));
     return await _dioHandle.putUri(uri, options: Options(validateStatus: (_) => true)).then((response) {
       return response.parseRegisterOrUnregister();
     }).onError((error, stackTrace) {
@@ -209,13 +194,11 @@ class BackendRepository implements IBackendService {
 
   /// [HttpPut]
   @override
-  Future<UserResponse> putRegisterAllAvailableUserEvents(String sessionToken, String defaultSchool) async {
+  Future<UserResponse> putRegisterAllAvailableUserEvents(String defaultSchool) async {
     final school = _schools.fromString(defaultSchool).schoolId.index;
-    Uri uri = Uri.https(
-        Endpoints.baseUrl,
-        Endpoints.putRegisterAll,
-        {Endpoints.school: school.toString(), Endpoints.sessionToken: sessionToken}
-            .map((key, value) => MapEntry(key, value.toString())));
+
+    Uri uri = Uri.https(Endpoints.baseUrl, Endpoints.putRegisterAll,
+        {Endpoints.school: school.toString()}.map((key, value) => MapEntry(key, value.toString())));
     return await _dioHandle.putUri(uri, options: Options(validateStatus: (_) => true)).then((response) {
       return response.parseMultiRegistrationResult();
     }).onError((error, stackTrace) {
@@ -226,19 +209,17 @@ class BackendRepository implements IBackendService {
 
   /// [HttpPut]
   @override
-  Future<BookingResponse> putBookResource(String sessionToken, String defaultSchool, String resourceId, DateTime date,
-      AvailabilityValue bookingSlot) async {
+  Future<BookingResponse> putBookResource(
+      String defaultSchool, String resourceId, DateTime date, AvailabilityValue bookingSlot) async {
     final school = _schools.fromString(defaultSchool).schoolId.index;
+
     final Map<String, dynamic> data = {
       Endpoints.resourceId: resourceId,
       Endpoints.date: date.toIso8601String(),
       Endpoints.bookingSlot: bookingSlot,
     };
-    Uri uri = Uri.https(
-        Endpoints.baseUrl,
-        Endpoints.putBookResource,
-        {Endpoints.school: school.toString(), Endpoints.sessionToken: sessionToken}
-            .map((key, value) => MapEntry(key, value.toString())));
+    Uri uri = Uri.https(Endpoints.baseUrl, Endpoints.putBookResource,
+        {Endpoints.school: school.toString()}.map((key, value) => MapEntry(key, value.toString())));
     return await _dioHandle
         .putUri(uri, data: jsonEncode(data), options: Options(validateStatus: (_) => true))
         .then((response) {
@@ -251,13 +232,13 @@ class BackendRepository implements IBackendService {
 
   /// [HttpPut]
   @override
-  Future<BookingResponse> putUnbookResource(String sessionToken, String defaultSchool, String bookingId) async {
+  Future<BookingResponse> putUnbookResource(String defaultSchool, String bookingId) async {
     final school = _schools.fromString(defaultSchool).schoolId.index;
 
     Uri uri = Uri.https(
         Endpoints.baseUrl,
         Endpoints.putUnbookResource,
-        {Endpoints.school: school.toString(), Endpoints.sessionToken: sessionToken, Endpoints.bookingId: bookingId}
+        {Endpoints.school: school.toString(), Endpoints.bookingId: bookingId}
             .map((key, value) => MapEntry(key, value.toString())));
     return await _dioHandle.putUri(uri, options: Options(validateStatus: (_) => true)).then((response) {
       return response.parseUnbookResource();
@@ -269,9 +250,9 @@ class BackendRepository implements IBackendService {
 
   /// [HttpPut]
   @override
-  Future<BookingResponse> putConfirmBooking(
-      String sessionToken, String defaultSchool, String resourceId, String bookingId) async {
+  Future<BookingResponse> putConfirmBooking(String defaultSchool, String resourceId, String bookingId) async {
     final school = _schools.fromString(defaultSchool).schoolId.index;
+
     final Map<String, dynamic> data = {
       Endpoints.resourceId: resourceId,
       Endpoints.bookingId: bookingId,
@@ -282,7 +263,6 @@ class BackendRepository implements IBackendService {
         Endpoints.putConfirmBooking,
         {
           Endpoints.school: school.toString(),
-          Endpoints.sessionToken: sessionToken,
         }.map((key, value) => MapEntry(key, value.toString())));
     return await _dioHandle
         .putUri(uri, data: jsonEncode(data), options: Options(validateStatus: (_) => true))

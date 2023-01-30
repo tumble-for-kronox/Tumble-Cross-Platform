@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
+import 'package:path/path.dart';
 import 'package:tumble/core/api/backend/response_types/schedule_or_programme_response.dart' as api;
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
@@ -15,10 +16,12 @@ import 'package:tumble/core/api/database/repository/database_repository.dart';
 import 'package:tumble/core/api/dependency_injection/get_it.dart';
 import 'package:tumble/core/extensions/extensions.dart';
 import 'package:tumble/core/models/backend_models/bookmarked_schedule_model.dart';
+import 'package:tumble/core/models/backend_models/kronox_user_model.dart';
 import 'package:tumble/core/models/backend_models/program_model.dart';
 import 'package:tumble/core/models/backend_models/schedule_model.dart';
 import 'package:tumble/core/models/ui_models/week_model.dart';
 import 'package:tumble/core/theme/color_picker.dart';
+import 'package:tumble/core/ui/cubit/auth_cubit.dart';
 import 'package:tumble/core/ui/schedule/utils/day_list_builder.dart';
 
 part 'search_page_state.dart';
