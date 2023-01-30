@@ -9,8 +9,8 @@ import 'package:flutter/foundation.dart';
 @immutable
 class Endpoints {
   // Endpoints
-  static String debugBaseUrl = Platform.isAndroid ? 'tumble.hkr.se:443' : '192.168.1.178:80';
-  static const String baseUrl = '10.0.2.2:7036';
+  static String debugBaseUrl = Platform.isAndroid ? '10.0.2.2:7036' : '192.168.1.178:80';
+  static String baseUrl = kDebugMode ? debugBaseUrl : 'tumble.hkr.se';
   static const String getSchedules = '/schedules/search';
   static const String getOneSchedule = '/schedules/';
   static const String getUserEvents = 'users/events';
