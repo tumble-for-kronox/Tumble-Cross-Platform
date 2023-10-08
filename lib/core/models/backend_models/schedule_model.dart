@@ -35,7 +35,7 @@ class Day with _$Day {
     required List<Event> events,
   }) = _Day;
 
-  factory Day.fromJson(Map<String, dynamic> json) => _$_Day(
+  factory Day.fromJson(Map<String, dynamic> json) => _Day(
         name: json['name'] as String,
         date: json['date'] as String,
         isoString: DateTime.parse(json['isoString'] as String).toLocal(),
@@ -58,7 +58,7 @@ class Event with _$Event {
     required DateTime lastModified,
   }) = _Event;
 
-  factory Event.fromJson(Map<String, dynamic> json) => _$_Event(
+  factory Event.fromJson(Map<String, dynamic> json) => _Event(
         id: json['id'] as String,
         title: HtmlUnescape().convert(json['title']),
         course: Course.fromJson(json['course'] as Map<String, dynamic>),
@@ -80,10 +80,10 @@ class Course with _$Course {
     required String englishName,
   }) = _Course;
 
-  factory Course.fromJson(Map<String, dynamic> json) => _$_Course(
-      id: json['id'] as String,
-      swedishName: json['swedishName'] as String,
-      englishName: json['englishName'] as String,
+  factory Course.fromJson(Map<String, dynamic> json) => _Course(
+        id: json['id'] as String,
+        swedishName: json['swedishName'] as String,
+        englishName: json['englishName'] as String,
       );
 }
 
