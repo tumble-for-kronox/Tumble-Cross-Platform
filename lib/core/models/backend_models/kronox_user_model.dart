@@ -17,7 +17,6 @@ abstract class KronoxUserModel with _$KronoxUserModel {
   const factory KronoxUserModel({
     required String name,
     required String username,
-    required String sessionToken,
     required String refreshToken,
   }) = _KronoxUserModel;
 

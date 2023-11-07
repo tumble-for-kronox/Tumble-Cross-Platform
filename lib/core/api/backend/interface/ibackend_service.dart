@@ -14,44 +14,42 @@ abstract class IBackendService {
   Future<ScheduleOrProgrammeResponse> getPrograms(String searchQuery, String defaultSchool);
 
   /// [HttpGet]
-  Future<UserResponse> getUserEvents(String sessionToken, String defaultSchool);
+  Future<UserResponse> getUserEvents(String defaultSchool);
 
   /// [HttpGet]
-  Future<UserResponse> getRefreshSession(String refreshToken, String defaultSchool);
+  Future<UserResponse> getRefreshSession(String defaultSchool);
 
   /// [HttpPost]
   Future<UserResponse> postUserLogin(String username, String password, String defaultSchool);
 
   /// [HttpPut]
-  Future<UserResponse> putRegisterUserEvent(String eventId, String sessionToken, String defaultSchool);
+  Future<UserResponse> putRegisterUserEvent(String eventId, String defaultSchool);
 
   /// [HttpPut]
-  Future<UserResponse> putUnregisterUserEvent(String eventId, String sessionToken, String defaultSchool);
+  Future<UserResponse> putUnregisterUserEvent(String eventId, String defaultSchool);
 
   /// [HttpPut]
-  Future<UserResponse> putRegisterAllAvailableUserEvents(String sessionToken, String defaultSchool);
+  Future<UserResponse> putRegisterAllAvailableUserEvents(String defaultSchool);
 
   /// [HttpPost]
   Future<BugReportResponse> postSubmitIssue(String issueSubject, String issueBody);
 
   /// [HttpGet]
-  Future<BookingResponse> getSchoolResources(String sessionToken, String defaultSchool);
+  Future<BookingResponse> getSchoolResources(String defaultSchool);
 
   /// [HttpGet]
-  Future<BookingResponse> getResourceAvailabilities(
-      String sessionToken, String defaultSchool, String resourceId, DateTime date);
+  Future<BookingResponse> getResourceAvailabilities(String defaultSchool, String resourceId, DateTime date);
 
   /// [HttpGet]
-  Future<BookingResponse> getUserBookings(String sessionToken, String defaultSchool);
+  Future<BookingResponse> getUserBookings(String defaultSchool);
 
   /// [HttpPut]
   Future<BookingResponse> putBookResource(
-      String sessionToken, String defaultSchool, String resourceId, DateTime date, AvailabilityValue bookingSlot);
+      String defaultSchool, String resourceId, DateTime date, AvailabilityValue bookingSlot);
 
   /// [HttpPut]
-  Future<BookingResponse> putUnbookResource(String sessionToken, String defaultSchool, String bookingId);
+  Future<BookingResponse> putUnbookResource(String defaultSchool, String bookingId);
 
   /// [HttpPut]
-  Future<BookingResponse> putConfirmBooking(
-      String sessionToken, String defaultSchool, String resourceId, String bookingId);
+  Future<BookingResponse> putConfirmBooking(String defaultSchool, String resourceId, String bookingId);
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tumble/core/ui/cubit/auth_cubit.dart';
 import 'package:tumble/core/ui/cubit/search_page_cubit.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
 import 'package:tumble/core/ui/schedule/dynamic_error_page.dart';

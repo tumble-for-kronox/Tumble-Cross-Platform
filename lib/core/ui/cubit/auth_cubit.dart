@@ -42,8 +42,7 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   Future<String?> runAutoSignup() async {
-    RefreshResponse<UserResponse> refreshResponse = await _userRepo.registerAllAvailableUserEvents(state.userSession!);
-    UserResponse autoSignup = refreshResponse.data;
+    UserResponse autoSignup = await _userRepo.registerAllAvailableUserEvents();
 
     switch (autoSignup.status) {
       case ApiUserResponseStatus.COMPLETED:
@@ -74,7 +73,7 @@ class AuthCubit extends Cubit<AuthState> {
 
     final refreshToken = await secureStorage.getRefreshToken();
     if (refreshToken != null) {
-      UserResponse loggedInUser = await userRepository.refreshSession(refreshToken);
+      UserResponse loggedInUser = await userRepository.refreshSession();
       switch (loggedInUser.status) {
         case ApiUserResponseStatus.AUTHORIZED:
           log(name: 'auth_cubit', "Successfully refreshed user session with token ..");

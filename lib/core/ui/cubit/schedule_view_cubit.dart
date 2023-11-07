@@ -15,6 +15,7 @@ import 'package:tumble/core/api/notifications/builders/notification_service_buil
 import 'package:tumble/core/api/notifications/repository/notification_repository.dart';
 import 'package:tumble/core/api/preferences/repository/preference_repository.dart';
 import 'package:tumble/core/extensions/extensions.dart';
+import 'package:tumble/core/models/backend_models/kronox_user_model.dart';
 import 'package:tumble/core/models/backend_models/schedule_model.dart';
 import 'package:tumble/core/models/ui_models/week_model.dart';
 import 'package:tumble/core/ui/schedule/utils/day_list_builder.dart';
@@ -22,7 +23,7 @@ import 'package:tumble/core/ui/schedule/utils/day_list_builder.dart';
 part 'schedule_view_state.dart';
 
 class ScheduleViewCubit extends Cubit<ScheduleViewState> {
-  ScheduleViewCubit()
+  ScheduleViewCubit(KronoxUserModel? session)
       : super(const ScheduleViewState(
             status: ScheduleViewStatus.LOADING,
             listOfDays: null,
@@ -30,7 +31,7 @@ class ScheduleViewCubit extends Cubit<ScheduleViewState> {
             listViewToTopButtonVisible: false,
             message: null,
             listOfScheduleModels: [])) {
-    _init();
+    _init(session);
   }
 
   final _cacheAndInteractionService = getIt<CacheRepository>();
@@ -46,9 +47,9 @@ class ScheduleViewCubit extends Cubit<ScheduleViewState> {
   bool get toTopButtonVisible =>
       _listViewScrollController.hasClients ? _listViewScrollController.offset >= 1000 : false;
 
-  Future<void> _init() async {
+  Future<void> _init(KronoxUserModel? session) async {
     log(name: 'schedule_view_cubit', 'Fetching cache ...');
-    await getCachedSchedules();
+    await getCachedSchedules(session);
     _listViewScrollController.addListener((setScrollController));
   }
 
@@ -58,7 +59,7 @@ class ScheduleViewCubit extends Cubit<ScheduleViewState> {
     return super.close();
   }
 
-  Future<void> getCachedSchedules() async {
+  Future<void> getCachedSchedules(KronoxUserModel? session) async {
     final currentScheduleIds = _preferenceService.bookmarkIds;
     List<List<Day>> matrixListOfDays = [];
     List<ScheduleModel> listOfScheduleModels = [];
@@ -251,7 +252,7 @@ class ScheduleViewCubit extends Cubit<ScheduleViewState> {
     await _preferenceService.setNotificationAllowed(value);
   }
 
-  Future<void> forceRefreshAll() async {
+  Future<void> forceRefreshAll(KronoxUserModel? session) async {
     final visibleBookmarks = _preferenceService.visibleBookmarkIds;
 
     for (var bookmark in visibleBookmarks) {
@@ -275,7 +276,7 @@ class ScheduleViewCubit extends Cubit<ScheduleViewState> {
           break;
       }
     }
-    await getCachedSchedules();
+    await getCachedSchedules(session);
   }
 
   void cancelAllNotifications() => _notificationService.cancelAllNotifications();

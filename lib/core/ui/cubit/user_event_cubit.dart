@@ -30,15 +30,13 @@ class UserEventCubit extends Cubit<UserEventState> {
     switch (status) {
       case AuthStatus.AUTHENTICATED:
         if (showLoading) emit(state.copyWith(userEventListStatus: UserOverviewStatus.LOADING));
-        RefreshResponse<UserResponse> refreshResponse = await _userActionService.userEvents(session);
-        UserResponse userEventResponse = refreshResponse.data;
+        UserResponse userEventResponse = await _userActionService.userEvents();
 
         switch (userEventResponse.status) {
           case ApiUserResponseStatus.COMPLETED:
             if (isClosed) {
               return;
             }
-            setAuthSession(refreshResponse.refreshResp.data as KronoxUserModel);
             emit(state.copyWith(
               userEventListStatus: UserOverviewStatus.LOADED,
               userEvents: userEventResponse.data!,
@@ -73,8 +71,7 @@ class UserEventCubit extends Cubit<UserEventState> {
       return;
     }
     emit(state.copyWith(registerUnregisterStatus: RegisterUnregisterStatus.LOADING));
-    RefreshResponse<UserResponse> refreshResponse = await _userActionService.registerUserEvent(id, session);
-    UserResponse registerResponse = refreshResponse.data;
+    UserResponse registerResponse = await _userActionService.registerUserEvent(id);
 
     switch (registerResponse.status) {
       case ApiUserResponseStatus.COMPLETED:
@@ -114,8 +111,7 @@ class UserEventCubit extends Cubit<UserEventState> {
       return;
     }
     emit(state.copyWith(registerUnregisterStatus: RegisterUnregisterStatus.LOADING));
-    RefreshResponse<UserResponse> refreshResponse = await _userActionService.unregisterUserEvent(id, session);
-    UserResponse unregisterResponse = refreshResponse.data;
+    UserResponse unregisterResponse = await _userActionService.unregisterUserEvent(id);
 
     switch (unregisterResponse.status) {
       case ApiUserResponseStatus.COMPLETED:
