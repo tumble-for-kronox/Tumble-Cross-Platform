@@ -62,19 +62,13 @@ class _SchoolSelectionPageState extends State<SchoolSelectionPage> {
   }
 
   void onPressSchool(School school, BuildContext context) {
-    if (school.loginRequired) {
-      Navigator.of(context).pushNamed(NavigationRouteLabels.loginPageRoot,
-          arguments: {'schoolName': school.schoolName});
-      Navigator.pop(context);
-    } else {
-      log(
-          name: 'school_selection_page',
-          'Setting ${school.schoolName} as default');
-      _cacheAndInteractionService.changeSchool(school.schoolName).then((_) {
-        _cacheAndInteractionService.setFirstTimeLaunched(true);
-        BlocProvider.of<AuthCubit>(context).logout();
-        Navigator.pop(context);
-      });
-    }
+    log(
+        name: 'school_selection_page',
+        'Setting ${school.schoolName} as default');
+    _cacheAndInteractionService.changeSchool(school.schoolName).then((_) {
+      _cacheAndInteractionService.setFirstTimeLaunched(true);
+      BlocProvider.of<AuthCubit>(context).logout();
+    });
+    Navigator.pop(context);
   }
 }

@@ -15,11 +15,7 @@ class TumbleEventModal extends StatelessWidget {
   final Event event;
   final Color color;
   final bool showSettings;
-  const TumbleEventModal(
-      {Key? key,
-      required this.event,
-      required this.color,
-      required this.showSettings})
+  const TumbleEventModal({Key? key, required this.event, required this.color, required this.showSettings})
       : super(key: key);
 
   static void showBookmarkEventModal(
@@ -29,7 +25,7 @@ class TumbleEventModal extends StatelessWidget {
   ) {
     showModalBottomSheet(
         isScrollControlled: true,
-        enableDrag: true,
+        enableDrag: false,
         isDismissible: true,
         context: context,
         builder: (_) => MultiBlocProvider(
@@ -46,8 +42,7 @@ class TumbleEventModal extends StatelessWidget {
             ));
   }
 
-  static void showPreviewEventModal(
-      BuildContext context, Event event, Color color) {
+  static void showPreviewEventModal(BuildContext context, Event event, Color color) {
     showModalBottomSheet(
         isScrollControlled: true,
         enableDrag: true,
@@ -69,8 +64,7 @@ class TumbleEventModal extends StatelessWidget {
         padding: const EdgeInsets.only(left: 20, right: 20, top: 50),
         decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.background,
-            borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(20), topRight: Radius.circular(20))),
+            borderRadius: const BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20))),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -79,8 +73,7 @@ class TumbleEventModal extends StatelessWidget {
                 height: 10,
               ),
               Container(
-                padding: const EdgeInsets.only(
-                    right: 0, left: 0, top: 5, bottom: 10),
+                padding: const EdgeInsets.only(right: 0, left: 0, top: 5, bottom: 10),
                 child: AutoSizeText(
                   event.title.capitalize(),
                   maxLines: 2,
@@ -135,7 +128,7 @@ class TumbleEventModal extends StatelessWidget {
                     title: S.detailsModal.teachers(),
                     icon: const Icon(CupertinoIcons.person_2),
                     teachers: event.teachers,
-                  ),
+                  )
                 ],
               )
             ],
@@ -144,9 +137,7 @@ class TumbleEventModal extends StatelessWidget {
       ),
       title: S.detailsModal.title(),
       barColor: color,
-      onSettingsPressed: showSettings
-          ? () => EventOptions.showEventOptions(context, event)
-          : null,
+      onSettingsPressed: showSettings ? () => EventOptions.showEventOptions(context, event) : null,
     );
   }
 }
