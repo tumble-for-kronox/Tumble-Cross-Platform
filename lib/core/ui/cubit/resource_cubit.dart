@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tumble/core/api/backend/repository/user_action_repository.dart';
 import 'package:tumble/core/api/backend/response_types/booking_response.dart';
-import 'package:tumble/core/api/backend/response_types/refresh_response.dart';
 import 'package:tumble/core/api/dependency_injection/get_it.dart';
 import 'package:tumble/core/api/notifications/builders/notification_service_builder.dart';
 import 'package:tumble/core/api/notifications/data/notification_channels.dart';

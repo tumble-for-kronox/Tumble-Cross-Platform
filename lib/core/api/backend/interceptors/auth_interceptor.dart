@@ -7,7 +7,10 @@ class AuthInterceptor extends Interceptor {
 
   @override
   Future<void> onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
-    options.headers.addAll({"x-auth-token": await _secureStorage.getRefreshToken() ?? ""});
+    String? refreshToken = await _secureStorage.getRefreshToken();
+    if (refreshToken != null) {
+      options.headers.addAll({"x-auth-token": refreshToken});
+    }
 
     super.onRequest(options, handler);
   }

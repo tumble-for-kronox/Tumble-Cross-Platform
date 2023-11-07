@@ -11,21 +11,23 @@ class Endpoints {
   // Endpoints
   static String debugBaseUrl = Platform.isAndroid ? '10.0.2.2:7036' : '192.168.1.178:80';
   static String baseUrl = kDebugMode ? debugBaseUrl : 'tumble.hkr.se';
-  static const String getSchedules = '/schedules/search';
-  static const String getOneSchedule = '/schedules/';
-  static const String getUserEvents = 'users/events';
-  static const String getRefreshSession = 'users';
-  static const String getSchoolResources = 'resources';
-  static const String getResourceAvailability = 'resources/';
-  static const String getUserBookings = 'resources/userbookings';
-  static const String putRegisterAll = 'users/events/register/all';
-  static const String putRegisterEvent = 'users/events/register/';
-  static const String putUnregisterEvent = 'users/events/unregister/';
-  static const String putBookResource = 'resources/book';
-  static const String putUnbookResource = 'resources/unbook';
-  static const String putConfirmBooking = 'resources/confirm';
-  static const String postSubmitIssue = '/misc/submitIssue';
-  static const String postUserLogin = 'users/login';
+  static const String pathPrefix = '/api';
+
+  static const String getSchedules = '$pathPrefix/schedules/search';
+  static const String getOneSchedule = '$pathPrefix/schedules/';
+  static const String getUserEvents = '$pathPrefix/users/events';
+  static const String getRefreshSession = '$pathPrefix/users';
+  static const String getSchoolResources = '$pathPrefix/resources';
+  static const String getResourceAvailability = '$pathPrefix/resources/';
+  static const String getUserBookings = '$pathPrefix/resources/userbookings';
+  static const String putRegisterAll = '$pathPrefix/users/events/register/all';
+  static const String putRegisterEvent = '$pathPrefix/users/events/register/';
+  static const String putUnregisterEvent = '$pathPrefix/users/events/unregister/';
+  static const String putBookResource = '$pathPrefix/resources/book';
+  static const String putUnbookResource = '$pathPrefix/resources/unbook';
+  static const String putConfirmBooking = '$pathPrefix/resources/confirm';
+  static const String postSubmitIssue = '$pathPrefix/misc/submitIssue';
+  static const String postUserLogin = '$pathPrefix/users/login';
 
   // Path parameters
   static const String eventId = 'eventId';
