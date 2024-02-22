@@ -14,7 +14,7 @@ class AuthInterceptor extends Interceptor {
       options.headers.addAll({"X-auth-token": refreshToken});
     }
 
-    if (refreshToken != null) {
+    if (sessionDetails != null) {
       options.headers.addAll({"X-session-token": sessionDetails});
     }
 
