@@ -3,7 +3,7 @@ description: Tumble for Kronox
 
 publish_to: 'none'
 
-version: 3.2.0+37
+version: 3.2.1+39
 
 environment:
   sdk: ">=3.0.0 <4.0.0"
@@ -15,7 +15,7 @@ dependencies:
     sdk: flutter
   darq: ^2.0.0
   uuid: ^4.1.0
-  syncfusion_localizations: ^23.1.39
+  syncfusion_localizations: ^26.2.11
   equatable: ^2.0.5
   freezed: ^2.4.3
   cupertino_icons: ^1.0.5
@@ -25,17 +25,17 @@ dependencies:
   get_it: ^7.2.0
   flutter_bloc: ^8.1.1
   permission_handler: ^11.0.1
-  lottie: ^2.6.0
-  intl: ^0.18.1
+  lottie: ^3.1.2
+  intl: ^0.19.0
   flutter_spinkit: any
   path_provider: ^2.0.9
-  syncfusion_flutter_calendar: ^23.1.39
+  syncfusion_flutter_calendar: ^26.2.11+1
   dart_extensions: ^2.2.0
   shared_preferences: ^2.0.15
   freezed_annotation: ^2.4.1
   json_annotation: ^4.5.0
   flutter_secure_storage: ^9.0.0
-  awesome_notifications: ^0.8.2
+  awesome_notifications: ^0.9.3+1
   url_launcher: ^6.1.5
   flutter_colorpicker: ^1.0.3
   html_unescape: ^2.0.0
@@ -52,7 +52,7 @@ dev_dependencies:
     sdk: flutter
   
   drift_dev: ^2.12.1
-  flutter_lints: ^2.0.0
+  flutter_lints: ^4.0.0
   json_serializable: ^6.2.0
 
 flutter:

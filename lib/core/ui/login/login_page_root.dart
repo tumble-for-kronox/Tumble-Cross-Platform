@@ -196,7 +196,7 @@ PreferredSizeWidget _appBar(BuildContext context) {
             ),
             style: ElevatedButton.styleFrom(
               elevation: 0,
-              primary: Colors.transparent,
+              backgroundColor: Colors.transparent,
             ),
             onPressed: () {
               state.passwordController.clear();

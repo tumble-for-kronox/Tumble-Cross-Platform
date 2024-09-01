@@ -31,7 +31,7 @@ class TumbleChosenResourcePage extends StatelessWidget {
               ),
               style: ElevatedButton.styleFrom(
                 elevation: 0,
-                primary: Colors.transparent,
+                backgroundColor: Colors.transparent,
               ),
               onPressed: () => Navigator.of(context).pop(),
               label: Text(
