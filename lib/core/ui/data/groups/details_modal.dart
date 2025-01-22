@@ -1,8 +1,7 @@
 import 'package:tumble/core/ui/data/string_constant_group.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class DetailsModalStrings extends StringConstantGroup {
-  DetailsModalStrings(AppLocalizations localizedStrings) : super(localizedStrings);
+  DetailsModalStrings(super.localizedStrings);
 
   String title() => localizedStrings.detailsTitle;
   String date() => localizedStrings.detailsDate;

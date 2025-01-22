@@ -5,11 +5,9 @@ import 'package:tumble/core/ui/tumble_loading.dart';
 import 'package:tumble/core/ui/user/overview/authenticated_overview_page.dart';
 import 'package:tumble/core/ui/user/overview/unauthenticated_overview_page.dart';
 
-import '../cubit/resource_cubit.dart';
-import '../cubit/user_event_cubit.dart';
 
 class TumbleUserOverviewPageSwitch extends StatefulWidget {
-  const TumbleUserOverviewPageSwitch({Key? key}) : super(key: key);
+  const TumbleUserOverviewPageSwitch({super.key});
 
   @override
   State<TumbleUserOverviewPageSwitch> createState() => _TumbleUserOverviewPageSwitchState();

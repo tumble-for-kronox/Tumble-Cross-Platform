@@ -13,7 +13,7 @@ import 'package:tumble/core/ui/tumble_loading.dart';
 typedef ToggleBookmark = Function(bool value);
 
 class SchedulePreview extends StatefulWidget {
-  const SchedulePreview({Key? key}) : super(key: key);
+  const SchedulePreview({super.key});
 
   @override
   State<SchedulePreview> createState() => _SchedulePreviewState();
@@ -51,7 +51,7 @@ class _SchedulePreviewState extends State<SchedulePreview> {
                                 child: Text(
                                   dayList[index].isoString.year.toString(),
                                   style: TextStyle(
-                                    color: Theme.of(context).colorScheme.onBackground,
+                                    color: Theme.of(context).colorScheme.onSurface,
                                     fontSize: 40,
                                     fontWeight: FontWeight.w400,
                                   ),

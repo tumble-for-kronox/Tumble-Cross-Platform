@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class SlideableLogo extends StatelessWidget {
   final bool focused;
-  const SlideableLogo({Key? key, required this.focused}) : super(key: key);
+  const SlideableLogo({super.key, required this.focused});
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +30,7 @@ class SlideableLogo extends StatelessWidget {
                   Text(
                     "TUMBLE",
                     style: TextStyle(
-                      color: Theme.of(context).colorScheme.onBackground,
+                      color: Theme.of(context).colorScheme.onSurface,
                       fontSize: 32,
                       letterSpacing: 3,
                       fontWeight: FontWeight.w500,

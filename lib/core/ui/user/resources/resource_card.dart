@@ -7,7 +7,7 @@ import 'package:tumble/core/ui/cubit/resource_cubit.dart';
 class ResourceCard extends StatelessWidget {
   final ResourceModel resource;
 
-  const ResourceCard({Key? key, required this.resource}) : super(key: key);
+  const ResourceCard({super.key, required this.resource});
 
   @override
   Widget build(BuildContext context) {

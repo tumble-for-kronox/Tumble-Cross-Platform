@@ -10,7 +10,7 @@ import 'package:tumble/core/ui/schedule/tumble_list_view/tumble_list_view_schedu
 
 class TumbleListViewDayContainer extends StatefulWidget {
   final Day day;
-  const TumbleListViewDayContainer({Key? key, required this.day}) : super(key: key);
+  const TumbleListViewDayContainer({super.key, required this.day});
 
   @override
   State<TumbleListViewDayContainer> createState() => _TumbleListViewDayContainerState();
@@ -29,10 +29,10 @@ class _TumbleListViewDayContainerState extends State<TumbleListViewDayContainer>
               Text(
                   "${DateFormat.EEEE(Localizations.localeOf(context).languageCode).format(widget.day.isoString).capitalize()} ${DateFormat("d/M", Localizations.localeOf(context).languageCode).format(widget.day.isoString)}",
                   style: TextStyle(
-                      color: Theme.of(context).colorScheme.onBackground, fontSize: 18, fontWeight: FontWeight.w400)),
+                      color: Theme.of(context).colorScheme.onSurface, fontSize: 18, fontWeight: FontWeight.w400)),
               Expanded(
                   child: Divider(
-                color: Theme.of(context).colorScheme.onBackground,
+                color: Theme.of(context).colorScheme.onSurface,
                 indent: 10,
                 endIndent: 10,
                 thickness: 1,

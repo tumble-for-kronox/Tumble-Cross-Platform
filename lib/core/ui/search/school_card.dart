@@ -8,12 +8,12 @@ class SchoolCard extends StatelessWidget {
   final VoidCallback selectSchool;
 
   const SchoolCard({
-    Key? key,
+    super.key,
     required this.selectSchool,
     required this.schoolId,
     required this.schoolName,
     required this.schoolLogo,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

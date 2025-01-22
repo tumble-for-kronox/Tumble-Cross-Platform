@@ -23,7 +23,7 @@ import 'package:tumble/core/ui/search/tumble_search_page.dart';
 import 'package:tumble/core/ui/user/tumble_user_overview_page_switch.dart';
 
 class NavigationRootPage extends StatefulWidget {
-  const NavigationRootPage({Key? key}) : super(key: key);
+  const NavigationRootPage({super.key});
 
   @override
   State<NavigationRootPage> createState() => _NavigationRootPageState();
@@ -78,7 +78,7 @@ class _NavigationRootPageState extends State<NavigationRootPage> {
         builder: (context, navState) {
           //_getEventsAndResources(context);
           return Scaffold(
-              backgroundColor: Theme.of(context).colorScheme.background,
+              backgroundColor: Theme.of(context).colorScheme.surface,
               endDrawer: MultiBlocProvider(
                 providers: [
                   BlocProvider.value(
@@ -99,66 +99,59 @@ class _NavigationRootPageState extends State<NavigationRootPage> {
                 preferredSize: Size.fromHeight(60),
                 child: TumbleAppBar(),
               ),
-              body: BlocListener<AuthCubit, AuthState>(
-                listener: (context, state) {
-                  if (context.read<UserEventCubit>().state.autoSignup) {
-                    context.read<AuthCubit>().runAutoSignup();
-                  }
-                },
-                child: MultiBlocProvider(
-                  providers: [
-                    BlocProvider.value(
-                      value: _searchPageCubit,
+              body: MultiBlocProvider(
+                providers: [
+                  BlocProvider.value(
+                    value: _searchPageCubit,
+                  ),
+                  BlocProvider.value(
+                    value: _scheduleViewCubit,
+                  ),
+                  BlocProvider.value(
+                    value: BlocProvider.of<AuthCubit>(context),
+                  ),
+                ],
+                child: MultiBlocListener(
+                  listeners: [
+                    BlocListener<SearchPageCubit, SearchPageState>(
+                      listenWhen: (previous, current) =>
+                          previous.previewToggledFavorite != current.previewToggledFavorite,
+                      listener: (context, state) {
+                        _scheduleViewCubit.setLoading();
+                        _scheduleViewCubit.getCachedSchedules(context.read<AuthCubit>().state.userSession);
+                      },
                     ),
-                    BlocProvider.value(
-                      value: _scheduleViewCubit,
-                    ),
-                    BlocProvider.value(
-                      value: BlocProvider.of<AuthCubit>(context),
+                    BlocListener<AuthCubit, AuthState>(
+                      listenWhen: (previous, current) =>
+                          ((previous.status == AuthStatus.INITIAL && current.status == AuthStatus.AUTHENTICATED) ||
+                              (previous.status == AuthStatus.UNAUTHENTICATED &&
+                                  current.status == AuthStatus.AUTHENTICATED)),
+                      listener: (context, state) async {
+                        await _initialiseUserData(context);
+                      },
                     ),
                   ],
-                  child: MultiBlocListener(
-                    listeners: [
-                      BlocListener<SearchPageCubit, SearchPageState>(
-                        listenWhen: (previous, current) =>
-                            previous.previewToggledFavorite != current.previewToggledFavorite,
-                        listener: (context, state) {
-                          _scheduleViewCubit.setLoading();
-                          _scheduleViewCubit.getCachedSchedules(context.read<AuthCubit>().state.userSession);
-                        },
-                      ),
-                      BlocListener<AuthCubit, AuthState>(
-                        listenWhen: (previous, current) =>
-                            ((previous.status == AuthStatus.INITIAL && current.status == AuthStatus.AUTHENTICATED) ||
-                                (previous.status == AuthStatus.UNAUTHENTICATED &&
-                                    current.status == AuthStatus.AUTHENTICATED)),
-                        listener: (context, state) async {
-                          await _initialiseUserData(context);
-                        },
-                      ),
-                    ],
-                    child: AnimatedSwitcher(
-                      duration: const Duration(milliseconds: 200),
-                      child: () {
-                        switch (context.read<NavigationCubit>().state.navbarItem) {
-                          case NavbarItem.SEARCH:
-                            return const TumbleSearchPage();
-                          case NavbarItem.LIST:
-                            return const TumbleListView();
-                          case NavbarItem.WEEK:
-                            return const TumbleWeekView();
-                          case NavbarItem.CALENDAR:
-                            return const TumbleCalendarView();
-                          case NavbarItem.USER_OVERVIEW:
-                            return BlocProvider.value(
-                              value: BlocProvider.of<AuthCubit>(context),
-                              child: Builder(builder: (context) {
-                                return const TumbleUserOverviewPageSwitch();
-                              }),
-                            );
-                        }
-                      }(),
-                    ),
+                  child: AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 200),
+                    child: () {
+                      switch (context.read<NavigationCubit>().state.navbarItem) {
+                        case NavbarItem.SEARCH:
+                          return const TumbleSearchPage();
+                        case NavbarItem.LIST:
+                          return const TumbleListView();
+                        case NavbarItem.WEEK:
+                          return const TumbleWeekView();
+                        case NavbarItem.CALENDAR:
+                          return const TumbleCalendarView();
+                        case NavbarItem.USER_OVERVIEW:
+                          return BlocProvider.value(
+                            value: BlocProvider.of<AuthCubit>(context),
+                            child: Builder(builder: (context) {
+                              return const TumbleUserOverviewPageSwitch();
+                            }),
+                          );
+                      }
+                    }(),
                   ),
                 ),
               ),

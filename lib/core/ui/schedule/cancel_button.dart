@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
 
 class CancelButton extends StatelessWidget {
-  const CancelButton({Key? key}) : super(key: key);
+  const CancelButton({super.key});
 
   @override
   Widget build(BuildContext context) => Container(

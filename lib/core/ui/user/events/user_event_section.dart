@@ -16,8 +16,7 @@ class UserEventSection extends StatelessWidget {
   final List<UpcomingUserEventModel>? upcomingEvents;
 
   const UserEventSection(
-      {Key? key, required this.sectionTitle, required this.availableEvents, required this.upcomingEvents})
-      : super(key: key);
+      {super.key, required this.sectionTitle, required this.availableEvents, required this.upcomingEvents});
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +76,7 @@ Widget _eventsDivider(BuildContext context, String title) {
         child: Text(
           title,
           style: TextStyle(
-            color: Theme.of(context).colorScheme.onBackground,
+            color: Theme.of(context).colorScheme.onSurface,
             fontWeight: FontWeight.w500,
             fontSize: 16,
             letterSpacing: 0.5,
@@ -86,7 +85,7 @@ Widget _eventsDivider(BuildContext context, String title) {
       ),
       Expanded(
         child: Divider(
-          color: Theme.of(context).colorScheme.onBackground,
+          color: Theme.of(context).colorScheme.onSurface,
           thickness: 0.1,
         ),
       ),

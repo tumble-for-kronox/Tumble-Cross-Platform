@@ -14,7 +14,7 @@ class AvailableUserEventCard extends StatelessWidget {
   final AvailableUserEventModel userEvent;
   final Null Function() onTap;
 
-  const AvailableUserEventCard({Key? key, required this.userEvent, required this.onTap}) : super(key: key);
+  const AvailableUserEventCard({super.key, required this.userEvent, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +92,7 @@ class AvailableUserEventCard extends StatelessWidget {
                           Text(userEvent.title.capitalize(),
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
-                                color: Theme.of(context).colorScheme.onBackground,
+                                color: Theme.of(context).colorScheme.onSurface,
                                 fontSize: 19,
                                 letterSpacing: .5,
                                 fontWeight: FontWeight.w400,
@@ -121,7 +121,7 @@ class AvailableUserEventCard extends StatelessWidget {
                                   DateFormat("dd-MM-yyyy", Localizations.localeOf(context).languageCode)
                                       .format(userEvent.lastSignupDate),
                                   style: TextStyle(
-                                    color: Theme.of(context).colorScheme.onBackground,
+                                    color: Theme.of(context).colorScheme.onSurface,
                                     fontWeight: FontWeight.w500,
                                     letterSpacing: 0.5,
                                   ),

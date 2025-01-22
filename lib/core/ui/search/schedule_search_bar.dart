@@ -1,12 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tumble/core/ui/cubit/auth_cubit.dart';
 import 'package:tumble/core/ui/cubit/search_page_cubit.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
 
 class ScheduleSearchBar extends StatefulWidget {
-  const ScheduleSearchBar({Key? key}) : super(key: key);
+  const ScheduleSearchBar({super.key});
 
   @override
   State<ScheduleSearchBar> createState() => _ScheduleSearchBarState();
@@ -46,7 +45,7 @@ class _ScheduleSearchBarState extends State<ScheduleSearchBar> {
                       prefixIcon: IconButton(
                         icon: Icon(
                           CupertinoIcons.search,
-                          color: Theme.of(context).colorScheme.onBackground,
+                          color: Theme.of(context).colorScheme.onSurface,
                         ),
                         onPressed: () async {
                           if (BlocProvider.of<SearchPageCubit>(context)
@@ -64,7 +63,7 @@ class _ScheduleSearchBarState extends State<ScheduleSearchBar> {
                           return IconButton(
                             onPressed: () => BlocProvider.of<SearchPageCubit>(context).resetCubit(),
                             icon: const Icon(CupertinoIcons.clear),
-                            color: Theme.of(context).colorScheme.onBackground,
+                            color: Theme.of(context).colorScheme.onSurface,
                           );
                         }
                       }(),

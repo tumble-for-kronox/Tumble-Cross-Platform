@@ -1,8 +1,7 @@
 import 'package:tumble/core/ui/data/string_constant_group.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LoginPageStrings extends StringConstantGroup {
-  LoginPageStrings(AppLocalizations localizedStrings) : super(localizedStrings);
+  LoginPageStrings(super.localizedStrings);
 
   String title() => localizedStrings.loginPageTitle;
   String description(String universityName) => localizedStrings.loginPageDescription(universityName);

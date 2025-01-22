@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tumble/core/ui/cubit/auth_cubit.dart';
 import 'package:tumble/core/ui/cubit/search_page_cubit.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
 import 'package:tumble/core/ui/schedule/dynamic_error_page.dart';
@@ -10,7 +9,7 @@ import 'package:tumble/core/ui/search/searchbar_and_logo_container.dart';
 import 'package:tumble/core/ui/tumble_loading.dart';
 
 class TumbleSearchPage extends StatefulWidget {
-  const TumbleSearchPage({Key? key}) : super(key: key);
+  const TumbleSearchPage({super.key});
 
   @override
   State<TumbleSearchPage> createState() => _TumbleSearchPageState();
@@ -57,7 +56,7 @@ class _TumbleSearchPageState extends State<TumbleSearchPage> {
                                         indent: 10,
                                         endIndent: 10,
                                         height: 10,
-                                        color: Theme.of(context).colorScheme.onBackground,
+                                        color: Theme.of(context).colorScheme.onSurface,
                                       ),
                                       ListView.builder(
                                         physics: const NeverScrollableScrollPhysics(),

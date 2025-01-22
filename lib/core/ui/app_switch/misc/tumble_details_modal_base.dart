@@ -10,8 +10,7 @@ class TumbleDetailsModalBase extends StatelessWidget {
   final Color barColor;
 
   const TumbleDetailsModalBase(
-      {Key? key, required this.body, required this.title, required this.barColor, this.onSettingsPressed})
-      : super(key: key);
+      {super.key, required this.body, required this.title, required this.barColor, this.onSettingsPressed});
 
   @override
   Widget build(BuildContext context) {

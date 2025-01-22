@@ -5,7 +5,7 @@ class TumbleLoading extends StatelessWidget {
   final Color? color;
   final double size;
 
-  const TumbleLoading({Key? key, this.color, this.size = 25}) : super(key: key);
+  const TumbleLoading({super.key, this.color, this.size = 25});
 
   @override
   Widget build(BuildContext context) => SpinKitThreeBounce(

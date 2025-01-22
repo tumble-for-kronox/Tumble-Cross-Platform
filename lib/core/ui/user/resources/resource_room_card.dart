@@ -7,7 +7,7 @@ class RoomCard extends StatelessWidget {
   final String roomId;
   final String? selectedRoomId;
 
-  const RoomCard({Key? key, required this.roomId, required this.selectedRoomId}) : super(key: key);
+  const RoomCard({super.key, required this.roomId, required this.selectedRoomId});
 
   @override
   Widget build(BuildContext context) {

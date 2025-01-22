@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
-import 'package:sembast/sembast.dart';
 import 'package:tumble/core/api/backend/interface/iservice.dart';
 import 'package:tumble/core/models/backend_models/kronox_user_model.dart';
 import 'package:tumble/core/models/backend_models/schedule_model.dart';

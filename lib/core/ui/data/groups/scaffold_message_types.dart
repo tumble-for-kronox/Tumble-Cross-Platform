@@ -1,8 +1,7 @@
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:tumble/core/ui/data/string_constant_group.dart';
 
 class ScaffoldMessageType extends StringConstantGroup {
-  ScaffoldMessageType(AppLocalizations localizedStrings) : super(localizedStrings);
+  ScaffoldMessageType(super.localizedStrings);
 
   String createdNotificationForCourse(String courseName, int eventCount) =>
       localizedStrings.scaffoldMessageCreatedNotificationForCourse(eventCount, courseName);
@@ -28,10 +27,4 @@ class ScaffoldMessageType extends StringConstantGroup {
   String bookedResource() => localizedStrings.scaffoldMessageBookedResource;
   String unbookedResource() => localizedStrings.scaffoldMessageUnbookedResource;
   String confirmedBooking() => localizedStrings.scaffoldMessageConfirmedBooking;
-  String autoSignupCompleted(int numberOfSignedUpEvents) =>
-      localizedStrings.scaffoldMessageAutoSignupCompleted(numberOfSignedUpEvents);
-  String autoSignupFailed(int numberOfFailedSignUpEvents) =>
-      localizedStrings.scaffoldMessageAutoSignupFailed(numberOfFailedSignUpEvents);
-  String autoSignupCompleteAndFail(int numberOfSignedUpEvents, int numberOfFailedSignUpEvents) =>
-      localizedStrings.scaffoldMessageAutoSignupCompletedAndFailed(numberOfFailedSignUpEvents, numberOfSignedUpEvents);
 }

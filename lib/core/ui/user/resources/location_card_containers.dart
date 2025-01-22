@@ -5,7 +5,7 @@ class LocationCardContainer extends StatelessWidget {
   final List<Widget> cards;
   final int maxRowItems;
 
-  const LocationCardContainer({Key? key, required this.cards, required this.maxRowItems}) : super(key: key);
+  const LocationCardContainer({super.key, required this.cards, required this.maxRowItems});
 
   @override
   Widget build(BuildContext context) {

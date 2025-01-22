@@ -5,7 +5,6 @@ import 'package:collection/collection.dart';
 import 'package:darq/darq.dart';
 import 'package:tumble/core/api/preferences/repository/preference_repository.dart';
 import 'package:tumble/core/api/notifications/builders/notification_service_builder.dart';
-import 'package:tumble/core/api/database/repository/database_repository.dart';
 import 'package:tumble/core/extensions/extensions.dart';
 import 'package:tumble/core/models/backend_models/schedule_model.dart';
 import 'package:tumble/core/api/notifications/interface/inotification_service.dart';
@@ -132,7 +131,7 @@ class NotificationRepository implements INotificationService {
               channelKey: scheduleId,
               channelName: 'Channel for $scheduleId',
               channelDescription: 'A notification channel for the schedule under id -> $scheduleId'))
-          .toList(),
+          ,
       _notificationServiceBuilder.buildNotificationChannel(
         channelKey: NotificationChannels.resources,
         channelName: "Resources",

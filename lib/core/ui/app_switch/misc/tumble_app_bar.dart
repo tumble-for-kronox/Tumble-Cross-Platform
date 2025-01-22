@@ -10,8 +10,8 @@ class TumbleAppBar extends StatefulWidget {
   final VoidCallback? toggleBookmark;
   const TumbleAppBar({
     this.toggleBookmark,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<TumbleAppBar> createState() => _TumbleAppBarState();
@@ -22,7 +22,7 @@ class _TumbleAppBarState extends State<TumbleAppBar> {
   Widget build(BuildContext context) {
     return AppBar(
       elevation: 0,
-      backgroundColor: Theme.of(context).colorScheme.background,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       systemOverlayStyle: SystemUiOverlayStyle(
         statusBarBrightness: () {
           switch (BlocProvider.of<ThemeCubit>(context).state.themeMode) {
@@ -58,7 +58,7 @@ class _TumbleAppBarState extends State<TumbleAppBar> {
                     builder: ((context, state) => Text(
                           state.navbarItem.toStringTitle(),
                           style: TextStyle(
-                              fontSize: 14, letterSpacing: 2, color: Theme.of(context).colorScheme.onBackground),
+                              fontSize: 14, letterSpacing: 2, color: Theme.of(context).colorScheme.onSurface),
                         ))),
               ),
               const Spacer(),
@@ -66,7 +66,7 @@ class _TumbleAppBarState extends State<TumbleAppBar> {
                 padding: const EdgeInsets.only(top: 5, right: 5),
                 child: IconButton(
                   iconSize: 30,
-                  icon: Icon(CupertinoIcons.gear, color: Theme.of(context).colorScheme.onBackground),
+                  icon: Icon(CupertinoIcons.gear, color: Theme.of(context).colorScheme.onSurface),
                   onPressed: () => Scaffold.of(context).openEndDrawer(),
                 ),
               ),

@@ -9,7 +9,7 @@ import 'package:tumble/core/ui/app_switch/school_selection_page.dart';
 import 'package:tumble/core/ui/cubit/auth_cubit.dart';
 
 class AppSwitch extends StatefulWidget {
-  const AppSwitch({Key? key}) : super(key: key);
+  const AppSwitch({super.key});
   @override
   State<AppSwitch> createState() => _AppSwitchState();
 }

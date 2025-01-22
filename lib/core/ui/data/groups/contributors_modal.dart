@@ -1,8 +1,7 @@
 import 'package:tumble/core/ui/data/string_constant_group.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ContributorsModalStrings extends StringConstantGroup {
-  ContributorsModalStrings(AppLocalizations localizedStrings) : super(localizedStrings);
+  ContributorsModalStrings(super.localizedStrings);
 
   String title() => localizedStrings.contributorsModalTitle;
   String development() => localizedStrings.contributorsModalDevelopment;

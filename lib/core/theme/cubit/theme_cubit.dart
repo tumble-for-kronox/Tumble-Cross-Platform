@@ -1,10 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tumble/core/api/dependency_injection/get_it.dart';
 import 'package:tumble/core/api/preferences/repository/preference_repository.dart';
-import 'package:tumble/core/shared/preference_types.dart';
 import 'package:tumble/core/theme/cubit/theme_state.dart';
 import 'package:tumble/core/theme/data/theme_strings.dart';
 import 'package:tumble/core/theme/repository/theme_repository.dart';

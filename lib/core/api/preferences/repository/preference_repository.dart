@@ -21,8 +21,7 @@ class PreferenceRepository implements IPreferenceService {
   String? get theme => _sharedPreferences.getString(PreferenceTypes.theme);
 
   @override
-  String? get defaultSchool =>
-      _sharedPreferences.getString(PreferenceTypes.school);
+  String? get defaultSchool => _sharedPreferences.getString(PreferenceTypes.school);
 
   @override
   List<String>? get bookmarkIds {
@@ -41,8 +40,7 @@ class PreferenceRepository implements IPreferenceService {
       .map((e) => bookmarkedScheduleModelFromJson(e))
       .toList();
 
-  bool? get allowedNotifications =>
-      _sharedPreferences.getBool(PreferenceTypes.notificationAllowed);
+  bool? get allowedNotifications => _sharedPreferences.getBool(PreferenceTypes.notificationAllowed);
 
   bool get userHasBookmarks => _sharedPreferences
       .getStringList(PreferenceTypes.bookmarks)!
@@ -57,12 +55,7 @@ class PreferenceRepository implements IPreferenceService {
       .contains(scheduleId);
 
   @override
-  int? get notificationOffset =>
-      _sharedPreferences.getInt(PreferenceTypes.notificationOffset);
-
-  @override
-  bool? get autoSignup =>
-      _sharedPreferences.getBool(PreferenceTypes.autoSignup);
+  int? get notificationOffset => _sharedPreferences.getInt(PreferenceTypes.notificationOffset);
 
   @override
   String? get locale => _sharedPreferences.getString(PreferenceTypes.locale);
@@ -70,24 +63,13 @@ class PreferenceRepository implements IPreferenceService {
   @override
   Future<void> setBookmarks(List<String> bookmarks) async {
     log(name: 'preference_repository', "Updating bookmarks ..");
-    await _sharedPreferences.setStringList(
-        PreferenceTypes.bookmarks, bookmarks);
+    await _sharedPreferences.setStringList(PreferenceTypes.bookmarks, bookmarks);
   }
 
   @override
   Future<void> setSchool(String schoolName) async {
-    log(
-        name: 'preference_repository',
-        "Changing default school to $schoolName ..");
+    log(name: 'preference_repository', "Changing default school to $schoolName ..");
     await _sharedPreferences.setString(PreferenceTypes.school, schoolName);
-  }
-
-  @override
-  Future<void> setAutoSignup(bool autoSignup) async {
-    log(
-        name: 'preference_repository',
-        "Changing autoSignup to be ${autoSignup ? 'on' : 'off'}..");
-    await _sharedPreferences.setBool(PreferenceTypes.autoSignup, autoSignup);
   }
 
   @override
@@ -95,15 +77,12 @@ class PreferenceRepository implements IPreferenceService {
     log(
         name: 'preference_repository',
         "Changing permission for notifications to be ${allowed ? 'allowed' : 'not allowed'}..");
-    await _sharedPreferences.setBool(
-        PreferenceTypes.notificationAllowed, allowed);
+    await _sharedPreferences.setBool(PreferenceTypes.notificationAllowed, allowed);
   }
 
   @override
   Future<void> setNotificationOffset(int offset) async {
-    log(
-        name: 'preference_repository',
-        "Changing notification offset to $offset ..");
+    log(name: 'preference_repository', "Changing notification offset to $offset ..");
     await _sharedPreferences.setInt(PreferenceTypes.notificationOffset, offset);
   }
 
@@ -140,10 +119,8 @@ class PreferenceRepository implements IPreferenceService {
 
   @override
   bool get hasRun =>
-      _sharedPreferences.containsKey(PreferenceTypes.hasRun) &&
-      _sharedPreferences.getBool(PreferenceTypes.hasRun)!;
+      _sharedPreferences.containsKey(PreferenceTypes.hasRun) && _sharedPreferences.getBool(PreferenceTypes.hasRun)!;
 
   @override
-  Future<void> setHasRun(bool hasRun) =>
-      _sharedPreferences.setBool(PreferenceTypes.hasRun, hasRun);
+  Future<void> setHasRun(bool hasRun) => _sharedPreferences.setBool(PreferenceTypes.hasRun, hasRun);
 }

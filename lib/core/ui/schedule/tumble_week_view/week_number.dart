@@ -4,7 +4,7 @@ import 'package:tumble/core/ui/data/string_constants.dart';
 
 class WeekNumber extends StatelessWidget {
   final Week week;
-  const WeekNumber({Key? key, required this.week}) : super(key: key);
+  const WeekNumber({super.key, required this.week});
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +14,7 @@ class WeekNumber extends StatelessWidget {
         child: Text(
           S.weekViewPage.weekNumber(week.weekNumber.toString()),
           style:
-              TextStyle(color: Theme.of(context).colorScheme.onBackground, fontSize: 20, fontWeight: FontWeight.w400),
+              TextStyle(color: Theme.of(context).colorScheme.onSurface, fontSize: 20, fontWeight: FontWeight.w400),
         ));
   }
 }

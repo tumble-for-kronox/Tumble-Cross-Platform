@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
 
 class TumbleEmptyWeekEventTile extends StatelessWidget {
-  const TumbleEmptyWeekEventTile({Key? key}) : super(key: key);
+  const TumbleEmptyWeekEventTile({super.key});
 
   @override
   Widget build(BuildContext context) {

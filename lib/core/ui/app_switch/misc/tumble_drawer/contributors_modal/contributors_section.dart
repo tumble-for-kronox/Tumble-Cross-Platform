@@ -4,7 +4,7 @@ class ContributorsSection extends StatelessWidget {
   final String sessionTitle;
   final List<String> contributors;
 
-  const ContributorsSection({Key? key, required this.sessionTitle, required this.contributors}) : super(key: key);
+  const ContributorsSection({super.key, required this.sessionTitle, required this.contributors});
 
   @override
   Widget build(BuildContext context) {

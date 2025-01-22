@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tumble/core/api/backend/response_types/runtime_error_type.dart';
-import 'package:tumble/core/ui/cubit/user_event_cubit.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
 
 typedef NavigateToSearchFromView = void Function();
@@ -21,7 +19,7 @@ class CustomAlertDialog {
           Text(S.popUps.scheduleHelpFirstLine(),
               textAlign: TextAlign.center,
               style: TextStyle(
-                  color: Theme.of(context).colorScheme.onBackground, fontSize: 16, fontWeight: FontWeight.w500)),
+                  color: Theme.of(context).colorScheme.onSurface, fontSize: 16, fontWeight: FontWeight.w500)),
           const SizedBox(
             height: 20,
           ),
@@ -35,7 +33,7 @@ class CustomAlertDialog {
           Text(S.popUps.scheduleHelpSecondLine(),
               textAlign: TextAlign.center,
               style: TextStyle(
-                  color: Theme.of(context).colorScheme.onBackground, fontSize: 16, fontWeight: FontWeight.w400))
+                  color: Theme.of(context).colorScheme.onSurface, fontSize: 16, fontWeight: FontWeight.w400))
         ]),
       ),
       actions: [
@@ -72,13 +70,13 @@ class CustomAlertDialog {
         child: Column(children: [
           Text(S.popUps.scheduleIsEmptyTitle(),
               style: TextStyle(
-                  color: Theme.of(context).colorScheme.onBackground, fontSize: 16, fontWeight: FontWeight.w400)),
+                  color: Theme.of(context).colorScheme.onSurface, fontSize: 16, fontWeight: FontWeight.w400)),
           const SizedBox(
             height: 30,
           ),
           Text(S.popUps.scheduleIsEmptyBody(),
               style: TextStyle(
-                  color: Theme.of(context).colorScheme.onBackground, fontSize: 16, fontWeight: FontWeight.w400))
+                  color: Theme.of(context).colorScheme.onSurface, fontSize: 16, fontWeight: FontWeight.w400))
         ]),
       ),
       actions: [
@@ -106,13 +104,13 @@ class CustomAlertDialog {
         child: Column(children: [
           Text(S.popUps.scheduleFetchError(),
               style: TextStyle(
-                  color: Theme.of(context).colorScheme.onBackground, fontSize: 16, fontWeight: FontWeight.w400)),
+                  color: Theme.of(context).colorScheme.onSurface, fontSize: 16, fontWeight: FontWeight.w400)),
           const SizedBox(
             height: 30,
           ),
           Text(S.general.tryAgain(),
               style: TextStyle(
-                  color: Theme.of(context).colorScheme.onBackground, fontSize: 15, fontWeight: FontWeight.w400))
+                  color: Theme.of(context).colorScheme.onSurface, fontSize: 15, fontWeight: FontWeight.w400))
         ]),
       ),
       actions: [
@@ -141,13 +139,13 @@ class CustomAlertDialog {
         child: Column(children: [
           Text(RuntimeErrorType.noCachedSchedule(),
               style: TextStyle(
-                  color: Theme.of(context).colorScheme.onBackground, fontSize: 16, fontWeight: FontWeight.w400)),
+                  color: Theme.of(context).colorScheme.onSurface, fontSize: 16, fontWeight: FontWeight.w400)),
           const SizedBox(
             height: 30,
           ),
           Text(S.general.tryAgain(),
               style: TextStyle(
-                  color: Theme.of(context).colorScheme.onBackground, fontSize: 15, fontWeight: FontWeight.w400))
+                  color: Theme.of(context).colorScheme.onSurface, fontSize: 15, fontWeight: FontWeight.w400))
         ]),
       ),
       actions: [
@@ -164,46 +162,6 @@ class CustomAlertDialog {
     );
   }
 
-  static AlertDialog automaticExamSignupWarning(BuildContext context, bool value) {
-    return AlertDialog(
-      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
-      content: SizedBox(
-        height: 300,
-        child: Column(children: [
-          Text(S.popUps.autoSignupTitle(),
-              style: TextStyle(
-                  color: Theme.of(context).colorScheme.onBackground, fontSize: 16, fontWeight: FontWeight.w600)),
-          const SizedBox(
-            height: 20,
-          ),
-          Text(S.popUps.autoSignupBody(),
-              style: TextStyle(
-                  color: Theme.of(context).colorScheme.onBackground, fontSize: 16, fontWeight: FontWeight.w400))
-        ]),
-      ),
-      actions: [
-        CupertinoDialogAction(
-          child: Text(
-            S.general.cancel(),
-            style: TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 15, fontWeight: FontWeight.w400),
-          ),
-          onPressed: () {
-            Navigator.of(context, rootNavigator: true).pop();
-          },
-        ),
-        CupertinoDialogAction(
-          child: Text(S.general.understood(),
-              style:
-                  TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 15, fontWeight: FontWeight.w400)),
-          onPressed: () {
-            Navigator.of(context, rootNavigator: true).pop();
-            BlocProvider.of<UserEventCubit>(context).autoSignupToggle(value);
-          },
-        )
-      ],
-    );
-  }
-
   static AlertDialog resourceNotGettable(BuildContext context) {
     return AlertDialog(
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
@@ -212,13 +170,13 @@ class CustomAlertDialog {
         child: Column(children: [
           Text(S.popUps.resourceFetchErrorTitle(),
               style: TextStyle(
-                  color: Theme.of(context).colorScheme.onBackground, fontSize: 16, fontWeight: FontWeight.w600)),
+                  color: Theme.of(context).colorScheme.onSurface, fontSize: 16, fontWeight: FontWeight.w600)),
           const SizedBox(
             height: 20,
           ),
           Text(S.popUps.resourceFetchErrorBody(),
               style: TextStyle(
-                  color: Theme.of(context).colorScheme.onBackground, fontSize: 16, fontWeight: FontWeight.w400))
+                  color: Theme.of(context).colorScheme.onSurface, fontSize: 16, fontWeight: FontWeight.w400))
         ]),
       ),
       actions: [

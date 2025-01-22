@@ -10,13 +10,13 @@ class ModalInfoRow extends StatelessWidget {
   final String title;
   final String? subtitle;
   const ModalInfoRow({
-    Key? key,
+    super.key,
     this.locations,
     this.subtitle,
     this.teachers,
     required this.title,
     required this.icon,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +55,7 @@ class ModalInfoRow extends StatelessWidget {
                     }
                     return subtitle!;
                   })(),
-                  style: TextStyle(color: Theme.of(context).colorScheme.onBackground, fontSize: 18),
+                  style: TextStyle(color: Theme.of(context).colorScheme.onSurface, fontSize: 18),
                 ),
               ),
             ],

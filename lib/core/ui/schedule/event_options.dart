@@ -16,8 +16,7 @@ class EventOptions extends StatelessWidget {
   final Event event;
   final BuildContext context;
 
-  const EventOptions({Key? key, required this.event, required this.context})
-      : super(key: key);
+  const EventOptions({super.key, required this.event, required this.context});
 
   /// The order in which this widget receives the build context is important,
   /// as it needs the context of the previous widget that called it that has
@@ -61,9 +60,9 @@ class EventOptions extends StatelessWidget {
                 builder: (_, snapshot) {
                   if (snapshot.connectionState == ConnectionState.done) {
                     bool notificationIsSetForEvent =
-                        (snapshot.data! as List<bool>)[0];
+                        (snapshot.data!)[0];
                     bool notificationIsSetForCourse =
-                        (snapshot.data! as List<bool>)[1];
+                        (snapshot.data!)[1];
                     return Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [

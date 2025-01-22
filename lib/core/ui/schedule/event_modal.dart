@@ -15,8 +15,7 @@ class TumbleEventModal extends StatelessWidget {
   final Event event;
   final Color color;
   final bool showSettings;
-  const TumbleEventModal({Key? key, required this.event, required this.color, required this.showSettings})
-      : super(key: key);
+  const TumbleEventModal({super.key, required this.event, required this.color, required this.showSettings});
 
   static void showBookmarkEventModal(
     BuildContext context,
@@ -63,7 +62,7 @@ class TumbleEventModal extends StatelessWidget {
         height: MediaQuery.of(context).size.height - 280,
         padding: const EdgeInsets.only(left: 20, right: 20, top: 50),
         decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.background,
+            color: Theme.of(context).colorScheme.surface,
             borderRadius: const BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20))),
         child: SingleChildScrollView(
           child: Column(
@@ -82,7 +81,7 @@ class TumbleEventModal extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.w500,
-                    color: Theme.of(context).colorScheme.onBackground,
+                    color: Theme.of(context).colorScheme.onSurface,
                   ),
                 ),
               ),

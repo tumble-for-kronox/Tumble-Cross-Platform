@@ -14,7 +14,7 @@ import 'package:tumble/core/ui/user/resources/time_stamp_containers.dart';
 import 'package:tumble/core/ui/user/resources/resource_time_stamp_card.dart';
 
 class TumbleChosenResourcePage extends StatelessWidget {
-  const TumbleChosenResourcePage({Key? key}) : super(key: key);
+  const TumbleChosenResourcePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +55,7 @@ class TumbleChosenResourcePage extends StatelessWidget {
                         topLeft: Radius.circular(20),
                         topRight: Radius.circular(20),
                       ),
-                      color: Theme.of(context).colorScheme.background,
+                      color: Theme.of(context).colorScheme.surface,
                     ),
                     child: _lowerSection(context, state),
                   ),
@@ -116,7 +116,7 @@ class TumbleChosenResourcePage extends StatelessWidget {
               ),
               Text(
                 DateFormat("MMMM d, y",
-                        context.read<ResourceCubit>().locale != null ? context.read<ResourceCubit>().locale! : null)
+                        context.read<ResourceCubit>().locale)
                     .format(context.read<ResourceCubit>().state.chosenDate),
                 style: TextStyle(
                   fontSize: 30,

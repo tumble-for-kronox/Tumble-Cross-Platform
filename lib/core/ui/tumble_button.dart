@@ -8,12 +8,12 @@ class TumbleButton extends StatelessWidget {
   final bool loading;
 
   const TumbleButton({
-    Key? key,
+    super.key,
     required this.onPressed,
     required this.prefixIcon,
     required this.text,
     required this.loading,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

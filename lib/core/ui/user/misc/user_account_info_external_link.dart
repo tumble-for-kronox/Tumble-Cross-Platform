@@ -8,12 +8,12 @@ class UserAccountExternalLink extends StatelessWidget {
   final IconData icon;
 
   const UserAccountExternalLink({
-    Key? key,
+    super.key,
     required this.title,
     required this.color,
     required this.link,
     required this.icon,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

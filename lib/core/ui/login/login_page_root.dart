@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
 import 'package:tumble/core/api/backend/response_types/runtime_error_type.dart';
-import 'package:tumble/core/navigation/navigation_route_labels.dart';
 import 'package:tumble/core/theme/data/colors.dart';
 import 'package:tumble/core/ui/cubit/auth_cubit.dart';
 import 'package:tumble/core/ui/cubit/login_cubit.dart';
@@ -11,11 +10,9 @@ import 'package:tumble/core/ui/data/string_constants.dart';
 import 'package:tumble/core/ui/scaffold_message.dart';
 import 'package:tumble/core/ui/tumble_loading.dart';
 
-import '../cubit/resource_cubit.dart';
-import '../cubit/user_event_cubit.dart';
 
 class LoginPageRoot extends StatefulWidget {
-  const LoginPageRoot({Key? key}) : super(key: key);
+  const LoginPageRoot({super.key});
 
   @override
   State<LoginPageRoot> createState() => _LoginPageRootState();
@@ -90,7 +87,7 @@ Widget _initialState(BuildContext context, String school) {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   CircleAvatar(
-                                    backgroundColor: CustomColors.lightColors.background,
+                                    backgroundColor: CustomColors.lightColors.surface,
                                     child: const Image(image: AssetImage('assets/images/ic_launcher.png')),
                                   ),
                                   const SizedBox(
@@ -135,7 +132,7 @@ Widget _initialState(BuildContext context, String school) {
               Container(
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.background,
+                    color: Theme.of(context).colorScheme.surface,
                     borderRadius: const BorderRadius.only(
                       topRight: Radius.circular(40.0),
                       topLeft: Radius.circular(40.0),
@@ -185,14 +182,14 @@ Widget _initialState(BuildContext context, String school) {
 
 PreferredSizeWidget _appBar(BuildContext context) {
   return AppBar(
-      backgroundColor: Theme.of(context).colorScheme.background,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       leadingWidth: 120,
       leading: BlocBuilder<LoginCubit, LoginState>(
         builder: (context, state) {
           return ElevatedButton.icon(
             icon: Icon(
               CupertinoIcons.chevron_back,
-              color: Theme.of(context).colorScheme.onBackground,
+              color: Theme.of(context).colorScheme.onSurface,
             ),
             style: ElevatedButton.styleFrom(
               elevation: 0,
@@ -205,7 +202,7 @@ PreferredSizeWidget _appBar(BuildContext context) {
             },
             label: Text(
               S.general.back(),
-              style: TextStyle(fontSize: 16, color: Theme.of(context).colorScheme.onBackground),
+              style: TextStyle(fontSize: 16, color: Theme.of(context).colorScheme.onSurface),
             ),
           );
         },
@@ -268,8 +265,8 @@ Widget _formSubmitButton(BuildContext context, String school) {
         BlocProvider.of<LoginCubit>(context).submitLogin(context, school);
       },
       style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.all<Color>(CustomColors.orangePrimary),
-        shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0))),
+        backgroundColor: WidgetStateProperty.all<Color>(CustomColors.orangePrimary),
+        shape: WidgetStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0))),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -306,7 +303,7 @@ Widget _formUsernameField(BuildContext context, String school) {
           decoration: InputDecoration(
               icon: Icon(
                 CupertinoIcons.person,
-                color: Theme.of(context).colorScheme.onBackground,
+                color: Theme.of(context).colorScheme.onSurface,
               ),
               labelText: S.loginPage.usernamePlaceholder(),
               enabledBorder: OutlineInputBorder(
@@ -355,9 +352,9 @@ Widget _formPasswordField(BuildContext context, String school) {
                   onPressed: () => BlocProvider.of<LoginCubit>(context).togglePasswordVisibility(),
                   icon: Icon(
                     !state.passwordHidden ? CupertinoIcons.eye : CupertinoIcons.eye_slash,
-                    color: Theme.of(context).colorScheme.onBackground.withOpacity(.9),
+                    color: Theme.of(context).colorScheme.onSurface.withOpacity(.9),
                   )),
-              icon: Icon(CupertinoIcons.lock, color: Theme.of(context).colorScheme.onBackground),
+              icon: Icon(CupertinoIcons.lock, color: Theme.of(context).colorScheme.onSurface),
               labelText: S.loginPage.passwordPlaceholder(),
               enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(width: 1, color: CustomColors.orangePrimary.withOpacity(.5)),

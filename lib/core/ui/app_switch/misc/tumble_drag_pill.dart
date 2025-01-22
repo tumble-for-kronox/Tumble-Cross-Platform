@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 class TumbleDragPill extends StatelessWidget {
   final Color barColor;
   const TumbleDragPill({
-    Key? key,
+    super.key,
     required this.barColor,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) => Container(

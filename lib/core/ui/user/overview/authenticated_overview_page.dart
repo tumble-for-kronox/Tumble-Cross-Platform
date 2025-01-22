@@ -10,7 +10,7 @@ import 'package:tumble/core/ui/user/overview/user_account_info.dart';
 import 'package:tumble/core/ui/user/resources/tumble_resource_page.dart';
 
 class AuthenticatedOverviewPage extends StatefulWidget {
-  const AuthenticatedOverviewPage({Key? key}) : super(key: key);
+  const AuthenticatedOverviewPage({super.key});
 
   @override
   State<StatefulWidget> createState() => _AuthenticatedPage();
@@ -28,26 +28,26 @@ class _AuthenticatedPage extends State<AuthenticatedOverviewPage> with TickerPro
               controller: tabController,
               indicatorColor: CustomColors.orangePrimary,
               labelStyle: const TextStyle(fontSize: 17),
-              labelColor: Theme.of(context).colorScheme.onBackground,
+              labelColor: Theme.of(context).colorScheme.onSurface,
               tabs: [
                 Tab(
                   icon: Icon(
                     CupertinoIcons.person_circle,
-                    color: Theme.of(context).colorScheme.onBackground,
+                    color: Theme.of(context).colorScheme.onSurface,
                     size: 25,
                   ),
                 ),
                 Tab(
                   icon: Icon(
                     CupertinoIcons.calendar_badge_plus,
-                    color: Theme.of(context).colorScheme.onBackground,
+                    color: Theme.of(context).colorScheme.onSurface,
                     size: 25,
                   ),
                 ),
                 Tab(
                   icon: Icon(
                     CupertinoIcons.building_2_fill,
-                    color: Theme.of(context).colorScheme.onBackground,
+                    color: Theme.of(context).colorScheme.onSurface,
                     size: 25,
                   ),
                 )

@@ -1,10 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:tumble/core/ui/data/string_constants.dart';
 
 class ToTopButton extends StatelessWidget {
   final VoidCallback scrollToTop;
-  const ToTopButton({Key? key, required this.scrollToTop}) : super(key: key);
+  const ToTopButton({super.key, required this.scrollToTop});
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +11,7 @@ class ToTopButton extends StatelessWidget {
         height: 50,
         width: 50,
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.background,
+          color: Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(5),
           boxShadow: const <BoxShadow>[BoxShadow(color: Colors.black26, blurRadius: 3, offset: Offset(0, 2))],
         ),

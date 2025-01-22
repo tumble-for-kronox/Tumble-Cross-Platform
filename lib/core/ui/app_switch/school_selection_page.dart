@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tumble/core/api/backend/repository/cache_repository.dart';
 import 'package:tumble/core/api/dependency_injection/get_it.dart';
 import 'package:tumble/core/models/ui_models/school_model.dart';
-import 'package:tumble/core/navigation/navigation_route_labels.dart';
 import 'package:tumble/core/ui/cubit/auth_cubit.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
 import 'package:tumble/core/ui/app_switch/data/schools.dart';
@@ -13,8 +12,8 @@ import 'package:tumble/core/ui/search/school_card.dart';
 
 class SchoolSelectionPage extends StatefulWidget {
   const SchoolSelectionPage({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<SchoolSelectionPage> createState() => _SchoolSelectionPageState();
@@ -30,7 +29,7 @@ class _SchoolSelectionPageState extends State<SchoolSelectionPage> {
         body: Container(
             width: double.infinity,
             height: double.infinity,
-            color: Theme.of(context).colorScheme.background,
+            color: Theme.of(context).colorScheme.surface,
             child: SingleChildScrollView(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -42,7 +41,7 @@ class _SchoolSelectionPageState extends State<SchoolSelectionPage> {
                     child: Text(
                       S.settingsPage.chooseUniversity(),
                       style: TextStyle(
-                        color: Theme.of(context).colorScheme.onBackground,
+                        color: Theme.of(context).colorScheme.onSurface,
                         fontSize: 26,
                       ),
                     ),

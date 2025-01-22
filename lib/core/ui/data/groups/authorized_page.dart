@@ -1,8 +1,7 @@
 import 'package:tumble/core/ui/data/string_constant_group.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AuthorizedPageStrings extends StringConstantGroup {
-  AuthorizedPageStrings(AppLocalizations localizedStrings) : super(localizedStrings);
+  AuthorizedPageStrings(super.localizedStrings);
 
   String title() => localizedStrings.accountPageTitle;
   String hello() => localizedStrings.authorizedPageHello;

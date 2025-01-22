@@ -1,13 +1,9 @@
-import 'dart:convert';
 import 'dart:developer';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import "package:collection/collection.dart";
 import 'package:tumble/core/api/backend/response_types/booking_response.dart';
-import 'package:tumble/core/api/database/repository/database_repository.dart';
-import 'package:tumble/core/api/dependency_injection/get_it.dart';
 import 'package:tumble/core/models/backend_models/kronox_user_model.dart';
-import 'package:tumble/core/theme/color_picker.dart';
 import 'package:tumble/core/models/backend_models/schedule_model.dart';
 import 'package:tumble/core/models/ui_models/school_model.dart';
 import 'package:tumble/core/models/ui_models/week_model.dart';

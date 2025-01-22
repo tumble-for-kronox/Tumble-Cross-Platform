@@ -8,7 +8,7 @@ import 'package:tumble/core/ui/schedule/tumble_week_view/week_list_view.dart';
 import 'package:tumble/core/ui/tumble_loading.dart';
 
 class TumbleWeekView extends StatefulWidget {
-  const TumbleWeekView({Key? key}) : super(key: key);
+  const TumbleWeekView({super.key});
 
   @override
   State<TumbleWeekView> createState() => _TumbleWeekViewState();
@@ -45,7 +45,7 @@ class _TumbleWeekViewState extends State<TumbleWeekView> {
                                   padding: const EdgeInsets.only(left: 20),
                                   child: Text(currentYear.toString(),
                                       style: TextStyle(
-                                        color: Theme.of(context).colorScheme.onBackground,
+                                        color: Theme.of(context).colorScheme.onSurface,
                                         fontSize: 40,
                                         fontWeight: FontWeight.w400,
                                       )),

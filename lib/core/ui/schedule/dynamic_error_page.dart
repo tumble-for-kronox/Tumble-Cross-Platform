@@ -9,8 +9,7 @@ class DynamicErrorPage extends StatefulWidget {
   final String errorType;
   final bool toSearch;
   final String? description;
-  const DynamicErrorPage({Key? key, required this.errorType, this.description, required this.toSearch})
-      : super(key: key);
+  const DynamicErrorPage({super.key, required this.errorType, this.description, required this.toSearch});
 
   @override
   State<DynamicErrorPage> createState() => _DynamicErrorPageState();
@@ -72,7 +71,7 @@ class _DynamicErrorPageState extends State<DynamicErrorPage> with TickerProvider
             child: Text(widget.errorType,
                 textAlign: TextAlign.left,
                 style: TextStyle(
-                    color: Theme.of(context).colorScheme.onBackground, fontSize: 30, fontWeight: FontWeight.w500)),
+                    color: Theme.of(context).colorScheme.onSurface, fontSize: 30, fontWeight: FontWeight.w500)),
           ),
           if (widget.description != null)
             const SizedBox(
@@ -86,7 +85,7 @@ class _DynamicErrorPageState extends State<DynamicErrorPage> with TickerProvider
                   Text(widget.description!,
                       textAlign: TextAlign.left,
                       style: TextStyle(
-                          color: Theme.of(context).colorScheme.onBackground,
+                          color: Theme.of(context).colorScheme.onSurface,
                           fontSize: 18,
                           fontWeight: FontWeight.w500)),
                   const SizedBox(

@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tumble/core/ui/cubit/user_event_cubit.dart';
@@ -9,7 +8,7 @@ import 'package:tumble/core/ui/user/events/user_event_section.dart';
 class Events extends StatefulWidget {
   final Future<void> Function() onRefresh;
 
-  const Events({Key? key, required this.onRefresh}) : super(key: key);
+  const Events({super.key, required this.onRefresh});
 
   @override
   State<Events> createState() => _EventsState();
@@ -37,7 +36,7 @@ class _EventsState extends State<Events> {
                           fontWeight: FontWeight.w500,
                           letterSpacing: 1,
                           fontSize: 24,
-                          color: Theme.of(context).colorScheme.onBackground),
+                          color: Theme.of(context).colorScheme.onSurface),
                     ),
                   ),
                   Container(
@@ -91,7 +90,7 @@ Widget _loaded(BuildContext context, UserEventState state) {
           child: Text(
             S.userEvents.empty(),
             style: TextStyle(
-              color: Theme.of(context).colorScheme.onBackground,
+              color: Theme.of(context).colorScheme.onSurface,
               letterSpacing: 0.5,
             ),
           ),

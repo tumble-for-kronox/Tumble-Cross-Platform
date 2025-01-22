@@ -7,7 +7,7 @@ class UpcomingUserEventCard extends StatelessWidget {
   final UpcomingUserEventModel userEvent;
   final Null Function() onTap;
 
-  const UpcomingUserEventCard({Key? key, required this.userEvent, required this.onTap}) : super(key: key);
+  const UpcomingUserEventCard({super.key, required this.userEvent, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -85,7 +85,7 @@ class UpcomingUserEventCard extends StatelessWidget {
                           Text(userEvent.title.capitalize(),
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
-                                color: Theme.of(context).colorScheme.onBackground,
+                                color: Theme.of(context).colorScheme.onSurface,
                                 fontSize: 19,
                                 letterSpacing: .5,
                                 fontWeight: FontWeight.w400,

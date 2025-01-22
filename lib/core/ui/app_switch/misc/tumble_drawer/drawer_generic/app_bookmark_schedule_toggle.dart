@@ -6,8 +6,8 @@ import 'package:tumble/core/ui/data/string_constants.dart';
 
 class ApplicationBookmarkPicker extends StatefulWidget {
   const ApplicationBookmarkPicker({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<ApplicationBookmarkPicker> createState() => _ApplicationBookmarkPickerState();
@@ -60,7 +60,7 @@ class _ApplicationBookmarkPickerState extends State<ApplicationBookmarkPicker> {
                           shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
                           title: Text(
                             id,
-                            style: TextStyle(color: Theme.of(context).colorScheme.onBackground),
+                            style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
                           ),
                           onChanged: (bool value) {
                             BlocProvider.of<DrawerCubit>(context).toggleSchedule(id, value);

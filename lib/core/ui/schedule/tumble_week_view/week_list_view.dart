@@ -6,7 +6,7 @@ import 'package:tumble/core/ui/schedule/tumble_week_view/week_number.dart';
 class TumbleWeekPageContainer extends StatefulWidget {
   final Week week;
 
-  const TumbleWeekPageContainer({Key? key, required this.week}) : super(key: key);
+  const TumbleWeekPageContainer({super.key, required this.week});
 
   @override
   State<TumbleWeekPageContainer> createState() => _TumbleWeekPageContainerState();

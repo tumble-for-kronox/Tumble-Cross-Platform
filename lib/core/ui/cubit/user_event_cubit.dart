@@ -9,17 +9,15 @@ import 'package:tumble/core/models/backend_models/kronox_user_model.dart';
 import 'package:tumble/core/models/backend_models/user_event_collection_model.dart';
 import 'package:tumble/core/ui/cubit/auth_cubit.dart';
 
-import '../../api/backend/response_types/refresh_response.dart';
 
 part 'user_event_state.dart';
 
 /// Handles user events and resource booking
 class UserEventCubit extends Cubit<UserEventState> {
   UserEventCubit()
-      : super(UserEventState(
+      : super(const UserEventState(
           userEventListStatus: UserOverviewStatus.INITIAL,
           registerUnregisterStatus: RegisterUnregisterStatus.INITIAL,
-          autoSignup: getIt<PreferenceRepository>().autoSignup!,
         ));
 
   final _userActionService = getIt<UserActionRepository>();
@@ -143,14 +141,6 @@ class UserEventCubit extends Cubit<UserEventState> {
             userEventListStatus: UserOverviewStatus.ERROR,
             errorMessage: RuntimeErrorType.failedExamSignUp()));
     }
-  }
-
-  Future<void> autoSignupToggle(bool value) async {
-    _preferenceService.setAutoSignup(value);
-    if (isClosed) {
-      return;
-    }
-    emit(state.copyWith(autoSignup: value));
   }
 
   void changeCurrentTabIndex(int newIndex) {

@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tumble/core/extensions/extensions.dart';
 import 'package:tumble/core/ui/cubit/drawer_state.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
@@ -15,7 +14,7 @@ class ApplicationThemePicker extends StatelessWidget {
   final SetTheme setTheme;
   final DrawerCubit cubit;
 
-  const ApplicationThemePicker({Key? key, required this.setTheme, required this.cubit}) : super(key: key);
+  const ApplicationThemePicker({super.key, required this.setTheme, required this.cubit});
 
   @override
   Widget build(BuildContext context) {
@@ -50,13 +49,13 @@ class ApplicationThemePicker extends StatelessWidget {
                                         trailing: cubit.isCurrentTheme(key.split(" ")[0].toLowerCase())
                                             ? Icon(
                                                 CupertinoIcons.smallcircle_fill_circle,
-                                                color: Theme.of(context).colorScheme.onBackground,
+                                                color: Theme.of(context).colorScheme.onSurface,
                                                 size: 20,
                                               )
                                             : null,
                                         title: Text(
                                           key,
-                                          style: TextStyle(color: Theme.of(context).colorScheme.onBackground),
+                                          style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
                                         ),
                                         onTap: () {
                                           showScaffoldMessage(context,
@@ -65,7 +64,7 @@ class ApplicationThemePicker extends StatelessWidget {
                                         }),
                                   ))
                               .toList()))),
-              TumbleDragPill(barColor: Theme.of(context).colorScheme.background.contrastColor())
+              TumbleDragPill(barColor: Theme.of(context).colorScheme.surface.contrastColor())
             ]),
           ),
           const CancelButton()

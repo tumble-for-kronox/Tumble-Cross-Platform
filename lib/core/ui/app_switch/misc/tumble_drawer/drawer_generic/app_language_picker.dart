@@ -12,8 +12,7 @@ class ApplicationLanguagePicker extends StatelessWidget {
   final Locale? currentLocale;
 
   const ApplicationLanguagePicker(
-      {Key? key, required this.parameterMap, required this.setLocale, required this.currentLocale})
-      : super(key: key);
+      {super.key, required this.parameterMap, required this.setLocale, required this.currentLocale});
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +45,7 @@ class ApplicationLanguagePicker extends StatelessWidget {
                                   child: ListTile(
                                       trailing: parameterMap[key] == currentLocale
                                           ? Icon(
-                                              color: Theme.of(context).colorScheme.onBackground,
+                                              color: Theme.of(context).colorScheme.onSurface,
                                               CupertinoIcons.smallcircle_fill_circle,
                                               size: 20,
                                             )
@@ -62,7 +61,7 @@ class ApplicationLanguagePicker extends StatelessWidget {
                             .toList()),
                   ),
                 )),
-                TumbleDragPill(barColor: Theme.of(context).colorScheme.background.contrastColor())
+                TumbleDragPill(barColor: Theme.of(context).colorScheme.surface.contrastColor())
               ],
             ),
           ),

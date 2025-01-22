@@ -5,7 +5,7 @@ import 'package:tumble/core/ui/data/string_constants.dart';
 class ScheduleCardLocationContainer extends StatelessWidget {
   final List<Location> locations;
   final Color textColor;
-  const ScheduleCardLocationContainer({Key? key, required this.locations, required this.textColor}) : super(key: key);
+  const ScheduleCardLocationContainer({super.key, required this.locations, required this.textColor});
 
   @override
   Widget build(BuildContext context) {

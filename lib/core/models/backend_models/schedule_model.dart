@@ -1,7 +1,6 @@
 // To parse this JSON data, do
 //
 //     final scheduleModel = scheduleModelFromJson(jsonString);
-import 'dart:ui';
 
 import 'package:html_unescape/html_unescape.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';

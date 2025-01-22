@@ -10,8 +10,8 @@ import 'package:tumble/core/ui/search/search_page_slideable_logo.dart';
 
 class SearchBarAndLogoContainer extends StatefulWidget {
   const SearchBarAndLogoContainer({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<SearchBarAndLogoContainer> createState() => _SearchBarAndLogoContainerState();
@@ -91,7 +91,7 @@ class _SearchBarAndLogoContainerState extends State<SearchBarAndLogoContainer> {
                                   alignment: Alignment.topCenter,
                                   child: Container(
                                     decoration: BoxDecoration(
-                                      color: Theme.of(context).colorScheme.background,
+                                      color: Theme.of(context).colorScheme.surface,
                                       borderRadius: const BorderRadius.only(
                                           bottomLeft: Radius.circular(20), bottomRight: Radius.circular(20)),
                                     ),

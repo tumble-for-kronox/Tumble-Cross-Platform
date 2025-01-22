@@ -3,17 +3,13 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tumble/core/api/backend/response_types/user_response.dart';
-import 'package:tumble/core/api/backend/response_types/runtime_error_type.dart';
 import 'package:tumble/core/api/backend/repository/user_action_repository.dart';
 import 'package:tumble/core/api/database/repository/secure_storage_repository.dart';
 import 'package:tumble/core/api/preferences/repository/preference_repository.dart';
 import 'package:tumble/core/models/backend_models/kronox_user_model.dart';
-import 'package:tumble/core/models/backend_models/multi_registration_result_model.dart';
 import 'package:tumble/core/models/ui_models/school_model.dart';
 import 'package:tumble/core/api/dependency_injection/get_it.dart';
-import 'package:tumble/core/ui/data/string_constants.dart';
 
-import '../../api/backend/response_types/refresh_response.dart';
 
 part 'auth_state.dart';
 
@@ -39,32 +35,6 @@ class AuthCubit extends Cubit<AuthState> {
 
   void setUserLoggedIn() {
     emit(state.copyWith(status: AuthStatus.AUTHENTICATED));
-  }
-
-  Future<String?> runAutoSignup() async {
-    UserResponse autoSignup = await _userRepo.registerAllAvailableUserEvents();
-
-    switch (autoSignup.status) {
-      case ApiUserResponseStatus.COMPLETED:
-        MultiRegistrationResultModel results = autoSignup.data as MultiRegistrationResultModel;
-        if (results.failedRegistrations.isEmpty && results.successfulRegistrations.isEmpty) {
-          return null;
-        }
-
-        if (results.failedRegistrations.isNotEmpty && results.successfulRegistrations.isEmpty) {
-          return S.scaffoldMessages.autoSignupFailed(results.failedRegistrations.length);
-        }
-
-        if (results.failedRegistrations.isEmpty && results.successfulRegistrations.isNotEmpty) {
-          return S.scaffoldMessages.autoSignupCompleted(results.successfulRegistrations.length);
-        }
-
-        return S.scaffoldMessages
-            .autoSignupCompleteAndFail(results.successfulRegistrations.length, results.failedRegistrations.length);
-      default:
-        break;
-    }
-    return autoSignup.data;
   }
 
   Future<void> login() async {

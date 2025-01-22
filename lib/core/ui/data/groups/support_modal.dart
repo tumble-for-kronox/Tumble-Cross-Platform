@@ -1,8 +1,7 @@
 import 'package:tumble/core/ui/data/string_constant_group.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SupportModalStrings extends StringConstantGroup {
-  SupportModalStrings(AppLocalizations localizedStrings) : super(localizedStrings);
+  SupportModalStrings(super.localizedStrings);
 
   String title() => localizedStrings.supportModalTitle;
   String subjectTooShort() => localizedStrings.supportModalSubjectTooShort;

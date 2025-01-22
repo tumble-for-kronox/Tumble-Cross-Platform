@@ -10,7 +10,7 @@ import 'package:tumble/core/ui/schedule/event_modal.dart';
 
 class TumbleWeekEventTile extends StatelessWidget {
   final Event event;
-  const TumbleWeekEventTile({Key? key, required this.event}) : super(key: key);
+  const TumbleWeekEventTile({super.key, required this.event});
 
   @override
   Widget build(BuildContext context) {

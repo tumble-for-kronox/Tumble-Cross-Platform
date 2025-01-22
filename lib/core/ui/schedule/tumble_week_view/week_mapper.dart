@@ -1,11 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tumble/core/models/ui_models/week_model.dart';
 import 'package:tumble/core/ui/schedule/tumble_week_view/tumble_day_of_week_container.dart';
 
 class WeekMapper extends StatelessWidget {
   final Week week;
-  const WeekMapper({Key? key, required this.week}) : super(key: key);
+  const WeekMapper({super.key, required this.week});
 
   @override
   Widget build(BuildContext context) {

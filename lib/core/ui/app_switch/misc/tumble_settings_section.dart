@@ -4,7 +4,7 @@ class TumbleSettingsSection extends StatelessWidget {
   final List<Widget> tiles;
   final String title;
 
-  const TumbleSettingsSection({Key? key, required this.tiles, required this.title}) : super(key: key);
+  const TumbleSettingsSection({super.key, required this.tiles, required this.title});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +19,7 @@ class TumbleSettingsSection extends StatelessWidget {
               title,
               textAlign: TextAlign.left,
               style: TextStyle(
-                color: Theme.of(context).colorScheme.onBackground,
+                color: Theme.of(context).colorScheme.onSurface,
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
               ),

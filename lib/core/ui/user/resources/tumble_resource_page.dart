@@ -9,7 +9,7 @@ import 'package:tumble/core/ui/user/resources/tumble_chosen_resource_page.dart';
 class ResourcePage extends StatelessWidget {
   final Future<void> Function()? onSchoolResourcesRefresh;
 
-  const ResourcePage({Key? key, this.onSchoolResourcesRefresh}) : super(key: key);
+  const ResourcePage({super.key, this.onSchoolResourcesRefresh});
 
   Map<String, Widget Function(BuildContext, ResourceState)> _routeBuilders(BuildContext context) {
     return {
@@ -29,7 +29,7 @@ class ResourcePage extends StatelessWidget {
           onGenerateRoute: (routeSettings) {
             return CupertinoPageRoute(
                 builder: (context) => Container(
-                      color: Theme.of(context).colorScheme.background,
+                      color: Theme.of(context).colorScheme.surface,
                       child: routeBuilders[routeSettings.name]!(context, state),
                     ));
           },
@@ -50,7 +50,7 @@ class ResourcePage extends StatelessWidget {
                 fontWeight: FontWeight.w500,
                 letterSpacing: 1,
                 fontSize: 24,
-                color: Theme.of(context).colorScheme.onBackground),
+                color: Theme.of(context).colorScheme.onSurface),
           ),
           const SizedBox(
             height: 25,

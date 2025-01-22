@@ -8,26 +8,25 @@ class ProgramCard extends StatelessWidget {
   final AsyncCallback onTap;
 
   const ProgramCard(
-      {Key? key,
+      {super.key,
       required this.schoolName,
       required this.programName,
       required this.programSubtitle,
-      required this.onTap})
-      : super(key: key);
+      required this.onTap});
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         Container(
-          color: Theme.of(context).colorScheme.background,
+          color: Theme.of(context).colorScheme.surface,
           width: double.infinity,
           height: 150,
           child: TextButton(
             onPressed: onTap,
             style: ButtonStyle(
-              overlayColor: MaterialStateProperty.all<Color>(Colors.grey.shade200),
-              foregroundColor: MaterialStateProperty.all<Color>(Theme.of(context).colorScheme.onBackground),
+              overlayColor: WidgetStateProperty.all<Color>(Colors.grey.shade200),
+              foregroundColor: WidgetStateProperty.all<Color>(Theme.of(context).colorScheme.onSurface),
             ),
             child: Container(
               width: double.infinity,

@@ -1,15 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tumble/core/api/preferences/repository/preference_repository.dart';
-import 'package:tumble/core/shared/preference_types.dart';
 import 'package:tumble/core/api/dependency_injection/get_it.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
 import 'package:tumble/core/ui/app_switch/data/schools.dart';
 import 'package:tumble/core/ui/tumble_button.dart';
 
 class UserInfo extends StatelessWidget {
-  const UserInfo({Key? key, this.name, required this.loggedIn, required this.onPressed}) : super(key: key);
+  const UserInfo({super.key, this.name, required this.loggedIn, required this.onPressed});
 
   final String? name;
   final bool loggedIn;
@@ -36,7 +34,7 @@ class UserInfo extends StatelessWidget {
             S.unauthorizedPage.description(),
             textAlign: TextAlign.center,
             style:
-                TextStyle(fontSize: 16, fontWeight: FontWeight.w400, color: Theme.of(context).colorScheme.onBackground),
+                TextStyle(fontSize: 16, fontWeight: FontWeight.w400, color: Theme.of(context).colorScheme.onSurface),
           ),
           FractionallySizedBox(
             widthFactor: 0.6,

@@ -10,7 +10,7 @@ import 'package:flutter/foundation.dart';
 class Endpoints {
   // Endpoints
   static String debugBaseUrl = Platform.isAndroid ? '10.0.2.2:7036' : '192.168.1.178:80';
-  static String baseUrl = kDebugMode ? debugBaseUrl : 'app.tumbleforkronox.com';
+  static String baseUrl = kDebugMode ? 'app.tumbleforkronox.com' : 'app.tumbleforkronox.com';
   static const String pathPrefix = '/api';
 
   static const String getSchedules = '$pathPrefix/schedules/search';

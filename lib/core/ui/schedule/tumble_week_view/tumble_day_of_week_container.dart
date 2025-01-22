@@ -8,7 +8,7 @@ import '../event_options.dart';
 
 class TumbleDayOfWeekContainer extends StatelessWidget {
   final Day day;
-  const TumbleDayOfWeekContainer({Key? key, required this.day}) : super(key: key);
+  const TumbleDayOfWeekContainer({super.key, required this.day});
 
   @override
   Widget build(BuildContext context) {

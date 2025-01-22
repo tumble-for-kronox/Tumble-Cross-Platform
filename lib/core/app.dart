@@ -14,7 +14,7 @@ import 'package:tumble/core/ui/login/login_page_root.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class App extends StatefulWidget {
-  const App({Key? key}) : super(key: key);
+  const App({super.key});
 
   @override
   State<App> createState() => _AppState();

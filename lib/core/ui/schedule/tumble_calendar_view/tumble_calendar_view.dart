@@ -16,7 +16,7 @@ import '../event_modal.dart';
 import '../event_options.dart';
 
 class TumbleCalendarView extends StatefulWidget {
-  const TumbleCalendarView({Key? key}) : super(key: key);
+  const TumbleCalendarView({super.key});
 
   @override
   State<TumbleCalendarView> createState() => _TumbleCalendarViewState();
@@ -127,10 +127,10 @@ class _TumbleCalendarViewState extends State<TumbleCalendarView> {
                           agendaViewHeight: 200,
                           appointmentDisplayMode: MonthAppointmentDisplayMode.indicator,
                           monthCellStyle: MonthCellStyle(
-                            backgroundColor: Theme.of(context).colorScheme.background,
-                            trailingDatesBackgroundColor: Theme.of(context).colorScheme.background,
-                            leadingDatesBackgroundColor: Theme.of(context).colorScheme.background,
-                            textStyle: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.onBackground),
+                            backgroundColor: Theme.of(context).colorScheme.surface,
+                            trailingDatesBackgroundColor: Theme.of(context).colorScheme.surface,
+                            leadingDatesBackgroundColor: Theme.of(context).colorScheme.surface,
+                            textStyle: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.onSurface),
                           )),
                       onLongPress: (calendarLongPressDetails) {
                         if (calendarLongPressDetails.targetElement != CalendarElement.appointment) {

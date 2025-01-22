@@ -5,13 +5,12 @@ import 'package:tumble/core/ui/cubit/auth_cubit.dart';
 import 'package:tumble/core/ui/cubit/schedule_view_cubit.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
 import 'package:tumble/core/ui/schedule/dynamic_error_page.dart';
-import 'package:tumble/core/ui/schedule/event_options.dart';
 import 'package:tumble/core/ui/schedule/tumble_list_view/data/to_top_button.dart';
 import 'package:tumble/core/ui/tumble_loading.dart';
 import 'tumble_list_view_day_container.dart';
 
 class TumbleListView extends StatefulWidget {
-  const TumbleListView({Key? key}) : super(key: key);
+  const TumbleListView({super.key});
 
   @override
   State<TumbleListView> createState() => _TumbleListViewState();
@@ -58,7 +57,7 @@ class _TumbleListViewState extends State<TumbleListView> with TickerProviderStat
                                   child: Text(
                                     dayList[index].isoString.year.toString(),
                                     style: TextStyle(
-                                      color: Theme.of(context).colorScheme.onBackground,
+                                      color: Theme.of(context).colorScheme.onSurface,
                                       fontSize: 40,
                                       fontWeight: FontWeight.w400,
                                     ),

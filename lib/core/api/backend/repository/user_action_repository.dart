@@ -1,14 +1,10 @@
 import 'package:tumble/core/api/backend/response_types/booking_response.dart';
-import 'package:tumble/core/api/backend/response_types/refresh_response.dart';
 import 'package:tumble/core/api/backend/response_types/user_response.dart';
 import 'package:tumble/core/api/backend/interface/iuser_action_service.dart';
 import 'package:tumble/core/api/backend/repository/backend_repository.dart';
 import 'package:tumble/core/api/preferences/repository/preference_repository.dart';
-import 'package:tumble/core/models/backend_models/kronox_user_model.dart';
 import 'package:tumble/core/models/backend_models/resource_model.dart';
-import 'package:tumble/core/shared/preference_types.dart';
 import 'package:tumble/core/api/dependency_injection/get_it.dart';
-import 'package:tumble/core/extensions/extensions.dart';
 
 class UserActionRepository implements IUserActionService {
   final _backendRepository = getIt<BackendRepository>();

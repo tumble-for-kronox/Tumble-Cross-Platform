@@ -14,8 +14,7 @@ class AppDependencies {
     final preferenceService = getIt<PreferenceRepository>();
 
     /// Only initialize notifications if notifications are allowed by user
-    if (preferenceService.allowedNotifications != null &&
-        preferenceService.allowedNotifications!) {
+    if (preferenceService.allowedNotifications != null && preferenceService.allowedNotifications!) {
       await getIt<NotificationRepository>().initialize();
     }
     preferenceService.setBookmarks(<String>[]);
@@ -28,9 +27,7 @@ class AppDependencies {
     final notificationService = getIt<NotificationRepository>();
 
     preferenceService.setTheme(preferenceService.theme ?? ThemeType.system);
-    preferenceService
-        .setNotificationOffset(preferenceService.notificationOffset ?? 60);
-    preferenceService.setAutoSignup(preferenceService.autoSignup ?? false);
+    preferenceService.setNotificationOffset(preferenceService.notificationOffset ?? 60);
 
     notificationService.initialize();
 
@@ -38,10 +35,8 @@ class AppDependencies {
     /// remove all scheduled notifications. If they are allowed, run [initialize()] on
     /// necesary channels in [NotificationRepository]
     if (preferenceService.allowedNotifications != null &&
-        await awesomeNotifications.isNotificationAllowed() !=
-            preferenceService.allowedNotifications) {
-      final bool permissionType =
-          await awesomeNotifications.isNotificationAllowed();
+        await awesomeNotifications.isNotificationAllowed() != preferenceService.allowedNotifications) {
+      final bool permissionType = await awesomeNotifications.isNotificationAllowed();
       preferenceService.setNotificationAllowed(permissionType);
       if (!permissionType) {
         log(name: 'app_dependencies', "Cancelling all user notifications ..");

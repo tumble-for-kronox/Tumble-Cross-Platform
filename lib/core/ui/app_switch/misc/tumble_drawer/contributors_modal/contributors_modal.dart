@@ -4,7 +4,7 @@ import 'package:tumble/core/ui/app_switch/misc/tumble_details_modal_base.dart';
 import 'package:tumble/core/ui/app_switch/misc/tumble_drawer/contributors_modal/contributors_section.dart';
 
 class ContributorsModal extends StatelessWidget {
-  const ContributorsModal({Key? key}) : super(key: key);
+  const ContributorsModal({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +14,7 @@ class ContributorsModal extends StatelessWidget {
         width: double.maxFinite,
         padding: const EdgeInsets.only(left: 20, right: 20, top: 50, bottom: 50),
         decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.background,
+            color: Theme.of(context).colorScheme.surface,
             borderRadius: const BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20))),
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 0),

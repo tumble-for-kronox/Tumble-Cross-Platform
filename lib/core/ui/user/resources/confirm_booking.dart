@@ -11,7 +11,7 @@ import 'package:tumble/core/ui/tumble_button.dart';
 class ConfirmBooking extends StatelessWidget {
   final ResourceState state;
 
-  const ConfirmBooking({Key? key, required this.state}) : super(key: key);
+  const ConfirmBooking({super.key, required this.state});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +20,7 @@ class ConfirmBooking extends StatelessWidget {
       children: [
         Divider(
           thickness: 0.5,
-          color: Theme.of(context).colorScheme.onBackground,
+          color: Theme.of(context).colorScheme.onSurface,
         ),
         Flexible(
           fit: FlexFit.loose,

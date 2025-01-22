@@ -4,12 +4,11 @@ import 'package:tumble/core/ui/cubit/auth_cubit.dart';
 import 'package:tumble/core/ui/cubit/resource_cubit.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
 import 'package:tumble/core/ui/scaffold_message.dart';
-import 'package:tumble/core/ui/schedule/dynamic_error_page.dart';
 import 'package:tumble/core/ui/tumble_loading.dart';
 import 'package:tumble/core/ui/user/resources/user_booking.dart';
 
 class UserBookingsContainer extends StatelessWidget {
-  const UserBookingsContainer({Key? key}) : super(key: key);
+  const UserBookingsContainer({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +34,7 @@ class UserBookingsContainer extends StatelessWidget {
                     child: Text(S.userBookings.noBookings(),
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          color: Theme.of(context).colorScheme.onBackground,
+                          color: Theme.of(context).colorScheme.onSurface,
                           fontSize: 18,
                           fontWeight: FontWeight.w400,
                         )),
@@ -85,13 +84,13 @@ class UserBookingsContainer extends StatelessWidget {
               child: Text(context.read<ResourceCubit>().state.userBookingsErrorMessage!,
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    color: Theme.of(context).colorScheme.onBackground,
+                    color: Theme.of(context).colorScheme.onSurface,
                     fontSize: 18,
                     fontWeight: FontWeight.w400,
                   )),
             );
           case UserBookingsStatus.INITIAL:
-            return Container(child: Text('This is default'),);
+            return Container(child: const Text('This is default'),);
         }
       }),
     );

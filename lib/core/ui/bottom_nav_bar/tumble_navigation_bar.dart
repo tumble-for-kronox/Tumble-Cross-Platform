@@ -9,7 +9,7 @@ typedef ChangePageCallBack = void Function(int index);
 
 class TumbleNavigationBar extends StatelessWidget {
   final ChangePageCallBack? onTap;
-  const TumbleNavigationBar({Key? key, this.onTap}) : super(key: key);
+  const TumbleNavigationBar({super.key, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -24,12 +24,12 @@ class TumbleNavigationBar extends StatelessWidget {
             type: BottomNavigationBarType.fixed,
             selectedIconTheme: const IconThemeData(size: 26),
             unselectedIconTheme: IconThemeData(
-                size: 24, color: Theme.of(context).colorScheme.onBackground),
+                size: 24, color: Theme.of(context).colorScheme.onSurface),
             onTap: onTap,
             selectedFontSize: 14,
             unselectedFontSize: 13,
             currentIndex: mainappstate.index,
-            backgroundColor: Theme.of(context).colorScheme.background,
+            backgroundColor: Theme.of(context).colorScheme.surface,
             elevation: 0,
             items: [
               BottomNavigationBarItem(

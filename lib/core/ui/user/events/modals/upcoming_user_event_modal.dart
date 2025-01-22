@@ -11,7 +11,7 @@ import '../../../schedule/modal_info_row.dart';
 class UpcomingUserEventModal extends StatelessWidget {
   final UpcomingUserEventModel userEvent;
 
-  const UpcomingUserEventModal({Key? key, required this.userEvent}) : super(key: key);
+  const UpcomingUserEventModal({super.key, required this.userEvent});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +20,7 @@ class UpcomingUserEventModal extends StatelessWidget {
         height: MediaQuery.of(context).size.height - 280,
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.background,
+            color: Theme.of(context).colorScheme.surface,
             borderRadius: const BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20))),
         child: SingleChildScrollView(
           child: Column(
@@ -34,7 +34,7 @@ class UpcomingUserEventModal extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   textAlign: TextAlign.start,
                   style: TextStyle(
-                      fontSize: 32, fontWeight: FontWeight.w500, color: Theme.of(context).colorScheme.onBackground),
+                      fontSize: 32, fontWeight: FontWeight.w500, color: Theme.of(context).colorScheme.onSurface),
                 ),
               ),
               const SizedBox(

@@ -10,13 +10,12 @@ class TumbleAppDrawerTile extends StatelessWidget {
   final ToggleDrawerEvent drawerEvent;
 
   const TumbleAppDrawerTile(
-      {Key? key,
+      {super.key,
       required this.suffixIcon,
       required this.drawerTileTitle,
       required this.subtitle,
       required this.eventType,
-      required this.drawerEvent})
-      : super(key: key);
+      required this.drawerEvent});
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +43,7 @@ class TumbleAppDrawerTile extends StatelessWidget {
                         drawerTileTitle,
                         textAlign: TextAlign.left,
                         style: TextStyle(
-                          color: Theme.of(context).colorScheme.onBackground,
+                          color: Theme.of(context).colorScheme.onSurface,
                           fontSize: 17,
                         ),
                       ),
@@ -57,7 +56,7 @@ class TumbleAppDrawerTile extends StatelessWidget {
                         subtitle,
                         textAlign: TextAlign.left,
                         style: TextStyle(
-                          color: Theme.of(context).colorScheme.onBackground,
+                          color: Theme.of(context).colorScheme.onSurface,
                           fontWeight: FontWeight.w200,
                         ),
                       ),
@@ -72,7 +71,7 @@ class TumbleAppDrawerTile extends StatelessWidget {
                 width: 35,
                 child: Icon(
                   suffixIcon,
-                  color: Theme.of(context).colorScheme.onBackground,
+                  color: Theme.of(context).colorScheme.onSurface,
                 ),
               ),
             ),

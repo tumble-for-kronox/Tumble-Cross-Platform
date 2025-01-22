@@ -12,11 +12,11 @@ class ScheduleCard extends StatelessWidget {
   final Color color;
 
   const ScheduleCard({
-    Key? key,
+    super.key,
     required this.event,
     required this.onTap,
     required this.color,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -104,7 +104,7 @@ class ScheduleCard extends StatelessWidget {
                                     Text(event.title.capitalize(),
                                         overflow: TextOverflow.ellipsis,
                                         style: TextStyle(
-                                          color: Theme.of(context).colorScheme.onBackground,
+                                          color: Theme.of(context).colorScheme.onSurface,
                                           fontSize: 20,
                                           letterSpacing: .5,
                                           fontWeight: FontWeight.w400,
@@ -120,7 +120,7 @@ class ScheduleCard extends StatelessWidget {
                                         child: Text(event.course.englishName,
                                             overflow: TextOverflow.ellipsis,
                                             style: TextStyle(
-                                              color: Theme.of(context).colorScheme.onBackground,
+                                              color: Theme.of(context).colorScheme.onSurface,
                                               fontSize: 16.5,
                                               letterSpacing: .5,
                                               fontWeight: FontWeight.w300,

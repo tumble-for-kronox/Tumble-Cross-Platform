@@ -5,7 +5,7 @@ class TimeStampContainer extends StatelessWidget {
   final List<Widget> cards;
   final int maxRowItems;
 
-  const TimeStampContainer({Key? key, required this.cards, required this.maxRowItems}) : super(key: key);
+  const TimeStampContainer({super.key, required this.cards, required this.maxRowItems});
 
   @override
   Widget build(BuildContext context) {

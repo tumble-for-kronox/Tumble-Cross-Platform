@@ -8,7 +8,7 @@ class RegisteredPassedUserEventCard extends StatelessWidget {
   final AvailableUserEventModel userEvent;
   final Null Function() onTap;
 
-  const RegisteredPassedUserEventCard({Key? key, required this.userEvent, required this.onTap}) : super(key: key);
+  const RegisteredPassedUserEventCard({super.key, required this.userEvent, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -88,7 +88,7 @@ class RegisteredPassedUserEventCard extends StatelessWidget {
                             child: Text(userEvent.title.capitalize(),
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
-                                  color: Theme.of(context).colorScheme.onBackground,
+                                  color: Theme.of(context).colorScheme.onSurface,
                                   fontSize: 19,
                                   letterSpacing: .5,
                                   fontWeight: FontWeight.w400,

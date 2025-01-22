@@ -8,12 +8,12 @@ class TumbleButtonSmall extends StatelessWidget {
   final bool loading;
 
   const TumbleButtonSmall({
-    Key? key,
+    super.key,
     this.onPressed,
     required this.prefixIcon,
     required this.text,
     required this.loading,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -22,9 +22,9 @@ class TumbleButtonSmall extends StatelessWidget {
         child: TextButton.icon(
           onPressed: loading ? null : onPressed,
           style: ButtonStyle(
-              shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
-              backgroundColor: MaterialStateColor.resolveWith((Set<MaterialState> states) =>
-                  states.contains(MaterialState.disabled)
+              shape: WidgetStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+              backgroundColor: WidgetStateColor.resolveWith((Set<WidgetState> states) =>
+                  states.contains(WidgetState.disabled)
                       ? Theme.of(context).colorScheme.primary.withOpacity(0.5)
                       : Theme.of(context).colorScheme.primary)),
           icon: loading

@@ -5,14 +5,13 @@ import 'package:tumble/core/ui/cubit/auth_cubit.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
 import 'package:tumble/core/ui/app_switch/data/schools.dart';
 import 'package:tumble/core/ui/tumble_button.dart';
-import 'package:tumble/core/ui/user/misc/auto_signup_option.dart';
 import 'package:tumble/core/ui/user/misc/user_account_info_external_link.dart';
 import 'package:tumble/core/ui/user/overview/user_bookings.dart';
 
 class UserAccountInfo extends StatefulWidget {
   final Future<void> Function() onRefresh;
 
-  const UserAccountInfo({Key? key, required this.onRefresh}) : super(key: key);
+  const UserAccountInfo({super.key, required this.onRefresh});
 
   @override
   State<UserAccountInfo> createState() => _UserAccountInfo();
@@ -61,7 +60,7 @@ class _UserAccountInfo extends State<UserAccountInfo> {
                                       maxLines: 2,
                                       softWrap: true,
                                       BlocProvider.of<AuthCubit>(context).state.userSession!.name,
-                                      style: TextStyle(fontSize: 22, color: Theme.of(context).colorScheme.onBackground),
+                                      style: TextStyle(fontSize: 22, color: Theme.of(context).colorScheme.onSurface),
                                     ),
                                     const SizedBox(height: 15),
                                     Row(
@@ -107,17 +106,6 @@ class _UserAccountInfo extends State<UserAccountInfo> {
                             ),
                           ],
                         ),
-                      ),
-                      const SizedBox(
-                        height: 40,
-                      ),
-                      _sectionDivider(context, S.authorizedPage.userOptionsTitle(), CupertinoIcons.gear),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      BlocProvider.value(
-                        value: BlocProvider.of<AuthCubit>(context),
-                        child: const AutoSignupOption(),
                       ),
                       const SizedBox(
                         height: 40,
@@ -200,7 +188,7 @@ Widget _sectionDivider(BuildContext context, String title, IconData icon) {
         padding: const EdgeInsets.only(left: 10, right: 8, bottom: 2.7),
         child: Icon(
           icon,
-          color: Theme.of(context).colorScheme.onBackground,
+          color: Theme.of(context).colorScheme.onSurface,
           size: 16,
         ),
       ),
@@ -209,7 +197,7 @@ Widget _sectionDivider(BuildContext context, String title, IconData icon) {
         child: Text(
           title,
           style: TextStyle(
-            color: Theme.of(context).colorScheme.onBackground,
+            color: Theme.of(context).colorScheme.onSurface,
             fontWeight: FontWeight.w500,
             fontSize: 16,
             letterSpacing: 0.5,
@@ -218,7 +206,7 @@ Widget _sectionDivider(BuildContext context, String title, IconData icon) {
       ),
       Expanded(
         child: Divider(
-          color: Theme.of(context).colorScheme.onBackground,
+          color: Theme.of(context).colorScheme.onSurface,
           thickness: 0.1,
         ),
       ),

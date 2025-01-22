@@ -12,8 +12,7 @@ class AppNotificationOffsetPicker extends StatelessWidget {
   final int currentNotificationTime;
 
   const AppNotificationOffsetPicker(
-      {Key? key, required this.setNotificationTime, required this.parameterMap, required this.currentNotificationTime})
-      : super(key: key);
+      {super.key, required this.setNotificationTime, required this.parameterMap, required this.currentNotificationTime});
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +45,7 @@ class AppNotificationOffsetPicker extends StatelessWidget {
                                     trailing: parameterMap[key] == currentNotificationTime
                                         ? Icon(
                                             CupertinoIcons.smallcircle_fill_circle,
-                                            color: Theme.of(context).colorScheme.onBackground,
+                                            color: Theme.of(context).colorScheme.onSurface,
                                             size: 20,
                                           )
                                         : null,
@@ -60,7 +59,7 @@ class AppNotificationOffsetPicker extends StatelessWidget {
                               ))
                           .toList()),
                 )),
-                TumbleDragPill(barColor: Theme.of(context).colorScheme.background.contrastColor())
+                TumbleDragPill(barColor: Theme.of(context).colorScheme.surface.contrastColor())
               ],
             ),
           ),

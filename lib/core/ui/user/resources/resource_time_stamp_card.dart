@@ -8,7 +8,7 @@ class TimeStampCard extends StatelessWidget {
   final TimeSlot timeSlot;
   final TimeSlot? selectedTimeSlot;
 
-  const TimeStampCard({Key? key, required this.timeSlot, required this.selectedTimeSlot}) : super(key: key);
+  const TimeStampCard({super.key, required this.timeSlot, required this.selectedTimeSlot});
 
   @override
   Widget build(BuildContext context) {

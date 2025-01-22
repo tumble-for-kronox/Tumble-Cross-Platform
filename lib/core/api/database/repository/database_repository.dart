@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:developer';
-import 'dart:ffi';
 import 'dart:ui';
 import 'package:sembast/sembast.dart';
 import 'package:sembast/utils/value_utils.dart';

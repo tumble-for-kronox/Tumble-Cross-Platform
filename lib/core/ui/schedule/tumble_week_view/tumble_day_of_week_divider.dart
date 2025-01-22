@@ -6,7 +6,7 @@ import 'package:tumble/core/ui/data/string_constants.dart';
 
 class DayOfWeekDivider extends StatelessWidget {
   final Day day;
-  const DayOfWeekDivider({Key? key, required this.day}) : super(key: key);
+  const DayOfWeekDivider({super.key, required this.day});
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +24,7 @@ class DayOfWeekDivider extends StatelessWidget {
           Text(
             "${DateFormat.EEEE(Localizations.localeOf(context).languageCode).format(day.isoString).capitalize()} ${DateFormat("d/M", Localizations.localeOf(context).languageCode).format(day.isoString)}",
             style: TextStyle(
-              color: Theme.of(context).colorScheme.onBackground,
+              color: Theme.of(context).colorScheme.onSurface,
               fontSize: 19.5,
               fontWeight: FontWeight.w400,
             ),
@@ -39,14 +39,14 @@ class DayOfWeekDivider extends StatelessWidget {
                         thickness: 1,
                         indent: 20,
                         endIndent: 20,
-                        color: Theme.of(context).colorScheme.onBackground,
+                        color: Theme.of(context).colorScheme.onSurface,
                       ),
                     ),
                     Container(
                         padding: const EdgeInsets.only(right: 3),
                         child: Text(
                           S.weekViewPage.todayLabel(),
-                          style: TextStyle(fontSize: 16),
+                          style: const TextStyle(fontSize: 16),
                         ))
                   ]),
                 )

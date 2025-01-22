@@ -15,13 +15,13 @@ class UserBooking extends StatelessWidget {
   final void Function()? onUnbook;
 
   const UserBooking({
-    Key? key,
+    super.key,
     required this.booking,
     required this.confirmLoading,
     required this.unbookLoading,
     required this.onConfirm,
     required this.onUnbook,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

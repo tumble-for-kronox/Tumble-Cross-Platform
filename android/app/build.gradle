@@ -33,7 +33,8 @@ apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
     compileSdkVersion 34
-    ndkVersion flutter.ndkVersion
+    ndkVersion "26.1.10909125"
+    namespace 'com.tumble.kronoxtoapp'
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8

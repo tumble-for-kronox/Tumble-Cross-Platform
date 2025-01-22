@@ -1,4 +1,3 @@
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tumble/core/api/backend/response_types/schedule_or_programme_response.dart';
 import 'package:tumble/core/api/backend/response_types/runtime_error_type.dart';
 import 'package:tumble/core/api/backend/data/constants.dart';
@@ -7,11 +6,8 @@ import 'package:tumble/core/api/backend/repository/backend_repository.dart';
 import 'package:tumble/core/api/database/repository/database_repository.dart';
 import 'package:tumble/core/api/notifications/repository/notification_repository.dart';
 import 'package:tumble/core/api/preferences/repository/preference_repository.dart';
-import 'package:tumble/core/models/backend_models/bookmarked_schedule_model.dart';
-import 'package:tumble/core/models/backend_models/kronox_user_model.dart';
 import 'package:tumble/core/models/backend_models/schedule_model.dart';
 import 'package:tumble/core/shared/app_dependencies.dart';
-import 'package:tumble/core/shared/preference_types.dart';
 import 'package:tumble/core/api/dependency_injection/get_it.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
 

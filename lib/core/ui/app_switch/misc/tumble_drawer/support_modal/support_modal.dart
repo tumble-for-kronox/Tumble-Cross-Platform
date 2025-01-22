@@ -10,7 +10,7 @@ import 'package:tumble/core/ui/tumble_button.dart';
 import 'package:tumble/core/ui/tumble_loading.dart';
 
 class BugReportModal extends StatefulWidget {
-  const BugReportModal({Key? key}) : super(key: key);
+  const BugReportModal({super.key});
 
   @override
   State<BugReportModal> createState() => _BugReportModalState();
@@ -33,7 +33,7 @@ class _BugReportModalState extends State<BugReportModal> {
 }
 
 class SupportModalBuilder extends StatefulWidget {
-  const SupportModalBuilder({Key? key}) : super(key: key);
+  const SupportModalBuilder({super.key});
 
   @override
   State<SupportModalBuilder> createState() => _SupportModalBuilderState();
@@ -81,21 +81,20 @@ class SupportModalShell extends StatelessWidget {
   final SupportModalStatus status;
 
   const SupportModalShell(
-      {Key? key,
+      {super.key,
       required this.subjectValidator,
       required this.bodyValidator,
       required this.subjectController,
       required this.bodyController,
       required this.onPressed,
-      required this.status})
-      : super(key: key);
+      required this.status});
   @override
   Widget build(BuildContext context) => TumbleDetailsModalBase(
         body: Container(
           width: double.infinity,
           padding: const EdgeInsets.only(left: 20, right: 20, top: 60),
           decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.background,
+              color: Theme.of(context).colorScheme.surface,
               borderRadius: const BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20))),
           child: Column(
             crossAxisAlignment: (status == SupportModalStatus.INITIAL || status == SupportModalStatus.ERROR)

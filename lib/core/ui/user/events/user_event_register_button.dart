@@ -2,9 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tumble/core/api/preferences/repository/preference_repository.dart';
 import 'package:tumble/core/ui/data/string_constants.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tumble/core/api/dependency_injection/get_it.dart';
-import 'package:tumble/core/shared/preference_types.dart';
 import 'package:tumble/core/ui/tumble_loading.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
@@ -13,8 +11,7 @@ class UserEventRegisterButton extends StatelessWidget {
   final bool loading;
   final Null Function()? onPressed;
 
-  const UserEventRegisterButton({Key? key, required this.loading, required this.linkToKronox, this.onPressed})
-      : super(key: key);
+  const UserEventRegisterButton({super.key, required this.loading, required this.linkToKronox, this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -35,9 +32,9 @@ class UserEventRegisterButton extends StatelessWidget {
             : TextButton.icon(
                 onPressed: loading ? null : onPressed,
                 style: ButtonStyle(
-                    shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
-                    backgroundColor: MaterialStateColor.resolveWith((Set<MaterialState> states) =>
-                        states.contains(MaterialState.disabled)
+                    shape: WidgetStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+                    backgroundColor: WidgetStateColor.resolveWith((Set<WidgetState> states) =>
+                        states.contains(WidgetState.disabled)
                             ? Theme.of(context).colorScheme.primary.withOpacity(0.5)
                             : Theme.of(context).colorScheme.primary)),
                 icon: loading

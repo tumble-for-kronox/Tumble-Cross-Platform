@@ -11,13 +11,11 @@ class UserEventState extends Equatable {
   final RegisterUnregisterStatus registerUnregisterStatus;
   final UserEventCollectionModel? userEvents;
   final int? currentTabIndex;
-  final bool autoSignup;
   final String? errorMessage;
 
   const UserEventState({
     required this.userEventListStatus,
     required this.registerUnregisterStatus,
-    required this.autoSignup,
     this.userEvents,
     this.errorMessage,
     this.currentTabIndex = 0,
@@ -27,7 +25,6 @@ class UserEventState extends Equatable {
     UserOverviewStatus? userEventListStatus,
     RegisterUnregisterStatus? registerUnregisterStatus,
     KronoxUserModel? userSession,
-    bool? autoSignup,
     UserEventCollectionModel? userEvents,
     String? errorMessage,
     int? currentTabIndex,
@@ -35,7 +32,6 @@ class UserEventState extends Equatable {
       UserEventState(
         userEventListStatus: userEventListStatus ?? this.userEventListStatus,
         registerUnregisterStatus: registerUnregisterStatus ?? this.registerUnregisterStatus,
-        autoSignup: autoSignup ?? this.autoSignup,
         userEvents: userEvents ?? this.userEvents,
         errorMessage: errorMessage ?? this.errorMessage,
         currentTabIndex: currentTabIndex ?? this.currentTabIndex,
@@ -45,7 +41,6 @@ class UserEventState extends Equatable {
   List<Object?> get props => [
         userEventListStatus,
         registerUnregisterStatus,
-        autoSignup,
         userEvents,
         currentTabIndex,
       ];

@@ -4,9 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tumble/core/extensions/extensions.dart';
 import 'package:tumble/core/models/backend_models/bookmarked_schedule_model.dart';
-import 'package:tumble/core/navigation/navigation_route_labels.dart';
 import 'package:tumble/core/theme/cubit/theme_cubit.dart';
-import 'package:tumble/core/ui/app_switch/app_switch.dart';
 import 'package:tumble/core/ui/app_switch/school_selection_page.dart';
 import 'package:tumble/core/ui/cubit/auth_cubit.dart';
 import 'package:tumble/core/ui/cubit/drawer_state.dart';
@@ -32,7 +30,7 @@ typedef HandleDrawerEvent = void Function(
 
 class TumbleAppDrawer extends StatefulWidget {
   final VoidCallback reloadViews;
-  const TumbleAppDrawer({Key? key, required this.reloadViews}) : super(key: key);
+  const TumbleAppDrawer({super.key, required this.reloadViews});
 
   @override
   State<TumbleAppDrawer> createState() => _TumbleAppDrawerState();
@@ -122,7 +120,7 @@ class _TumbleAppDrawerState extends State<TumbleAppDrawer> {
                     ], title: S.settingsPage.commonTitle()),
                     Divider(
                       height: 40.0,
-                      color: Theme.of(context).colorScheme.onBackground,
+                      color: Theme.of(context).colorScheme.onSurface,
                       indent: 20,
                       endIndent: 30,
                     ),
@@ -138,7 +136,7 @@ class _TumbleAppDrawerState extends State<TumbleAppDrawer> {
                     ], title: S.settingsPage.scheduleTitle()),
                     Divider(
                       height: 40.0,
-                      color: Theme.of(context).colorScheme.onBackground,
+                      color: Theme.of(context).colorScheme.onSurface,
                       indent: 20,
                       endIndent: 30,
                     ),
@@ -159,7 +157,7 @@ class _TumbleAppDrawerState extends State<TumbleAppDrawer> {
                     ], title: S.settingsPage.notificationTitle()),
                     Divider(
                       height: 40.0,
-                      color: Theme.of(context).colorScheme.onBackground,
+                      color: Theme.of(context).colorScheme.onSurface,
                       indent: 20,
                       endIndent: 30,
                     ),

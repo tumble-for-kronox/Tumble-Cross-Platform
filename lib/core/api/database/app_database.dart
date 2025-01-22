@@ -1,18 +1,10 @@
 import 'dart:async';
 import 'dart:developer';
-import 'package:flutter/animation.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sembast/sembast.dart';
 import 'package:sembast/sembast_io.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tumble/core/api/database/data/access_stores.dart';
-import 'package:tumble/core/api/database/repository/database_repository.dart';
-import 'package:tumble/core/api/dependency_injection/get_it.dart';
-import 'package:tumble/core/api/preferences/repository/preference_repository.dart';
-import 'package:tumble/core/models/backend_models/schedule_model.dart';
-import 'package:tumble/core/theme/color_picker.dart';
-import 'package:tumble/core/ui/schedule/utils/day_list_builder.dart';
 
 class AppDatabase {
   // Completer is used for transforming synchronous code into asynchronous code.

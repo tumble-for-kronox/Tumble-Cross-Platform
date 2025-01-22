@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 
 class SearchErrorMessage extends StatelessWidget {
   final String errorType;
-  const SearchErrorMessage({Key? key, required this.errorType})
-      : super(key: key);
+  const SearchErrorMessage({super.key, required this.errorType});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +18,7 @@ class SearchErrorMessage extends StatelessWidget {
               errorType,
               textAlign: TextAlign.center,
               style: TextStyle(
-                color: Theme.of(context).colorScheme.onBackground,
+                color: Theme.of(context).colorScheme.onSurface,
                 fontSize: 30,
                 fontWeight: FontWeight.w500,
               ),
